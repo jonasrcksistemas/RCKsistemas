@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.rcksuporte05.rcksistemas.interfaces.ActivityCliente">
+
+    <item android:id="@+id/menu_salvar_produto"
+        android:title="Lançar Produto no pedido!"
+        android:icon="@mipmap/ic_salvar"
+        app:showAsAction="always"
+        android:orderInCategory="0"/>
+
+</menu>

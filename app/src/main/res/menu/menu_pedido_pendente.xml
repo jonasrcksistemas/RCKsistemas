@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.rcksuporte05.rcksistemas.interfaces.ListagemPedidoPendente">
+
+    <item
+        android:id="@+id/menu_pedido_pendente"
+        android:icon="@mipmap/ic_enviar_pedidos"
+        android:orderInCategory="0"
+        android:title="Enviar pedidos!"
+        app:showAsAction="always" />
+
+</menu>

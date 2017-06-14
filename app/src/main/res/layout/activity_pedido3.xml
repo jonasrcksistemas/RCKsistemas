@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_cadastro_cliente"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.rcksuporte05.rcksistemas.interfaces.ActivityPedidoMain">
+
+    <ScrollView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin">
+
+            <TextView
+                android:id="@+id/txtCliente"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:text="CLIENTE"
+                android:textColor="@color/colorAccent" />
+
+            <EditText
+                android:id="@+id/edtCliente"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txtCliente"
+                android:layout_toStartOf="@+id/btnBuscarCliente"
+                android:background="@drawable/borda_edittext"
+                android:focusable="false"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
+
+            <Button
+                android:id="@+id/btnBuscarCliente"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignBottom="@+id/edtCliente"
+                android:layout_alignParentEnd="true"
+                android:background="@mipmap/ic_search_dark" />
+
+            <TextView
+                android:id="@+id/txtPagamento"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/edtCliente"
+                android:layout_marginTop="12dp"
+                android:text="PAGAMENTO"
+                android:textColor="@color/colorAccent" />
+
+            <Spinner
+                android:id="@+id/spPagamento"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/txtPagamento"
+                android:layout_toEndOf="@+id/txtPagamento" />
+
+            <EditText
+                android:id="@+id/edtObservacao"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_below="@+id/spPagamento"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/borda_edittext"
+                android:gravity="top"
+                android:hint="OBSERVAÇÕES DO PEDIDO"
+                android:inputType="textCapSentences"
+                android:maxLength="300" />
+
+            <Button
+                android:id="@+id/btnHistoricoFinanceiro"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_below="@+id/edtObservacao"
+                android:layout_marginTop="15dp"
+                android:background="@mipmap/ic_financeiro" />
+
+            <TextView
+                android:id="@+id/txtHistoricoFinanceiro"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/btnHistoricoFinanceiro"
+                android:layout_alignTop="@+id/btnHistoricoFinanceiro"
+                android:layout_toEndOf="@+id/btnHistoricoFinanceiro"
+                android:gravity="center_vertical"
+                android:text="Historico Financeiro"
+                android:textColor="@color/colorAccent" />
+
+            <Button
+                android:id="@+id/btnSalvarPedido"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/edtObservacao"
+                android:layout_alignStart="@+id/edtObservacao"
+                android:layout_below="@+id/btnHistoricoFinanceiro"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/borda_edittext"
+                android:text="Salvar Pedido"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+                android:textColor="@color/colorAccent"
+                android:textStyle="bold" />
+
+
+        </RelativeLayout>
+    </ScrollView>
+</LinearLayout>

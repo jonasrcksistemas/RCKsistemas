@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.rcksuporte05.rcksistemas.interfaces.ListagemPedidoPendente">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbarPedidoPendente"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+    <ListView
+        android:id="@+id/lstPedidoPendente"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/edtNumeroPedidoPendente"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/toolbarPedidoPendente"
+        android:layout_toEndOf="@+id/edtNumeroPedidoPendente"
+        android:fastScrollAlwaysVisible="false"
+        android:fastScrollEnabled="true"
+        android:scrollbars="vertical" />
+
+    <EditText
+        android:id="@+id/edtNumeroPedidoPendente"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="center"
+        android:background="#dddfdd"
+        android:focusable="false"
+        android:gravity="end"
+        android:text="0: Pedidos Pendentes" />
+</RelativeLayout>

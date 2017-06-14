@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_cadastro_cliente"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.rcksuporte05.rcksistemas.interfaces.ActivityPedidoMain">
+
+    <ListView
+        android:id="@+id/lstProdutosPedido"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:clipToPadding="false"
+        android:fastScrollAlwaysVisible="false"
+        android:paddingBottom="90dp"
+        android:scrollbars="vertical" />
+
+    <Button
+        android:id="@+id/btnInserirProduto"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="30dp"
+        android:layout_marginEnd="30dp"
+        android:background="@drawable/style_button"
+        android:elevation="48dp"
+        android:gravity="center_horizontal|center_vertical"
+        android:text="+"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="25sp" />
+
+    <Button
+        android:id="@+id/btnFinalizarPedido"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_alignTop="@+id/btnInserirProduto"
+        android:layout_marginStart="30dp"
+        android:background="@drawable/style_button2"
+        android:text=">>"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+        android:textColor="#000000"
+        android:textSize="20dp" />
+
+    <TextView
+        android:id="@+id/txtFinalizarPedido"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/btnFinalizarPedido"
+        android:layout_alignTop="@+id/btnFinalizarPedido"
+        android:layout_marginStart="4dp"
+        android:layout_toEndOf="@+id/btnFinalizarPedido"
+        android:gravity="center_vertical"
+        android:text="Finalização"
+        android:textColor="#000000" />
+
+</RelativeLayout>

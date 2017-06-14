@@ -1,0 +1,68 @@
+package com.example.rcksuporte05.rcksistemas.adapters;
+
+import android.content.Context;
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+
+import com.example.rcksuporte05.rcksistemas.classes.CondicoesPagamento;
+import com.example.rcksuporte05.rcksistemas.fragment.Pedido1;
+import com.example.rcksuporte05.rcksistemas.fragment.Pedido2;
+import com.example.rcksuporte05.rcksistemas.fragment.Pedido3;
+
+import java.util.List;
+
+public class TabsAdapterPedido extends FragmentPagerAdapter {
+    private Context context;
+    private String[] titles = {"Cliente", "Produtos", "Finalização"};
+    private String usuario;
+    private int idUsuario;
+    private int idVendedor;
+    private int vizualizacao;
+
+    public TabsAdapterPedido(FragmentManager fm, Context c, String usuario, int idUsuario, int idVendedor, int vizualizacao) {
+        super(fm);
+        context = c;
+        this.idUsuario = idUsuario;
+        this.usuario = usuario;
+        this.idVendedor = idVendedor;
+        this.vizualizacao = vizualizacao;
+    }
+
+    @Override
+    public Fragment getItem(int position) {
+        Fragment frag = null;
+        switch (position) {
+            case 0:
+                frag = new Pedido1();
+                break;
+            case 1:
+                frag = new Pedido2();
+                break;
+            case 2:
+                frag = new Pedido3();
+                break;
+        }
+
+        Bundle b = new Bundle();
+        b.putInt("position", position);
+        b.putString("usuario", usuario);
+        b.putInt("idUsuario", idUsuario);
+        b.putInt("idVendedor", idVendedor);
+        b.putInt("vizualizacao", vizualizacao);
+        frag.setArguments(b);
+
+        return frag;
+    }
+
+    @Override
+    public int getCount() {
+        return titles.length;
+    }
+
+    @Override
+    public CharSequence getPageTitle(int position) {
+        return (titles[position]);
+    }
+}

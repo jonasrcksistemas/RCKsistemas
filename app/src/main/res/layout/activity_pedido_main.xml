@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_cadastro_cliente_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.rcksuporte05.rcksistemas.interfaces.ActivityPedidoMain">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbarFragsPedido"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
+    <com.example.rcksuporte05.rcksistemas.extras.SlidingTabLayout
+        android:id="@+id/stl_tabsPedido"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:clipToPadding="false"
+        android:paddingStart="36dp"
+        android:theme="@style/Theme.Toolbar" />
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/vp_tabsHistoricoFinanceiro"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.99" />
+
+    <EditText
+        android:id="@+id/edtTotalVenda"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="#dddfdd"
+        android:focusable="false"
+        android:gravity="end"
+        android:text="TOTAL    R$00,00     "
+        android:textSize="20dp" />
+
+</LinearLayout>

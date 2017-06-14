@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/menu_sincroniza"
+        android:title="Sincronizar dados com o servidor"
+        android:icon="@mipmap/ic_sincroniza_main"
+        app:showAsAction="always"/>
+
+</menu>

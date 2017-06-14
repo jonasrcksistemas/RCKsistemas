@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:weightSum="1"
+    tools:context="com.example.rcksuporte05.rcksistemas.interfaces.HistoricoFinanceiroMain">
+
+    <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/tabela"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#eeeeee"
+        android:stretchColumns="0,1,2,3,4,5,6">
+
+        <TableRow android:id="@+id/trLinhaColuna">
+
+            <TextView
+                android:id="@+id/txtDocumento"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:gravity="center"
+                android:text="NFe" />
+
+            <TextView
+                android:id="@+id/txtParcela"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Parc." />
+
+            <TextView
+                android:id="@+id/txtEmissao"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Emissão" />
+
+            <TextView
+                android:id="@+id/txtVencimento"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Venc." />
+
+            <TextView
+                android:id="@+id/txtDiasVenc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Dias Venc." />
+
+            <TextView
+                android:id="@+id/txtValor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="Valor" />
+
+        </TableRow>
+
+    </TableLayout>
+
+    <ListView
+        android:id="@+id/lstHistoricoFinanceiroPendente"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@+id/edtTotalTitulos"
+        android:layout_below="@+id/tabela"
+        android:fastScrollAlwaysVisible="false"
+        android:fastScrollEnabled="true"
+        android:scrollbars="vertical" />
+
+    <EditText
+        android:id="@+id/edtTotalTitulos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="#eeeeee"
+        android:focusable="false"
+        android:gravity="end"
+        android:text="Totalização: 0  " />
+
+</RelativeLayout>

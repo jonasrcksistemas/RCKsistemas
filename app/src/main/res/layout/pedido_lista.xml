@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/txtIdPedido"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="12dp"
+        android:text="IdPedido"
+        android:textColor="#535353"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/txtNomeCliente"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="12dp"
+        android:layout_toEndOf="@+id/txtIdPedido"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="nomeCliente" />
+
+    <TextView
+        android:id="@+id/txtPrecoPedido"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtIdPedido"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="12dp"
+        android:text="precoPedido"
+        android:textColor="#000000"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/txtHoraPedido"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txtPrecoPedido"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="30dp"
+        android:text="hora" />
+
+    <TextView
+        android:id="@+id/txtPontoCoeficiente"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txtPrecoPedido"
+        android:layout_toEndOf="@+id/txtPrecoPedido"
+        android:layout_toStartOf="@+id/txtHoraPedido"
+        android:gravity="center"
+        android:text="PontoCoeficiente"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/txtDataPedido"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/txtPrecoPedido"
+        android:layout_toEndOf="@+id/txtPrecoPedido"
+        android:layout_toStartOf="@+id/txtHoraPedido"
+        android:gravity="center_horizontal"
+        android:text="data" />
+
+    <View
+        android:id="@+id/viewCor"
+        android:layout_width="15dp"
+        android:layout_height="45dp"
+        android:layout_alignBottom="@+id/txtPrecoPedido"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:background="#000000"
+        android:visibility="gone" />
+
+</RelativeLayout>

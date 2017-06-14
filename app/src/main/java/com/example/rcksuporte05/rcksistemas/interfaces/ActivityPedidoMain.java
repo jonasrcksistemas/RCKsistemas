@@ -1,0 +1,129 @@
+package com.example.rcksuporte05.rcksistemas.interfaces;
+
+import android.content.DialogInterface;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
+import android.widget.EditText;
+
+import com.example.rcksuporte05.rcksistemas.Helper.PedidoHelper;
+import com.example.rcksuporte05.rcksistemas.R;
+import com.example.rcksuporte05.rcksistemas.adapters.TabsAdapterPedido;
+import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
+import com.example.rcksuporte05.rcksistemas.extras.SlidingTabLayout;
+
+public class ActivityPedidoMain extends AppCompatActivity {
+
+    private SlidingTabLayout stl_tabsPedido;
+    private ViewPager mViewPager;
+    private Bundle bundle = new Bundle();
+    private String usuario;
+    private int idUsuario;
+    private int idVendedor;
+    private EditText edtTotalVenda;
+    private TabsAdapterPedido tabsAdapterPedido;
+    private PedidoHelper pedidoHelper;
+    private DBHelper db = new DBHelper(this);
+    private MenuItem salvar_pedido;
+    private int vizualizacao;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_pedido_main);
+
+        pedidoHelper = new PedidoHelper(this);
+
+        edtTotalVenda = (EditText) findViewById(R.id.edtTotalVenda);
+        bundle = getIntent().getExtras();
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarFragsPedido);
+
+        usuario = db.consulta("SELECT NOME_USUARIO FROM TBL_WEB_USUARIO WHERE ID_USUARIO = " + bundle.getInt("usuario"), "NOME_USUARIO");
+        idUsuario = bundle.getInt("usuario");
+        idVendedor = bundle.getInt("vendedor");
+        vizualizacao = bundle.getInt("vizualizacao");
+
+        mViewPager = (ViewPager) findViewById(R.id.vp_tabsHistoricoFinanceiro);
+        tabsAdapterPedido = new TabsAdapterPedido(getSupportFragmentManager(), ActivityPedidoMain.this, usuario, idUsuario, idVendedor, vizualizacao);
+        mViewPager.setAdapter(tabsAdapterPedido);
+
+        stl_tabsPedido = (SlidingTabLayout) findViewById(R.id.stl_tabsPedido);
+        stl_tabsPedido.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        stl_tabsPedido.setSelectedIndicatorColors(Color.WHITE);
+        stl_tabsPedido.setViewPager(mViewPager);
+
+        if (vizualizacao == 1) {
+            toolbar.setTitle("Vizualização de Pedido");
+        } else if (pedidoHelper.getIdPedido() > 0) {
+            toolbar.setTitle("Alteração do pedido");
+        } else {
+            toolbar.setTitle("Lançamento de Pedido");
+        }
+
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (vizualizacao != 1) {
+            if (mViewPager.getCurrentItem() != 0) {
+                mViewPager.setCurrentItem(0);
+            } else {
+                AlertDialog.Builder alert = new AlertDialog.Builder(ActivityPedidoMain.this);
+                alert.setMessage("Tem certeza que deseja sair do pedido? As informações não salvas serão perdidas");
+                alert.setTitle("Atenção!");
+                alert.setNegativeButton("Não", null);
+                alert.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        finish();
+                    }
+                });
+                alert.show();
+            }
+        } else {
+            finish();
+        }
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                if (vizualizacao != 1) {
+                    if (mViewPager.getCurrentItem() != 0) {
+                        mViewPager.setCurrentItem(0);
+                    } else {
+                        AlertDialog.Builder alert = new AlertDialog.Builder(ActivityPedidoMain.this);
+                        alert.setMessage("Tem certeza que deseja sair do pedido? As informações não salvas serão perdidas");
+                        alert.setTitle("Atenção!");
+                        alert.setNegativeButton("Não", null);
+                        alert.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                finish();
+                            }
+                        });
+                        alert.show();
+                    }
+                } else {
+                    finish();
+                }
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onDestroy() {
+        pedidoHelper.limparDados();
+        System.gc();
+        super.onDestroy();
+    }
+}

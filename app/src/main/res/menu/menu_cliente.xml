@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.rcksuporte05.rcksistemas.interfaces.ActivityCliente">
+
+    <!--<item android:id="@+id/menu_item_novo_cliente"-->
+    <!--android:title="Cadastrar novo cliente!"-->
+    <!--android:icon="@drawable/ic_novo_cliente"-->
+    <!--app:showAsAction="always"-->
+    <!--android:orderInCategory="2"/>-->
+
+    <item
+        android:id="@+id/buscaCliente"
+        android:icon="@drawable/ic_search"
+        android:title="Habilita busca de Cliente"
+        app:actionViewClass="android.support.v7.widget.SearchView"
+        app:showAsAction="collapseActionView|ifRoom" />
+
+</menu>

@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_produto_pedido"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.rcksuporte05.rcksistemas.interfaces.ProdutoPedidoActivity">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/tb_produto_pedido"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:theme="@style/Theme.Toolbar"
+        tools:context=".interfaces.ActivityCliente" />
+
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/tb_produto_pedido">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin">
+
+            <TextView
+                android:id="@+id/txtIdPedido"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:text="NOME DO PRODUTO"
+                android:textColor="@color/colorAccent" />
+
+            <EditText
+                android:id="@+id/edtNomeProduto"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txtIdPedido"
+                android:layout_toStartOf="@+id/btnBuscaProduto"
+                android:background="@drawable/borda_edittext"
+                android:focusable="false"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
+
+            <Button
+                android:id="@+id/btnBuscaProduto"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignTop="@+id/edtNomeProduto"
+                android:background="@mipmap/ic_search_dark"
+                android:scaleType="centerCrop" />
+
+            <TextView
+                android:id="@+id/txtQuantidade"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/txtPontoCoeficiente"
+                android:layout_alignBottom="@+id/txtPontoCoeficiente"
+                android:layout_alignParentStart="true"
+                android:text="QUANTIDADE"
+                android:textColor="@color/colorAccent" />
+
+            <EditText
+                android:id="@+id/edtQuantidade"
+                android:layout_width="170dp"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/edtDesconto"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/txtQuantidade"
+                android:layout_toStartOf="@+id/edtDescontoReais"
+                android:background="@drawable/borda_edittext"
+                android:inputType="numberDecimal" />
+
+            <TextView
+                android:id="@+id/txtPontoCoeficiente"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/edtTabelaPreco"
+                android:layout_below="@+id/btnBuscaProduto"
+                android:text="VALOR UNITARIO"
+                android:textColor="@color/colorAccent" />
+
+            <EditText
+                android:id="@+id/edtTabelaPreco"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txtPontoCoeficiente"
+                android:layout_marginStart="12dp"
+                android:layout_toEndOf="@+id/edtQuantidade"
+                android:background="@drawable/borda_edittext"
+                android:inputType="numberDecimal" />
+
+            <TextView
+                android:id="@+id/txtValorProdutos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/edtTabelaPreco"
+                android:layout_marginTop="12dp"
+                android:text="VALOR PRODUTOS"
+                android:textColor="@color/colorAccent"
+                android:visibility="gone" />
+
+            <EditText
+                android:id="@+id/edtValorProdutos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txtValorProdutos"
+                android:background="@drawable/borda_edittext"
+                android:focusable="false"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/txtFaixaDesconto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/edtValorProdutos"
+                android:layout_marginTop="12dp"
+                android:text="FAIXA DE DESCONTO"
+                android:textColor="@color/colorAccent"
+                android:visibility="gone" />
+
+            <Spinner
+                android:id="@+id/spFaixaPadrao"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/txtFaixaDesconto"
+                android:layout_toEndOf="@+id/txtFaixaDesconto"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/txtDesconto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/edtDesconto"
+                android:layout_alignBottom="@+id/edtDesconto"
+                android:layout_alignParentStart="true"
+                android:text="DESCONTO"
+                android:textColor="@color/colorAccent"
+                android:visibility="gone" />
+
+            <EditText
+                android:id="@+id/edtDesconto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/spFaixaPadrao"
+                android:layout_toEndOf="@+id/txtDesconto"
+                android:background="@drawable/borda_edittext"
+                android:focusable="false"
+                android:gravity="center"
+                android:text="00,00%"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/txtDescontoReais"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/spFaixaPadrao"
+                android:layout_marginLeft="12dp"
+                android:layout_marginTop="12dp"
+                android:layout_toEndOf="@+id/edtDesconto"
+                android:text="R$ "
+                android:textColor="@color/colorAccent"
+                android:visibility="gone" />
+
+            <EditText
+                android:id="@+id/edtDescontoReais"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/spFaixaPadrao"
+                android:layout_toEndOf="@+id/txtDescontoReais"
+                android:background="@drawable/borda_edittext"
+                android:focusable="false"
+                android:text="0,00"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/txtPrecoPago"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/edtDesconto"
+                android:layout_marginTop="12dp"
+                android:text="PÇ. PAGO"
+                android:textColor="@color/colorAccent"
+                android:visibility="gone" />
+
+            <EditText
+                android:id="@+id/edtPrecoPago"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/txtPrecoPago"
+                android:background="@drawable/borda_edittext"
+                android:focusable="false"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/txtTotal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/edtQuantidade"
+                android:layout_marginTop="12dp"
+                android:text="TOTAL"
+                android:textColor="@color/colorAccent"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/edtTotal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txtTotal"
+                android:background="@drawable/borda_edittext"
+                android:focusable="false"
+                android:textStyle="bold" />
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+</RelativeLayout>
