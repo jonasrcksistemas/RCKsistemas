@@ -27,7 +27,6 @@
             android:id="@+id/ivInternet"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:layout_gravity="end"
             android:layout_marginTop="12dp"
             android:background="@mipmap/ic_sem_internet"
             android:visibility="invisible" />

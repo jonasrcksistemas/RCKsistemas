@@ -33,7 +33,7 @@ public class ListaAdapterHistoricoFinanceiroPendentes extends ArrayAdapter<Histo
 
         convertView = LayoutInflater.from(this.context).inflate(R.layout.lista_financeiro_pendente, null);
 
-        if (position % 2 != 0) {
+        if (position % 2 == 0) {
             convertView.setBackgroundColor(Color.parseColor("#eeeeee"));
         }
 

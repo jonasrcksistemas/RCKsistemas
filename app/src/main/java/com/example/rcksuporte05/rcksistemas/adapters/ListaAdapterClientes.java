@@ -57,7 +57,7 @@ public class ListaAdapterClientes extends ArrayAdapter<Cliente> {
 
         textViewNomeFantasia.setText(itemPosicao.getNome_fantasia());
 
-        if (position % 2 != 0) {
+        if (position % 2 == 0) {
             convertView.setBackgroundColor(Color.parseColor("#eeeeee"));
         }
 

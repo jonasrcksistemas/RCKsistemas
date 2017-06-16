@@ -28,8 +28,8 @@ import java.util.List;
 
 public class BancoWeb {
 
-//    String URL = "http://tksimports.ddns.com.br:3385/Banco/Banco?wsdl";
-    String URL = "http://rcksistemassuporte.ddns.com.br:3384/Banco/Banco?wsdl";
+    String URL = "http://tksimports.ddns.com.br:3385/Banco/Banco?wsdl";
+//    String URL = "http://rcksistemassuporte.ddns.com.br:3384/Banco/Banco?wsdl";
     String pacote = "http://DB/";
     SoapObject soap;
     HttpTransportSE httpTrans;

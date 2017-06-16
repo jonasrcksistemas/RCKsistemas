@@ -42,7 +42,7 @@ public class ListaAdapterProdutoPedido extends ArrayAdapter<WebPedidoItens> {
 
 //        viewCor.setBackgroundColor(Color.parseColor(itemPosicao.getTabela_preco_faixa().getCor_web()));
 
-        if (position % 2 != 0) {
+        if (position % 2 == 0) {
             convertView.setBackgroundColor(Color.parseColor("#eeeeee"));
         }
 

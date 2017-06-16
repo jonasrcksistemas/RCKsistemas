@@ -57,7 +57,7 @@ public class ListaAdapterProdutos extends ArrayAdapter<Produto> {
 
         textViewUnidadeMedida.setText(itemPosicao.getDescricao());
 
-        if (position % 2 != 0) {
+        if (position % 2 == 0) {
             convertView.setBackgroundColor(Color.parseColor("#eeeeee"));
         }
 

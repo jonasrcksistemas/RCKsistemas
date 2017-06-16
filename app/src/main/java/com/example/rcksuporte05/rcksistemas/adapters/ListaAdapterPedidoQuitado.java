@@ -60,7 +60,7 @@ public class ListaAdapterPedidoQuitado extends ArrayAdapter<WebPedido> {
         txtPontoCoeficiente.setText("COEF: " + itemPosicao.getPontos_coeficiente());
         viewCor.setBackgroundColor(Color.parseColor(itemPosicao.getPontos_cor()));
 
-        if (position % 2 != 0) {
+        if (position % 2 == 0) {
             convertView.setBackgroundColor(Color.parseColor("#eeeeee"));
         }
         return convertView;
