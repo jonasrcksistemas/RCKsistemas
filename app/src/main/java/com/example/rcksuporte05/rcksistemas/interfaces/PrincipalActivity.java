@@ -396,681 +396,306 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                     }
                 }
 
+                notificacao.setProgress(0, 0, true).
+                        setContentText("Clientes").
+                        setContentTitle("Sincronia em andamento");
+                mNotificationManager.notify(0, notificacao.build());
+                try {
+                    db.alterar("DELETE FROM TBL_CADASTRO;");
 
-                if (db.contagem("SELECT COUNT(*) FROM TBL_CADASTRO") == 0) {
-                    notificacao.setProgress(0, 0, true).
-                            setContentText("Clientes").
-                            setContentTitle("Sincronia em andamento");
-                    mNotificationManager.notify(0, notificacao.build());
-                    try {
-                        Cliente[] listaCliente;
-                        if (Integer.parseInt(banco.ConsultaSQL("SELECT COUNT(*) FROM TBL_USUARIO_VINCULO_VENDEDOR WHERE ID_USUARIO = " + id_usuario + ";", "COUNT")) > 0) {
-                            listaCliente = banco.sincronizaCliente("SELECT A.* FROM TBL_CADASTRO A \n" +
-                                    "    INNER JOIN TBL_USUARIO_VINCULO_VENDEDOR B ON (B.ID_VENDEDOR = A.ID_VENDEDOR) \n" +
-                                    "WHERE A.F_CLIENTE = 'S' AND B.ID_USUARIO = '" + id_usuario + "';");
-                        } else {
-                            listaCliente = banco.sincronizaCliente("SELECT * FROM TBL_CADASTRO WHERE F_VENDEDOR = 'S' OR F_CLIENTE = 'S';");
-                        }
-
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                ivInternet.setVisibility(View.INVISIBLE);
-                            }
-                        });
-
-                        for (int i = 0; listaCliente.length > i; i++) {
-                            notificacao.setProgress(listaCliente.length, i, false);
-                            db.inserirTBL_CADASTRO(listaCliente[i].getAtivo(),
-                                    listaCliente[i].getId_empresa(),
-                                    listaCliente[i].getId_cadastro(),
-                                    listaCliente[i].getPessoa_f_j(),
-                                    listaCliente[i].getData_aniversario(),
-                                    listaCliente[i].getNome_cadastro(),
-                                    listaCliente[i].getNome_fantasia(),
-                                    listaCliente[i].getCpf_cnpj(),
-                                    listaCliente[i].getInscri_estadual(),
-                                    listaCliente[i].getInscri_municipal(),
-                                    listaCliente[i].getEndereco(),
-                                    listaCliente[i].getEndereco_bairro(),
-                                    listaCliente[i].getEndereco_numero(),
-                                    listaCliente[i].getEndereco_complemento(),
-                                    listaCliente[i].getEndereco_uf(),
-                                    listaCliente[i].getEndereco_id_municipio(),
-                                    listaCliente[i].getEndereco_cep(),
-                                    listaCliente[i].getUsuario_id(),
-                                    listaCliente[i].getUsuario_nome(),
-                                    listaCliente[i].getUsuario_data(),
-                                    listaCliente[i].getF_cliente(),
-                                    listaCliente[i].getF_fornecedor(),
-                                    listaCliente[i].getF_funcionario(),
-                                    listaCliente[i].getF_vendedor(),
-                                    listaCliente[i].getF_transportador(),
-                                    listaCliente[i].getData_ultima_compra(),
-                                    listaCliente[i].getId_vendedor(),
-                                    listaCliente[i].getF_id_cliente(),
-                                    listaCliente[i].getId_entidade(),
-                                    listaCliente[i].getF_id_fornecedor(),
-                                    listaCliente[i].getF_id_vendedor(),
-                                    listaCliente[i].getF_id_transportador(),
-                                    listaCliente[i].getTelefone_principal(),
-                                    listaCliente[i].getEmail_principal(),
-                                    listaCliente[i].getId_pais(),
-                                    listaCliente[i].getF_id_funcionario(),
-                                    listaCliente[i].getAvisar_com_dias(),
-                                    listaCliente[i].getObservacoes(),
-                                    listaCliente[i].getPadrao_id_c_custo(),
-                                    listaCliente[i].getPadrao_id_c_gerenciadora(),
-                                    listaCliente[i].getPadrao_id_c_analitica(),
-                                    listaCliente[i].getCob_endereco(),
-                                    listaCliente[i].getCob_endereco_bairro(),
-                                    listaCliente[i].getCob_endereco_numero(),
-                                    listaCliente[i].getCob_endereco_complemento(),
-                                    listaCliente[i].getCob_endereco_uf(),
-                                    listaCliente[i].getCob_endereco_id_municipio(),
-                                    listaCliente[i].getCob_endereco_cep(),
-                                    listaCliente[i].getCob_endereco_id_pais(),
-                                    listaCliente[i].getLimite_credito(),
-                                    listaCliente[i].getLimite_disponivel(),
-                                    listaCliente[i].getPessoa_contato_financeiro(),
-                                    listaCliente[i].getEmail_financeiro(),
-                                    listaCliente[i].getObservacoes_faturamento(),
-                                    listaCliente[i].getObservacoes_financeiro(),
-                                    listaCliente[i].getTelefone_dois(),
-                                    listaCliente[i].getTelefone_tres(),
-                                    listaCliente[i].getPessoa_contato_principal(),
-                                    listaCliente[i].getInd_da_ie_destinatario(),
-                                    listaCliente[i].getComissao_percentual(),
-                                    listaCliente[i].getId_setor(),
-                                    listaCliente[i].getNfe_email_enviar(),
-                                    listaCliente[i].getNfe_email_um(),
-                                    listaCliente[i].getNfe_email_dois(),
-                                    listaCliente[i].getNfe_email_tres(),
-                                    listaCliente[i].getNfe_email_quatro(),
-                                    listaCliente[i].getNfe_email_cinco(),
-                                    listaCliente[i].getId_grupo_vendedor(),
-                                    listaCliente[i].getVendedor_usa_portal(),
-                                    listaCliente[i].getVendedor_id_user_portal(),
-                                    listaCliente[i].getF_tarifa(),
-                                    listaCliente[i].getF_id_tarifa(),
-                                    listaCliente[i].getF_produtor(),
-                                    listaCliente[i].getRg_numero(),
-                                    listaCliente[i].getRg_ssp(),
-                                    listaCliente[i].getConta_contabil(),
-                                    listaCliente[i].getMotorista(),
-                                    listaCliente[i].getF_id_motorista(),
-                                    listaCliente[i].getHabilitacao_numero(),
-                                    listaCliente[i].getHabilitacao_categoria(),
-                                    listaCliente[i].getHabilitacao_vencimento(),
-                                    listaCliente[i].getMot_id_transportadora(),
-                                    listaCliente[i].getLocal_cadastro());
-
-                            mNotificationManager.notify(0, notificacao.build());
-                        }
-
-                        Cliente[] listaVendedores = banco.sincronizaCliente("SELECT * FROM TBL_CADASTRO WHERE F_VENDEDOR = 'S' ORDER BY F_ID_VENDEDOR;");
-                        for (int i = 0; listaVendedores.length > i; i++) {
-                            notificacao.setProgress(listaVendedores.length, i, false);
-                            db.inserirTBL_CADASTRO(listaVendedores[i].getAtivo(),
-                                    listaVendedores[i].getId_empresa(),
-                                    listaVendedores[i].getId_cadastro(),
-                                    listaVendedores[i].getPessoa_f_j(),
-                                    listaVendedores[i].getData_aniversario(),
-                                    listaVendedores[i].getNome_cadastro(),
-                                    listaVendedores[i].getNome_fantasia(),
-                                    listaVendedores[i].getCpf_cnpj(),
-                                    listaVendedores[i].getInscri_estadual(),
-                                    listaVendedores[i].getInscri_municipal(),
-                                    listaVendedores[i].getEndereco(),
-                                    listaVendedores[i].getEndereco_bairro(),
-                                    listaVendedores[i].getEndereco_numero(),
-                                    listaVendedores[i].getEndereco_complemento(),
-                                    listaVendedores[i].getEndereco_uf(),
-                                    listaVendedores[i].getEndereco_id_municipio(),
-                                    listaVendedores[i].getEndereco_cep(),
-                                    listaVendedores[i].getUsuario_id(),
-                                    listaVendedores[i].getUsuario_nome(),
-                                    listaVendedores[i].getUsuario_data(),
-                                    listaVendedores[i].getF_cliente(),
-                                    listaVendedores[i].getF_fornecedor(),
-                                    listaVendedores[i].getF_funcionario(),
-                                    listaVendedores[i].getF_vendedor(),
-                                    listaVendedores[i].getF_transportador(),
-                                    listaVendedores[i].getData_ultima_compra(),
-                                    listaVendedores[i].getId_vendedor(),
-                                    listaVendedores[i].getF_id_cliente(),
-                                    listaVendedores[i].getId_entidade(),
-                                    listaVendedores[i].getF_id_fornecedor(),
-                                    listaVendedores[i].getF_id_vendedor(),
-                                    listaVendedores[i].getF_id_transportador(),
-                                    listaVendedores[i].getTelefone_principal(),
-                                    listaVendedores[i].getEmail_principal(),
-                                    listaVendedores[i].getId_pais(),
-                                    listaVendedores[i].getF_id_funcionario(),
-                                    listaVendedores[i].getAvisar_com_dias(),
-                                    listaVendedores[i].getObservacoes(),
-                                    listaVendedores[i].getPadrao_id_c_custo(),
-                                    listaVendedores[i].getPadrao_id_c_gerenciadora(),
-                                    listaVendedores[i].getPadrao_id_c_analitica(),
-                                    listaVendedores[i].getCob_endereco(),
-                                    listaVendedores[i].getCob_endereco_bairro(),
-                                    listaVendedores[i].getCob_endereco_numero(),
-                                    listaVendedores[i].getCob_endereco_complemento(),
-                                    listaVendedores[i].getCob_endereco_uf(),
-                                    listaVendedores[i].getCob_endereco_id_municipio(),
-                                    listaVendedores[i].getCob_endereco_cep(),
-                                    listaVendedores[i].getCob_endereco_id_pais(),
-                                    listaVendedores[i].getLimite_credito(),
-                                    listaVendedores[i].getLimite_disponivel(),
-                                    listaVendedores[i].getPessoa_contato_financeiro(),
-                                    listaVendedores[i].getEmail_financeiro(),
-                                    listaVendedores[i].getObservacoes_faturamento(),
-                                    listaVendedores[i].getObservacoes_financeiro(),
-                                    listaVendedores[i].getTelefone_dois(),
-                                    listaVendedores[i].getTelefone_tres(),
-                                    listaVendedores[i].getPessoa_contato_principal(),
-                                    listaVendedores[i].getInd_da_ie_destinatario(),
-                                    listaVendedores[i].getComissao_percentual(),
-                                    listaVendedores[i].getId_setor(),
-                                    listaVendedores[i].getNfe_email_enviar(),
-                                    listaVendedores[i].getNfe_email_um(),
-                                    listaVendedores[i].getNfe_email_dois(),
-                                    listaVendedores[i].getNfe_email_tres(),
-                                    listaVendedores[i].getNfe_email_quatro(),
-                                    listaVendedores[i].getNfe_email_cinco(),
-                                    listaVendedores[i].getId_grupo_vendedor(),
-                                    listaVendedores[i].getVendedor_usa_portal(),
-                                    listaVendedores[i].getVendedor_id_user_portal(),
-                                    listaVendedores[i].getF_tarifa(),
-                                    listaVendedores[i].getF_id_tarifa(),
-                                    listaVendedores[i].getF_produtor(),
-                                    listaVendedores[i].getRg_numero(),
-                                    listaVendedores[i].getRg_ssp(),
-                                    listaVendedores[i].getConta_contabil(),
-                                    listaVendedores[i].getMotorista(),
-                                    listaVendedores[i].getF_id_motorista(),
-                                    listaVendedores[i].getHabilitacao_numero(),
-                                    listaVendedores[i].getHabilitacao_categoria(),
-                                    listaVendedores[i].getHabilitacao_vencimento(),
-                                    listaVendedores[i].getMot_id_transportadora(),
-                                    listaVendedores[i].getLocal_cadastro());
-
-                            mNotificationManager.notify(0, notificacao.build());
-                        }
-
-                        banco.Atualiza("UPDATE TBL_CADASTRO_SYNC SET SYNC = 'S' WHERE ID_WEB_USUARIO = " + id_usuario);
-                        notificacao.setContentText("Clientes completo")
-                                .setProgress(0, 0, false);
-                        mNotificationManager.notify(0, notificacao.build());
-                        System.gc();
-                    } catch (IOException | XmlPullParserException e) {
-
-                        notificacao.setContentText("Problema de conexão").
-                                setContentTitle("Verifique sua conexão!").
-                                setProgress(0, 0, false).
-                                setSmallIcon(R.mipmap.ic_sem_internet);
-                        mNotificationManager.notify(0, notificacao.build());
-
-                    } finally {
-                        System.gc();
+                    Cliente[] listaCliente;
+                    if (Integer.parseInt(banco.ConsultaSQL("SELECT COUNT(*) FROM TBL_USUARIO_VINCULO_VENDEDOR WHERE ID_USUARIO = " + id_usuario + ";", "COUNT")) > 0) {
+                        listaCliente = banco.sincronizaCliente("SELECT A.* FROM TBL_CADASTRO A \n" +
+                                "    INNER JOIN TBL_USUARIO_VINCULO_VENDEDOR B ON (B.ID_VENDEDOR = A.ID_VENDEDOR) \n" +
+                                "WHERE A.F_CLIENTE = 'S' AND B.ID_USUARIO = '" + id_usuario + "';");
+                    } else {
+                        listaCliente = banco.sincronizaCliente("SELECT * FROM TBL_CADASTRO WHERE F_VENDEDOR = 'S' OR F_CLIENTE = 'S';");
                     }
-                } else {
-                    notificacao.setProgress(0, 0, true).
-                            setContentText("Clientes").
-                            setContentTitle("Sincronia em andamento")
-                            .setAutoCancel(true);
-                    mNotificationManager.notify(0, notificacao.build());
-                    try {
-                        Cliente[] listaCliente;
-                        int quantidadeVinculos = Integer.parseInt(banco.ConsultaSQL("SELECT COUNT(*) FROM TBL_USUARIO_VINCULO_VENDEDOR WHERE ID_USUARIO = " + id_usuario + ";", "COUNT"));
-                        if (quantidadeVinculos > 0) {
-                            listaCliente = banco.sincronizaCliente("SELECT A.* FROM TBL_CADASTRO A INNER JOIN TBL_USUARIO_VINCULO_VENDEDOR B ON (B.ID_VENDEDOR = A.ID_VENDEDOR) " +
-                                    "INNER JOIN TBL_CADASTRO_SYNC C ON (A.ID_CADASTRO = C.ID_CADASTRO) WHERE A.F_CLIENTE = 'S' AND B.ID_USUARIO =  " + id_usuario + " AND C.SYNC = 'N';");
-                        } else {
-                            listaCliente = banco.sincronizaCliente("SELECT A.* FROM TBL_CADASTRO A INNER JOIN TBL_CADASTRO_SYNC B ON (A.ID_CADASTRO = B.ID_CADASTRO) WHERE B.ID_WEB_USUARIO = " + id_usuario + " AND B.SYNC = 'N' AND A.F_CLIENTE = 'S';");
-                        }
 
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                ivInternet.setVisibility(View.INVISIBLE);
-                            }
-                        });
-
-                        if (listaCliente.length > 0 || quantidadeVinculos > 0) {
-                            db.alterar("UPDATE TBL_CADASTRO SET SINCRONIZADO = 'N'");
-                        }
-
-                        for (int i = 0; listaCliente.length > i; i++) {
-                            notificacao.setProgress(listaCliente.length, i, false)
-                                    .setPriority(0);
-                            if (db.contagem("SELECT COUNT(ID_CADASTRO) FROM TBL_CADASTRO WHERE ID_CADASTRO = " + listaCliente[i].getId_cadastro() + ";") == 0) {
-                                db.inserirTBL_CADASTRO(listaCliente[i].getAtivo(),
-                                        listaCliente[i].getId_empresa(),
-                                        listaCliente[i].getId_cadastro(),
-                                        listaCliente[i].getPessoa_f_j(),
-                                        listaCliente[i].getData_aniversario(),
-                                        listaCliente[i].getNome_cadastro(),
-                                        listaCliente[i].getNome_fantasia(),
-                                        listaCliente[i].getCpf_cnpj(),
-                                        listaCliente[i].getInscri_estadual(),
-                                        listaCliente[i].getInscri_municipal(),
-                                        listaCliente[i].getEndereco(),
-                                        listaCliente[i].getEndereco_bairro(),
-                                        listaCliente[i].getEndereco_numero(),
-                                        listaCliente[i].getEndereco_complemento(),
-                                        listaCliente[i].getEndereco_uf(),
-                                        listaCliente[i].getEndereco_id_municipio(),
-                                        listaCliente[i].getEndereco_cep(),
-                                        listaCliente[i].getUsuario_id(),
-                                        listaCliente[i].getUsuario_nome(),
-                                        listaCliente[i].getUsuario_data(),
-                                        listaCliente[i].getF_cliente(),
-                                        listaCliente[i].getF_fornecedor(),
-                                        listaCliente[i].getF_funcionario(),
-                                        listaCliente[i].getF_vendedor(),
-                                        listaCliente[i].getF_transportador(),
-                                        listaCliente[i].getData_ultima_compra(),
-                                        listaCliente[i].getId_vendedor(),
-                                        listaCliente[i].getF_id_cliente(),
-                                        listaCliente[i].getId_entidade(),
-                                        listaCliente[i].getF_id_fornecedor(),
-                                        listaCliente[i].getF_id_vendedor(),
-                                        listaCliente[i].getF_id_transportador(),
-                                        listaCliente[i].getTelefone_principal(),
-                                        listaCliente[i].getEmail_principal(),
-                                        listaCliente[i].getId_pais(),
-                                        listaCliente[i].getF_id_funcionario(),
-                                        listaCliente[i].getAvisar_com_dias(),
-                                        listaCliente[i].getObservacoes(),
-                                        listaCliente[i].getPadrao_id_c_custo(),
-                                        listaCliente[i].getPadrao_id_c_gerenciadora(),
-                                        listaCliente[i].getPadrao_id_c_analitica(),
-                                        listaCliente[i].getCob_endereco(),
-                                        listaCliente[i].getCob_endereco_bairro(),
-                                        listaCliente[i].getCob_endereco_numero(),
-                                        listaCliente[i].getCob_endereco_complemento(),
-                                        listaCliente[i].getCob_endereco_uf(),
-                                        listaCliente[i].getCob_endereco_id_municipio(),
-                                        listaCliente[i].getCob_endereco_cep(),
-                                        listaCliente[i].getCob_endereco_id_pais(),
-                                        listaCliente[i].getLimite_credito(),
-                                        listaCliente[i].getLimite_disponivel(),
-                                        listaCliente[i].getPessoa_contato_financeiro(),
-                                        listaCliente[i].getEmail_financeiro(),
-                                        listaCliente[i].getObservacoes_faturamento(),
-                                        listaCliente[i].getObservacoes_financeiro(),
-                                        listaCliente[i].getTelefone_dois(),
-                                        listaCliente[i].getTelefone_tres(),
-                                        listaCliente[i].getPessoa_contato_principal(),
-                                        listaCliente[i].getInd_da_ie_destinatario(),
-                                        listaCliente[i].getComissao_percentual(),
-                                        listaCliente[i].getId_setor(),
-                                        listaCliente[i].getNfe_email_enviar(),
-                                        listaCliente[i].getNfe_email_um(),
-                                        listaCliente[i].getNfe_email_dois(),
-                                        listaCliente[i].getNfe_email_tres(),
-                                        listaCliente[i].getNfe_email_quatro(),
-                                        listaCliente[i].getNfe_email_cinco(),
-                                        listaCliente[i].getId_grupo_vendedor(),
-                                        listaCliente[i].getVendedor_usa_portal(),
-                                        listaCliente[i].getVendedor_id_user_portal(),
-                                        listaCliente[i].getF_tarifa(),
-                                        listaCliente[i].getF_id_tarifa(),
-                                        listaCliente[i].getF_produtor(),
-                                        listaCliente[i].getRg_numero(),
-                                        listaCliente[i].getRg_ssp(),
-                                        listaCliente[i].getConta_contabil(),
-                                        listaCliente[i].getMotorista(),
-                                        listaCliente[i].getF_id_motorista(),
-                                        listaCliente[i].getHabilitacao_numero(),
-                                        listaCliente[i].getHabilitacao_categoria(),
-                                        listaCliente[i].getHabilitacao_vencimento(),
-                                        listaCliente[i].getMot_id_transportadora(),
-                                        listaCliente[i].getLocal_cadastro());
-                            } else {
-                                db.atualizarTBL_CADASTRO(listaCliente[i].getAtivo(),
-                                        listaCliente[i].getId_empresa(),
-                                        listaCliente[i].getId_cadastro(),
-                                        listaCliente[i].getPessoa_f_j(),
-                                        listaCliente[i].getData_aniversario(),
-                                        listaCliente[i].getNome_cadastro(),
-                                        listaCliente[i].getNome_fantasia(),
-                                        listaCliente[i].getCpf_cnpj(),
-                                        listaCliente[i].getInscri_estadual(),
-                                        listaCliente[i].getInscri_municipal(),
-                                        listaCliente[i].getEndereco(),
-                                        listaCliente[i].getEndereco_bairro(),
-                                        listaCliente[i].getEndereco_numero(),
-                                        listaCliente[i].getEndereco_complemento(),
-                                        listaCliente[i].getEndereco_uf(),
-                                        listaCliente[i].getEndereco_id_municipio(),
-                                        listaCliente[i].getEndereco_cep(),
-                                        listaCliente[i].getUsuario_id(),
-                                        listaCliente[i].getUsuario_nome(),
-                                        listaCliente[i].getUsuario_data(),
-                                        listaCliente[i].getF_cliente(),
-                                        listaCliente[i].getF_fornecedor(),
-                                        listaCliente[i].getF_funcionario(),
-                                        listaCliente[i].getF_vendedor(),
-                                        listaCliente[i].getF_transportador(),
-                                        listaCliente[i].getData_ultima_compra(),
-                                        listaCliente[i].getId_vendedor(),
-                                        listaCliente[i].getF_id_cliente(),
-                                        listaCliente[i].getId_entidade(),
-                                        listaCliente[i].getF_id_fornecedor(),
-                                        listaCliente[i].getF_id_vendedor(),
-                                        listaCliente[i].getF_id_transportador(),
-                                        listaCliente[i].getTelefone_principal(),
-                                        listaCliente[i].getEmail_principal(),
-                                        listaCliente[i].getId_pais(),
-                                        listaCliente[i].getF_id_funcionario(),
-                                        listaCliente[i].getAvisar_com_dias(),
-                                        listaCliente[i].getObservacoes(),
-                                        listaCliente[i].getPadrao_id_c_custo(),
-                                        listaCliente[i].getPadrao_id_c_gerenciadora(),
-                                        listaCliente[i].getPadrao_id_c_analitica(),
-                                        listaCliente[i].getCob_endereco(),
-                                        listaCliente[i].getCob_endereco_bairro(),
-                                        listaCliente[i].getCob_endereco_numero(),
-                                        listaCliente[i].getCob_endereco_complemento(),
-                                        listaCliente[i].getCob_endereco_uf(),
-                                        listaCliente[i].getCob_endereco_id_municipio(),
-                                        listaCliente[i].getCob_endereco_cep(),
-                                        listaCliente[i].getCob_endereco_id_pais(),
-                                        listaCliente[i].getLimite_credito(),
-                                        listaCliente[i].getLimite_disponivel(),
-                                        listaCliente[i].getPessoa_contato_financeiro(),
-                                        listaCliente[i].getEmail_financeiro(),
-                                        listaCliente[i].getObservacoes_faturamento(),
-                                        listaCliente[i].getObservacoes_financeiro(),
-                                        listaCliente[i].getTelefone_dois(),
-                                        listaCliente[i].getTelefone_tres(),
-                                        listaCliente[i].getPessoa_contato_principal(),
-                                        listaCliente[i].getInd_da_ie_destinatario(),
-                                        listaCliente[i].getComissao_percentual(),
-                                        listaCliente[i].getId_setor(),
-                                        listaCliente[i].getNfe_email_enviar(),
-                                        listaCliente[i].getNfe_email_um(),
-                                        listaCliente[i].getNfe_email_dois(),
-                                        listaCliente[i].getNfe_email_tres(),
-                                        listaCliente[i].getNfe_email_quatro(),
-                                        listaCliente[i].getNfe_email_cinco(),
-                                        listaCliente[i].getId_grupo_vendedor(),
-                                        listaCliente[i].getVendedor_usa_portal(),
-                                        listaCliente[i].getVendedor_id_user_portal(),
-                                        listaCliente[i].getF_tarifa(),
-                                        listaCliente[i].getF_id_tarifa(),
-                                        listaCliente[i].getF_produtor(),
-                                        listaCliente[i].getRg_numero(),
-                                        listaCliente[i].getRg_ssp(),
-                                        listaCliente[i].getConta_contabil(),
-                                        listaCliente[i].getMotorista(),
-                                        listaCliente[i].getF_id_motorista(),
-                                        listaCliente[i].getHabilitacao_numero(),
-                                        listaCliente[i].getHabilitacao_categoria(),
-                                        listaCliente[i].getHabilitacao_vencimento(),
-                                        listaCliente[i].getMot_id_transportadora(),
-                                        listaCliente[i].getLocal_cadastro());
-                            }
-                            mNotificationManager.notify(0, notificacao.build());
-                        }
-                        banco.Atualiza("UPDATE TBL_CADASTRO_SYNC SET SYNC = 'S' WHERE ID_WEB_USUARIO = " + id_usuario + ";");
-                        notificacao.setContentText("Clientes completo")
-                                .setProgress(0, 0, false);
-                        mNotificationManager.notify(0, notificacao.build());
-                    } catch (XmlPullParserException | IOException e) {
-
-                        notificacao.setContentText("Problema de conexão").
-                                setContentTitle("Verifique sua conexão!").
-                                setProgress(0, 0, false).
-                                setSmallIcon(R.mipmap.ic_sem_internet);
-                        mNotificationManager.notify(0, notificacao.build());
-
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                ivInternet.setVisibility(View.VISIBLE);
-
-                            }
-                        });
-                        System.out.println(e.getMessage());
-                    }
-                }
-
-                if (db.contagem("SELECT COUNT(*) FROM TBL_PRODUTO") == 0) {
-                    notificacao.setProgress(0, 0, true).
-                            setContentText("Produtos").
-                            setContentTitle("Sincronia em andamento");
-                    mNotificationManager.notify(0, notificacao.build());
-                    try {
-
-                        Produto[] listaProduto = banco.sincronizaProduto("SELECT A.*, B.DESCRICAO FROM TBL_PRODUTO A INNER JOIN TBL_PRODUTO_UNID_MEDIDA B ON A.UNIDADE = B.ABREVIATURA WHERE A.PRODUTO_VENDA = 'S' AND A.MULTI_DISPOSITIVO = 'S';");
-
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                ivInternet.setVisibility(View.INVISIBLE);
-
-                            }
-                        });
-
-                        for (int i = 0; listaProduto.length > i; i++) {
-                            notificacao.setProgress(listaProduto.length, i, false);
-                            db.inserirTBL_PRODUTO(listaProduto[i].getAtivo(),
-                                    listaProduto[i].getId_produto(),
-                                    listaProduto[i].getNome_produto(),
-                                    listaProduto[i].getUnidade(),
-                                    listaProduto[i].getTipo_cadastro(),
-                                    listaProduto[i].getId_entidade(),
-                                    listaProduto[i].getNcm(),
-                                    listaProduto[i].getId_grupo(),
-                                    listaProduto[i].getId_sub_grupo(),
-                                    listaProduto[i].getPeso_bruto(),
-                                    listaProduto[i].getPeso_liquido(),
-                                    listaProduto[i].getCodigo_em_barras(),
-                                    listaProduto[i].getMovimenta_estoque(),
-                                    listaProduto[i].getNome_da_marca(),
-                                    listaProduto[i].getId_empresa(),
-                                    listaProduto[i].getId_origem(),
-                                    listaProduto[i].getCusto_produto(),
-                                    listaProduto[i].getCusto_per_ipi(),
-                                    listaProduto[i].getCusto_ipi(),
-                                    listaProduto[i].getCusto_per_frete(),
-                                    listaProduto[i].getCusto_frete(),
-                                    listaProduto[i].getCusto_per_icms(),
-                                    listaProduto[i].getCusto_icms(),
-                                    listaProduto[i].getCusto_per_fin(),
-                                    listaProduto[i].getCusto_fin(),
-                                    listaProduto[i].getCusto_per_subst(),
-                                    listaProduto[i].getCusto_subt(),
-                                    listaProduto[i].getCusto_per_outros(),
-                                    listaProduto[i].getCusto_outros(),
-                                    listaProduto[i].getValor_custo(),
-                                    listaProduto[i].getExcluido(),
-                                    listaProduto[i].getExcluido_por(),
-                                    listaProduto[i].getExcluido_por_data(),
-                                    listaProduto[i].getExcluido_codigo_novo(),
-                                    listaProduto[i].getAjuste_preco_data(),
-                                    listaProduto[i].getAjuste_preco_nfe(),
-                                    listaProduto[i].getAjuste_preco_usuario(),
-                                    listaProduto[i].getTotal_custo(),
-                                    listaProduto[i].getTotal_credito(),
-                                    listaProduto[i].getValor_custo_estoque(),
-                                    listaProduto[i].getCusto_data_inicial(),
-                                    listaProduto[i].getCusto_valor_inicial(),
-                                    listaProduto[i].getProduto_venda(),
-                                    listaProduto[i].getProduto_insumo(),
-                                    listaProduto[i].getProduto_consumo(),
-                                    listaProduto[i].getProduto_producao(),
-                                    listaProduto[i].getVenda_perc_comissao(),
-                                    listaProduto[i].getVenda_preco(),
-                                    listaProduto[i].getVenda_perc_comissao_dois(),
-                                    listaProduto[i].getDescricao());
-                            mNotificationManager.notify(0, notificacao.build());
-                        }
-                    } catch (XmlPullParserException | IOException e) {
-
-                        notificacao.setContentText("Problema de conexão").
-                                setContentTitle("Verifique sua conexão!").
-                                setProgress(0, 0, false).
-                                setSmallIcon(R.mipmap.ic_sem_internet);
-                        mNotificationManager.notify(0, notificacao.build());
-
-
-                        System.out.println(e.getMessage());
-                    }
-                } else {
-                    notificacao.setProgress(0, 0, true).
-                            setContentText("Produtos").
-                            setContentTitle("Sincronia em andamento");
-                    mNotificationManager.notify(0, notificacao.build());
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            ivInternet.setVisibility(View.INVISIBLE);
+                        }
+                    });
+
+                    for (int i = 0; listaCliente.length > i; i++) {
+                        notificacao.setProgress(listaCliente.length, i, false);
+                        db.inserirTBL_CADASTRO(listaCliente[i].getAtivo(),
+                                listaCliente[i].getId_empresa(),
+                                listaCliente[i].getId_cadastro(),
+                                listaCliente[i].getPessoa_f_j(),
+                                listaCliente[i].getData_aniversario(),
+                                listaCliente[i].getNome_cadastro(),
+                                listaCliente[i].getNome_fantasia(),
+                                listaCliente[i].getCpf_cnpj(),
+                                listaCliente[i].getInscri_estadual(),
+                                listaCliente[i].getInscri_municipal(),
+                                listaCliente[i].getEndereco(),
+                                listaCliente[i].getEndereco_bairro(),
+                                listaCliente[i].getEndereco_numero(),
+                                listaCliente[i].getEndereco_complemento(),
+                                listaCliente[i].getEndereco_uf(),
+                                listaCliente[i].getEndereco_id_municipio(),
+                                listaCliente[i].getEndereco_cep(),
+                                listaCliente[i].getUsuario_id(),
+                                listaCliente[i].getUsuario_nome(),
+                                listaCliente[i].getUsuario_data(),
+                                listaCliente[i].getF_cliente(),
+                                listaCliente[i].getF_fornecedor(),
+                                listaCliente[i].getF_funcionario(),
+                                listaCliente[i].getF_vendedor(),
+                                listaCliente[i].getF_transportador(),
+                                listaCliente[i].getData_ultima_compra(),
+                                listaCliente[i].getId_vendedor(),
+                                listaCliente[i].getF_id_cliente(),
+                                listaCliente[i].getId_entidade(),
+                                listaCliente[i].getF_id_fornecedor(),
+                                listaCliente[i].getF_id_vendedor(),
+                                listaCliente[i].getF_id_transportador(),
+                                listaCliente[i].getTelefone_principal(),
+                                listaCliente[i].getEmail_principal(),
+                                listaCliente[i].getId_pais(),
+                                listaCliente[i].getF_id_funcionario(),
+                                listaCliente[i].getAvisar_com_dias(),
+                                listaCliente[i].getObservacoes(),
+                                listaCliente[i].getPadrao_id_c_custo(),
+                                listaCliente[i].getPadrao_id_c_gerenciadora(),
+                                listaCliente[i].getPadrao_id_c_analitica(),
+                                listaCliente[i].getCob_endereco(),
+                                listaCliente[i].getCob_endereco_bairro(),
+                                listaCliente[i].getCob_endereco_numero(),
+                                listaCliente[i].getCob_endereco_complemento(),
+                                listaCliente[i].getCob_endereco_uf(),
+                                listaCliente[i].getCob_endereco_id_municipio(),
+                                listaCliente[i].getCob_endereco_cep(),
+                                listaCliente[i].getCob_endereco_id_pais(),
+                                listaCliente[i].getLimite_credito(),
+                                listaCliente[i].getLimite_disponivel(),
+                                listaCliente[i].getPessoa_contato_financeiro(),
+                                listaCliente[i].getEmail_financeiro(),
+                                listaCliente[i].getObservacoes_faturamento(),
+                                listaCliente[i].getObservacoes_financeiro(),
+                                listaCliente[i].getTelefone_dois(),
+                                listaCliente[i].getTelefone_tres(),
+                                listaCliente[i].getPessoa_contato_principal(),
+                                listaCliente[i].getInd_da_ie_destinatario(),
+                                listaCliente[i].getComissao_percentual(),
+                                listaCliente[i].getId_setor(),
+                                listaCliente[i].getNfe_email_enviar(),
+                                listaCliente[i].getNfe_email_um(),
+                                listaCliente[i].getNfe_email_dois(),
+                                listaCliente[i].getNfe_email_tres(),
+                                listaCliente[i].getNfe_email_quatro(),
+                                listaCliente[i].getNfe_email_cinco(),
+                                listaCliente[i].getId_grupo_vendedor(),
+                                listaCliente[i].getVendedor_usa_portal(),
+                                listaCliente[i].getVendedor_id_user_portal(),
+                                listaCliente[i].getF_tarifa(),
+                                listaCliente[i].getF_id_tarifa(),
+                                listaCliente[i].getF_produtor(),
+                                listaCliente[i].getRg_numero(),
+                                listaCliente[i].getRg_ssp(),
+                                listaCliente[i].getConta_contabil(),
+                                listaCliente[i].getMotorista(),
+                                listaCliente[i].getF_id_motorista(),
+                                listaCliente[i].getHabilitacao_numero(),
+                                listaCliente[i].getHabilitacao_categoria(),
+                                listaCliente[i].getHabilitacao_vencimento(),
+                                listaCliente[i].getMot_id_transportadora(),
+                                listaCliente[i].getLocal_cadastro());
+
+                        mNotificationManager.notify(0, notificacao.build());
+                    }
+
+                    Cliente[] listaVendedores = banco.sincronizaCliente("SELECT * FROM TBL_CADASTRO WHERE F_VENDEDOR = 'S' ORDER BY F_ID_VENDEDOR;");
+                    for (int i = 0; listaVendedores.length > i; i++) {
+                        notificacao.setProgress(listaVendedores.length, i, false);
+                        db.inserirTBL_CADASTRO(listaVendedores[i].getAtivo(),
+                                listaVendedores[i].getId_empresa(),
+                                listaVendedores[i].getId_cadastro(),
+                                listaVendedores[i].getPessoa_f_j(),
+                                listaVendedores[i].getData_aniversario(),
+                                listaVendedores[i].getNome_cadastro(),
+                                listaVendedores[i].getNome_fantasia(),
+                                listaVendedores[i].getCpf_cnpj(),
+                                listaVendedores[i].getInscri_estadual(),
+                                listaVendedores[i].getInscri_municipal(),
+                                listaVendedores[i].getEndereco(),
+                                listaVendedores[i].getEndereco_bairro(),
+                                listaVendedores[i].getEndereco_numero(),
+                                listaVendedores[i].getEndereco_complemento(),
+                                listaVendedores[i].getEndereco_uf(),
+                                listaVendedores[i].getEndereco_id_municipio(),
+                                listaVendedores[i].getEndereco_cep(),
+                                listaVendedores[i].getUsuario_id(),
+                                listaVendedores[i].getUsuario_nome(),
+                                listaVendedores[i].getUsuario_data(),
+                                listaVendedores[i].getF_cliente(),
+                                listaVendedores[i].getF_fornecedor(),
+                                listaVendedores[i].getF_funcionario(),
+                                listaVendedores[i].getF_vendedor(),
+                                listaVendedores[i].getF_transportador(),
+                                listaVendedores[i].getData_ultima_compra(),
+                                listaVendedores[i].getId_vendedor(),
+                                listaVendedores[i].getF_id_cliente(),
+                                listaVendedores[i].getId_entidade(),
+                                listaVendedores[i].getF_id_fornecedor(),
+                                listaVendedores[i].getF_id_vendedor(),
+                                listaVendedores[i].getF_id_transportador(),
+                                listaVendedores[i].getTelefone_principal(),
+                                listaVendedores[i].getEmail_principal(),
+                                listaVendedores[i].getId_pais(),
+                                listaVendedores[i].getF_id_funcionario(),
+                                listaVendedores[i].getAvisar_com_dias(),
+                                listaVendedores[i].getObservacoes(),
+                                listaVendedores[i].getPadrao_id_c_custo(),
+                                listaVendedores[i].getPadrao_id_c_gerenciadora(),
+                                listaVendedores[i].getPadrao_id_c_analitica(),
+                                listaVendedores[i].getCob_endereco(),
+                                listaVendedores[i].getCob_endereco_bairro(),
+                                listaVendedores[i].getCob_endereco_numero(),
+                                listaVendedores[i].getCob_endereco_complemento(),
+                                listaVendedores[i].getCob_endereco_uf(),
+                                listaVendedores[i].getCob_endereco_id_municipio(),
+                                listaVendedores[i].getCob_endereco_cep(),
+                                listaVendedores[i].getCob_endereco_id_pais(),
+                                listaVendedores[i].getLimite_credito(),
+                                listaVendedores[i].getLimite_disponivel(),
+                                listaVendedores[i].getPessoa_contato_financeiro(),
+                                listaVendedores[i].getEmail_financeiro(),
+                                listaVendedores[i].getObservacoes_faturamento(),
+                                listaVendedores[i].getObservacoes_financeiro(),
+                                listaVendedores[i].getTelefone_dois(),
+                                listaVendedores[i].getTelefone_tres(),
+                                listaVendedores[i].getPessoa_contato_principal(),
+                                listaVendedores[i].getInd_da_ie_destinatario(),
+                                listaVendedores[i].getComissao_percentual(),
+                                listaVendedores[i].getId_setor(),
+                                listaVendedores[i].getNfe_email_enviar(),
+                                listaVendedores[i].getNfe_email_um(),
+                                listaVendedores[i].getNfe_email_dois(),
+                                listaVendedores[i].getNfe_email_tres(),
+                                listaVendedores[i].getNfe_email_quatro(),
+                                listaVendedores[i].getNfe_email_cinco(),
+                                listaVendedores[i].getId_grupo_vendedor(),
+                                listaVendedores[i].getVendedor_usa_portal(),
+                                listaVendedores[i].getVendedor_id_user_portal(),
+                                listaVendedores[i].getF_tarifa(),
+                                listaVendedores[i].getF_id_tarifa(),
+                                listaVendedores[i].getF_produtor(),
+                                listaVendedores[i].getRg_numero(),
+                                listaVendedores[i].getRg_ssp(),
+                                listaVendedores[i].getConta_contabil(),
+                                listaVendedores[i].getMotorista(),
+                                listaVendedores[i].getF_id_motorista(),
+                                listaVendedores[i].getHabilitacao_numero(),
+                                listaVendedores[i].getHabilitacao_categoria(),
+                                listaVendedores[i].getHabilitacao_vencimento(),
+                                listaVendedores[i].getMot_id_transportadora(),
+                                listaVendedores[i].getLocal_cadastro());
+
+                        mNotificationManager.notify(0, notificacao.build());
+                    }
+
+                    banco.Atualiza("UPDATE TBL_CADASTRO_SYNC SET SYNC = 'S' WHERE ID_WEB_USUARIO = " + id_usuario);
+                    notificacao.setContentText("Clientes completo")
+                            .setProgress(0, 0, false);
+                    mNotificationManager.notify(0, notificacao.build());
+                    System.gc();
+                } catch (IOException | XmlPullParserException e) {
+
+                    notificacao.setContentText("Problema de conexão").
+                            setContentTitle("Verifique sua conexão!").
+                            setProgress(0, 0, false).
+                            setSmallIcon(R.mipmap.ic_sem_internet);
+                    mNotificationManager.notify(0, notificacao.build());
+
+                } finally {
+                    System.gc();
+                }
+
+                notificacao.setProgress(0, 0, true).
+                        setContentText("Produtos").
+                        setContentTitle("Sincronia em andamento");
+                mNotificationManager.notify(0, notificacao.build());
+                try {
+
+                    db.alterar("DELETE FROM TBL_PRODUTO;");
+                    Produto[] listaProduto = banco.sincronizaProduto("SELECT A.*, B.DESCRICAO FROM TBL_PRODUTO A INNER JOIN TBL_PRODUTO_UNID_MEDIDA B ON A.UNIDADE = B.ABREVIATURA WHERE A.PRODUTO_VENDA = 'S' AND A.MULTI_DISPOSITIVO = 'S';");
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            ivInternet.setVisibility(View.INVISIBLE);
 
                         }
                     });
-                    try {
-                        Produto[] listaProduto = banco.sincronizaProduto("SELECT A.*, B.DESCRICAO FROM TBL_PRODUTO A INNER JOIN TBL_PRODUTO_UNID_MEDIDA B ON A.UNIDADE = B.ABREVIATURA INNER JOIN TBL_PRODUTO_SYNC C ON A.ID_PRODUTO = C.ID_PRODUTO WHERE A.PRODUTO_VENDA = 'S' AND C.SYNC = 'N' AND C.ID_WEB_USUARIO = " + id_usuario + " AND A.MULTI_DISPOSITIVO = 'S';");
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                ivInternet.setVisibility(View.INVISIBLE);
 
-                            }
-                        });
-                        if (listaProduto.length > 0) {
-                            db.alterar("UPDATE TBL_PRODUTO SET SINCRONIZADO = 'N';");
-                        }
-                        for (int i = 0; listaProduto.length > i; i++) {
-                            notificacao.setProgress(listaProduto.length, i, false);
-                            if (db.contagem("SELECT COUNT(*) FROM TBL_PRODUTO WHERE ID_PRODUTO = '" + listaProduto[i].getId_produto() + "'") == 0) {
-                                db.inserirTBL_PRODUTO(listaProduto[i].getAtivo(),
-                                        listaProduto[i].getId_produto(),
-                                        listaProduto[i].getNome_produto(),
-                                        listaProduto[i].getUnidade(),
-                                        listaProduto[i].getTipo_cadastro(),
-                                        listaProduto[i].getId_entidade(),
-                                        listaProduto[i].getNcm(),
-                                        listaProduto[i].getId_grupo(),
-                                        listaProduto[i].getId_sub_grupo(),
-                                        listaProduto[i].getPeso_bruto(),
-                                        listaProduto[i].getPeso_liquido(),
-                                        listaProduto[i].getCodigo_em_barras(),
-                                        listaProduto[i].getMovimenta_estoque(),
-                                        listaProduto[i].getNome_da_marca(),
-                                        listaProduto[i].getId_empresa(),
-                                        listaProduto[i].getId_origem(),
-                                        listaProduto[i].getCusto_produto(),
-                                        listaProduto[i].getCusto_per_ipi(),
-                                        listaProduto[i].getCusto_ipi(),
-                                        listaProduto[i].getCusto_per_frete(),
-                                        listaProduto[i].getCusto_frete(),
-                                        listaProduto[i].getCusto_per_icms(),
-                                        listaProduto[i].getCusto_icms(),
-                                        listaProduto[i].getCusto_per_fin(),
-                                        listaProduto[i].getCusto_fin(),
-                                        listaProduto[i].getCusto_per_subst(),
-                                        listaProduto[i].getCusto_subt(),
-                                        listaProduto[i].getCusto_per_outros(),
-                                        listaProduto[i].getCusto_outros(),
-                                        listaProduto[i].getValor_custo(),
-                                        listaProduto[i].getExcluido(),
-                                        listaProduto[i].getExcluido_por(),
-                                        listaProduto[i].getExcluido_por_data(),
-                                        listaProduto[i].getExcluido_codigo_novo(),
-                                        listaProduto[i].getAjuste_preco_data(),
-                                        listaProduto[i].getAjuste_preco_nfe(),
-                                        listaProduto[i].getAjuste_preco_usuario(),
-                                        listaProduto[i].getTotal_custo(),
-                                        listaProduto[i].getTotal_credito(),
-                                        listaProduto[i].getValor_custo_estoque(),
-                                        listaProduto[i].getCusto_data_inicial(),
-                                        listaProduto[i].getCusto_valor_inicial(),
-                                        listaProduto[i].getProduto_venda(),
-                                        listaProduto[i].getProduto_insumo(),
-                                        listaProduto[i].getProduto_consumo(),
-                                        listaProduto[i].getProduto_producao(),
-                                        listaProduto[i].getVenda_perc_comissao(),
-                                        listaProduto[i].getVenda_preco(),
-                                        listaProduto[i].getVenda_perc_comissao_dois(),
-                                        listaProduto[i].getDescricao());
-                            } else {
-                                db.atualizarTBL_PRODUTO(listaProduto[i].getAtivo(),
-                                        listaProduto[i].getId_produto(),
-                                        listaProduto[i].getNome_produto(),
-                                        listaProduto[i].getUnidade(),
-                                        listaProduto[i].getTipo_cadastro(),
-                                        listaProduto[i].getId_entidade(),
-                                        listaProduto[i].getNcm(),
-                                        listaProduto[i].getId_grupo(),
-                                        listaProduto[i].getId_sub_grupo(),
-                                        listaProduto[i].getPeso_bruto(),
-                                        listaProduto[i].getPeso_liquido(),
-                                        listaProduto[i].getCodigo_em_barras(),
-                                        listaProduto[i].getMovimenta_estoque(),
-                                        listaProduto[i].getNome_da_marca(),
-                                        listaProduto[i].getId_empresa(),
-                                        listaProduto[i].getId_origem(),
-                                        listaProduto[i].getCusto_produto(),
-                                        listaProduto[i].getCusto_per_ipi(),
-                                        listaProduto[i].getCusto_ipi(),
-                                        listaProduto[i].getCusto_per_frete(),
-                                        listaProduto[i].getCusto_frete(),
-                                        listaProduto[i].getCusto_per_icms(),
-                                        listaProduto[i].getCusto_icms(),
-                                        listaProduto[i].getCusto_per_fin(),
-                                        listaProduto[i].getCusto_fin(),
-                                        listaProduto[i].getCusto_per_subst(),
-                                        listaProduto[i].getCusto_subt(),
-                                        listaProduto[i].getCusto_per_outros(),
-                                        listaProduto[i].getCusto_outros(),
-                                        listaProduto[i].getValor_custo(),
-                                        listaProduto[i].getExcluido(),
-                                        listaProduto[i].getExcluido_por(),
-                                        listaProduto[i].getExcluido_por_data(),
-                                        listaProduto[i].getExcluido_codigo_novo(),
-                                        listaProduto[i].getAjuste_preco_data(),
-                                        listaProduto[i].getAjuste_preco_nfe(),
-                                        listaProduto[i].getAjuste_preco_usuario(),
-                                        listaProduto[i].getTotal_custo(),
-                                        listaProduto[i].getTotal_credito(),
-                                        listaProduto[i].getValor_custo_estoque(),
-                                        listaProduto[i].getCusto_data_inicial(),
-                                        listaProduto[i].getCusto_valor_inicial(),
-                                        listaProduto[i].getProduto_venda(),
-                                        listaProduto[i].getProduto_insumo(),
-                                        listaProduto[i].getProduto_consumo(),
-                                        listaProduto[i].getProduto_producao(),
-                                        listaProduto[i].getVenda_perc_comissao(),
-                                        listaProduto[i].getVenda_preco(),
-                                        listaProduto[i].getVenda_perc_comissao_dois(),
-                                        listaProduto[i].getDescricao());
-                            }
-                            mNotificationManager.notify(0, notificacao.build());
-                        }
-                        banco.Atualiza("UPDATE TBL_PRODUTO_SYNC SET SYNC = 'S' WHERE ID_WEB_USUARIO = " + id_usuario + ";");
-                        notificacao.setContentText("Produtos completo")
-                                .setProgress(0, 0, false);
+                    for (int i = 0; listaProduto.length > i; i++) {
+                        notificacao.setProgress(listaProduto.length, i, false);
+                        db.inserirTBL_PRODUTO(listaProduto[i].getAtivo(),
+                                listaProduto[i].getId_produto(),
+                                listaProduto[i].getNome_produto(),
+                                listaProduto[i].getUnidade(),
+                                listaProduto[i].getTipo_cadastro(),
+                                listaProduto[i].getId_entidade(),
+                                listaProduto[i].getNcm(),
+                                listaProduto[i].getId_grupo(),
+                                listaProduto[i].getId_sub_grupo(),
+                                listaProduto[i].getPeso_bruto(),
+                                listaProduto[i].getPeso_liquido(),
+                                listaProduto[i].getCodigo_em_barras(),
+                                listaProduto[i].getMovimenta_estoque(),
+                                listaProduto[i].getNome_da_marca(),
+                                listaProduto[i].getId_empresa(),
+                                listaProduto[i].getId_origem(),
+                                listaProduto[i].getCusto_produto(),
+                                listaProduto[i].getCusto_per_ipi(),
+                                listaProduto[i].getCusto_ipi(),
+                                listaProduto[i].getCusto_per_frete(),
+                                listaProduto[i].getCusto_frete(),
+                                listaProduto[i].getCusto_per_icms(),
+                                listaProduto[i].getCusto_icms(),
+                                listaProduto[i].getCusto_per_fin(),
+                                listaProduto[i].getCusto_fin(),
+                                listaProduto[i].getCusto_per_subst(),
+                                listaProduto[i].getCusto_subt(),
+                                listaProduto[i].getCusto_per_outros(),
+                                listaProduto[i].getCusto_outros(),
+                                listaProduto[i].getValor_custo(),
+                                listaProduto[i].getExcluido(),
+                                listaProduto[i].getExcluido_por(),
+                                listaProduto[i].getExcluido_por_data(),
+                                listaProduto[i].getExcluido_codigo_novo(),
+                                listaProduto[i].getAjuste_preco_data(),
+                                listaProduto[i].getAjuste_preco_nfe(),
+                                listaProduto[i].getAjuste_preco_usuario(),
+                                listaProduto[i].getTotal_custo(),
+                                listaProduto[i].getTotal_credito(),
+                                listaProduto[i].getValor_custo_estoque(),
+                                listaProduto[i].getCusto_data_inicial(),
+                                listaProduto[i].getCusto_valor_inicial(),
+                                listaProduto[i].getProduto_venda(),
+                                listaProduto[i].getProduto_insumo(),
+                                listaProduto[i].getProduto_consumo(),
+                                listaProduto[i].getProduto_producao(),
+                                listaProduto[i].getVenda_perc_comissao(),
+                                listaProduto[i].getVenda_preco(),
+                                listaProduto[i].getVenda_perc_comissao_dois(),
+                                listaProduto[i].getDescricao());
                         mNotificationManager.notify(0, notificacao.build());
-                    } catch (IOException | XmlPullParserException e) {
-
-                        notificacao.setContentText("Problema de conexão").
-                                setContentTitle("Verifique sua conexão!").
-                                setProgress(0, 0, false).
-                                setSmallIcon(R.mipmap.ic_sem_internet);
-                        mNotificationManager.notify(0, notificacao.build());
-
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                ivInternet.setVisibility(View.VISIBLE);
-
-                            }
-                        });
-                        System.out.println(e.getMessage());
                     }
+                } catch (XmlPullParserException | IOException e) {
+
+                    notificacao.setContentText("Problema de conexão").
+                            setContentTitle("Verifique sua conexão!").
+                            setProgress(0, 0, false).
+                            setSmallIcon(R.mipmap.ic_sem_internet);
+                    mNotificationManager.notify(0, notificacao.build());
+
+
+                    System.out.println(e.getMessage());
                 }
 
                 if (db.contagem("SELECT COUNT(*) FROM TBL_PAISES") == 0) {
