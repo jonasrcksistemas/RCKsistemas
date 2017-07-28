@@ -40,6 +40,7 @@ public class WebPedido implements java.io.Serializable {
     private String perc_bonus_credor;
     private String origem;
     private String id_web_pedido_servidor;
+    private String data_prev_entrega;
 
     public WebPedido() {
     }
@@ -350,5 +351,13 @@ public class WebPedido implements java.io.Serializable {
 
     public void setId_web_pedido_servidor(String id_web_pedido_servidor) {
         this.id_web_pedido_servidor = id_web_pedido_servidor;
+    }
+
+    public String getData_prev_entrega() {
+        return data_prev_entrega;
+    }
+
+    public void setData_prev_entrega(String data_prev_entrega) {
+        this.data_prev_entrega = data_prev_entrega;
     }
 }

@@ -28,8 +28,10 @@ import java.util.List;
 
 public class BancoWeb {
 
-    String URL = "http://tksimports.ddns.com.br:3385/Banco/Banco?wsdl";
-//    String URL = "http://rcksistemassuporte.ddns.com.br:3384/Banco/Banco?wsdl";
+    String URL = "http://rcksistemassuporte.ddns.com.br:3383/Banco/Banco?wsdl"; //URL Maquina 05
+//    String URL = "http://rcksistemassuporte.ddns.com.br:3384/Banco/Banco?wsdl";//URL Servidor RCK
+//    String URL = "http://tksimports.ddns.com.br:3385/Banco/Banco?wsdl";//URL Servidor TKS
+
     String pacote = "http://DB/";
     SoapObject soap;
     HttpTransportSE httpTrans;
@@ -671,6 +673,7 @@ public class BancoWeb {
         soap.addProperty("valor_bonus_credor", webPedido.getValor_bonus_credor());
         soap.addProperty("perc_bonus_credor", webPedido.getPerc_bonus_credor());
         soap.addProperty("origem", webPedido.getOrigem());
+        soap.addProperty("data_prev_entrega", webPedido.getData_prev_entrega());
 
         envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
         envelope.setOutputSoapObject(soap);

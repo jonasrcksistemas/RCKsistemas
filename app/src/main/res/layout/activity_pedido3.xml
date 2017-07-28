@@ -61,12 +61,34 @@
                 android:layout_alignTop="@+id/txtPagamento"
                 android:layout_toEndOf="@+id/txtPagamento" />
 
+            <TextView
+                android:id="@+id/txtDataVencimento"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/spPagamento"
+                android:text="DATA DE VENCIMENTO"
+                android:textColor="@color/colorAccent"
+                android:visibility="gone" />
+
+            <EditText
+                android:id="@+id/edtDataVencimento"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/txtDataVencimento"
+                android:layout_alignTop="@id/txtDataVencimento"
+                android:layout_toEndOf="@+id/txtDataVencimento"
+                android:background="@drawable/borda_edittext"
+                android:focusable="false"
+                android:gravity="center_horizontal"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                android:visibility="gone" />
+
             <EditText
                 android:id="@+id/edtObservacao"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:layout_below="@+id/spPagamento"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="25dp"
                 android:background="@drawable/borda_edittext"
                 android:gravity="top"
                 android:hint="OBSERVAÇÕES DO PEDIDO"

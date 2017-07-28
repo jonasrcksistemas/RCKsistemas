@@ -1,6 +1,8 @@
 package com.example.rcksuporte05.rcksistemas.fragment;
 
+import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.CursorIndexOutOfBoundsException;
@@ -10,8 +12,10 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -25,6 +29,9 @@ import com.example.rcksuporte05.rcksistemas.classes.WebPedido;
 import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
 import com.example.rcksuporte05.rcksistemas.interfaces.ActivityCliente;
 import com.example.rcksuporte05.rcksistemas.interfaces.HistoricoFinanceiroMain;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 public class Pedido3 extends Fragment implements View.OnClickListener {
 
@@ -41,6 +48,8 @@ public class Pedido3 extends Fragment implements View.OnClickListener {
     private WebPedido webPedido = new WebPedido();
     private Bundle bundle;
     private PedidoHelper pedidoHelper;
+    private EditText edtDataVencimento;
+    private TextView txtDataVencimento;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -54,6 +63,14 @@ public class Pedido3 extends Fragment implements View.OnClickListener {
 
         edtCliente = (EditText) view.findViewById(R.id.edtCliente);
         edtObservacao = (EditText) view.findViewById(R.id.edtObservacao);
+        edtDataVencimento = (EditText) view.findViewById(R.id.edtDataVencimento);
+        txtDataVencimento = (TextView) view.findViewById(R.id.txtDataVencimento);
+        edtDataVencimento.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mostraDatePickerDialog(PedidoHelper.getActivityPedidoMain(), edtDataVencimento);
+            }
+        });
 
         btnHistoricoFinanceiro = (Button) view.findViewById(R.id.btnHistoricoFinanceiro);
         btnHistoricoFinanceiro.setOnClickListener(this);
@@ -65,6 +82,23 @@ public class Pedido3 extends Fragment implements View.OnClickListener {
         btnBuscarCliente.setOnClickListener(this);
         try {
             spPagamento = (Spinner) view.findViewById(R.id.spPagamento);
+            spPagamento.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    if (adapterPagamento.getItem(spPagamento.getSelectedItemPosition()).getTipo_condicao().equals("2")) {
+                        edtDataVencimento.setVisibility(View.VISIBLE);
+                        txtDataVencimento.setVisibility(View.VISIBLE);
+                    } else {
+                        edtDataVencimento.setVisibility(View.GONE);
+                        txtDataVencimento.setVisibility(View.GONE);
+                    }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
             adapterPagamento = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_activated_1, db.listaCondicoesPagamento("SELECT * FROM TBL_CONDICOES_PAG_CAB;"));
             spPagamento.setAdapter(adapterPagamento);
         } catch (CursorIndexOutOfBoundsException e) {
@@ -143,6 +177,27 @@ public class Pedido3 extends Fragment implements View.OnClickListener {
         return (view);
     }
 
+    public void mostraDatePickerDialog(Context context, final EditText campoTexto) {
+        final Calendar calendar;
+        //Prepara data anterior caso ja tenha sido selecionada
+        if (campoTexto.getTag() != null) {
+            calendar = ((Calendar) campoTexto.getTag());
+        } else {
+            calendar = Calendar.getInstance();
+        }
+        //----
+
+        new DatePickerDialog(context, new DatePickerDialog.OnDateSetListener() {
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                Calendar newDate = Calendar.getInstance();
+                newDate.set(year, monthOfYear, dayOfMonth);
+                campoTexto.setText(new SimpleDateFormat("dd/MM/yyyy").format(newDate.getTime()));
+                campoTexto.setTag(newDate);
+            }
+
+        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
+    }
+
     public void pegaCliente(Cliente cliente) {
         objetoCliente = cliente;
         if (PedidoHelper.getIdPedido() > 0) {
@@ -155,6 +210,7 @@ public class Pedido3 extends Fragment implements View.OnClickListener {
         webPedido.setId_condicao_pagamento(adapterPagamento.getItem(spPagamento.getSelectedItemPosition()).getId_condicao());
         webPedido.setCadastro(objetoCliente);
         webPedido.setObservacoes(edtObservacao.getText().toString());
+        webPedido.setData_prev_entrega(edtDataVencimento.getText().toString().trim());
 
         return webPedido;
     }
