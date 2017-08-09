@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.CursorIndexOutOfBoundsException;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
@@ -46,7 +47,6 @@ public class ListagemPedidoPendente extends AppCompatActivity {
     private List<WebPedido> listaPedido = new ArrayList();
     private List<WebPedidoItens> listaPedidoItens = new ArrayList();
     private EditText edtNumerPedidoPendentes;
-    private MenuItem subirPedido;
     private BancoWeb bancoWeb = new BancoWeb();
     private DBHelper db = new DBHelper(this);
     private Bundle bundle;
@@ -161,7 +161,7 @@ public class ListagemPedidoPendente extends AppCompatActivity {
                                             @Override
                                             public void run() {
                                                 try {
-                                                    listaPedido = db.listaWebPedido("SELECT * FROM TBL_WEB_PEDIDO WHERE PEDIDO_ENVIADO = 'N'");
+                                                    listaPedido = db.listaWebPedido("SELECT * FROM TBL_WEB_PEDIDO WHERE PEDIDO_ENVIADO = 'N' AND USUARIO_LANCAMENTO_ID = " + usuario.getId_usuario() + " ORDER BY ID_WEB_PEDIDO DESC;");
 
                                                     listaAdapterPedidoPendente = new ListaAdapterPedidoPendente(ListagemPedidoPendente.this, listaPedido);
                                                     lstPedidoPendente.setAdapter(listaAdapterPedidoPendente);
@@ -172,7 +172,7 @@ public class ListagemPedidoPendente extends AppCompatActivity {
                                                         public void run() {
                                                             lstPedidoPendente.setVisibility(View.INVISIBLE);
                                                             Toast.makeText(ListagemPedidoPendente.this, "Pedidos sincronizados com sucesso!", Toast.LENGTH_LONG).show();
-                                                            edtNumerPedidoPendentes.setText("0: Pedidos Pendentes");
+                                                            edtNumerPedidoPendentes.setText("Nenhum Pedido Pendente");
                                                         }
                                                     });
                                                 }
@@ -279,15 +279,21 @@ public class ListagemPedidoPendente extends AppCompatActivity {
                                         @Override
                                         public void run() {
                                             try {
-                                                listaPedido = db.listaWebPedido("SELECT * FROM TBL_WEB_PEDIDO WHERE PEDIDO_ENVIADO = 'N'");
+                                                listaPedido = db.listaWebPedido("SELECT * FROM TBL_WEB_PEDIDO WHERE PEDIDO_ENVIADO = 'N' AND USUARIO_LANCAMENTO_ID = " + usuario.getId_usuario() + " ORDER BY ID_WEB_PEDIDO DESC;");
 
                                                 listaAdapterPedidoPendente = new ListaAdapterPedidoPendente(ListagemPedidoPendente.this, listaPedido);
                                                 lstPedidoPendente.setAdapter(listaAdapterPedidoPendente);
-                                                edtNumerPedidoPendentes.setText("0: Pedidos Pendentes");
+                                                if (listaPedido.size() > 1) {
+                                                    edtNumerPedidoPendentes.setText(listaPedido.size() + ": Pedidos Pendentes");
+                                                } else if (listaPedido.size() == 1) {
+                                                    edtNumerPedidoPendentes.setText(listaPedido.size() + ": Pedido Pendente");
+                                                } else if (listaPedido.size() <= 0) {
+                                                    edtNumerPedidoPendentes.setText("Nenhum Pedido Pendente");
+                                                }
                                             } catch (CursorIndexOutOfBoundsException e) {
                                                 Toast.makeText(ListagemPedidoPendente.this, "Pedido " + listaPedido.get(info.position).getId_web_pedido() + " foi enviado com sucesso!", Toast.LENGTH_LONG).show();
                                                 listaAdapterPedidoPendente.clear();
-                                                edtNumerPedidoPendentes.setText("0: Pedidos Pendentes");
+                                                edtNumerPedidoPendentes.setText("Nenhum Pedido Pendente");
                                             }
 
                                         }
@@ -351,13 +357,9 @@ public class ListagemPedidoPendente extends AppCompatActivity {
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.menu_pedido_pendente, menu);
 
-        subirPedido = menu.findItem(R.id.menu_pedido_pendente);
-
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView;
         MenuItem item = menu.findItem(R.id.busca_pedido_pendente);
-
-        //TODO Nullpointer no Listener da Busca
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             searchView = (SearchView) item.getActionView();
@@ -375,10 +377,25 @@ public class ListagemPedidoPendente extends AppCompatActivity {
                 a = new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        if (!query.equals("") && query.length() >= 3) {
+                        if (!query.equals("")) {
                             try {
-                                listaPedido = db.listaWebPedido("SELECT * FROM TBL_CADASTRO WHERE NOME_CADASTRO LIKE '%" + query + "%' OR NOME_FANTASIA LIKE '%" + query + "%' OR CPF_CNPJ LIKE '" + query + "%' OR TELEFONE_PRINCIPAL LIKE '%" + query + "%' ORDER BY ATIVO DESC, NOME_CADASTRO");
+                                listaPedido = db.listaWebPedido("SELECT * FROM TBL_WEB_PEDIDO WHERE PEDIDO_ENVIADO = 'N' AND USUARIO_LANCAMENTO_ID = " + usuario.getId_usuario() + " AND (NOME_EXTENSO LIKE '%" + query + "%' OR ID_WEB_PEDIDO LIKE '" + query + "') ORDER BY ID_WEB_PEDIDO DESC;");
                                 listaAdapterPedidoPendente = new ListaAdapterPedidoPendente(ListagemPedidoPendente.this, listaPedido);
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (listaPedido.size() > 1) {
+                                            edtNumerPedidoPendentes.setText(listaPedido.size() + ": Pedidos Encontrados");
+                                            edtNumerPedidoPendentes.setTextColor(Color.BLACK);
+                                        } else if (listaPedido.size() == 1) {
+                                            edtNumerPedidoPendentes.setText(listaPedido.size() + ": Pedido Encontrado");
+                                            edtNumerPedidoPendentes.setTextColor(Color.BLACK);
+                                        } else if (listaPedido.size() <= 0) {
+                                            edtNumerPedidoPendentes.setText("Nenhum pedido encontrado");
+                                            edtNumerPedidoPendentes.setTextColor(Color.RED);
+                                        }
+                                    }
+                                });
 
                                 runOnUiThread(new Runnable() {
                                     @Override
@@ -388,7 +405,7 @@ public class ListagemPedidoPendente extends AppCompatActivity {
                                             lstPedidoPendente.setAdapter(listaAdapterPedidoPendente);
                                             listaAdapterPedidoPendente.notifyDataSetChanged();
                                         } catch (NullPointerException | IllegalStateException e) {
-                                            System.out.println("adaptador se nenhum dado!");
+                                            System.out.println("listaAdapterPedidoPendente se nenhum dado!");
                                         }
                                     }
                                 });
@@ -405,8 +422,12 @@ public class ListagemPedidoPendente extends AppCompatActivity {
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    lstPedidoPendente.setVisibility(View.VISIBLE);
+                                    listaPedido = db.listaWebPedido("SELECT * FROM TBL_WEB_PEDIDO WHERE PEDIDO_ENVIADO = 'N' AND USUARIO_LANCAMENTO_ID = " + usuario.getId_usuario() + " ORDER BY ID_WEB_PEDIDO DESC;");
+                                    listaAdapterPedidoPendente = new ListaAdapterPedidoPendente(ListagemPedidoPendente.this, listaPedido);
                                     lstPedidoPendente.setAdapter(listaAdapterPedidoPendente);
+                                    edtNumerPedidoPendentes.setText(listaPedido.size() + ": Pedidos Pendentes");
+                                    edtNumerPedidoPendentes.setTextColor(Color.BLACK);
+                                    lstPedidoPendente.setVisibility(View.VISIBLE);
                                     listaAdapterPedidoPendente.notifyDataSetChanged();
                                 }
                             });
@@ -422,7 +443,7 @@ public class ListagemPedidoPendente extends AppCompatActivity {
         });
 
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        searchView.setQueryHint("Nº pedido/ Nome cliente");
+        searchView.setQueryHint("Nome Cliente / Nº pedido");
         return true;
     }
 

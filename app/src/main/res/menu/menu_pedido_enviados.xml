@@ -5,10 +5,10 @@
     tools:context="com.example.rcksuporte05.rcksistemas.interfaces.ListagemPedidoEnviado">
 
     <item
-        android:id="@+id/busca_pedido_enviado"
+        android:id="@+id/busca_pedido_enviados"
         android:icon="@drawable/ic_search"
-        android:orderInCategory="0"
-        android:title="Habilita busca de pedidos!"
-        app:showAsAction="always" />
+        android:title="Habilita busca de Pedidos"
+        app:actionViewClass="android.support.v7.widget.SearchView"
+        app:showAsAction="collapseActionView|ifRoom" />
 
 </menu>

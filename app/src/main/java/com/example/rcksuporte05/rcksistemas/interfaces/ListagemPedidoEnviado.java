@@ -1,12 +1,19 @@
 package com.example.rcksuporte05.rcksistemas.interfaces;
 
 import android.app.NotificationManager;
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.database.CursorIndexOutOfBoundsException;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.ContextMenu;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -33,10 +40,11 @@ public class ListagemPedidoEnviado extends AppCompatActivity {
     private DBHelper db = new DBHelper(this);
     private Bundle bundle = new Bundle();
     private Usuario usuario;
+    private Thread a = new Thread();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         notificationManager.cancel(0);
 
         super.onCreate(savedInstanceState);
@@ -90,6 +98,101 @@ NotificationManager notificationManager = (NotificationManager) getSystemService
                 return false;
             }
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.menu_pedido_enviados, menu);
+
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView;
+        MenuItem item = menu.findItem(R.id.busca_pedido_enviados);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            searchView = (SearchView) item.getActionView();
+        } else {
+            searchView = (SearchView) MenuItemCompat.getActionView(item);
+        }
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(final String query) {
+                a = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (!query.equals("")) {
+                            try {
+                                listaPedido = db.listaWebPedido("SELECT * FROM TBL_WEB_PEDIDO WHERE PEDIDO_ENVIADO = 'S' AND USUARIO_LANCAMENTO_ID = " + usuario.getId_usuario() + " AND (NOME_EXTENSO LIKE '%" + query + "%' OR ID_WEB_PEDIDO_SERVIDOR LIKE '" + query + "') ORDER BY ID_WEB_PEDIDO DESC;");
+                                listaAdapterPedidoEnviado = new ListaAdapterPedidoEnviado(ListagemPedidoEnviado.this, listaPedido);
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (listaPedido.size() > 1) {
+                                            edtNumerPedidoEnviados.setText(listaPedido.size() + ": Pedidos Encontrados");
+                                            edtNumerPedidoEnviados.setTextColor(Color.BLACK);
+                                        } else if (listaPedido.size() == 1) {
+                                            edtNumerPedidoEnviados.setText(listaPedido.size() + ": Pedido Encontrado");
+                                            edtNumerPedidoEnviados.setTextColor(Color.BLACK);
+                                        } else if (listaPedido.size() <= 0) {
+                                            edtNumerPedidoEnviados.setText("Nenhum pedido encontrado");
+                                            edtNumerPedidoEnviados.setTextColor(Color.RED);
+                                        }
+                                    }
+                                });
+
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        try {
+                                            lstPedidoEnviado.setVisibility(View.VISIBLE);
+                                            lstPedidoEnviado.setAdapter(listaAdapterPedidoEnviado);
+                                            listaAdapterPedidoEnviado.notifyDataSetChanged();
+                                        } catch (NullPointerException | IllegalStateException e) {
+                                            System.out.println("listaAdapterPedidoEnviado se nenhum dado!");
+                                        }
+                                    }
+                                });
+                            } catch (CursorIndexOutOfBoundsException | NullPointerException e) {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        lstPedidoEnviado.setVisibility(View.INVISIBLE);
+                                        Toast.makeText(ListagemPedidoEnviado.this, "Sem resutados para '" + query + "'", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            }
+                        } else {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    listaPedido = db.listaWebPedido("SELECT * FROM TBL_WEB_PEDIDO WHERE PEDIDO_ENVIADO = 'S' AND USUARIO_LANCAMENTO_ID = " + usuario.getId_usuario() + " ORDER BY ID_WEB_PEDIDO_SERVIDOR DESC;");
+                                    listaAdapterPedidoEnviado = new ListaAdapterPedidoEnviado(ListagemPedidoEnviado.this, listaPedido);
+                                    lstPedidoEnviado.setAdapter(listaAdapterPedidoEnviado);
+                                    edtNumerPedidoEnviados.setText(listaPedido.size() + ": Pedidos Enviados");
+                                    edtNumerPedidoEnviados.setTextColor(Color.BLACK);
+                                    lstPedidoEnviado.setVisibility(View.VISIBLE);
+                                    listaAdapterPedidoEnviado.notifyDataSetChanged();
+                                }
+                            });
+                        }
+                    }
+                });
+                if (!a.isAlive()) {
+                    a.start();
+                }
+                System.gc();
+                return false;
+            }
+        });
+
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setQueryHint("Nome Cliente / Nº pedido");
+        return true;
     }
 
     @Override

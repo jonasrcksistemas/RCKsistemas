@@ -29,7 +29,6 @@ import java.util.List;
 
 public class ActivityCliente extends AppCompatActivity {
     //    private MenuItem novo_cliente;
-    private SearchView busca_cliente;
     private ListView lstClientes;
     private Toolbar toolbar;
     private List<Cliente> listaAux;
