@@ -134,10 +134,14 @@ public class HistoricoFinanceiroHelper {
     }
 
     public void limparDados() {
-        historicoFinanceiroMain = null;
-        historicoFinanceiro1 = null;
-        listaVencidas.clear();
-        listaVencer.clear();
-        listaQuitado.clear();
+        try {
+            historicoFinanceiroMain = null;
+            historicoFinanceiro1 = null;
+            listaVencidas.clear();
+            listaVencer.clear();
+            listaQuitado.clear();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

@@ -14,6 +14,11 @@ import com.example.rcksuporte05.rcksistemas.fragment.Pedido3;
 import com.example.rcksuporte05.rcksistemas.interfaces.ActivityPedidoMain;
 import com.example.rcksuporte05.rcksistemas.interfaces.ProdutoPedidoActivity;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 public class PedidoHelper {
@@ -144,16 +149,34 @@ public class PedidoHelper {
         webPedido.setId_condicao_pagamento(pedido3.salvaPedido().getId_condicao_pagamento());
         webPedido.setObservacoes(pedido3.salvaPedido().getObservacoes());
         webPedido.setCadastro(pedido3.salvaPedido().getCadastro());
+        try {
+            webPedido.setData_prev_entrega(new SimpleDateFormat("MM-dd-yyyy").format(new SimpleDateFormat("dd/MM/yyyy").parse(pedido3.salvaPedido().getData_prev_entrega())));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
         listaWebPedidoItens = pedido2.salvaPedidos();
-        if (webPedido.getCadastro() != null) {
-            if (listaWebPedidoItens.size() > 0) {
-                webPedido.setValor_total(valorVenda.toString());
-                for (int i = 0; listaWebPedidoItens.size() > i; i++) {
-                    valorProdutos += Float.parseFloat(listaWebPedidoItens.get(i).getValor_bruto());
+        try {
+            if (webPedido.getCadastro() != null) {
+                if (listaWebPedidoItens.size() > 0) {
+                    if (webPedido.getData_prev_entrega() != null) {
+
+                        Calendar dataAtual = new GregorianCalendar();
+                        Calendar dataPedido = new GregorianCalendar();
+                        Date date = new Date();
+                        dataAtual.setTime(date);
+                        dataPedido.setTime(new SimpleDateFormat("MM-dd-yyyy").parse(webPedido.getData_prev_entrega()));
+                        String atual = new SimpleDateFormat("dd/MM/yyyy").format(dataAtual.getTime());
+                        String pedido = new SimpleDateFormat("dd/MM/yyyy").format(dataPedido.getTime());
+                        if (atual.equals(pedido) || !dataAtual.getTime().after(dataPedido.getTime())) {
+
+                            webPedido.setValor_total(valorVenda.toString());
+                            for (int i = 0; listaWebPedidoItens.size() > i; i++) {
+                                valorProdutos += Float.parseFloat(listaWebPedidoItens.get(i).getValor_bruto());
                     /*descontoReal += Float.parseFloat(listaWebPedidoItens.get(i).getValor_desconto_real());
                     mediaDesconto += Float.parseFloat(listaWebPedidoItens.get(i).getTabela_preco_faixa().getPerc_desc_inicial());
                     totalPontos += Float.parseFloat(listaWebPedidoItens.get(i).getPontos_total());*/
-                }
+                            }
 //                mediaDesconto = (mediaDesconto / listaWebPedidoItens.size());
                 /*webPedido.setPontos_total(totalPontos.toString());
                 if (totalPontos > 0) {
@@ -162,36 +185,48 @@ public class PedidoHelper {
                     webPedido.setPontos_coeficiente("0");
                 }*/
 //                webPedido.setDesconto_per(String.valueOf(mediaDesconto));
-                webPedido.setValor_produtos(String.valueOf(valorProdutos));
+                            webPedido.setValor_produtos(String.valueOf(valorProdutos));
                 /*webPedido.setValor_desconto(String.valueOf(descontoReal));
                 webPedido.setPontos_cor(db.consulta("SELECT I.COR_WEB, I.ID_ITEM FROM TBL_TABELA_PRECO_ITENS I JOIN TBL_TABELA_PRECO_CAB T ON T.ID_TABELA=I.ID_TABELA WHERE PERC_DESC_INICIAL<= " + mediaDesconto + " AND PERC_DESC_FINAL>= " + mediaDesconto + ";", "COR_WEB"));
                 webPedido.setId_tabela_preco_faixa(db.consulta("SELECT I.COR_WEB, I.ID_ITEM FROM TBL_TABELA_PRECO_ITENS I JOIN TBL_TABELA_PRECO_CAB T ON T.ID_TABELA=I.ID_TABELA WHERE PERC_DESC_INICIAL<= " + mediaDesconto + " AND PERC_DESC_FINAL>= " + mediaDesconto + ";", "ID_ITEM"));*/
-                if (PedidoHelper.getIdPedido() > 0) {
-                    db.atualizarTBL_WEB_PEDIDO(webPedido);
-                    for (int i = 0; listaWebPedidoItens.size() > i; i++) {
-                        if (listaWebPedidoItens.get(i).getId_web_item() == null) {
-                            listaWebPedidoItens.get(i).setId_pedido(webPedido.getId_web_pedido());
-                            db.inserirTBL_WEB_PEDIDO_ITENS(listaWebPedidoItens.get(i));
+                            if (PedidoHelper.getIdPedido() > 0) {
+                                db.atualizarTBL_WEB_PEDIDO(webPedido);
+                                for (int i = 0; listaWebPedidoItens.size() > i; i++) {
+                                    if (listaWebPedidoItens.get(i).getId_web_item() == null) {
+                                        listaWebPedidoItens.get(i).setId_pedido(webPedido.getId_web_pedido());
+                                        db.inserirTBL_WEB_PEDIDO_ITENS(listaWebPedidoItens.get(i));
+                                    } else {
+                                        db.atualizarTBL_WEB_PEDIDO_ITENS(listaWebPedidoItens.get(i));
+                                    }
+                                }
+                            } else {
+                                db.inserirTBL_WEB_PEDIDO(webPedido);
+                                int idPedido = db.contagem("SELECT MAX(ID_WEB_PEDIDO) FROM TBL_WEB_PEDIDO");
+                                for (int i = 0; listaWebPedidoItens.size() > i; i++) {
+                                    listaWebPedidoItens.get(i).setId_pedido(String.valueOf(idPedido));
+                                    db.inserirTBL_WEB_PEDIDO_ITENS(listaWebPedidoItens.get(i));
+                                }
+                            }
+                            return true;
                         } else {
-                            db.atualizarTBL_WEB_PEDIDO_ITENS(listaWebPedidoItens.get(i));
+                            Toast.makeText(activityPedidoMain, "A data de entrega não pode ser menor que a data de emissão da venda", Toast.LENGTH_SHORT).show();
+                            return false;
                         }
+                    } else {
+                        Toast.makeText(activityPedidoMain, "ATENÇÃO - Você precisa informar a data de entrega", Toast.LENGTH_SHORT).show();
+                        return false;
                     }
                 } else {
-                    db.inserirTBL_WEB_PEDIDO(webPedido);
-                    int idPedido = db.contagem("SELECT MAX(ID_WEB_PEDIDO) FROM TBL_WEB_PEDIDO");
-                    for (int i = 0; listaWebPedidoItens.size() > i; i++) {
-                        listaWebPedidoItens.get(i).setId_pedido(String.valueOf(idPedido));
-                        db.inserirTBL_WEB_PEDIDO_ITENS(listaWebPedidoItens.get(i));
-                    }
+                    Toast.makeText(activityPedidoMain, "O pedido não pode ser salvo sem produtos!", Toast.LENGTH_SHORT).show();
+                    moveTela(1);
+                    return false;
                 }
-                return true;
             } else {
-                Toast.makeText(activityPedidoMain, "O pedido não pode ser salvo sem produtos!", Toast.LENGTH_SHORT).show();
-                moveTela(1);
+                Toast.makeText(activityPedidoMain, "O pedido não pode ser salvo sem selecionar o cliente!", Toast.LENGTH_SHORT).show();
                 return false;
             }
-        } else {
-            Toast.makeText(activityPedidoMain, "O pedido não pode ser salvo sem selecionar o cliente!", Toast.LENGTH_SHORT).show();
+        } catch (Exception e) {
+            e.printStackTrace();
             return false;
         }
     }

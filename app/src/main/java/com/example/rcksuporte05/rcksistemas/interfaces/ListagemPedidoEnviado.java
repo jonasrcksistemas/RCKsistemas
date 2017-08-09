@@ -36,8 +36,7 @@ public class ListagemPedidoEnviado extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
-        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         notificationManager.cancel(0);
 
         super.onCreate(savedInstanceState);
@@ -96,7 +95,7 @@ public class ListagemPedidoEnviado extends AppCompatActivity {
     @Override
     protected void onResume() {
         try {
-            listaPedido = db.listaWebPedido("SELECT * FROM TBL_WEB_PEDIDO WHERE PEDIDO_ENVIADO = 'S' AND USUARIO_LANCAMENTO_ID = " + usuario.getId_usuario() + " ORDER BY ID_WEB_PEDIDO_SERVIDOR;");
+            listaPedido = db.listaWebPedido("SELECT * FROM TBL_WEB_PEDIDO WHERE PEDIDO_ENVIADO = 'S' AND USUARIO_LANCAMENTO_ID = " + usuario.getId_usuario() + " ORDER BY ID_WEB_PEDIDO_SERVIDOR DESC;");
 
             listaAdapterPedidoEnviado = new ListaAdapterPedidoEnviado(ListagemPedidoEnviado.this, listaPedido);
             lstPedidoEnviado.setAdapter(listaAdapterPedidoEnviado);

@@ -2,14 +2,18 @@ package com.example.rcksuporte05.rcksistemas.interfaces;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.CursorIndexOutOfBoundsException;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.ContextMenu;
 import android.view.Menu;
@@ -47,6 +51,7 @@ public class ListagemPedidoPendente extends AppCompatActivity {
     private DBHelper db = new DBHelper(this);
     private Bundle bundle;
     private Usuario usuario;
+    private Thread a = new Thread();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,16 +73,6 @@ public class ListagemPedidoPendente extends AppCompatActivity {
         });
         edtNumerPedidoPendentes = (EditText) findViewById(R.id.edtNumeroPedidoPendente);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-        getMenuInflater().inflate(R.menu.menu_pedido_pendente, menu);
-
-        subirPedido = menu.findItem(R.id.menu_pedido_pendente);
-
-        return true;
     }
 
     @Override
@@ -352,9 +347,89 @@ public class ListagemPedidoPendente extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.menu_pedido_pendente, menu);
+
+        subirPedido = menu.findItem(R.id.menu_pedido_pendente);
+
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView searchView;
+        MenuItem item = menu.findItem(R.id.busca_pedido_pendente);
+
+        //TODO Nullpointer no Listener da Busca
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            searchView = (SearchView) item.getActionView();
+        } else {
+            searchView = (SearchView) MenuItemCompat.getActionView(item);
+        }
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(final String query) {
+                a = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (!query.equals("") && query.length() >= 3) {
+                            try {
+                                listaPedido = db.listaWebPedido("SELECT * FROM TBL_CADASTRO WHERE NOME_CADASTRO LIKE '%" + query + "%' OR NOME_FANTASIA LIKE '%" + query + "%' OR CPF_CNPJ LIKE '" + query + "%' OR TELEFONE_PRINCIPAL LIKE '%" + query + "%' ORDER BY ATIVO DESC, NOME_CADASTRO");
+                                listaAdapterPedidoPendente = new ListaAdapterPedidoPendente(ListagemPedidoPendente.this, listaPedido);
+
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        try {
+                                            lstPedidoPendente.setVisibility(View.VISIBLE);
+                                            lstPedidoPendente.setAdapter(listaAdapterPedidoPendente);
+                                            listaAdapterPedidoPendente.notifyDataSetChanged();
+                                        } catch (NullPointerException | IllegalStateException e) {
+                                            System.out.println("adaptador se nenhum dado!");
+                                        }
+                                    }
+                                });
+                            } catch (CursorIndexOutOfBoundsException | NullPointerException e) {
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        lstPedidoPendente.setVisibility(View.INVISIBLE);
+                                        Toast.makeText(ListagemPedidoPendente.this, "Sem resutados para '" + query + "'", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            }
+                        } else {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    lstPedidoPendente.setVisibility(View.VISIBLE);
+                                    lstPedidoPendente.setAdapter(listaAdapterPedidoPendente);
+                                    listaAdapterPedidoPendente.notifyDataSetChanged();
+                                }
+                            });
+                        }
+                    }
+                });
+                if (!a.isAlive()) {
+                    a.start();
+                }
+                System.gc();
+                return false;
+            }
+        });
+
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setQueryHint("Nº pedido/ Nome cliente");
+        return true;
+    }
+
+    @Override
     protected void onResume() {
         try {
-            listaPedido = db.listaWebPedido("SELECT * FROM TBL_WEB_PEDIDO WHERE PEDIDO_ENVIADO = 'N' AND USUARIO_LANCAMENTO_ID = " + usuario.getId_usuario() + " ORDER BY ID_WEB_PEDIDO;");
+            listaPedido = db.listaWebPedido("SELECT * FROM TBL_WEB_PEDIDO WHERE PEDIDO_ENVIADO = 'N' AND USUARIO_LANCAMENTO_ID = " + usuario.getId_usuario() + " ORDER BY ID_WEB_PEDIDO DESC;");
 
             listaAdapterPedidoPendente = new ListaAdapterPedidoPendente(ListagemPedidoPendente.this, listaPedido);
             lstPedidoPendente.setAdapter(listaAdapterPedidoPendente);

@@ -26,7 +26,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private final static String NomeBanco = "Banco.db";
 
     public DBHelper(Context context) {
-        super(context, NomeBanco, null, 1);
+        super(context, NomeBanco, null, 2);
     }
 
     @Override
@@ -325,7 +325,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 " PERC_BONUS_CREDOR DECIMAL(12, 4), " +
                 " FATURADO VARCHAR(1)," +
                 " PEDIDO_ENVIADO VARCHAR(1) DEFAULT 'N', " +
-                " ID_WEB_PEDIDO_SERVIDOR INTEGER);");
+                " ID_WEB_PEDIDO_SERVIDOR INTEGER," +
+                " DATA_PREV_ENTREGA DATE);");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS TBL_WEB_PEDIDO_ITENS (ID_WEB_ITEM INTEGER PRIMARY KEY AUTOINCREMENT ," +
                 "ID_PEDIDO INTEGER NOT NULL," +
@@ -375,8 +376,14 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     @Override
-    public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        if (newVersion > oldVersion) {
+            try {
+                db.execSQL("ALTER TABLE TBL_WEB_PEDIDO ADD DATA_PREV_ENTREGA DATE;");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public String pegaDataAtual() {
@@ -1076,6 +1083,7 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("ID_FAIXA_FINAL", webPedido.getId_faixa_final());
         content.put("VALOR_BONUS_CREDOR", webPedido.getValor_bonus_credor());
         content.put("PERC_BONUS_CREDOR", webPedido.getPerc_bonus_credor());
+        content.put("DATA_PREV_ENTREGA", webPedido.getData_prev_entrega());
 
         db.insert("TBL_WEB_PEDIDO", null, content);
         System.gc();
@@ -1121,6 +1129,7 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("ID_FAIXA_FINAL", webPedido.getId_faixa_final());
         content.put("VALOR_BONUS_CREDOR", webPedido.getValor_bonus_credor());
         content.put("PERC_BONUS_CREDOR", webPedido.getPerc_bonus_credor());
+        content.put("DATA_PREV_ENTREGA", webPedido.getData_prev_entrega());
 
         db.update("TBL_WEB_PEDIDO", content, "ID_WEB_PEDIDO = " + webPedido.getId_web_pedido(), null);
         System.gc();
@@ -1620,6 +1629,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 webPedido.setValor_bonus_credor(cursor.getString(cursor.getColumnIndex("VALOR_BONUS_CREDOR")));
                 webPedido.setPerc_bonus_credor(cursor.getString(cursor.getColumnIndex("PERC_BONUS_CREDOR")));
                 webPedido.setId_web_pedido_servidor(cursor.getString(cursor.getColumnIndex("ID_WEB_PEDIDO_SERVIDOR")));
+                webPedido.setData_prev_entrega(cursor.getString(cursor.getColumnIndex("DATA_PREV_ENTREGA")));
 
                 lista.add(webPedido);
             } catch (CursorIndexOutOfBoundsException e) {

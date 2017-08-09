@@ -12,7 +12,6 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -30,6 +29,7 @@ import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
 import com.example.rcksuporte05.rcksistemas.interfaces.ActivityCliente;
 import com.example.rcksuporte05.rcksistemas.interfaces.HistoricoFinanceiroMain;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -48,8 +48,8 @@ public class Pedido3 extends Fragment implements View.OnClickListener {
     private WebPedido webPedido = new WebPedido();
     private Bundle bundle;
     private PedidoHelper pedidoHelper;
-    private EditText edtDataVencimento;
-    private TextView txtDataVencimento;
+    private EditText edtDataEntrega;
+    private TextView txtDataEntrega;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -63,14 +63,8 @@ public class Pedido3 extends Fragment implements View.OnClickListener {
 
         edtCliente = (EditText) view.findViewById(R.id.edtCliente);
         edtObservacao = (EditText) view.findViewById(R.id.edtObservacao);
-        edtDataVencimento = (EditText) view.findViewById(R.id.edtDataVencimento);
-        txtDataVencimento = (TextView) view.findViewById(R.id.txtDataVencimento);
-        edtDataVencimento.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mostraDatePickerDialog(PedidoHelper.getActivityPedidoMain(), edtDataVencimento);
-            }
-        });
+        edtDataEntrega = (EditText) view.findViewById(R.id.edtDataEntrega);
+        txtDataEntrega = (TextView) view.findViewById(R.id.txtDataEntrega);
 
         btnHistoricoFinanceiro = (Button) view.findViewById(R.id.btnHistoricoFinanceiro);
         btnHistoricoFinanceiro.setOnClickListener(this);
@@ -82,23 +76,7 @@ public class Pedido3 extends Fragment implements View.OnClickListener {
         btnBuscarCliente.setOnClickListener(this);
         try {
             spPagamento = (Spinner) view.findViewById(R.id.spPagamento);
-            spPagamento.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    if (adapterPagamento.getItem(spPagamento.getSelectedItemPosition()).getTipo_condicao().equals("2")) {
-                        edtDataVencimento.setVisibility(View.VISIBLE);
-                        txtDataVencimento.setVisibility(View.VISIBLE);
-                    } else {
-                        edtDataVencimento.setVisibility(View.GONE);
-                        txtDataVencimento.setVisibility(View.GONE);
-                    }
-                }
 
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-
-                }
-            });
             adapterPagamento = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_activated_1, db.listaCondicoesPagamento("SELECT * FROM TBL_CONDICOES_PAG_CAB;"));
             spPagamento.setAdapter(adapterPagamento);
         } catch (CursorIndexOutOfBoundsException e) {
@@ -130,6 +108,11 @@ public class Pedido3 extends Fragment implements View.OnClickListener {
                 System.out.println(e.getMessage());
             }
             edtObservacao.setText(webPedido.getObservacoes());
+            try {
+                edtDataEntrega.setText(new SimpleDateFormat("dd/MM/yyyy").format(new SimpleDateFormat("MM-dd-yyyy").parse(webPedido.getData_prev_entrega())));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
 
         btnSalvarPedido = (Button) view.findViewById(R.id.btnSalvarPedido);
@@ -171,6 +154,14 @@ public class Pedido3 extends Fragment implements View.OnClickListener {
             btnBuscarCliente.setEnabled(false);
             edtObservacao.setFocusable(false);
             spPagamento.setEnabled(false);
+            edtDataEntrega.setFocusable(false);
+        } else {
+            edtDataEntrega.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mostraDatePickerDialog(PedidoHelper.getActivityPedidoMain(), edtDataEntrega);
+                }
+            });
         }
         System.gc();
 
@@ -210,7 +201,7 @@ public class Pedido3 extends Fragment implements View.OnClickListener {
         webPedido.setId_condicao_pagamento(adapterPagamento.getItem(spPagamento.getSelectedItemPosition()).getId_condicao());
         webPedido.setCadastro(objetoCliente);
         webPedido.setObservacoes(edtObservacao.getText().toString());
-        webPedido.setData_prev_entrega(edtDataVencimento.getText().toString().trim());
+        webPedido.setData_prev_entrega(edtDataEntrega.getText().toString().trim());
 
         return webPedido;
     }

@@ -62,37 +62,35 @@
                 android:layout_toEndOf="@+id/txtPagamento" />
 
             <TextView
-                android:id="@+id/txtDataVencimento"
+                android:id="@+id/txtDataEntrega"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
                 android:layout_below="@+id/spPagamento"
-                android:text="DATA DE VENCIMENTO"
-                android:textColor="@color/colorAccent"
-                android:visibility="gone" />
+                android:text="DATA DE ENTREGA"
+                android:textColor="@color/colorAccent" />
 
             <EditText
-                android:id="@+id/edtDataVencimento"
+                android:id="@+id/edtDataEntrega"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/txtDataVencimento"
-                android:layout_alignTop="@id/txtDataVencimento"
-                android:layout_toEndOf="@+id/txtDataVencimento"
+                android:layout_height="19dp"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/txtDataEntrega"
                 android:background="@drawable/borda_edittext"
                 android:focusable="false"
                 android:gravity="center_horizontal"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-                android:visibility="gone" />
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
 
             <EditText
                 android:id="@+id/edtObservacao"
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
-                android:layout_below="@+id/spPagamento"
-                android:layout_marginTop="25dp"
+                android:layout_below="@+id/edtDataEntrega"
+                android:layout_marginTop="10dp"
                 android:background="@drawable/borda_edittext"
                 android:gravity="top"
                 android:hint="OBSERVAÇÕES DO PEDIDO"
-                android:inputType="textCapSentences"
+                android:inputType="textCapSentences|textMultiLine"
                 android:maxLength="300" />
 
             <Button

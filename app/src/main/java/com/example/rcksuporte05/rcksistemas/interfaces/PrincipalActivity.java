@@ -1234,132 +1234,59 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                     }
                 }
 
-                if (db.contagem("SELECT COUNT(*) FROM TBL_CONDICOES_PAG_CAB") == 0) {
-                    notificacao.setProgress(0, 0, true).
-                            setContentText("Condições de pagamento").
-                            setContentTitle("Sincronia em andamento");
-                    mNotificationManager.notify(0, notificacao.build());
-                    try {
 
-                        CondicoesPagamento[] condicoesPagamento = banco.sincronizaCondicoesPagamento("SELECT * FROM TBL_CONDICOES_PAG_CAB WHERE PUBLICAR_NA_WEB = 'S';");
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                ivInternet.setVisibility(View.INVISIBLE);
-                            }
-                        });
-                        for (int i = 0; condicoesPagamento.length > i; i++) {
-                            notificacao.setProgress(condicoesPagamento.length, i, false);
-                            db.inserirTBL_CONDICOES_PAG_CAB(
-                                    condicoesPagamento[i].getAtivo(),
-                                    condicoesPagamento[i].getId_condicao(),
-                                    condicoesPagamento[i].getNome_condicao(),
-                                    condicoesPagamento[i].getNumero_parcelas(),
-                                    condicoesPagamento[i].getIntervalo_dias(),
-                                    condicoesPagamento[i].getTipo_condicao(),
-                                    condicoesPagamento[i].getNfe_tipo_financeiro(),
-                                    condicoesPagamento[i].getNfe_mostrar_parcelas(),
-                                    condicoesPagamento[i].getUsuario_id(),
-                                    condicoesPagamento[i].getUsuario_nome(),
-                                    condicoesPagamento[i].getUsuario_data(),
-                                    condicoesPagamento[i].getPublicar_na_web());
+                notificacao.setProgress(0, 0, true).
+                        setContentText("Condições de pagamento").
+                        setContentTitle("Sincronia em andamento");
+                mNotificationManager.notify(0, notificacao.build());
 
-                            mNotificationManager.notify(0, notificacao.build());
+                try {
+                    db.alterar("DELETE FROM TBL_CONDICOES_PAG_CAB;");
+                    CondicoesPagamento[] condicoesPagamento = banco.sincronizaCondicoesPagamento("SELECT * FROM TBL_CONDICOES_PAG_CAB WHERE PUBLICAR_NA_WEB = 'S';");
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            ivInternet.setVisibility(View.INVISIBLE);
                         }
-                        banco.Atualiza("UPDATE TBL_CONDICOES_PAG_CAB_SYNC SET SYNC = 'S' WHERE ID_WEB_USUARIO = " + id_usuario + ";");
-                        notificacao.setContentText("Condições de pagamento")
-                                .setProgress(0, 0, false);
+                    });
+                    for (int i = 0; condicoesPagamento.length > i; i++) {
+                        notificacao.setProgress(condicoesPagamento.length, i, false);
+                        db.inserirTBL_CONDICOES_PAG_CAB(
+                                condicoesPagamento[i].getAtivo(),
+                                condicoesPagamento[i].getId_condicao(),
+                                condicoesPagamento[i].getNome_condicao(),
+                                condicoesPagamento[i].getNumero_parcelas(),
+                                condicoesPagamento[i].getIntervalo_dias(),
+                                condicoesPagamento[i].getTipo_condicao(),
+                                condicoesPagamento[i].getNfe_tipo_financeiro(),
+                                condicoesPagamento[i].getNfe_mostrar_parcelas(),
+                                condicoesPagamento[i].getUsuario_id(),
+                                condicoesPagamento[i].getUsuario_nome(),
+                                condicoesPagamento[i].getUsuario_data(),
+                                condicoesPagamento[i].getPublicar_na_web());
+
                         mNotificationManager.notify(0, notificacao.build());
-                    } catch (IOException | XmlPullParserException e) {
-
-                        notificacao.setContentText("Problema de conexão").
-                                setContentTitle("Verifique sua conexão!").
-                                setProgress(0, 0, false).
-                                setSmallIcon(R.mipmap.ic_sem_internet);
-                        mNotificationManager.notify(0, notificacao.build());
-
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-//                                Toast.makeText(PrincipalActivity.this, "Servidor indisponivel", Toast.LENGTH_SHORT).show();
-                                ivInternet.setVisibility(View.VISIBLE);
-
-                            }
-                        });
                     }
-                } else {
-                    notificacao.setProgress(0, 0, true).
-                            setContentText("Condições de pagamento").
-                            setContentTitle("Sincronia em andamento");
+                    banco.Atualiza("UPDATE TBL_CONDICOES_PAG_CAB_SYNC SET SYNC = 'S' WHERE ID_WEB_USUARIO = " + id_usuario + ";");
+                    notificacao.setContentText("Condições de pagamento")
+                            .setProgress(0, 0, false);
                     mNotificationManager.notify(0, notificacao.build());
-                    try {
+                } catch (IOException | XmlPullParserException e) {
 
-                        CondicoesPagamento[] condicoesPagamento = banco.sincronizaCondicoesPagamento("SELECT A.* FROM TBL_CONDICOES_PAG_CAB A INNER JOIN TBL_CONDICOES_PAG_CAB_SYNC B ON A.ID_CONDICAO = B.ID_CONDICAO WHERE B.SYNC = 'N' AND A.PUBLICAR_NA_WEB = 'S' AND B.ID_WEB_USUARIO = " + id_usuario + ";");
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                ivInternet.setVisibility(View.INVISIBLE);
-                            }
-                        });
+                    notificacao.setContentText("Problema de conexão").
+                            setContentTitle("Verifique sua conexão!").
+                            setProgress(0, 0, false).
+                            setSmallIcon(R.mipmap.ic_sem_internet);
+                    mNotificationManager.notify(0, notificacao.build());
 
-                        if (condicoesPagamento.length > 0) {
-                            db.alterar("UPDATE TBL_CONDICOES_PAG_CAB SET SINCRONIZADO = 'N'");
-                        }
-
-                        for (int i = 0; condicoesPagamento.length > i; i++) {
-                            notificacao.setProgress(condicoesPagamento.length, i, false);
-                            if (db.contagem("SELECT COUNT(*) FROM TBL_CONDICOES_PAG_CAB WHERE ID_CONDICAO = " + condicoesPagamento[i].getId_condicao()) == 0) {
-                                db.inserirTBL_CONDICOES_PAG_CAB(
-                                        condicoesPagamento[i].getAtivo(),
-                                        condicoesPagamento[i].getId_condicao(),
-                                        condicoesPagamento[i].getNome_condicao(),
-                                        condicoesPagamento[i].getNumero_parcelas(),
-                                        condicoesPagamento[i].getIntervalo_dias(),
-                                        condicoesPagamento[i].getTipo_condicao(),
-                                        condicoesPagamento[i].getNfe_tipo_financeiro(),
-                                        condicoesPagamento[i].getNfe_mostrar_parcelas(),
-                                        condicoesPagamento[i].getUsuario_id(),
-                                        condicoesPagamento[i].getUsuario_nome(),
-                                        condicoesPagamento[i].getUsuario_data(),
-                                        condicoesPagamento[i].getPublicar_na_web());
-                            } else {
-                                db.atualizarTBL_CONDICOES_PAG_CAB(
-                                        condicoesPagamento[i].getAtivo(),
-                                        condicoesPagamento[i].getId_condicao(),
-                                        condicoesPagamento[i].getNome_condicao(),
-                                        condicoesPagamento[i].getNumero_parcelas(),
-                                        condicoesPagamento[i].getIntervalo_dias(),
-                                        condicoesPagamento[i].getTipo_condicao(),
-                                        condicoesPagamento[i].getNfe_tipo_financeiro(),
-                                        condicoesPagamento[i].getNfe_mostrar_parcelas(),
-                                        condicoesPagamento[i].getUsuario_id(),
-                                        condicoesPagamento[i].getUsuario_nome(),
-                                        condicoesPagamento[i].getUsuario_data(),
-                                        condicoesPagamento[i].getPublicar_na_web());
-                            }
-                            mNotificationManager.notify(0, notificacao.build());
-                        }
-                        banco.Atualiza("UPDATE TBL_CONDICOES_PAG_CAB_SYNC SET SYNC = 'S' WHERE ID_WEB_USUARIO = " + id_usuario + ";");
-                        notificacao.setContentText("Condições de pagamento")
-                                .setProgress(0, 0, false);
-                        mNotificationManager.notify(0, notificacao.build());
-                    } catch (IOException | XmlPullParserException e) {
-
-                        notificacao.setContentText("Problema de conexão").
-                                setContentTitle("Verifique sua conexão!").
-                                setProgress(0, 0, false).
-                                setSmallIcon(R.mipmap.ic_sem_internet);
-                        mNotificationManager.notify(0, notificacao.build());
-
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
 //                                Toast.makeText(PrincipalActivity.this, "Servidor indisponivel", Toast.LENGTH_SHORT).show();
-                                ivInternet.setVisibility(View.VISIBLE);
+                            ivInternet.setVisibility(View.VISIBLE);
 
-                            }
-                        });
-                    }
+                        }
+                    });
                 }
 
                 if (db.contagem("SELECT COUNT(*) FROM TBL_VENDEDOR_BONUS_RESUMO") == 0) {

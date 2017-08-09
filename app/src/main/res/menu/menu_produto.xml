@@ -7,7 +7,7 @@
     <item
         android:id="@+id/buscaProduto"
         android:icon="@drawable/ic_search"
-        android:title="Habilita busca de Cliente"
+        android:title="Habilita busca de Produtos"
         app:actionViewClass="android.support.v7.widget.SearchView"
         app:showAsAction="collapseActionView|ifRoom" />
 
