@@ -91,7 +91,7 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
             <TextView
-                android:id="@+id/txtNomeFantasia"
+                android:id="@+id/txtRazaoSocial"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
@@ -107,7 +107,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentStart="true"
-                android:layout_below="@+id/txtNomeFantasia"
+                android:layout_below="@+id/txtRazaoSocial"
                 android:background="@drawable/borda_edittext"
                 android:hint="Nome Fantasia"
                 android:inputType="textCapCharacters|textMultiLine"

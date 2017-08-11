@@ -44,6 +44,7 @@
         <activity
             android:name=".interfaces.HistoricoFinanceiroMain"
             android:screenOrientation="portrait" />
+        <activity android:name=".interfaces.ContatoActivity"></activity>
     </application>
 
 </manifest>

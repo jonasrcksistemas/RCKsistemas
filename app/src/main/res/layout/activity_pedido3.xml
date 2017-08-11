@@ -72,19 +72,26 @@
 
             <EditText
                 android:id="@+id/edtDataEntrega"
-                android:layout_width="match_parent"
-                android:layout_height="19dp"
-                android:layout_alignParentStart="true"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
                 android:layout_below="@+id/txtDataEntrega"
                 android:background="@drawable/borda_edittext"
                 android:focusable="false"
-                android:gravity="center_horizontal"
+                android:gravity="center"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
+
+            <Button
+                android:id="@+id/btnDataEntrega"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:background="@mipmap/ic_calendario"
+                android:layout_below="@+id/txtDataEntrega"
+                android:layout_toEndOf="@+id/edtDataEntrega" />
 
             <EditText
                 android:id="@+id/edtObservacao"
                 android:layout_width="match_parent"
-                android:layout_height="100dp"
+                android:layout_height="95dp"
                 android:layout_below="@+id/edtDataEntrega"
                 android:layout_marginTop="10dp"
                 android:background="@drawable/borda_edittext"
@@ -98,7 +105,7 @@
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_below="@+id/edtObservacao"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="10dp"
                 android:background="@mipmap/ic_financeiro" />
 
             <TextView
@@ -119,7 +126,7 @@
                 android:layout_alignEnd="@+id/edtObservacao"
                 android:layout_alignStart="@+id/edtObservacao"
                 android:layout_below="@+id/btnHistoricoFinanceiro"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 android:background="@drawable/borda_edittext"
                 android:text="Salvar Pedido"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"

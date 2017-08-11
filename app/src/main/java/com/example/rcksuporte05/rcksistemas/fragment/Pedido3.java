@@ -49,7 +49,7 @@ public class Pedido3 extends Fragment implements View.OnClickListener {
     private Bundle bundle;
     private PedidoHelper pedidoHelper;
     private EditText edtDataEntrega;
-    private TextView txtDataEntrega;
+    private Button btnDataEntrega;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -64,7 +64,7 @@ public class Pedido3 extends Fragment implements View.OnClickListener {
         edtCliente = (EditText) view.findViewById(R.id.edtCliente);
         edtObservacao = (EditText) view.findViewById(R.id.edtObservacao);
         edtDataEntrega = (EditText) view.findViewById(R.id.edtDataEntrega);
-        txtDataEntrega = (TextView) view.findViewById(R.id.txtDataEntrega);
+        btnDataEntrega = (Button) view.findViewById(R.id.btnDataEntrega);
 
         btnHistoricoFinanceiro = (Button) view.findViewById(R.id.btnHistoricoFinanceiro);
         btnHistoricoFinanceiro.setOnClickListener(this);
@@ -156,7 +156,7 @@ public class Pedido3 extends Fragment implements View.OnClickListener {
             spPagamento.setEnabled(false);
             edtDataEntrega.setFocusable(false);
         } else {
-            edtDataEntrega.setOnClickListener(new View.OnClickListener() {
+            btnDataEntrega.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     mostraDatePickerDialog(PedidoHelper.getActivityPedidoMain(), edtDataEntrega);

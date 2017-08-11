@@ -831,106 +831,54 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                     }
                 }
 
-                if (db.contagem("SELECT COUNT(*) FROM TBL_OPERACAO_ESTOQUE") == 0) {
-                    notificacao.setProgress(0, 0, true).
-                            setContentText("Operações de Estoque").
-                            setContentTitle("Sincronia em andamento");
-                    mNotificationManager.notify(0, notificacao.build());
+                notificacao.setProgress(0, 0, true).
+                        setContentText("Operações de Estoque").
+                        setContentTitle("Sincronia em andamento");
+                mNotificationManager.notify(0, notificacao.build());
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                    }
+                });
+                try {
+                    Operacao[] operacao = banco.sincronizaOperacao("SELECT * FROM TBL_OPERACAO_ESTOQUE WHERE E_ENTRADA_S_SAIDA='S' AND ATIVO='S' AND ( TIPO_OPERACAO=1 OR  TIPO_OPERACAO= 5 ) AND EMISSOR='P' AND MOVIMENTA_ESTOQUE='S' AND MULTI_DISPOSITIVO = 'S' ORDER BY ID_OPERACAO;");
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
+                            ivInternet.setVisibility(View.INVISIBLE);
+                        }
+                    });
+                    db.alterar("DELETE FROM TBL_OPERACAO_ESTOQUE;");
+                    for (int i = 0; operacao.length > i; i++) {
+                        notificacao.setProgress(operacao.length, i, false);
+                        db.inserirTBL_OPERACAO_ESTOQUE(operacao[i].getAtivo(),
+                                operacao[i].getId_operacao(),
+                                operacao[i].getNome_operacao());
+                        mNotificationManager.notify(0, notificacao.build());
+                    }
+                    banco.Atualiza("UPDATE TBL_OPERACAO_ESTOQUE_SYNC SET SYNC = 'S' WHERE ID_WEB_USUARIO = " + id_usuario + ";");
+                    notificacao.setContentText("Operações de estoque completo")
+                            .setProgress(0, 0, false);
+                    mNotificationManager.notify(0, notificacao.build());
+                } catch (IOException | XmlPullParserException e) {
+
+                    notificacao.setContentText("Problema de conexão").
+                            setContentTitle("Verifique sua conexão!").
+                            setProgress(0, 0, false)
+                            .setSmallIcon(R.mipmap.ic_sem_internet);
+                    mNotificationManager.notify(0, notificacao.build());
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+//                                Toast.makeText(PrincipalActivity.this, "Servidor indisponivel", Toast.LENGTH_SHORT).show();
+                            ivInternet.setVisibility(View.VISIBLE);
 
                         }
                     });
-                    try {
-                        Operacao[] operacao = banco.sincronizaOperacao("SELECT O.ATIVO, O.ID_OPERACAO, O.NOME_OPERACAO FROM TBL_OPERACAO_ESTOQUE O INNER JOIN TBL_OPERACAO_ESTOQUE_CONF F ON O.ID_OPERACAO = F.ID_OPERACAO WHERE O.E_ENTRADA_S_SAIDA='S' AND O.ATIVO='S' AND ( O.TIPO_OPERACAO=1 OR  O.TIPO_OPERACAO= 5 ) AND O.EMISSOR='P' AND O.MOVIMENTA_ESTOQUE='S' AND O.MULTI_DISPOSITIVO = 'S' ORDER BY ID_OPERACAO;");
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                ivInternet.setVisibility(View.INVISIBLE);
-                            }
-                        });
-                        for (int i = 0; operacao.length > i; i++) {
-                            notificacao.setProgress(operacao.length, i, false);
-                            db.inserirTBL_OPERACAO_ESTOQUE(operacao[i].getAtivo(),
-                                    operacao[i].getId_operacao(),
-                                    operacao[i].getNome_operacao());
-                            mNotificationManager.notify(0, notificacao.build());
-                        }
-                        banco.Atualiza("UPDATE TBL_OPERACAO_ESTOQUE_SYNC SET SYNC = 'S' WHERE ID_WEB_USUARIO = " + id_usuario + ";");
-                        notificacao.setContentText("Operações de estoque completo")
-                                .setProgress(0, 0, false);
-                        mNotificationManager.notify(0, notificacao.build());
-                    } catch (IOException | XmlPullParserException e) {
-
-                        notificacao.setContentText("Problema de conexão").
-                                setContentTitle("Verifique sua conexão!").
-                                setProgress(0, 0, false)
-                                .setSmallIcon(R.mipmap.ic_sem_internet);
-                        mNotificationManager.notify(0, notificacao.build());
-
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-//                                Toast.makeText(PrincipalActivity.this, "Servidor indisponivel", Toast.LENGTH_SHORT).show();
-                                ivInternet.setVisibility(View.VISIBLE);
-
-                            }
-                        });
-                    }
-                } else {
-                    notificacao.setProgress(0, 0, true).
-                            setContentText("Operações de Estoque").
-                            setContentTitle("Sincronia em andamento");
-                    mNotificationManager.notify(0, notificacao.build());
-                    try {
-
-                        Operacao[] operacao = banco.sincronizaOperacao("SELECT O.ATIVO, O.ID_OPERACAO, O.NOME_OPERACAO FROM TBL_OPERACAO_ESTOQUE O INNER JOIN TBL_OPERACAO_ESTOQUE_CONF F ON O.ID_OPERACAO = F.ID_OPERACAO INNER JOIN TBL_OPERACAO_ESTOQUE_SYNC S ON O.ID_OPERACAO = S.ID_OPERACAO WHERE O.E_ENTRADA_S_SAIDA='S' AND O.ATIVO='S' AND ( O.TIPO_OPERACAO=1 OR  O.TIPO_OPERACAO= 5 ) AND O.EMISSOR='P' AND O.MOVIMENTA_ESTOQUE='S' AND O.MULTI_DISPOSITIVO = 'S' AND S.SYNC = 'N' AND S.ID_WEB_USUARIO = " + id_usuario + " ORDER BY ID_OPERACAO;");
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                ivInternet.setVisibility(View.INVISIBLE);
-                            }
-                        });
-                        if (operacao.length > 0) {
-                            db.alterar("UPDATE TBL_OPERACAO_ESTOQUE SET SINCRONIZADO = 'N';");
-                        }
-                        for (int i = 0; operacao.length > i; i++) {
-                            notificacao.setProgress(operacao.length, i, false);
-                            if (db.contagem("SELECT COUNT(*) FROM TBL_OPERACAO_ESTOQUE WHERE ID_OPERACAO = " + operacao[i].getId_operacao()) < 0) {
-                                db.inserirTBL_OPERACAO_ESTOQUE(operacao[i].getAtivo(),
-                                        operacao[i].getId_operacao(),
-                                        operacao[i].getNome_operacao());
-                            } else {
-                                db.atualizarTBL_OPERACAO_ESTOQUE(operacao[i].getAtivo(),
-                                        operacao[i].getId_operacao(),
-                                        operacao[i].getNome_operacao());
-                            }
-                            mNotificationManager.notify(0, notificacao.build());
-                        }
-
-                        banco.Atualiza("UPDATE TBL_OPERACAO_ESTOQUE_SYNC SET SYNC = 'S' WHERE ID_WEB_USUARIO = " + id_usuario + ";");
-                        notificacao.setContentText("Operações de estoque completo")
-                                .setProgress(0, 0, false);
-                        mNotificationManager.notify(0, notificacao.build());
-                    } catch (IOException | XmlPullParserException e) {
-
-                        notificacao.setContentText("Problema de conexão").
-                                setContentTitle("Verifique sua conexão!").
-                                setProgress(0, 0, false)
-                                .setSmallIcon(R.mipmap.ic_sem_internet);
-                        mNotificationManager.notify(0, notificacao.build());
-
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-//                                Toast.makeText(PrincipalActivity.this, "Servidor indisponivel", Toast.LENGTH_SHORT).show();
-                                ivInternet.setVisibility(View.VISIBLE);
-
-                            }
-                        });
-                    }
                 }
+
 
                 if (db.contagem("SELECT COUNT(*) FROM TBL_TABELA_PRECO_CAB") == 0) {
                     notificacao.setProgress(0, 0, true).

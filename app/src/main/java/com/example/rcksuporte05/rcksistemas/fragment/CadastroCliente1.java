@@ -69,7 +69,7 @@ public class CadastroCliente1 extends Fragment {
         rdJuridica = (RadioButton) view.findViewById(R.id.rdJuridica);
         txtNomeCliente = (TextView) view.findViewById(R.id.txtNomeCliente);
         edtData = (EditText) view.findViewById(R.id.edtData);
-        txtNomeFantasia = (TextView) view.findViewById(R.id.txtNomeFantasia);
+        txtNomeFantasia = (TextView) view.findViewById(R.id.txtRazaoSocial);
         edtNomeFantasia = (EditText) view.findViewById(R.id.edtNomeFantasia);
         txtCpfCnpj = (TextView) view.findViewById(R.id.txtCpfCnpj);
         edtCpfCnpj = (EditText) view.findViewById(R.id.edtCpfCnpj);
