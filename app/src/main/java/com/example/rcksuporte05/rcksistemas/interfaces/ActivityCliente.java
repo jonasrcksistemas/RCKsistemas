@@ -88,7 +88,7 @@ public class ActivityCliente extends AppCompatActivity {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Intent intent = new Intent(ActivityCliente.this, ContatoActivity.class);
-                    intent.putExtra("id_cliente", Integer.parseInt(lista.get(position).getId_cadastro()));
+                    intent.putExtra("id_cliente", Integer.parseInt(listaAux.get(position).getId_cadastro()));
                     System.gc();
                     startActivity(intent);
                 }

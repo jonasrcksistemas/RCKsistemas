@@ -1,9 +1,11 @@
 package com.example.rcksuporte05.rcksistemas.fragment;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -95,79 +97,24 @@ public class CadastroCliente1 extends Fragment {
         btnLigar2 = (Button) view.findViewById(R.id.btnLigar2);
         btnLigar3 = (Button) view.findViewById(R.id.btnLigar3);
 
-        rdJuridica.setChecked(true);
-
         btnLigar1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    if (!cliente[32].replaceAll("[^0-9]", "").isEmpty() && cliente[32].replaceAll("[^0-9]", "").length() >= 8) {
-                        Intent intent = new Intent(Intent.ACTION_DIAL);
-
-                        if (cliente[32].replaceAll("[^0-9]", "").length() == 10) {
-                            intent.setData(Uri.parse("tel:" + "0" + cliente[32]));
-                        } else if (cliente[32].replaceAll("[^0-9]", "").length() == 11) {
-                            intent.setData(Uri.parse("tel:" + "0" + cliente[32]));
-                        } else {
-                            intent.setData(Uri.parse("tel:" + cliente[32]));
-                        }
-
-                        startActivity(intent);
-                    } else {
-                        Toast.makeText(getContext(), "Digite um numero válido", Toast.LENGTH_LONG).show();
-                    }
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                }
+                fazerChamada(edtTelefonePrincipal.getText().toString(), cliente[5]);
             }
         });
 
         btnLigar2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    if (!cliente[55].replaceAll("[^0-9]", "").isEmpty() && cliente[55].replaceAll("[^0-9]", "").length() >= 8) {
-                        Intent intent = new Intent(Intent.ACTION_DIAL);
-
-                        if (cliente[55].replaceAll("[^0-9]", "").length() == 10) {
-                            intent.setData(Uri.parse("tel:" + "0" + cliente[55]));
-                        } else if (cliente[55].replaceAll("[^0-9]", "").length() == 11) {
-                            intent.setData(Uri.parse("tel:" + "0" + cliente[55]));
-                        } else {
-                            intent.setData(Uri.parse("tel:" + cliente[55]));
-                        }
-
-                        startActivity(intent);
-                    } else {
-                        Toast.makeText(getContext(), "Digite um numero válido", Toast.LENGTH_LONG).show();
-                    }
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                }
+                fazerChamada(edtTelefone1.getText().toString(), cliente[5]);
             }
         });
 
         btnLigar3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    if (!cliente[56].replaceAll("[^0-9]", "").isEmpty() && cliente[56].replaceAll("[^0-9]", "").length() >= 8) {
-                        Intent intent = new Intent(Intent.ACTION_DIAL);
-                        if (cliente[56].replaceAll("[^0-9]", "").length() == 10) {
-                            intent.setData(Uri.parse("tel:" + "0" + cliente[56]));
-                        } else if (cliente[56].replaceAll("[^0-9]", "").length() == 11) {
-                            intent.setData(Uri.parse("tel:" + "0" + cliente[56]));
-                        } else {
-                            intent.setData(Uri.parse("tel:" + cliente[56]));
-                        }
-
-                        startActivity(intent);
-                    } else {
-                        Toast.makeText(getContext(), "Digite um numero válido", Toast.LENGTH_LONG).show();
-                    }
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
-                }
+                fazerChamada(edtTelefone2.getText().toString(), cliente[5]);
             }
         });
 
@@ -217,10 +164,13 @@ public class CadastroCliente1 extends Fragment {
                 } catch (StringIndexOutOfBoundsException e) {
                     Toast.makeText(getContext(), "Falta de informações no cadastro", Toast.LENGTH_SHORT).show();
                 }
-            } else {
+            } else if (cliente[3].equals("F")) {
                 rdFisica.setChecked(true);
                 edtCpfCnpj.setText(cpfCnpj.substring(0, 3) + "." + cpfCnpj.substring(3, 6) + "." + cpfCnpj.substring(6, 9) + "-" + cpfCnpj.substring(9, 11));
+            } else {
+                edtCpfCnpj.setText(cpfCnpj);
             }
+
             String telefonePrincipal = cliente[32].trim().replaceAll("[^0-9]", "");
             if (telefonePrincipal.length() == 10) {
                 edtTelefonePrincipal.setText("(" + telefonePrincipal.substring(0, 2) + ") " + telefonePrincipal.substring(2, 6) + "-" + telefonePrincipal.substring(6, 10));
@@ -326,6 +276,43 @@ public class CadastroCliente1 extends Fragment {
         });
         System.gc();
         return (view);
+    }
+
+    public void fazerChamada(final String telefone, final String nome) {
+        try {
+
+            if (!telefone.replaceAll("[^0-9]", "").trim().isEmpty()) {
+                if (telefone.replaceAll("[^0-9]", "").length() >= 8 && telefone.replaceAll("[^0-9]", "").length() <= 11) {
+                    final Intent intent = new Intent(Intent.ACTION_DIAL);
+
+                    AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+                    alert.setMessage("Deseja ligar para " + nome + " usando o número " + telefone + " ?");
+                    alert.setTitle("ATENÇÃO");
+                    alert.setNegativeButton("Não", null);
+                    alert.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            if (telefone.replaceAll("[^0-9]", "").length() == 10) {
+                                intent.setData(Uri.parse("tel:" + "0" + telefone));
+                            } else if (telefone.replaceAll("[^0-9]", "").length() == 11) {
+                                intent.setData(Uri.parse("tel:" + "0" + telefone));
+                            } else {
+                                intent.setData(Uri.parse("tel:" + telefone));
+                            }
+                            startActivity(intent);
+                        }
+                    });
+                    alert.show();
+
+                } else {
+                    Toast.makeText(getContext(), "Este numero de telefone não é válido!", Toast.LENGTH_LONG).show();
+                }
+            } else {
+                Toast.makeText(getContext(), "Nenhum numero de Telefone informado!", Toast.LENGTH_LONG).show();
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     @Override

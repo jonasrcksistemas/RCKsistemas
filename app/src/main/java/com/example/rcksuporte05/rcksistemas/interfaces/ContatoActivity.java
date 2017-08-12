@@ -1,8 +1,11 @@
 package com.example.rcksuporte05.rcksistemas.interfaces;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.CursorIndexOutOfBoundsException;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -25,6 +28,7 @@ public class ContatoActivity extends AppCompatActivity {
     private TextView txtEmail;
     private TextView txtEndereco;
     private LinearLayout lyDetalhes;
+    private LinearLayout lyChamada;
     private Cliente cliente;
     private Bundle bundle;
     private DBHelper db = new DBHelper(ContatoActivity.this);
@@ -44,18 +48,27 @@ public class ContatoActivity extends AppCompatActivity {
             txtEmail = (TextView) findViewById(R.id.txtEmail);
             txtEndereco = (TextView) findViewById(R.id.txtEndereco);
             lyDetalhes = (LinearLayout) findViewById(R.id.lyDetalhes);
+            lyChamada = (LinearLayout) findViewById(R.id.lyChamada);
 
             toolbar.setTitle("Contato");
             txtRazaoSocial.setText(cliente.getNome_cadastro());
 
-            if (!cliente.getTelefone_principal().trim().equals("")) {
+            if (cliente.getPessoa_f_j().equals("F")) {
+                imageView.setImageResource(R.mipmap.ic_pessoa_fisica);
+            } else if (cliente.getPessoa_f_j().equals("J")) {
+                imageView.setImageResource(R.mipmap.ic_pessoa_juridica);
+            } else {
+                imageView.setImageResource(R.mipmap.ic_pessoa_duvida);
+            }
+
+            if (!cliente.getTelefone_principal().replaceAll("[^0-9]", "").trim().isEmpty() && cliente.getTelefone_principal().replaceAll("[^0-9]", "").length() >= 8 && cliente.getTelefone_principal().replaceAll("[^0-9]", "").length() <= 11) {
                 txtTelefone.setText(formataTelefone(cliente.getTelefone_principal()));
-            } else if (!cliente.getTelefone_dois().trim().equals("")) {
+            } else if (!cliente.getTelefone_dois().replaceAll("[^0-9]", "").trim().isEmpty() && cliente.getTelefone_dois().replaceAll("[^0-9]", "").length() >= 8 && cliente.getTelefone_dois().replaceAll("[^0-9]", "").length() <= 11) {
                 txtTelefone.setText(formataTelefone(cliente.getTelefone_dois()));
-            } else if (!cliente.getTelefone_tres().trim().equals("")) {
+            } else if (!cliente.getTelefone_tres().replaceAll("[^0-9]", "").trim().isEmpty() && cliente.getTelefone_tres().replaceAll("[^0-9]", "").length() >= 8 && cliente.getTelefone_tres().replaceAll("[^0-9]", "").length() <= 11) {
                 txtTelefone.setText(formataTelefone(cliente.getTelefone_tres()));
             } else {
-                txtTelefone.setText("Nenhum telefone informado!");
+                txtTelefone.setText("Nenhum telefone válido informado!");
             }
 
             if (!cliente.getEmail_principal().trim().equals("")) {
@@ -172,6 +185,13 @@ public class ContatoActivity extends AppCompatActivity {
                 }
             });
 
+            lyChamada.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    fazerChamada(txtTelefone.getText().toString(), cliente.getNome_cadastro());
+                }
+            });
+
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -194,7 +214,8 @@ public class ContatoActivity extends AppCompatActivity {
     }
 
     public String formataTelefone(String telefone) {
-        String telefoneRetorno = telefone.trim().replaceAll("[^0-9]", "");
+        String telefoneRetorno;
+        telefone = telefone.trim().replaceAll("[^0-9]", "");
         if (telefone.length() == 10) {
             telefoneRetorno = "(" + telefone.substring(0, 2) + ")" + telefone.substring(2, 6) + "-" + telefone.substring(6, 10);
         } else if (telefone.length() == 11) {
@@ -208,5 +229,42 @@ public class ContatoActivity extends AppCompatActivity {
         }
 
         return telefoneRetorno;
+    }
+
+    public void fazerChamada(final String telefone, final String nome) {
+
+        try {
+            if (!telefone.replaceAll("[^0-9]", "").trim().isEmpty()) {
+                if (telefone.replaceAll("[^0-9]", "").length() >= 8 && telefone.replaceAll("[^0-9]", "").length() <= 11) {
+                    final Intent intent = new Intent(Intent.ACTION_DIAL);
+
+                    AlertDialog.Builder alert = new AlertDialog.Builder(ContatoActivity.this);
+                    alert.setMessage("Deseja ligar para " + nome + " usando o número " + telefone + " ?");
+                    alert.setTitle("ATENÇÃO");
+                    alert.setNegativeButton("Não", null);
+                    alert.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            if (telefone.replaceAll("[^0-9]", "").length() == 10) {
+                                intent.setData(Uri.parse("tel:" + "0" + telefone));
+                            } else if (telefone.replaceAll("[^0-9]", "").length() == 11) {
+                                intent.setData(Uri.parse("tel:" + "0" + telefone));
+                            } else {
+                                intent.setData(Uri.parse("tel:" + telefone));
+                            }
+                            startActivity(intent);
+                        }
+                    });
+                    alert.show();
+
+                } else {
+                    Toast.makeText(ContatoActivity.this, "Este numero de telefone não é válido!", Toast.LENGTH_LONG).show();
+                }
+            } else {
+                Toast.makeText(ContatoActivity.this, "Nenhum numero de Telefone informado!", Toast.LENGTH_LONG).show();
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
     }
 }
