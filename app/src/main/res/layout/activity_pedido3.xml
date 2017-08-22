@@ -78,7 +78,8 @@
                 android:background="@drawable/borda_edittext"
                 android:focusable="false"
                 android:gravity="center"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                android:text="  /  /    "/>
 
             <Button
                 android:id="@+id/btnDataEntrega"
