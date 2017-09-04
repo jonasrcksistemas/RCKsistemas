@@ -1276,9 +1276,8 @@ public class DBHelper extends SQLiteOpenHelper {
     public ArrayList<Cliente> listaCliente(String SQL) {
         ArrayList<Cliente> lista = new ArrayList<>();
         SQLiteDatabase banco = this.getReadableDatabase();
-        Cursor cursor;
+        Cursor cursor = banco.rawQuery(SQL, null);
 
-        cursor = banco.rawQuery(SQL, null);
         cursor.moveToFirst();
         do {
             Cliente cliente = new Cliente();
