@@ -142,7 +142,7 @@ public class ListagemPedidoPendente extends AppCompatActivity {
                                                 .setSmallIcon(R.mipmap.ic_sincronia_sucesso)
                                                 .setPriority(2)
                                                 .setDefaults(NotificationCompat.DEFAULT_ALL)
-                                                .addAction(0, "PEDIDOS ENVIADOS", pendingIntent)
+                                                .addAction(0, "PEDIDOS ENVIDADOS", pendingIntent)
                                                 .setProgress(0, 0, false)
                                                 .setAutoCancel(true);
                                         notificationManager.notify(0, notificacao.build());
@@ -259,7 +259,7 @@ public class ListagemPedidoPendente extends AppCompatActivity {
                                             .setSmallIcon(R.mipmap.ic_sincronia_sucesso)
                                             .setPriority(2)
                                             .setDefaults(NotificationCompat.DEFAULT_ALL)
-                                            .addAction(0, "PEDIDOS ENVIADOS", pendingIntent)
+                                            .addAction(0, "PEDIDOS ENVIDADOS", pendingIntent)
                                             .setProgress(0, 0, false)
                                             .setAutoCancel(true);
                                     notificationManager.notify(0, notificacao.build());

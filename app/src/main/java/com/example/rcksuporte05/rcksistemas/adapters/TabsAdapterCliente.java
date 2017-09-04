@@ -36,15 +36,6 @@ public class TabsAdapterCliente extends FragmentPagerAdapter {
         this.cliente = cliente;
     }
 
-    public TabsAdapterCliente(FragmentManager fm, Context c, List<Paises> listaPaises, List<Municipios> listaMunicipios, int idCliente, String[] cliente) {
-        super(fm);
-        mContext = c;
-        this.listaPaises = listaPaises;
-        this.listaMunicipios = listaMunicipios;
-        this.idCliente = idCliente;
-        this.cliente = cliente;
-    }
-
     @Override
     public Fragment getItem(int position) {
         Fragment frag = null;

@@ -34,9 +34,6 @@ public class PedidoHelper {
     private static List<WebPedidoItens> listaWebPedidoItens;
     private static int idPedido;
     private Float valorProdutos = 0.0f;
-    /*private Float descontoReal = 0.0f;
-    private Float mediaDesconto = 0.0f;
-    private Float totalPontos = 0.0f;*/
     private EditText edtTotalVenda;
     private EditText edtNomeProduto;
     private EditText edtTabelaPreco;
@@ -173,22 +170,9 @@ public class PedidoHelper {
                             webPedido.setValor_total(valorVenda.toString());
                             for (int i = 0; listaWebPedidoItens.size() > i; i++) {
                                 valorProdutos += Float.parseFloat(listaWebPedidoItens.get(i).getValor_bruto());
-                    /*descontoReal += Float.parseFloat(listaWebPedidoItens.get(i).getValor_desconto_real());
-                    mediaDesconto += Float.parseFloat(listaWebPedidoItens.get(i).getTabela_preco_faixa().getPerc_desc_inicial());
-                    totalPontos += Float.parseFloat(listaWebPedidoItens.get(i).getPontos_total());*/
                             }
-//                mediaDesconto = (mediaDesconto / listaWebPedidoItens.size());
-                /*webPedido.setPontos_total(totalPontos.toString());
-                if (totalPontos > 0) {
-                    webPedido.setPontos_coeficiente(String.valueOf(Float.parseFloat(webPedido.getValor_total()) / totalPontos));
-                } else {
-                    webPedido.setPontos_coeficiente("0");
-                }*/
-//                webPedido.setDesconto_per(String.valueOf(mediaDesconto));
                             webPedido.setValor_produtos(String.valueOf(valorProdutos));
-                /*webPedido.setValor_desconto(String.valueOf(descontoReal));
-                webPedido.setPontos_cor(db.consulta("SELECT I.COR_WEB, I.ID_ITEM FROM TBL_TABELA_PRECO_ITENS I JOIN TBL_TABELA_PRECO_CAB T ON T.ID_TABELA=I.ID_TABELA WHERE PERC_DESC_INICIAL<= " + mediaDesconto + " AND PERC_DESC_FINAL>= " + mediaDesconto + ";", "COR_WEB"));
-                webPedido.setId_tabela_preco_faixa(db.consulta("SELECT I.COR_WEB, I.ID_ITEM FROM TBL_TABELA_PRECO_ITENS I JOIN TBL_TABELA_PRECO_CAB T ON T.ID_TABELA=I.ID_TABELA WHERE PERC_DESC_INICIAL<= " + mediaDesconto + " AND PERC_DESC_FINAL>= " + mediaDesconto + ";", "ID_ITEM"));*/
+
                             if (PedidoHelper.getIdPedido() > 0) {
                                 db.atualizarTBL_WEB_PEDIDO(webPedido);
                                 for (int i = 0; listaWebPedidoItens.size() > i; i++) {

@@ -28,9 +28,9 @@ import java.util.List;
 
 public class BancoWeb {
 
-//    String URL = "http://rcksistemassuporte.ddns.com.br:3383/Banco/Banco?wsdl"; //URL Maquina 05
+    String URL = "http://rcksistemassuporte.ddns.com.br:3383/Banco/Banco?wsdl"; //URL Maquina 05
 //    String URL = "http://rcksistemassuporte.ddns.com.br:3384/Banco/Banco?wsdl";//URL Servidor RCK
-    String URL = "http://tksimports.ddns.com.br:3385/Banco/Banco?wsdl";//URL Servidor TKS
+//    String URL = "http://tksimports.ddns.com.br:3385/Banco/Banco?wsdl";//URL Servidor TKS
 
     String pacote = "http://DB/";
     SoapObject soap;
@@ -77,21 +77,6 @@ public class BancoWeb {
         Object resultado = envelope.getResponse();
 
         return String.valueOf(resultado);
-    }
-
-    public int Inserir(String SQL) throws IOException, XmlPullParserException {
-        soap = new SoapObject(pacote, "Inserir");
-        soap.addProperty("SQL", SQL);
-
-        envelope = new SoapSerializationEnvelope(SoapEnvelope.VER11);
-        envelope.setOutputSoapObject(soap);
-
-        httpTrans = new HttpTransportSE(URL);
-        httpTrans.call("Inserir", envelope);
-
-        Object resultado = envelope.getResponse();
-
-        return Integer.parseInt(String.valueOf(resultado));
     }
 
     public ArrayList lista(String SQL, String campo) throws IOException, XmlPullParserException {

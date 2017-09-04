@@ -80,12 +80,7 @@ public class Pedido1 extends Fragment implements View.OnClickListener {
             adapterOperacao = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_activated_1, db.listaOperacao("SELECT * FROM TBL_OPERACAO_ESTOQUE;"));
             spOperacao.setAdapter(adapterOperacao);
 
-            /*spTabelaPreco = (Spinner) view.findViewById(R.id.spTabelaPreco);
-            adapterPreco = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_activated_1, db.listaTabelaPreco("SELECT * FROM TBL_TABELA_PRECO_CAB;"));
-            spTabelaPreco.setAdapter(adapterPreco);*/
-
         } catch (CursorIndexOutOfBoundsException e) {
-//            Toast.makeText(getContext(), "A sincronia é necessária antes de se fazer um pedido", Toast.LENGTH_SHORT).show();
             AlertDialog.Builder alert = new AlertDialog.Builder(PedidoHelper.getActivityPedidoMain());
             alert.setMessage("A sincronia é necessária antes de se fazer um pedido, ou não há OPERAÇÕES DE ESTOQUE marcada para multi dispositivo!\n     Qualquer duvida entre em contato com a RCK SISTEMAS.");
             alert.setTitle("Atenção!");
@@ -113,26 +108,12 @@ public class Pedido1 extends Fragment implements View.OnClickListener {
                 System.out.println(e.getMessage());
             }
 
-
-            //Seleciona Tabela de Preco correta dentro do Spinner spTabelaPreco
-           /* try {
-                int i = -1;
-                do {
-                    i++;
-                }
-                while (!webPedido.getId_tabela().equals(adapterPreco.getItem(i).getId_tabela()));
-                spTabelaPreco.setSelection(i);
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }*/
-
             txtAdicionarProdutos.setText("Produtos");
         }
 
         if (bundle.getInt("vizualizacao") == 1) {
 
             btnBuscarCliente.setEnabled(false);
-//            spTabelaPreco.setEnabled(false);
             spOperacao.setEnabled(false);
         }
 
@@ -163,7 +144,6 @@ public class Pedido1 extends Fragment implements View.OnClickListener {
         webPedido.setId_empresa("1");
         webPedido.setId_vendedor(String.valueOf(bundle.getInt("idVendedor")));
         webPedido.setId_operacao(adapterOperacao.getItem(spOperacao.getSelectedItemPosition()).getId_operacao());
-//        webPedido.setId_tabela(adapterPreco.getItem(spTabelaPreco.getSelectedItemPosition()).getId_tabela());
         webPedido.setExcluido("N");
         webPedido.setUsuario_lancamento_id(String.valueOf(bundle.getInt("idUsuario")));
         webPedido.setUsuario_lancamento_nome(String.valueOf(bundle.getString("usuario")));
