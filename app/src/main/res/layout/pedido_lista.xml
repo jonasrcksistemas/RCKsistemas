@@ -74,7 +74,6 @@
         android:layout_alignBottom="@+id/txtPrecoPedido"
         android:layout_alignParentEnd="true"
         android:layout_alignParentTop="true"
-        android:background="#000000"
-        android:visibility="gone" />
+        android:background="#000000" />
 
 </RelativeLayout>

@@ -33,14 +33,14 @@ public class ListaAdapterProdutoPedido extends ArrayAdapter<WebPedidoItens> {
         TextView precoProduto = (TextView) convertView.findViewById(R.id.precoProduto);
         TextView textViewUnidadeMedida = (TextView) convertView.findViewById(R.id.textViewUnidadeMedida);
         TextView idPosition = (TextView) convertView.findViewById(R.id.idPosition);
-//        View viewCor = convertView.findViewById(R.id.viewCor);
+        View viewCor = convertView.findViewById(R.id.viewCor);
 
         nomeListaProduto.setText(itemPosicao.getNome_produto());
         precoProduto.setText(String.format("%.2f", Float.parseFloat(itemPosicao.getQuantidade())) + " x " + String.format("R$%.2f", Float.parseFloat(itemPosicao.getValor_unitario())) + " = " + String.format("R$%.2f", Float.parseFloat(itemPosicao.getValor_total())));
         textViewUnidadeMedida.setText(itemPosicao.getDescricao());
         idPosition.setText(String.valueOf(position + 1));
 
-//        viewCor.setBackgroundColor(Color.parseColor(itemPosicao.getTabela_preco_faixa().getCor_web()));
+        viewCor.setBackgroundColor(Color.parseColor(itemPosicao.getTabela_preco_faixa().getCor_web()));
 
         if (position % 2 == 0) {
             convertView.setBackgroundColor(Color.parseColor("#eeeeee"));

@@ -20,7 +20,6 @@ import android.widget.Toast;
 import com.example.rcksuporte05.rcksistemas.Helper.PedidoHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.ListaAdapterProdutoPedido;
-import com.example.rcksuporte05.rcksistemas.classes.WebPedido;
 import com.example.rcksuporte05.rcksistemas.classes.WebPedidoItens;
 import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
 import com.example.rcksuporte05.rcksistemas.interfaces.ProdutoPedidoActivity;
@@ -39,8 +38,6 @@ public class Pedido2 extends Fragment {
     private Button btnFinalizarPedido;
     private TextView txtFinalizarPedido;
     private Bundle bundle;
-    private WebPedido webPedido;
-    private int idPedido;
     private int posicao;
 
     @Override
@@ -172,7 +169,7 @@ public class Pedido2 extends Fragment {
                     intent.putExtra("pedido", 1);
                     intent.putExtra("position", info.position);
                     posicao = info.position;
-//                PedidoHelper.getProdutoPedidoActivity().pegaProduto(listaProdutoPedido.get(info.position));
+                    PedidoHelper.getProdutoPedidoActivity().pegaProduto(listaProdutoPedido.get(info.position));
                     PedidoHelper.setWebPedidoItem(listaProdutoPedido.get(info.position));
                     startActivity(intent);
                     return false;

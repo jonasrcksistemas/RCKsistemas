@@ -65,10 +65,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 finish();
             }
         } catch (android.database.CursorIndexOutOfBoundsException e) {
-            /*if (db.contagem("SELECT COUNT(*) FROM TBL_LOGIN") != 0) {
+            if (db.contagem("SELECT COUNT(*) FROM TBL_LOGIN") != 0) {
                 Toast.makeText(getApplicationContext(), "Usuario alterado", Toast.LENGTH_LONG).show();
                 db.alterar("DELETE FROM TBL_LOGIN");
-            }*/
+            }
             System.out.println(e.getMessage());
         }
     }

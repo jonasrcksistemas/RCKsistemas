@@ -1146,7 +1146,7 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("QUANTIDADE", webPedidoItem.getQuantidade());
         content.put("VALOR_UNITARIO", webPedidoItem.getVenda_preco());
         content.put("VALOR_BRUTO", webPedidoItem.getValor_bruto());
-//        content.put("VALOR_DESCONTO_PER", webPedidoItem.getTabela_preco_faixa().getPerc_desc_inicial());
+        content.put("VALOR_DESCONTO_PER", webPedidoItem.getTabela_preco_faixa().getPerc_desc_inicial());
         content.put("VALOR_DESCONTO_REAL", webPedidoItem.getValor_desconto_real());
         content.put("VALOR_DESCONTO_PER_ADD", webPedidoItem.getValor_desconto_per_add());
         content.put("VALOR_DESCONTO_REAL_ADD", webPedidoItem.getValor_desconto_real_add());
@@ -1154,17 +1154,17 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("DATA_MOVIMENTACAO", this.pegaDataAtual());
         content.put("USUARIO_LANCAMENTO_ID", webPedidoItem.getUsuario_lancamento_id());
         content.put("USUARIO_LANCAMENTO_DATA", this.pegaDataHoraAtual());
-//        content.put("ID_TABELA_PRECO_FAIXA", webPedidoItem.getTabela_preco_faixa().getId_item());
+        content.put("ID_TABELA_PRECO_FAIXA", webPedidoItem.getTabela_preco_faixa().getId_item());
         content.put("ID_ITEM_DESCONTO", webPedidoItem.getId_item_desconto());
         content.put("PONTOS_UNITARIO", webPedidoItem.getPontos_unitario());
         content.put("PONTOS_TOTAL", webPedidoItem.getPontos_total());
         content.put("PONTOS_COEFICIENTE", webPedidoItem.getPontos_coeficiente());
-//        content.put("PONTOS_COR", webPedidoItem.getTabela_preco_faixa().getCor_painel());
+        content.put("PONTOS_COR", webPedidoItem.getTabela_preco_faixa().getCor_painel());
         content.put("COMISSAO_PERCENTUAL", webPedidoItem.getComissao_percentual());
         content.put("COMISSAO_VALOR", webPedidoItem.getComissao_valor());
         content.put("VALOR_BONUS_CREDOR", webPedidoItem.getValor_bonus_credor());
         content.put("PERC_BONUS_CREDOR", webPedidoItem.getPerc_bonus_credor());
-//        content.put("ID_TABELA_PRECO", webPedidoItem.getTabela_preco_faixa().getId_item());
+        content.put("ID_TABELA_PRECO", webPedidoItem.getTabela_preco_faixa().getId_item());
         content.put("VALOR_DESCONTO_PER_ORIG", webPedidoItem.getValor_desconto_per_orig());
         content.put("VALOR_DESCONTO_REAL_ORIG", webPedidoItem.getValor_desconto_real_orig());
         content.put("VALOR_DESCONTO_PER_ADD_ORIG", webPedidoItem.getValor_desconto_per_add_orig());
@@ -1197,7 +1197,7 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("QUANTIDADE", webPedidoItem.getQuantidade());
         content.put("VALOR_UNITARIO", webPedidoItem.getValor_unitario());
         content.put("VALOR_BRUTO", webPedidoItem.getValor_bruto());
-//        content.put("VALOR_DESCONTO_PER", webPedidoItem.getTabela_preco_faixa().getPerc_desc_inicial());
+        content.put("VALOR_DESCONTO_PER", webPedidoItem.getTabela_preco_faixa().getPerc_desc_inicial());
         content.put("VALOR_DESCONTO_REAL", webPedidoItem.getValor_desconto_real());
         content.put("VALOR_DESCONTO_PER_ADD", webPedidoItem.getValor_desconto_per_add());
         content.put("VALOR_DESCONTO_REAL_ADD", webPedidoItem.getValor_desconto_real_add());
@@ -1205,7 +1205,7 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("DATA_MOVIMENTACAO", webPedidoItem.getData_movimentacao());
         content.put("USUARIO_LANCAMENTO_ID", webPedidoItem.getUsuario_lancamento_id());
         content.put("USUARIO_LANCAMENTO_DATA", webPedidoItem.getUsuario_lancamento_data());
-//        content.put("ID_TABELA_PRECO_FAIXA", webPedidoItem.getTabela_preco_faixa().getId_item());
+        content.put("ID_TABELA_PRECO_FAIXA", webPedidoItem.getTabela_preco_faixa().getId_item());
         content.put("ID_ITEM_DESCONTO", webPedidoItem.getId_item_desconto());
         content.put("PONTOS_UNITARIO", webPedidoItem.getPontos_unitario());
         content.put("PONTOS_TOTAL", webPedidoItem.getPontos_total());
@@ -1670,7 +1670,7 @@ public class DBHelper extends SQLiteOpenHelper {
             webPedidoItens.setData_movimentacao(cursor.getString(cursor.getColumnIndex("DATA_MOVIMENTACAO")));
             webPedidoItens.setUsuario_lancamento_id(cursor.getString(cursor.getColumnIndex("USUARIO_LANCAMENTO_ID")));
             webPedidoItens.setUsuario_lancamento_data(cursor.getString(cursor.getColumnIndex("USUARIO_LANCAMENTO_DATA")));
-//            webPedidoItens.setTabela_preco_faixa(this.listaTabelaPrecoItem("SELECT * FROM TBL_TABELA_PRECO_ITENS WHERE ID_ITEM = " + cursor.getString(cursor.getColumnIndex("ID_TABELA_PRECO_FAIXA"))).get(0));
+            webPedidoItens.setTabela_preco_faixa(this.listaTabelaPrecoItem("SELECT * FROM TBL_TABELA_PRECO_ITENS WHERE ID_ITEM = " + cursor.getString(cursor.getColumnIndex("ID_TABELA_PRECO_FAIXA"))).get(0));
             webPedidoItens.setId_item_desconto(cursor.getString(cursor.getColumnIndex("ID_ITEM_DESCONTO")));
             webPedidoItens.setPontos_unitario(cursor.getString(cursor.getColumnIndex("PONTOS_UNITARIO")));
             webPedidoItens.setPontos_total(cursor.getString(cursor.getColumnIndex("PONTOS_TOTAL")));

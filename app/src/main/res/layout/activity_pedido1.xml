@@ -76,25 +76,23 @@
                 android:id="@+id/txtPontoCoeficiente"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/spPagamento"
+                android:layout_below="@+id/spOperacao"
                 android:layout_marginTop="12dp"
                 android:text="TABELA DE PREÇO"
-                android:textColor="@color/colorAccent"
-                android:visibility="gone" />
+                android:textColor="@color/colorAccent" />
 
             <Spinner
                 android:id="@+id/spTabelaPreco"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@+id/txtPontoCoeficiente"
-                android:layout_toEndOf="@+id/txtPontoCoeficiente"
-                android:visibility="gone" />
+                android:layout_toEndOf="@+id/txtPontoCoeficiente" />
 
             <Button
                 android:id="@+id/btnHistoricoFinanceiro"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:layout_below="@+id/spOperacao"
+                android:layout_below="@+id/spTabelaPreco"
                 android:layout_marginTop="15dp"
                 android:background="@mipmap/ic_financeiro" />
 

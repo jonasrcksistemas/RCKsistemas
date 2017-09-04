@@ -28,9 +28,9 @@ import java.util.List;
 
 public class BancoWeb {
 
-//    String URL = "http://rcksistemassuporte.ddns.com.br:3383/Banco/Banco?wsdl"; //URL Maquina 05
+    String URL = "http://rcksistemassuporte.ddns.com.br:3383/Banco/Banco?wsdl"; //URL Maquina 05
 //    String URL = "http://rcksistemassuporte.ddns.com.br:3384/Banco/Banco?wsdl";//URL Servidor RCK
-    String URL = "http://tksimports.ddns.com.br:3385/Banco/Banco?wsdl";//URL Servidor TKS
+//    String URL = "http://tksimports.ddns.com.br:3385/Banco/Banco?wsdl";//URL Servidor TKS
 
     String pacote = "http://DB/";
     SoapObject soap;
@@ -704,7 +704,7 @@ public class BancoWeb {
         soap.addProperty("data_movimentacao", webPedidoItens.getData_movimentacao());
         soap.addProperty("usuario_lancamento_id", webPedidoItens.getUsuario_lancamento_id());
         soap.addProperty("usuario_lancamento_data", webPedidoItens.getUsuario_lancamento_data());
-//        soap.addProperty("id_tabela_preco_faixa", webPedidoItens.getTabela_preco_faixa().getId_item());
+        soap.addProperty("id_tabela_preco_faixa", webPedidoItens.getTabela_preco_faixa().getId_item());
         soap.addProperty("id_item_desconto", webPedidoItens.getId_item_desconto());
         soap.addProperty("pontos_unitario", webPedidoItens.getPontos_unitario());
         soap.addProperty("pontos_total", webPedidoItens.getPontos_total());
