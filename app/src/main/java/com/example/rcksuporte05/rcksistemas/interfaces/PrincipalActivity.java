@@ -301,6 +301,13 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.notify(0, notificacao.build());
 
+        final ProgressDialog progress = new ProgressDialog(PrincipalActivity.this);
+        progress.setMessage("Aguarde");
+        progress.setTitle("Sincronia em andamento");
+        progress.setCancelable(false);
+        progress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        progress.show();
+
         banco = new BancoWeb();
 
         a = new Thread(new Runnable() {
@@ -313,7 +320,10 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                     notificacao.setContentText("Usuarios").
                             setProgress(0, 0, true);
                     mNotificationManager.notify(0, notificacao.build());
+                    progress.setMessage("Usuarios");
+
                     Usuario[] usuario = banco.sincronizaUsuario("SELECT * FROM TBL_WEB_USUARIO A INNER JOIN TBL_WEB_USUARIO_SYNC B ON (A.ID_USUARIO = B.ID_USUARIO) WHERE B.ID_WEB_USUARIO = " + id_usuario + " AND B.SYNC = 'N';");
+                    progress.setMax(usuario.length);
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -323,6 +333,7 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
 
                     for (int i = 0; usuario.length > i; i++) {
                         notificacao.setProgress(usuario.length, i, false);
+                        progress.setProgress(i);
                         if (db.contagem("SELECT COUNT(*) FROM TBL_WEB_USUARIO WHERE ID_USUARIO = " + usuario[i].getId_usuario()) != 0) {
                             db.atualizarTBL_WEB_USUARIO(usuario[i]);
                         } else {
@@ -339,6 +350,8 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                             setProgress(0, 0, false).
                             setSmallIcon(R.mipmap.ic_sem_internet);
                     mNotificationManager.notify(0, notificacao.build());
+                    progress.setMessage("Problema de Conexão");
+                    progress.setProgress(0);
 
                     runOnUiThread(new Runnable() {
                         @Override
@@ -364,6 +377,8 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                                     setSmallIcon(R.mipmap.ic_usuario_alterado);
                             mNotificationManager.notify(0, notificacao.build());
 
+                            progress.dismiss();
+
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
@@ -385,6 +400,8 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                                 setSmallIcon(R.mipmap.ic_usuario_alterado);
                         mNotificationManager.notify(0, notificacao.build());
 
+                        progress.dismiss();
+
                         if (db.contagem("SELECT COUNT(*) FROM TBL_LOGIN") != 0) {
                             DBHelper db = new DBHelper(PrincipalActivity.this);
                             db.alterar("DELETE FROM TBL_LOGIN");
@@ -400,6 +417,13 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                         setContentText("Clientes").
                         setContentTitle("Sincronia em andamento");
                 mNotificationManager.notify(0, notificacao.build());
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        progress.setMessage("Clientes");
+                    }
+                });
+
                 try {
                     db.alterar("DELETE FROM TBL_CADASTRO;");
 
@@ -412,6 +436,7 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                         listaCliente = banco.sincronizaCliente("SELECT * FROM TBL_CADASTRO WHERE F_VENDEDOR = 'S' OR F_CLIENTE = 'S';");
                     }
 
+                    progress.setMax(listaCliente.length);
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -421,6 +446,7 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
 
                     for (int i = 0; listaCliente.length > i; i++) {
                         notificacao.setProgress(listaCliente.length, i, false);
+                        progress.setProgress(i);
                         db.inserirTBL_CADASTRO(listaCliente[i].getAtivo(),
                                 listaCliente[i].getId_empresa(),
                                 listaCliente[i].getId_cadastro(),
@@ -509,8 +535,10 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                     }
 
                     Cliente[] listaVendedores = banco.sincronizaCliente("SELECT * FROM TBL_CADASTRO WHERE F_VENDEDOR = 'S' ORDER BY F_ID_VENDEDOR;");
+                    progress.setMax(listaVendedores.length);
                     for (int i = 0; listaVendedores.length > i; i++) {
                         notificacao.setProgress(listaVendedores.length, i, false);
+                        progress.setProgress(i);
                         db.inserirTBL_CADASTRO(listaVendedores[i].getAtivo(),
                                 listaVendedores[i].getId_empresa(),
                                 listaVendedores[i].getId_cadastro(),
@@ -602,6 +630,7 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                     notificacao.setContentText("Clientes completo")
                             .setProgress(0, 0, false);
                     mNotificationManager.notify(0, notificacao.build());
+                    progress.setProgress(0);
                     System.gc();
                 } catch (IOException | XmlPullParserException e) {
 
@@ -611,6 +640,8 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                             setSmallIcon(R.mipmap.ic_sem_internet);
                     mNotificationManager.notify(0, notificacao.build());
 
+                    progress.setProgress(0);
+
                 } finally {
                     System.gc();
                 }
@@ -619,11 +650,19 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                         setContentText("Produtos").
                         setContentTitle("Sincronia em andamento");
                 mNotificationManager.notify(0, notificacao.build());
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        progress.setMessage("Produtos");
+                    }
+                });
                 try {
 
                     db.alterar("DELETE FROM TBL_PRODUTO;");
                     Produto[] listaProduto = banco.sincronizaProduto("SELECT A.*, B.DESCRICAO FROM TBL_PRODUTO A INNER JOIN TBL_PRODUTO_UNID_MEDIDA B ON A.UNIDADE = B.ABREVIATURA WHERE A.PRODUTO_VENDA = 'S' AND A.MULTI_DISPOSITIVO = 'S';");
 
+                    progress.setMax(listaProduto.length);
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -634,6 +673,7 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
 
                     for (int i = 0; listaProduto.length > i; i++) {
                         notificacao.setProgress(listaProduto.length, i, false);
+                        progress.setProgress(i);
                         db.inserirTBL_PRODUTO(listaProduto[i].getAtivo(),
                                 listaProduto[i].getId_produto(),
                                 listaProduto[i].getNome_produto(),
@@ -694,7 +734,7 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                             setSmallIcon(R.mipmap.ic_sem_internet);
                     mNotificationManager.notify(0, notificacao.build());
 
-
+                    progress.setProgress(0);
                     System.out.println(e.getMessage());
                 }
 
@@ -703,9 +743,18 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                             setContentText("Países").
                             setContentTitle("Sincronia em andamento");
                     mNotificationManager.notify(0, notificacao.build());
-                    try {
 
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            progress.setMessage("Países");
+                        }
+                    });
+
+                    try {
                         Paises[] paises = banco.sincronizaPaises("SELECT * FROM TBL_PAISES");
+                        progress.setMax(paises.length);
+
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -715,6 +764,7 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
 
                         for (int i = 0; paises.length > i; i++) {
                             notificacao.setProgress(paises.length, i, false);
+                            progress.setProgress(i);
                             db.inserirTBL_PAISES(paises[i].getId_pais(),
                                     paises[i].getNome_pais());
                             mNotificationManager.notify(0, notificacao.build());
@@ -731,6 +781,8 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                                 setSmallIcon(R.mipmap.ic_sem_internet);
                         mNotificationManager.notify(0, notificacao.build());
 
+                        progress.setProgress(0);
+
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -745,20 +797,30 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                             setContentText("Países").
                             setContentTitle("Sincronia em andamento");
                     mNotificationManager.notify(0, notificacao.build());
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            progress.setMessage("Países");
+                        }
+                    });
+
                     try {
 
                         Paises[] paises = banco.sincronizaPaises("SELECT A.* FROM TBL_PAISES A INNER JOIN TBL_PAISES_SYNC B ON A.ID_PAIS = B.ID_PAIS WHERE B.SYNC = 'N' AND B.ID_WEB_USUARIO = " + id_usuario + ";");
+                        progress.setMax(paises.length);
+
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 ivInternet.setVisibility(View.INVISIBLE);
                             }
                         });
-                        if (paises.length > 0) {
-                            db.alterar("UPDATE TBL_PAISES SET SINCRONIZADO = 'N';");
-                        }
+
                         for (int i = 0; paises.length > i; i++) {
                             notificacao.setProgress(paises.length, i, false);
+                            progress.setProgress(i);
+
                             if (db.contagem("SELECT COUNT(*) FROM TBL_PAISES WHERE ID_PAIS = " + paises[i].getId_pais()) <= 0) {
                                 db.inserirTBL_PAISES(paises[i].getId_pais(),
                                         paises[i].getNome_pais());
@@ -770,9 +832,12 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                         }
 
                         banco.Atualiza("UPDATE TBL_PAISES_SYNC SET SYNC = 'N' WHERE ID_WEB_USUARIO = " + id_usuario + ";");
-                        notificacao.setContentText("Clientes completo")
+
+                        notificacao.setContentText("Países completo")
                                 .setProgress(0, 0, false);
                         mNotificationManager.notify(0, notificacao.build());
+
+                        progress.setProgress(0);
                     } catch (IOException | XmlPullParserException e) {
 
                         notificacao.setContentText("Problema de conexão").
@@ -780,6 +845,8 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                                 setProgress(0, 0, false).
                                 setSmallIcon(R.mipmap.ic_sem_internet);
                         mNotificationManager.notify(0, notificacao.build());
+
+                        progress.setProgress(0);
 
                         runOnUiThread(new Runnable() {
                             @Override
@@ -798,8 +865,17 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                             setContentTitle("Sincronia em andamento");
                     mNotificationManager.notify(0, notificacao.build());
 
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            progress.setMessage("Municipios");
+                        }
+                    });
+
                     try {
                         Municipios[] municipios = banco.sincronizaMunicipios("SELECT * FROM TBL_MUNICIPIOS");
+                        progress.setMax(municipios.length);
+
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -809,6 +885,8 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
 
                         if (municipios.length > 0) {
                             for (int i = 0; municipios.length > i; i++) {
+                                progress.setProgress(i);
+
                                 notificacao.setProgress(municipios.length, i, false);
                                 db.inserirTBL_MUNICIPIOS(municipios[i].getId_municipio(), municipios[i].getNome_municipio(), municipios[i].getUf(), municipios[i].getCep());
                                 mNotificationManager.notify(0, notificacao.build());
@@ -818,6 +896,8 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                         notificacao.setContentText("Municipios completo")
                                 .setProgress(0, 0, false);
                         mNotificationManager.notify(0, notificacao.build());
+
+                        progress.setProgress(0);
                     } catch (IOException | XmlPullParserException e) {
 
                         notificacao.setContentText("Problema de conexão").
@@ -826,6 +906,7 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                                 setSmallIcon(R.mipmap.ic_sem_internet);
                         mNotificationManager.notify(0, notificacao.build());
 
+                        progress.setProgress(0);
 
                         System.out.println(e.getMessage());
                     }
@@ -835,14 +916,17 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                         setContentText("Operações de Estoque").
                         setContentTitle("Sincronia em andamento");
                 mNotificationManager.notify(0, notificacao.build());
+
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-
+                        progress.setMessage("Operações de Estoque");
                     }
                 });
+
                 try {
                     Operacao[] operacao = banco.sincronizaOperacao("SELECT * FROM TBL_OPERACAO_ESTOQUE WHERE E_ENTRADA_S_SAIDA='S' AND ATIVO='S' AND ( TIPO_OPERACAO=1 OR  TIPO_OPERACAO= 5 ) AND EMISSOR='P' AND MOVIMENTA_ESTOQUE='S' AND MULTI_DISPOSITIVO = 'S' ORDER BY ID_OPERACAO;");
+                    progress.setMax(operacao.length);
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -856,11 +940,14 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                                 operacao[i].getId_operacao(),
                                 operacao[i].getNome_operacao());
                         mNotificationManager.notify(0, notificacao.build());
+                        progress.setProgress(i);
                     }
                     banco.Atualiza("UPDATE TBL_OPERACAO_ESTOQUE_SYNC SET SYNC = 'S' WHERE ID_WEB_USUARIO = " + id_usuario + ";");
                     notificacao.setContentText("Operações de estoque completo")
                             .setProgress(0, 0, false);
                     mNotificationManager.notify(0, notificacao.build());
+
+                    progress.setProgress(0);
                 } catch (IOException | XmlPullParserException e) {
 
                     notificacao.setContentText("Problema de conexão").
@@ -868,6 +955,8 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                             setProgress(0, 0, false)
                             .setSmallIcon(R.mipmap.ic_sem_internet);
                     mNotificationManager.notify(0, notificacao.build());
+
+                    progress.setProgress(0);
 
                     runOnUiThread(new Runnable() {
                         @Override
@@ -885,9 +974,17 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                             setContentText("Tabela de preços").
                             setContentTitle("Sincronia em andamento");
                     mNotificationManager.notify(0, notificacao.build());
-                    try {
 
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            progress.setMessage("Tabela de preços");
+                        }
+                    });
+                    try {
                         TabelaPreco[] tabelaPrecos = banco.sincronizaTabelaPreco("SELECT * FROM TBL_TABELA_PRECO_CAB WHERE ATIVO = 'S';");
+                        progress.setMax(tabelaPrecos.length);
+
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -896,6 +993,9 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                         });
                         for (int i = 0; tabelaPrecos.length > i; i++) {
                             notificacao.setProgress(tabelaPrecos.length, i, false);
+
+                            progress.setProgress(i);
+
                             db.inserirTBL_TABELA_PRECO_CAB(
                                     tabelaPrecos[i].getId_tabela(),
                                     tabelaPrecos[i].getId_empresa(),
@@ -925,6 +1025,7 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                         notificacao.setContentText("Tabela de preços completo")
                                 .setProgress(0, 0, false);
                         mNotificationManager.notify(0, notificacao.build());
+                        progress.setProgress(0);
                     } catch (IOException | XmlPullParserException e) {
 
                         notificacao.setContentText("Problema de conexão").
@@ -932,6 +1033,7 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                                 setProgress(0, 0, false).
                                 setSmallIcon(R.mipmap.ic_sem_internet);
                         mNotificationManager.notify(0, notificacao.build());
+                        progress.setProgress(0);
 
 //                        Toast.makeText(PrincipalActivity.this, "Servidor indisponivel", Toast.LENGTH_SHORT).show();
                         runOnUiThread(new Runnable() {
@@ -947,25 +1049,27 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                             setContentText("Tabela de preços").
                             setContentTitle("Sincronia em andamento");
                     mNotificationManager.notify(0, notificacao.build());
+
                     try {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-
+                                progress.setMessage("Tabela de preços");
                             }
                         });
+
                         TabelaPreco[] tabelaPrecos = banco.sincronizaTabelaPreco("SELECT * FROM TBL_TABELA_PRECO_CAB A INNER JOIN TBL_TABELA_PRECO_CAB_SYNC B ON A.ID_TABELA = B.ID_TABELA WHERE A.ATIVO = 'S' AND B.SYNC = 'N' AND B.ID_WEB_USUARIO = " + id_usuario + ";");
+                        progress.setMax(tabelaPrecos.length);
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 ivInternet.setVisibility(View.INVISIBLE);
                             }
                         });
-                        if (tabelaPrecos.length > 0) {
-                            db.alterar("UPDATE TBL_TABELA_PRECO_CAB SET SINCRONIZADO = 'N'");
-                        }
+
                         for (int i = 0; tabelaPrecos.length > i; i++) {
                             notificacao.setProgress(tabelaPrecos.length, i, false);
+                            progress.setProgress(i);
                             if (db.contagem("SELECT COUNT(*) FROM TBL_TABELA_PRECO_CAB WHERE ID_TABELA = " + tabelaPrecos[i].getId_tabela()) == 0) {
                                 db.inserirTBL_TABELA_PRECO_CAB(
                                         tabelaPrecos[i].getId_tabela(),
@@ -1019,6 +1123,7 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                         notificacao.setContentText("Tabela de preços completo")
                                 .setProgress(0, 0, false);
                         mNotificationManager.notify(0, notificacao.build());
+                        progress.setProgress(0);
                     } catch (IOException | XmlPullParserException e) {
 
                         notificacao.setContentText("Problema de conexão").
@@ -1026,6 +1131,7 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                                 setProgress(0, 0, false).
                                 setSmallIcon(R.mipmap.ic_sem_internet);
                         mNotificationManager.notify(0, notificacao.build());
+                        progress.setProgress(0);
 
                         runOnUiThread(new Runnable() {
                             @Override
@@ -1042,9 +1148,18 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                             setContentText("Tabela de preços").
                             setContentTitle("Sincronia em andamento");
                     mNotificationManager.notify(0, notificacao.build());
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            progress.setMessage("Tabela de preços");
+                        }
+                    });
+
                     try {
 
                         TabelaPrecoItem[] tabelaPrecoItem = banco.sincronizaTabelaPrecoItem("SELECT * FROM TBL_TABELA_PRECO_ITENS;");
+                        progress.setMax(tabelaPrecoItem.length);
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -1053,6 +1168,7 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                         });
                         for (int i = 0; tabelaPrecoItem.length > i; i++) {
                             notificacao.setProgress(tabelaPrecoItem.length, i, false);
+                            progress.setProgress(i);
                             db.inserirTBL_TABELA_PRECO_ITENS(
                                     tabelaPrecoItem[i].getId_item(),
                                     tabelaPrecoItem[i].getId_tabela(),
@@ -1079,6 +1195,7 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                         notificacao.setContentText("Tabela de preços completo")
                                 .setProgress(0, 0, false);
                         mNotificationManager.notify(0, notificacao.build());
+                        progress.setProgress(0);
                     } catch (IOException | XmlPullParserException e) {
 
                         notificacao.setContentText("Problema de conexão").
@@ -1086,6 +1203,8 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                                 setProgress(0, 0, false).
                                 setSmallIcon(R.mipmap.ic_sem_internet);
                         mNotificationManager.notify(0, notificacao.build());
+
+                        progress.setProgress(0);
 
 //                        Toast.makeText(PrincipalActivity.this, "Servidor indisponivel", Toast.LENGTH_SHORT).show();
                         runOnUiThread(new Runnable() {
@@ -1102,9 +1221,17 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                             setContentText("Tabela de preços").
                             setContentTitle("Sincronia em andamento");
                     mNotificationManager.notify(0, notificacao.build());
-                    try {
 
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            progress.setMessage("Tabela de preços");
+                        }
+                    });
+
+                    try {
                         TabelaPrecoItem[] tabelaPrecoItem = banco.sincronizaTabelaPrecoItem("SELECT A.* FROM TBL_TABELA_PRECO_ITENS A INNER JOIN TBL_TABELA_PRECO_ITENS_SYNC B ON A.ID_ITEM = B.ID_ITEM WHERE B.SYNC = 'N' AND B.ID_WEB_USUARIO = " + id_usuario + ";");
+                        progress.setMax(tabelaPrecoItem.length);
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -1112,12 +1239,9 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                             }
                         });
 
-                        if (tabelaPrecoItem.length > 0) {
-                            db.alterar("UPDATE TBL_TABELA_PRECO_ITENS SET SINCRONIZADO = 'N'");
-                        }
-
                         for (int i = 0; tabelaPrecoItem.length > i; i++) {
                             notificacao.setProgress(tabelaPrecoItem.length, i, false);
+                            progress.setProgress(i);
                             if (db.contagem("SELECT COUNT(*) FROM TBL_TABELA_PRECO_ITENS WHERE ID_TABELA = " + tabelaPrecoItem[i].getId_tabela()) == 0) {
                                 db.inserirTBL_TABELA_PRECO_ITENS(
                                         tabelaPrecoItem[i].getId_item(),
@@ -1163,6 +1287,7 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                         notificacao.setContentText("Tabela de preços completo")
                                 .setProgress(0, 0, false);
                         mNotificationManager.notify(0, notificacao.build());
+                        progress.setProgress(0);
                     } catch (IOException | XmlPullParserException e) {
 
                         notificacao.setContentText("Problema de conexão").
@@ -1170,6 +1295,8 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                                 setProgress(0, 0, false).
                                 setSmallIcon(R.mipmap.ic_sem_internet);
                         mNotificationManager.notify(0, notificacao.build());
+
+                        progress.setProgress(0);
 
                         runOnUiThread(new Runnable() {
                             @Override
@@ -1188,9 +1315,17 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                         setContentTitle("Sincronia em andamento");
                 mNotificationManager.notify(0, notificacao.build());
 
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        progress.setMessage("Condições de Pagamento");
+                    }
+                });
+
                 try {
                     db.alterar("DELETE FROM TBL_CONDICOES_PAG_CAB;");
                     CondicoesPagamento[] condicoesPagamento = banco.sincronizaCondicoesPagamento("SELECT * FROM TBL_CONDICOES_PAG_CAB WHERE PUBLICAR_NA_WEB = 'S';");
+                    progress.setMax(condicoesPagamento.length);
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -1199,6 +1334,7 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                     });
                     for (int i = 0; condicoesPagamento.length > i; i++) {
                         notificacao.setProgress(condicoesPagamento.length, i, false);
+                        progress.setProgress(i);
                         db.inserirTBL_CONDICOES_PAG_CAB(
                                 condicoesPagamento[i].getAtivo(),
                                 condicoesPagamento[i].getId_condicao(),
@@ -1219,6 +1355,7 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                     notificacao.setContentText("Condições de pagamento")
                             .setProgress(0, 0, false);
                     mNotificationManager.notify(0, notificacao.build());
+                    progress.setProgress(0);
                 } catch (IOException | XmlPullParserException e) {
 
                     notificacao.setContentText("Problema de conexão").
@@ -1226,6 +1363,8 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                             setProgress(0, 0, false).
                             setSmallIcon(R.mipmap.ic_sem_internet);
                     mNotificationManager.notify(0, notificacao.build());
+
+                    progress.setProgress(0);
 
                     runOnUiThread(new Runnable() {
                         @Override
@@ -1242,9 +1381,17 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                             setContentText("Bonus resumo").
                             setContentTitle("Sincronia em andamento");
                     mNotificationManager.notify(0, notificacao.build());
-                    try {
 
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            progress.setMessage("Bonus resumo");
+                        }
+                    });
+
+                    try {
                         VendedorBonusResumo[] vendedorBonusResumo = banco.sincronizaVendedorBonusResumo("SELECT * FROM TBL_VENDEDOR_BONUS_RESUMO;");
+                        progress.setMax(vendedorBonusResumo.length);
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -1253,6 +1400,7 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                         });
                         for (int i = 0; vendedorBonusResumo.length > i; i++) {
                             notificacao.setProgress(vendedorBonusResumo.length, i, false);
+                            progress.setProgress(i);
                             db.inserirTBL_VENDEDOR_BONUS_RESUMO(
                                     vendedorBonusResumo[i].getId_vendedor(),
                                     vendedorBonusResumo[i].getId_empresa(),
@@ -1277,6 +1425,19 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                                 .setContentIntent(pendingIntent);
                         mNotificationManager.notify(0, notificacao.build());
 
+                        progress.dismiss();
+
+                        final AlertDialog.Builder alert = new AlertDialog.Builder(PrincipalActivity.this);
+                        alert.setMessage("Completo!");
+                        alert.setTitle("Sincronia concluída");
+                        alert.setNeutralButton("OK", null);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                alert.show();
+                            }
+                        });
+
                     } catch (IOException | XmlPullParserException e) {
 
                         notificacao.setContentText("Problema de conexão").
@@ -1284,6 +1445,8 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                                 setProgress(0, 0, false).
                                 setSmallIcon(R.mipmap.ic_sem_internet);
                         mNotificationManager.notify(0, notificacao.build());
+
+                        progress.dismiss();
 
                         runOnUiThread(new Runnable() {
                             @Override
@@ -1299,9 +1462,17 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                             setContentText("Bonus resumo").
                             setContentTitle("Sincronia em andamento");
                     mNotificationManager.notify(0, notificacao.build());
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            progress.setMessage("Bonus resumo");
+                        }
+                    });
                     try {
 
                         VendedorBonusResumo[] vendedorBonusResumo = banco.sincronizaVendedorBonusResumo("SELECT * FROM TBL_VENDEDOR_BONUS_RESUMO A INNER JOIN TBL_VENDEDOR_BONUS_RESUMO_SYNC B ON A.ID_VENDEDOR = B.ID_VENDEDOR WHERE B.SYNC = 'N' AND B.ID_WEB_USUARIO = " + id_usuario + ";");
+                        progress.setMax(vendedorBonusResumo.length);
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -1309,12 +1480,9 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                             }
                         });
 
-                        if (vendedorBonusResumo.length > 0) {
-                            db.alterar("UPDATE TBL_VENDEDOR_BONUS_RESUMO SET SINCRONIZADO = 'N'");
-                        }
-
                         for (int i = 0; vendedorBonusResumo.length > i; i++) {
                             notificacao.setProgress(vendedorBonusResumo.length, i, false);
+                            progress.setProgress(i);
                             if (db.contagem("SELECT COUNT(*) FROM TBL_VENDEDOR_BONUS_RESUMO WHERE ID_VENDEDOR = " + vendedorBonusResumo[i].getId_vendedor()) == 0) {
                                 db.inserirTBL_VENDEDOR_BONUS_RESUMO(
                                         vendedorBonusResumo[i].getId_vendedor(),
@@ -1350,6 +1518,19 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                                 .setContentIntent(pendingIntent);
                         mNotificationManager.notify(0, notificacao.build());
 
+                        progress.dismiss();
+
+                        final AlertDialog.Builder alert = new AlertDialog.Builder(PrincipalActivity.this);
+                        alert.setMessage("Completo!");
+                        alert.setTitle("Sincronia concluída");
+                        alert.setNeutralButton("OK", null);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                alert.show();
+                            }
+                        });
+
                         System.gc();
                     } catch (IOException | XmlPullParserException e) {
 
@@ -1358,6 +1539,8 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                                 setProgress(0, 0, false).
                                 setSmallIcon(R.mipmap.ic_sem_internet);
                         mNotificationManager.notify(0, notificacao.build());
+
+                        progress.dismiss();
 
                         runOnUiThread(new Runnable() {
                             @Override
