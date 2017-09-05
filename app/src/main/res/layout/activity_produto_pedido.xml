@@ -79,7 +79,7 @@
                 android:layout_toStartOf="@+id/edtDescontoReais"
                 android:background="@drawable/borda_edittext"
                 android:inputType="numberDecimal"
-                android:nextFocusDown="@+id/edtTabelaPreco"/>
+                android:nextFocusDown="@+id/edtTabelaPreco" />
 
             <TextView
                 android:id="@+id/txtPontoCoeficiente"
@@ -99,109 +99,6 @@
                 android:layout_toEndOf="@+id/edtQuantidade"
                 android:background="@drawable/borda_edittext"
                 android:inputType="numberDecimal" />
-
-            <TextView
-                android:id="@+id/txtValorProdutos"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/edtTabelaPreco"
-                android:layout_marginTop="12dp"
-                android:text="VALOR PRODUTOS"
-                android:textColor="@color/colorAccent"
-                android:visibility="gone" />
-
-            <EditText
-                android:id="@+id/edtValorProdutos"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/txtValorProdutos"
-                android:background="@drawable/borda_edittext"
-                android:focusable="false"
-                android:visibility="gone" />
-
-            <TextView
-                android:id="@+id/txtFaixaDesconto"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/edtValorProdutos"
-                android:layout_marginTop="12dp"
-                android:text="FAIXA DE DESCONTO"
-                android:textColor="@color/colorAccent"
-                android:visibility="gone" />
-
-            <Spinner
-                android:id="@+id/spFaixaPadrao"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/txtFaixaDesconto"
-                android:layout_toEndOf="@+id/txtFaixaDesconto"
-                android:visibility="gone" />
-
-            <TextView
-                android:id="@+id/txtDesconto"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/edtDesconto"
-                android:layout_alignBottom="@+id/edtDesconto"
-                android:layout_alignParentStart="true"
-                android:text="DESCONTO"
-                android:textColor="@color/colorAccent"
-                android:visibility="gone" />
-
-            <EditText
-                android:id="@+id/edtDesconto"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/spFaixaPadrao"
-                android:layout_toEndOf="@+id/txtDesconto"
-                android:background="@drawable/borda_edittext"
-                android:focusable="false"
-                android:gravity="center"
-                android:text="00,00%"
-                android:visibility="gone" />
-
-            <TextView
-                android:id="@+id/txtDescontoReais"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/spFaixaPadrao"
-                android:layout_marginLeft="12dp"
-                android:layout_marginTop="12dp"
-                android:layout_toEndOf="@+id/edtDesconto"
-                android:text="R$ "
-                android:textColor="@color/colorAccent"
-                android:visibility="gone" />
-
-            <EditText
-                android:id="@+id/edtDescontoReais"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/spFaixaPadrao"
-                android:layout_toEndOf="@+id/txtDescontoReais"
-                android:background="@drawable/borda_edittext"
-                android:focusable="false"
-                android:text="0,00"
-                android:visibility="gone" />
-
-            <TextView
-                android:id="@+id/txtPrecoPago"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/edtDesconto"
-                android:layout_marginTop="12dp"
-                android:text="PÇ. PAGO"
-                android:textColor="@color/colorAccent"
-                android:visibility="gone" />
-
-            <EditText
-                android:id="@+id/edtPrecoPago"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/txtPrecoPago"
-                android:background="@drawable/borda_edittext"
-                android:focusable="false"
-                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/txtTotal"

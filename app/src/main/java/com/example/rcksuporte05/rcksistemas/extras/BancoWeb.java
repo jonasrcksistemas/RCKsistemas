@@ -28,9 +28,9 @@ import java.util.List;
 
 public class BancoWeb {
 
-    String URL = "http://rcksistemassuporte.ddns.com.br:3383/Banco/Banco?wsdl"; //URL Maquina 05
-//    String URL = "http://rcksistemassuporte.ddns.com.br:3384/Banco/Banco?wsdl";//URL Servidor RCK
-//    String URL = "http://tksimports.ddns.com.br:3385/Banco/Banco?wsdl";//URL Servidor TKS
+//    String URL = "http://rcksistemassuporte.ddns.com.br:3383/Banco/Banco?wsdl"; //URL Maquina 05
+    String URL = "http://rcksistemassuporte.ddns.com.br:3384/Banco/Banco?wsdl"; //URL Servidor RCK
+//    String URL = "http://tksimports.ddns.com.br:3385/Banco/Banco?wsdl"; //URL Servidor TKS
 
     String pacote = "http://DB/";
     SoapObject soap;

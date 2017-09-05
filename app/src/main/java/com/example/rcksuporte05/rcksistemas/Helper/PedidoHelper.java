@@ -35,14 +35,6 @@ public class PedidoHelper {
     private static int idPedido;
     private Float valorProdutos = 0.0f;
     private EditText edtTotalVenda;
-    private EditText edtNomeProduto;
-    private EditText edtTabelaPreco;
-    private EditText edtQuantidade;
-    private EditText edtValorProdutos;
-    private EditText edtDesconto;
-    private EditText edtDescontoReais;
-    private EditText edtPrecoPago;
-    private EditText edtTotal;
     private ViewPager mViewPager;
     private DBHelper db;
 
@@ -58,15 +50,6 @@ public class PedidoHelper {
 
     public PedidoHelper(ProdutoPedidoActivity produtoPedidoActivity) {
         this.produtoPedidoActivity = produtoPedidoActivity;
-
-        edtNomeProduto = (EditText) produtoPedidoActivity.findViewById(R.id.edtNomeProduto);
-        edtTabelaPreco = (EditText) produtoPedidoActivity.findViewById(R.id.edtTabelaPreco);
-        edtValorProdutos = (EditText) produtoPedidoActivity.findViewById(R.id.edtValorProdutos);
-        edtQuantidade = (EditText) produtoPedidoActivity.findViewById(R.id.edtQuantidade);
-        edtDesconto = (EditText) produtoPedidoActivity.findViewById(R.id.edtDesconto);
-        edtDescontoReais = (EditText) produtoPedidoActivity.findViewById(R.id.edtDescontoReais);
-        edtPrecoPago = (EditText) produtoPedidoActivity.findViewById(R.id.edtPrecoPago);
-        edtTotal = (EditText) produtoPedidoActivity.findViewById(R.id.edtTotal);
 
         System.gc();
     }
