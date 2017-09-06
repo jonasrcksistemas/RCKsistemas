@@ -101,11 +101,6 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
 
         id_usuario = Integer.parseInt(db.consulta("SELECT ID_USUARIO FROM TBL_WEB_USUARIO WHERE NOME_USUARIO = '" + getIntent().getStringExtra("usuario") + "';", "ID_USUARIO"));
         id_vendedor = Integer.parseInt(db.consulta("SELECT ID_QUANDO_VENDEDOR FROM TBL_WEB_USUARIO WHERE NOME_USUARIO = '" + getIntent().getStringExtra("usuario") + "';", "ID_QUANDO_VENDEDOR"));
-
-        /*AlertDialog.Builder alert = new AlertDialog.Builder(this);
-        alert.setMessage(Settings.Secure.getString(getBaseContext().getContentResolver(), Settings.Secure.ANDROID_ID));
-        alert.setNeutralButton("OK", null);
-        alert.show();*/
     }
 
     @Override
@@ -421,6 +416,7 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                     @Override
                     public void run() {
                         progress.setMessage("Clientes");
+                        progress.setIndeterminate(true);
                     }
                 });
 
@@ -437,10 +433,13 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                     }
 
                     progress.setMax(listaCliente.length);
+
+
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             ivInternet.setVisibility(View.INVISIBLE);
+                            progress.setIndeterminate(false);
                         }
                     });
 
@@ -655,6 +654,7 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                     @Override
                     public void run() {
                         progress.setMessage("Produtos");
+                        progress.setIndeterminate(true);
                     }
                 });
                 try {
@@ -663,13 +663,15 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                     Produto[] listaProduto = banco.sincronizaProduto("SELECT A.*, B.DESCRICAO FROM TBL_PRODUTO A INNER JOIN TBL_PRODUTO_UNID_MEDIDA B ON A.UNIDADE = B.ABREVIATURA WHERE A.PRODUTO_VENDA = 'S' AND A.MULTI_DISPOSITIVO = 'S';");
 
                     progress.setMax(listaProduto.length);
+
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             ivInternet.setVisibility(View.INVISIBLE);
-
+                            progress.setIndeterminate(false);
                         }
                     });
+
 
                     for (int i = 0; listaProduto.length > i; i++) {
                         notificacao.setProgress(listaProduto.length, i, false);
@@ -748,6 +750,7 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                         @Override
                         public void run() {
                             progress.setMessage("Países");
+                            progress.setIndeterminate(true);
                         }
                     });
 
@@ -755,10 +758,12 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                         Paises[] paises = banco.sincronizaPaises("SELECT * FROM TBL_PAISES");
                         progress.setMax(paises.length);
 
+
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 ivInternet.setVisibility(View.INVISIBLE);
+                                progress.setIndeterminate(false);
                             }
                         });
 
@@ -802,6 +807,7 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                         @Override
                         public void run() {
                             progress.setMessage("Países");
+                            progress.setIndeterminate(true);
                         }
                     });
 
@@ -810,10 +816,12 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                         Paises[] paises = banco.sincronizaPaises("SELECT A.* FROM TBL_PAISES A INNER JOIN TBL_PAISES_SYNC B ON A.ID_PAIS = B.ID_PAIS WHERE B.SYNC = 'N' AND B.ID_WEB_USUARIO = " + id_usuario + ";");
                         progress.setMax(paises.length);
 
+
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 ivInternet.setVisibility(View.INVISIBLE);
+                                progress.setIndeterminate(false);
                             }
                         });
 
@@ -869,6 +877,7 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                         @Override
                         public void run() {
                             progress.setMessage("Municipios");
+                            progress.setIndeterminate(true);
                         }
                     });
 
@@ -876,10 +885,12 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                         Municipios[] municipios = banco.sincronizaMunicipios("SELECT * FROM TBL_MUNICIPIOS");
                         progress.setMax(municipios.length);
 
+
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 ivInternet.setVisibility(View.INVISIBLE);
+                                progress.setIndeterminate(false);
                             }
                         });
 
@@ -921,16 +932,21 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                     @Override
                     public void run() {
                         progress.setMessage("Operações de Estoque");
+                        progress.setIndeterminate(true);
                     }
                 });
 
                 try {
                     Operacao[] operacao = banco.sincronizaOperacao("SELECT * FROM TBL_OPERACAO_ESTOQUE WHERE E_ENTRADA_S_SAIDA='S' AND ATIVO='S' AND ( TIPO_OPERACAO=1 OR  TIPO_OPERACAO= 5 ) AND EMISSOR='P' AND MOVIMENTA_ESTOQUE='S' AND MULTI_DISPOSITIVO = 'S' ORDER BY ID_OPERACAO;");
+
                     progress.setMax(operacao.length);
+
+
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             ivInternet.setVisibility(View.INVISIBLE);
+                            progress.setIndeterminate(false);
                         }
                     });
                     db.alterar("DELETE FROM TBL_OPERACAO_ESTOQUE;");
@@ -979,16 +995,20 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                         @Override
                         public void run() {
                             progress.setMessage("Tabela de preços");
+                            progress.setIndeterminate(true);
                         }
                     });
                     try {
                         TabelaPreco[] tabelaPrecos = banco.sincronizaTabelaPreco("SELECT * FROM TBL_TABELA_PRECO_CAB WHERE ATIVO = 'S';");
+
                         progress.setMax(tabelaPrecos.length);
+
 
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 ivInternet.setVisibility(View.INVISIBLE);
+                                progress.setIndeterminate(false);
                             }
                         });
                         for (int i = 0; tabelaPrecos.length > i; i++) {
@@ -1055,15 +1075,20 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                             @Override
                             public void run() {
                                 progress.setMessage("Tabela de preços");
+                                progress.setIndeterminate(true);
                             }
                         });
 
                         TabelaPreco[] tabelaPrecos = banco.sincronizaTabelaPreco("SELECT * FROM TBL_TABELA_PRECO_CAB A INNER JOIN TBL_TABELA_PRECO_CAB_SYNC B ON A.ID_TABELA = B.ID_TABELA WHERE A.ATIVO = 'S' AND B.SYNC = 'N' AND B.ID_WEB_USUARIO = " + id_usuario + ";");
+
                         progress.setMax(tabelaPrecos.length);
+
+
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 ivInternet.setVisibility(View.INVISIBLE);
+                                progress.setIndeterminate(false);
                             }
                         });
 
@@ -1153,17 +1178,22 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                         @Override
                         public void run() {
                             progress.setMessage("Tabela de preços");
+                            progress.setIndeterminate(true);
                         }
                     });
 
                     try {
 
                         TabelaPrecoItem[] tabelaPrecoItem = banco.sincronizaTabelaPrecoItem("SELECT * FROM TBL_TABELA_PRECO_ITENS;");
+
                         progress.setMax(tabelaPrecoItem.length);
+
+
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 ivInternet.setVisibility(View.INVISIBLE);
+                                progress.setIndeterminate(false);
                             }
                         });
                         for (int i = 0; tabelaPrecoItem.length > i; i++) {
@@ -1226,16 +1256,21 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                         @Override
                         public void run() {
                             progress.setMessage("Tabela de preços");
+                            progress.setIndeterminate(true);
                         }
                     });
 
                     try {
                         TabelaPrecoItem[] tabelaPrecoItem = banco.sincronizaTabelaPrecoItem("SELECT A.* FROM TBL_TABELA_PRECO_ITENS A INNER JOIN TBL_TABELA_PRECO_ITENS_SYNC B ON A.ID_ITEM = B.ID_ITEM WHERE B.SYNC = 'N' AND B.ID_WEB_USUARIO = " + id_usuario + ";");
+
                         progress.setMax(tabelaPrecoItem.length);
+
+
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 ivInternet.setVisibility(View.INVISIBLE);
+                                progress.setIndeterminate(false);
                             }
                         });
 
@@ -1319,17 +1354,22 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                     @Override
                     public void run() {
                         progress.setMessage("Condições de Pagamento");
+                        progress.setIndeterminate(true);
                     }
                 });
 
                 try {
                     db.alterar("DELETE FROM TBL_CONDICOES_PAG_CAB;");
                     CondicoesPagamento[] condicoesPagamento = banco.sincronizaCondicoesPagamento("SELECT * FROM TBL_CONDICOES_PAG_CAB WHERE PUBLICAR_NA_WEB = 'S';");
+
                     progress.setMax(condicoesPagamento.length);
+
+
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
                             ivInternet.setVisibility(View.INVISIBLE);
+                            progress.setIndeterminate(false);
                         }
                     });
                     for (int i = 0; condicoesPagamento.length > i; i++) {
@@ -1386,16 +1426,21 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                         @Override
                         public void run() {
                             progress.setMessage("Bonus resumo");
+                            progress.setIndeterminate(true);
                         }
                     });
 
                     try {
                         VendedorBonusResumo[] vendedorBonusResumo = banco.sincronizaVendedorBonusResumo("SELECT * FROM TBL_VENDEDOR_BONUS_RESUMO;");
+
                         progress.setMax(vendedorBonusResumo.length);
+
+
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 ivInternet.setVisibility(View.INVISIBLE);
+                                progress.setIndeterminate(false);
                             }
                         });
                         for (int i = 0; vendedorBonusResumo.length > i; i++) {
@@ -1467,16 +1512,21 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                         @Override
                         public void run() {
                             progress.setMessage("Bonus resumo");
+                            progress.setIndeterminate(true);
                         }
                     });
                     try {
 
                         VendedorBonusResumo[] vendedorBonusResumo = banco.sincronizaVendedorBonusResumo("SELECT * FROM TBL_VENDEDOR_BONUS_RESUMO A INNER JOIN TBL_VENDEDOR_BONUS_RESUMO_SYNC B ON A.ID_VENDEDOR = B.ID_VENDEDOR WHERE B.SYNC = 'N' AND B.ID_WEB_USUARIO = " + id_usuario + ";");
+
                         progress.setMax(vendedorBonusResumo.length);
+
+
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
                                 ivInternet.setVisibility(View.INVISIBLE);
+                                progress.setIndeterminate(false);
                             }
                         });
 
