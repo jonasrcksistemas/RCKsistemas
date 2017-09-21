@@ -9,6 +9,7 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,6 +22,7 @@ import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.classes.Cliente;
 import com.example.rcksuporte05.rcksistemas.classes.Operacao;
 import com.example.rcksuporte05.rcksistemas.classes.TabelaPreco;
+import com.example.rcksuporte05.rcksistemas.classes.TabelaPrecoItem;
 import com.example.rcksuporte05.rcksistemas.classes.WebPedido;
 import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
 import com.example.rcksuporte05.rcksistemas.interfaces.ActivityCliente;
@@ -31,8 +33,10 @@ public class Pedido1 extends Fragment implements View.OnClickListener {
     private static Cliente objetoCliente = null;
     private Spinner spOperacao;
     private Spinner spTabelaPreco;
+    private Spinner spFaixaPadrao;
     private ArrayAdapter<Operacao> adapterOperacao;
     private ArrayAdapter<TabelaPreco> adapterPreco;
+    private ArrayAdapter<TabelaPrecoItem> adapterFaixaPadrao;
     private Bundle bundle;
     private TextView txtVendedorPedido;
     private Button btnBuscarCliente;
@@ -85,6 +89,21 @@ public class Pedido1 extends Fragment implements View.OnClickListener {
             adapterPreco = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_activated_1, db.listaTabelaPreco("SELECT * FROM TBL_TABELA_PRECO_CAB;"));
             spTabelaPreco.setAdapter(adapterPreco);
 
+            spFaixaPadrao = (Spinner) view.findViewById(R.id.spFaixaPadrao);
+            adapterFaixaPadrao = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_activated_1, db.listaTabelaPrecoItem("SELECT * FROM TBL_TABELA_PRECO_ITENS WHERE PONTOS_PREMIACAO > 0;"));
+            spFaixaPadrao.setAdapter(adapterFaixaPadrao);
+            spFaixaPadrao.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    PedidoHelper.setPositionFaixPadrao(spFaixaPadrao.getSelectedItemPosition());
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
+
         } catch (CursorIndexOutOfBoundsException e) {
 //            Toast.makeText(getContext(), "A sincronia é necessária antes de se fazer um pedido", Toast.LENGTH_SHORT).show();
             AlertDialog.Builder alert = new AlertDialog.Builder(PedidoHelper.getActivityPedidoMain());
@@ -127,14 +146,26 @@ public class Pedido1 extends Fragment implements View.OnClickListener {
                 System.out.println(e.getMessage());
             }
 
+            //Seleciona a Feixa padrão no Spinner Faixa Padrão
+            try {
+                int i = -1;
+                do {
+                    i++;
+                }
+                while (!webPedido.getId_tabela_preco_faixa().trim().equals(adapterFaixaPadrao.getItem(i).getId_item()));
+                spFaixaPadrao.setSelection(i);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
             txtAdicionarProdutos.setText("Produtos");
         }
 
         if (bundle.getInt("vizualizacao") == 1) {
-
             btnBuscarCliente.setEnabled(false);
             spTabelaPreco.setEnabled(false);
             spOperacao.setEnabled(false);
+            spFaixaPadrao.setEnabled(false);
         }
 
         System.gc();

@@ -284,7 +284,14 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
                 while (!Objects.equals(webPedidoItem.getTabela_preco_faixa().getPerc_desc_inicial(), adapterFaixaPadrao.getItem(i).getPerc_desc_inicial()));
                 spFaixaPadrao.setSelection(i);
             } catch (Exception e) {
-                System.out.println(e.getMessage());
+                e.printStackTrace();
+            }
+
+        } else {
+            try {
+                spFaixaPadrao.setSelection(PedidoHelper.getPositionFaixPadrao());
+            } catch (NullPointerException e) {
+                e.printStackTrace();
             }
         }
 

@@ -984,188 +984,84 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                     });
                 }
 
+                notificacao.setProgress(0, 0, true).
+                        setContentText("Tabela de preços").
+                        setContentTitle("Sincronia em andamento");
+                mNotificationManager.notify(0, notificacao.build());
 
-                if (db.contagem("SELECT COUNT(*) FROM TBL_TABELA_PRECO_CAB") == 0) {
-                    notificacao.setProgress(0, 0, true).
-                            setContentText("Tabela de preços").
-                            setContentTitle("Sincronia em andamento");
-                    mNotificationManager.notify(0, notificacao.build());
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        progress.setMessage("Tabela de preços");
+                        progress.setIndeterminate(true);
+                    }
+                });
+                try {
+                    TabelaPreco[] tabelaPrecos = banco.sincronizaTabelaPreco("SELECT * FROM TBL_TABELA_PRECO_CAB WHERE ATIVO = 'S' AND MULTI_DISPOSITIVO = 'S';");
+
+                    progress.setMax(tabelaPrecos.length);
+                    db.alterar("DELETE FROM TBL_TABELA_PRECO_CAB;");
+
 
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            progress.setMessage("Tabela de preços");
-                            progress.setIndeterminate(true);
+                            ivInternet.setVisibility(View.INVISIBLE);
+                            progress.setIndeterminate(false);
                         }
                     });
-                    try {
-                        TabelaPreco[] tabelaPrecos = banco.sincronizaTabelaPreco("SELECT * FROM TBL_TABELA_PRECO_CAB WHERE ATIVO = 'S';");
+                    for (int i = 0; tabelaPrecos.length > i; i++) {
+                        notificacao.setProgress(tabelaPrecos.length, i, false);
 
-                        progress.setMax(tabelaPrecos.length);
+                        progress.setProgress(i);
 
-
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                ivInternet.setVisibility(View.INVISIBLE);
-                                progress.setIndeterminate(false);
-                            }
-                        });
-                        for (int i = 0; tabelaPrecos.length > i; i++) {
-                            notificacao.setProgress(tabelaPrecos.length, i, false);
-
-                            progress.setProgress(i);
-
-                            db.inserirTBL_TABELA_PRECO_CAB(
-                                    tabelaPrecos[i].getId_tabela(),
-                                    tabelaPrecos[i].getId_empresa(),
-                                    tabelaPrecos[i].getAtivo(),
-                                    tabelaPrecos[i].getId_tipo_tabela(),
-                                    tabelaPrecos[i].getNome_tabela(),
-                                    tabelaPrecos[i].getData_inicio(),
-                                    tabelaPrecos[i].getData_fim(),
-                                    tabelaPrecos[i].getDesconto_de_perc(),
-                                    tabelaPrecos[i].getDesconto_a_perc(),
-                                    tabelaPrecos[i].getComissao_perc(),
-                                    tabelaPrecos[i].getVerba_perc(),
-                                    tabelaPrecos[i].getFaixa_valor_de(),
-                                    tabelaPrecos[i].getFaixa_valor_a(),
-                                    tabelaPrecos[i].getUsuario_id(),
-                                    tabelaPrecos[i].getUsuario_nome(),
-                                    tabelaPrecos[i].getUsuario_data(),
-                                    tabelaPrecos[i].getDesconto_verba_max(),
-                                    tabelaPrecos[i].getId_grupo_vendedores(),
-                                    tabelaPrecos[i].getUtiliza_verba(),
-                                    tabelaPrecos[i].getFaixa_valor_bruto_de(),
-                                    tabelaPrecos[i].getFaixa_valor_bruto_a()
-                            );
-                            mNotificationManager.notify(0, notificacao.build());
-                        }
-                        banco.Atualiza("UPDATE TBL_TABELA_PRECO_CAB_SYNC SET SYNC = 'S' WHERE ID_WEB_USUARIO = " + id_usuario + ";");
-                        notificacao.setContentText("Tabela de preços completo")
-                                .setProgress(0, 0, false);
+                        db.inserirTBL_TABELA_PRECO_CAB(
+                                tabelaPrecos[i].getId_tabela(),
+                                tabelaPrecos[i].getId_empresa(),
+                                tabelaPrecos[i].getAtivo(),
+                                tabelaPrecos[i].getId_tipo_tabela(),
+                                tabelaPrecos[i].getNome_tabela(),
+                                tabelaPrecos[i].getData_inicio(),
+                                tabelaPrecos[i].getData_fim(),
+                                tabelaPrecos[i].getDesconto_de_perc(),
+                                tabelaPrecos[i].getDesconto_a_perc(),
+                                tabelaPrecos[i].getComissao_perc(),
+                                tabelaPrecos[i].getVerba_perc(),
+                                tabelaPrecos[i].getFaixa_valor_de(),
+                                tabelaPrecos[i].getFaixa_valor_a(),
+                                tabelaPrecos[i].getUsuario_id(),
+                                tabelaPrecos[i].getUsuario_nome(),
+                                tabelaPrecos[i].getUsuario_data(),
+                                tabelaPrecos[i].getDesconto_verba_max(),
+                                tabelaPrecos[i].getId_grupo_vendedores(),
+                                tabelaPrecos[i].getUtiliza_verba(),
+                                tabelaPrecos[i].getFaixa_valor_bruto_de(),
+                                tabelaPrecos[i].getFaixa_valor_bruto_a()
+                        );
                         mNotificationManager.notify(0, notificacao.build());
-                        progress.setProgress(0);
-                    } catch (IOException | XmlPullParserException e) {
+                    }
+                    banco.Atualiza("UPDATE TBL_TABELA_PRECO_CAB_SYNC SET SYNC = 'S' WHERE ID_WEB_USUARIO = " + id_usuario + ";");
+                    notificacao.setContentText("Tabela de preços completo")
+                            .setProgress(0, 0, false);
+                    mNotificationManager.notify(0, notificacao.build());
+                    progress.setProgress(0);
+                } catch (IOException | XmlPullParserException e) {
 
-                        notificacao.setContentText("Problema de conexão").
-                                setContentTitle("Verifique sua conexão!").
-                                setProgress(0, 0, false).
-                                setSmallIcon(R.mipmap.ic_sem_internet);
-                        mNotificationManager.notify(0, notificacao.build());
-                        progress.setProgress(0);
+                    notificacao.setContentText("Problema de conexão").
+                            setContentTitle("Verifique sua conexão!").
+                            setProgress(0, 0, false).
+                            setSmallIcon(R.mipmap.ic_sem_internet);
+                    mNotificationManager.notify(0, notificacao.build());
+                    progress.setProgress(0);
 
 //                        Toast.makeText(PrincipalActivity.this, "Servidor indisponivel", Toast.LENGTH_SHORT).show();
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                ivInternet.setVisibility(View.VISIBLE);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            ivInternet.setVisibility(View.VISIBLE);
 
-                            }
-                        });
-                    }
-                } else {
-                    notificacao.setProgress(0, 0, true).
-                            setContentText("Tabela de preços").
-                            setContentTitle("Sincronia em andamento");
-                    mNotificationManager.notify(0, notificacao.build());
-
-                    try {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                progress.setMessage("Tabela de preços");
-                                progress.setIndeterminate(true);
-                            }
-                        });
-
-                        TabelaPreco[] tabelaPrecos = banco.sincronizaTabelaPreco("SELECT * FROM TBL_TABELA_PRECO_CAB A INNER JOIN TBL_TABELA_PRECO_CAB_SYNC B ON A.ID_TABELA = B.ID_TABELA WHERE A.ATIVO = 'S' AND B.SYNC = 'N' AND B.ID_WEB_USUARIO = " + id_usuario + ";");
-
-                        progress.setMax(tabelaPrecos.length);
-
-
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                ivInternet.setVisibility(View.INVISIBLE);
-                                progress.setIndeterminate(false);
-                            }
-                        });
-
-                        for (int i = 0; tabelaPrecos.length > i; i++) {
-                            notificacao.setProgress(tabelaPrecos.length, i, false);
-                            progress.setProgress(i);
-                            if (db.contagem("SELECT COUNT(*) FROM TBL_TABELA_PRECO_CAB WHERE ID_TABELA = " + tabelaPrecos[i].getId_tabela()) == 0) {
-                                db.inserirTBL_TABELA_PRECO_CAB(
-                                        tabelaPrecos[i].getId_tabela(),
-                                        tabelaPrecos[i].getId_empresa(),
-                                        tabelaPrecos[i].getAtivo(),
-                                        tabelaPrecos[i].getId_tipo_tabela(),
-                                        tabelaPrecos[i].getNome_tabela(),
-                                        tabelaPrecos[i].getData_inicio(),
-                                        tabelaPrecos[i].getData_fim(),
-                                        tabelaPrecos[i].getDesconto_de_perc(),
-                                        tabelaPrecos[i].getDesconto_a_perc(),
-                                        tabelaPrecos[i].getComissao_perc(),
-                                        tabelaPrecos[i].getVerba_perc(),
-                                        tabelaPrecos[i].getFaixa_valor_de(),
-                                        tabelaPrecos[i].getFaixa_valor_a(),
-                                        tabelaPrecos[i].getUsuario_id(),
-                                        tabelaPrecos[i].getUsuario_nome(),
-                                        tabelaPrecos[i].getUsuario_data(),
-                                        tabelaPrecos[i].getDesconto_verba_max(),
-                                        tabelaPrecos[i].getId_grupo_vendedores(),
-                                        tabelaPrecos[i].getUtiliza_verba(),
-                                        tabelaPrecos[i].getFaixa_valor_bruto_de(),
-                                        tabelaPrecos[i].getFaixa_valor_bruto_a());
-                            } else {
-                                db.atualizarTBL_TABELA_PRECO_CAB(
-                                        tabelaPrecos[i].getId_tabela(),
-                                        tabelaPrecos[i].getId_empresa(),
-                                        tabelaPrecos[i].getAtivo(),
-                                        tabelaPrecos[i].getId_tipo_tabela(),
-                                        tabelaPrecos[i].getNome_tabela(),
-                                        tabelaPrecos[i].getData_inicio(),
-                                        tabelaPrecos[i].getData_fim(),
-                                        tabelaPrecos[i].getDesconto_de_perc(),
-                                        tabelaPrecos[i].getDesconto_a_perc(),
-                                        tabelaPrecos[i].getComissao_perc(),
-                                        tabelaPrecos[i].getVerba_perc(),
-                                        tabelaPrecos[i].getFaixa_valor_de(),
-                                        tabelaPrecos[i].getFaixa_valor_a(),
-                                        tabelaPrecos[i].getUsuario_id(),
-                                        tabelaPrecos[i].getUsuario_nome(),
-                                        tabelaPrecos[i].getUsuario_data(),
-                                        tabelaPrecos[i].getDesconto_verba_max(),
-                                        tabelaPrecos[i].getId_grupo_vendedores(),
-                                        tabelaPrecos[i].getUtiliza_verba(),
-                                        tabelaPrecos[i].getFaixa_valor_bruto_de(),
-                                        tabelaPrecos[i].getFaixa_valor_bruto_a());
-                            }
-                            mNotificationManager.notify(0, notificacao.build());
                         }
-                        banco.Atualiza("UPDATE TBL_TABELA_PRECO_CAB_SYNC SET SYNC = 'S' WHERE ID_WEB_USUARIO = " + id_usuario + ";");
-                        notificacao.setContentText("Tabela de preços completo")
-                                .setProgress(0, 0, false);
-                        mNotificationManager.notify(0, notificacao.build());
-                        progress.setProgress(0);
-                    } catch (IOException | XmlPullParserException e) {
-
-                        notificacao.setContentText("Problema de conexão").
-                                setContentTitle("Verifique sua conexão!").
-                                setProgress(0, 0, false).
-                                setSmallIcon(R.mipmap.ic_sem_internet);
-                        mNotificationManager.notify(0, notificacao.build());
-                        progress.setProgress(0);
-
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-//                                Toast.makeText(PrincipalActivity.this, "Servidor indisponivel", Toast.LENGTH_SHORT).show();
-                                ivInternet.setVisibility(View.VISIBLE);
-                            }
-                        });
-                    }
+                    });
                 }
 
                 if (db.contagem("SELECT COUNT(*) FROM TBL_TABELA_PRECO_ITENS") == 0) {

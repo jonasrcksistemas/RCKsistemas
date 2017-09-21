@@ -169,7 +169,6 @@ public class Pedido2 extends Fragment {
                     intent.putExtra("pedido", 1);
                     intent.putExtra("position", info.position);
                     posicao = info.position;
-                    PedidoHelper.getProdutoPedidoActivity().pegaProduto(listaProdutoPedido.get(info.position));
                     PedidoHelper.setWebPedidoItem(listaProdutoPedido.get(info.position));
                     startActivity(intent);
                     return false;
