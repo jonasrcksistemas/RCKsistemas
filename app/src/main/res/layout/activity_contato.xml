@@ -43,6 +43,7 @@
                     android:orientation="vertical">
 
                     <LinearLayout
+                        android:id="@+id/lyNomeCliente"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
@@ -103,6 +104,7 @@
                         android:background="#999999" />
 
                     <LinearLayout
+                        android:id="@+id/lyGps"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
@@ -135,6 +137,7 @@
                         android:background="#999999" />
 
                     <LinearLayout
+                        android:id="@+id/lyEmail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
