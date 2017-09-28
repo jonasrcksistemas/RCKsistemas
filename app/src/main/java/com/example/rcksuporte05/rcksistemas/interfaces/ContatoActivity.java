@@ -155,7 +155,7 @@ public class ContatoActivity extends AppCompatActivity {
 
                                 Uri gmmIntentUri = Uri.parse("google.navigation:q=" + txtEndereco.getText().toString());
                                 Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-//                                mapIntent.setPackage("com.google.android.apps.maps");
+                                mapIntent.setPackage("com.google.android.apps.maps");
                                 startActivity(mapIntent);
 
                             }
