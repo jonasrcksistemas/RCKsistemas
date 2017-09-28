@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.database.CursorIndexOutOfBoundsException;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.ShareCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -125,11 +124,8 @@ public class ContatoActivity extends AppCompatActivity {
                         alert.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                final Intent intent = ShareCompat.IntentBuilder.from(ContatoActivity.this)
-                                        .setType("message/rfc822")
-                                        .setChooserTitle("Selecione a aplicação de Email desejada")
-                                        .addEmailTo(txtEmail.getText().toString().trim())
-                                        .createChooserIntent();
+                                final Intent intent = new Intent(Intent.ACTION_SENDTO);
+                                intent.setData(Uri.parse("mailto: " + txtEmail.getText().toString()));
 
                                 startActivity(intent);
                             }
@@ -150,16 +146,18 @@ public class ContatoActivity extends AppCompatActivity {
                         alert.show();
                     } else {
                         final AlertDialog.Builder alert = new AlertDialog.Builder(ContatoActivity.this);
-                        alert.setMessage("Deseja exibir localização para " + cliente.getNome_cadastro() + " no GPS?");
+                        alert.setMessage("Deseja navegar para a localização para " + cliente.getNome_cadastro() + " no GPS?");
                         alert.setTitle("Atenção");
                         alert.setNegativeButton("Não", null);
                         alert.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Uri gmmIntentUri = Uri.parse("geo:0,0?q=" + txtEndereco.getText().toString());
+
+                                Uri gmmIntentUri = Uri.parse("google.navigation:q=" + txtEndereco.getText().toString());
                                 Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-                                mapIntent.setPackage("com.google.android.apps.maps");
+//                                mapIntent.setPackage("com.google.android.apps.maps");
                                 startActivity(mapIntent);
+
                             }
                         });
                         alert.show();
