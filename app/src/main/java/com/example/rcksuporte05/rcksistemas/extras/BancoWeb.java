@@ -689,7 +689,6 @@ public class BancoWeb {
         soap.addProperty("data_movimentacao", webPedidoItens.getData_movimentacao());
         soap.addProperty("usuario_lancamento_id", webPedidoItens.getUsuario_lancamento_id());
         soap.addProperty("usuario_lancamento_data", webPedidoItens.getUsuario_lancamento_data());
-//        soap.addProperty("id_tabela_preco_faixa", webPedidoItens.getTabela_preco_faixa().getId_item());
         soap.addProperty("id_item_desconto", webPedidoItens.getId_item_desconto());
         soap.addProperty("pontos_unitario", webPedidoItens.getPontos_unitario());
         soap.addProperty("pontos_total", webPedidoItens.getPontos_total());

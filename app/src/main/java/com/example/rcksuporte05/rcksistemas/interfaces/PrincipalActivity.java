@@ -1573,7 +1573,12 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                         final AlertDialog.Builder alert = new AlertDialog.Builder(PrincipalActivity.this);
                         alert.setMessage("Completo!");
                         alert.setTitle("Sincronia concluída");
-                        alert.setNeutralButton("OK", null);
+                        alert.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                mNotificationManager.cancel(0);
+                            }
+                        });
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
