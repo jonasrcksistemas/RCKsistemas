@@ -69,7 +69,6 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_principal);
-//        Bundle bundle = getIntent().getExtras();
 
         btnCliente = (Button) findViewById(R.id.btnCliente);
         btnProduto = (Button) findViewById(R.id.btnProduto);
@@ -351,7 +350,6 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-//                            Toast.makeText(PrincipalActivity.this, "Não foi possivel se conectar ao servidor!", Toast.LENGTH_LONG).show();
                             ivInternet.setVisibility(View.VISIBLE);
                         }
                     });
@@ -361,7 +359,6 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    //Toast.makeText(getApplicationContext(), "Usuario ok!", Toast.LENGTH_LONG).show();
                                     System.out.println("Usuario ok!");
                                 }
                             });
