@@ -361,7 +361,6 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    //Toast.makeText(getApplicationContext(), "Usuario ok!", Toast.LENGTH_LONG).show();
                                     System.out.println("Usuario ok!");
                                 }
                             });
