@@ -1,5 +1,6 @@
 package com.example.rcksuporte05.rcksistemas.interfaces;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.CursorIndexOutOfBoundsException;
@@ -16,6 +17,9 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.rcksuporte05.rcksistemas.R;
+import com.example.rcksuporte05.rcksistemas.api.Api;
+import com.example.rcksuporte05.rcksistemas.api.Rotas;
+import com.example.rcksuporte05.rcksistemas.bo.UsuarioBO;
 import com.example.rcksuporte05.rcksistemas.classes.Usuario;
 import com.example.rcksuporte05.rcksistemas.extras.BancoWeb;
 import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
@@ -23,6 +27,12 @@ import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
     private EditText edtLogin;
@@ -32,12 +42,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Bundle bundleUsuario;
     private MenuItem sincroniza;
     private Toolbar tb_main;
+    private List<Usuario> usuarioList;
     private Thread a = new Thread();
+    private UsuarioBO usuarioBO;
+    private ProgressDialog progress;
+    private boolean resultadoSetIdAndroid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         edtLogin = (EditText) findViewById(R.id.edtLogin);
         edtSenha = (EditText) findViewById(R.id.edtSenha);
@@ -54,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnEntrar.setOnClickListener(this);
         btnFechar.setOnClickListener(this);
 
-        sincronizar();
+        getUsuarios();
         DBHelper db = new DBHelper(this);
         try {
             if (db.consulta("SELECT SENHA FROM TBL_WEB_USUARIO WHERE LOGIN = '" + db.consulta("SELECT LOGIN FROM TBL_LOGIN WHERE LOGADO = 'S'", "LOGIN") + "';", "SENHA").equals(db.consulta("SELECT SENHA FROM TBL_LOGIN", "SENHA"))) {
@@ -150,6 +165,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+
+
     public void logar(final int alterado) {
         Thread a = new Thread(new Runnable() {
             @Override
@@ -159,21 +176,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     BancoWeb banco = new BancoWeb();
                     Intent intent = new Intent(MainActivity.this, PrincipalActivity.class);
                     Usuario usuario = db.listaUsuario("SELECT * FROM TBL_WEB_USUARIO WHERE LOGIN = '" + edtLogin.getText().toString() + "'").get(0);
-                    banco.Atualiza("UPDATE TBL_WEB_USUARIO SET APARELHO_ID = '" + (Settings.Secure.getString(getBaseContext().getContentResolver(), Settings.Secure.ANDROID_ID)) + "' WHERE ID_USUARIO = " + usuario.getId_usuario() + ";");
-                    if (db.contagem("SELECT COUNT(*) FROM TBL_LOGIN") > 0) {
-                        db.atualizarTBL_LOGIN("1", edtLogin.getText().toString(), edtSenha.getText().toString(), "S", (Settings.Secure.getString(getBaseContext().getContentResolver(), Settings.Secure.ANDROID_ID)));
-                    } else {
-                        db.insertTBL_LOGIN("1", edtLogin.getText().toString(), edtSenha.getText().toString(), "S", (Settings.Secure.getString(getBaseContext().getContentResolver(), Settings.Secure.ANDROID_ID)));
+                    setAndroidId(usuario);
+                    if(resultadoSetIdAndroid){
+
+                        if (db.contagem("SELECT COUNT(*) FROM TBL_LOGIN") > 0) {
+                            db.atualizarTBL_LOGIN("1", edtLogin.getText().toString(), edtSenha.getText().toString(), "S", (Settings.Secure.getString(getBaseContext().getContentResolver(), Settings.Secure.ANDROID_ID)));
+                        } else {
+                            db.insertTBL_LOGIN("1", edtLogin.getText().toString(), edtSenha.getText().toString(), "S", (Settings.Secure.getString(getBaseContext().getContentResolver(), Settings.Secure.ANDROID_ID)));
+                        }
+                        bundleUsuario = new Bundle();
+                        bundleUsuario.putString("usuario", db.consulta("SELECT NOME_USUARIO FROM TBL_WEB_USUARIO WHERE LOGIN = '" + edtLogin.getText().toString() + "';", "NOME_USUARIO"));
+                        intent.putExtras(bundleUsuario);
+                        intent.putExtra("alterado", alterado);
+                        db.close();
+                        System.gc();
+                        startActivity(intent);
+                        finish();
+
                     }
-                    bundleUsuario = new Bundle();
-                    bundleUsuario.putString("usuario", db.consulta("SELECT NOME_USUARIO FROM TBL_WEB_USUARIO WHERE LOGIN = '" + edtLogin.getText().toString() + "';", "NOME_USUARIO"));
-                    intent.putExtras(bundleUsuario);
-                    intent.putExtra("alterado", alterado);
-                    db.close();
-                    System.gc();
-                    startActivity(intent);
-                    finish();
-                } catch (IOException | XmlPullParserException e) {
+                } catch (Exception  e) {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -188,52 +209,68 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         a.start();
     }
 
-    public void sincronizar() throws NullPointerException {
-        a = new Thread(new Runnable() {
+    public void getUsuarios(){
+        progress = new ProgressDialog(MainActivity.this);
+        progress.setMessage("Carregando Usuarios");
+        progress.setTitle("ATENÇÃO");
+        progress.show();
+
+        Rotas apiRotas = Api.buildRetrofit();
+
+
+        Call<List<Usuario>> call = apiRotas.getUsuarios();
+
+        call.enqueue(new Callback<List<Usuario>>() {
             @Override
-            public void run() {
-                BancoWeb banco = new BancoWeb();
-                DBHelper db = new DBHelper(MainActivity.this);
-                try {
-                    try {
-                        Usuario[] listaUsuario = banco.sincronizaUsuario("SELECT * FROM TBL_WEB_USUARIO ORDER BY ID_USUARIO");
+            public void onResponse(Call<List<Usuario>> call, Response<List<Usuario>> response) {
+                usuarioList = response.body();
+                boolean operacao = usuarioBO.sincronizaNobanco(usuarioList, MainActivity.this);
+                if(operacao){
 
-                        for (int i = 0; listaUsuario.length > i; i++) {
-                            if (db.contagem("SELECT COUNT(*) FROM TBL_WEB_USUARIO WHERE ID_USUARIO = " + listaUsuario[i].getId_usuario()) <= 0) {
-                                db.inserirTBL_WEB_USUARIO(listaUsuario[i]);
-                            } else {
-                                db.atualizarTBL_WEB_USUARIO(listaUsuario[i]);
-                            }
 
-                        }
-                    } catch (final Exception e) {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                Toast.makeText(MainActivity.this, "Não foi possivel sincronizar com o servidor", Toast.LENGTH_LONG).show();
-                                System.out.println("Não foi possivel sincronizar com o servidor: " + e);
-                            }
-                        });
-                    }
+                }else
+                    Toast.makeText(MainActivity.this, "Não foi possivel Pegar Usuarios", Toast.LENGTH_LONG).show();
+                progress.dismiss();
 
-                } catch (final Exception e) {
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
-                            alert.setTitle("Atenção!");
-                            alert.setMessage("Não foi possivel conectar ao servidor!\n      Verifique sua conexão com a internet!");
-                            alert.setNeutralButton("OK", null);
-                            alert.show();
-                        }
-                    });
-                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Usuario>> call, Throwable t) {
+                Toast.makeText(MainActivity.this, "Não foi possivel sincronizar com o servidor", Toast.LENGTH_LONG).show();
+
             }
         });
-        if (!a.isAlive()) {
-            a.start();
-        }
+
     }
+
+    public void setAndroidId(Usuario usuario){
+        Rotas apiRotas = Api.buildRetrofit();
+
+        String idAndroit = Settings.Secure.getString(getBaseContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+
+        Call call = apiRotas.setAndroidId(idAndroit, usuario.getId_usuario());
+
+        call.enqueue(new Callback() {
+            @Override
+            public void onResponse(Call call, Response response) {
+               if(response.code() != 200){
+                 resultadoSetIdAndroid = false;
+               }else
+                   resultadoSetIdAndroid = true;
+            }
+
+            @Override
+            public void onFailure(Call call, Throwable t) {
+                Toast.makeText(MainActivity.this, "Você precisa estar conectado a internet para poder logar!", Toast.LENGTH_SHORT).show();
+                edtSenha.setText("");
+                edtSenha.requestFocus();
+            }
+        });
+
+
+    }
+
+
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
@@ -251,7 +288,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_sincroniza:
-                sincronizar();
+                getUsuarios();
                 return true;
         }
         return false;
