@@ -21,13 +21,8 @@ import com.example.rcksuporte05.rcksistemas.api.Api;
 import com.example.rcksuporte05.rcksistemas.api.Rotas;
 import com.example.rcksuporte05.rcksistemas.bo.UsuarioBO;
 import com.example.rcksuporte05.rcksistemas.classes.Usuario;
-import com.example.rcksuporte05.rcksistemas.extras.BancoWeb;
 import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
 
-import org.xmlpull.v1.XmlPullParserException;
-
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
@@ -44,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Toolbar tb_main;
     private List<Usuario> usuarioList;
     private Thread a = new Thread();
-    private UsuarioBO usuarioBO;
+    private UsuarioBO usuarioBO = new UsuarioBO();
     private ProgressDialog progress;
     private boolean resultadoSetIdAndroid;
 
@@ -84,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Toast.makeText(getApplicationContext(), "Usuario alterado", Toast.LENGTH_LONG).show();
                 db.alterar("DELETE FROM TBL_LOGIN");
             }*/
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -166,18 +161,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-
     public void logar(final int alterado) {
         Thread a = new Thread(new Runnable() {
             @Override
             public void run() {
                 try {
                     DBHelper db = new DBHelper(MainActivity.this);
-                    BancoWeb banco = new BancoWeb();
                     Intent intent = new Intent(MainActivity.this, PrincipalActivity.class);
                     Usuario usuario = db.listaUsuario("SELECT * FROM TBL_WEB_USUARIO WHERE LOGIN = '" + edtLogin.getText().toString() + "'").get(0);
                     setAndroidId(usuario);
-                    if(resultadoSetIdAndroid){
+                    if (resultadoSetIdAndroid) {
 
                         if (db.contagem("SELECT COUNT(*) FROM TBL_LOGIN") > 0) {
                             db.atualizarTBL_LOGIN("1", edtLogin.getText().toString(), edtSenha.getText().toString(), "S", (Settings.Secure.getString(getBaseContext().getContentResolver(), Settings.Secure.ANDROID_ID)));
@@ -194,7 +187,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         finish();
 
                     }
-                } catch (Exception  e) {
+                } catch (Exception e) {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -209,7 +202,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         a.start();
     }
 
-    public void getUsuarios(){
+    public void getUsuarios() {
         progress = new ProgressDialog(MainActivity.this);
         progress.setMessage("Carregando Usuarios");
         progress.setTitle("ATENÇÃO");
@@ -224,12 +217,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onResponse(Call<List<Usuario>> call, Response<List<Usuario>> response) {
                 usuarioList = response.body();
-                boolean operacao = usuarioBO.sincronizaNobanco(usuarioList, MainActivity.this);
-                if(operacao){
-
-
-                }else
+                if (!usuarioBO.sincronizaNobanco(usuarioList, MainActivity.this))
                     Toast.makeText(MainActivity.this, "Não foi possivel Pegar Usuarios", Toast.LENGTH_LONG).show();
+
                 progress.dismiss();
 
             }
@@ -243,33 +233,30 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-    public void setAndroidId(Usuario usuario){
+    public void setAndroidId(Usuario usuario) {
         Rotas apiRotas = Api.buildRetrofit();
 
         String idAndroit = Settings.Secure.getString(getBaseContext().getContentResolver(), Settings.Secure.ANDROID_ID);
 
-        Call call = apiRotas.setAndroidId(idAndroit, usuario.getId_usuario());
+        Call<Usuario> call = apiRotas.setAndroidId(idAndroit, usuario.getId_usuario());
 
-        call.enqueue(new Callback() {
+        call.enqueue(new Callback<Usuario>() {
             @Override
-            public void onResponse(Call call, Response response) {
-               if(response.code() != 200){
-                 resultadoSetIdAndroid = false;
-               }else
-                   resultadoSetIdAndroid = true;
+            public void onResponse(Call<Usuario> call, Response<Usuario> response) {
+                if (response.code() != 200) {
+                    resultadoSetIdAndroid = false;
+                } else
+                    resultadoSetIdAndroid = true;
             }
 
             @Override
-            public void onFailure(Call call, Throwable t) {
+            public void onFailure(Call<Usuario> call, Throwable t) {
                 Toast.makeText(MainActivity.this, "Você precisa estar conectado a internet para poder logar!", Toast.LENGTH_SHORT).show();
                 edtSenha.setText("");
                 edtSenha.requestFocus();
             }
         });
-
-
     }
-
 
 
     @Override
