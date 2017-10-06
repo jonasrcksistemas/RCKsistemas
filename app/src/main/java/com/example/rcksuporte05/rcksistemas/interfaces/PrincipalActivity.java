@@ -1,14 +1,10 @@
 package com.example.rcksuporte05.rcksistemas.interfaces;
 
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.CursorIndexOutOfBoundsException;
 import android.os.Bundle;
-import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -20,17 +16,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.rcksuporte05.rcksistemas.Helper.UsuarioHelper;
 import com.example.rcksuporte05.rcksistemas.R;
-import com.example.rcksuporte05.rcksistemas.classes.Cliente;
-import com.example.rcksuporte05.rcksistemas.classes.CondicoesPagamento;
-import com.example.rcksuporte05.rcksistemas.classes.Municipios;
-import com.example.rcksuporte05.rcksistemas.classes.Operacao;
-import com.example.rcksuporte05.rcksistemas.classes.Paises;
-import com.example.rcksuporte05.rcksistemas.classes.Produto;
-import com.example.rcksuporte05.rcksistemas.classes.TabelaPreco;
-import com.example.rcksuporte05.rcksistemas.classes.TabelaPrecoItem;
+import com.example.rcksuporte05.rcksistemas.api.Api;
+import com.example.rcksuporte05.rcksistemas.api.Rotas;
+import com.example.rcksuporte05.rcksistemas.bo.SincroniaBO;
+import com.example.rcksuporte05.rcksistemas.classes.Sincronia;
 import com.example.rcksuporte05.rcksistemas.classes.Usuario;
-import com.example.rcksuporte05.rcksistemas.classes.VendedorBonusResumo;
 import com.example.rcksuporte05.rcksistemas.extras.BancoWeb;
 import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
 
@@ -39,6 +31,10 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class PrincipalActivity extends AppCompatActivity implements View.OnClickListener {
     private static final int pedidosPendentes = 0;
@@ -62,7 +58,8 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
     private Thread a = new Thread();
     private Thread b = new Thread();
     private ImageView ivInternet;
-    private Usuario usuario;
+    private SincroniaBO sincroniaBO = new SincroniaBO();
+    private Sincronia sincronia;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,10 +93,9 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
 
         setSupportActionBar(tb_principal);
 
-        usuario = db.listaUsuario("SELECT * FROM TBL_WEB_USUARIO WHERE NOME_USUARIO = '" + getIntent().getStringExtra("usuario") + "';").get(0);
 
-        id_usuario = Integer.parseInt(db.consulta("SELECT ID_USUARIO FROM TBL_WEB_USUARIO WHERE NOME_USUARIO = '" + getIntent().getStringExtra("usuario") + "';", "ID_USUARIO"));
-        id_vendedor = Integer.parseInt(db.consulta("SELECT ID_QUANDO_VENDEDOR FROM TBL_WEB_USUARIO WHERE NOME_USUARIO = '" + getIntent().getStringExtra("usuario") + "';", "ID_QUANDO_VENDEDOR"));
+        id_usuario = Integer.parseInt(UsuarioHelper.getUsuario().getId_usuario());
+        id_vendedor = Integer.parseInt(UsuarioHelper.getUsuario().getId_quando_vendedor());
     }
 
     @Override
@@ -141,7 +137,7 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                 alert.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        sincroniza();
+                        sincronizaApi();
                     }
                 });
                 alert.show();
@@ -284,7 +280,7 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
         }
         return false;
     }
-
+/*
     public void sincroniza() {
         final NotificationCompat.Builder notificacao = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.mipmap.ic_sincroniza_main)
@@ -301,6 +297,8 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
         progress.setCancelable(false);
         progress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         progress.show();
+
+
 
         banco = new BancoWeb();
 
@@ -1499,6 +1497,29 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
         });
         a.start();
     }
+    */
+
+    public void sincronizaApi() {
+
+        final Rotas apiRotas = Api.buildRetrofit();
+
+        Call<Sincronia> call = apiRotas.sincroniaApi();
+
+        call.enqueue(new Callback<Sincronia>() {
+            @Override
+            public void onResponse(Call<Sincronia> call, Response<Sincronia> response) {
+                sincronia = response.body();
+                sincroniaBO.sincronizaBanco(sincronia, PrincipalActivity.this);
+            }
+
+            @Override
+            public void onFailure(Call<Sincronia> call, Throwable t) {
+                System.out.println();
+            }
+        });
+
+
+    }
 
     public void sincronizaUsuario() {
         banco = new BancoWeb();
@@ -1569,7 +1590,7 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
             sincronizaUsuario();
         }
         if (getIntent().getIntExtra("alterado", 0) == 1) {
-            sincroniza();
+            sincronizaApi();
             getIntent().putExtra("alterado", 0);
         }
         super.onResume();
