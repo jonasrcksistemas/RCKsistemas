@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.util.SortedList;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,12 +22,8 @@ import com.example.rcksuporte05.rcksistemas.api.Api;
 import com.example.rcksuporte05.rcksistemas.api.Rotas;
 import com.example.rcksuporte05.rcksistemas.bo.UsuarioBO;
 import com.example.rcksuporte05.rcksistemas.classes.Usuario;
-import com.example.rcksuporte05.rcksistemas.extras.BancoWeb;
 import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
 
-import org.xmlpull.v1.XmlPullParserException;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -220,12 +217,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onResponse(Call<List<Usuario>> call, Response<List<Usuario>> response) {
                 usuarioList = response.body();
-
-
-                if (!usuarioBO.sincronizaNobanco(usuarioList, MainActivity.this)) {
+                if (!usuarioBO.sincronizaNobanco(usuarioList, MainActivity.this))
                     Toast.makeText(MainActivity.this, "Não foi possivel Pegar Usuarios", Toast.LENGTH_LONG).show();
-                }
-
 
                 progress.dismiss();
 
@@ -240,8 +233,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
-
-    public void setAndroidId(Usuario usuario){
+    public void setAndroidId(Usuario usuario) {
         Rotas apiRotas = Api.buildRetrofit();
 
         String idAndroit = Settings.Secure.getString(getBaseContext().getContentResolver(), Settings.Secure.ANDROID_ID);
@@ -251,21 +243,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         call.enqueue(new Callback<Usuario>() {
             @Override
             public void onResponse(Call<Usuario> call, Response<Usuario> response) {
-                if(response.code() != 200){
+                if (response.code() != 200) {
                     resultadoSetIdAndroid = false;
-                }else
+                } else
                     resultadoSetIdAndroid = true;
-
             }
 
             @Override
             public void onFailure(Call<Usuario> call, Throwable t) {
-
+                Toast.makeText(MainActivity.this, "Você precisa estar conectado a internet para poder logar!", Toast.LENGTH_SHORT).show();
+                edtSenha.setText("");
+                edtSenha.requestFocus();
             }
         });
-
-
     }
+
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
