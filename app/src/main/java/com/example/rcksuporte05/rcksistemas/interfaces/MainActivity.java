@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.rcksuporte05.rcksistemas.Helper.UsuarioHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.api.Api;
 import com.example.rcksuporte05.rcksistemas.api.Rotas;
@@ -71,6 +72,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             if (db.consulta("SELECT SENHA FROM TBL_WEB_USUARIO WHERE LOGIN = '" + db.consulta("SELECT LOGIN FROM TBL_LOGIN WHERE LOGADO = 'S'", "LOGIN") + "';", "SENHA").equals(db.consulta("SELECT SENHA FROM TBL_LOGIN", "SENHA"))) {
                 Intent intent = new Intent(MainActivity.this, PrincipalActivity.class);
                 intent.putExtra("usuario", db.consulta("SELECT NOME_USUARIO FROM TBL_WEB_USUARIO WHERE LOGIN = '" + db.consulta("SELECT LOGIN FROM TBL_LOGIN", "LOGIN") + "';", "NOME_USUARIO"));
+                Usuario usuario = db.listaUsuario("SELECT * FROM TBL_WEB_USUARIO WHERE LOGIN = '" + edtLogin.getText().toString() + "'").get(0);
+                UsuarioHelper.setUsuario(usuario);
                 startActivity(intent);
                 db.close();
                 finish();
@@ -182,6 +185,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     intent.putExtra("alterado", alterado);
                     db.close();
                     System.gc();
+                    UsuarioHelper.setUsuario(usuario);
                     startActivity(intent);
                     finish();
                 } catch (Exception e) {

@@ -1,5 +1,6 @@
 package com.example.rcksuporte05.rcksistemas.api;
 
+import com.example.rcksuporte05.rcksistemas.classes.Sincronia;
 import com.example.rcksuporte05.rcksistemas.classes.Usuario;
 
 import java.util.List;
@@ -20,6 +21,9 @@ public interface Rotas {
 
     @GET("usuario/login/{idandroid}/{idusuario}")
     Call<Usuario> setAndroidId(@Path("idandroid") String idandroid, @Path("idusuario") String idusuario);
+
+    @GET("sincronia")
+    Call<Sincronia> sincroniaApi();
 
 
 }
