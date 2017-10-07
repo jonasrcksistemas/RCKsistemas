@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.util.SortedList;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -44,12 +43,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private ProgressDialog progress;
     private List<Usuario> usuarioList = new ArrayList<>();
     private UsuarioBO usuarioBO = new UsuarioBO();
-    private boolean resultadoSetIdAndroid;
+    private DBHelper db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        db = new DBHelper(MainActivity.this);
 
         edtLogin = (EditText) findViewById(R.id.edtLogin);
         edtSenha = (EditText) findViewById(R.id.edtSenha);
@@ -165,51 +166,27 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void logar(final int alterado) {
-        Thread a = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    DBHelper db = new DBHelper(MainActivity.this);
-
-                    Intent intent = new Intent(MainActivity.this, PrincipalActivity.class);
-                    Usuario usuario = db.listaUsuario("SELECT * FROM TBL_WEB_USUARIO WHERE LOGIN = '" + edtLogin.getText().toString() + "'").get(0);
-                    setAndroidId(usuario);
-                    if (db.contagem("SELECT COUNT(*) FROM TBL_LOGIN") > 0) {
-                        db.atualizarTBL_LOGIN("1", edtLogin.getText().toString(), edtSenha.getText().toString(), "S", (Settings.Secure.getString(getBaseContext().getContentResolver(), Settings.Secure.ANDROID_ID)));
-                    } else {
-                        db.insertTBL_LOGIN("1", edtLogin.getText().toString(), edtSenha.getText().toString(), "S", (Settings.Secure.getString(getBaseContext().getContentResolver(), Settings.Secure.ANDROID_ID)));
-                    }
-                    bundleUsuario = new Bundle();
-                    bundleUsuario.putString("usuario", db.consulta("SELECT NOME_USUARIO FROM TBL_WEB_USUARIO WHERE LOGIN = '" + edtLogin.getText().toString() + "';", "NOME_USUARIO"));
-                    intent.putExtras(bundleUsuario);
-                    intent.putExtra("alterado", alterado);
-                    db.close();
-                    System.gc();
-                    UsuarioHelper.setUsuario(usuario);
-                    startActivity(intent);
-                    finish();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-
-                            Toast.makeText(MainActivity.this, "Você precisa estar conectado a internet para poder logar!", Toast.LENGTH_SHORT).show();
-                            edtSenha.setText("");
-                            edtSenha.requestFocus();
-                        }
-                    });
+        try {
+            Usuario usuario = db.listaUsuario("SELECT * FROM TBL_WEB_USUARIO WHERE LOGIN = '" + edtLogin.getText().toString() + "'").get(0);
+            setAndroidId(usuario, alterado);
+        } catch (Exception e) {
+            e.printStackTrace();
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    Toast.makeText(MainActivity.this, "Você precisa estar conectado a internet para poder logar!", Toast.LENGTH_SHORT).show();
+                    edtSenha.setText("");
+                    edtSenha.requestFocus();
                 }
-            }
-        });
-        a.start();
+            });
+        }
     }
 
 
     public void getUsuarios() {
         progress = new ProgressDialog(MainActivity.this);
         progress.setMessage("Carregando Usuarios");
-        progress.setTitle("ATENÇÃO");
+        progress.setTitle("Aguarde");
         progress.show();
 
         Rotas apiRotas = Api.buildRetrofit();
@@ -222,22 +199,25 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onResponse(Call<List<Usuario>> call, Response<List<Usuario>> response) {
                 usuarioList = response.body();
                 if (!usuarioBO.sincronizaNobanco(usuarioList, MainActivity.this))
-                    Toast.makeText(MainActivity.this, "Não foi possivel Pegar Usuarios", Toast.LENGTH_LONG).show();
-
+                    Toast.makeText(MainActivity.this, "Houve um erro ao salvar os usuarios", Toast.LENGTH_LONG).show();
                 progress.dismiss();
 
             }
 
             @Override
             public void onFailure(Call<List<Usuario>> call, Throwable t) {
-                Toast.makeText(MainActivity.this, "Não foi possivel sincronizar com o servidor", Toast.LENGTH_LONG).show();
-
+                progress.dismiss();
+                Toast.makeText(MainActivity.this, "Não foi possivel sincronizar com o servidor, por favor verifique sua conexão", Toast.LENGTH_LONG).show();
             }
         });
-
     }
 
-    public void setAndroidId(Usuario usuario) {
+    public void setAndroidId(final Usuario usuario, final int alterado) {
+        final ProgressDialog progress = new ProgressDialog(MainActivity.this);
+        progress.setMessage("Aguarde enquanto seus dados são validados");
+        progress.setTitle("AGUARDE");
+        progress.show();
+
         Rotas apiRotas = Api.buildRetrofit();
 
         String idAndroit = Settings.Secure.getString(getBaseContext().getContentResolver(), Settings.Secure.ANDROID_ID);
@@ -247,15 +227,38 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         call.enqueue(new Callback<Usuario>() {
             @Override
             public void onResponse(Call<Usuario> call, Response<Usuario> response) {
-                if (response.code() != 200) {
-                    resultadoSetIdAndroid = false;
-                } else
-                    resultadoSetIdAndroid = true;
+                if (response.code() == 200) {
+                    Intent intent = new Intent(MainActivity.this, PrincipalActivity.class);
+
+                    if (db.contagem("SELECT COUNT(*) FROM TBL_LOGIN") > 0) {
+                        db.atualizarTBL_LOGIN("1", edtLogin.getText().toString(), edtSenha.getText().toString(), "S", (Settings.Secure.getString(getBaseContext().getContentResolver(), Settings.Secure.ANDROID_ID)));
+                    } else {
+                        db.insertTBL_LOGIN("1", edtLogin.getText().toString(), edtSenha.getText().toString(), "S", (Settings.Secure.getString(getBaseContext().getContentResolver(), Settings.Secure.ANDROID_ID)));
+                    }
+                    bundleUsuario = new Bundle();
+                    bundleUsuario.putString("usuario", db.consulta("SELECT NOME_USUARIO FROM TBL_WEB_USUARIO WHERE LOGIN = '" + edtLogin.getText().toString() + "';", "NOME_USUARIO"));
+                    intent.putExtras(bundleUsuario);
+                    intent.putExtra("alterado", alterado);
+                    db.close();
+                    System.gc();
+                    UsuarioHelper.setUsuario(usuario);
+                    progress.dismiss();
+                    startActivity(intent);
+                    finish();
+                } else {
+
+                }
+
             }
 
             @Override
             public void onFailure(Call<Usuario> call, Throwable t) {
-                Toast.makeText(MainActivity.this, "Você precisa estar conectado a internet para poder logar!", Toast.LENGTH_SHORT).show();
+                progress.dismiss();
+                AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
+                alert.setMessage("Você precisa estar conectado a internet para poder logar!");
+                alert.setTitle("Atenção!");
+                alert.setNeutralButton("OK", null);
+                alert.show();
                 edtSenha.setText("");
                 edtSenha.requestFocus();
             }
@@ -283,21 +286,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 return true;
         }
         return false;
-    }
-
-    @Override
-    protected void onDestroy() {
-        System.gc();
-        super.onDestroy();
-    }
-
-    @Override
-    public void onBackPressed() {
-        Intent intent = new Intent(Intent.ACTION_MAIN);
-        intent.addCategory(Intent.CATEGORY_HOME);
-        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//***Change Here***
-        startActivity(intent);
-        finish();
     }
 }
 
