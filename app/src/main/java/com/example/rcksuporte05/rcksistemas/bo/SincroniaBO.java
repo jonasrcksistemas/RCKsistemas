@@ -1,6 +1,7 @@
 package com.example.rcksuporte05.rcksistemas.bo;
 
 
+import android.app.Activity;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
@@ -29,29 +30,14 @@ import com.example.rcksuporte05.rcksistemas.interfaces.MainActivity;
 
 public class SincroniaBO {
 
-    public void sincronizaBanco(Sincronia sincronia, Context context) {
+    public void sincronizaBanco(Sincronia sincronia, Activity activity, ProgressDialog progress, NotificationCompat.Builder notificacao, NotificationManager mNotificationManager) {
         //controla o progresso da notificação e do progressDialog
         int contadorNotificacaoEProgresso = 0;
 
-        DBHelper db = new DBHelper(context);
+        DBHelper db = new DBHelper(activity);
 
-        final NotificationCompat.Builder notificacao = new NotificationCompat.Builder(context)
-                .setSmallIcon(R.mipmap.ic_sincroniza_main)
-                .setContentTitle("Sincronia em andamento")
-                .setContentText("Aguarde")
-                .setPriority(2);
-        final NotificationManager mNotificationManager =
-                (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        mNotificationManager.notify(0, notificacao.build());
 
-        final ProgressDialog progress = new ProgressDialog(context);
-        progress.setMessage("Aguarde");
-        progress.setTitle("Sincronia em andamento");
-        progress.setCancelable(false);
-        progress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        progress.show();
-
-        progress.setMax(sincronia.getListaCliente().size() +
+        int maxProgress = sincronia.getListaCliente().size() +
                 sincronia.getListaCondicoesPagamento().size() +
 //                sincronia.getListaformaPagamento().size() +
                 sincronia.getListaMunicipios().size() +
@@ -60,111 +46,124 @@ public class SincroniaBO {
                 sincronia.getListaProduto().size() +
                 sincronia.getListaTabelaPreco().size() +
                 sincronia.getListaUsuario().size() +
-                sincronia.getListaVendedorBonusResumo().size());
+                sincronia.getListaVendedorBonusResumo().size();
+
+        progress.setIndeterminate(false);
+        progress.setMax(maxProgress);
 
         //TODO VERIFICAR CLIENTES POR VENDEDOR
         //Primeiro delete todos os itens da tabela em questao
         db.alterar("DELETE FROM TBL_CADASTRO");
         //insere todos os itens da tabela em questao
         for (Cliente cliente : sincronia.getListaCliente()) {
-            notificacao.setProgress(sincronia.getListaCliente().size(), contadorNotificacaoEProgresso, false);
+            notificacao.setProgress(maxProgress, contadorNotificacaoEProgresso, false);
             progress.setProgress(contadorNotificacaoEProgresso);
 
             db.inserirTBL_CADASTRO(cliente);
 
-            //incrementa o progresso da notificação e do progressDialog
+            //incrementa o progresso da notific
+            //ação e do progressDialog
             contadorNotificacaoEProgresso++;
+            mNotificationManager.notify(0, notificacao.build());
         }
 
         db.alterar("DELETE FROM TBL_PRODUTO");
 
         for (Produto produto : sincronia.getListaProduto()) {
-            notificacao.setProgress(sincronia.getListaProduto().size(), contadorNotificacaoEProgresso, false);
+            notificacao.setProgress(maxProgress, contadorNotificacaoEProgresso, false);
             progress.setProgress(contadorNotificacaoEProgresso);
 
             db.inserirTBL_PRODUTO(produto);
 
             contadorNotificacaoEProgresso++;
+            mNotificationManager.notify(0, notificacao.build());
         }
 
         db.alterar("DELETE FROM TBL_PAISES");
 
         for (Paises paises : sincronia.getListaPaises()) {
-            notificacao.setProgress(sincronia.getListaPaises().size(), contadorNotificacaoEProgresso, false);
+            notificacao.setProgress(maxProgress, contadorNotificacaoEProgresso, false);
             progress.setProgress(contadorNotificacaoEProgresso);
 
             db.inserirTBL_PAISES(paises);
 
             contadorNotificacaoEProgresso++;
+            mNotificationManager.notify(0, notificacao.build());
         }
 
         for (Municipios municipio : sincronia.getListaMunicipios()) {
-            notificacao.setProgress(sincronia.getListaMunicipios().size(), contadorNotificacaoEProgresso, false);
+            notificacao.setProgress(maxProgress, contadorNotificacaoEProgresso, false);
             progress.setProgress(contadorNotificacaoEProgresso);
 
             db.inserirTBL_MUNICIPIOS(municipio);
 
             contadorNotificacaoEProgresso++;
+            mNotificationManager.notify(0, notificacao.build());
         }
 
         db.alterar("DELETE FROM TBL_OPERACAO_ESTOQUE");
 
         for (Operacao operacao : sincronia.getListaOperacao()) {
-            notificacao.setProgress(sincronia.getListaOperacao().size(), contadorNotificacaoEProgresso, false);
+            notificacao.setProgress(maxProgress, contadorNotificacaoEProgresso, false);
             progress.setProgress(contadorNotificacaoEProgresso);
 
             db.inserirTBL_OPERACAO_ESTOQUE(operacao);
 
             contadorNotificacaoEProgresso++;
+            mNotificationManager.notify(0, notificacao.build());
         }
 
         db.alterar("DELETE FROM TBL_TABELA_PRECO_CAB");
 
         for (TabelaPreco tabelaPreco : sincronia.getListaTabelaPreco()) {
-            notificacao.setProgress(sincronia.getListaTabelaPreco().size(), contadorNotificacaoEProgresso, false);
+            notificacao.setProgress(maxProgress, contadorNotificacaoEProgresso, false);
             progress.setProgress(contadorNotificacaoEProgresso);
 
             db.inserirTBL_TABELA_PRECO_CAB(tabelaPreco);
 
             contadorNotificacaoEProgresso++;
+            mNotificationManager.notify(0, notificacao.build());
         }
 
         db.alterar("DELETE FROM TBL_TABELA_PRECO_ITENS");
 
         for (TabelaPrecoItem tabelaPrecoItem : sincronia.getListaTabelaPrecoItem()) {
-            notificacao.setProgress(sincronia.getListaTabelaPrecoItem().size(), contadorNotificacaoEProgresso, false);
+            notificacao.setProgress(maxProgress, contadorNotificacaoEProgresso, false);
             progress.setProgress(contadorNotificacaoEProgresso);
 
             db.inserirTBL_TABELA_PRECO_ITENS(tabelaPrecoItem);
 
             contadorNotificacaoEProgresso++;
+            mNotificationManager.notify(0, notificacao.build());
         }
 
         db.alterar("DELETE FROM TBL_CONDICOES_PAG_CAB");
 
         for (CondicoesPagamento condicoesPagamento : sincronia.getListaCondicoesPagamento()) {
-            notificacao.setProgress(sincronia.getListaCondicoesPagamento().size(), contadorNotificacaoEProgresso, false);
+            notificacao.setProgress(maxProgress, contadorNotificacaoEProgresso, false);
             progress.setProgress(contadorNotificacaoEProgresso);
 
             db.inserirTBL_CONDICOES_PAG_CAB(condicoesPagamento);
 
             contadorNotificacaoEProgresso++;
+            mNotificationManager.notify(0, notificacao.build());
         }
 
 
         db.alterar("DELETE FROM TBL_VENDEDOR_BONUS_RESUMO");
 
         for (VendedorBonusResumo vendedorBonusResumo : sincronia.getListaVendedorBonusResumo()) {
-            notificacao.setProgress(sincronia.getListaVendedorBonusResumo().size(), contadorNotificacaoEProgresso, false);
+            notificacao.setProgress(maxProgress, contadorNotificacaoEProgresso, false);
             progress.setProgress(contadorNotificacaoEProgresso);
 
             db.inserirTBL_VENDEDOR_BONUS_RESUMO(vendedorBonusResumo);
 
             contadorNotificacaoEProgresso++;
+            mNotificationManager.notify(0, notificacao.build());
         }
 
-        Intent intent = new Intent(context, MainActivity.class);
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+        Intent intent = new Intent(activity, MainActivity.class);
+        PendingIntent pendingIntent = PendingIntent.getActivity(activity, 0, intent, 0);
         notificacao.setContentText("Completo")
                 .setContentTitle("Sincronia concluída")
                 .setProgress(0, 0, false)
@@ -175,6 +174,5 @@ public class SincroniaBO {
                 .setContentIntent(pendingIntent);
         mNotificationManager.notify(0, notificacao.build());
 
-        progress.dismiss();
     }
 }

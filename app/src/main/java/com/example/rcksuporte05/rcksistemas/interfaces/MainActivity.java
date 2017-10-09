@@ -201,6 +201,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (!usuarioBO.sincronizaNobanco(usuarioList, MainActivity.this))
                     Toast.makeText(MainActivity.this, "Houve um erro ao salvar os usuarios", Toast.LENGTH_LONG).show();
                 progress.dismiss();
+                edtLogin.requestFocus();
 
             }
 
@@ -208,6 +209,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onFailure(Call<List<Usuario>> call, Throwable t) {
                 progress.dismiss();
                 Toast.makeText(MainActivity.this, "Não foi possivel sincronizar com o servidor, por favor verifique sua conexão", Toast.LENGTH_LONG).show();
+                edtLogin.requestFocus();
             }
         });
     }
