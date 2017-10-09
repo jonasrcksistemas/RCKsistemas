@@ -1,10 +1,13 @@
 package com.example.rcksuporte05.rcksistemas.interfaces;
 
+import android.app.NotificationManager;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.CursorIndexOutOfBoundsException;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -88,11 +91,7 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
         tb_principal.setSubtitle("Usuario: " + getIntent().getStringExtra("usuario"));
         tb_principal.setLogo(R.mipmap.ic_launcher);
 
-        DBHelper db = new DBHelper(this);
-
-
         setSupportActionBar(tb_principal);
-
 
         id_usuario = Integer.parseInt(UsuarioHelper.getUsuario().getId_usuario());
         id_vendedor = Integer.parseInt(UsuarioHelper.getUsuario().getId_quando_vendedor());
@@ -280,7 +279,8 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
         }
         return false;
     }
-/*
+
+    /*
     public void sincroniza() {
         final NotificationCompat.Builder notificacao = new NotificationCompat.Builder(this)
                 .setSmallIcon(R.mipmap.ic_sincroniza_main)
@@ -1500,6 +1500,23 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
     */
 
     public void sincronizaApi() {
+        final NotificationCompat.Builder notificacao = new NotificationCompat.Builder(PrincipalActivity.this)
+                .setSmallIcon(R.mipmap.ic_sincroniza_main)
+                .setContentTitle("Sincronia em andamento")
+                .setContentText("Aguarde")
+                .setPriority(2)
+                .setProgress(0, 0, true);
+        final NotificationManager mNotificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.notify(0, notificacao.build());
+
+        final ProgressDialog progress = new ProgressDialog(PrincipalActivity.this);
+        progress.setMessage("Aguarde");
+        progress.setTitle("Sincronia em andamento");
+        progress.setCancelable(false);
+        progress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        progress.setIndeterminate(true);
+        progress.show();
 
         final Rotas apiRotas = Api.buildRetrofit();
 
@@ -1509,12 +1526,12 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onResponse(Call<Sincronia> call, Response<Sincronia> response) {
                 sincronia = response.body();
-                sincroniaBO.sincronizaBanco(sincronia, PrincipalActivity.this);
+                sincroniaBO.sincronizaBanco(sincronia, PrincipalActivity.this, progress, notificacao, mNotificationManager);
             }
 
             @Override
             public void onFailure(Call<Sincronia> call, Throwable t) {
-                System.out.println();
+                System.out.println(t.getMessage());
             }
         });
 
