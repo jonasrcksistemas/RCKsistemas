@@ -99,62 +99,7 @@ public class WebPedidoItens extends Produto {
         this.tabela_preco_faixa = tabela_preco_faixa;
     }
 
-    public WebPedidoItens(Produto produto) {
-        this.setAtivo(produto.getAtivo());
-        this.setId_produto(produto.getId_produto());
-        this.setNome_produto(produto.getNome_produto());
-        this.setUnidade(produto.getUnidade());
-        this.setTipo_cadastro(produto.getTipo_cadastro());
-        this.setId_entidade(produto.getId_entidade());
-        this.setNcm(produto.getNcm());
-        this.setId_grupo(produto.getId_grupo());
-        this.setId_sub_grupo(produto.getId_sub_grupo());
-        this.setPeso_bruto(produto.getPeso_bruto());
-        this.setPeso_liquido(produto.getPeso_liquido());
-        this.setCodigo_em_barras(produto.getCodigo_em_barras());
-        this.setMovimenta_estoque(produto.getMovimenta_estoque());
-        this.setNome_da_marca(produto.getNome_da_marca());
-        this.setId_empresa(produto.getId_empresa());
-        this.setId_origem(produto.getId_origem());
-        this.setCusto_produto(produto.getCusto_produto());
-        this.setCusto_per_ipi(produto.getCusto_per_ipi());
-        this.setCusto_ipi(produto.getCusto_ipi());
-        this.setCusto_per_frete(produto.getCusto_per_frete());
-        this.setCusto_frete(produto.getCusto_frete());
-        this.setCusto_per_icms(produto.getCusto_per_icms());
-        this.setCusto_icms(produto.getCusto_icms());
-        this.setCusto_per_fin(produto.getCusto_per_fin());
-        this.setCusto_fin(produto.getCusto_fin());
-        this.setCusto_per_subst(produto.getCusto_per_subst());
-        this.setCusto_subt(produto.getCusto_subt());
-        this.setCusto_per_outros(produto.getCusto_per_outros());
-        this.setCusto_outros(produto.getCusto_outros());
-        this.setValor_custo(produto.getValor_custo());
-        this.setExcluido(produto.getExcluido());
-        this.setExcluido_por(produto.getExcluido_por());
-        this.setExcluido_por_data(produto.getExcluido_por_data());
-        this.setExcluido_codigo_novo(produto.getExcluido_codigo_novo());
-        this.setAjuste_preco_data(produto.getAjuste_preco_data());
-        this.setAjuste_preco_nfe(produto.getAjuste_preco_nfe());
-        this.setAjuste_preco_usuario(produto.getAjuste_preco_usuario());
-        this.setTotal_custo(produto.getTotal_custo());
-        this.setTotal_credito(produto.getTotal_credito());
-        this.setValor_custo_estoque(produto.getValor_custo_estoque());
-        this.setCusto_data_inicial(produto.getCusto_data_inicial());
-        this.setCusto_valor_inicial(produto.getCusto_valor_inicial());
-        this.setProduto_venda(produto.getProduto_venda());
-        this.setProduto_insumo(produto.getProduto_insumo());
-        this.setProduto_consumo(produto.getProduto_consumo());
-        this.setProduto_producao(produto.getProduto_producao());
-        this.setVenda_perc_comissao(produto.getVenda_perc_comissao());
-        this.setVenda_preco(produto.getVenda_preco());
-        this.setVenda_perc_comissao_dois(produto.getVenda_perc_comissao_dois());
-        this.setDescricao(produto.getDescricao());
-    }
 
-    public WebPedidoItens(TabelaPrecoItem tabela_preco_faixa) {
-        this.tabela_preco_faixa = tabela_preco_faixa;
-    }
 
     public WebPedidoItens() {
     }

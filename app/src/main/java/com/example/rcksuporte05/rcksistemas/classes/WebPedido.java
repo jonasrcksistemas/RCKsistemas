@@ -1,5 +1,7 @@
 package com.example.rcksuporte05.rcksistemas.classes;
 
+import java.util.List;
+
 public class WebPedido implements java.io.Serializable {
 
     private String id_web_pedido;
@@ -41,6 +43,8 @@ public class WebPedido implements java.io.Serializable {
     private String origem;
     private String id_web_pedido_servidor;
     private String data_prev_entrega;
+    private List<WebPedidoItens> webPedidoItens;
+    private String pedido_enviado;
 
     public WebPedido() {
     }
@@ -359,5 +363,21 @@ public class WebPedido implements java.io.Serializable {
 
     public void setData_prev_entrega(String data_prev_entrega) {
         this.data_prev_entrega = data_prev_entrega;
+    }
+
+    public List<WebPedidoItens> getWebPedidoItens() {
+        return webPedidoItens;
+    }
+
+    public void setWebPedidoItens(List<WebPedidoItens> webPedidoItens) {
+        this.webPedidoItens = webPedidoItens;
+    }
+
+    public String getPedido_enviado() {
+        return pedido_enviado;
+    }
+
+    public void setPedido_enviado(String pedido_enviado) {
+        this.pedido_enviado = pedido_enviado;
     }
 }

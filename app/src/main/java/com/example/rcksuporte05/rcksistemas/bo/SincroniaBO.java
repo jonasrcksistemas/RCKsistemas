@@ -61,7 +61,7 @@ public class SincroniaBO {
 
             db.inserirTBL_CADASTRO(cliente);
 
-            //incrementa o progresso da notific
+            //incrementa o progresso da notificao
             //ação e do progressDialog
             contadorNotificacaoEProgresso++;
             mNotificationManager.notify(0, notificacao.build());

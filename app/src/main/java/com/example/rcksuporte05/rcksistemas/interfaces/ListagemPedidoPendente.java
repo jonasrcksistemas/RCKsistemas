@@ -2,6 +2,7 @@ package com.example.rcksuporte05.rcksistemas.interfaces;
 
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -28,6 +29,8 @@ import android.widget.Toast;
 import com.example.rcksuporte05.rcksistemas.Helper.PedidoHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.ListaAdapterPedidoPendente;
+import com.example.rcksuporte05.rcksistemas.api.Api;
+import com.example.rcksuporte05.rcksistemas.api.Rotas;
 import com.example.rcksuporte05.rcksistemas.classes.Usuario;
 import com.example.rcksuporte05.rcksistemas.classes.WebPedido;
 import com.example.rcksuporte05.rcksistemas.classes.WebPedidoItens;
@@ -39,6 +42,10 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ListagemPedidoPendente extends AppCompatActivity {
 
@@ -52,6 +59,7 @@ public class ListagemPedidoPendente extends AppCompatActivity {
     private Bundle bundle;
     private Usuario usuario;
     private Thread a = new Thread();
+    private ProgressDialog progress;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,103 +96,19 @@ public class ListagemPedidoPendente extends AppCompatActivity {
                     alert.setMessage("Deseja sincronizar os pedidos?");
                     alert.setNegativeButton("NÃO", null);
                     alert.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(final DialogInterface dialog, int which) {
-                            final NotificationCompat.Builder notificacao = new NotificationCompat.Builder(ListagemPedidoPendente.this)
-                                    .setSmallIcon(R.mipmap.ic_enviar_pedidos)
-                                    .setContentTitle("Enviando pedidos")
-                                    .setContentText("Estabelecendo Conexão")
-                                    .setProgress(0, 0, true)
-                                    .setPriority(2);
-                            final NotificationManager notificationManager =
-                                    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                            notificationManager.notify(0, notificacao.build());
-
-                            Thread a = new Thread(new Runnable() {
                                 @Override
-                                public void run() {
+                                public void onClick(DialogInterface dialog, int which) {
+                                    progress = new ProgressDialog(ListagemPedidoPendente.this);
+                                    progress.setMessage("Enviando pedidos...");
+                                    progress.setTitle("Atenção!");
+                                    progress.setCancelable(false);
+                                    progress.show();
 
-
-                                    runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            Toast.makeText(ListagemPedidoPendente.this, "Enviando pedidos...", Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
-                                    try {
-                                        String idWebPedido;
-                                        String idWebPedidoItem;
-                                        for (int i = 0; listaPedido.size() > i; i++) {
-                                            notificacao.setContentText("Enviando pedido " + listaPedido.get(i).getId_web_pedido())
-                                                    .setProgress(listaPedido.size(), i, false)
-                                                    .setContentText("Enviando...")
-                                                    .setPriority(2);
-
-                                            idWebPedido = bancoWeb.sincronizaWebPedido(listaPedido.get(i));
-                                            db.alterar("UPDATE TBL_WEB_PEDIDO SET ID_WEB_PEDIDO_SERVIDOR = " + idWebPedido + " WHERE ID_WEB_PEDIDO = " + listaPedido.get(i).getId_web_pedido());
-
-                                            listaPedidoItens = db.listaWebPedidoItens("SELECT * FROM TBL_WEB_PEDIDO_ITENS WHERE ID_PEDIDO = " + listaPedido.get(i).getId_web_pedido());
-                                            for (int c = 0; listaPedidoItens.size() > c; c++) {
-                                                idWebPedidoItem = bancoWeb.sincronizaWebPedidoItens(listaPedidoItens.get(c));
-                                                db.alterar("UPDATE TBL_WEB_PEDIDO_ITENS SET ID_WEB_ITEM_SERVIDOR = " + idWebPedidoItem + ", ITEM_ENVIADO = 'S' WHERE ID_WEB_ITEM = " + listaPedidoItens.get(c).getId_web_item());
-                                            }
-                                            bancoWeb.Atualiza("UPDATE TBL_WEB_PEDIDO SET STATUS = 'P' WHERE ID_WEB_PEDIDO = " + idWebPedido + ";");
-                                            db.alterar("UPDATE TBL_WEB_PEDIDO SET PEDIDO_ENVIADO = 'S', STATUS = 'P' WHERE ID_WEB_PEDIDO = " + listaPedido.get(i).getId_web_pedido());
-                                            listaPedidoItens.clear();
-
-                                            notificationManager.notify(0, notificacao.build());
-                                        }
-
-                                        PendingIntent pendingIntent = PendingIntent.getActivity(ListagemPedidoPendente.this, 0, new Intent(ListagemPedidoPendente.this, ListagemPedidoEnviado.class), 0);
-
-                                        notificacao.setContentTitle("Pedidos enviados com sucesso!")
-                                                .setContentText(listaPedido.size() + " pedidos enviados.")
-                                                .setSmallIcon(R.mipmap.ic_sincronia_sucesso)
-                                                .setPriority(2)
-                                                .setDefaults(NotificationCompat.DEFAULT_ALL)
-                                                .addAction(0, "PEDIDOS ENVIADOS", pendingIntent)
-                                                .setProgress(0, 0, false)
-                                                .setAutoCancel(true);
-                                        notificationManager.notify(0, notificacao.build());
-
-                                    } catch (XmlPullParserException | IOException e) {
-                                        notificacao.setContentText("Não foi possivel enviar os pedidos")
-                                                .setContentTitle("Problema de conexão")
-                                                .setProgress(0, 0, false)
-                                                .setSmallIcon(R.mipmap.ic_sem_internet)
-                                                .setDefaults(NotificationCompat.DEFAULT_VIBRATE)
-                                                .setPriority(2);
-                                        notificationManager.notify(0, notificacao.build());
-
-                                    } finally {
-                                        runOnUiThread(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                try {
-                                                    listaPedido = db.listaWebPedido("SELECT * FROM TBL_WEB_PEDIDO WHERE PEDIDO_ENVIADO = 'N' AND USUARIO_LANCAMENTO_ID = " + usuario.getId_usuario() + " ORDER BY ID_WEB_PEDIDO DESC;");
-
-                                                    listaAdapterPedidoPendente = new ListaAdapterPedidoPendente(ListagemPedidoPendente.this, listaPedido);
-                                                    lstPedidoPendente.setAdapter(listaAdapterPedidoPendente);
-
-                                                } catch (CursorIndexOutOfBoundsException e) {
-                                                    runOnUiThread(new Runnable() {
-                                                        @Override
-                                                        public void run() {
-                                                            lstPedidoPendente.setVisibility(View.INVISIBLE);
-                                                            Toast.makeText(ListagemPedidoPendente.this, "Pedidos sincronizados com sucesso!", Toast.LENGTH_LONG).show();
-                                                            edtNumerPedidoPendentes.setText("Nenhum Pedido Pendente");
-                                                        }
-                                                    });
-                                                }
-                                            }
-                                        });
-                                    }
+                                    enviarPedidos();
                                 }
                             });
-                            a.start();
-                        }
-                    });
                     alert.show();
+
                     break;
                 } else {
                     AlertDialog.Builder alert = new AlertDialog.Builder(this);
@@ -351,6 +275,86 @@ public class ListagemPedidoPendente extends AppCompatActivity {
             }
         });
     }
+
+
+    public void enviarPedidos(){
+        final Rotas apiRotas = Api.buildRetrofit();
+
+
+        final NotificationCompat.Builder notificacao = new NotificationCompat.Builder(ListagemPedidoPendente.this)
+                .setSmallIcon(R.mipmap.ic_enviar_pedidos)
+                .setContentTitle("Enviando pedidos")
+                .setContentText("Estabelecendo Conexão")
+                .setProgress(0, 0, true)
+                .setPriority(2);
+        final NotificationManager notificationManager =
+                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(0, notificacao.build());
+
+        prepararItensPedidos();
+
+        Call<List<WebPedido>> call = apiRotas.enviarPedidos(listaPedido);
+
+
+        call.enqueue(new Callback<List<WebPedido>>() {
+            @Override
+            public void onResponse(Call<List<WebPedido>> call, Response<List<WebPedido>> response) {
+                if (response.code() == 200){
+                     List<WebPedido> webPedidosEnviados = response.body();
+
+                    for(WebPedido pedido : webPedidosEnviados){
+                        db.atualizarTBL_WEB_PEDIDO(pedido);
+                        for (WebPedidoItens pedidoIten : pedido.getWebPedidoItens()){
+                            db.atualizarTBL_WEB_PEDIDO_ITENS(pedidoIten);
+                        }
+                    }
+
+                    PendingIntent pendingIntent = PendingIntent.getActivity(ListagemPedidoPendente.this, 0, new Intent(ListagemPedidoPendente.this, ListagemPedidoEnviado.class), 0);
+
+                    notificacao.setContentTitle("Pedidos enviados com sucesso!")
+                            .setContentText(listaPedido.size() + " pedidos enviados.")
+                            .setSmallIcon(R.mipmap.ic_sincronia_sucesso)
+                            .setPriority(2)
+                            .setDefaults(NotificationCompat.DEFAULT_ALL)
+                            .addAction(0, "PEDIDOS ENVIADOS", pendingIntent)
+                            .setProgress(0, 0, false)
+                            .setAutoCancel(true);
+                    notificationManager.notify(0, notificacao.build());
+                }else
+                    Toast.makeText(ListagemPedidoPendente.this, "Não foi possivel enviar os pedidos", Toast.LENGTH_SHORT).show();
+
+
+            }
+
+            @Override
+            public void onFailure(Call<List<WebPedido>> call, Throwable t) {
+                progress.dismiss();
+                notificacao.setContentText("Não foi possivel enviar os pedidos")
+                        .setContentTitle("Problema de conexão")
+                        .setProgress(0, 0, false)
+                        .setSmallIcon(R.mipmap.ic_sem_internet)
+                        .setDefaults(NotificationCompat.DEFAULT_VIBRATE)
+                        .setPriority(2);
+                notificationManager.notify(0, notificacao.build());
+                Toast.makeText(ListagemPedidoPendente.this, "Não foi possivel enviar os pedidos", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
+    public void prepararItensPedidos() {
+
+
+        for(WebPedido pedido : listaPedido){
+           List<WebPedidoItens> webPedidoItenses;
+
+            webPedidoItenses = db.listaWebPedidoItens("SELECT * FROM TBL_WEB_PEDIDO_ITENS WHERE ID_PEDIDO = "+pedido.getId_web_pedido());
+            pedido.setWebPedidoItens(webPedidoItenses);
+
+        }
+
+    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

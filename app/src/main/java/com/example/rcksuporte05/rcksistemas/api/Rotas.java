@@ -2,11 +2,13 @@ package com.example.rcksuporte05.rcksistemas.api;
 
 import com.example.rcksuporte05.rcksistemas.classes.Sincronia;
 import com.example.rcksuporte05.rcksistemas.classes.Usuario;
+import com.example.rcksuporte05.rcksistemas.classes.WebPedido;
 
 import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
@@ -24,6 +26,11 @@ public interface Rotas {
 
     @GET("sincronia")
     Call<Sincronia> sincroniaApi();
+
+    @POST("/webpedido/faturar")
+    Call<List<WebPedido>> enviarPedidos(List<WebPedido> webPedidos);
+
+
 
 
 }
