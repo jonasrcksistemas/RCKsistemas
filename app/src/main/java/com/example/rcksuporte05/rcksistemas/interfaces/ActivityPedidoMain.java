@@ -41,7 +41,7 @@ public class ActivityPedidoMain extends AppCompatActivity {
 
         vizualizacao = getIntent().getIntExtra("vizualizacao", 0);
 
-        mViewPager = (ViewPager) findViewById(R.id.vp_tabsHistoricoFinanceiro);
+        mViewPager = (ViewPager) findViewById(R.id.vp_tabsPedido);
         tabsAdapterPedido = new TabsAdapterPedido(getSupportFragmentManager(), ActivityPedidoMain.this, UsuarioHelper.getUsuario(), vizualizacao);
         mViewPager.setAdapter(tabsAdapterPedido);
 

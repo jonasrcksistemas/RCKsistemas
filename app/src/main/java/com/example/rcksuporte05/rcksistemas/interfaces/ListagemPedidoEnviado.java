@@ -38,7 +38,6 @@ public class ListagemPedidoEnviado extends AppCompatActivity {
     private List<WebPedido> listaPedido = new ArrayList();
     private EditText edtNumerPedidoEnviados;
     private DBHelper db = new DBHelper(this);
-    private Bundle bundle = new Bundle();
     private Usuario usuario;
     private Thread a = new Thread();
 
@@ -50,7 +49,6 @@ public class ListagemPedidoEnviado extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listagem_pedido_enviado);
 
-        bundle = getIntent().getExtras();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarPedidoEnviado);
         toolbar.setTitle("Pedidos Enviados");
@@ -89,9 +87,7 @@ public class ListagemPedidoEnviado extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 Intent intent = new Intent(ListagemPedidoEnviado.this, ActivityPedidoMain.class);
                 PedidoHelper.setIdPedido(Integer.parseInt(listaPedido.get(info.position).getId_web_pedido()));
-                bundle = new Bundle();
                 intent.putExtra("vizualizacao", 1);
-
                 startActivity(intent);
                 return false;
             }

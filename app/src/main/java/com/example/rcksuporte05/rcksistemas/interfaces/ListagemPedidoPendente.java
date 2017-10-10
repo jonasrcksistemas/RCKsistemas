@@ -50,7 +50,6 @@ public class ListagemPedidoPendente extends AppCompatActivity {
     private List<WebPedido> listaPedido = new ArrayList();
     private EditText edtNumerPedidoPendentes;
     private DBHelper db = new DBHelper(this);
-    private Bundle bundle;
     private Usuario usuario;
     private Thread a = new Thread();
     private ProgressDialog progress;
@@ -60,7 +59,6 @@ public class ListagemPedidoPendente extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listagem_pedido_pendente);
 
-        bundle = getIntent().getExtras();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarPedidoPendente);
         toolbar.setTitle("Pedidos Pendentes");
@@ -154,8 +152,7 @@ public class ListagemPedidoPendente extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 Intent intent = new Intent(ListagemPedidoPendente.this, ActivityPedidoMain.class);
                 PedidoHelper.setIdPedido(Integer.parseInt(listaPedido.get(info.position).getId_web_pedido()));
-                bundle = getIntent().getExtras();
-                intent.putExtras(bundle);
+
                 startActivity(intent);
                 return false;
             }

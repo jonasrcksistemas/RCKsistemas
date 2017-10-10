@@ -42,12 +42,12 @@ public class ActivityProduto extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_produto);
 
-        bundle = getIntent().getExtras();
+
 
         lstProdutos = (ListView) findViewById(R.id.lstProdutos);
         toolbar = (Toolbar) findViewById(R.id.tb_produto);
         toolbar.setTitle("Lista de Produtos");
-        if (bundle.getInt("acao") == 1) {
+        if (getIntent().getIntExtra("acao", 0) == 1) {
             try {
                 lista = db.listaProduto("SELECT * FROM TBL_PRODUTO WHERE ATIVO = 'S' ORDER BY NOME_PRODUTO");
                 listaAux = lista;

@@ -28,7 +28,7 @@
         android:theme="@style/Theme.Toolbar" />
 
     <android.support.v4.view.ViewPager
-        android:id="@+id/vp_tabsHistoricoFinanceiro"
+        android:id="@+id/vp_tabsPedido"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="0.99" />

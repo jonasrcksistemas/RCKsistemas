@@ -110,16 +110,15 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
 
                 startActivity(intent);
             } else if (view == btnProduto || view == txtProduto) {
-                Bundle bundleUsuario = new Bundle();
 
                 Intent intent = new Intent(PrincipalActivity.this, ActivityProduto.class);
-                intent.putExtras(bundleUsuario);
+
 
                 startActivity(intent);
             } else if (view == btnPedidos || view == txtPedido) {
                  Intent intent = new Intent(PrincipalActivity.this, ActivityPedidoMain.class);
 
-                startActivity(intent);
+                 startActivity(intent);
             } else if (view == btnSincroniza || view == txtSincroniza) {
                 AlertDialog.Builder alert = new AlertDialog.Builder(this);
                 alert.setTitle("Atenção!");
@@ -197,10 +196,6 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                     break;
                 case pedidosPendentes:
                     Intent telaPedidoPendentes = new Intent(PrincipalActivity.this, ListagemPedidoPendente.class);
-                    Bundle bundleUsuario = new Bundle();
-                    bundleUsuario.putInt("usuario", id_usuario);
-                    bundleUsuario.putInt("vendedor", id_vendedor);
-                    telaPedidoPendentes.putExtras(bundleUsuario);
                     startActivity(telaPedidoPendentes);
                     break;
                 case pedidosEnviados:

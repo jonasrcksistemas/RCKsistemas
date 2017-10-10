@@ -127,7 +127,7 @@ public class PedidoHelper {
     }
 
     public void moveTela(int position) {
-        mViewPager = (ViewPager) activityPedidoMain.findViewById(R.id.vp_tabsHistoricoFinanceiro);
+        mViewPager = (ViewPager) activityPedidoMain.findViewById(R.id.vp_tabsPedido);
         mViewPager.setCurrentItem(position);
         System.gc();
     }

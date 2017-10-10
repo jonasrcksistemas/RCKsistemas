@@ -119,10 +119,8 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
         btnBuscarProduto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Bundle bundle = new Bundle();
                 Intent intent = new Intent(ProdutoPedidoActivity.this, ActivityProduto.class);
-                bundle.putInt("acao", 1);
-                intent.putExtras(bundle);
+                intent.putExtra("acao", 1);
                 startActivity(intent);
             }
         });
