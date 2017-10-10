@@ -68,18 +68,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnFechar.setOnClickListener(this);
 
         getUsuarios();
-        DBHelper db = new DBHelper(this);
         try {
-            if (db.consulta("SELECT SENHA FROM TBL_WEB_USUARIO WHERE LOGIN = '" + db.consulta("SELECT LOGIN FROM TBL_LOGIN WHERE LOGADO = 'S'", "LOGIN") + "';", "SENHA").equals(db.consulta("SELECT SENHA FROM TBL_LOGIN", "SENHA"))) {
+            Usuario usuario =  db.listaUsuario("SELECT * FROM TBL_WEB_USUARIO WHERE LOGIN = (SELECT LOGIN FROM TBL_LOGIN WHERE LOGADO = 'S')").get(0);
+
+            if(usuario.getSenha().equals(db.consulta("SELECT SENHA FROM TBL_LOGIN WHERE LOGADO = 'S'", "SENHA"))){
                 Intent intent = new Intent(MainActivity.this, PrincipalActivity.class);
-                intent.putExtra("usuario", db.consulta("SELECT NOME_USUARIO FROM TBL_WEB_USUARIO WHERE LOGIN = '" + db.consulta("SELECT LOGIN FROM TBL_LOGIN", "LOGIN") + "';", "NOME_USUARIO"));
-                Usuario usuario = db.listaUsuario("SELECT * FROM TBL_WEB_USUARIO WHERE LOGIN = '" + edtLogin.getText().toString() + "'").get(0);
                 UsuarioHelper.setUsuario(usuario);
                 startActivity(intent);
                 db.close();
                 finish();
             }
-        } catch (android.database.CursorIndexOutOfBoundsException e) {
+
+        } catch (/*android.database.CursorIndexOutOfBoundsException*/ Exception e) {
             if (db.contagem("SELECT COUNT(*) FROM TBL_LOGIN") != 0) {
                 Toast.makeText(getApplicationContext(), "Usuario alterado", Toast.LENGTH_LONG).show();
                 db.alterar("DELETE FROM TBL_LOGIN");
@@ -167,8 +167,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void logar(final int alterado) {
         try {
-            Usuario usuario = db.listaUsuario("SELECT * FROM TBL_WEB_USUARIO WHERE LOGIN = '" + edtLogin.getText().toString() + "'").get(0);
-            setAndroidId(usuario, alterado);
+            if(alterado == 0){
+                Usuario usuario = db.listaUsuario("SELECT * FROM TBL_WEB_USUARIO WHERE LOGIN = '" + edtLogin.getText().toString() + "'").get(0);
+                setAndroidId(usuario, alterado);
+            }{
+                getUsuarios();
+            }
         } catch (Exception e) {
             e.printStackTrace();
             runOnUiThread(new Runnable() {
@@ -229,13 +233,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         call.enqueue(new Callback<Usuario>() {
             @Override
             public void onResponse(Call<Usuario> call, Response<Usuario> response) {
+                Usuario usuario1 = response.body();
                 if (response.code() == 200) {
                     Intent intent = new Intent(MainActivity.this, PrincipalActivity.class);
 
                     if (db.contagem("SELECT COUNT(*) FROM TBL_LOGIN") > 0) {
-                        db.atualizarTBL_LOGIN("1", edtLogin.getText().toString(), edtSenha.getText().toString(), "S", (Settings.Secure.getString(getBaseContext().getContentResolver(), Settings.Secure.ANDROID_ID)));
+                        db.atualizarTBL_LOGIN("1", edtLogin.getText().toString(), edtSenha.getText().toString(), "S", usuario1.getAparelho_id());
                     } else {
-                        db.insertTBL_LOGIN("1", edtLogin.getText().toString(), edtSenha.getText().toString(), "S", (Settings.Secure.getString(getBaseContext().getContentResolver(), Settings.Secure.ANDROID_ID)));
+                        db.insertTBL_LOGIN("1", edtLogin.getText().toString(), edtSenha.getText().toString(), "S", usuario1.getAparelho_id());
                     }
                     bundleUsuario = new Bundle();
                     bundleUsuario.putString("usuario", db.consulta("SELECT NOME_USUARIO FROM TBL_WEB_USUARIO WHERE LOGIN = '" + edtLogin.getText().toString() + "';", "NOME_USUARIO"));

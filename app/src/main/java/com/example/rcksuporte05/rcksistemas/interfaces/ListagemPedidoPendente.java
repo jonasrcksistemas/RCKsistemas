@@ -277,7 +277,7 @@ public class ListagemPedidoPendente extends AppCompatActivity {
     }
 
 
-    public void enviarPedidos(){
+        public void enviarPedidos(){
         final Rotas apiRotas = Api.buildRetrofit();
 
 

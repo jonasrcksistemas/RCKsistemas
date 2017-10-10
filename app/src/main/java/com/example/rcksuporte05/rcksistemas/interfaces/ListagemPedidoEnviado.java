@@ -90,10 +90,8 @@ public class ListagemPedidoEnviado extends AppCompatActivity {
                 Intent intent = new Intent(ListagemPedidoEnviado.this, ActivityPedidoMain.class);
                 PedidoHelper.setIdPedido(Integer.parseInt(listaPedido.get(info.position).getId_web_pedido()));
                 bundle = new Bundle();
-                bundle.putInt("vizualizacao", 1);
-                bundle.putInt("usuario", Integer.parseInt(listaPedido.get(info.position).getUsuario_lancamento_id()));
-                bundle.putInt("vendedor", Integer.parseInt(listaPedido.get(info.position).getCadastro().getId_vendedor()));
-                intent.putExtras(bundle);
+                intent.putExtra("vizualizacao", 1);
+
                 startActivity(intent);
                 return false;
             }

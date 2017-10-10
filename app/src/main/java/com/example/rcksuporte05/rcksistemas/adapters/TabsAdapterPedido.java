@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
 import com.example.rcksuporte05.rcksistemas.classes.CondicoesPagamento;
+import com.example.rcksuporte05.rcksistemas.classes.Usuario;
 import com.example.rcksuporte05.rcksistemas.fragment.Pedido1;
 import com.example.rcksuporte05.rcksistemas.fragment.Pedido2;
 import com.example.rcksuporte05.rcksistemas.fragment.Pedido3;
@@ -21,12 +22,12 @@ public class TabsAdapterPedido extends FragmentPagerAdapter {
     private int idVendedor;
     private int vizualizacao;
 
-    public TabsAdapterPedido(FragmentManager fm, Context c, String usuario, int idUsuario, int idVendedor, int vizualizacao) {
+    public TabsAdapterPedido(FragmentManager fm, Context c, Usuario usuario, int vizualizacao) {
         super(fm);
         context = c;
-        this.idUsuario = idUsuario;
-        this.usuario = usuario;
-        this.idVendedor = idVendedor;
+        this.idUsuario = Integer.parseInt(usuario.getId_usuario());
+        this.usuario = usuario.getNome_usuario();
+        this.idVendedor = Integer.parseInt(usuario.getId_quando_vendedor());
         this.vizualizacao = vizualizacao;
     }
 

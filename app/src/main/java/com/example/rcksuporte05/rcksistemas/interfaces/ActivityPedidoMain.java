@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.widget.EditText;
 
 import com.example.rcksuporte05.rcksistemas.Helper.PedidoHelper;
+import com.example.rcksuporte05.rcksistemas.Helper.UsuarioHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.TabsAdapterPedido;
 import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
@@ -20,10 +21,6 @@ public class ActivityPedidoMain extends AppCompatActivity {
 
     private SlidingTabLayout stl_tabsPedido;
     private ViewPager mViewPager;
-    private Bundle bundle = new Bundle();
-    private String usuario;
-    private int idUsuario;
-    private int idVendedor;
     private EditText edtTotalVenda;
     private TabsAdapterPedido tabsAdapterPedido;
     private PedidoHelper pedidoHelper;
@@ -39,16 +36,13 @@ public class ActivityPedidoMain extends AppCompatActivity {
         pedidoHelper = new PedidoHelper(this);
 
         edtTotalVenda = (EditText) findViewById(R.id.edtTotalVenda);
-        bundle = getIntent().getExtras();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarFragsPedido);
 
-        usuario = db.consulta("SELECT NOME_USUARIO FROM TBL_WEB_USUARIO WHERE ID_USUARIO = " + bundle.getInt("usuario"), "NOME_USUARIO");
-        idUsuario = bundle.getInt("usuario");
-        idVendedor = bundle.getInt("vendedor");
-        vizualizacao = bundle.getInt("vizualizacao");
+
+        vizualizacao = getIntent().getIntExtra("vizualizacao", 0);
 
         mViewPager = (ViewPager) findViewById(R.id.vp_tabsHistoricoFinanceiro);
-        tabsAdapterPedido = new TabsAdapterPedido(getSupportFragmentManager(), ActivityPedidoMain.this, usuario, idUsuario, idVendedor, vizualizacao);
+        tabsAdapterPedido = new TabsAdapterPedido(getSupportFragmentManager(), ActivityPedidoMain.this, UsuarioHelper.getUsuario(), vizualizacao);
         mViewPager.setAdapter(tabsAdapterPedido);
 
         stl_tabsPedido = (SlidingTabLayout) findViewById(R.id.stl_tabsPedido);
