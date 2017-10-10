@@ -7,6 +7,7 @@ import com.example.rcksuporte05.rcksistemas.classes.WebPedido;
 import java.util.List;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
@@ -27,8 +28,8 @@ public interface Rotas {
     @GET("sincronia")
     Call<Sincronia> sincroniaApi();
 
-    @POST("/webpedido/faturar")
-    Call<List<WebPedido>> enviarPedidos(List<WebPedido> webPedidos);
+    @POST("webpedido/faturar")
+    Call<List<WebPedido>> enviarPedidos(@Body List<WebPedido> webPedidos);
 
 
 

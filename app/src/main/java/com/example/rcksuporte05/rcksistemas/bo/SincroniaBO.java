@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 
@@ -173,6 +172,8 @@ public class SincroniaBO {
                 .setAutoCancel(true)
                 .setContentIntent(pendingIntent);
         mNotificationManager.notify(0, notificacao.build());
+
+        progress.dismiss();
 
     }
 }
