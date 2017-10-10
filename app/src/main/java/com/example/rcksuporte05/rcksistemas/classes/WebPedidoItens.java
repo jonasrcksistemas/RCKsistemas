@@ -5,7 +5,6 @@ public class WebPedidoItens extends Produto {
     private String id_web_item;
     private String id_pedido;
     private Produto produto;
-    private String id_empresa;
     private String quantidade;
     private String valor_unitario;
     private String valor_bruto;
@@ -100,7 +99,6 @@ public class WebPedidoItens extends Produto {
     }
 
 
-
     public WebPedidoItens() {
     }
 
@@ -182,14 +180,6 @@ public class WebPedidoItens extends Produto {
 
     public void setId_pedido(String id_pedido) {
         this.id_pedido = id_pedido;
-    }
-
-    public String getId_empresa() {
-        return id_empresa;
-    }
-
-    public void setId_empresa(String id_empresa) {
-        this.id_empresa = id_empresa;
     }
 
     public String getQuantidade() {

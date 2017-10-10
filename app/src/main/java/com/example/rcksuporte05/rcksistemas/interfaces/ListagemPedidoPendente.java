@@ -96,17 +96,17 @@ public class ListagemPedidoPendente extends AppCompatActivity {
                     alert.setMessage("Deseja sincronizar os pedidos?");
                     alert.setNegativeButton("NÃO", null);
                     alert.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    progress = new ProgressDialog(ListagemPedidoPendente.this);
-                                    progress.setMessage("Enviando pedidos...");
-                                    progress.setTitle("Atenção!");
-                                    progress.setCancelable(false);
-                                    progress.show();
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            progress = new ProgressDialog(ListagemPedidoPendente.this);
+                            progress.setMessage("Enviando pedidos...");
+                            progress.setTitle("Atenção!");
+                            progress.setCancelable(false);
+                            progress.show();
 
-                                    enviarPedidos();
-                                }
-                            });
+                            enviarPedidos();
+                        }
+                    });
                     alert.show();
 
                     break;
@@ -277,9 +277,7 @@ public class ListagemPedidoPendente extends AppCompatActivity {
     }
 
 
-    public void enviarPedidos(){
-        final Rotas apiRotas = Api.buildRetrofit();
-
+    public void enviarPedidos() {
 
         final NotificationCompat.Builder notificacao = new NotificationCompat.Builder(ListagemPedidoPendente.this)
                 .setSmallIcon(R.mipmap.ic_enviar_pedidos)
@@ -293,18 +291,20 @@ public class ListagemPedidoPendente extends AppCompatActivity {
 
         prepararItensPedidos();
 
+        final Rotas apiRotas = Api.buildRetrofit();
+
         Call<List<WebPedido>> call = apiRotas.enviarPedidos(listaPedido);
 
 
         call.enqueue(new Callback<List<WebPedido>>() {
             @Override
             public void onResponse(Call<List<WebPedido>> call, Response<List<WebPedido>> response) {
-                if (response.code() == 200){
-                     List<WebPedido> webPedidosEnviados = response.body();
+                if (response.code() == 200) {
+                    List<WebPedido> webPedidosEnviados = response.body();
 
-                    for(WebPedido pedido : webPedidosEnviados){
+                    for (WebPedido pedido : webPedidosEnviados) {
                         db.atualizarTBL_WEB_PEDIDO(pedido);
-                        for (WebPedidoItens pedidoIten : pedido.getWebPedidoItens()){
+                        for (WebPedidoItens pedidoIten : pedido.getWebPedidoItens()) {
                             db.atualizarTBL_WEB_PEDIDO_ITENS(pedidoIten);
                         }
                     }
@@ -320,10 +320,12 @@ public class ListagemPedidoPendente extends AppCompatActivity {
                             .setProgress(0, 0, false)
                             .setAutoCancel(true);
                     notificationManager.notify(0, notificacao.build());
-                }else
+
+                    progress.dismiss();
+                } else {
                     Toast.makeText(ListagemPedidoPendente.this, "Não foi possivel enviar os pedidos", Toast.LENGTH_SHORT).show();
-
-
+                    progress.dismiss();
+                }
             }
 
             @Override
@@ -345,10 +347,10 @@ public class ListagemPedidoPendente extends AppCompatActivity {
     public void prepararItensPedidos() {
 
 
-        for(WebPedido pedido : listaPedido){
-           List<WebPedidoItens> webPedidoItenses;
+        for (WebPedido pedido : listaPedido) {
+            List<WebPedidoItens> webPedidoItenses;
 
-            webPedidoItenses = db.listaWebPedidoItens("SELECT * FROM TBL_WEB_PEDIDO_ITENS WHERE ID_PEDIDO = "+pedido.getId_web_pedido());
+            webPedidoItenses = db.listaWebPedidoItens("SELECT * FROM TBL_WEB_PEDIDO_ITENS WHERE ID_PEDIDO = " + pedido.getId_web_pedido());
             pedido.setWebPedidoItens(webPedidoItenses);
 
         }

@@ -490,7 +490,7 @@ public class DBHelper extends SQLiteOpenHelper {
         System.gc();
     }
 
-    public void inserirTBL_CADASTRO(Cliente cliente){
+    public void inserirTBL_CADASTRO(Cliente cliente) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content = new ContentValues();
         content.put("ATIVO", cliente.getAtivo());
@@ -1082,6 +1082,7 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("VALOR_BONUS_CREDOR", webPedido.getValor_bonus_credor());
         content.put("PERC_BONUS_CREDOR", webPedido.getPerc_bonus_credor());
         content.put("DATA_PREV_ENTREGA", webPedido.getData_prev_entrega());
+        content.put("ID_WEB_PEDIDO_SERVIDOR", webPedido.getId_web_pedido_servidor());
 
         db.insert("TBL_WEB_PEDIDO", null, content);
         System.gc();
@@ -1129,6 +1130,7 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("PERC_BONUS_CREDOR", webPedido.getPerc_bonus_credor());
         content.put("DATA_PREV_ENTREGA", webPedido.getData_prev_entrega());
         content.put("PEDIDO_ENVIADO", webPedido.getPedido_enviado());
+        content.put("ID_WEB_PEDIDO_SERVIDOR", webPedido.getId_web_pedido_servidor());
 
         db.update("TBL_WEB_PEDIDO", content, "ID_WEB_PEDIDO = " + webPedido.getId_web_pedido(), null);
         System.gc();
