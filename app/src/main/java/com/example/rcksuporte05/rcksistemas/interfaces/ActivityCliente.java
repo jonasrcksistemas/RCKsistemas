@@ -146,12 +146,13 @@ public class ActivityCliente extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(final String query) {
+                final String consulta = query.replace("'", "");
                 b = new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        if (!query.equals("") && query.length() >= 3) {
+                        if (!consulta.equals("") && consulta.length() >= 3) {
                             try {
-                                listaAux = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE NOME_CADASTRO LIKE '%" + query + "%' OR NOME_FANTASIA LIKE '%" + query + "%' OR CPF_CNPJ LIKE '" + query + "%' OR TELEFONE_PRINCIPAL LIKE '%" + query + "%' ORDER BY ATIVO DESC, NOME_CADASTRO");
+                                listaAux = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE NOME_CADASTRO LIKE '%" + consulta + "%' OR NOME_FANTASIA LIKE '%" + consulta + "%' OR CPF_CNPJ LIKE '" + consulta + "%' OR TELEFONE_PRINCIPAL LIKE '%" + consulta + "%' ORDER BY ATIVO DESC, NOME_CADASTRO");
                                 adaptador = new ListaAdapterClientes(ActivityCliente.this, listaAux);
 
                                 runOnUiThread(new Runnable() {
@@ -171,7 +172,7 @@ public class ActivityCliente extends AppCompatActivity {
                                     @Override
                                     public void run() {
                                         lstClientes.setVisibility(View.INVISIBLE);
-                                        Toast.makeText(ActivityCliente.this, "Sem resutados para '" + query + "'", Toast.LENGTH_SHORT).show();
+                                        Toast.makeText(ActivityCliente.this, "Sem resutados para '" + consulta + "'", Toast.LENGTH_SHORT).show();
                                     }
                                 });
                             }

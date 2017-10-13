@@ -1,29 +1,13 @@
 package com.example.rcksuporte05.rcksistemas.Helper;
 
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
-import android.support.v7.app.AlertDialog;
-import android.widget.Toast;
-
-import com.example.rcksuporte05.rcksistemas.api.Api;
-import com.example.rcksuporte05.rcksistemas.api.Rotas;
-import com.example.rcksuporte05.rcksistemas.classes.HistoricoFinanceiro;
 import com.example.rcksuporte05.rcksistemas.classes.HistoricoFinanceiroPendente;
 import com.example.rcksuporte05.rcksistemas.classes.HistoricoFinanceiroQuitado;
-import com.example.rcksuporte05.rcksistemas.extras.BancoWeb;
 import com.example.rcksuporte05.rcksistemas.fragment.HistoricoFinanceiro1;
 import com.example.rcksuporte05.rcksistemas.fragment.HistoricoFinanceiro2;
 import com.example.rcksuporte05.rcksistemas.interfaces.HistoricoFinanceiroMain;
 
-import org.xmlpull.v1.XmlPullParserException;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class HistoricoFinanceiroHelper {
     private static HistoricoFinanceiroMain historicoFinanceiroMain;
@@ -32,167 +16,38 @@ public class HistoricoFinanceiroHelper {
     private static List<HistoricoFinanceiroPendente> listaVencidas = new ArrayList<>();
     private static List<HistoricoFinanceiroPendente> listaVencer = new ArrayList<>();
     private static List<HistoricoFinanceiroQuitado> listaQuitado;
-    private BancoWeb bancoWeb = new BancoWeb();
-    private ProgressDialog progress;
-    private AlertDialog.Builder alert;
-    private Thread a;
 
+    public HistoricoFinanceiroHelper(List<HistoricoFinanceiroPendente> listaVencidas, List<HistoricoFinanceiroPendente> listaVencer, List<HistoricoFinanceiroQuitado> listaQuitado) {
+        this.listaVencidas = listaVencidas;
+        this.listaVencer = listaVencer;
+        this.listaQuitado = listaQuitado;
+    }
 
     public HistoricoFinanceiroHelper() {
     }
 
-    public HistoricoFinanceiroHelper(HistoricoFinanceiroMain historicoFinanceiroMain) {
-        HistoricoFinanceiroHelper.historicoFinanceiroMain = historicoFinanceiroMain;
-        System.gc();
+    public static List<HistoricoFinanceiroPendente> getListaVencidas() {
+        return listaVencidas;
     }
 
-    public HistoricoFinanceiroHelper(HistoricoFinanceiro1 historicoFinanceiro1) {
-        HistoricoFinanceiroHelper.historicoFinanceiro1 = historicoFinanceiro1;
-        System.gc();
-    }
-
-    public HistoricoFinanceiroHelper(HistoricoFinanceiro2 historicoFinanceiro2) {
-        HistoricoFinanceiroHelper.historicoFinanceiro2 = historicoFinanceiro2;
-        System.gc();
+    public static void setListaVencidas(List<HistoricoFinanceiroPendente> listaVencidas) {
+        HistoricoFinanceiroHelper.listaVencidas = listaVencidas;
     }
 
     public static List<HistoricoFinanceiroPendente> getListaVencer() {
         return listaVencer;
     }
 
-    /*
-    public void carregaRelatorio(final int idCliente) {
-        a = new Thread(new Runnable() {
-            @Override
-            public void run() {
-
-                historicoFinanceiroMain.runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        progress = new ProgressDialog(historicoFinanceiroMain);
-                        progress.setMessage("Carregando historico financeiro!");
-                        progress.setCanceledOnTouchOutside(false);
-                        progress.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                            @Override
-                            public void onCancel(DialogInterface dialog) {
-                                a.interrupt();
-                                historicoFinanceiroMain.finish();
-                                Toast.makeText(historicoFinanceiroMain, "Ação cancelada pelo usuário", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                        progress.show();
-                    }
-                });
-                try {
-                    final List<HistoricoFinanceiroPendente> listaPendentes = bancoWeb.sincronizaHistoricoFinanceiroPendente(idCliente);
-                    for (int i = 0; listaPendentes.size() > i; i++) {
-                        if (Integer.parseInt(listaPendentes.get(i).getDias_atrazo()) > 0) {
-                            listaVencidas.add(listaPendentes.get(i));
-                        } else {
-                            listaVencer.add(listaPendentes.get(i));
-                        }
-                    }
-                    listaQuitado = bancoWeb.sincronizaHistoricoFinanceiroQuitado(idCliente);
-
-                    historicoFinanceiroMain.runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            historicoFinanceiro1.carregarLista(listaVencidas);
-                            historicoFinanceiro2.carregarLista(listaVencer);
-                            progress.dismiss();
-                            if (listaQuitado.size() <= 0 && listaPendentes.size() <= 0) {
-                                Toast.makeText(historicoFinanceiroMain, "Cliente sem historico financeiro.", Toast.LENGTH_LONG).show();
-                            }
-                        }
-                    });
-                } catch (IOException | XmlPullParserException e) {
-                    System.out.println(e.getMessage());
-                    try {
-                        historicoFinanceiroMain.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                alert = new AlertDialog.Builder(historicoFinanceiroMain);
-                                alert.setTitle("Atenção!");
-                                alert.setMessage("Não foi possivel carregar relatorio!\n        Verifique sua conexão com a internet!");
-                                alert.setNeutralButton("OK", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        historicoFinanceiroMain.finish();
-                                    }
-                                });
-                                progress.dismiss();
-                                alert.show();
-                            }
-                        });
-                    } catch (NullPointerException exception) {
-                        System.out.println(exception.getMessage());
-                    }
-                }
-            }
-        });
-
-        a.start();
-    }
-    */
-    public void carregarHistoricoFinanceiro(int idCliente){
-        Rotas apiRotas = Api.buildRetrofit();
-
-        Call<HistoricoFinanceiro> call = apiRotas.getHistoricoFinanceiro(idCliente);
-
-
-        progress = new ProgressDialog(historicoFinanceiroMain);
-        progress.setMessage("Carregando historico financeiro!");
-        progress.setCanceledOnTouchOutside(false);
-        progress.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                a.interrupt();
-                historicoFinanceiroMain.finish();
-                Toast.makeText(historicoFinanceiroMain, "Ação cancelada pelo usuário", Toast.LENGTH_SHORT).show();
-            }
-        });
-        progress.show();
-
-        call.enqueue(new Callback<HistoricoFinanceiro>() {
-            @Override
-            public void onResponse(Call<HistoricoFinanceiro> call, Response<HistoricoFinanceiro> response) {
-
-                for(HistoricoFinanceiroPendente hp : response.body().getListaPendente()){
-                    if (Integer.parseInt(hp.getDias_atrazo()) > 0) {
-                        listaVencidas.add(hp);
-                    } else {
-                        listaVencer.add(hp);
-                    }
-                }
-
-                listaQuitado = response.body().getListaQuitado();
-                
-                progress.dismiss();
-            }
-
-            @Override
-            public void onFailure(Call<HistoricoFinanceiro> call, Throwable t) {
-                alert = new AlertDialog.Builder(historicoFinanceiroMain);
-                alert.setTitle("Atenção!");
-                alert.setMessage("Não foi possivel carregar relatorio!\n        Verifique sua conexão com a internet!");
-                alert.setNeutralButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        historicoFinanceiroMain.finish();
-                    }
-                });
-                alert.show();
-                progress.dismiss();
-            }
-        });
+    public static void setListaVencer(List<HistoricoFinanceiroPendente> listaVencer) {
+        HistoricoFinanceiroHelper.listaVencer = listaVencer;
     }
 
-    public List<HistoricoFinanceiroPendente> getListaVencidas() {
-        return listaVencidas;
-    }
-
-    public List<HistoricoFinanceiroQuitado> getListaQuitado() {
+    public static List<HistoricoFinanceiroQuitado> getListaQuitado() {
         return listaQuitado;
+    }
+
+    public static void setListaQuitado(List<HistoricoFinanceiroQuitado> listaQuitado) {
+        HistoricoFinanceiroHelper.listaQuitado = listaQuitado;
     }
 
     public void limparDados() {

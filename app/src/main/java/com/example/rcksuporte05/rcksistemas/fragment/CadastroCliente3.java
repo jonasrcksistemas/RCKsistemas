@@ -132,6 +132,7 @@ public class CadastroCliente3 extends Fragment implements View.OnClickListener {
         if (v == btnHistoricoFinanceiro || v == txtHistoricoFinanceiro) {
             if (ClienteHelper.getCliente() != null) {
                 Intent intent = new Intent(getContext(), HistoricoFinanceiroMain.class);
+                intent.putExtra("idCliente", Integer.parseInt(ClienteHelper.getCliente().getId_cadastro()));
                 System.gc();
                 getContext().startActivity(intent);
                 CadastroClienteMain cadastroClienteMain = new CadastroClienteMain();
