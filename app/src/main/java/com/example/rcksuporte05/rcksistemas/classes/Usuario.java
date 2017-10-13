@@ -277,5 +277,9 @@ public class Usuario {
     public String getAparelho_id() {
         return aparelho_id;
     }
+
+    public void setAparelho_id(String aparelho_id) {
+        this.aparelho_id = aparelho_id;
+    }
 }
 

@@ -29,7 +29,6 @@ public class HistoricoFinanceiroMain extends AppCompatActivity {
         DBHelper db = new DBHelper(this);
 
         financeiroHelper = new HistoricoFinanceiroHelper(this);
-        financeiroHelper.carregaRelatorio(getIntent().getIntExtra("idCliente", 0));
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarFragsHistoricoFinanceiro);
         vp_tabsHistoricoFinanceiro = (ViewPager) findViewById(R.id.vp_tabsHistoricoFinanceiro);
