@@ -29,6 +29,8 @@ public class HistoricoFinanceiro2 extends Fragment {
         lstHistoricoFinanceiroPendente = (ListView) view.findViewById(R.id.lstHistoricoFinanceiroPendente);
         financeiroHelper = new HistoricoFinanceiroHelper(this);
 
+
+
         if (financeiroHelper.getListaVencidas() != null) {
             ListaAdapterHistoricoFinanceiroPendentes adapterVencer = new ListaAdapterHistoricoFinanceiroPendentes(getContext(), financeiroHelper.getListaVencer());
             lstHistoricoFinanceiroPendente.setAdapter(adapterVencer);
@@ -36,6 +38,7 @@ public class HistoricoFinanceiro2 extends Fragment {
             for (int i = 0; financeiroHelper.getListaVencidas().size() > i; i++) {
                 total += Float.parseFloat(financeiroHelper.getListaVencidas().get(i).getValor_total());
             }
+
             edtTotalTitulos.setText(String.format("R$%.2f", total));
         }
         System.gc();

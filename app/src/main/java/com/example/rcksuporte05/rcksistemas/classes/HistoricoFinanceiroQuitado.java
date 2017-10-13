@@ -15,10 +15,10 @@ public class HistoricoFinanceiroQuitado {
     private String pontualidade;
     private String pontualidade_status;
 
-    public HistoricoFinanceiroQuitado() {
-    }
-
     public String getDocumento() {
+        if (documento == null) {
+            documento = " ";
+        }
         return documento;
     }
 
@@ -27,6 +27,9 @@ public class HistoricoFinanceiroQuitado {
     }
 
     public String getParcela() {
+        if (parcela == null) {
+            parcela = " ";
+        }
         return parcela;
     }
 
@@ -35,6 +38,9 @@ public class HistoricoFinanceiroQuitado {
     }
 
     public String getEspecie() {
+        if (especie == null) {
+            especie = " ";
+        }
         return especie;
     }
 
@@ -43,6 +49,9 @@ public class HistoricoFinanceiroQuitado {
     }
 
     public String getNome_conta() {
+        if (nome_conta == null) {
+            nome_conta = " ";
+        }
         return nome_conta;
     }
 
@@ -51,6 +60,9 @@ public class HistoricoFinanceiroQuitado {
     }
 
     public String getData_emissao() {
+        if (data_emissao == null) {
+            data_emissao = " ";
+        }
         return data_emissao;
     }
 
@@ -59,6 +71,9 @@ public class HistoricoFinanceiroQuitado {
     }
 
     public String getData_vencimento() {
+        if (data_vencimento == null) {
+            data_vencimento = " ";
+        }
         return data_vencimento;
     }
 
@@ -67,6 +82,9 @@ public class HistoricoFinanceiroQuitado {
     }
 
     public String getData_baixa() {
+        if (data_baixa == null) {
+            data_baixa = " ";
+        }
         return data_baixa;
     }
 
@@ -75,6 +93,9 @@ public class HistoricoFinanceiroQuitado {
     }
 
     public String getValor_total() {
+        if (valor_total == null) {
+            valor_total = " ";
+        }
         return valor_total;
     }
 
@@ -83,6 +104,9 @@ public class HistoricoFinanceiroQuitado {
     }
 
     public String getCobranca_descricao_status() {
+        if (cobranca_descricao_status == null) {
+            cobranca_descricao_status = " ";
+        }
         return cobranca_descricao_status;
     }
 
@@ -91,6 +115,9 @@ public class HistoricoFinanceiroQuitado {
     }
 
     public String getHistorico() {
+        if (historico == null) {
+            historico = " ";
+        }
         return historico;
     }
 
@@ -99,6 +126,9 @@ public class HistoricoFinanceiroQuitado {
     }
 
     public String getPontualidade() {
+        if (pontualidade == null) {
+            pontualidade = " ";
+        }
         return pontualidade;
     }
 
@@ -107,10 +137,14 @@ public class HistoricoFinanceiroQuitado {
     }
 
     public String getPontualidade_status() {
+        if (pontualidade_status == null) {
+            pontualidade_status = " ";
+        }
         return pontualidade_status;
     }
 
     public void setPontualidade_status(String pontualidade_status) {
         this.pontualidade_status = pontualidade_status;
     }
+
 }

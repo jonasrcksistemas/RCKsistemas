@@ -1,5 +1,6 @@
 package com.example.rcksuporte05.rcksistemas.api;
 
+import com.example.rcksuporte05.rcksistemas.classes.HistoricoFinanceiro;
 import com.example.rcksuporte05.rcksistemas.classes.Sincronia;
 import com.example.rcksuporte05.rcksistemas.classes.Usuario;
 import com.example.rcksuporte05.rcksistemas.classes.WebPedido;
@@ -30,6 +31,9 @@ public interface Rotas {
 
     @POST("webpedido/faturar")
     Call<List<WebPedido>> enviarPedidos(@Body List<WebPedido> webPedidos);
+
+    @GET("historicofinanceiro/listar/{id}")
+    Call<HistoricoFinanceiro> getHistoricoFinanceiro(@Path("id") int idCliente);
 
 
 
