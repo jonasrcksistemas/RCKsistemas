@@ -5,7 +5,6 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.CursorIndexOutOfBoundsException;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AlertDialog;
@@ -27,12 +26,8 @@ import com.example.rcksuporte05.rcksistemas.bo.SincroniaBO;
 import com.example.rcksuporte05.rcksistemas.bo.UsuarioBO;
 import com.example.rcksuporte05.rcksistemas.classes.Sincronia;
 import com.example.rcksuporte05.rcksistemas.classes.Usuario;
-import com.example.rcksuporte05.rcksistemas.extras.BancoWeb;
 import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
 
-import org.xmlpull.v1.XmlPullParserException;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -90,7 +85,7 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
         btnSincroniza.setOnClickListener(this);
         tb_principal = (Toolbar) findViewById(R.id.tb_principal);
         tb_principal.setTitle(getString(R.string.app_name));
-        tb_principal.setSubtitle("Usuario: " + UsuarioHelper.getUsuario().getLogin());
+        tb_principal.setSubtitle("Usuario: " + UsuarioHelper.getUsuario().getNome_usuario());
         tb_principal.setLogo(R.mipmap.ic_launcher);
 
         setSupportActionBar(tb_principal);
@@ -104,34 +99,30 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
     @Override
     public void onClick(View view) {
 
-            if (view == btnCliente || view == txtCliente) {
+        if (view == btnCliente || view == txtCliente) {
+            Intent intent = new Intent(PrincipalActivity.this, ActivityCliente.class);
+            startActivity(intent);
+        } else if (view == btnProduto || view == txtProduto) {
 
-                Intent intent = new Intent(PrincipalActivity.this, ActivityCliente.class);
+            Intent intent = new Intent(PrincipalActivity.this, ActivityProduto.class);
+            startActivity(intent);
+        } else if (view == btnPedidos || view == txtPedido) {
+            Intent intent = new Intent(PrincipalActivity.this, ActivityPedidoMain.class);
 
-                startActivity(intent);
-            } else if (view == btnProduto || view == txtProduto) {
-
-                Intent intent = new Intent(PrincipalActivity.this, ActivityProduto.class);
-
-
-                startActivity(intent);
-            } else if (view == btnPedidos || view == txtPedido) {
-                 Intent intent = new Intent(PrincipalActivity.this, ActivityPedidoMain.class);
-
-                 startActivity(intent);
-            } else if (view == btnSincroniza || view == txtSincroniza) {
-                AlertDialog.Builder alert = new AlertDialog.Builder(this);
-                alert.setTitle("Atenção!");
-                alert.setMessage("Tem certeza que deseja iniciar a sincronia agora?");
-                alert.setNegativeButton("NÃO", null);
-                alert.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        sincronizaApi();
-                    }
-                });
-                alert.show();
-            }
+            startActivity(intent);
+        } else if (view == btnSincroniza || view == txtSincroniza) {
+            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+            alert.setTitle("Atenção!");
+            alert.setMessage("Tem certeza que deseja iniciar a sincronia agora?");
+            alert.setNegativeButton("NÃO", null);
+            alert.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    sincronizaApi();
+                }
+            });
+            alert.show();
+        }
 
 
     }
@@ -175,34 +166,34 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-            switch (item.getItemId()) {
-                case sair:
-                    AlertDialog.Builder alert = new AlertDialog.Builder(this);
-                    alert.setMessage("Tem certteza que deseja sair?\n(O login só é possível com acesso a internet)");
-                    alert.setTitle("Atenção!");
-                    alert.setNegativeButton("Não", null);
-                    alert.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            DBHelper db = new DBHelper(PrincipalActivity.this);
-                            db.alterar("UPDATE TBL_LOGIN SET LOGADO = 'N'");
-                            Intent intent = new Intent(PrincipalActivity.this, MainActivity.class);
-                            startActivity(intent);
-                            System.gc();
-                            finish();
-                        }
-                    });
-                    alert.show();
-                    break;
-                case pedidosPendentes:
-                    Intent telaPedidoPendentes = new Intent(PrincipalActivity.this, ListagemPedidoPendente.class);
-                    startActivity(telaPedidoPendentes);
-                    break;
-                case pedidosEnviados:
-                    Intent telaPedidoEnviado = new Intent(PrincipalActivity.this, ListagemPedidoEnviado.class);
-                    startActivity(telaPedidoEnviado);
-                    break;
-            }
+        switch (item.getItemId()) {
+            case sair:
+                AlertDialog.Builder alert = new AlertDialog.Builder(this);
+                alert.setMessage("Tem certteza que deseja sair?\n(O login só é possível com acesso a internet)");
+                alert.setTitle("Atenção!");
+                alert.setNegativeButton("Não", null);
+                alert.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        DBHelper db = new DBHelper(PrincipalActivity.this);
+                        db.alterar("UPDATE TBL_LOGIN SET LOGADO = 'N'");
+                        Intent intent = new Intent(PrincipalActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        System.gc();
+                        finish();
+                    }
+                });
+                alert.show();
+                break;
+            case pedidosPendentes:
+                Intent telaPedidoPendentes = new Intent(PrincipalActivity.this, ListagemPedidoPendente.class);
+                startActivity(telaPedidoPendentes);
+                break;
+            case pedidosEnviados:
+                Intent telaPedidoEnviado = new Intent(PrincipalActivity.this, ListagemPedidoEnviado.class);
+                startActivity(telaPedidoEnviado);
+                break;
+        }
 
         return false;
     }
@@ -278,11 +269,12 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
             }
         });
     }
+
     @Override
     protected void onResume() {
         System.gc();
 
-            getUsuarios();
+        getUsuarios();
 
         if (getIntent().getIntExtra("alterado", 0) == 1) {
             sincronizaApi();

@@ -25,9 +25,6 @@ public class TabelaPreco {
     private String faixa_valor_bruto_a;
 
     public String getId_tabela() {
-        if (id_tabela.equals("anyType{}")) {
-            id_tabela = "";
-        }
         return id_tabela;
     }
 
@@ -36,9 +33,6 @@ public class TabelaPreco {
     }
 
     public String getId_empresa() {
-        if (id_empresa.equals("anyType{}")) {
-            id_empresa = "";
-        }
         return id_empresa;
     }
 
@@ -47,9 +41,6 @@ public class TabelaPreco {
     }
 
     public String getAtivo() {
-        if (ativo.equals("anyType{}")) {
-            ativo = "";
-        }
         return ativo;
     }
 
@@ -58,9 +49,6 @@ public class TabelaPreco {
     }
 
     public String getId_tipo_tabela() {
-        if (id_tipo_tabela.equals("anyType{}")) {
-            id_tipo_tabela = "";
-        }
         return id_tipo_tabela;
     }
 
@@ -69,9 +57,6 @@ public class TabelaPreco {
     }
 
     public String getNome_tabela() {
-        if (nome_tabela.equals("anyType{}")) {
-            nome_tabela = "";
-        }
         return nome_tabela;
     }
 
@@ -80,9 +65,6 @@ public class TabelaPreco {
     }
 
     public String getData_inicio() {
-        if (data_inicio.equals("anyType{}")) {
-            data_inicio = "";
-        }
         return data_inicio;
     }
 
@@ -91,9 +73,6 @@ public class TabelaPreco {
     }
 
     public String getData_fim() {
-        if (data_fim.equals("anyType{}")) {
-            data_fim = "";
-        }
         return data_fim;
     }
 
@@ -102,9 +81,6 @@ public class TabelaPreco {
     }
 
     public String getDesconto_de_perc() {
-        if (desconto_de_perc.equals("anyType{}")) {
-            desconto_de_perc = "";
-        }
         return desconto_de_perc;
     }
 
@@ -113,9 +89,6 @@ public class TabelaPreco {
     }
 
     public String getDesconto_a_perc() {
-        if (desconto_a_perc.equals("anyType{}")) {
-            desconto_a_perc = "";
-        }
         return desconto_a_perc;
     }
 
@@ -124,9 +97,6 @@ public class TabelaPreco {
     }
 
     public String getComissao_perc() {
-        if (comissao_perc.equals("anyType{}")) {
-            comissao_perc = "";
-        }
         return comissao_perc;
     }
 
@@ -135,9 +105,6 @@ public class TabelaPreco {
     }
 
     public String getVerba_perc() {
-        if (verba_perc.equals("anyType{}")) {
-            verba_perc = "";
-        }
         return verba_perc;
     }
 
@@ -146,9 +113,6 @@ public class TabelaPreco {
     }
 
     public String getFaixa_valor_de() {
-        if (faixa_valor_de.equals("anyType{}")) {
-            faixa_valor_de = "";
-        }
         return faixa_valor_de;
     }
 
@@ -157,9 +121,6 @@ public class TabelaPreco {
     }
 
     public String getFaixa_valor_a() {
-        if (faixa_valor_a.equals("anyType{}")) {
-            faixa_valor_a = "";
-        }
         return faixa_valor_a;
     }
 
@@ -168,9 +129,6 @@ public class TabelaPreco {
     }
 
     public String getUsuario_id() {
-        if (usuario_id.equals("anyType{}")) {
-            usuario_id = "";
-        }
         return usuario_id;
     }
 
@@ -179,9 +137,6 @@ public class TabelaPreco {
     }
 
     public String getUsuario_nome() {
-        if (usuario_nome.equals("anyType{}")) {
-            usuario_nome = "";
-        }
         return usuario_nome;
     }
 
@@ -190,9 +145,6 @@ public class TabelaPreco {
     }
 
     public String getUsuario_data() {
-        if (usuario_data.equals("anyType{}")) {
-            usuario_data = "";
-        }
         return usuario_data;
     }
 
@@ -201,9 +153,6 @@ public class TabelaPreco {
     }
 
     public String getDesconto_verba_max() {
-        if (desconto_verba_max.equals("anyType{}")) {
-            desconto_verba_max = "";
-        }
         return desconto_verba_max;
     }
 
@@ -212,9 +161,6 @@ public class TabelaPreco {
     }
 
     public String getId_grupo_vendedores() {
-        if (id_grupo_vendedores.equals("anyType{}")) {
-            id_grupo_vendedores = "";
-        }
         return id_grupo_vendedores;
     }
 
@@ -223,9 +169,6 @@ public class TabelaPreco {
     }
 
     public String getUtiliza_verba() {
-        if (utiliza_verba.equals("anyType{}")) {
-            utiliza_verba = "";
-        }
         return utiliza_verba;
     }
 
@@ -234,9 +177,6 @@ public class TabelaPreco {
     }
 
     public String getFaixa_valor_bruto_de() {
-        if (faixa_valor_bruto_de.equals("anyType{}")) {
-            faixa_valor_bruto_de = "";
-        }
         return faixa_valor_bruto_de;
     }
 
@@ -245,9 +185,6 @@ public class TabelaPreco {
     }
 
     public String getFaixa_valor_bruto_a() {
-        if (faixa_valor_bruto_a.equals("anyType{}")) {
-            faixa_valor_bruto_a = "";
-        }
         return faixa_valor_bruto_a;
     }
 

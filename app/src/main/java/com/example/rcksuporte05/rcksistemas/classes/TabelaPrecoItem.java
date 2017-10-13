@@ -20,9 +20,6 @@ public class TabelaPrecoItem {
     private String cor_web;
 
     public String getId_item() {
-        if (id_item.equals("anyType{}")) {
-            id_item = "";
-        }
         return id_item;
     }
 
@@ -31,9 +28,6 @@ public class TabelaPrecoItem {
     }
 
     public String getId_tabela() {
-        if (id_tabela.equals("anyType{}")) {
-            id_tabela = "";
-        }
         return id_tabela;
     }
 
@@ -42,9 +36,6 @@ public class TabelaPrecoItem {
     }
 
     public String getPerc_desc_inicial() {
-        if (perc_desc_inicial.equals("anyType{}")) {
-            perc_desc_inicial = "";
-        }
         return perc_desc_inicial;
     }
 
@@ -53,9 +44,6 @@ public class TabelaPrecoItem {
     }
 
     public String getPerc_desc_final() {
-        if (perc_desc_final.equals("anyType{}")) {
-            perc_desc_final = "";
-        }
         return perc_desc_final;
     }
 
@@ -64,9 +52,6 @@ public class TabelaPrecoItem {
     }
 
     public String getPerc_com_interno() {
-        if (perc_com_interno.equals("anyType{}")) {
-            perc_com_interno = "";
-        }
         return perc_com_interno;
     }
 
@@ -75,9 +60,6 @@ public class TabelaPrecoItem {
     }
 
     public String getPerc_com_externo() {
-        if (perc_com_externo.equals("anyType{}")) {
-            perc_com_externo = "";
-        }
         return perc_com_externo;
     }
 
@@ -86,9 +68,6 @@ public class TabelaPrecoItem {
     }
 
     public String getPerc_com_exportacao() {
-        if (perc_com_exportacao.equals("anyType{}")) {
-            perc_com_exportacao = "";
-        }
         return perc_com_exportacao;
     }
 
@@ -97,9 +76,6 @@ public class TabelaPrecoItem {
     }
 
     public String getPontos_premiacao() {
-        if (pontos_premiacao.equals("anyType{}")) {
-            pontos_premiacao = "";
-        }
         return pontos_premiacao;
     }
 
@@ -108,9 +84,6 @@ public class TabelaPrecoItem {
     }
 
     public String getCor_painel() {
-        if (cor_painel.equals("anyType{}")) {
-            cor_painel = "";
-        }
         return cor_painel;
     }
 
@@ -119,9 +92,6 @@ public class TabelaPrecoItem {
     }
 
     public String getCor_fonte() {
-        if (cor_fonte.equals("anyType{}")) {
-            cor_fonte = "";
-        }
         return cor_fonte;
     }
 
@@ -130,9 +100,6 @@ public class TabelaPrecoItem {
     }
 
     public String getVerba_perc() {
-        if (verba_perc.equals("anyType{}")) {
-            verba_perc = "";
-        }
         return verba_perc;
     }
 
@@ -141,9 +108,6 @@ public class TabelaPrecoItem {
     }
 
     public String getUtiliza_verba() {
-        if (utiliza_verba.equals("anyType{}")) {
-            utiliza_verba = "";
-        }
         return utiliza_verba;
     }
 
@@ -152,9 +116,6 @@ public class TabelaPrecoItem {
     }
 
     public String getDesconto_verba_max() {
-        if (desconto_verba_max.equals("anyType{}")) {
-            desconto_verba_max = "";
-        }
         return desconto_verba_max;
     }
 
@@ -163,9 +124,6 @@ public class TabelaPrecoItem {
     }
 
     public String getId_usuario() {
-        if (id_usuario.equals("anyType{}")) {
-            id_usuario = "";
-        }
         return id_usuario;
     }
 
@@ -174,9 +132,6 @@ public class TabelaPrecoItem {
     }
 
     public String getUsuario() {
-        if (usuario.equals("anyType{}")) {
-            usuario = "";
-        }
         return usuario;
     }
 
@@ -185,9 +140,6 @@ public class TabelaPrecoItem {
     }
 
     public String getUsuario_data() {
-        if (usuario_data.equals("anyType{}")) {
-            usuario_data = "";
-        }
         return usuario_data;
     }
 
@@ -196,9 +148,6 @@ public class TabelaPrecoItem {
     }
 
     public String getCor_web() {
-        if (cor_web.equals("anyType{}")) {
-            cor_web = "";
-        }
         return cor_web;
     }
 

@@ -20,9 +20,6 @@ class FormaPagamento {
     private String publicar_na_web;
 
     public String getAtivo() {
-        if (ativo == null) {
-            ativo = " ";
-        }
         return ativo;
     }
 
@@ -31,9 +28,6 @@ class FormaPagamento {
     }
 
     public String getId_condicao() {
-        if (id_condicao == null) {
-            id_condicao = " ";
-        }
         return id_condicao;
     }
 
@@ -42,9 +36,6 @@ class FormaPagamento {
     }
 
     public String getNome_condicao() {
-        if (nome_condicao == null) {
-            nome_condicao = " ";
-        }
         return nome_condicao;
     }
 
@@ -53,9 +44,6 @@ class FormaPagamento {
     }
 
     public String getNumero_parcelas() {
-        if (numero_parcelas == null) {
-            numero_parcelas = " ";
-        }
         return numero_parcelas;
     }
 
@@ -64,9 +52,6 @@ class FormaPagamento {
     }
 
     public String getIntervalo_dias() {
-        if (intervalo_dias == null) {
-            intervalo_dias = " ";
-        }
         return intervalo_dias;
     }
 
@@ -75,9 +60,6 @@ class FormaPagamento {
     }
 
     public String getTipo_condicao() {
-        if (tipo_condicao == null) {
-            tipo_condicao = " ";
-        }
         return tipo_condicao;
     }
 
@@ -86,9 +68,6 @@ class FormaPagamento {
     }
 
     public String getNfe_tipo_financeiro() {
-        if (nfe_tipo_financeiro == null) {
-            nfe_tipo_financeiro = " ";
-        }
         return nfe_tipo_financeiro;
     }
 
@@ -97,9 +76,6 @@ class FormaPagamento {
     }
 
     public String getNfe_mostrar_parcelas() {
-        if (nfe_mostrar_parcelas == null) {
-            nfe_mostrar_parcelas = " ";
-        }
         return nfe_mostrar_parcelas;
     }
 
@@ -108,9 +84,6 @@ class FormaPagamento {
     }
 
     public String getUsuario_id() {
-        if (usuario_id == null) {
-            usuario_id = " ";
-        }
         return usuario_id;
     }
 
@@ -119,9 +92,6 @@ class FormaPagamento {
     }
 
     public String getUsuario_nome() {
-        if (usuario_nome == null) {
-            usuario_nome = " ";
-        }
         return usuario_nome;
     }
 
@@ -130,9 +100,6 @@ class FormaPagamento {
     }
 
     public String getUsuario_data() {
-        if (usuario_data == null) {
-            usuario_data = " ";
-        }
         return usuario_data;
     }
 
@@ -141,9 +108,6 @@ class FormaPagamento {
     }
 
     public String getPublicar_na_web() {
-        if (publicar_na_web == null) {
-            publicar_na_web = " ";
-        }
         return publicar_na_web;
     }
 

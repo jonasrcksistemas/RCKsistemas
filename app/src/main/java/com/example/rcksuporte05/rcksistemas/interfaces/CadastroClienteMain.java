@@ -1,6 +1,5 @@
 package com.example.rcksuporte05.rcksistemas.interfaces;
 
-import android.database.CursorIndexOutOfBoundsException;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -8,24 +7,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.TabsAdapterCliente;
-import com.example.rcksuporte05.rcksistemas.classes.Cliente;
-import com.example.rcksuporte05.rcksistemas.classes.Municipios;
-import com.example.rcksuporte05.rcksistemas.classes.Paises;
-import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
 import com.example.rcksuporte05.rcksistemas.extras.SlidingTabLayout;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class CadastroClienteMain extends AppCompatActivity {
     private SlidingTabLayout mSlidingTabLayout;
     private ViewPager mViewPager;
-    private List<Paises> listaPaises;
-    private List<Municipios> listaMunicipios;
-    private ArrayList<Cliente> listaVendedor;
-    private Bundle bundle;
     private TabsAdapterCliente tabsAdapterCliente;
 
     @Override
@@ -35,27 +24,10 @@ public class CadastroClienteMain extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarFrags);
         toolbar.setTitle("Cadastro de Clientes");
-        DBHelper db = new DBHelper(this);
-        bundle = getIntent().getExtras();
 
-        try {
-            listaPaises = db.listaPaises("SELECT * FROM TBL_PAISES;");
-            listaMunicipios = db.listaMunicipios("SELECT * FROM TBL_MUNICIPIOS ORDER BY NOME_MUNICIPIO");
-            listaVendedor = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE F_VENDEDOR = 'S' ORDER BY NOME_CADASTRO;");
-        } catch (CursorIndexOutOfBoundsException e) {
-            System.out.println("Erro ao carregar parametros");
-        }
-
-        if (Integer.parseInt(bundle.getString("cliente")) > 0) {
-
-            mViewPager = (ViewPager) findViewById(R.id.vp_tabs);
-            tabsAdapterCliente = new TabsAdapterCliente(getSupportFragmentManager(), CadastroClienteMain.this, listaPaises, listaMunicipios, listaVendedor, Integer.parseInt(bundle.getString("cliente")), bundle.getStringArray("clienteListar"));
-            mViewPager.setAdapter(tabsAdapterCliente);
-        } else {
-            mViewPager = (ViewPager) findViewById(R.id.vp_tabs);
-            tabsAdapterCliente = new TabsAdapterCliente(getSupportFragmentManager(), CadastroClienteMain.this, listaPaises, listaMunicipios, listaVendedor, Integer.parseInt(bundle.getString("cliente")), bundle.getStringArray("clienteListar"));
-            mViewPager.setAdapter(tabsAdapterCliente);
-        }
+        mViewPager = (ViewPager) findViewById(R.id.vp_tabs);
+        tabsAdapterCliente = new TabsAdapterCliente(getSupportFragmentManager());
+        mViewPager.setAdapter(tabsAdapterCliente);
 
         mSlidingTabLayout = (SlidingTabLayout) findViewById(R.id.stl_tabs);
         mSlidingTabLayout.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
@@ -90,6 +62,7 @@ public class CadastroClienteMain extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+        ClienteHelper.setCliente(null);
         System.gc();
         super.onDestroy();
     }

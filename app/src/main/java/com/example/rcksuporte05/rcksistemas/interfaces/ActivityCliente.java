@@ -18,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.ListaAdapterClientes;
 import com.example.rcksuporte05.rcksistemas.classes.Cliente;
@@ -37,7 +38,6 @@ public class ActivityCliente extends AppCompatActivity {
     private ListaAdapterClientes adaptador;
     private DBHelper db = new DBHelper(this);
     private Thread b = new Thread();
-    private Bundle bundle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,8 +47,7 @@ public class ActivityCliente extends AppCompatActivity {
         lstClientes = (ListView) findViewById(R.id.lstClientes);
         toolbar = (Toolbar) findViewById(R.id.tb_cliente);
         toolbar.setTitle("Lista de Clientes");
-        bundle = getIntent().getExtras();
-        if (bundle.getInt("acao") == 1) {
+        if (getIntent().getIntExtra("acao", 0) == 1) {
             toolbar.setTitle("Pesquisa de Clientes");
 
             try {
@@ -88,6 +87,7 @@ public class ActivityCliente extends AppCompatActivity {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Intent intent = new Intent(ActivityCliente.this, ContatoActivity.class);
+                    ClienteHelper.setCliente(listaAux.get(position));
                     intent.putExtra("id_cliente", Integer.parseInt(listaAux.get(position).getId_cadastro()));
                     System.gc();
                     startActivity(intent);

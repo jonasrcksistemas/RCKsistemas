@@ -7,9 +7,6 @@ public class Operacao {
     private String nome_operacao;
 
     public String getAtivo() {
-        if (ativo.equals("anyType{}")) {
-            ativo = "";
-        }
         return ativo;
     }
 
@@ -18,9 +15,6 @@ public class Operacao {
     }
 
     public String getId_operacao() {
-        if (id_operacao.equals("anyType{}")) {
-            id_operacao = "";
-        }
         return id_operacao;
     }
 
@@ -29,9 +23,6 @@ public class Operacao {
     }
 
     public String getNome_operacao() {
-        if (nome_operacao.equals("anyType{}")) {
-            nome_operacao = "";
-        }
         return nome_operacao;
     }
 

@@ -35,9 +35,6 @@ public class Usuario {
     private String aparelho_id;
 
     public String getId_usuario() {
-        if (id_usuario.equals("anyType{}")) {
-            id_usuario = "";
-        }
         return id_usuario;
     }
 
@@ -46,9 +43,6 @@ public class Usuario {
     }
 
     public String getAtivo() {
-        if (ativo.equals("anyType{}")) {
-            ativo = "";
-        }
         return ativo;
     }
 
@@ -57,9 +51,6 @@ public class Usuario {
     }
 
     public String getNome_usuario() {
-        if (nome_usuario.equals("anyType{}")) {
-            nome_usuario = "";
-        }
         return nome_usuario;
     }
 
@@ -68,9 +59,6 @@ public class Usuario {
     }
 
     public String getLogin() {
-        if (login.equals("anyType{}")) {
-            login = "";
-        }
         return login;
     }
 
@@ -79,9 +67,6 @@ public class Usuario {
     }
 
     public String getSenha() {
-        if (senha.equals("anyType{}")) {
-            senha = "";
-        }
         return senha;
     }
 
@@ -90,9 +75,6 @@ public class Usuario {
     }
 
     public String getSenha_confirma() {
-        if (senha_confirma.equals("anyType{}")) {
-            senha_confirma = "";
-        }
         return senha_confirma;
     }
 
@@ -101,9 +83,6 @@ public class Usuario {
     }
 
     public String getData_cadastro() {
-        if (data_cadastro.equals("anyType{}")) {
-            data_cadastro = "";
-        }
         return data_cadastro;
     }
 
@@ -112,9 +91,6 @@ public class Usuario {
     }
 
     public String getUsuario_cadatro() {
-        if (usuario_cadatro.equals("anyType{}")) {
-            usuario_cadatro = "";
-        }
         return usuario_cadatro;
     }
 
@@ -123,9 +99,6 @@ public class Usuario {
     }
 
     public String getData_alterado() {
-        if (data_alterado.equals("anyType{}")) {
-            data_alterado = "";
-        }
         return data_alterado;
     }
 
@@ -134,9 +107,6 @@ public class Usuario {
     }
 
     public String getUsuario_alterou() {
-        if (usuario_alterou.equals("anyType{}")) {
-            usuario_alterou = "";
-        }
         return usuario_alterou;
     }
 
@@ -145,9 +115,6 @@ public class Usuario {
     }
 
     public String getAparece_cad_usuario() {
-        if (aparece_cad_usuario.equals("anyType{}")) {
-            aparece_cad_usuario = "";
-        }
         return aparece_cad_usuario;
     }
 
@@ -156,9 +123,6 @@ public class Usuario {
     }
 
     public String getCliente_lista_todos() {
-        if (cliente_lista_todos.equals("anyType{}")) {
-            cliente_lista_todos = "";
-        }
         return cliente_lista_todos;
     }
 
@@ -167,9 +131,6 @@ public class Usuario {
     }
 
     public String getCliente_lista_setor() {
-        if (cliente_lista_setor.equals("anyType{}")) {
-            cliente_lista_setor = "";
-        }
         return cliente_lista_setor;
     }
 
@@ -178,9 +139,6 @@ public class Usuario {
     }
 
     public String getCliente_lista_representante() {
-        if (cliente_lista_representante.equals("anyType{}")) {
-            cliente_lista_representante = "";
-        }
         return cliente_lista_representante;
     }
 
@@ -189,9 +147,6 @@ public class Usuario {
     }
 
     public String getPedido_lista_todos() {
-        if (pedido_lista_todos.equals("anyType{}")) {
-            pedido_lista_todos = "";
-        }
         return pedido_lista_todos;
     }
 
@@ -200,9 +155,6 @@ public class Usuario {
     }
 
     public String getPedido_lista_setor() {
-        if (pedido_lista_setor.equals("anyType{}")) {
-            pedido_lista_setor = "";
-        }
         return pedido_lista_setor;
     }
 
@@ -211,9 +163,6 @@ public class Usuario {
     }
 
     public String getPedido_lista_representante() {
-        if (pedido_lista_representante.equals("anyType{}")) {
-            pedido_lista_representante = "";
-        }
         return pedido_lista_representante;
     }
 
@@ -222,9 +171,6 @@ public class Usuario {
     }
 
     public String getMensagem_lista_financeiro() {
-        if (mensagem_lista_financeiro.equals("anyType{}")) {
-            mensagem_lista_financeiro = "";
-        }
         return mensagem_lista_financeiro;
     }
 
@@ -233,9 +179,6 @@ public class Usuario {
     }
 
     public String getMensagem_lista_todos() {
-        if (mensagem_lista_todos.equals("anyType{}")) {
-            mensagem_lista_todos = "";
-        }
         return mensagem_lista_todos;
     }
 
@@ -244,9 +187,6 @@ public class Usuario {
     }
 
     public String getMensagem_lista_setor() {
-        if (mensagem_lista_setor.equals("anyType{}")) {
-            mensagem_lista_setor = "";
-        }
         return mensagem_lista_setor;
     }
 
@@ -255,9 +195,6 @@ public class Usuario {
     }
 
     public String getMensagem_lista_representante() {
-        if (mensagem_lista_representante.equals("anyType{}")) {
-            mensagem_lista_representante = "";
-        }
         return mensagem_lista_representante;
     }
 
@@ -266,9 +203,6 @@ public class Usuario {
     }
 
     public String getOrcamento_lista_todos() {
-        if (orcamento_lista_todos.equals("anyType{}")) {
-            orcamento_lista_todos = "";
-        }
         return orcamento_lista_todos;
     }
 
@@ -277,9 +211,6 @@ public class Usuario {
     }
 
     public String getOrcamento_lista_setor() {
-        if (orcamento_lista_setor.equals("anyType{}")) {
-            orcamento_lista_setor = "";
-        }
         return orcamento_lista_setor;
     }
 
@@ -288,9 +219,6 @@ public class Usuario {
     }
 
     public String getOrcamento_lista_representante() {
-        if (orcamento_lista_representante.equals("anyType{}")) {
-            orcamento_lista_representante = "";
-        }
         return orcamento_lista_representante;
     }
 
@@ -299,9 +227,6 @@ public class Usuario {
     }
 
     public String getUsuario_lista_todos() {
-        if (usuario_lista_todos.equals("anyType{}")) {
-            usuario_lista_todos = "";
-        }
         return usuario_lista_todos;
     }
 
@@ -310,9 +235,6 @@ public class Usuario {
     }
 
     public String getUsuario_lista_setor() {
-        if (usuario_lista_setor.equals("anyType{}")) {
-            usuario_lista_setor = "";
-        }
         return usuario_lista_setor;
     }
 
@@ -321,9 +243,6 @@ public class Usuario {
     }
 
     public String getUsuario_lista_representante() {
-        if (usuario_lista_representante.equals("anyType{}")) {
-            usuario_lista_representante = "";
-        }
         return usuario_lista_representante;
     }
 
@@ -332,9 +251,6 @@ public class Usuario {
     }
 
     public String getExcluido() {
-        if (excluido.equals("anyType{}")) {
-            excluido = "";
-        }
         return excluido;
     }
 
@@ -343,9 +259,6 @@ public class Usuario {
     }
 
     public String getId_setor() {
-        if (id_setor.equals("anyType{}")) {
-            id_setor = "-2";
-        }
         return id_setor;
     }
 
@@ -354,9 +267,6 @@ public class Usuario {
     }
 
     public String getId_quando_vendedor() {
-        if (id_quando_vendedor.equals("anyType{}")) {
-            id_quando_vendedor = "";
-        }
         return id_quando_vendedor;
     }
 
@@ -366,10 +276,6 @@ public class Usuario {
 
     public String getAparelho_id() {
         return aparelho_id;
-    }
-
-    public void setAparelho_id(String aparelho_id) {
-        this.aparelho_id = aparelho_id;
     }
 }
 

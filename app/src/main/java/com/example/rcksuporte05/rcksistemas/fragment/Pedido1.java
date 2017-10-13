@@ -233,10 +233,8 @@ public class Pedido1 extends Fragment implements View.OnClickListener {
                 Toast.makeText(getContext(), "Você precisa selecionar o cliente para consultar seu historico financeiro", Toast.LENGTH_SHORT).show();
             }
         } else if (v == btnBuscarCliente) {
-            bundle = new Bundle();
-            bundle.putInt("acao", 1);
             Intent intent = new Intent(getContext(), ActivityCliente.class);
-            intent.putExtras(bundle);
+            intent.putExtra("acao", 1);
             startActivity(intent);
         } else if (v == btnAdicionarProdutos || v == txtAdicionarProdutos) {
             pedidoHelper.moveTela(1);

@@ -11,9 +11,6 @@ public class VendedorBonusResumo {
     private String data_ultima_atualizacao;
 
     public String getId_vendedor() {
-        if (id_vendedor.equals("anyType{}")) {
-            id_vendedor = "";
-        }
         return id_vendedor;
     }
 
@@ -22,9 +19,6 @@ public class VendedorBonusResumo {
     }
 
     public String getId_empresa() {
-        if (id_empresa.equals("anyType{}")) {
-            id_empresa = "";
-        }
         return id_empresa;
     }
 
@@ -33,9 +27,6 @@ public class VendedorBonusResumo {
     }
 
     public String getValor_credito() {
-        if (valor_credito.equals("anyType{}")) {
-            valor_credito = "";
-        }
         return valor_credito;
     }
 
@@ -44,9 +35,6 @@ public class VendedorBonusResumo {
     }
 
     public String getValor_debito() {
-        if (valor_debito.equals("anyType{}")) {
-            valor_debito = "";
-        }
         return valor_debito;
     }
 
@@ -55,9 +43,6 @@ public class VendedorBonusResumo {
     }
 
     public String getValor_bonus_cancelados() {
-        if (valor_bonus_cancelados.equals("anyType{}")) {
-            valor_bonus_cancelados = "";
-        }
         return valor_bonus_cancelados;
     }
 
@@ -66,9 +51,6 @@ public class VendedorBonusResumo {
     }
 
     public String getValor_saldo() {
-        if (valor_saldo.equals("anyType{}")) {
-            valor_saldo = "";
-        }
         return valor_saldo;
     }
 
@@ -77,9 +59,6 @@ public class VendedorBonusResumo {
     }
 
     public String getData_ultima_atualizacao() {
-        if (data_ultima_atualizacao.equals("anyType{}")) {
-            data_ultima_atualizacao = "";
-        }
         return data_ultima_atualizacao;
     }
 
