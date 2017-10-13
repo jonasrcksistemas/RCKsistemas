@@ -18,6 +18,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 
 
@@ -26,36 +27,25 @@ public class CadastroCliente1 extends Fragment {
     private ArrayAdapter arrayIe;
     private ArrayAdapter arrayVen;
     private String[] contribuinte = {"Contribuinte", "Isento", "Não Contribuinte"};
-    private Bundle bundle = new Bundle();
     private TextView txtId;
-    private TextView txtPessoa;
     private RadioButton rdFisica;
     private RadioButton rdJuridica;
     private TextView txtNomeCliente;
     private EditText edtData;
-    private TextView txtNomeFantasia;
     private EditText edtNomeFantasia;
     private TextView txtCpfCnpj;
     private EditText edtCpfCnpj;
-    private TextView txtInscEstadual;
     private EditText edtTelefonePrincipal;
-    private TextView txtTelefonePrincipal;
     private EditText edtTelefone1;
-    private TextView txtTelefone1;
     private EditText edtTelefone2;
-    private TextView txtTelefone2;
     private EditText edtPessoaContato;
-    private TextView txtPessoaContato;
     private EditText edtEmailPrincipal;
-    private TextView txtEmailPrincipal;
     private EditText edtNomeCliente;
     private EditText edtInscEstadual;
     private Spinner spIe;
     private TextView txtData;
     private Spinner spVendedor;
-    private TextView txtInscMunicipal;
     private EditText edtInscMunicipal;
-    private String[] cliente;
     private String[] idVendedores;
     private Button btnLigar1;
     private Button btnLigar2;
@@ -65,30 +55,23 @@ public class CadastroCliente1 extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_cadastro_cliente1, container, false);
 
+        ClienteHelper clienteHelper = new ClienteHelper(getContext());
+
         txtId = (TextView) view.findViewById(R.id.txtId);
-        txtPessoa = (TextView) view.findViewById(R.id.txtPessoa);
         rdFisica = (RadioButton) view.findViewById(R.id.rdFisica);
         rdJuridica = (RadioButton) view.findViewById(R.id.rdJuridica);
         txtNomeCliente = (TextView) view.findViewById(R.id.txtNomeCliente);
         edtData = (EditText) view.findViewById(R.id.edtData);
-        txtNomeFantasia = (TextView) view.findViewById(R.id.txtRazaoSocial);
         edtNomeFantasia = (EditText) view.findViewById(R.id.edtNomeFantasia);
         txtCpfCnpj = (TextView) view.findViewById(R.id.txtCpfCnpj);
         edtCpfCnpj = (EditText) view.findViewById(R.id.edtCpfCnpj);
-        txtInscEstadual = (TextView) view.findViewById(R.id.txtInscEstadual);
         edtTelefonePrincipal = (EditText) view.findViewById(R.id.edtTelefonePrincipal);
-        txtTelefonePrincipal = (TextView) view.findViewById(R.id.txtTelefonePrincipal);
         edtTelefone1 = (EditText) view.findViewById(R.id.edtTelefone1);
-        txtTelefone1 = (TextView) view.findViewById(R.id.txtTelefone1);
         edtTelefone2 = (EditText) view.findViewById(R.id.edtTelefone2);
-        txtTelefone2 = (TextView) view.findViewById(R.id.txtTelefone2);
         edtPessoaContato = (EditText) view.findViewById(R.id.edtPessoaContato);
-        txtPessoaContato = (TextView) view.findViewById(R.id.txtPessoaContato);
         edtEmailPrincipal = (EditText) view.findViewById(R.id.edtEmailPrincipal);
-        txtEmailPrincipal = (TextView) view.findViewById(R.id.txtEmailPrincipal);
         edtNomeCliente = (EditText) view.findViewById(R.id.edtNomeCliente);
         edtInscEstadual = (EditText) view.findViewById(R.id.edtInscEstadual);
-        txtInscMunicipal = (TextView) view.findViewById(R.id.txtInscMunicipal);
         edtInscMunicipal = (EditText) view.findViewById(R.id.edtInscMunicipal);
         spIe = (Spinner) view.findViewById(R.id.spIe);
         txtData = (TextView) view.findViewById(R.id.txtData);
@@ -100,34 +83,31 @@ public class CadastroCliente1 extends Fragment {
         btnLigar1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fazerChamada(edtTelefonePrincipal.getText().toString(), cliente[5]);
+                fazerChamada(edtTelefonePrincipal.getText().toString(), ClienteHelper.getCliente().getNome_cadastro());
             }
         });
 
         btnLigar2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fazerChamada(edtTelefone1.getText().toString(), cliente[5]);
+                fazerChamada(edtTelefone1.getText().toString(), ClienteHelper.getCliente().getNome_cadastro());
             }
         });
 
         btnLigar3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                fazerChamada(edtTelefone2.getText().toString(), cliente[5]);
+                fazerChamada(edtTelefone2.getText().toString(), ClienteHelper.getCliente().getNome_cadastro());
             }
         });
-
 
         arrayIe = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_activated_1, contribuinte);
         spIe.setAdapter(arrayIe);
 
-        bundle = getArguments();
-        arrayVen = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_activated_1, bundle.getStringArray("vendedores"));
+        arrayVen = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_activated_1, clienteHelper.getListaVendedor());
         spVendedor.setAdapter(arrayVen);
 
-        if (bundle.getInt("cliente") > 0) {
-            cliente = bundle.getStringArray("clienteListar");
+        if (ClienteHelper.getCliente() != null) {
 
             rdFisica.setClickable(false);
             rdJuridica.setClickable(false);
@@ -145,33 +125,33 @@ public class CadastroCliente1 extends Fragment {
             spIe.setEnabled(false);
             spVendedor.setEnabled(false);
 
-            txtId.setText("ID: " + bundle.getInt("cliente"));
-            edtNomeCliente.setText(cliente[5]);
-            edtNomeFantasia.setText(cliente[6]);
+            txtId.setText("ID: " + ClienteHelper.getCliente().getId_cadastro());
+            edtNomeCliente.setText(ClienteHelper.getCliente().getNome_cadastro());
+            edtNomeFantasia.setText(ClienteHelper.getCliente().getNome_fantasia());
 
-            String data = cliente[4].replaceAll("[^0-9]", "");
+            String data = ClienteHelper.getCliente().getData_aniversario().replaceAll("[^0-9]", "");
             if (!data.isEmpty()) {
                 edtData.setText(data.substring(6, 8) + "/" + data.substring(4, 6) + "/" + data.substring(0, 4));
             }
 
-            edtInscEstadual.setText(cliente[8]);
-            edtInscMunicipal.setText(cliente[9]);
-            String cpfCnpj = cliente[7].trim().replaceAll("[^0-9]", "");
-            if (cliente[3].equals("J")) {
+            edtInscEstadual.setText(ClienteHelper.getCliente().getInscri_estadual());
+            edtInscMunicipal.setText(ClienteHelper.getCliente().getInscri_municipal());
+            String cpfCnpj = ClienteHelper.getCliente().getCpf_cnpj().trim().replaceAll("[^0-9]", "");
+            if (ClienteHelper.getCliente().getPessoa_f_j().equals("J")) {
                 rdJuridica.setChecked(true);
                 try {
                     edtCpfCnpj.setText(cpfCnpj.substring(0, 2) + "." + cpfCnpj.substring(2, 5) + "." + cpfCnpj.substring(5, 8) + "/" + cpfCnpj.substring(8, 12) + "-" + cpfCnpj.substring(12, 14));
                 } catch (StringIndexOutOfBoundsException e) {
                     Toast.makeText(getContext(), "Falta de informações no cadastro", Toast.LENGTH_SHORT).show();
                 }
-            } else if (cliente[3].equals("F")) {
+            } else if (ClienteHelper.getCliente().getPessoa_f_j().equals("F")) {
                 rdFisica.setChecked(true);
                 edtCpfCnpj.setText(cpfCnpj.substring(0, 3) + "." + cpfCnpj.substring(3, 6) + "." + cpfCnpj.substring(6, 9) + "-" + cpfCnpj.substring(9, 11));
             } else {
                 edtCpfCnpj.setText(cpfCnpj);
             }
 
-            String telefonePrincipal = cliente[32].trim().replaceAll("[^0-9]", "");
+            String telefonePrincipal = ClienteHelper.getCliente().getTelefone_principal().trim().replaceAll("[^0-9]", "");
             if (telefonePrincipal.length() == 10) {
                 edtTelefonePrincipal.setText("(" + telefonePrincipal.substring(0, 2) + ") " + telefonePrincipal.substring(2, 6) + "-" + telefonePrincipal.substring(6, 10));
             } else if (telefonePrincipal.length() == 11) {
@@ -185,7 +165,7 @@ public class CadastroCliente1 extends Fragment {
             }
 
 
-            String telefone1 = cliente[55].trim().replaceAll("[^0-9]", "");
+            String telefone1 = ClienteHelper.getCliente().getTelefone_dois().trim().replaceAll("[^0-9]", "");
             if (telefone1.length() == 10) {
                 edtTelefone1.setText("(" + telefone1.substring(0, 2) + ") " + telefone1.substring(2, 6) + "-" + telefone1.substring(6, 10));
             } else if (telefone1.length() == 11) {
@@ -198,7 +178,7 @@ public class CadastroCliente1 extends Fragment {
                 edtTelefone1.setText(telefone1);
             }
 
-            String telefone2 = cliente[56].trim().replaceAll("[^0-9]", "");
+            String telefone2 = ClienteHelper.getCliente().getTelefone_tres().trim().replaceAll("[^0-9]", "");
             if (telefone2.length() == 10) {
                 edtTelefone2.setText("(" + telefone2.substring(0, 2) + ") " + telefone2.substring(2, 6) + "-" + telefone2.substring(6, 10));
             } else if (telefone2.length() == 11) {
@@ -211,16 +191,15 @@ public class CadastroCliente1 extends Fragment {
                 edtTelefone2.setText(telefone2);
             }
 
-            edtPessoaContato.setText(cliente[57]);
-            edtEmailPrincipal.setText(cliente[33]);
+            edtPessoaContato.setText(ClienteHelper.getCliente().getPessoa_contato_principal());
+            edtEmailPrincipal.setText(ClienteHelper.getCliente().getEmail_principal());
             try {
-                spIe.setSelection(Integer.parseInt(cliente[58]) - 1);
+                spIe.setSelection(Integer.parseInt(ClienteHelper.getCliente().getInd_da_ie_destinatario()) - 1);
             } catch (NumberFormatException e) {
                 System.out.println(e.getMessage());
             }
-            idVendedores = bundle.getStringArray("idVendedores");
-            for (int i = 0; idVendedores.length > i; i++) {
-                if (idVendedores[i].equals(cliente[26])) {
+            for (int i = 0; clienteHelper.getListaVendedor().size() > i; i++) {
+                if (clienteHelper.getListaVendedor().get(i).getId_cadastro().equals(ClienteHelper.getCliente().getId_vendedor())) {
                     spVendedor.setSelection(i);
                 }
             }

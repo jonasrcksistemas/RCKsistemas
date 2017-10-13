@@ -15,9 +15,6 @@ public class CondicoesPagamento {
     private String publicar_na_web;
 
     public String getAtivo() {
-        if (ativo.equals("anyType{}")) {
-            ativo = "";
-        }
         return ativo;
     }
 
@@ -26,9 +23,6 @@ public class CondicoesPagamento {
     }
 
     public String getId_condicao() {
-        if (id_condicao.equals("anyType{}")) {
-            id_condicao = "";
-        }
         return id_condicao;
     }
 
@@ -37,9 +31,6 @@ public class CondicoesPagamento {
     }
 
     public String getNome_condicao() {
-        if (nome_condicao.equals("anyType{}")) {
-            nome_condicao = "";
-        }
         return nome_condicao;
     }
 
@@ -48,9 +39,6 @@ public class CondicoesPagamento {
     }
 
     public String getNumero_parcelas() {
-        if (numero_parcelas.equals("anyType{}")) {
-            numero_parcelas = "";
-        }
         return numero_parcelas;
     }
 
@@ -59,9 +47,6 @@ public class CondicoesPagamento {
     }
 
     public String getIntervalo_dias() {
-        if (intervalo_dias.equals("anyType{}")) {
-            intervalo_dias = "";
-        }
         return intervalo_dias;
     }
 
@@ -70,9 +55,6 @@ public class CondicoesPagamento {
     }
 
     public String getTipo_condicao() {
-        if (tipo_condicao.equals("anyType{}")) {
-            tipo_condicao = "";
-        }
         return tipo_condicao;
     }
 
@@ -81,9 +63,6 @@ public class CondicoesPagamento {
     }
 
     public String getNfe_tipo_financeiro() {
-        if (nfe_tipo_financeiro.equals("anyType{}")) {
-            nfe_tipo_financeiro = "";
-        }
         return nfe_tipo_financeiro;
     }
 
@@ -92,9 +71,6 @@ public class CondicoesPagamento {
     }
 
     public String getNfe_mostrar_parcelas() {
-        if (nfe_mostrar_parcelas.equals("anyType{}")) {
-            nfe_mostrar_parcelas = "";
-        }
         return nfe_mostrar_parcelas;
     }
 
@@ -103,9 +79,6 @@ public class CondicoesPagamento {
     }
 
     public String getUsuario_id() {
-        if (usuario_id.equals("anyType{}")) {
-            usuario_id = "";
-        }
         return usuario_id;
     }
 
@@ -114,9 +87,6 @@ public class CondicoesPagamento {
     }
 
     public String getUsuario_nome() {
-        if (usuario_nome.equals("anyType{}")) {
-            usuario_nome = "";
-        }
         return usuario_nome;
     }
 
@@ -125,9 +95,6 @@ public class CondicoesPagamento {
     }
 
     public String getUsuario_data() {
-        if (usuario_data.equals("anyType{}")) {
-            usuario_data = "";
-        }
         return usuario_data;
     }
 
@@ -136,9 +103,6 @@ public class CondicoesPagamento {
     }
 
     public String getPublicar_na_web() {
-        if (publicar_na_web.equals("anyType{}")) {
-            publicar_na_web = "";
-        }
         return publicar_na_web;
     }
 

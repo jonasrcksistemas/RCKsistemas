@@ -87,9 +87,6 @@ public class Cliente {
     private String local_cadastro;
 
     public String getAtivo() {
-        if (ativo.equals("anyType{}")) {
-            ativo = "";
-        }
         return ativo;
     }
 
@@ -98,9 +95,6 @@ public class Cliente {
     }
 
     public String getId_empresa() {
-        if (id_empresa.equals("anyType{}")) {
-            id_empresa = "";
-        }
         return id_empresa;
     }
 
@@ -109,9 +103,6 @@ public class Cliente {
     }
 
     public String getId_cadastro() {
-        if (id_cadastro.equals("anyType{}")) {
-            id_cadastro = "";
-        }
         return id_cadastro;
     }
 
@@ -120,9 +111,6 @@ public class Cliente {
     }
 
     public String getPessoa_f_j() {
-        if (pessoa_f_j.equals("anyType{}")) {
-            pessoa_f_j = "";
-        }
         return pessoa_f_j;
     }
 
@@ -131,9 +119,6 @@ public class Cliente {
     }
 
     public String getData_aniversario() {
-        if (data_aniversario.equals("anyType{}")) {
-            data_aniversario = "";
-        }
         return data_aniversario;
     }
 
@@ -142,9 +127,6 @@ public class Cliente {
     }
 
     public String getNome_cadastro() {
-        if (nome_cadastro.equals("anyType{}")) {
-            nome_cadastro = "";
-        }
         return nome_cadastro;
     }
 
@@ -153,9 +135,6 @@ public class Cliente {
     }
 
     public String getNome_fantasia() {
-        if (nome_fantasia.equals("anyType{}")) {
-            nome_fantasia = "";
-        }
         return nome_fantasia;
     }
 
@@ -164,9 +143,6 @@ public class Cliente {
     }
 
     public String getCpf_cnpj() {
-        if (cpf_cnpj.equals("anyType{}")) {
-            cpf_cnpj = "";
-        }
         return cpf_cnpj;
     }
 
@@ -175,9 +151,6 @@ public class Cliente {
     }
 
     public String getInscri_estadual() {
-        if (inscri_estadual.equals("anyType{}")) {
-            inscri_estadual = "";
-        }
         return inscri_estadual;
     }
 
@@ -186,9 +159,6 @@ public class Cliente {
     }
 
     public String getInscri_municipal() {
-        if (inscri_municipal.equals("anyType{}")) {
-            inscri_municipal = "";
-        }
         return inscri_municipal;
     }
 
@@ -197,9 +167,6 @@ public class Cliente {
     }
 
     public String getEndereco() {
-        if (endereco.equals("anyType{}")) {
-            endereco = "";
-        }
         return endereco;
     }
 
@@ -208,9 +175,6 @@ public class Cliente {
     }
 
     public String getEndereco_bairro() {
-        if (endereco_bairro.equals("anyType{}")) {
-            endereco_bairro = "";
-        }
         return endereco_bairro;
     }
 
@@ -219,9 +183,6 @@ public class Cliente {
     }
 
     public String getEndereco_numero() {
-        if (endereco_numero.equals("anyType{}")) {
-            endereco_numero = "";
-        }
         return endereco_numero;
     }
 
@@ -230,9 +191,6 @@ public class Cliente {
     }
 
     public String getEndereco_complemento() {
-        if (endereco_complemento.equals("anyType{}")) {
-            endereco_complemento = "";
-        }
         return endereco_complemento;
     }
 
@@ -241,9 +199,6 @@ public class Cliente {
     }
 
     public String getEndereco_uf() {
-        if (endereco_uf.equals("anyType{}")) {
-            endereco_uf = "";
-        }
         return endereco_uf;
     }
 
@@ -252,9 +207,6 @@ public class Cliente {
     }
 
     public String getEndereco_id_municipio() {
-        if (endereco_id_municipio.equals("anyType{}")) {
-            endereco_id_municipio = "";
-        }
         return endereco_id_municipio;
     }
 
@@ -263,9 +215,6 @@ public class Cliente {
     }
 
     public String getEndereco_cep() {
-        if (endereco_cep.equals("anyType{}")) {
-            endereco_cep = "";
-        }
         return endereco_cep;
     }
 
@@ -274,9 +223,6 @@ public class Cliente {
     }
 
     public String getUsuario_id() {
-        if (usuario_id.equals("anyType{}")) {
-            usuario_id = "";
-        }
         return usuario_id;
     }
 
@@ -285,9 +231,6 @@ public class Cliente {
     }
 
     public String getUsuario_nome() {
-        if (usuario_nome.equals("anyType{}")) {
-            usuario_nome = "";
-        }
         return usuario_nome;
     }
 
@@ -296,9 +239,6 @@ public class Cliente {
     }
 
     public String getUsuario_data() {
-        if (usuario_data.equals("anyType{}")) {
-            usuario_data = "";
-        }
         return usuario_data;
     }
 
@@ -307,9 +247,6 @@ public class Cliente {
     }
 
     public String getF_cliente() {
-        if (f_cliente.equals("anyType{}")) {
-            f_cliente = "";
-        }
         return f_cliente;
     }
 
@@ -318,9 +255,6 @@ public class Cliente {
     }
 
     public String getF_fornecedor() {
-        if (f_fornecedor.equals("anyType{}")) {
-            f_fornecedor = "";
-        }
         return f_fornecedor;
     }
 
@@ -329,9 +263,6 @@ public class Cliente {
     }
 
     public String getF_funcionario() {
-        if (f_funcionario.equals("anyType{}")) {
-            f_funcionario = "";
-        }
         return f_funcionario;
     }
 
@@ -340,9 +271,6 @@ public class Cliente {
     }
 
     public String getF_vendedor() {
-        if (f_vendedor.equals("anyType{}")) {
-            f_vendedor = "";
-        }
         return f_vendedor;
     }
 
@@ -351,9 +279,6 @@ public class Cliente {
     }
 
     public String getF_transportador() {
-        if (f_transportador.equals("anyType{}")) {
-            f_transportador = "";
-        }
         return f_transportador;
     }
 
@@ -362,9 +287,6 @@ public class Cliente {
     }
 
     public String getData_ultima_compra() {
-        if (data_ultima_compra.equals("anyType{}")) {
-            data_ultima_compra = "";
-        }
         return data_ultima_compra;
     }
 
@@ -373,9 +295,6 @@ public class Cliente {
     }
 
     public String getId_vendedor() {
-        if (id_vendedor.equals("anyType{}")) {
-            id_vendedor = "";
-        }
         return id_vendedor;
     }
 
@@ -384,9 +303,6 @@ public class Cliente {
     }
 
     public String getF_id_cliente() {
-        if (f_id_cliente.equals("anyType{}")) {
-            f_id_cliente = "";
-        }
         return f_id_cliente;
     }
 
@@ -395,9 +311,6 @@ public class Cliente {
     }
 
     public String getId_entidade() {
-        if (id_entidade.equals("anyType{}")) {
-            id_entidade = "";
-        }
         return id_entidade;
     }
 
@@ -406,9 +319,6 @@ public class Cliente {
     }
 
     public String getF_id_fornecedor() {
-        if (f_id_fornecedor.equals("anyType{}")) {
-            f_id_fornecedor = "";
-        }
         return f_id_fornecedor;
     }
 
@@ -417,9 +327,6 @@ public class Cliente {
     }
 
     public String getF_id_vendedor() {
-        if (f_id_vendedor.equals("anyType{}")) {
-            f_id_vendedor = "";
-        }
         return f_id_vendedor;
     }
 
@@ -428,9 +335,6 @@ public class Cliente {
     }
 
     public String getF_id_transportador() {
-        if (f_id_transportador.equals("anyType{}")) {
-            f_id_transportador = "";
-        }
         return f_id_transportador;
     }
 
@@ -439,9 +343,6 @@ public class Cliente {
     }
 
     public String getTelefone_principal() {
-        if (telefone_principal.equals("anyType{}")) {
-            telefone_principal = "";
-        }
         return telefone_principal;
     }
 
@@ -450,9 +351,6 @@ public class Cliente {
     }
 
     public String getEmail_principal() {
-        if (email_principal.equals("anyType{}")) {
-            email_principal = "";
-        }
         return email_principal;
     }
 
@@ -461,9 +359,6 @@ public class Cliente {
     }
 
     public String getId_pais() {
-        if (id_pais.equals("anyType{}")) {
-            id_pais = "";
-        }
         return id_pais;
     }
 
@@ -472,9 +367,6 @@ public class Cliente {
     }
 
     public String getF_id_funcionario() {
-        if (f_id_funcionario.equals("anyType{}")) {
-            f_id_funcionario = "";
-        }
         return f_id_funcionario;
     }
 
@@ -483,9 +375,6 @@ public class Cliente {
     }
 
     public String getAvisar_com_dias() {
-        if (avisar_com_dias.equals("anyType{}")) {
-            avisar_com_dias = "";
-        }
         return avisar_com_dias;
     }
 
@@ -494,9 +383,6 @@ public class Cliente {
     }
 
     public String getObservacoes() {
-        if (observacoes.equals("anyType{}")) {
-            observacoes = "";
-        }
         return observacoes;
     }
 
@@ -505,9 +391,6 @@ public class Cliente {
     }
 
     public String getPadrao_id_c_custo() {
-        if (padrao_id_c_custo.equals("anyType{}")) {
-            padrao_id_c_custo = "";
-        }
         return padrao_id_c_custo;
     }
 
@@ -516,9 +399,6 @@ public class Cliente {
     }
 
     public String getPadrao_id_c_gerenciadora() {
-        if (padrao_id_c_gerenciadora.equals("anyType{}")) {
-            padrao_id_c_gerenciadora = "";
-        }
         return padrao_id_c_gerenciadora;
     }
 
@@ -527,9 +407,6 @@ public class Cliente {
     }
 
     public String getPadrao_id_c_analitica() {
-        if (padrao_id_c_analitica.equals("anyType{}")) {
-            padrao_id_c_analitica = "";
-        }
         return padrao_id_c_analitica;
     }
 
@@ -538,9 +415,6 @@ public class Cliente {
     }
 
     public String getCob_endereco() {
-        if (cob_endereco.equals("anyType{}")) {
-            cob_endereco = "";
-        }
         return cob_endereco;
     }
 
@@ -549,9 +423,6 @@ public class Cliente {
     }
 
     public String getCob_endereco_bairro() {
-        if (cob_endereco_bairro.equals("anyType{}")) {
-            cob_endereco_bairro = "";
-        }
         return cob_endereco_bairro;
     }
 
@@ -560,9 +431,6 @@ public class Cliente {
     }
 
     public String getCob_endereco_numero() {
-        if (cob_endereco_numero.equals("anyType{}")) {
-            cob_endereco_numero = "";
-        }
         return cob_endereco_numero;
     }
 
@@ -571,9 +439,6 @@ public class Cliente {
     }
 
     public String getCob_endereco_complemento() {
-        if (cob_endereco_complemento.equals("anyType{}")) {
-            cob_endereco_complemento = "";
-        }
         return cob_endereco_complemento;
     }
 
@@ -582,9 +447,6 @@ public class Cliente {
     }
 
     public String getCob_endereco_uf() {
-        if (cob_endereco_uf.equals("anyType{}")) {
-            cob_endereco_uf = "";
-        }
         return cob_endereco_uf;
     }
 
@@ -593,9 +455,6 @@ public class Cliente {
     }
 
     public String getCob_endereco_id_municipio() {
-        if (cob_endereco_id_municipio.equals("anyType{}")) {
-            cob_endereco_id_municipio = "";
-        }
         return cob_endereco_id_municipio;
     }
 
@@ -604,9 +463,6 @@ public class Cliente {
     }
 
     public String getCob_endereco_cep() {
-        if (cob_endereco_cep.equals("anyType{}")) {
-            cob_endereco_cep = "";
-        }
         return cob_endereco_cep;
     }
 
@@ -615,9 +471,6 @@ public class Cliente {
     }
 
     public String getCob_endereco_id_pais() {
-        if (cob_endereco_id_pais.equals("anyType{}")) {
-            cob_endereco_id_pais = "";
-        }
         return cob_endereco_id_pais;
     }
 
@@ -626,9 +479,6 @@ public class Cliente {
     }
 
     public String getLimite_credito() {
-        if (limite_credito.equals("anyType{}")) {
-            limite_credito = "";
-        }
         return limite_credito;
     }
 
@@ -637,9 +487,6 @@ public class Cliente {
     }
 
     public String getLimite_disponivel() {
-        if (limite_disponivel.equals("anyType{}")) {
-            limite_disponivel = "";
-        }
         return limite_disponivel;
     }
 
@@ -648,9 +495,6 @@ public class Cliente {
     }
 
     public String getPessoa_contato_financeiro() {
-        if (pessoa_contato_financeiro.equals("anyType{}")) {
-            pessoa_contato_financeiro = "";
-        }
         return pessoa_contato_financeiro;
     }
 
@@ -659,9 +503,6 @@ public class Cliente {
     }
 
     public String getEmail_financeiro() {
-        if (email_financeiro.equals("anyType{}")) {
-            email_financeiro = "";
-        }
         return email_financeiro;
     }
 
@@ -670,9 +511,6 @@ public class Cliente {
     }
 
     public String getObservacoes_faturamento() {
-        if (observacoes_faturamento.equals("anyType{}")) {
-            observacoes_faturamento = "";
-        }
         return observacoes_faturamento;
     }
 
@@ -681,9 +519,6 @@ public class Cliente {
     }
 
     public String getObservacoes_financeiro() {
-        if (observacoes_financeiro.equals("anyType{}")) {
-            observacoes_financeiro = "";
-        }
         return observacoes_financeiro;
     }
 
@@ -692,9 +527,6 @@ public class Cliente {
     }
 
     public String getTelefone_dois() {
-        if (telefone_dois.equals("anyType{}")) {
-            telefone_dois = "";
-        }
         return telefone_dois;
     }
 
@@ -703,9 +535,6 @@ public class Cliente {
     }
 
     public String getTelefone_tres() {
-        if (telefone_tres.equals("anyType{}")) {
-            telefone_tres = "";
-        }
         return telefone_tres;
     }
 
@@ -714,9 +543,6 @@ public class Cliente {
     }
 
     public String getPessoa_contato_principal() {
-        if (pessoa_contato_principal.equals("anyType{}")) {
-            pessoa_contato_principal = "";
-        }
         return pessoa_contato_principal;
     }
 
@@ -725,9 +551,6 @@ public class Cliente {
     }
 
     public String getInd_da_ie_destinatario() {
-        if (ind_da_ie_destinatario.equals("anyType{}")) {
-            ind_da_ie_destinatario = "";
-        }
         return ind_da_ie_destinatario;
     }
 
@@ -736,9 +559,6 @@ public class Cliente {
     }
 
     public String getComissao_percentual() {
-        if (comissao_percentual.equals("anyType{}")) {
-            comissao_percentual = "";
-        }
         return comissao_percentual;
     }
 
@@ -747,9 +567,6 @@ public class Cliente {
     }
 
     public String getId_setor() {
-        if (id_setor.equals("anyType{}")) {
-            id_setor = "";
-        }
         return id_setor;
     }
 
@@ -758,9 +575,6 @@ public class Cliente {
     }
 
     public String getNfe_email_enviar() {
-        if (nfe_email_enviar.equals("anyType{}")) {
-            nfe_email_enviar = "";
-        }
         return nfe_email_enviar;
     }
 
@@ -769,9 +583,6 @@ public class Cliente {
     }
 
     public String getNfe_email_um() {
-        if (nfe_email_um.equals("anyType{}")) {
-            nfe_email_um = "";
-        }
         return nfe_email_um;
     }
 
@@ -780,9 +591,6 @@ public class Cliente {
     }
 
     public String getNfe_email_dois() {
-        if (nfe_email_dois.equals("anyType{}")) {
-            nfe_email_dois = "";
-        }
         return nfe_email_dois;
     }
 
@@ -791,9 +599,6 @@ public class Cliente {
     }
 
     public String getNfe_email_tres() {
-        if (nfe_email_tres.equals("anyType{}")) {
-            nfe_email_tres = "";
-        }
         return nfe_email_tres;
     }
 
@@ -802,9 +607,6 @@ public class Cliente {
     }
 
     public String getNfe_email_quatro() {
-        if (nfe_email_quatro.equals("anyType{}")) {
-            nfe_email_quatro = "";
-        }
         return nfe_email_quatro;
     }
 
@@ -813,9 +615,6 @@ public class Cliente {
     }
 
     public String getNfe_email_cinco() {
-        if (nfe_email_cinco.equals("anyType{}")) {
-            nfe_email_cinco = "";
-        }
         return nfe_email_cinco;
     }
 
@@ -824,9 +623,6 @@ public class Cliente {
     }
 
     public String getId_grupo_vendedor() {
-        if (id_grupo_vendedor.equals("anyType{}")) {
-            id_grupo_vendedor = "";
-        }
         return id_grupo_vendedor;
     }
 
@@ -835,9 +631,6 @@ public class Cliente {
     }
 
     public String getVendedor_usa_portal() {
-        if (vendedor_usa_portal.equals("anyType{}")) {
-            vendedor_usa_portal = "";
-        }
         return vendedor_usa_portal;
     }
 
@@ -846,9 +639,6 @@ public class Cliente {
     }
 
     public String getVendedor_id_user_portal() {
-        if (vendedor_id_user_portal.equals("anyType{}")) {
-            vendedor_id_user_portal = "";
-        }
         return vendedor_id_user_portal;
     }
 
@@ -857,9 +647,6 @@ public class Cliente {
     }
 
     public String getF_tarifa() {
-        if (f_tarifa.equals("anyType{}")) {
-            f_tarifa = "";
-        }
         return f_tarifa;
     }
 
@@ -868,9 +655,6 @@ public class Cliente {
     }
 
     public String getF_id_tarifa() {
-        if (f_id_tarifa.equals("anyType{}")) {
-            f_id_tarifa = "";
-        }
         return f_id_tarifa;
     }
 
@@ -879,9 +663,6 @@ public class Cliente {
     }
 
     public String getF_produtor() {
-        if (f_produtor.equals("anyType{}")) {
-            f_produtor = "";
-        }
         return f_produtor;
     }
 
@@ -890,9 +671,6 @@ public class Cliente {
     }
 
     public String getRg_numero() {
-        if (rg_numero.equals("anyType{}")) {
-            rg_numero = "";
-        }
         return rg_numero;
     }
 
@@ -901,9 +679,6 @@ public class Cliente {
     }
 
     public String getRg_ssp() {
-        if (rg_ssp.equals("anyType{}")) {
-            rg_ssp = "";
-        }
         return rg_ssp;
     }
 
@@ -912,9 +687,6 @@ public class Cliente {
     }
 
     public String getConta_contabil() {
-        if (conta_contabil.equals("anyType{}")) {
-            conta_contabil = "";
-        }
         return conta_contabil;
     }
 
@@ -923,9 +695,6 @@ public class Cliente {
     }
 
     public String getMotorista() {
-        if (motorista.equals("anyType{}")) {
-            motorista = "";
-        }
         return motorista;
     }
 
@@ -934,9 +703,6 @@ public class Cliente {
     }
 
     public String getF_id_motorista() {
-        if (f_id_motorista.equals("anyType{}")) {
-            f_id_motorista = "";
-        }
         return f_id_motorista;
     }
 
@@ -945,9 +711,6 @@ public class Cliente {
     }
 
     public String getHabilitacao_numero() {
-        if (habilitacao_numero.equals("anyType{}")) {
-            habilitacao_numero = "";
-        }
         return habilitacao_numero;
     }
 
@@ -956,9 +719,6 @@ public class Cliente {
     }
 
     public String getHabilitacao_categoria() {
-        if (habilitacao_categoria.equals("anyType{}")) {
-            habilitacao_categoria = "";
-        }
         return habilitacao_categoria;
     }
 
@@ -967,9 +727,6 @@ public class Cliente {
     }
 
     public String getHabilitacao_vencimento() {
-        if (habilitacao_vencimento.equals("anyType{}")) {
-            habilitacao_vencimento = "";
-        }
         return habilitacao_vencimento;
     }
 
@@ -978,9 +735,6 @@ public class Cliente {
     }
 
     public String getMot_id_transportadora() {
-        if (mot_id_transportadora.equals("anyType{}")) {
-            mot_id_transportadora = "";
-        }
         return mot_id_transportadora;
     }
 
@@ -989,14 +743,16 @@ public class Cliente {
     }
 
     public String getLocal_cadastro() {
-        if (local_cadastro.equals("anyType{}")) {
-            local_cadastro = "";
-        }
         return local_cadastro;
     }
 
     public void setLocal_cadastro(String local_cadastro) {
         this.local_cadastro = local_cadastro;
+    }
+
+    @Override
+    public String toString() {
+        return nome_cadastro;
     }
 }
 

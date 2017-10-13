@@ -13,19 +13,21 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
 import com.example.rcksuporte05.rcksistemas.R;
+import com.example.rcksuporte05.rcksistemas.classes.Municipios;
+import com.example.rcksuporte05.rcksistemas.classes.Paises;
 import com.example.rcksuporte05.rcksistemas.interfaces.CadastroClienteMain;
 import com.example.rcksuporte05.rcksistemas.interfaces.HistoricoFinanceiroMain;
 
 public class CadastroCliente3 extends Fragment implements View.OnClickListener {
     private Spinner spPaisCobranca;
-    private ArrayAdapter paisAdapter;
+    private ArrayAdapter<Paises> paisAdapter;
     private Spinner spUfCobranca;
-    private ArrayAdapter ufCobrancaAdapter;
+    private ArrayAdapter<String> ufCobrancaAdapter;
     private String[] uf = {"AC", "AL", "AM", "AP", "BA", "CE", "DF", "ES", "EX", "GO", "MA", "MG", "MS", "MT", "PA", "PB", "PE", "PI", "PR", "RJ", "RN", "RO", "RR", "RS", "SC", "SE", "SP", "TO"};
     private Spinner spMunicipioCobranca;
-    private ArrayAdapter municipioAdapter;
-    private Bundle bundle = new Bundle();
+    private ArrayAdapter<Municipios> municipioAdapter;
     private EditText edtLimiteCredito;
     private EditText edtContatoFinanceiro;
     private EditText edtEmailFinanceiro;
@@ -35,24 +37,15 @@ public class CadastroCliente3 extends Fragment implements View.OnClickListener {
     private EditText edtCepCobranca;
     private Button btnHistoricoFinanceiro;
     private TextView txtHistoricoFinanceiro;
-    private String[] cliente;
-    private String[] municipios;
-    private String[] idMunicipios;
-    private String[] paises;
-    private String[] idPaises;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_cadastro_cliente3, container, false);
-        bundle = getArguments();
 
-        municipios = bundle.getStringArray("municipios");
-        idMunicipios = bundle.getStringArray("idMunicipios");
-        paises = bundle.getStringArray("paises");
-        idPaises = bundle.getStringArray("idPaises");
+        ClienteHelper clienteHelper = new ClienteHelper(getContext());
 
         spPaisCobranca = (Spinner) view.findViewById(R.id.spPaisCobranca);
-        paisAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_activated_1, paises);
+        paisAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_activated_1, clienteHelper.getListaPaises());
         spPaisCobranca.setAdapter(paisAdapter);
 
         spUfCobranca = (Spinner) view.findViewById(R.id.spUfCobranca);
@@ -60,7 +53,7 @@ public class CadastroCliente3 extends Fragment implements View.OnClickListener {
         spUfCobranca.setAdapter(ufCobrancaAdapter);
 
         spMunicipioCobranca = (Spinner) view.findViewById(R.id.spMunicipioCobranca);
-        municipioAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_activated_1, municipios);
+        municipioAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_activated_1, clienteHelper.getListaMunicipios());
         spMunicipioCobranca.setAdapter(municipioAdapter);
 
         edtLimiteCredito = (EditText) view.findViewById(R.id.edtLimiteCredito);
@@ -77,8 +70,7 @@ public class CadastroCliente3 extends Fragment implements View.OnClickListener {
         txtHistoricoFinanceiro = (TextView) view.findViewById(R.id.txtHistoricoFinanceiro);
         txtHistoricoFinanceiro.setOnClickListener(this);
 
-        if (bundle.getInt("cliente") > 0) {
-            cliente = bundle.getStringArray("clienteListar");
+        if (ClienteHelper.getCliente() != null) {
 
             edtLimiteCredito.setFocusable(false);
             edtContatoFinanceiro.setFocusable(false);
@@ -91,36 +83,36 @@ public class CadastroCliente3 extends Fragment implements View.OnClickListener {
             spPaisCobranca.setEnabled(false);
             spUfCobranca.setEnabled(false);
 
-            if (cliente[49].equals(" ")) {
-                edtLimiteCredito.setText(cliente[49]);
+            if (ClienteHelper.getCliente().getLimite_credito().equals(" ")) {
+                edtLimiteCredito.setText(ClienteHelper.getCliente().getLimite_credito());
             } else {
-                Float limiteCredito = Float.parseFloat(cliente[49]);
+                Float limiteCredito = Float.parseFloat(ClienteHelper.getCliente().getLimite_credito());
                 edtLimiteCredito.setText("R$" + String.format("%.2f", limiteCredito));
             }
-            edtContatoFinanceiro.setText(cliente[51]);
-            edtEmailFinanceiro.setText(cliente[52]);
-            edtEnderecoCobranca.setText(cliente[41]);
-            edtNumero.setText(cliente[43]);
-            edtComplemento.setText(cliente[44]);
-            String cep = cliente[47].trim().replaceAll("[^0-9]", "");
+            edtContatoFinanceiro.setText(ClienteHelper.getCliente().getPessoa_contato_financeiro());
+            edtEmailFinanceiro.setText(ClienteHelper.getCliente().getEmail_financeiro());
+            edtEnderecoCobranca.setText(ClienteHelper.getCliente().getCob_endereco());
+            edtNumero.setText(ClienteHelper.getCliente().getCob_endereco_numero());
+            edtComplemento.setText(ClienteHelper.getCliente().getCob_endereco_complemento());
+            String cep = ClienteHelper.getCliente().getCob_endereco_cep().trim().replaceAll("[^0-9]", "");
             if (cep.length() >= 8) {
                 edtCepCobranca.setText(cep.substring(0, 5) + "-" + cep.substring(5));
             } else {
                 edtCepCobranca.setText(cep);
             }
 
-            for (int i = 0; municipios.length > i; i++) {
-                if (idMunicipios[i].equals(cliente[46])) {
+            for (int i = 0; clienteHelper.getListaMunicipios().size() > i; i++) {
+                if (clienteHelper.getListaMunicipios().get(i).getId_municipio().equals(ClienteHelper.getCliente().getCob_endereco_id_municipio())) {
                     spMunicipioCobranca.setSelection(i);
                 }
             }
-            for (int i = 0; paises.length > i; i++) {
-                if (idPaises[i].equals(cliente[48])) {
+            for (int i = 0; clienteHelper.getListaPaises().size() > i; i++) {
+                if (clienteHelper.getListaPaises().get(i).getId_pais().equals(ClienteHelper.getCliente().getCob_endereco_id_pais())) {
                     spPaisCobranca.setSelection(i);
                 }
             }
             for (int i = 0; uf.length > i; i++) {
-                if (uf[i].equals(cliente[45])) {
+                if (uf[i].equals(ClienteHelper.getCliente().getCob_endereco_uf())) {
                     spUfCobranca.setSelection(i);
                 }
             }
@@ -138,10 +130,8 @@ public class CadastroCliente3 extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         if (v == btnHistoricoFinanceiro || v == txtHistoricoFinanceiro) {
-            bundle = getArguments();
-            if (bundle.getInt("cliente") > 0) {
+            if (ClienteHelper.getCliente() != null) {
                 Intent intent = new Intent(getContext(), HistoricoFinanceiroMain.class);
-                intent.putExtra("idCliente", bundle.getInt("cliente"));
                 System.gc();
                 getContext().startActivity(intent);
                 CadastroClienteMain cadastroClienteMain = new CadastroClienteMain();

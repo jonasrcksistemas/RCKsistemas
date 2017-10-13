@@ -6,38 +6,29 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.TextView;
 
+import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 
 public class CadastroCliente5 extends Fragment {
-    private TextView txtobsFat;
     private EditText edtobsFat;
-    private TextView txtObsFinancas;
     private EditText edtObsFinancas;
-    private String[] cliente;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_cadastro_cliente5, container, false);
 
-        txtobsFat = (TextView) view.findViewById(R.id.txtobsFat);
         edtobsFat = (EditText) view.findViewById(R.id.edtobsFat);
-        txtObsFinancas = (TextView) view.findViewById(R.id.txtObsFinancas);
         edtObsFinancas = (EditText) view.findViewById(R.id.edtObsFinancas);
 
-        Bundle bundle = getArguments();
-
-        if (bundle.getInt("cliente") > 0) {
-            cliente = bundle.getStringArray("clienteListar");
+        if (ClienteHelper.getCliente() != null) {
 
             edtobsFat.setFocusable(false);
             edtObsFinancas.setFocusable(false);
 
-            edtobsFat.setText(cliente[53]);
-            edtObsFinancas.setText(cliente[54]);
+            edtobsFat.setText(ClienteHelper.getCliente().getObservacoes_faturamento());
+            edtObsFinancas.setText(ClienteHelper.getCliente().getObservacoes_financeiro());
         }
-        System.gc();
         return view;
     }
 
