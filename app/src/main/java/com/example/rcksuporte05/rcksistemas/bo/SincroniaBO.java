@@ -4,9 +4,10 @@ package com.example.rcksuporte05.rcksistemas.bo;
 import android.app.Activity;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
+import android.support.v7.app.AlertDialog;
 
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.classes.Cliente;
@@ -29,7 +30,7 @@ import com.example.rcksuporte05.rcksistemas.interfaces.MainActivity;
 
 public class SincroniaBO {
 
-    public void sincronizaBanco(Sincronia sincronia, Activity activity, ProgressDialog progress, NotificationCompat.Builder notificacao, NotificationManager mNotificationManager) {
+    public void sincronizaBanco(Sincronia sincronia, Activity activity, final NotificationCompat.Builder notificacao, final NotificationManager mNotificationManager) {
         //controla o progresso da notificação e do progressDialog
         int contadorNotificacaoEProgresso = 0;
 
@@ -47,16 +48,12 @@ public class SincroniaBO {
                 sincronia.getListaUsuario().size() +
                 sincronia.getListaVendedorBonusResumo().size();
 
-        progress.setIndeterminate(false);
-        progress.setMax(maxProgress);
-
         //TODO VERIFICAR CLIENTES POR VENDEDOR
         //Primeiro delete todos os itens da tabela em questao
         db.alterar("DELETE FROM TBL_CADASTRO");
         //insere todos os itens da tabela em questao
         for (Cliente cliente : sincronia.getListaCliente()) {
             notificacao.setProgress(maxProgress, contadorNotificacaoEProgresso, false);
-            progress.setProgress(contadorNotificacaoEProgresso);
 
             db.inserirTBL_CADASTRO(cliente);
 
@@ -70,7 +67,6 @@ public class SincroniaBO {
 
         for (Produto produto : sincronia.getListaProduto()) {
             notificacao.setProgress(maxProgress, contadorNotificacaoEProgresso, false);
-            progress.setProgress(contadorNotificacaoEProgresso);
 
             db.inserirTBL_PRODUTO(produto);
 
@@ -82,7 +78,6 @@ public class SincroniaBO {
 
         for (Paises paises : sincronia.getListaPaises()) {
             notificacao.setProgress(maxProgress, contadorNotificacaoEProgresso, false);
-            progress.setProgress(contadorNotificacaoEProgresso);
 
             db.inserirTBL_PAISES(paises);
 
@@ -92,7 +87,6 @@ public class SincroniaBO {
 
         for (Municipios municipio : sincronia.getListaMunicipios()) {
             notificacao.setProgress(maxProgress, contadorNotificacaoEProgresso, false);
-            progress.setProgress(contadorNotificacaoEProgresso);
 
             db.inserirTBL_MUNICIPIOS(municipio);
 
@@ -104,7 +98,6 @@ public class SincroniaBO {
 
         for (Operacao operacao : sincronia.getListaOperacao()) {
             notificacao.setProgress(maxProgress, contadorNotificacaoEProgresso, false);
-            progress.setProgress(contadorNotificacaoEProgresso);
 
             db.inserirTBL_OPERACAO_ESTOQUE(operacao);
 
@@ -116,7 +109,6 @@ public class SincroniaBO {
 
         for (TabelaPreco tabelaPreco : sincronia.getListaTabelaPreco()) {
             notificacao.setProgress(maxProgress, contadorNotificacaoEProgresso, false);
-            progress.setProgress(contadorNotificacaoEProgresso);
 
             db.inserirTBL_TABELA_PRECO_CAB(tabelaPreco);
 
@@ -128,7 +120,6 @@ public class SincroniaBO {
 
         for (TabelaPrecoItem tabelaPrecoItem : sincronia.getListaTabelaPrecoItem()) {
             notificacao.setProgress(maxProgress, contadorNotificacaoEProgresso, false);
-            progress.setProgress(contadorNotificacaoEProgresso);
 
             db.inserirTBL_TABELA_PRECO_ITENS(tabelaPrecoItem);
 
@@ -140,7 +131,6 @@ public class SincroniaBO {
 
         for (CondicoesPagamento condicoesPagamento : sincronia.getListaCondicoesPagamento()) {
             notificacao.setProgress(maxProgress, contadorNotificacaoEProgresso, false);
-            progress.setProgress(contadorNotificacaoEProgresso);
 
             db.inserirTBL_CONDICOES_PAG_CAB(condicoesPagamento);
 
@@ -153,7 +143,6 @@ public class SincroniaBO {
 
         for (VendedorBonusResumo vendedorBonusResumo : sincronia.getListaVendedorBonusResumo()) {
             notificacao.setProgress(maxProgress, contadorNotificacaoEProgresso, false);
-            progress.setProgress(contadorNotificacaoEProgresso);
 
             db.inserirTBL_VENDEDOR_BONUS_RESUMO(vendedorBonusResumo);
 
@@ -173,7 +162,19 @@ public class SincroniaBO {
                 .setContentIntent(pendingIntent);
         mNotificationManager.notify(0, notificacao.build());
 
-        progress.dismiss();
+        System.gc();
 
+
+        AlertDialog.Builder alert = new AlertDialog.Builder(activity);
+        alert.setMessage("Sincronia concluida com sucesso");
+        alert.setTitle("Atenção");
+        alert.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                mNotificationManager.cancel(0);
+                System.gc();
+            }
+        });
+        alert.show();
     }
 }

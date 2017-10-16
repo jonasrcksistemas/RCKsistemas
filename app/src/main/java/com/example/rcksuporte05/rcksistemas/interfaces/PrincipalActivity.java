@@ -51,8 +51,6 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
     private TextView txtProduto;
     private TextView txtSincroniza;
     private int aperta = 0;
-    private int id_usuario;
-    private int id_vendedor;
     private Toolbar tb_principal;
     private ImageView ivInternet;
     private SincroniaBO sincroniaBO = new SincroniaBO();
@@ -89,10 +87,6 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
         tb_principal.setLogo(R.mipmap.ic_launcher);
 
         setSupportActionBar(tb_principal);
-
-        id_usuario = Integer.parseInt(UsuarioHelper.getUsuario().getId_usuario());
-        id_vendedor = Integer.parseInt(UsuarioHelper.getUsuario().getId_quando_vendedor());
-
 
     }
 
@@ -210,12 +204,10 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.notify(0, notificacao.build());
 
-        final ProgressDialog progress = new ProgressDialog(PrincipalActivity.this);
-        progress.setMessage("Aguarde");
-        progress.setTitle("Sincronia em andamento");
+        progress = new ProgressDialog(PrincipalActivity.this);
+        progress.setMessage("Sincronia em execução");
+        progress.setTitle("Aguarde");
         progress.setCancelable(false);
-        progress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        progress.setIndeterminate(true);
         progress.show();
 
         final Rotas apiRotas = Api.buildRetrofit();
@@ -226,12 +218,15 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onResponse(Call<Sincronia> call, Response<Sincronia> response) {
                 sincronia = response.body();
-                sincroniaBO.sincronizaBanco(sincronia, PrincipalActivity.this, progress, notificacao, mNotificationManager);
+                sincroniaBO.sincronizaBanco(sincronia, PrincipalActivity.this, notificacao, mNotificationManager);
+                progress.dismiss();
             }
 
             @Override
             public void onFailure(Call<Sincronia> call, Throwable t) {
                 System.out.println(t.getMessage());
+                ivInternet.setVisibility(View.VISIBLE);
+                progress.dismiss();
             }
         });
 

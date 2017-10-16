@@ -206,7 +206,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     Toast.makeText(MainActivity.this, "Houve um erro ao salvar os usuarios", Toast.LENGTH_LONG).show();
                 progress.dismiss();
                 edtLogin.requestFocus();
-
             }
 
             @Override
