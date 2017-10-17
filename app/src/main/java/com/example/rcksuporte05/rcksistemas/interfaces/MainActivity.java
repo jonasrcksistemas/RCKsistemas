@@ -39,7 +39,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private Bundle bundleUsuario;
     private MenuItem sincroniza;
     private Toolbar tb_main;
-    private Thread a = new Thread();
     private ProgressDialog progress;
     private List<Usuario> usuarioList = new ArrayList<>();
     private UsuarioBO usuarioBO = new UsuarioBO();

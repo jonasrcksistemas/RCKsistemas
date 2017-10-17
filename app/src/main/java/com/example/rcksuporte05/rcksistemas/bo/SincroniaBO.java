@@ -4,6 +4,7 @@ package com.example.rcksuporte05.rcksistemas.bo;
 import android.app.Activity;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
@@ -30,16 +31,15 @@ import com.example.rcksuporte05.rcksistemas.interfaces.MainActivity;
 
 public class SincroniaBO {
 
-    public void sincronizaBanco(Sincronia sincronia, Activity activity, final NotificationCompat.Builder notificacao, final NotificationManager mNotificationManager) {
+    public void sincronizaBanco(Sincronia sincronia, Activity activity, final NotificationCompat.Builder notificacao, final NotificationManager mNotificationManager, final ProgressDialog progress) {
         //controla o progresso da notificação e do progressDialog
         int contadorNotificacaoEProgresso = 0;
 
         DBHelper db = new DBHelper(activity);
 
 
-        int maxProgress = sincronia.getListaCliente().size() +
+        final int maxProgress = sincronia.getListaCliente().size() +
                 sincronia.getListaCondicoesPagamento().size() +
-//                sincronia.getListaformaPagamento().size() +
                 sincronia.getListaMunicipios().size() +
                 sincronia.getListaOperacao().size() +
                 sincronia.getListaPaises().size() +
@@ -48,7 +48,14 @@ public class SincroniaBO {
                 sincronia.getListaUsuario().size() +
                 sincronia.getListaVendedorBonusResumo().size();
 
-        //TODO VERIFICAR CLIENTES POR VENDEDOR
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                progress.setIndeterminate(false);
+                progress.setMax(maxProgress);
+            }
+        });
+
         //Primeiro delete todos os itens da tabela em questao
         db.alterar("DELETE FROM TBL_CADASTRO");
         //insere todos os itens da tabela em questao
@@ -60,6 +67,14 @@ public class SincroniaBO {
             //incrementa o progresso da notificao
             //ação e do progressDialog
             contadorNotificacaoEProgresso++;
+            final int finalContadorNotificacaoEProgresso = contadorNotificacaoEProgresso;
+            //SubThread necessária para manipulação de componentes da tela
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    progress.setProgress(finalContadorNotificacaoEProgresso);
+                }
+            });
             mNotificationManager.notify(0, notificacao.build());
         }
 
@@ -71,6 +86,13 @@ public class SincroniaBO {
             db.inserirTBL_PRODUTO(produto);
 
             contadorNotificacaoEProgresso++;
+            final int finalContadorNotificacaoEProgresso = contadorNotificacaoEProgresso;
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    progress.setProgress(finalContadorNotificacaoEProgresso);
+                }
+            });
             mNotificationManager.notify(0, notificacao.build());
         }
 
@@ -82,6 +104,13 @@ public class SincroniaBO {
             db.inserirTBL_PAISES(paises);
 
             contadorNotificacaoEProgresso++;
+            final int finalContadorNotificacaoEProgresso = contadorNotificacaoEProgresso;
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    progress.setProgress(finalContadorNotificacaoEProgresso);
+                }
+            });
             mNotificationManager.notify(0, notificacao.build());
         }
 
@@ -91,6 +120,13 @@ public class SincroniaBO {
             db.inserirTBL_MUNICIPIOS(municipio);
 
             contadorNotificacaoEProgresso++;
+            final int finalContadorNotificacaoEProgresso = contadorNotificacaoEProgresso;
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    progress.setProgress(finalContadorNotificacaoEProgresso);
+                }
+            });
             mNotificationManager.notify(0, notificacao.build());
         }
 
@@ -102,6 +138,13 @@ public class SincroniaBO {
             db.inserirTBL_OPERACAO_ESTOQUE(operacao);
 
             contadorNotificacaoEProgresso++;
+            final int finalContadorNotificacaoEProgresso = contadorNotificacaoEProgresso;
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    progress.setProgress(finalContadorNotificacaoEProgresso);
+                }
+            });
             mNotificationManager.notify(0, notificacao.build());
         }
 
@@ -113,6 +156,13 @@ public class SincroniaBO {
             db.inserirTBL_TABELA_PRECO_CAB(tabelaPreco);
 
             contadorNotificacaoEProgresso++;
+            final int finalContadorNotificacaoEProgresso = contadorNotificacaoEProgresso;
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    progress.setProgress(finalContadorNotificacaoEProgresso);
+                }
+            });
             mNotificationManager.notify(0, notificacao.build());
         }
 
@@ -124,6 +174,13 @@ public class SincroniaBO {
             db.inserirTBL_TABELA_PRECO_ITENS(tabelaPrecoItem);
 
             contadorNotificacaoEProgresso++;
+            final int finalContadorNotificacaoEProgresso = contadorNotificacaoEProgresso;
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    progress.setProgress(finalContadorNotificacaoEProgresso);
+                }
+            });
             mNotificationManager.notify(0, notificacao.build());
         }
 
@@ -135,6 +192,13 @@ public class SincroniaBO {
             db.inserirTBL_CONDICOES_PAG_CAB(condicoesPagamento);
 
             contadorNotificacaoEProgresso++;
+            final int finalContadorNotificacaoEProgresso = contadorNotificacaoEProgresso;
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    progress.setProgress(finalContadorNotificacaoEProgresso);
+                }
+            });
             mNotificationManager.notify(0, notificacao.build());
         }
 
@@ -147,6 +211,13 @@ public class SincroniaBO {
             db.inserirTBL_VENDEDOR_BONUS_RESUMO(vendedorBonusResumo);
 
             contadorNotificacaoEProgresso++;
+            final int finalContadorNotificacaoEProgresso = contadorNotificacaoEProgresso;
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    progress.setProgress(finalContadorNotificacaoEProgresso);
+                }
+            });
             mNotificationManager.notify(0, notificacao.build());
         }
 
@@ -165,7 +236,7 @@ public class SincroniaBO {
         System.gc();
 
 
-        AlertDialog.Builder alert = new AlertDialog.Builder(activity);
+        final AlertDialog.Builder alert = new AlertDialog.Builder(activity);
         alert.setMessage("Sincronia concluida com sucesso");
         alert.setTitle("Atenção");
         alert.setNeutralButton("OK", new DialogInterface.OnClickListener() {
@@ -175,6 +246,13 @@ public class SincroniaBO {
                 System.gc();
             }
         });
-        alert.show();
+        activity.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                progress.dismiss();
+                alert.show();
+            }
+        });
+
     }
 }

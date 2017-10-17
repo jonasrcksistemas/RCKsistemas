@@ -28,6 +28,7 @@ import com.example.rcksuporte05.rcksistemas.classes.Sincronia;
 import com.example.rcksuporte05.rcksistemas.classes.Usuario;
 import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
@@ -204,33 +205,29 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         mNotificationManager.notify(0, notificacao.build());
 
-        progress = new ProgressDialog(PrincipalActivity.this);
+        final ProgressDialog progress = new ProgressDialog(PrincipalActivity.this);
         progress.setMessage("Sincronia em execução");
         progress.setTitle("Aguarde");
+        progress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        progress.setIndeterminate(true);
         progress.setCancelable(false);
         progress.show();
 
         final Rotas apiRotas = Api.buildRetrofit();
 
-        Call<Sincronia> call = apiRotas.sincroniaApi();
-
-        call.enqueue(new Callback<Sincronia>() {
+        Thread a = new Thread(new Runnable() {
             @Override
-            public void onResponse(Call<Sincronia> call, Response<Sincronia> response) {
-                sincronia = response.body();
-                sincroniaBO.sincronizaBanco(sincronia, PrincipalActivity.this, notificacao, mNotificationManager);
-                progress.dismiss();
-            }
-
-            @Override
-            public void onFailure(Call<Sincronia> call, Throwable t) {
-                System.out.println(t.getMessage());
-                ivInternet.setVisibility(View.VISIBLE);
-                progress.dismiss();
+            public void run() {
+                Call<Sincronia> call = apiRotas.sincroniaApi();
+                try {
+                    sincronia = call.execute().body();
+                    sincroniaBO.sincronizaBanco(sincronia, PrincipalActivity.this, notificacao, mNotificationManager, progress);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
             }
         });
-
-
+        a.start();
     }
 
 

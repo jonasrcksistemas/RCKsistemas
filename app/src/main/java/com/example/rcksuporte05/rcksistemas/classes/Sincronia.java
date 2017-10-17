@@ -9,7 +9,6 @@ import java.util.List;
 public class Sincronia {
     private List<Cliente> listaCliente;
     private List<CondicoesPagamento> listaCondicoesPagamento;
-    private List<FormaPagamento> listaformaPagamento;
     private List<Municipios> listaMunicipios;
     private List<Operacao> listaOperacao;
     private List<Paises> listaPaises;
@@ -33,14 +32,6 @@ public class Sincronia {
 
     public void setListaCondicoesPagamento(List<CondicoesPagamento> listaCondicoesPagamento) {
         this.listaCondicoesPagamento = listaCondicoesPagamento;
-    }
-
-    public List<FormaPagamento> getListaformaPagamento() {
-        return listaformaPagamento;
-    }
-
-    public void setListaformaPagamento(List<FormaPagamento> listaformaPagamento) {
-        this.listaformaPagamento = listaformaPagamento;
     }
 
     public List<Municipios> getListaMunicipios() {
