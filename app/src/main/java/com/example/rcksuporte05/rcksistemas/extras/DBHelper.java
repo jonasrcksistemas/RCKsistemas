@@ -25,7 +25,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private final static String NomeBanco = "Banco.db";
 
     public DBHelper(Context context) {
-        super(context, NomeBanco, null, 2);
+        super(context, NomeBanco, null, 3);
     }
 
     @Override
@@ -119,7 +119,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 " COB_ENDERECO_UF VARCHAR(2)," +
                 " COB_ENDERECO_ID_MUNICIPIO VARCHAR(60)," +
                 " COB_ENDERECO_CEP VARCHAR(8)," +
-                " NOME_PAIS_COB INTEGER," +
+                " NOME_PAIS_COB ," +
                 " LIMITE_CREDITO DECIMAL(12, 2)," +
                 " LIMITE_DISPONIVEL DECIMAL(12, 2)," +
                 " PESSOA_CONTATO_FINANCEIRO VARCHAR(80)," +
@@ -361,7 +361,99 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
+        if (newVersion > oldVersion) {
+            try {
+                db.execSQL("DROP TABLE TBL_MUNICIPIOS;");
+                db.execSQL("DROP TABLE TBL_PAISES;");
+                db.execSQL("DROP TABLE TBL_CADASTRO;");
+                db.execSQL("CREATE TABLE IF NOT EXISTS TBL_CADASTRO " +
+                        "(ATIVO VARCHAR(1) DEFAULT 'S'  NOT NULL ," +
+                        " ID_EMPRESA INTEGER NOT NULL," +
+                        " ID_CADASTRO INTEGER PRIMARY KEY," +
+                        " PESSOA_F_J VARCHAR(1)," +
+                        " DATA_ANIVERSARIO DATE," +
+                        " NOME_CADASTRO VARCHAR(60)," +
+                        " NOME_FANTASIA VARCHAR(60)," +
+                        " CPF_CNPJ VARCHAR(14)," +
+                        " INSCRI_ESTADUAL VARCHAR(20)," +
+                        " INSCRI_MUNICIPAL VARCHAR(20)," +
+                        " ENDERECO VARCHAR(60)," +
+                        " ENDERECO_BAIRRO VARCHAR(60)," +
+                        " ENDERECO_NUMERO VARCHAR(20)," +
+                        " ENDERECO_COMPLEMENTO VARCHAR(20)," +
+                        " ENDERECO_UF CHAR(2) NOT NULL," +
+                        " ENDERECO_ID_MUNICIPIO VARCHAR(50)," +
+                        " ENDERECO_CEP VARCHAR(8)," +
+                        " USUARIO_ID INTEGER," +
+                        " USUARIO_NOME VARCHAR(60)," +
+                        " USUARIO_DATA TIMESTAMP," +
+                        " F_CLIENTE VARCHAR(1) DEFAULT 'N'  NOT NULL," +
+                        " F_FORNECEDOR VARCHAR(1) DEFAULT 'N'  NOT NULL," +
+                        " F_FUNCIONARIO VARCHAR(1) DEFAULT 'N'  NOT NULL," +
+                        " F_VENDEDOR VARCHAR(1) DEFAULT 'N'  NOT NULL," +
+                        " F_TRANSPORTADOR VARCHAR(1) DEFAULT 'N'  NOT NULL," +
+                        " DATA_ULTIMA_COMPRA DATE," +
+                        " NOME_VENDEDOR VARCHAR(60)," +
+                        " F_ID_CLIENTE INTEGER," +
+                        " ID_ENTIDADE INTEGER NOT NULL," +
+                        " F_ID_FORNECEDOR INTEGER," +
+                        " F_ID_VENDEDOR SMALLINT," +
+                        " F_ID_TRANSPORTADOR INTEGER," +
+                        " TELEFONE_PRINCIPAL VARCHAR(20)," +
+                        " EMAIL_PRINCIPAL VARCHAR(100)," +
+                        " NOME_PAIS VARCHAR(60) ," +
+                        " F_ID_FUNCIONARIO INTEGER," +
+                        " AVISAR_COM_DIAS INTEGER DEFAULT 0 ," +
+                        " OBSERVACOES BLOB," +
+                        " PADRAO_ID_C_CUSTO INTEGER," +
+                        " PADRAO_ID_C_GERENCIADORA INTEGER," +
+                        " PADRAO_ID_C_ANALITICA INTEGER," +
+                        " COB_ENDERECO VARCHAR(60)," +
+                        " COB_ENDERECO_BAIRRO VARCHAR(60)," +
+                        " COB_ENDERECO_NUMERO VARCHAR(20)," +
+                        " COB_ENDERECO_COMPLEMENTO VARCHAR(20)," +
+                        " COB_ENDERECO_UF VARCHAR(2)," +
+                        " COB_ENDERECO_ID_MUNICIPIO VARCHAR(60)," +
+                        " COB_ENDERECO_CEP VARCHAR(8)," +
+                        " NOME_PAIS_COB ," +
+                        " LIMITE_CREDITO DECIMAL(12, 2)," +
+                        " LIMITE_DISPONIVEL DECIMAL(12, 2)," +
+                        " PESSOA_CONTATO_FINANCEIRO VARCHAR(80)," +
+                        " EMAIL_FINANCEIRO VARCHAR(80)," +
+                        " OBSERVACOES_FATURAMENTO VARCHAR(300)," +
+                        " OBSERVACOES_FINANCEIRO VARCHAR(300)," +
+                        " TELEFONE_DOIS VARCHAR(20)," +
+                        " TELEFONE_TRES VARCHAR(20)," +
+                        " PESSOA_CONTATO_PRINCIPAL VARCHAR(80)," +
+                        " IND_DA_IE_DESTINATARIO INTEGER," +
+                        " COMISSAO_PERCENTUAL DECIMAL(12, 4)," +
+                        " ID_SETOR INTEGER," +
+                        " NFE_EMAIL_ENVIAR VARCHAR(1)," +
+                        " NFE_EMAIL_UM VARCHAR(60)," +
+                        " NFE_EMAIL_DOIS VARCHAR(60)," +
+                        " NFE_EMAIL_TRES VARCHAR(60)," +
+                        " NFE_EMAIL_QUATRO VARCHAR(60)," +
+                        " NFE_EMAIL_CINCO VARCHAR(60)," +
+                        " ID_GRUPO_VENDEDOR INTEGER," +
+                        " VENDEDOR_USA_PORTAL VARCHAR(1)," +
+                        " VENDEDOR_ID_USER_PORTAL INTEGER," +
+                        " F_TARIFA VARCHAR(1)," +
+                        " F_ID_TARIFA INTEGER," +
+                        " F_PRODUTOR VARCHAR(1)," +
+                        " RG_NUMERO VARCHAR(30)," +
+                        " RG_SSP VARCHAR(10)," +
+                        " CONTA_CONTABIL VARCHAR(15)," +
+                        " MOTORISTA VARCHAR(1)," +
+                        " F_ID_MOTORISTA INTEGER," +
+                        " HABILITACAO_NUMERO VARCHAR(20)," +
+                        " HABILITACAO_CATEGORIA VARCHAR(10)," +
+                        " HABILITACAO_VENCIMENTO DATE," +
+                        " MOT_ID_TRANSPORTADORA INTEGER," +
+                        " LOCAL_CADASTRO VARCHAR(20));");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public String pegaDataAtual() {
