@@ -233,7 +233,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
-                android:layout_below="@+id/spVendedor"
+                android:layout_below="@+id/edtVendedor"
                 android:layout_marginTop="12dp"
                 android:text="PESSOA CONTATO"
                 android:textColor="@color/colorAccent"
@@ -310,15 +310,14 @@
                 android:layout_marginTop="12dp"
                 android:text="VENDEDOR"
                 android:textColor="@color/colorAccent"
-
                 android:textStyle="bold" />
 
-            <Spinner
-                android:id="@+id/spVendedor"
-                android:layout_width="wrap_content"
+            <EditText
+                android:id="@+id/edtVendedor"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/edtTelefone2"
-                android:layout_toEndOf="@+id/txtTelefone1" />
+                android:layout_below="@+id/txtVendedor"
+                android:background="@drawable/borda_edittext" />
 
             <TextView
                 android:id="@+id/txtInscMunicipal"

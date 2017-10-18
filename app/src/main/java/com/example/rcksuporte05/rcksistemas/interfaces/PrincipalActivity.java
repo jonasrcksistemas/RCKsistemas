@@ -122,7 +122,6 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
 
     }
 
-
     @Override
     public void onBackPressed() {
         aperta++;
@@ -221,9 +220,11 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                 Call<Sincronia> call = apiRotas.sincroniaApi();
                 try {
                     sincronia = call.execute().body();
+                    ivInternet.setVisibility(View.INVISIBLE);
                     sincroniaBO.sincronizaBanco(sincronia, PrincipalActivity.this, notificacao, mNotificationManager, progress);
                 } catch (IOException e) {
                     e.printStackTrace();
+                    ivInternet.setVisibility(View.VISIBLE);
                 }
             }
         });
@@ -246,18 +247,18 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onResponse(Call<List<Usuario>> call, Response<List<Usuario>> response) {
                 usuarioList = response.body();
+                ivInternet.setVisibility(View.INVISIBLE);
                 if (!usuarioBO.sincronizaNobanco(usuarioList, PrincipalActivity.this))
                     Toast.makeText(PrincipalActivity.this, "Houve um erro ao salvar os usuarios", Toast.LENGTH_LONG).show();
                 progress.dismiss();
-
-
             }
 
             @Override
             public void onFailure(Call<List<Usuario>> call, Throwable t) {
+                t.printStackTrace();
                 progress.dismiss();
                 Toast.makeText(PrincipalActivity.this, "Não foi possivel sincronizar com o servidor, por favor verifique sua conexão", Toast.LENGTH_LONG).show();
-
+                ivInternet.setVisibility(View.VISIBLE);
             }
         });
     }
@@ -265,9 +266,7 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
     @Override
     protected void onResume() {
         System.gc();
-
         getUsuarios();
-
         if (getIntent().getIntExtra("alterado", 0) == 1) {
             sincronizaApi();
             getIntent().putExtra("alterado", 0);

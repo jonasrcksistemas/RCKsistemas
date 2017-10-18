@@ -196,36 +196,38 @@
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
 
-            <Spinner
-                android:id="@+id/spPaisCobranca"
-                android:layout_width="wrap_content"
+            <EditText
+                android:id="@+id/edtPaisCobranca"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/edtNumero"
-                android:layout_toEndOf="@+id/txtPaisCobranca" />
+                android:layout_below="@+id/txtPaisCobranca"
+                android:background="@drawable/borda_edittext" />
 
             <TextView
                 android:id="@+id/txtUfCobranca"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/edtNumero"
+                android:layout_marginStart="12dp"
                 android:layout_marginTop="12dp"
-                android:layout_toEndOf="@+id/spPaisCobranca"
+                android:layout_toEndOf="@+id/edtPaisCobranca"
                 android:text="UF: "
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
 
-            <Spinner
-                android:id="@+id/spUfCobranca"
-                android:layout_width="wrap_content"
+            <EditText
+                android:id="@+id/edtUfCobranca"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/edtNumero"
-                android:layout_toEndOf="@+id/txtUfCobranca" />
+                android:layout_alignStart="@id/txtUfCobranca"
+                android:layout_below="@+id/txtUfCobranca"
+                android:background="@drawable/borda_edittext" />
 
             <TextView
                 android:id="@+id/txtMunicipioCobranca"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/spPaisCobranca"
+                android:layout_below="@+id/edtPaisCobranca"
                 android:layout_marginTop="12dp"
                 android:text="MUNICIPIO"
                 android:textColor="@color/colorAccent"
@@ -246,18 +248,18 @@
                 android:id="@+id/txtCepCobranca"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/spMunicipioCobranca"
+                android:layout_below="@+id/edtMunicipioCobranca"
                 android:layout_marginTop="12dp"
                 android:text="CEP"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
 
-            <Spinner
-                android:id="@+id/spMunicipioCobranca"
-                android:layout_width="wrap_content"
+            <EditText
+                android:id="@+id/edtMunicipioCobranca"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/spPaisCobranca"
-                android:layout_toEndOf="@+id/txtMunicipioCobranca" />
+                android:layout_below="@+id/txtMunicipioCobranca"
+                android:background="@drawable/borda_edittext" />
 
 
         </RelativeLayout>

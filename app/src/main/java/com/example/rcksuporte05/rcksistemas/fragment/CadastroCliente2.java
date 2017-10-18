@@ -5,23 +5,15 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.Spinner;
 
 import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
 import com.example.rcksuporte05.rcksistemas.R;
-import com.example.rcksuporte05.rcksistemas.classes.Municipios;
-import com.example.rcksuporte05.rcksistemas.classes.Paises;
 
 public class CadastroCliente2 extends Fragment {
-    private Spinner spPais;
-    private ArrayAdapter<Municipios> adapterMunicipios;
-    private ArrayAdapter<Paises> adapterPaises;
-    private Spinner spUf;
-    private String[] uf = {"AC", "AL", "AM", "AP", "BA", "CE", "DF", "ES", "EX", "GO", "MA", "MG", "MS", "MT", "PA", "PB", "PE", "PI", "PR", "RJ", "RN", "RO", "RR", "RS", "SC", "SE", "SP", "TO"};
-    private Spinner spMunicipio;
-    private ArrayAdapter<String> ufAdapter;
+    private EditText edtPais;
+    private EditText edtUf;
+    private EditText edtMunicipio;
     private EditText edtNumero;
     private EditText edtBairro;
     private EditText edtCep;
@@ -31,19 +23,14 @@ public class CadastroCliente2 extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_cadastro_cliente2, container, false);
 
-        ClienteHelper clienteHelper = new ClienteHelper(getContext());
+        edtPais = (EditText) view.findViewById(R.id.edtPais);
+        edtPais.setText(ClienteHelper.getCliente().getNome_pais());
 
-        spPais = (Spinner) view.findViewById(R.id.spPais);
-        adapterPaises = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_activated_1, clienteHelper.getListaPaises());
-        spPais.setAdapter(adapterPaises);
+        edtUf = (EditText) view.findViewById(R.id.edtUf);
+        edtUf.setText(ClienteHelper.getCliente().getEndereco_uf());
 
-        spUf = (Spinner) view.findViewById(R.id.spUf);
-        ufAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_activated_1, uf);
-        spUf.setAdapter(ufAdapter);
-
-        spMunicipio = (Spinner) view.findViewById(R.id.spMunicipio);
-        adapterMunicipios = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_activated_1, clienteHelper.getListaMunicipios());
-        spMunicipio.setAdapter(adapterMunicipios);
+        edtMunicipio = (EditText) view.findViewById(R.id.edtMunicipio);
+        edtMunicipio.setText(ClienteHelper.getCliente().getEndereco_id_municipio());
 
         edtNumero = (EditText) view.findViewById(R.id.edtNumero);
         edtBairro = (EditText) view.findViewById(R.id.edtBairro);
@@ -56,9 +43,9 @@ public class CadastroCliente2 extends Fragment {
             edtBairro.setFocusable(false);
             edtCep.setFocusable(false);
             edtEndereco.setFocusable(false);
-            spPais.setEnabled(false);
-            spUf.setEnabled(false);
-            spMunicipio.setEnabled(false);
+            edtPais.setEnabled(false);
+            edtUf.setEnabled(false);
+            edtMunicipio.setEnabled(false);
 
             edtEndereco.setText(ClienteHelper.getCliente().getEndereco());
             edtNumero.setText(ClienteHelper.getCliente().getEndereco_numero());
@@ -68,21 +55,6 @@ public class CadastroCliente2 extends Fragment {
                 edtCep.setText(cep.substring(0, 5) + "-" + cep.substring(5));
             } else {
                 edtCep.setText(cep);
-            }
-            for (int i = 0; clienteHelper.getListaMunicipios().size() > i; i++) {
-                if (clienteHelper.getListaMunicipios().get(i).equals(ClienteHelper.getCliente().getEndereco_id_municipio())) {
-                    spMunicipio.setSelection(i);
-                }
-            }
-            for (int i = 0; clienteHelper.getListaPaises().size() > i; i++) {
-                if (clienteHelper.getListaPaises().get(i).getId_pais().equals(ClienteHelper.getCliente().getId_pais())) {
-                    spPais.setSelection(i);
-                }
-            }
-            for (int i = 0; uf.length > i; i++) {
-                if (uf[i].equals(ClienteHelper.getCliente().getEndereco_uf())) {
-                    spUf.setSelection(i);
-                }
             }
 
         }

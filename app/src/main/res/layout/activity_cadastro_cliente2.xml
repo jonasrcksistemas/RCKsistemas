@@ -75,47 +75,49 @@
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
 
-            <Spinner
-                android:id="@+id/spPais"
-                android:layout_width="wrap_content"
+            <EditText
+                android:id="@+id/edtPais"
+                android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/edtBairro"
-                android:layout_toEndOf="@+id/txtPais" />
-
-            <Spinner
-                android:id="@+id/spUf"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/txtUf"
-                android:layout_toEndOf="@+id/txtUf" />
+                android:layout_below="@+id/txtPais"
+                android:background="@drawable/borda_edittext" />
 
             <TextView
                 android:id="@+id/txtUf"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/edtBairro"
+                android:layout_marginStart="12dp"
                 android:layout_marginTop="12dp"
-                android:layout_toEndOf="@+id/spPais"
+                android:layout_toEndOf="@+id/edtPais"
                 android:text="UF"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/edtUf"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@id/txtUf"
+                android:layout_below="@id/txtUf"
+                android:background="@drawable/borda_edittext" />
 
             <TextView
                 android:id="@+id/txtMunicipio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/spPais"
+                android:layout_below="@+id/edtPais"
                 android:layout_marginTop="12dp"
                 android:text="MUNICIPIO"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
 
-            <Spinner
-                android:id="@+id/spMunicipio"
-                android:layout_width="wrap_content"
+            <EditText
+                android:id="@+id/edtMunicipio"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/spPais"
-                android:layout_toEndOf="@+id/txtMunicipio" />
+                android:layout_below="@+id/txtMunicipio"
+                android:background="@drawable/borda_edittext" />
 
             <EditText
                 android:id="@+id/edtCep"
@@ -146,7 +148,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
-                android:layout_below="@+id/spMunicipio"
+                android:layout_below="@+id/edtMunicipio"
                 android:layout_marginTop="12dp"
                 android:text="CEP"
                 android:textColor="@color/colorAccent"

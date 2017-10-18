@@ -43,10 +43,12 @@ public class CadastroCliente4 extends Fragment {
             edtEmail3.setFocusable(false);
             edtEmail2.setFocusable(false);
 
-            if (ClienteHelper.getCliente().getNfe_email_enviar().equals("S")) {
-                rdSim.setChecked(true);
-            } else if (ClienteHelper.getCliente().getNfe_email_enviar().equals("N")) {
-                rdNao.setChecked(true);
+            if (ClienteHelper.getCliente().getNfe_email_enviar() != null) {
+                if (ClienteHelper.getCliente().getNfe_email_enviar().equals("S")) {
+                    rdSim.setChecked(true);
+                } else if (ClienteHelper.getCliente().getNfe_email_enviar().equals("N")) {
+                    rdNao.setChecked(true);
+                }
             }
 
             edtEmail1.setText(ClienteHelper.getCliente().getNfe_email_um());

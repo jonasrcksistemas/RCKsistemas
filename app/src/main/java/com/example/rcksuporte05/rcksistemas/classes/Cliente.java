@@ -28,7 +28,7 @@ public class Cliente {
     private String f_vendedor;
     private String f_transportador;
     private String data_ultima_compra;
-    private String id_vendedor;
+    private String nome_vendedor;
     private String f_id_cliente;
     private String id_entidade;
     private String f_id_fornecedor;
@@ -36,7 +36,7 @@ public class Cliente {
     private String f_id_transportador;
     private String telefone_principal;
     private String email_principal;
-    private String id_pais;
+    private String nome_pais;
     private String f_id_funcionario;
     private String avisar_com_dias;
     private String observacoes;
@@ -50,7 +50,7 @@ public class Cliente {
     private String cob_endereco_uf;
     private String cob_endereco_id_municipio;
     private String cob_endereco_cep;
-    private String cob_endereco_id_pais;
+    private String nome_pais_cob;
     private String limite_credito;
     private String limite_disponivel;
     private String pessoa_contato_financeiro;
@@ -294,14 +294,6 @@ public class Cliente {
         this.data_ultima_compra = data_ultima_compra;
     }
 
-    public String getId_vendedor() {
-        return id_vendedor;
-    }
-
-    public void setId_vendedor(String id_vendedor) {
-        this.id_vendedor = id_vendedor;
-    }
-
     public String getF_id_cliente() {
         return f_id_cliente;
     }
@@ -356,14 +348,6 @@ public class Cliente {
 
     public void setEmail_principal(String email_principal) {
         this.email_principal = email_principal;
-    }
-
-    public String getId_pais() {
-        return id_pais;
-    }
-
-    public void setId_pais(String id_pais) {
-        this.id_pais = id_pais;
     }
 
     public String getF_id_funcionario() {
@@ -470,12 +454,12 @@ public class Cliente {
         this.cob_endereco_cep = cob_endereco_cep;
     }
 
-    public String getCob_endereco_id_pais() {
-        return cob_endereco_id_pais;
+    public String getNome_pais_cob() {
+        return nome_pais_cob;
     }
 
-    public void setCob_endereco_id_pais(String cob_endereco_id_pais) {
-        this.cob_endereco_id_pais = cob_endereco_id_pais;
+    public void setNome_pais_cob(String nome_pais_cob) {
+        this.nome_pais_cob = nome_pais_cob;
     }
 
     public String getLimite_credito() {
@@ -750,9 +734,20 @@ public class Cliente {
         this.local_cadastro = local_cadastro;
     }
 
-    @Override
-    public String toString() {
-        return nome_cadastro;
+    public String getNome_vendedor() {
+        return nome_vendedor;
+    }
+
+    public void setNome_vendedor(String nome_vendedor) {
+        this.nome_vendedor = nome_vendedor;
+    }
+
+    public String getNome_pais() {
+        return nome_pais;
+    }
+
+    public void setNome_pais(String nome_pais) {
+        this.nome_pais = nome_pais;
     }
 }
 

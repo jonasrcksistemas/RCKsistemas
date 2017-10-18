@@ -9,9 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.rcksuporte05.rcksistemas.classes.Cliente;
 import com.example.rcksuporte05.rcksistemas.classes.CondicoesPagamento;
-import com.example.rcksuporte05.rcksistemas.classes.Municipios;
 import com.example.rcksuporte05.rcksistemas.classes.Operacao;
-import com.example.rcksuporte05.rcksistemas.classes.Paises;
 import com.example.rcksuporte05.rcksistemas.classes.Produto;
 import com.example.rcksuporte05.rcksistemas.classes.TabelaPreco;
 import com.example.rcksuporte05.rcksistemas.classes.TabelaPrecoItem;
@@ -88,7 +86,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 " ENDERECO_NUMERO VARCHAR(20)," +
                 " ENDERECO_COMPLEMENTO VARCHAR(20)," +
                 " ENDERECO_UF CHAR(2) NOT NULL," +
-                " ENDERECO_ID_MUNICIPIO INTEGER NOT NULL," +
+                " ENDERECO_ID_MUNICIPIO VARCHAR(50)," +
                 " ENDERECO_CEP VARCHAR(8)," +
                 " USUARIO_ID INTEGER," +
                 " USUARIO_NOME VARCHAR(60)," +
@@ -99,7 +97,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 " F_VENDEDOR VARCHAR(1) DEFAULT 'N'  NOT NULL," +
                 " F_TRANSPORTADOR VARCHAR(1) DEFAULT 'N'  NOT NULL," +
                 " DATA_ULTIMA_COMPRA DATE," +
-                " ID_VENDEDOR INTEGER," +
+                " NOME_VENDEDOR VARCHAR(60)," +
                 " F_ID_CLIENTE INTEGER," +
                 " ID_ENTIDADE INTEGER NOT NULL," +
                 " F_ID_FORNECEDOR INTEGER," +
@@ -107,7 +105,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 " F_ID_TRANSPORTADOR INTEGER," +
                 " TELEFONE_PRINCIPAL VARCHAR(20)," +
                 " EMAIL_PRINCIPAL VARCHAR(100)," +
-                " ID_PAIS INTEGER NOT NULL," +
+                " NOME_PAIS VARCHAR(60) ," +
                 " F_ID_FUNCIONARIO INTEGER," +
                 " AVISAR_COM_DIAS INTEGER DEFAULT 0 ," +
                 " OBSERVACOES BLOB," +
@@ -119,9 +117,9 @@ public class DBHelper extends SQLiteOpenHelper {
                 " COB_ENDERECO_NUMERO VARCHAR(20)," +
                 " COB_ENDERECO_COMPLEMENTO VARCHAR(20)," +
                 " COB_ENDERECO_UF VARCHAR(2)," +
-                " COB_ENDERECO_ID_MUNICIPIO INTEGER," +
+                " COB_ENDERECO_ID_MUNICIPIO VARCHAR(60)," +
                 " COB_ENDERECO_CEP VARCHAR(8)," +
-                " COB_ENDERECO_ID_PAIS INTEGER," +
+                " NOME_PAIS_COB INTEGER," +
                 " LIMITE_CREDITO DECIMAL(12, 2)," +
                 " LIMITE_DISPONIVEL DECIMAL(12, 2)," +
                 " PESSOA_CONTATO_FINANCEIRO VARCHAR(80)," +
@@ -155,8 +153,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 " HABILITACAO_CATEGORIA VARCHAR(10)," +
                 " HABILITACAO_VENCIMENTO DATE," +
                 " MOT_ID_TRANSPORTADORA INTEGER," +
-                " LOCAL_CADASTRO VARCHAR(20)," +
-                " SINCRONIZADO VARCHAR(1));");
+                " LOCAL_CADASTRO VARCHAR(20));");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS TBL_PRODUTO (ATIVO VARCHAR(1) DEFAULT 'S'  NOT NULL," +
                 " ID_PRODUTO VARCHAR(20) PRIMARY KEY," +
@@ -209,19 +206,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 " VENDA_PERC_COMISSAO DECIMAL(12, 6)," +
                 " VENDA_PRECO DECIMAL(12, 6)," +
                 " VENDA_PERC_COMISSAO_DOIS DECIMAL(12, 4)," +
-                " DESCRICAO VARCHAR(20)," +
-                " SINCRONIZADO VARCHAR(1));");
-
-        db.execSQL("CREATE TABLE IF NOT EXISTS TBL_PAISES (ID_PAIS INTEGER PRIMARY KEY, NOME_PAIS VARCHAR(60) NOT NULL, SINCRONIZADO VARCHAR(1));");
-
-        db.execSQL("CREATE TABLE IF NOT EXISTS TBL_MUNICIPIOS   " +
-                "(ID_MUNICIPIO INTEGER PRIMARY KEY," +
-                "NOME_MUNICIPIO VARCHAR(50)," +
-                "UF VARCHAR(4)," +
-                "CEP VARCHAR(12)," +
-                "SINCRONIZADO VARCHAR(1));");
-
-        db.execSQL("CREATE TABLE IF NOT EXISTS TBL_OPERACAO_ESTOQUE (ATIVO CHAR(1) DEFAULT 'S'  NOT NULL, ID_OPERACAO INTEGER DEFAULT 0 PRIMARY KEY, NOME_OPERACAO VARCHAR(60) NOT NULL, SINCRONIZADO VARCHAR(1));");
+                " DESCRICAO VARCHAR(20));");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS TBL_TABELA_PRECO_CAB (ID_TABELA INTEGER PRIMARY KEY," +
                 " ID_EMPRESA INTEGER NOT NULL," +
@@ -243,8 +228,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 " ID_GRUPO_VENDEDORES INTEGER," +
                 " UTILIZA_VERBA CHAR(1)," +
                 " FAIXA_VALOR_BRUTO_DE DECIMAL(12, 2)," +
-                " FAIXA_VALOR_BRUTO_A DECIMAL(12, 2)," +
-                " SINCRONIZADO VARCHAR(1));");
+                " FAIXA_VALOR_BRUTO_A DECIMAL(12, 2));");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS TBL_TABELA_PRECO_ITENS (ID_ITEM INTEGER PRIMARY KEY," +
                 " ID_TABELA INTEGER NOT NULL," +
@@ -262,8 +246,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 " ID_USUARIO INTEGER NOT NULL," +
                 " USUARIO VARCHAR(30)," +
                 " USUARIO_DATA TIMESTAMP," +
-                " COR_WEB VARCHAR(20)," +
-                " SINCRONIZADO VARCHAR(1));");
+                " COR_WEB VARCHAR(20));");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS TBL_CONDICOES_PAG_CAB (ATIVO VARCHAR(1)," +
                 "ID_CONDICAO INTEGER PRIMARY KEY," +
@@ -276,8 +259,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 "USUARIO_ID INTEGER NOT NULL," +
                 "USUARIO_NOME VARCHAR(40)," +
                 "USUARIO_DATA TIMESTAMP," +
-                "PUBLICAR_NA_WEB VARCHAR(1)," +
-                "SINCRONIZADO VARCHAR(1));");
+                "PUBLICAR_NA_WEB VARCHAR(1));");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS TBL_VENDEDOR_BONUS_RESUMO (ID_VENDEDOR INTEGER PRIMARY KEY," +
                 " ID_EMPRESA INTEGER NOT NULL," +
@@ -285,8 +267,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 " VALOR_DEBITO DECIMAL(12, 2)," +
                 " VALOR_BONUS_CANCELADOS DECIMAL(12, 2)," +
                 " VALOR_SALDO DECIMAL(12, 2)," +
-                " DATA_ULTIMA_ATUALIZACAO DATE," +
-                " SINCRONIZADO VARCHAR(1));");
+                " DATA_ULTIMA_ATUALIZACAO DATE);");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS TBL_WEB_PEDIDO (ID_WEB_PEDIDO INTEGER PRIMARY KEY AUTOINCREMENT," +
                 " ID_EMPRESA INTEGER NOT NULL," +
@@ -328,6 +309,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 " PEDIDO_ENVIADO VARCHAR(1) DEFAULT 'N', " +
                 " ID_WEB_PEDIDO_SERVIDOR INTEGER," +
                 " DATA_PREV_ENTREGA DATE);");
+
+        db.execSQL("CREATE TABLE IF NOT EXISTS TBL_OPERACAO_ESTOQUE (ATIVO CHAR(1) DEFAULT 'S'  NOT NULL, ID_OPERACAO INTEGER DEFAULT 0 PRIMARY KEY, NOME_OPERACAO VARCHAR(60) NOT NULL);");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS TBL_WEB_PEDIDO_ITENS (ID_WEB_ITEM INTEGER PRIMARY KEY AUTOINCREMENT ," +
                 "ID_PEDIDO INTEGER NOT NULL," +
@@ -378,13 +361,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if (newVersion > oldVersion) {
-            try {
-                db.execSQL("ALTER TABLE TBL_WEB_PEDIDO ADD DATA_PREV_ENTREGA DATE;");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+
     }
 
     public String pegaDataAtual() {
@@ -519,7 +496,7 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("F_VENDEDOR", cliente.getF_vendedor());
         content.put("F_TRANSPORTADOR", cliente.getF_transportador());
         content.put("DATA_ULTIMA_COMPRA", cliente.getData_ultima_compra());
-        content.put("ID_VENDEDOR", cliente.getId_vendedor());
+        content.put("NOME_VENDEDOR", cliente.getNome_vendedor());
         content.put("F_ID_CLIENTE", cliente.getF_id_cliente());
         content.put("ID_ENTIDADE", cliente.getId_entidade());
         content.put("F_ID_FORNECEDOR", cliente.getF_id_fornecedor());
@@ -527,7 +504,7 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("F_ID_TRANSPORTADOR", cliente.getF_id_transportador());
         content.put("TELEFONE_PRINCIPAL", cliente.getTelefone_principal());
         content.put("EMAIL_PRINCIPAL", cliente.getEmail_principal());
-        content.put("ID_PAIS", cliente.getId_pais());
+        content.put("NOME_PAIS", cliente.getNome_pais());
         content.put("F_ID_FUNCIONARIO", cliente.getF_id_funcionario());
         content.put("AVISAR_COM_DIAS", cliente.getAvisar_com_dias());
         content.put("OBSERVACOES", cliente.getObservacoes());
@@ -541,7 +518,7 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("COB_ENDERECO_UF", cliente.getCob_endereco_uf());
         content.put("COB_ENDERECO_ID_MUNICIPIO", cliente.getCob_endereco_id_municipio());
         content.put("COB_ENDERECO_CEP", cliente.getCob_endereco_cep());
-        content.put("COB_ENDERECO_ID_PAIS", cliente.getCob_endereco_id_pais());
+        content.put("NOME_PAIS_COB", cliente.getNome_pais_cob());
         content.put("LIMITE_CREDITO", cliente.getLimite_credito());
         content.put("LIMITE_DISPONIVEL", cliente.getLimite_disponivel());
         content.put("PESSOA_CONTATO_FINANCEIRO", cliente.getPessoa_contato_financeiro());
@@ -666,7 +643,6 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("HABILITACAO_VENCIMENTO", HABILITACAO_VENCIMENTO);
         content.put("MOT_ID_TRANSPORTADORA", MOT_ID_TRANSPORTADORA);
         content.put("LOCAL_CADASTRO", LOCAL_CADASTRO);
-        content.put("SINCRONIZADO", "S");
         db.update("TBL_CADASTRO", content, "ID_CADASTRO = " + ID_CADASTRO, null);
         System.gc();
     }
@@ -780,7 +756,6 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("VENDA_PRECO", VENDA_PRECO);
         content.put("VENDA_PERC_COMISSAO_DOIS", VENDA_PERC_COMISSAO_DOIS);
         content.put("DESCRICAO", DESCRICAO);
-        content.put("SINCRONIZADO", "S");
         db.update("TBL_PRODUTO", content, "ID_PRODUTO = '" + ID_PRODUTO + "'", null);
         System.gc();
     }
@@ -809,7 +784,6 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("UTILIZA_VERBA", tabelaPreco.getUtiliza_verba());
         content.put("FAIXA_VALOR_BRUTO_DE", tabelaPreco.getFaixa_valor_bruto_de());
         content.put("FAIXA_VALOR_BRUTO_A", tabelaPreco.getFaixa_valor_bruto_a());
-        content.put("SINCRONIZADO", "S");
 
         db.insert("TBL_TABELA_PRECO_CAB", null, content);
         System.gc();
@@ -839,7 +813,6 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("UTILIZA_VERBA", UTILIZA_VERBA);
         content.put("FAIXA_VALOR_BRUTO_DE", FAIXA_VALOR_BRUTO_DE);
         content.put("FAIXA_VALOR_BRUTO_A", FAIXA_VALOR_BRUTO_A);
-        content.put("SINCRONIZADO", "S");
 
         db.update("TBL_TABELA_PRECO_CAB", content, "ID_TABELA = " + ID_TABELA, null);
         System.gc();
@@ -865,7 +838,6 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("USUARIO", tabelaPrecoItem.getUsuario());
         content.put("USUARIO_DATA", tabelaPrecoItem.getUsuario_data());
         content.put("COR_WEB", tabelaPrecoItem.getCor_web());
-        content.put("SINCRONIZADO", "S");
 
         db.insert("TBL_TABELA_PRECO_ITENS", null, content);
         System.gc();
@@ -891,38 +863,8 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("USUARIO", USUARIO);
         content.put("USUARIO_DATA", USUARIO_DATA);
         content.put("COR_WEB", COR_WEB);
-        content.put("SINCRONIZADO", "S");
 
         db.update("TBL_TABELA_PRECO_ITENS", content, "ID_ITEM = " + ID_ITEM, null);
-        System.gc();
-    }
-
-    public void inserirTBL_PAISES(Paises paises) throws android.database.sqlite.SQLiteConstraintException {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues content = new ContentValues();
-        content.put("ID_PAIS", paises.getId_pais());
-        content.put("NOME_PAIS", paises.getNome_pais());
-        db.insert("TBL_PAISES", null, content);
-        System.gc();
-    }
-
-    public void atualizarTBL_PAISES(String ID_PAIS, String NOME_PAIS) throws android.database.sqlite.SQLiteConstraintException {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues content = new ContentValues();
-        content.put("NOME_PAIS", NOME_PAIS);
-        content.put("SINCRONIZADO", "S");
-        db.update("TBL_PAISES", content, "ID_PAIS = " + ID_PAIS, null);
-        System.gc();
-    }
-
-    public void inserirTBL_MUNICIPIOS(Municipios municipio) throws android.database.sqlite.SQLiteConstraintException {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues content = new ContentValues();
-        content.put("ID_MUNICIPIO", municipio.getId_municipio());
-        content.put("NOME_MUNICIPIO", municipio.getNome_municipio());
-        content.put("UF", municipio.getUf());
-        content.put("CEP", municipio.getCep());
-        db.insert("TBL_MUNICIPIOS", null, content);
         System.gc();
     }
 
@@ -964,7 +906,6 @@ public class DBHelper extends SQLiteOpenHelper {
         ContentValues content = new ContentValues();
         content.put("ATIVO", ATIVO);
         content.put("NOME_OPERACAO", NOME_OPERACAO);
-        content.put("SINCRONIZADO", "S");
         db.update("TBL_OPERACAO_ESTOQUE", content, "ID_OPERACAO = " + ID_OPERACAO, null);
         System.gc();
     }
@@ -1309,7 +1250,7 @@ public class DBHelper extends SQLiteOpenHelper {
             cliente.setF_vendedor(cursor.getString(cursor.getColumnIndex("F_VENDEDOR")));
             cliente.setF_transportador(cursor.getString(cursor.getColumnIndex("F_TRANSPORTADOR")));
             cliente.setData_ultima_compra(cursor.getString(cursor.getColumnIndex("DATA_ULTIMA_COMPRA")));
-            cliente.setId_vendedor(cursor.getString(cursor.getColumnIndex("ID_VENDEDOR")));
+            cliente.setNome_vendedor(cursor.getString(cursor.getColumnIndex("NOME_VENDEDOR")));
             cliente.setF_id_cliente(cursor.getString(cursor.getColumnIndex("F_ID_CLIENTE")));
             cliente.setId_entidade(cursor.getString(cursor.getColumnIndex("ID_ENTIDADE")));
             cliente.setF_id_fornecedor(cursor.getString(cursor.getColumnIndex("F_ID_FORNECEDOR")));
@@ -1317,7 +1258,7 @@ public class DBHelper extends SQLiteOpenHelper {
             cliente.setF_id_transportador(cursor.getString(cursor.getColumnIndex("F_ID_TRANSPORTADOR")));
             cliente.setTelefone_principal(cursor.getString(cursor.getColumnIndex("TELEFONE_PRINCIPAL")));
             cliente.setEmail_principal(cursor.getString(cursor.getColumnIndex("EMAIL_PRINCIPAL")));
-            cliente.setId_pais(cursor.getString(cursor.getColumnIndex("ID_PAIS")));
+            cliente.setNome_pais(cursor.getString(cursor.getColumnIndex("NOME_PAIS")));
             cliente.setF_id_funcionario(cursor.getString(cursor.getColumnIndex("F_ID_FUNCIONARIO")));
             cliente.setAvisar_com_dias(cursor.getString(cursor.getColumnIndex("AVISAR_COM_DIAS")));
             cliente.setObservacoes(cursor.getString(cursor.getColumnIndex("OBSERVACOES")));
@@ -1331,7 +1272,7 @@ public class DBHelper extends SQLiteOpenHelper {
             cliente.setCob_endereco_uf(cursor.getString(cursor.getColumnIndex("COB_ENDERECO_UF")));
             cliente.setCob_endereco_id_municipio(cursor.getString(cursor.getColumnIndex("COB_ENDERECO_ID_MUNICIPIO")));
             cliente.setCob_endereco_cep(cursor.getString(cursor.getColumnIndex("COB_ENDERECO_CEP")));
-            cliente.setCob_endereco_id_pais(cursor.getString(cursor.getColumnIndex("COB_ENDERECO_ID_PAIS")));
+            cliente.setNome_pais_cob(cursor.getString(cursor.getColumnIndex("NOME_PAIS_COB")));
             cliente.setLimite_credito(cursor.getString(cursor.getColumnIndex("LIMITE_CREDITO")));
             cliente.setLimite_disponivel(cursor.getString(cursor.getColumnIndex("LIMITE_DISPONIVEL")));
             cliente.setPessoa_contato_financeiro(cursor.getString(cursor.getColumnIndex("PESSOA_CONTATO_FINANCEIRO")));
@@ -1394,52 +1335,6 @@ public class DBHelper extends SQLiteOpenHelper {
             produto.setAtivo(cursor.getString(cursor.getColumnIndex("ATIVO")));
 
             lista.add(produto);
-            System.gc();
-        } while (cursor.moveToNext());
-        cursor.close();
-        System.gc();
-
-        return lista;
-    }
-
-    public List<Paises> listaPaises(String SQL) {
-        List<Paises> lista = new ArrayList<>();
-        SQLiteDatabase banco = this.getReadableDatabase();
-        Cursor cursor;
-
-        cursor = banco.rawQuery(SQL, null);
-        cursor.moveToFirst();
-        do {
-            Paises paises = new Paises();
-
-            paises.setId_pais(cursor.getString(cursor.getColumnIndex("ID_PAIS")));
-            paises.setNome_pais(cursor.getString(cursor.getColumnIndex("NOME_PAIS")));
-
-            lista.add(paises);
-            System.gc();
-        } while (cursor.moveToNext());
-        cursor.close();
-        System.gc();
-
-        return lista;
-    }
-
-    public List<Municipios> listaMunicipios(String SQL) {
-        List<Municipios> lista = new ArrayList<>();
-        SQLiteDatabase banco = this.getReadableDatabase();
-        Cursor cursor;
-
-        cursor = banco.rawQuery(SQL, null);
-        cursor.moveToFirst();
-        do {
-            Municipios municipios = new Municipios();
-
-            municipios.setId_municipio(cursor.getString(cursor.getColumnIndex("ID_MUNICIPIO")));
-            municipios.setNome_municipio(cursor.getString(cursor.getColumnIndex("NOME_MUNICIPIO")));
-            municipios.setUf(cursor.getString(cursor.getColumnIndex("UF")));
-            municipios.setCep(cursor.getString(cursor.getColumnIndex("CEP")));
-
-            lista.add(municipios);
             System.gc();
         } while (cursor.moveToNext());
         cursor.close();

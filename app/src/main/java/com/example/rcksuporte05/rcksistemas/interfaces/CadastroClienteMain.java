@@ -59,11 +59,4 @@ public class CadastroClienteMain extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
-    @Override
-    protected void onDestroy() {
-        ClienteHelper.setCliente(null);
-        System.gc();
-        super.onDestroy();
-    }
 }

@@ -57,35 +57,39 @@ public class ContatoActivity extends AppCompatActivity {
             toolbar.setTitle("Contato");
             txtRazaoSocial.setText(cliente.getNome_cadastro());
 
-            if (cliente.getPessoa_f_j().equals("F")) {
-                imageView.setImageResource(R.mipmap.ic_pessoa_fisica);
-            } else if (cliente.getPessoa_f_j().equals("J")) {
-                imageView.setImageResource(R.mipmap.ic_pessoa_juridica);
+            if (cliente.getPessoa_f_j() != null) {
+                if (cliente.getPessoa_f_j().equals("F")) {
+                    imageView.setImageResource(R.mipmap.ic_pessoa_fisica);
+                } else if (cliente.getPessoa_f_j().equals("J")) {
+                    imageView.setImageResource(R.mipmap.ic_pessoa_juridica);
+                } else {
+                    imageView.setImageResource(R.mipmap.ic_pessoa_duvida);
+                }
             } else {
                 imageView.setImageResource(R.mipmap.ic_pessoa_duvida);
             }
 
-            if (!cliente.getTelefone_principal().replaceAll("[^0-9]", "").trim().isEmpty() && cliente.getTelefone_principal().replaceAll("[^0-9]", "").length() >= 8 && cliente.getTelefone_principal().replaceAll("[^0-9]", "").length() <= 11) {
+            if (cliente.getTelefone_principal() != null && !cliente.getTelefone_principal().replaceAll("[^0-9]", "").trim().isEmpty() && cliente.getTelefone_principal().replaceAll("[^0-9]", "").length() >= 8 && cliente.getTelefone_principal().replaceAll("[^0-9]", "").length() <= 11) {
                 txtTelefone.setText(formataTelefone(cliente.getTelefone_principal()));
-            } else if (!cliente.getTelefone_dois().replaceAll("[^0-9]", "").trim().isEmpty() && cliente.getTelefone_dois().replaceAll("[^0-9]", "").length() >= 8 && cliente.getTelefone_dois().replaceAll("[^0-9]", "").length() <= 11) {
+            } else if (cliente.getTelefone_dois() != null && !cliente.getTelefone_dois().replaceAll("[^0-9]", "").trim().isEmpty() && cliente.getTelefone_dois().replaceAll("[^0-9]", "").length() >= 8 && cliente.getTelefone_dois().replaceAll("[^0-9]", "").length() <= 11) {
                 txtTelefone.setText(formataTelefone(cliente.getTelefone_dois()));
-            } else if (!cliente.getTelefone_tres().replaceAll("[^0-9]", "").trim().isEmpty() && cliente.getTelefone_tres().replaceAll("[^0-9]", "").length() >= 8 && cliente.getTelefone_tres().replaceAll("[^0-9]", "").length() <= 11) {
+            } else if (cliente.getTelefone_tres() != null && !cliente.getTelefone_tres().replaceAll("[^0-9]", "").trim().isEmpty() && cliente.getTelefone_tres().replaceAll("[^0-9]", "").length() >= 8 && cliente.getTelefone_tres().replaceAll("[^0-9]", "").length() <= 11) {
                 txtTelefone.setText(formataTelefone(cliente.getTelefone_tres()));
             } else {
                 txtTelefone.setText("Nenhum telefone válido informado!");
             }
 
-            if (!cliente.getEmail_principal().trim().equals("")) {
+            if (cliente.getEmail_principal() != null && !cliente.getEmail_principal().trim().equals("")) {
                 txtEmail.setText(cliente.getEmail_principal());
-            } else if (!cliente.getEmail_financeiro().trim().equals("")) {
+            } else if (cliente.getEmail_financeiro() != null && !cliente.getEmail_financeiro().trim().equals("")) {
                 txtEmail.setText(cliente.getEmail_financeiro());
             } else {
                 txtEmail.setText("Nenhum email informado!");
             }
 
-            if (!cliente.getEndereco().trim().equals("")) {
+            if (cliente.getEndereco() != null && !cliente.getEndereco().trim().equals("")) {
                 txtEndereco.setText(cliente.getEndereco().replace(",", "") + ", " + cliente.getEndereco_numero() + " - " + cliente.getEndereco_cep());
-            } else if (!cliente.getCob_endereco().trim().equals("")) {
+            } else if (cliente.getCob_endereco() != null && !cliente.getCob_endereco().trim().equals("")) {
                 txtEndereco.setText(cliente.getCob_endereco().replace(",", "") + ", " + cliente.getCob_endereco_numero() + " - " + cliente.getCob_endereco_cep());
             } else {
                 txtEndereco.setText("Nenhum endereço informado!");
@@ -256,5 +260,11 @@ public class ContatoActivity extends AppCompatActivity {
     public void detalhes() {
         Intent intent = new Intent(ContatoActivity.this, CadastroClienteMain.class);
         startActivity(intent);
+    }
+
+    @Override
+    protected void onDestroy() {
+        ClienteHelper.setCliente(null);
+        super.onDestroy();
     }
 }

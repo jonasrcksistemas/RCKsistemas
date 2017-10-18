@@ -65,12 +65,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         btnEntrar.setOnClickListener(this);
         btnFechar.setOnClickListener(this);
-
-        getUsuarios();
         try {
-            Usuario usuario =  db.listaUsuario("SELECT * FROM TBL_WEB_USUARIO WHERE LOGIN = (SELECT LOGIN FROM TBL_LOGIN WHERE LOGADO = 'S')").get(0);
+            Usuario usuario = db.listaUsuario("SELECT * FROM TBL_WEB_USUARIO WHERE LOGIN = (SELECT LOGIN FROM TBL_LOGIN WHERE LOGADO = 'S')").get(0);
 
-            if(usuario.getSenha().equals(db.consulta("SELECT SENHA FROM TBL_LOGIN WHERE LOGADO = 'S'", "SENHA"))){
+            if (usuario.getSenha().equals(db.consulta("SELECT SENHA FROM TBL_LOGIN WHERE LOGADO = 'S'", "SENHA"))) {
                 Intent intent = new Intent(MainActivity.this, PrincipalActivity.class);
                 UsuarioHelper.setUsuario(usuario);
                 startActivity(intent);
@@ -166,10 +164,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void logar(final int alterado) {
         try {
-            if(alterado == 0){
+            if (alterado == 0) {
                 Usuario usuario = db.listaUsuario("SELECT * FROM TBL_WEB_USUARIO WHERE LOGIN = '" + edtLogin.getText().toString() + "'").get(0);
                 setAndroidId(usuario, alterado);
-            }{
+            }
+            {
                 getUsuarios();
             }
         } catch (Exception e) {
@@ -291,6 +290,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 return true;
         }
         return false;
+    }
+
+    @Override
+    protected void onResume() {
+        getUsuarios();
+        super.onResume();
     }
 }
 

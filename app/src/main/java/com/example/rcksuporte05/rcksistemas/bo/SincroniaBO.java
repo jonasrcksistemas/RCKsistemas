@@ -13,9 +13,7 @@ import android.support.v7.app.AlertDialog;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.classes.Cliente;
 import com.example.rcksuporte05.rcksistemas.classes.CondicoesPagamento;
-import com.example.rcksuporte05.rcksistemas.classes.Municipios;
 import com.example.rcksuporte05.rcksistemas.classes.Operacao;
-import com.example.rcksuporte05.rcksistemas.classes.Paises;
 import com.example.rcksuporte05.rcksistemas.classes.Produto;
 import com.example.rcksuporte05.rcksistemas.classes.Sincronia;
 import com.example.rcksuporte05.rcksistemas.classes.TabelaPreco;
@@ -40,9 +38,7 @@ public class SincroniaBO {
 
         final int maxProgress = sincronia.getListaCliente().size() +
                 sincronia.getListaCondicoesPagamento().size() +
-                sincronia.getListaMunicipios().size() +
                 sincronia.getListaOperacao().size() +
-                sincronia.getListaPaises().size() +
                 sincronia.getListaProduto().size() +
                 sincronia.getListaTabelaPreco().size() +
                 sincronia.getListaUsuario().size() +
@@ -84,40 +80,6 @@ public class SincroniaBO {
             notificacao.setProgress(maxProgress, contadorNotificacaoEProgresso, false);
 
             db.inserirTBL_PRODUTO(produto);
-
-            contadorNotificacaoEProgresso++;
-            final int finalContadorNotificacaoEProgresso = contadorNotificacaoEProgresso;
-            activity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    progress.setProgress(finalContadorNotificacaoEProgresso);
-                }
-            });
-            mNotificationManager.notify(0, notificacao.build());
-        }
-
-        db.alterar("DELETE FROM TBL_PAISES");
-
-        for (Paises paises : sincronia.getListaPaises()) {
-            notificacao.setProgress(maxProgress, contadorNotificacaoEProgresso, false);
-
-            db.inserirTBL_PAISES(paises);
-
-            contadorNotificacaoEProgresso++;
-            final int finalContadorNotificacaoEProgresso = contadorNotificacaoEProgresso;
-            activity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    progress.setProgress(finalContadorNotificacaoEProgresso);
-                }
-            });
-            mNotificationManager.notify(0, notificacao.build());
-        }
-
-        for (Municipios municipio : sincronia.getListaMunicipios()) {
-            notificacao.setProgress(maxProgress, contadorNotificacaoEProgresso, false);
-
-            db.inserirTBL_MUNICIPIOS(municipio);
 
             contadorNotificacaoEProgresso++;
             final int finalContadorNotificacaoEProgresso = contadorNotificacaoEProgresso;
