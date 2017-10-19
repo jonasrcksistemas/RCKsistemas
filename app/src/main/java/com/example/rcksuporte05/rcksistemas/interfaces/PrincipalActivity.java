@@ -118,8 +118,6 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
             });
             alert.show();
         }
-
-
     }
 
     @Override
@@ -217,7 +215,7 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
         Thread a = new Thread(new Runnable() {
             @Override
             public void run() {
-                Call<Sincronia> call = apiRotas.sincroniaApi();
+                Call<Sincronia> call = apiRotas.sincroniaApi(Integer.parseInt(UsuarioHelper.getUsuario().getId_usuario()));
                 try {
                     sincronia = call.execute().body();
                     ivInternet.setVisibility(View.INVISIBLE);

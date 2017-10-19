@@ -25,16 +25,14 @@ public interface Rotas {
     @GET("usuario/login/{idandroid}/{idusuario}")
     Call<Usuario> setAndroidId(@Path("idandroid") String idandroid, @Path("idusuario") String idusuario);
 
-    @GET("sincronia")
-    Call<Sincronia> sincroniaApi();
+    @GET("sincronia/{id}")
+    Call<Sincronia> sincroniaApi(@Path("id") int id);
 
     @POST("webpedido/faturar")
     Call<List<WebPedido>> enviarPedidos(@Body List<WebPedido> webPedidos);
 
     @GET("historicofinanceiro/listar/{id}")
     Call<HistoricoFinanceiro> getHistoricoFinanceiro(@Path("id") int idCliente);
-
-
 
 
 }

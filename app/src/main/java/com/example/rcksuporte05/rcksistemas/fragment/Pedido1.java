@@ -209,7 +209,7 @@ public class Pedido1 extends Fragment implements View.OnClickListener {
         try {
             edtCliente.setText(objetoCliente.getNome_cadastro());
         } catch (NullPointerException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
 
         super.onResume();
