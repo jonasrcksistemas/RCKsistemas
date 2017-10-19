@@ -13,21 +13,21 @@ import java.util.List;
 
 public class UsuarioBO {
 
-    public boolean sincronizaNobanco(List<Usuario> usuarioList, Context context) {
+    public boolean sincronizaNobanco(List<Usuario> usuarioList, Context context){
         DBHelper db = new DBHelper(context);
 
         try {
+
+            db.alterar("DELETE FROM TBL_WEB_USUARIO");
             for (Usuario usuario : usuarioList) {
-                if (db.contagem("SELECT COUNT(*) FROM TBL_WEB_USUARIO WHERE ID_USUARIO = " + usuario.getId_usuario()) <= 0) {
-                    db.inserirTBL_WEB_USUARIO(usuario);
-                } else {
-                    db.atualizarTBL_WEB_USUARIO(usuario);
-                }
+                 db.inserirTBL_WEB_USUARIO(usuario);
             }
-        } catch (final Exception e) {
+
+        }catch (final Exception e){
             e.printStackTrace();
             return false;
         }
+
 
 
         return true;

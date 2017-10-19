@@ -2,7 +2,6 @@ package com.example.rcksuporte05.rcksistemas.interfaces;
 
 import android.app.SearchManager;
 import android.content.Context;
-import android.database.CursorIndexOutOfBoundsException;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
@@ -22,6 +21,7 @@ import com.example.rcksuporte05.rcksistemas.adapters.ListaAdapterProdutos;
 import com.example.rcksuporte05.rcksistemas.classes.Produto;
 import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ActivityProduto extends AppCompatActivity {
@@ -121,53 +121,16 @@ public class ActivityProduto extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(final String query) {
-                b = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (!query.equals("") && query.length() >= 3) {
-                            try {
-                                listaAux = db.listaProduto("SELECT * FROM TBL_PRODUTO WHERE NOME_PRODUTO LIKE '%" + query + "%' ORDER BY ATIVO DESC, NOME_PRODUTO");
-                                lstProdutos.setFastScrollEnabled(true);
-                                lstProdutos.setFastScrollAlwaysVisible(false);
-                                lstProdutos.setVerticalScrollbarPosition(52);
-                                adaptador = new ListaAdapterProdutos(ActivityProduto.this, listaAux);
-
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        try {
-                                            lstProdutos.setVisibility(View.VISIBLE);
-                                            lstProdutos.setAdapter(adaptador);
-                                            adaptador.notifyDataSetChanged();
-                                        } catch (NullPointerException | IllegalStateException e) {
-                                            System.out.println("adaptador se nenhum dado!");
-                                        }
-                                    }
-                                });
-                            } catch (CursorIndexOutOfBoundsException | NullPointerException e) {
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        lstProdutos.setVisibility(View.INVISIBLE);
-                                    }
-                                });
-                            }
-                        } else {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    listaAux = lista;
-                                    lstProdutos.setVisibility(View.VISIBLE);
-                                    lstProdutos.setAdapter(adaptadorPrincipal);
-                                    adaptadorPrincipal.notifyDataSetChanged();
-                                }
-                            });
-                        }
-                    }
-                });
-                if (!b.isAlive()) {
-                    b.start();
+                if(query.trim().equals("")){
+                    adaptador = new ListaAdapterProdutos(ActivityProduto.this, lista);
+                    adaptador.notifyDataSetChanged();
+                    lstProdutos.setAdapter(adaptador);
+                }else {
+                    adaptador = new ListaAdapterProdutos(ActivityProduto.this, buscarProdutos(lista, query));
+                    adaptador.notifyDataSetChanged();
+                    lstProdutos.setAdapter(adaptador);
                 }
+
                 return false;
             }
         });
@@ -187,6 +150,24 @@ public class ActivityProduto extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    public List<Produto> buscarProdutos(List<Produto> produtos, String query) {
+        final String upperCaseQuery = query.toUpperCase();
+
+        final List<Produto> lista = new ArrayList<>();
+        for (Produto produto : produtos) {
+            try {
+                final String nomeCliente = produto.getNome_produto().toUpperCase();
+                if (nomeCliente.contains(upperCaseQuery)) {
+                    lista.add(produto);
+                }
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
+        }
+        return lista;
+    }
+
 
     @Override
     protected void onDestroy() {
