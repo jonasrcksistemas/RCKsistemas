@@ -3,7 +3,6 @@ package com.example.rcksuporte05.rcksistemas.interfaces;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
-import android.database.CursorIndexOutOfBoundsException;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
@@ -26,6 +25,7 @@ import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
 import com.example.rcksuporte05.rcksistemas.fragment.Pedido1;
 import com.example.rcksuporte05.rcksistemas.fragment.Pedido3;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ActivityCliente extends AppCompatActivity {
@@ -146,52 +146,21 @@ public class ActivityCliente extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(final String query) {
-                final String consulta = query.replace("'", "");
-                b = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (!consulta.equals("") && consulta.length() >= 3) {
-                            try {
-                                listaAux = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE NOME_CADASTRO LIKE '%" + consulta + "%' OR NOME_FANTASIA LIKE '%" + consulta + "%' OR CPF_CNPJ LIKE '" + consulta + "%' OR TELEFONE_PRINCIPAL LIKE '%" + consulta + "%' ORDER BY ATIVO DESC, NOME_CADASTRO");
-                                adaptador = new ListaAdapterClientes(ActivityCliente.this, listaAux);
+                if(query.trim().equals("")){
 
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        try {
-                                            lstClientes.setVisibility(View.VISIBLE);
-                                            lstClientes.setAdapter(adaptador);
-                                            adaptador.notifyDataSetChanged();
-                                        } catch (NullPointerException | IllegalStateException e) {
-                                            System.out.println("adaptador se nenhum dado!");
-                                        }
-                                    }
-                                });
-                            } catch (CursorIndexOutOfBoundsException | NullPointerException e) {
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        lstClientes.setVisibility(View.INVISIBLE);
-                                        Toast.makeText(ActivityCliente.this, "Sem resutados para '" + consulta + "'", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                            }
-                        } else {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    listaAux = lista;
-                                    lstClientes.setVisibility(View.VISIBLE);
-                                    lstClientes.setAdapter(adaptadorPrincipal);
-                                    adaptadorPrincipal.notifyDataSetChanged();
-                                }
-                            });
-                        }
-                    }
-                });
-                if (!b.isAlive()) {
-                    b.start();
+                    adaptador = new ListaAdapterClientes(ActivityCliente.this, lista);
+                    lstClientes.setVisibility(View.VISIBLE);
+                    lstClientes.setAdapter(adaptador);
+                    adaptador.notifyDataSetChanged();
+
+                }else{
+                    adaptador = new ListaAdapterClientes(ActivityCliente.this, buscaClientes(lista, query));
+                    lstClientes.setVisibility(View.VISIBLE);
+                    lstClientes.setAdapter(adaptador);
+                    adaptador.notifyDataSetChanged();
                 }
+
+
                 System.gc();
                 return false;
             }
@@ -217,6 +186,26 @@ public class ActivityCliente extends AppCompatActivity {
                 finish();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+    public List<Cliente> buscaClientes(List<Cliente> clientes, String query) {
+        final String upperCaseQuery = query.toUpperCase();
+
+        final List<Cliente> lista = new ArrayList<>();
+        for (Cliente cliente : clientes) {
+            try {
+                final String nomeCliente = cliente.getNome_cadastro().toUpperCase();
+
+
+                if (nomeCliente.contains(upperCaseQuery)) {
+                    lista.add(cliente);
+                }
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
+        }
+        return lista;
     }
 
     @Override
