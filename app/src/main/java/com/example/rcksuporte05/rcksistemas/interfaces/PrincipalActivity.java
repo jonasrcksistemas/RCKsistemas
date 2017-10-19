@@ -218,11 +218,30 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                 Call<Sincronia> call = apiRotas.sincroniaApi(Integer.parseInt(UsuarioHelper.getUsuario().getId_usuario()));
                 try {
                     sincronia = call.execute().body();
-                    ivInternet.setVisibility(View.INVISIBLE);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            ivInternet.setVisibility(View.INVISIBLE);
+                        }
+                    });
                     sincroniaBO.sincronizaBanco(sincronia, PrincipalActivity.this, notificacao, mNotificationManager, progress);
                 } catch (IOException e) {
                     e.printStackTrace();
-                    ivInternet.setVisibility(View.VISIBLE);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            ivInternet.setVisibility(View.VISIBLE);
+                            progress.dismiss();
+                        }
+                    });
+                    notificacao.setContentText("Erro de comunicação")
+                            .setContentTitle("Verifique sua conexão e tente novamente")
+                            .setProgress(0, 0, false)
+                            .setSmallIcon(R.mipmap.ic_sem_internet)
+                            .setDefaults(NotificationCompat.DEFAULT_ALL)
+                            .setPriority(2)
+                            .setAutoCancel(true);
+                    mNotificationManager.notify(0, notificacao.build());
                 }
             }
         });
@@ -231,11 +250,6 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
 
 
     public void getUsuarios() {
-        progress = new ProgressDialog(PrincipalActivity.this);
-        progress.setMessage("Carregando Usuarios");
-        progress.setTitle("Aguarde");
-        progress.show();
-
         Rotas apiRotas = Api.buildRetrofit();
 
 
@@ -248,13 +262,11 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                 ivInternet.setVisibility(View.INVISIBLE);
                 if (!usuarioBO.sincronizaNobanco(usuarioList, PrincipalActivity.this))
                     Toast.makeText(PrincipalActivity.this, "Houve um erro ao salvar os usuarios", Toast.LENGTH_LONG).show();
-                progress.dismiss();
             }
 
             @Override
             public void onFailure(Call<List<Usuario>> call, Throwable t) {
                 t.printStackTrace();
-                progress.dismiss();
                 Toast.makeText(PrincipalActivity.this, "Não foi possivel sincronizar com o servidor, por favor verifique sua conexão", Toast.LENGTH_LONG).show();
                 ivInternet.setVisibility(View.VISIBLE);
             }

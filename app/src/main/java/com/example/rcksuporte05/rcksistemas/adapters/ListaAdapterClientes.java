@@ -42,17 +42,19 @@ public class ListaAdapterClientes extends ArrayAdapter<Cliente> {
         }
         textViewNome.setText(itemPosicao.getNome_cadastro());
 
-        String telefone = itemPosicao.getTelefone_principal().trim().replaceAll("[^0-9]", "");
-        if (telefone.length() == 10) {
-            textViewTelefone.setText("(" + telefone.substring(0, 2) + ")" + telefone.substring(2, 6) + "-" + telefone.substring(6, 10));
-        } else if (telefone.length() == 11) {
-            textViewTelefone.setText("(" + telefone.substring(0, 2) + ")" + telefone.substring(2, 7) + "-" + telefone.substring(7, 11));
-        } else if (telefone.length() == 9 && !telefone.contains("-")) {
-            textViewTelefone.setText(telefone.substring(0, 5) + "-" + telefone.substring(5, 9));
-        } else if (telefone.length() == 8) {
-            textViewTelefone.setText(telefone.substring(0, 4) + "-" + telefone.substring(4, 8));
-        } else {
-            textViewTelefone.setText(telefone);
+        if (itemPosicao.getTelefone_principal() != null) {
+            String telefone = itemPosicao.getTelefone_principal().trim().replaceAll("[^0-9]", "");
+            if (telefone.length() == 10) {
+                textViewTelefone.setText("(" + telefone.substring(0, 2) + ")" + telefone.substring(2, 6) + "-" + telefone.substring(6, 10));
+            } else if (telefone.length() == 11) {
+                textViewTelefone.setText("(" + telefone.substring(0, 2) + ")" + telefone.substring(2, 7) + "-" + telefone.substring(7, 11));
+            } else if (telefone.length() == 9 && !telefone.contains("-")) {
+                textViewTelefone.setText(telefone.substring(0, 5) + "-" + telefone.substring(5, 9));
+            } else if (telefone.length() == 8) {
+                textViewTelefone.setText(telefone.substring(0, 4) + "-" + telefone.substring(4, 8));
+            } else {
+                textViewTelefone.setText(telefone);
+            }
         }
 
         textViewNomeFantasia.setText(itemPosicao.getNome_fantasia());

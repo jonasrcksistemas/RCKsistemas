@@ -18,6 +18,7 @@ import com.example.rcksuporte05.rcksistemas.classes.Produto;
 import com.example.rcksuporte05.rcksistemas.classes.Sincronia;
 import com.example.rcksuporte05.rcksistemas.classes.TabelaPreco;
 import com.example.rcksuporte05.rcksistemas.classes.TabelaPrecoItem;
+import com.example.rcksuporte05.rcksistemas.classes.Usuario;
 import com.example.rcksuporte05.rcksistemas.classes.VendedorBonusResumo;
 import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
 import com.example.rcksuporte05.rcksistemas.interfaces.MainActivity;
@@ -65,6 +66,24 @@ public class SincroniaBO {
             contadorNotificacaoEProgresso++;
             final int finalContadorNotificacaoEProgresso = contadorNotificacaoEProgresso;
             //SubThread necessária para manipulação de componentes da tela
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    progress.setProgress(finalContadorNotificacaoEProgresso);
+                }
+            });
+            mNotificationManager.notify(0, notificacao.build());
+        }
+
+        db.alterar("DELETE FROM TBL_WEB_USUARIO");
+
+        for (Usuario usuario : sincronia.getListaUsuario()) {
+            notificacao.setProgress(maxProgress, contadorNotificacaoEProgresso, false);
+
+            db.inserirTBL_WEB_USUARIO(usuario);
+
+            contadorNotificacaoEProgresso++;
+            final int finalContadorNotificacaoEProgresso = contadorNotificacaoEProgresso;
             activity.runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
