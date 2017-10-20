@@ -6,10 +6,12 @@ import com.example.rcksuporte05.rcksistemas.classes.Usuario;
 import com.example.rcksuporte05.rcksistemas.classes.WebPedido;
 
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.HeaderMap;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 
@@ -23,10 +25,10 @@ public interface Rotas {
     Call<List<Usuario>> getUsuarios();
 
     @GET("usuario/login/{idandroid}/{idusuario}")
-    Call<Usuario> setAndroidId(@Path("idandroid") String idandroid, @Path("idusuario") String idusuario);
+    Call<Usuario> login(@Path("idandroid") String idandroid, @Path("idusuario") String idusuario);
 
     @GET("sincronia/{id}")
-    Call<Sincronia> sincroniaApi(@Path("id") int id);
+    Call<Sincronia> sincroniaApi(@Path("id") int id, @HeaderMap Map<String, String> chaveDeAcesso);
 
     @POST("webpedido/faturar")
     Call<List<WebPedido>> enviarPedidos(@Body List<WebPedido> webPedidos);

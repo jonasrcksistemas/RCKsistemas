@@ -31,7 +31,9 @@ import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -222,7 +224,9 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
         Thread a = new Thread(new Runnable() {
             @Override
             public void run() {
-                Call<Sincronia> call = apiRotas.sincroniaApi(Integer.parseInt(UsuarioHelper.getUsuario().getId_usuario()));
+                Map<String, String> cabecalho = new HashMap<>();
+                cabecalho.put("AUTHORIZATION", UsuarioHelper.getUsuario().getToken());
+                Call<Sincronia> call = apiRotas.sincroniaApi(Integer.parseInt(UsuarioHelper.getUsuario().getId_usuario()), cabecalho);
                 try {
                     sincronia = call.execute().body();
                     runOnUiThread(new Runnable() {
