@@ -21,11 +21,8 @@ public class ActivityPedidoMain extends AppCompatActivity {
 
     private SlidingTabLayout stl_tabsPedido;
     private ViewPager mViewPager;
-    private EditText edtTotalVenda;
     private TabsAdapterPedido tabsAdapterPedido;
     private PedidoHelper pedidoHelper;
-    private DBHelper db = new DBHelper(this);
-    private MenuItem salvar_pedido;
     private int vizualizacao;
 
     @Override
@@ -35,7 +32,6 @@ public class ActivityPedidoMain extends AppCompatActivity {
 
         pedidoHelper = new PedidoHelper(this);
 
-        edtTotalVenda = (EditText) findViewById(R.id.edtTotalVenda);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarFragsPedido);
 
 

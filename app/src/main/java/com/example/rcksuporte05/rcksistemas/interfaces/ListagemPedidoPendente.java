@@ -373,69 +373,24 @@ public class ListagemPedidoPendente extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(final String query) {
-                a = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (!query.equals("")) {
-                            try {
-                                listaPedido = db.listaWebPedido("SELECT * FROM TBL_WEB_PEDIDO WHERE PEDIDO_ENVIADO = 'N' AND USUARIO_LANCAMENTO_ID = " + usuario.getId_usuario() + " AND (NOME_EXTENSO LIKE '%" + query + "%' OR ID_WEB_PEDIDO LIKE '" + query + "') ORDER BY ID_WEB_PEDIDO DESC;");
-                                listaAdapterPedidoPendente = new ListaAdapterPedidoPendente(ListagemPedidoPendente.this, listaPedido);
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        if (listaPedido.size() > 1) {
-                                            edtNumerPedidoPendentes.setText(listaPedido.size() + ": Pedidos Encontrados");
-                                            edtNumerPedidoPendentes.setTextColor(Color.BLACK);
-                                        } else if (listaPedido.size() == 1) {
-                                            edtNumerPedidoPendentes.setText(listaPedido.size() + ": Pedido Encontrado");
-                                            edtNumerPedidoPendentes.setTextColor(Color.BLACK);
-                                        } else if (listaPedido.size() <= 0) {
-                                            edtNumerPedidoPendentes.setText("Nenhum pedido encontrado");
-                                            edtNumerPedidoPendentes.setTextColor(Color.RED);
-                                        }
-                                    }
-                                });
-
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        try {
-                                            lstPedidoPendente.setVisibility(View.VISIBLE);
-                                            lstPedidoPendente.setAdapter(listaAdapterPedidoPendente);
-                                            listaAdapterPedidoPendente.notifyDataSetChanged();
-                                        } catch (NullPointerException | IllegalStateException e) {
-                                            System.out.println("listaAdapterPedidoPendente se nenhum dado!");
-                                        }
-                                    }
-                                });
-                            } catch (CursorIndexOutOfBoundsException | NullPointerException e) {
-                                runOnUiThread(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        lstPedidoPendente.setVisibility(View.INVISIBLE);
-                                        Toast.makeText(ListagemPedidoPendente.this, "Sem resutados para '" + query + "'", Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                            }
-                        } else {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    listaPedido = db.listaWebPedido("SELECT * FROM TBL_WEB_PEDIDO WHERE PEDIDO_ENVIADO = 'N' AND USUARIO_LANCAMENTO_ID = " + usuario.getId_usuario() + " ORDER BY ID_WEB_PEDIDO DESC;");
-                                    listaAdapterPedidoPendente = new ListaAdapterPedidoPendente(ListagemPedidoPendente.this, listaPedido);
-                                    lstPedidoPendente.setAdapter(listaAdapterPedidoPendente);
-                                    edtNumerPedidoPendentes.setText(listaPedido.size() + ": Pedidos Pendentes");
-                                    edtNumerPedidoPendentes.setTextColor(Color.BLACK);
-                                    lstPedidoPendente.setVisibility(View.VISIBLE);
-                                    listaAdapterPedidoPendente.notifyDataSetChanged();
-                                }
-                            });
-                        }
+                if (query.trim().equals("")) {
+                    listaAdapterPedidoPendente = new ListaAdapterPedidoPendente(ListagemPedidoPendente.this, listaPedido);
+                    edtNumerPedidoPendentes.setText(listaPedido.size() + ": Pedidos Pendentes");
+                    edtNumerPedidoPendentes.setTextColor(Color.BLACK);
+                } else {
+                    List<WebPedido> listaBusca = buscaPedidoPendente(listaPedido, query);
+                    listaAdapterPedidoPendente = new ListaAdapterPedidoPendente(ListagemPedidoPendente.this, listaBusca);
+                    if (listaBusca.size() > 0) {
+                        edtNumerPedidoPendentes.setText(listaBusca.size() + ": Pedidos Encontrados");
+                        edtNumerPedidoPendentes.setTextColor(Color.BLACK);
+                    } else {
+                        edtNumerPedidoPendentes.setText("Nenum pedido encontrado");
+                        edtNumerPedidoPendentes.setTextColor(Color.RED);
                     }
-                });
-                if (!a.isAlive()) {
-                    a.start();
                 }
+                lstPedidoPendente.setVisibility(View.VISIBLE);
+                lstPedidoPendente.setAdapter(listaAdapterPedidoPendente);
+                listaAdapterPedidoPendente.notifyDataSetChanged();
                 System.gc();
                 return false;
             }
@@ -444,6 +399,25 @@ public class ListagemPedidoPendente extends AppCompatActivity {
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setQueryHint("Nome Cliente / Nº pedido");
         return true;
+    }
+
+    public List<WebPedido> buscaPedidoPendente(List<WebPedido> webPedidos, String query) {
+        final String upperCaseQuery = query.toUpperCase();
+
+        final List<WebPedido> lista = new ArrayList<>();
+        for (WebPedido webPedido : webPedidos) {
+            try {
+                final String nomeCliente = webPedido.getNome_extenso().toUpperCase();
+                final String numeroPedido = webPedido.getId_web_pedido().toUpperCase();
+
+                if (nomeCliente.contains(upperCaseQuery) || numeroPedido.equals(upperCaseQuery)) {
+                    lista.add(webPedido);
+                }
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
+        }
+        return lista;
     }
 
     @Override

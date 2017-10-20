@@ -146,21 +146,14 @@ public class ActivityCliente extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(final String query) {
-                if(query.trim().equals("")){
-
+                if (query.trim().equals("")) {
                     adaptador = new ListaAdapterClientes(ActivityCliente.this, lista);
-                    lstClientes.setVisibility(View.VISIBLE);
-                    lstClientes.setAdapter(adaptador);
-                    adaptador.notifyDataSetChanged();
-
-                }else{
+                } else {
                     adaptador = new ListaAdapterClientes(ActivityCliente.this, buscaClientes(lista, query));
-                    lstClientes.setVisibility(View.VISIBLE);
-                    lstClientes.setAdapter(adaptador);
-                    adaptador.notifyDataSetChanged();
                 }
-
-
+                lstClientes.setVisibility(View.VISIBLE);
+                lstClientes.setAdapter(adaptador);
+                adaptador.notifyDataSetChanged();
                 System.gc();
                 return false;
             }
@@ -196,9 +189,9 @@ public class ActivityCliente extends AppCompatActivity {
         for (Cliente cliente : clientes) {
             try {
                 final String nomeCliente = cliente.getNome_cadastro().toUpperCase();
+                final String nomeFantasia = cliente.getNome_fantasia().toUpperCase();
 
-
-                if (nomeCliente.contains(upperCaseQuery)) {
+                if (nomeCliente.contains(upperCaseQuery) || nomeFantasia.contains(upperCaseQuery)) {
                     lista.add(cliente);
                 }
             } catch (NullPointerException e) {

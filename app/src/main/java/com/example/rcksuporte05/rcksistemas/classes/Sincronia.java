@@ -2,10 +2,6 @@ package com.example.rcksuporte05.rcksistemas.classes;
 
 import java.util.List;
 
-/**
- * Created by RCK 03 on 06/10/2017.
- */
-
 public class Sincronia {
     private List<Cliente> listaCliente;
     private List<CondicoesPagamento> listaCondicoesPagamento;
@@ -15,6 +11,7 @@ public class Sincronia {
     private List<TabelaPrecoItem> listaTabelaPrecoItem;
     private List<Usuario> listaUsuario;
     private List<VendedorBonusResumo> listaVendedorBonusResumo;
+    private List<WebPedido> listaWebPedidos;
 
     public List<Cliente> getListaCliente() {
         return listaCliente;
@@ -80,4 +77,11 @@ public class Sincronia {
         this.listaVendedorBonusResumo = listaVendedorBonusResumo;
     }
 
+    public List<WebPedido> getListaWebPedidos() {
+        return listaWebPedidos;
+    }
+
+    public void setListaWebPedidos(List<WebPedido> listaWebPedidos) {
+        this.listaWebPedidos = listaWebPedidos;
+    }
 }

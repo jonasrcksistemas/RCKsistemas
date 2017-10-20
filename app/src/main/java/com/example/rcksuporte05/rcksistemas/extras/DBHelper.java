@@ -1116,6 +1116,7 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("PERC_BONUS_CREDOR", webPedido.getPerc_bonus_credor());
         content.put("DATA_PREV_ENTREGA", webPedido.getData_prev_entrega());
         content.put("ID_WEB_PEDIDO_SERVIDOR", webPedido.getId_web_pedido_servidor());
+        content.put("PEDIDO_ENVIADO", webPedido.getPedido_enviado());
 
         db.insert("TBL_WEB_PEDIDO", null, content);
         System.gc();
@@ -1266,7 +1267,12 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("PONTOS_COR_ORIG", webPedidoItem.getPontos_cor_orig());
         content.put("VALOR_PRECO_PAGO", webPedidoItem.getValor_preco_pago());
 
-        db.update("TBL_WEB_PEDIDO_ITENS", content, "ID_WEB_ITEM = " + webPedidoItem.getId_web_item(), null);
+        if (contagem("SELECT COUNT(*) FROM TBL_WEB_PEDIDO_ITENS WHERE ID_WEB_ITEM_SERVIDOR = " + webPedidoItem.getId_web_item_servidor()) <= 0) {
+            db.insert("TBL_WEB_PEDIDO_ITENS", null, content);
+        } else {
+            db.update("TBL_WEB_PEDIDO_ITENS", content, "ID_WEB_ITEM = " + webPedidoItem.getId_web_item(), null);
+        }
+
         System.gc();
     }
 
@@ -1617,6 +1623,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 webPedido.setPerc_bonus_credor(cursor.getString(cursor.getColumnIndex("PERC_BONUS_CREDOR")));
                 webPedido.setId_web_pedido_servidor(cursor.getString(cursor.getColumnIndex("ID_WEB_PEDIDO_SERVIDOR")));
                 webPedido.setData_prev_entrega(cursor.getString(cursor.getColumnIndex("DATA_PREV_ENTREGA")));
+                webPedido.setPedido_enviado(cursor.getString(cursor.getColumnIndex("PEDIDO_ENVIADO")));
 
                 lista.add(webPedido);
             } catch (CursorIndexOutOfBoundsException e) {

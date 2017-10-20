@@ -20,6 +20,8 @@ import com.example.rcksuporte05.rcksistemas.classes.TabelaPreco;
 import com.example.rcksuporte05.rcksistemas.classes.TabelaPrecoItem;
 import com.example.rcksuporte05.rcksistemas.classes.Usuario;
 import com.example.rcksuporte05.rcksistemas.classes.VendedorBonusResumo;
+import com.example.rcksuporte05.rcksistemas.classes.WebPedido;
+import com.example.rcksuporte05.rcksistemas.classes.WebPedidoItens;
 import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
 import com.example.rcksuporte05.rcksistemas.interfaces.MainActivity;
 
@@ -36,14 +38,15 @@ public class SincroniaBO {
 
         DBHelper db = new DBHelper(activity);
 
-
         final int maxProgress = sincronia.getListaCliente().size() +
                 sincronia.getListaCondicoesPagamento().size() +
                 sincronia.getListaOperacao().size() +
                 sincronia.getListaProduto().size() +
                 sincronia.getListaTabelaPreco().size() +
+                sincronia.getListaTabelaPrecoItem().size() +
                 sincronia.getListaUsuario().size() +
-                sincronia.getListaVendedorBonusResumo().size();
+                sincronia.getListaVendedorBonusResumo().size() +
+                sincronia.getListaWebPedidos().size();
 
         activity.runOnUiThread(new Runnable() {
             @Override
@@ -202,6 +205,32 @@ public class SincroniaBO {
             mNotificationManager.notify(0, notificacao.build());
         }
 
+        for (WebPedido webPedido : sincronia.getListaWebPedidos()) {
+            notificacao.setProgress(maxProgress, contadorNotificacaoEProgresso, false);
+
+            webPedido.setPedido_enviado("S");
+            if (db.contagem("SELECT COUNT(*) FROM TBL_WEB_PEDIDO WHERE ID_WEB_PEDIDO_SERVIDOR = " + webPedido.getId_web_pedido_servidor()) <= 0) {
+                db.inserirTBL_WEB_PEDIDO(webPedido);
+            } else {
+                db.atualizarTBL_WEB_PEDIDO(webPedido);
+            }
+            for (WebPedidoItens webPedidoItens : webPedido.getWebPedidoItens()) {
+                String idPedido = db.consulta("SELECT * FROM TBL_WEB_PEDIDO WHERE ID_WEB_PEDIDO_SERVIDOR = " + webPedido.getId_web_pedido_servidor(), "ID_WEB_PEDIDO");
+                webPedidoItens.setId_pedido(idPedido);
+                db.atualizarTBL_WEB_PEDIDO_ITENS(webPedidoItens);
+            }
+
+            contadorNotificacaoEProgresso++;
+            final int finalContadorNotificacaoEProgresso = contadorNotificacaoEProgresso;
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    progress.setProgress(finalContadorNotificacaoEProgresso);
+                }
+            });
+                mNotificationManager.notify(0, notificacao.build());
+        }
+
         Intent intent = new Intent(activity, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(activity, 0, intent, 0);
         notificacao.setContentText("Completo")
@@ -236,4 +265,6 @@ public class SincroniaBO {
         });
 
     }
+
+
 }

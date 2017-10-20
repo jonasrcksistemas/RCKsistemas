@@ -93,7 +93,8 @@ public class Pedido2 extends Fragment {
         if (PedidoHelper.getIdPedido() > 0) {
             final int pedido = PedidoHelper.getIdPedido();
             try {
-                listaProdutoPedido = db.listaWebPedidoItens("SELECT * FROM TBL_WEB_PEDIDO_ITENS WHERE ID_PEDIDO = " + pedido);
+
+                listaProdutoPedido = db.listaWebPedidoItens("SELECT * FROM TBL_WEB_PEDIDO_ITENS --WHERE ID_PEDIDO = " + pedido);
                 adapter = new ListaAdapterProdutoPedido(getContext(), listaProdutoPedido);
                 lstProdutoPedido.setAdapter(adapter);
             } catch (CursorIndexOutOfBoundsException e) {
@@ -110,7 +111,7 @@ public class Pedido2 extends Fragment {
                     }
                 });
                 alert.show();
-                System.out.println(e.getMessage());
+                e.printStackTrace();
             }
         }
 

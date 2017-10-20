@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -56,15 +57,17 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
     private ImageView ivInternet;
     private SincroniaBO sincroniaBO = new SincroniaBO();
     private Sincronia sincronia;
-    private ProgressDialog progress;
     private List<Usuario> usuarioList = new ArrayList<>();
     private UsuarioBO usuarioBO = new UsuarioBO();
+    private DBHelper db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_principal);
+
+        db = new DBHelper(this);
 
         btnCliente = (Button) findViewById(R.id.btnCliente);
         btnProduto = (Button) findViewById(R.id.btnProduto);
@@ -95,17 +98,21 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
     public void onClick(View view) {
 
         if (view == btnCliente || view == txtCliente) {
+            getUsuarios();
             Intent intent = new Intent(PrincipalActivity.this, ActivityCliente.class);
             startActivity(intent);
         } else if (view == btnProduto || view == txtProduto) {
+            getUsuarios();
 
             Intent intent = new Intent(PrincipalActivity.this, ActivityProduto.class);
             startActivity(intent);
         } else if (view == btnPedidos || view == txtPedido) {
+            getUsuarios();
             Intent intent = new Intent(PrincipalActivity.this, ActivityPedidoMain.class);
 
             startActivity(intent);
         } else if (view == btnSincroniza || view == txtSincroniza) {
+            getUsuarios();
             AlertDialog.Builder alert = new AlertDialog.Builder(this);
             alert.setTitle("Atenção!");
             alert.setMessage("Tem certeza que deseja iniciar a sincronia agora?");
@@ -262,6 +269,30 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                 ivInternet.setVisibility(View.INVISIBLE);
                 if (!usuarioBO.sincronizaNobanco(usuarioList, PrincipalActivity.this))
                     Toast.makeText(PrincipalActivity.this, "Houve um erro ao salvar os usuarios", Toast.LENGTH_LONG).show();
+                else {
+                    String aparelhoId = Settings.Secure.getString(getBaseContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+                    String idLogin = db.consulta("SELECT * FROM TBL_WEB_USUARIO WHERE ID_USUARIO = " + UsuarioHelper.getUsuario().getId_usuario(), "APARELHO_ID");
+                    if (aparelhoId.equals(idLogin)) {
+                        if (UsuarioHelper.getUsuario().getSenha().equals(db.consulta("SELECT SENHA FROM TBL_WEB_USUARIO WHERE ATIVO = 'S' AND LOGIN = '" + UsuarioHelper.getUsuario().getLogin() + "';", "SENHA").trim())) {
+                            System.out.println("Usuario ok!");
+                        } else {
+                            Toast.makeText(getApplicationContext(), "Por favor, refaça o seu login!", Toast.LENGTH_LONG).show();
+                            db.alterar("UPDATE TBL_LOGIN SET LOGADO = 'N';");
+                            Intent intent = new Intent(PrincipalActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            finish();
+                            System.gc();
+                        }
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Este usuario está logado em outro aparelho!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Por favor, refaça o seu login!", Toast.LENGTH_LONG).show();
+                        db.alterar("UPDATE TBL_LOGIN SET LOGADO = 'N';");
+                        Intent intent = new Intent(PrincipalActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                        System.gc();
+                    }
+                }
             }
 
             @Override
