@@ -166,7 +166,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         try {
             if (alterado == 0) {
                 Usuario usuario = db.listaUsuario("SELECT * FROM TBL_WEB_USUARIO WHERE LOGIN = '" + edtLogin.getText().toString() + "'").get(0);
-                setAndroidId(usuario, alterado);
+                loginNaApi(usuario, alterado);
             }
             {
                 getUsuarios();
@@ -215,7 +215,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         });
     }
 
-    public void setAndroidId(final Usuario usuario, final int alterado) {
+    public void loginNaApi(final Usuario usuario, final int alterado) {
         final ProgressDialog progress = new ProgressDialog(MainActivity.this);
         progress.setMessage("Aguarde enquanto seus dados são validados");
         progress.setTitle("AGUARDE");
@@ -225,7 +225,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         String idAndroit = Settings.Secure.getString(getBaseContext().getContentResolver(), Settings.Secure.ANDROID_ID);
 
-        Call<Usuario> call = apiRotas.setAndroidId(idAndroit, usuario.getId_usuario());
+        Call<Usuario> call = apiRotas.login(idAndroit, usuario.getId_usuario());
 
         call.enqueue(new Callback<Usuario>() {
             @Override
@@ -233,19 +233,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Usuario usuario1 = response.body();
                 if (response.code() == 200) {
                     Intent intent = new Intent(MainActivity.this, PrincipalActivity.class);
-
+                    usuario1.setLogado("S");
                     if (db.contagem("SELECT COUNT(*) FROM TBL_LOGIN") > 0) {
-                        db.atualizarTBL_LOGIN("1", edtLogin.getText().toString(), edtSenha.getText().toString(), "S", usuario1.getAparelho_id());
+                        db.atualizarTBL_LOGIN(usuario1);
                     } else {
-                        db.insertTBL_LOGIN("1", edtLogin.getText().toString(), edtSenha.getText().toString(), "S", usuario1.getAparelho_id());
+                        db.insertTBL_LOGIN(usuario1);
                     }
-                    bundleUsuario = new Bundle();
-                    bundleUsuario.putString("usuario", db.consulta("SELECT NOME_USUARIO FROM TBL_WEB_USUARIO WHERE LOGIN = '" + edtLogin.getText().toString() + "';", "NOME_USUARIO"));
-                    intent.putExtras(bundleUsuario);
                     intent.putExtra("alterado", alterado);
                     db.close();
                     System.gc();
-                    UsuarioHelper.setUsuario(usuario);
+                    UsuarioHelper.setUsuario(usuario1);
                     progress.dismiss();
                     startActivity(intent);
                     finish();

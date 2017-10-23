@@ -25,7 +25,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private final static String NomeBanco = "Banco.db";
 
     public DBHelper(Context context) {
-        super(context, NomeBanco, null, 3);
+        super(context, NomeBanco, null, 4);
     }
 
     @Override
@@ -450,6 +450,8 @@ public class DBHelper extends SQLiteOpenHelper {
                         " HABILITACAO_VENCIMENTO DATE," +
                         " MOT_ID_TRANSPORTADORA INTEGER," +
                         " LOCAL_CADASTRO VARCHAR(20));");
+
+                db.execSQL("ALETER TABLE TBL_LOGIN ADD COLUMN TOKEN VARCHAR(60)");
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -960,26 +962,26 @@ public class DBHelper extends SQLiteOpenHelper {
         System.gc();
     }
 
-    public void insertTBL_LOGIN(String id_login, String usuario, String senha, String logado, String aparelho_id) {
+    public void insertTBL_LOGIN(Usuario usuario) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content = new ContentValues();
-        content.put("ID_LOGIN", id_login);
-        content.put("LOGIN", usuario);
-        content.put("SENHA", senha);
-        content.put("LOGADO", logado);
-        content.put("APARELHO_ID", aparelho_id);
+        content.put("ID_LOGIN", 1);
+        content.put("LOGIN", usuario.getLogin());
+        content.put("SENHA", usuario.getSenha());
+        content.put("LOGADO", usuario.getLogado());
+        content.put("APARELHO_ID", usuario.getAparelho_id());
         db.insert("TBL_LOGIN", null, content);
         System.gc();
     }
 
-    public void atualizarTBL_LOGIN(String id_login, String usuario, String senha, String logado, String aparelho_id) {
+    public void atualizarTBL_LOGIN(Usuario usuario) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content = new ContentValues();
-        content.put("LOGIN", usuario);
-        content.put("SENHA", senha);
-        content.put("LOGADO", logado);
-        content.put("APARELHO_ID", aparelho_id);
-        db.update("TBL_LOGIN", content, "ID_LOGIN = " + id_login, null);
+        content.put("LOGIN", usuario.getLogin());
+        content.put("SENHA", usuario.getSenha());
+        content.put("LOGADO", usuario.getLogado());
+        content.put("APARELHO_ID", usuario.getAparelho_id());
+        db.update("TBL_LOGIN", content, "ID_LOGIN = " + 1, null);
         System.gc();
     }
 
