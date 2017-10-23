@@ -94,7 +94,7 @@ public class Pedido2 extends Fragment {
             final int pedido = PedidoHelper.getIdPedido();
             try {
 
-                listaProdutoPedido = db.listaWebPedidoItens("SELECT * FROM TBL_WEB_PEDIDO_ITENS --WHERE ID_PEDIDO = " + pedido);
+                listaProdutoPedido = db.listaWebPedidoItens("SELECT * FROM TBL_WEB_PEDIDO_ITENS WHERE ID_PEDIDO = " + pedido);
                 adapter = new ListaAdapterProdutoPedido(getContext(), listaProdutoPedido);
                 lstProdutoPedido.setAdapter(adapter);
             } catch (CursorIndexOutOfBoundsException e) {

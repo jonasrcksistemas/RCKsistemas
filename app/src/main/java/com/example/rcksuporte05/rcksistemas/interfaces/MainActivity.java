@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Toast.makeText(getApplicationContext(), "Usuario alterado", Toast.LENGTH_LONG).show();
                 db.alterar("DELETE FROM TBL_LOGIN");
             }
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 

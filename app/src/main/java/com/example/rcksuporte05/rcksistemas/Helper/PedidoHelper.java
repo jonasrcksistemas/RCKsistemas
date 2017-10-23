@@ -194,6 +194,7 @@ public class PedidoHelper {
                                         }
                                     }
                                 } else {
+                                    webPedido.setPedido_enviado("N");
                                     db.inserirTBL_WEB_PEDIDO(webPedido);
                                     int idPedido = db.contagem("SELECT MAX(ID_WEB_PEDIDO) FROM TBL_WEB_PEDIDO");
                                     for (int i = 0; listaWebPedidoItens.size() > i; i++) {

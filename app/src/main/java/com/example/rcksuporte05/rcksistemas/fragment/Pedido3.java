@@ -202,6 +202,7 @@ public class Pedido3 extends Fragment implements View.OnClickListener {
         webPedido.setCadastro(objetoCliente);
         webPedido.setObservacoes(edtObservacao.getText().toString());
         webPedido.setData_prev_entrega(edtDataEntrega.getText().toString().trim());
+        webPedido.setPedido_enviado("N");
 
         return webPedido;
     }

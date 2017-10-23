@@ -49,7 +49,6 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
     private Float precoPago;
     private Float total;
     private Float valorBruto;
-    private Bundle bundle;
     private DBHelper db;
 
     @Override
@@ -58,8 +57,6 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_produto_pedido);
 
         PedidoHelper pedidoHelper = new PedidoHelper(this);
-
-        bundle = getIntent().getExtras();
 
         db = new DBHelper(ProdutoPedidoActivity.this);
 
@@ -230,12 +227,12 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
                 edtQuantidade.setText(quantidade.toString());
                 edtPrecoPago.setText(String.format("R$%.4f", precoPago));
                 edtDescontoReais.setText(String.format("%.2f", descontoReais));
-                edtTotal.setText(String.format("R$%.2f", 0));
+                edtTotal.setText(String.format("R$%.2f", 0.f));
                 edtValorProdutos.setText(String.format("R$%.2f", valorBruto));
 
             } catch (Exception e) {
+                e.printStackTrace();
                 edtValorProdutos.setText(String.format("R$%.2f", Float.parseFloat(objetoProduto.getVenda_preco())));
-                System.out.println(e.toString());
             }
         }
 
