@@ -34,7 +34,7 @@ public interface Rotas {
     Call<List<WebPedido>> enviarPedidos(@Body List<WebPedido> webPedidos);
 
     @GET("historicofinanceiro/listar/{id}")
-    Call<HistoricoFinanceiro> getHistoricoFinanceiro(@Path("id") int idCliente);
+    Call<HistoricoFinanceiro> getHistoricoFinanceiro(@Path("id") int idCliente, @HeaderMap Map<String, String> chaveDeAcesso);
 
 
 }

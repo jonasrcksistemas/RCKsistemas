@@ -15,6 +15,7 @@ public class Api {
 
     public static Rotas buildRetrofit() {
 
+
         if (apiRotas == null) {
             Retrofit retrofit = new Retrofit.Builder()
                     .addConverterFactory(GsonConverterFactory.create())
