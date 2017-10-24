@@ -263,7 +263,6 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
     public void getUsuarios() {
         Rotas apiRotas = Api.buildRetrofit();
 
-
         Call<List<Usuario>> call = apiRotas.getUsuarios();
 
         call.enqueue(new Callback<List<Usuario>>() {

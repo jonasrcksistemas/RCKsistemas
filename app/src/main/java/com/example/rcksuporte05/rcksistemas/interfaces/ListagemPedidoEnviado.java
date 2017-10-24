@@ -79,14 +79,14 @@ public class ListagemPedidoEnviado extends AppCompatActivity {
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-        menu.setHeaderTitle("Pedido: " + listaPedido.get(info.position).getId_web_pedido_servidor());
+        menu.setHeaderTitle("Pedido: " + listaAdapterPedidoEnviado.getItem(info.position).getId_web_pedido_servidor());
 
         MenuItem visualizar = menu.add("Visualizar");
         visualizar.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 Intent intent = new Intent(ListagemPedidoEnviado.this, ActivityPedidoMain.class);
-                PedidoHelper.setIdPedido(Integer.parseInt(listaPedido.get(info.position).getId_web_pedido()));
+                PedidoHelper.setIdPedido(Integer.parseInt(listaAdapterPedidoEnviado.getItem(info.position).getId_web_pedido()));
                 intent.putExtra("vizualizacao", 1);
                 startActivity(intent);
                 return false;

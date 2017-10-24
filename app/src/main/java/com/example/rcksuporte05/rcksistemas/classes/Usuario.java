@@ -35,6 +35,7 @@ public class Usuario {
     private String aparelho_id;
     private String token;
     private String logado;
+    private String idEmpresa;
 
     public String getId_usuario() {
         return id_usuario;
@@ -298,6 +299,14 @@ public class Usuario {
 
     public void setLogado(String logado) {
         this.logado = logado;
+    }
+
+    public String getIdEmpresa() {
+        return idEmpresa;
+    }
+
+    public void setIdEmpresa(String idEmpresa) {
+        this.idEmpresa = idEmpresa;
     }
 }
 
