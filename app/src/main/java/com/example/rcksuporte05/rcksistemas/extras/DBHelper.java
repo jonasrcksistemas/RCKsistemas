@@ -66,8 +66,9 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE IF NOT EXISTS TBL_LOGIN " +
                 "(ID_LOGIN INTEGER PRIMARY KEY, " +
                 "LOGIN VARCHAR(100), " +
-                "SENHA VARCHAR(100)," +
-                "LOGADO VARCHAR(1)," +
+                "SENHA VARCHAR(100), " +
+                "LOGADO VARCHAR(1), " +
+                "TOKEN VARCHAR(60), " +
                 "APARELHO_ID VARCHAR(20));");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS TBL_CADASTRO " +
@@ -970,6 +971,7 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("SENHA", usuario.getSenha());
         content.put("LOGADO", usuario.getLogado());
         content.put("APARELHO_ID", usuario.getAparelho_id());
+        content.put("TOKEN", usuario.getToken());
         db.insert("TBL_LOGIN", null, content);
         System.gc();
     }
@@ -981,6 +983,7 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("SENHA", usuario.getSenha());
         content.put("LOGADO", usuario.getLogado());
         content.put("APARELHO_ID", usuario.getAparelho_id());
+        content.put("TOKEN", usuario.getToken());
         db.update("TBL_LOGIN", content, "ID_LOGIN = " + 1, null);
         System.gc();
     }

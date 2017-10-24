@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnEntrar.setOnClickListener(this);
         btnFechar.setOnClickListener(this);
         try {
-            Usuario usuario = db.listaUsuario("SELECT * FROM TBL_WEB_USUARIO WHERE LOGIN = (SELECT LOGIN FROM TBL_LOGIN WHERE LOGADO = 'S')").get(0);
+            Usuario usuario = usuarioBO.buscarUsuarioLogin(this);
 
             if (usuario.getSenha().equals(db.consulta("SELECT SENHA FROM TBL_LOGIN WHERE LOGADO = 'S'", "SENHA"))) {
                 Intent intent = new Intent(MainActivity.this, PrincipalActivity.class);
@@ -246,8 +246,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     progress.dismiss();
                     startActivity(intent);
                     finish();
-                } else {
-
                 }
 
             }
