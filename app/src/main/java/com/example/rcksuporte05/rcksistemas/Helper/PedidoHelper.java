@@ -115,7 +115,7 @@ public class PedidoHelper {
             resultado += Float.valueOf(produtoPedido.get(i).getValor_total());
         }
         valorVenda = resultado;
-        edtTotalVenda.setText(String.format("TOTAL    R$%.2f", valorVenda) + "     ");
+        edtTotalVenda.setText(String.format("TOTAL    R$%.2f", valorVenda) + "    ");
     }
 
     public void inserirProduto(WebPedidoItens webPedidoItem) {

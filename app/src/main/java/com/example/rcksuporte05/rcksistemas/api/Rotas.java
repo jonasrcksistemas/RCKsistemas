@@ -31,7 +31,7 @@ public interface Rotas {
     Call<Sincronia> sincroniaApi(@Path("id") int id, @HeaderMap Map<String, String> chaveDeAcesso);
 
     @POST("webpedido/faturar")
-    Call<List<WebPedido>> enviarPedidos(@Body List<WebPedido> webPedidos);
+    Call<List<WebPedido>> enviarPedidos(@Body List<WebPedido> webPedidos, @HeaderMap Map<String, String> chaveDeAcesso);
 
     @GET("historicofinanceiro/listar/{id}")
     Call<HistoricoFinanceiro> getHistoricoFinanceiro(@Path("id") int idCliente, @HeaderMap Map<String, String> chaveDeAcesso);

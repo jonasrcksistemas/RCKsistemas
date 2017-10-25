@@ -29,9 +29,7 @@ public class ActivityProduto extends AppCompatActivity {
     private SearchView busca_produto;
     private ListView lstProdutos;
     private Toolbar toolbar;
-    private List<Produto> listaAux;
     private List<Produto> lista;
-    private ListaAdapterProdutos adaptadorPrincipal;
     private ListaAdapterProdutos adaptador;
     private DBHelper db = new DBHelper(this);
     private Thread b = new Thread();
@@ -50,9 +48,9 @@ public class ActivityProduto extends AppCompatActivity {
         if (getIntent().getIntExtra("acao", 0) == 1) {
             try {
                 lista = db.listaProduto("SELECT * FROM TBL_PRODUTO WHERE ATIVO = 'S' ORDER BY NOME_PRODUTO");
-                listaAux = lista;
-                adaptadorPrincipal = new ListaAdapterProdutos(ActivityProduto.this, lista);
-                lstProdutos.setAdapter(adaptadorPrincipal);
+
+                adaptador = new ListaAdapterProdutos(ActivityProduto.this, lista);
+                lstProdutos.setAdapter(adaptador);
             } catch (Exception e) {
                 Toast.makeText(this, "Não há nenhum produto a ser exibido!", Toast.LENGTH_LONG).show();
             }
@@ -60,16 +58,15 @@ public class ActivityProduto extends AppCompatActivity {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     ProdutoPedidoActivity produtoPedidoActivity = new ProdutoPedidoActivity();
-                    produtoPedidoActivity.pegaProduto(listaAux.get(position));
+                    produtoPedidoActivity.pegaProduto(adaptador.getItem(position));
                     finish();
                 }
             });
         } else {
             try {
                 lista = db.listaProduto("SELECT * FROM TBL_PRODUTO ORDER BY ATIVO DESC, NOME_PRODUTO");
-                listaAux = lista;
-                adaptadorPrincipal = new ListaAdapterProdutos(ActivityProduto.this, lista);
-                lstProdutos.setAdapter(adaptadorPrincipal);
+                adaptador = new ListaAdapterProdutos(ActivityProduto.this, lista);
+                lstProdutos.setAdapter(adaptador);
             } catch (Exception e) {
                 Toast.makeText(this, "Não há nenhum produto a ser exibido!", Toast.LENGTH_SHORT).show();
             }
@@ -79,10 +76,10 @@ public class ActivityProduto extends AppCompatActivity {
                     Float preco = null;
                     String mensagem;
                     try {
-                        preco = Float.parseFloat(listaAux.get(position).getVenda_preco());
-                        mensagem = "Produto: " + listaAux.get(position).getId_produto() + "\n        " + listaAux.get(position).getNome_produto() + "\nUnidade de Medida: " + listaAux.get(position).getDescricao() + "\nPreço de Venda: R$" + String.format("%.2f", preco);
+                        preco = Float.parseFloat(adaptador.getItem(position).getVenda_preco());
+                        mensagem = "Produto: " + adaptador.getItem(position).getId_produto() + "\n        " + adaptador.getItem(position).getNome_produto() + "\nUnidade de Medida: " + adaptador.getItem(position).getDescricao() + "\nPreço de Venda: R$" + String.format("%.2f", preco);
                     } catch (NumberFormatException e) {
-                        mensagem = "Produto: " + listaAux.get(position).getId_produto() + "\n        " + listaAux.get(position).getNome_produto() + "\nUnidade de Medida: " + listaAux.get(position).getDescricao();
+                        mensagem = "Produto: " + adaptador.getItem(position).getId_produto() + "\n        " + adaptador.getItem(position).getNome_produto() + "\nUnidade de Medida: " + adaptador.getItem(position).getDescricao();
                         System.out.println("Produto sem preco");
                     }
                     AlertDialog.Builder alert = new AlertDialog.Builder(ActivityProduto.this);

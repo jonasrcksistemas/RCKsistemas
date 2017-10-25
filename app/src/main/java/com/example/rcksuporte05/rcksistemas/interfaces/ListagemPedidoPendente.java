@@ -27,6 +27,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.rcksuporte05.rcksistemas.Helper.PedidoHelper;
+import com.example.rcksuporte05.rcksistemas.Helper.UsuarioHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.ListaAdapterPedidoPendente;
 import com.example.rcksuporte05.rcksistemas.api.Api;
@@ -37,7 +38,9 @@ import com.example.rcksuporte05.rcksistemas.classes.WebPedidoItens;
 import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -204,8 +207,9 @@ public class ListagemPedidoPendente extends AppCompatActivity {
         prepararItensPedidos();
 
         final Rotas apiRotas = Api.buildRetrofit();
-
-        Call<List<WebPedido>> call = apiRotas.enviarPedidos(listaPedido);
+        Map<String, String> cabecalho = new HashMap<>();
+        cabecalho.put("AUTHORIZATION", UsuarioHelper.getUsuario().getToken());
+        Call<List<WebPedido>> call = apiRotas.enviarPedidos(listaPedido, cabecalho);
 
 
         call.enqueue(new Callback<List<WebPedido>>() {
@@ -274,8 +278,11 @@ public class ListagemPedidoPendente extends AppCompatActivity {
         pedido.add(prepararItemPedido(webPedido));
 
         final Rotas apiRotas = Api.buildRetrofit();
+        Map<String, String> cabecalho = new HashMap<>();
+        cabecalho.put("AUTHORIZATION", UsuarioHelper.getUsuario().getToken());
 
-        Call<List<WebPedido>> call = apiRotas.enviarPedidos(pedido);
+        Call<List<WebPedido>> call = apiRotas.enviarPedidos(pedido, cabecalho);
+
         call.enqueue(new Callback<List<WebPedido>>() {
             @Override
             public void onResponse(Call<List<WebPedido>> call, Response<List<WebPedido>> response) {
