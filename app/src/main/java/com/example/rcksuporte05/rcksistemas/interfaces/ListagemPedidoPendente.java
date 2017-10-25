@@ -206,7 +206,6 @@ public class ListagemPedidoPendente extends AppCompatActivity {
 
         Call<List<WebPedido>> call = apiRotas.enviarPedidos(listaPedido);
 
-
         call.enqueue(new Callback<List<WebPedido>>() {
             @Override
             public void onResponse(Call<List<WebPedido>> call, Response<List<WebPedido>> response) {
@@ -234,7 +233,15 @@ public class ListagemPedidoPendente extends AppCompatActivity {
                     onResume();
                     progress.dismiss();
                 } else {
+                    notificacao.setContentText("Não foi possivel enviar os pedidos")
+                            .setContentTitle("Problema de conexão")
+                            .setProgress(0, 0, false)
+                            .setSmallIcon(R.mipmap.ic_sem_internet)
+                            .setDefaults(NotificationCompat.DEFAULT_VIBRATE)
+                            .setPriority(2);
+                    notificationManager.notify(0, notificacao.build());
                     onResume();
+                    progress.dismiss();
                     Toast.makeText(ListagemPedidoPendente.this, "Não foi possivel enviar os pedidos", Toast.LENGTH_SHORT).show();
                     progress.dismiss();
                 }

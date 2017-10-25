@@ -32,12 +32,9 @@ public class ActivityCliente extends AppCompatActivity {
     //    private MenuItem novo_cliente;
     private ListView lstClientes;
     private Toolbar toolbar;
-    private List<Cliente> listaAux;
     private List<Cliente> lista;
-    private ListaAdapterClientes adaptadorPrincipal;
     private ListaAdapterClientes adaptador;
     private DBHelper db = new DBHelper(this);
-    private Thread b = new Thread();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,9 +49,8 @@ public class ActivityCliente extends AppCompatActivity {
 
             try {
                 lista = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE F_CLIENTE = 'S' AND F_VENDEDOR = 'N' AND ATIVO = 'S' ORDER BY ATIVO DESC, NOME_CADASTRO;");
-                listaAux = lista;
-                adaptadorPrincipal = new ListaAdapterClientes(ActivityCliente.this, lista);
-                lstClientes.setAdapter(adaptadorPrincipal);
+                adaptador = new ListaAdapterClientes(ActivityCliente.this, lista);
+                lstClientes.setAdapter(adaptador);
                 System.gc();
             } catch (Exception e) {
                 Toast.makeText(this, "Não há nenhum cliente a ser exibido!", Toast.LENGTH_LONG).show();
@@ -65,8 +61,8 @@ public class ActivityCliente extends AppCompatActivity {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Pedido1 pedido1 = new Pedido1();
                     Pedido3 pedido3 = new Pedido3();
-                    pedido1.pegaCliente(listaAux.get(position));
-                    pedido3.pegaCliente(listaAux.get(position));
+                    pedido1.pegaCliente(adaptador.getItem(position));
+                    pedido3.pegaCliente(adaptador.getItem(position));
                     System.gc();
                     finish();
                 }
@@ -75,9 +71,8 @@ public class ActivityCliente extends AppCompatActivity {
 
             try {
                 lista = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE F_CLIENTE = 'S' AND F_VENDEDOR = 'N' ORDER BY ATIVO DESC, NOME_CADASTRO;");
-                listaAux = lista;
-                adaptadorPrincipal = new ListaAdapterClientes(ActivityCliente.this, lista);
-                lstClientes.setAdapter(adaptadorPrincipal);
+                adaptador = new ListaAdapterClientes(ActivityCliente.this, lista);
+                lstClientes.setAdapter(adaptador);
                 System.gc();
             } catch (Exception e) {
                 Toast.makeText(this, "Não há nenhum cliente a ser exibido!", Toast.LENGTH_LONG).show();
@@ -87,8 +82,8 @@ public class ActivityCliente extends AppCompatActivity {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Intent intent = new Intent(ActivityCliente.this, ContatoActivity.class);
-                    ClienteHelper.setCliente(listaAux.get(position));
-                    intent.putExtra("id_cliente", Integer.parseInt(listaAux.get(position).getId_cadastro()));
+                    ClienteHelper.setCliente(adaptador.getItem(position));
+                    intent.putExtra("id_cliente", Integer.parseInt(adaptador.getItem(position).getId_cadastro()));
                     System.gc();
                     startActivity(intent);
                 }
@@ -106,14 +101,14 @@ public class ActivityCliente extends AppCompatActivity {
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-        menu.setHeaderTitle(listaAux.get(info.position).getNome_cadastro());
+        menu.setHeaderTitle(adaptador.getItem(info.position).getNome_cadastro());
 
         MenuItem historicoFInanceiro = menu.add("Historico Financeiro");
         historicoFInanceiro.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 Intent intent = new Intent(ActivityCliente.this, HistoricoFinanceiroMain.class);
-                intent.putExtra("idCliente", Integer.parseInt(listaAux.get(info.position).getId_cadastro()));
+                intent.putExtra("idCliente", Integer.parseInt(adaptador.getItem(info.position).getId_cadastro()));
                 ActivityCliente.this.startActivity(intent);
 
                 return false;
