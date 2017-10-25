@@ -32,11 +32,14 @@ public class ActivityProduto extends AppCompatActivity {
     private List<Produto> lista;
     private ListaAdapterProdutos adaptador;
     private DBHelper db = new DBHelper(this);
+    private Thread b = new Thread();
+    private Bundle bundle = new Bundle();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_produto);
+
 
 
         lstProdutos = (ListView) findViewById(R.id.lstProdutos);
@@ -45,6 +48,7 @@ public class ActivityProduto extends AppCompatActivity {
         if (getIntent().getIntExtra("acao", 0) == 1) {
             try {
                 lista = db.listaProduto("SELECT * FROM TBL_PRODUTO WHERE ATIVO = 'S' ORDER BY NOME_PRODUTO");
+
                 adaptador = new ListaAdapterProdutos(ActivityProduto.this, lista);
                 lstProdutos.setAdapter(adaptador);
             } catch (Exception e) {
@@ -69,7 +73,7 @@ public class ActivityProduto extends AppCompatActivity {
             lstProdutos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Float preco;
+                    Float preco = null;
                     String mensagem;
                     try {
                         preco = Float.parseFloat(adaptador.getItem(position).getVenda_preco());
@@ -114,11 +118,11 @@ public class ActivityProduto extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(final String query) {
-                if (query.trim().equals("")) {
+                if(query.trim().equals("")){
                     adaptador = new ListaAdapterProdutos(ActivityProduto.this, lista);
                     adaptador.notifyDataSetChanged();
                     lstProdutos.setAdapter(adaptador);
-                } else {
+                }else {
                     adaptador = new ListaAdapterProdutos(ActivityProduto.this, buscarProdutos(lista, query));
                     adaptador.notifyDataSetChanged();
                     lstProdutos.setAdapter(adaptador);

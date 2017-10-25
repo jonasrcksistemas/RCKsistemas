@@ -35,6 +35,11 @@ public class UsuarioBO {
         return true;
     }
 
+
+    /*
+      foi criado para poder executar um inner join para montar um usuario com token no login
+      automatico.
+    */
     public Usuario buscarUsuarioLogin(Context context){
         db = new DBHelper(context);
 
