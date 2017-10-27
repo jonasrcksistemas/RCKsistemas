@@ -5,9 +5,9 @@
     android:id="@+id/activity_cliente"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:theme="@style/Theme.Toolbar"
-    tools:context="com.example.rcksuporte05.rcksistemas.interfaces.ActivityCliente"
-    android:orientation="vertical">
+    android:layout_weight="1"
+    android:orientation="vertical"
+    tools:context="com.example.rcksuporte05.rcksistemas.interfaces.ActivityCliente">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/tb_cliente"
@@ -15,15 +15,26 @@
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:theme="@style/Theme.Toolbar"
         tools:context=".interfaces.ActivityCliente" />
 
     <ListView
         android:id="@+id/lstClientes"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:fastScrollAlwaysVisible="false"
         android:fastScrollEnabled="true"
         android:scrollbars="vertical" />
+
+    <EditText
+        android:id="@+id/edtTotalClientes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="#dddfdd"
+        android:focusable="false"
+        android:gravity="end"
+        android:text="total"/>
 
 </LinearLayout>

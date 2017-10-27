@@ -61,7 +61,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 " EXCLUIDO VARCHAR(1)," +
                 " ID_SETOR INTEGER," +
                 " ID_QUANDO_VENDEDOR INTEGER," +
-                " APARELHO_ID VARCHAR(20));");
+                " APARELHO_ID VARCHAR(20)," +
+                " ID_EMPRESA_MULTI_DEVICE INTEGER);");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS TBL_LOGIN " +
                 "(ID_LOGIN INTEGER PRIMARY KEY, " +
@@ -154,7 +155,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 " HABILITACAO_CATEGORIA VARCHAR(10)," +
                 " HABILITACAO_VENCIMENTO DATE," +
                 " MOT_ID_TRANSPORTADORA INTEGER," +
-                " LOCAL_CADASTRO VARCHAR(20));");
+                " LOCAL_CADASTRO VARCHAR(20)," +
+                " ID_EMPRESA_MULTIDEVICE INTEGER);");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS TBL_PRODUTO (ATIVO VARCHAR(1) DEFAULT 'S'  NOT NULL," +
                 " ID_PRODUTO VARCHAR(20) PRIMARY KEY," +
@@ -452,7 +454,8 @@ public class DBHelper extends SQLiteOpenHelper {
                         " MOT_ID_TRANSPORTADORA INTEGER," +
                         " LOCAL_CADASTRO VARCHAR(20));");
 
-                db.execSQL("ALETER TABLE TBL_LOGIN ADD COLUMN TOKEN VARCHAR(60)");
+                db.execSQL("ALTER TABLE TBL_LOGIN ADD COLUMN TOKEN VARCHAR(60)");
+                db.execSQL("ALTER TABLE TBL_WEB_USUARIO ADD COLUMN ID_EMPRESA_MULTI_DEVICE INTEGER");
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -520,6 +523,8 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("ID_SETOR", usuario.getId_setor());
         content.put("ID_QUANDO_VENDEDOR", usuario.getId_quando_vendedor());
         content.put("APARELHO_ID", usuario.getAparelho_id());
+        content.put("ID_EMPRESA_MULTI_DEVICE", usuario.getIdEmpresaMultiDevice());
+
         db.insert("TBL_WEB_USUARIO", null, content);
         System.gc();
     }
@@ -558,6 +563,7 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("ID_SETOR", usuario.getId_setor());
         content.put("ID_QUANDO_VENDEDOR", usuario.getId_quando_vendedor());
         content.put("APARELHO_ID", usuario.getAparelho_id());
+        content.put("ID_EMPRESA_MULTI_DEVICE", usuario.getIdEmpresaMultiDevice());
         db.update("TBL_WEB_USUARIO", content, "ID_USUARIO = " + usuario.getId_usuario(), null);
         System.gc();
     }
@@ -653,92 +659,92 @@ public class DBHelper extends SQLiteOpenHelper {
         System.gc();
     }
 
-    public void atualizarTBL_CADASTRO(String ATIVO, String ID_EMPRESA, String ID_CADASTRO, String PESSOA_F_J, String DATA_ANIVERSARIO, String NOME_CADASTRO, String NOME_FANTASIA, String CPF_CNPJ, String INSCRI_ESTADUAL, String INSCRI_MUNICIPAL, String ENDERECO, String ENDERECO_BAIRRO, String ENDERECO_NUMERO, String ENDERECO_COMPLEMENTO, String ENDERECO_UF, String ENDERECO_ID_MUNICIPIO, String ENDERECO_CEP, String USUARIO_ID, String USUARIO_NOME, String USUARIO_DATA, String F_CLIENTE, String F_FORNECEDOR, String F_FUNCIONARIO, String F_VENDEDOR, String F_TRANSPORTADOR, String DATA_ULTIMA_COMPRA, String ID_VENDEDOR, String F_ID_CLIENTE, String ID_ENTIDADE, String F_ID_FORNECEDOR, String F_ID_VENDEDOR, String F_ID_TRANSPORTADOR, String TELEFONE_PRINCIPAL, String EMAIL_PRINCIPAL, String ID_PAIS, String F_ID_FUNCIONARIO, String AVISAR_COM_DIAS, String OBSERVACOES, String PADRAO_ID_C_CUSTO, String PADRAO_ID_C_GERENCIADORA, String PADRAO_ID_C_ANALITICA, String COB_ENDERECO, String COB_ENDERECO_BAIRRO, String COB_ENDERECO_NUMERO, String COB_ENDERECO_COMPLEMENTO, String COB_ENDERECO_UF, String COB_ENDERECO_ID_MUNICIPIO, String COB_ENDERECO_CEP, String COB_ENDERECO_ID_PAIS, String LIMITE_CREDITO, String LIMITE_DISPONIVEL, String PESSOA_CONTATO_FINANCEIRO, String EMAIL_FINANCEIRO, String OBSERVACOES_FATURAMENTO, String OBSERVACOES_FINANCEIRO, String TELEFONE_DOIS, String TELEFONE_TRES, String PESSOA_CONTATO_PRINCIPAL, String IND_DA_IE_DESTINATARIO, String COMISSAO_PERCENTUAL, String ID_SETOR, String NFE_EMAIL_ENVIAR, String NFE_EMAIL_UM, String NFE_EMAIL_DOIS, String NFE_EMAIL_TRES, String NFE_EMAIL_QUATRO, String NFE_EMAIL_CINCO, String ID_GRUPO_VENDEDOR, String VENDEDOR_USA_PORTAL, String VENDEDOR_ID_USER_PORTAL, String F_TARIFA, String F_ID_TARIFA, String F_PRODUTOR, String RG_NUMERO, String RG_SSP, String CONTA_CONTABIL, String MOTORISTA, String F_ID_MOTORISTA, String HABILITACAO_NUMERO, String HABILITACAO_CATEGORIA, String HABILITACAO_VENCIMENTO, String MOT_ID_TRANSPORTADORA, String LOCAL_CADASTRO) throws android.database.sqlite.SQLiteConstraintException {
+    public void atualizarTBL_CADASTRO(Cliente cliente) throws android.database.sqlite.SQLiteConstraintException {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content = new ContentValues();
-        content.put("ATIVO", ATIVO);
-        content.put("ID_EMPRESA", ID_EMPRESA);
-        content.put("PESSOA_F_J", PESSOA_F_J);
-        content.put("DATA_ANIVERSARIO", DATA_ANIVERSARIO);
-        content.put("NOME_CADASTRO", NOME_CADASTRO);
-        content.put("NOME_FANTASIA", NOME_FANTASIA);
-        content.put("CPF_CNPJ", CPF_CNPJ);
-        content.put("INSCRI_ESTADUAL", INSCRI_ESTADUAL);
-        content.put("INSCRI_MUNICIPAL", INSCRI_MUNICIPAL);
-        content.put("ENDERECO", ENDERECO);
-        content.put("ENDERECO_BAIRRO", ENDERECO_BAIRRO);
-        content.put("ENDERECO_NUMERO", ENDERECO_NUMERO);
-        content.put("ENDERECO_COMPLEMENTO", ENDERECO_COMPLEMENTO);
-        content.put("ENDERECO_UF", ENDERECO_UF);
-        content.put("ENDERECO_ID_MUNICIPIO", ENDERECO_ID_MUNICIPIO);
-        content.put("ENDERECO_CEP", ENDERECO_CEP);
-        content.put("USUARIO_ID", USUARIO_ID);
-        content.put("USUARIO_NOME", USUARIO_NOME);
-        content.put("USUARIO_DATA", USUARIO_DATA);
-        content.put("F_CLIENTE", F_CLIENTE);
-        content.put("F_FORNECEDOR", F_FORNECEDOR);
-        content.put("F_FUNCIONARIO", F_FUNCIONARIO);
-        content.put("F_VENDEDOR", F_VENDEDOR);
-        content.put("F_TRANSPORTADOR", F_TRANSPORTADOR);
-        content.put("DATA_ULTIMA_COMPRA", DATA_ULTIMA_COMPRA);
-        content.put("ID_VENDEDOR", ID_VENDEDOR);
-        content.put("F_ID_CLIENTE", F_ID_CLIENTE);
-        content.put("ID_ENTIDADE", ID_ENTIDADE);
-        content.put("F_ID_FORNECEDOR", F_ID_FORNECEDOR);
-        content.put("F_ID_VENDEDOR", F_ID_VENDEDOR);
-        content.put("F_ID_TRANSPORTADOR", F_ID_TRANSPORTADOR);
-        content.put("TELEFONE_PRINCIPAL", TELEFONE_PRINCIPAL);
-        content.put("EMAIL_PRINCIPAL", EMAIL_PRINCIPAL);
-        content.put("ID_PAIS", ID_PAIS);
-        content.put("F_ID_FUNCIONARIO", F_ID_FUNCIONARIO);
-        content.put("AVISAR_COM_DIAS", AVISAR_COM_DIAS);
-        content.put("OBSERVACOES", OBSERVACOES);
-        content.put("PADRAO_ID_C_CUSTO", PADRAO_ID_C_CUSTO);
-        content.put("PADRAO_ID_C_GERENCIADORA", PADRAO_ID_C_GERENCIADORA);
-        content.put("PADRAO_ID_C_ANALITICA", PADRAO_ID_C_ANALITICA);
-        content.put("COB_ENDERECO", COB_ENDERECO);
-        content.put("COB_ENDERECO_BAIRRO", COB_ENDERECO_BAIRRO);
-        content.put("COB_ENDERECO_NUMERO", COB_ENDERECO_NUMERO);
-        content.put("COB_ENDERECO_COMPLEMENTO", COB_ENDERECO_COMPLEMENTO);
-        content.put("COB_ENDERECO_UF", COB_ENDERECO_UF);
-        content.put("COB_ENDERECO_ID_MUNICIPIO", COB_ENDERECO_ID_MUNICIPIO);
-        content.put("COB_ENDERECO_CEP", COB_ENDERECO_CEP);
-        content.put("COB_ENDERECO_ID_PAIS", COB_ENDERECO_ID_PAIS);
-        content.put("LIMITE_CREDITO", LIMITE_CREDITO);
-        content.put("LIMITE_DISPONIVEL", LIMITE_DISPONIVEL);
-        content.put("PESSOA_CONTATO_FINANCEIRO", PESSOA_CONTATO_FINANCEIRO);
-        content.put("EMAIL_FINANCEIRO", EMAIL_FINANCEIRO);
-        content.put("OBSERVACOES_FATURAMENTO", OBSERVACOES_FATURAMENTO);
-        content.put("OBSERVACOES_FINANCEIRO", OBSERVACOES_FINANCEIRO);
-        content.put("TELEFONE_DOIS", TELEFONE_DOIS);
-        content.put("TELEFONE_TRES", TELEFONE_TRES);
-        content.put("PESSOA_CONTATO_PRINCIPAL", PESSOA_CONTATO_PRINCIPAL);
-        content.put("IND_DA_IE_DESTINATARIO", IND_DA_IE_DESTINATARIO);
-        content.put("COMISSAO_PERCENTUAL", COMISSAO_PERCENTUAL);
-        content.put("ID_SETOR", ID_SETOR);
-        content.put("NFE_EMAIL_ENVIAR", NFE_EMAIL_ENVIAR);
-        content.put("NFE_EMAIL_UM", NFE_EMAIL_UM);
-        content.put("NFE_EMAIL_DOIS", NFE_EMAIL_DOIS);
-        content.put("NFE_EMAIL_TRES", NFE_EMAIL_TRES);
-        content.put("NFE_EMAIL_QUATRO", NFE_EMAIL_QUATRO);
-        content.put("NFE_EMAIL_CINCO", NFE_EMAIL_CINCO);
-        content.put("ID_GRUPO_VENDEDOR", ID_GRUPO_VENDEDOR);
-        content.put("VENDEDOR_USA_PORTAL", VENDEDOR_USA_PORTAL);
-        content.put("VENDEDOR_ID_USER_PORTAL", VENDEDOR_ID_USER_PORTAL);
-        content.put("F_TARIFA", F_TARIFA);
-        content.put("F_ID_TARIFA", F_ID_TARIFA);
-        content.put("F_PRODUTOR", F_PRODUTOR);
-        content.put("RG_NUMERO", RG_NUMERO);
-        content.put("RG_SSP", RG_SSP);
-        content.put("CONTA_CONTABIL", CONTA_CONTABIL);
-        content.put("MOTORISTA", MOTORISTA);
-        content.put("F_ID_MOTORISTA", F_ID_MOTORISTA);
-        content.put("HABILITACAO_NUMERO", HABILITACAO_NUMERO);
-        content.put("HABILITACAO_CATEGORIA", HABILITACAO_CATEGORIA);
-        content.put("HABILITACAO_VENCIMENTO", HABILITACAO_VENCIMENTO);
-        content.put("MOT_ID_TRANSPORTADORA", MOT_ID_TRANSPORTADORA);
-        content.put("LOCAL_CADASTRO", LOCAL_CADASTRO);
-        db.update("TBL_CADASTRO", content, "ID_CADASTRO = " + ID_CADASTRO, null);
+        content.put("ATIVO", cliente.getAtivo());
+        content.put("ID_EMPRESA", cliente.getId_empresa());
+        content.put("ID_CADASTRO", cliente.getId_cadastro());
+        content.put("PESSOA_F_J", cliente.getPessoa_f_j());
+        content.put("DATA_ANIVERSARIO", cliente.getData_aniversario());
+        content.put("NOME_CADASTRO", cliente.getNome_cadastro());
+        content.put("NOME_FANTASIA", cliente.getNome_fantasia());
+        content.put("CPF_CNPJ", cliente.getCpf_cnpj());
+        content.put("INSCRI_ESTADUAL", cliente.getInscri_estadual());
+        content.put("INSCRI_MUNICIPAL", cliente.getInscri_municipal());
+        content.put("ENDERECO", cliente.getEndereco());
+        content.put("ENDERECO_BAIRRO", cliente.getEndereco_bairro());
+        content.put("ENDERECO_NUMERO", cliente.getEndereco_numero());
+        content.put("ENDERECO_COMPLEMENTO", cliente.getEndereco_complemento());
+        content.put("ENDERECO_UF", cliente.getEndereco_uf());
+        content.put("ENDERECO_ID_MUNICIPIO", cliente.getEndereco_id_municipio());
+        content.put("ENDERECO_CEP", cliente.getEndereco_cep());
+        content.put("USUARIO_ID", cliente.getUsuario_id());
+        content.put("USUARIO_NOME", cliente.getUsuario_nome());
+        content.put("USUARIO_DATA", cliente.getUsuario_data());
+        content.put("F_CLIENTE", cliente.getF_cliente());
+        content.put("F_FORNECEDOR", cliente.getF_fornecedor());
+        content.put("F_FUNCIONARIO", cliente.getF_funcionario());
+        content.put("F_VENDEDOR", cliente.getF_vendedor());
+        content.put("F_TRANSPORTADOR", cliente.getF_transportador());
+        content.put("DATA_ULTIMA_COMPRA", cliente.getData_ultima_compra());
+        content.put("NOME_VENDEDOR", cliente.getNome_vendedor());
+        content.put("F_ID_CLIENTE", cliente.getF_id_cliente());
+        content.put("ID_ENTIDADE", cliente.getId_entidade());
+        content.put("F_ID_FORNECEDOR", cliente.getF_id_fornecedor());
+        content.put("F_ID_VENDEDOR", cliente.getF_id_vendedor());
+        content.put("F_ID_TRANSPORTADOR", cliente.getF_id_transportador());
+        content.put("TELEFONE_PRINCIPAL", cliente.getTelefone_principal());
+        content.put("EMAIL_PRINCIPAL", cliente.getEmail_principal());
+        content.put("NOME_PAIS", cliente.getNome_pais());
+        content.put("F_ID_FUNCIONARIO", cliente.getF_id_funcionario());
+        content.put("AVISAR_COM_DIAS", cliente.getAvisar_com_dias());
+        content.put("OBSERVACOES", cliente.getObservacoes());
+        content.put("PADRAO_ID_C_CUSTO", cliente.getPadrao_id_c_custo());
+        content.put("PADRAO_ID_C_GERENCIADORA", cliente.getPadrao_id_c_gerenciadora());
+        content.put("PADRAO_ID_C_ANALITICA", cliente.getPadrao_id_c_analitica());
+        content.put("COB_ENDERECO", cliente.getCob_endereco());
+        content.put("COB_ENDERECO_BAIRRO", cliente.getCob_endereco_bairro());
+        content.put("COB_ENDERECO_NUMERO", cliente.getCob_endereco_numero());
+        content.put("COB_ENDERECO_COMPLEMENTO", cliente.getCob_endereco_complemento());
+        content.put("COB_ENDERECO_UF", cliente.getCob_endereco_uf());
+        content.put("COB_ENDERECO_ID_MUNICIPIO", cliente.getCob_endereco_id_municipio());
+        content.put("COB_ENDERECO_CEP", cliente.getCob_endereco_cep());
+        content.put("NOME_PAIS_COB", cliente.getNome_pais_cob());
+        content.put("LIMITE_CREDITO", cliente.getLimite_credito());
+        content.put("LIMITE_DISPONIVEL", cliente.getLimite_disponivel());
+        content.put("PESSOA_CONTATO_FINANCEIRO", cliente.getPessoa_contato_financeiro());
+        content.put("EMAIL_FINANCEIRO", cliente.getEmail_financeiro());
+        content.put("OBSERVACOES_FATURAMENTO", cliente.getObservacoes_faturamento());
+        content.put("OBSERVACOES_FINANCEIRO", cliente.getObservacoes_financeiro());
+        content.put("TELEFONE_DOIS", cliente.getTelefone_dois());
+        content.put("TELEFONE_TRES", cliente.getTelefone_tres());
+        content.put("PESSOA_CONTATO_PRINCIPAL", cliente.getPessoa_contato_principal());
+        content.put("IND_DA_IE_DESTINATARIO", cliente.getInd_da_ie_destinatario());
+        content.put("COMISSAO_PERCENTUAL", cliente.getComissao_percentual());
+        content.put("ID_SETOR", cliente.getId_setor());
+        content.put("NFE_EMAIL_ENVIAR", cliente.getNfe_email_enviar());
+        content.put("NFE_EMAIL_UM", cliente.getNfe_email_um());
+        content.put("NFE_EMAIL_DOIS", cliente.getNfe_email_dois());
+        content.put("NFE_EMAIL_TRES", cliente.getNfe_email_tres());
+        content.put("NFE_EMAIL_QUATRO", cliente.getNfe_email_quatro());
+        content.put("NFE_EMAIL_CINCO", cliente.getNfe_email_cinco());
+        content.put("ID_GRUPO_VENDEDOR", cliente.getId_grupo_vendedor());
+        content.put("VENDEDOR_USA_PORTAL", cliente.getVendedor_usa_portal());
+        content.put("VENDEDOR_ID_USER_PORTAL", cliente.getVendedor_id_user_portal());
+        content.put("F_TARIFA", cliente.getF_tarifa());
+        content.put("F_ID_TARIFA", cliente.getF_id_tarifa());
+        content.put("F_PRODUTOR", cliente.getF_produtor());
+        content.put("RG_NUMERO", cliente.getRg_numero());
+        content.put("RG_SSP", cliente.getRg_ssp());
+        content.put("CONTA_CONTABIL", cliente.getConta_contabil());
+        content.put("MOTORISTA", cliente.getMotorista());
+        content.put("F_ID_MOTORISTA", cliente.getF_id_motorista());
+        content.put("HABILITACAO_NUMERO", cliente.getHabilitacao_numero());
+        content.put("HABILITACAO_CATEGORIA", cliente.getHabilitacao_categoria());
+        content.put("HABILITACAO_VENCIMENTO", cliente.getHabilitacao_vencimento());
+        content.put("MOT_ID_TRANSPORTADORA", cliente.getMot_id_transportadora());
+        db.update("TBL_CADASTRO", content, "ID_CADASTRO = " + cliente.getId_cadastro(), null);
         System.gc();
     }
 
@@ -1272,7 +1278,7 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("PONTOS_COR_ORIG", webPedidoItem.getPontos_cor_orig());
         content.put("VALOR_PRECO_PAGO", webPedidoItem.getValor_preco_pago());
 
-        if (contagem("SELECT COUNT(*) FROM TBL_WEB_PEDIDO_ITENS WHERE ID_WEB_ITEM_SERVIDOR = " + webPedidoItem.getId_web_item_servidor()) <= 0) {
+        if (contagem("SELECT COUNT(*) FROM TBL_WEB_PEDIDO_ITENS WHERE ID_WEB_ITEM = " + webPedidoItem.getId_web_item()) <= 0) {
             db.insert("TBL_WEB_PEDIDO_ITENS", null, content);
         } else {
             db.update("TBL_WEB_PEDIDO_ITENS", content, "ID_WEB_ITEM = " + webPedidoItem.getId_web_item(), null);
@@ -1708,12 +1714,12 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public List<Usuario> listaUsuario(String SQL) {
         SQLiteDatabase banco = this.getReadableDatabase();
+        List<Usuario> listaUsuario = new ArrayList<>();
+
         Cursor cursor;
 
         cursor = banco.rawQuery(SQL, null);
         cursor.moveToFirst();
-
-        List<Usuario> listaUsuario = new ArrayList<>();
 
         do {
             Usuario usuario = new Usuario();
@@ -1749,9 +1755,9 @@ public class DBHelper extends SQLiteOpenHelper {
             usuario.setId_setor(cursor.getString(cursor.getColumnIndex("ID_SETOR")));
             usuario.setId_quando_vendedor(cursor.getString(cursor.getColumnIndex("ID_QUANDO_VENDEDOR")));
             usuario.setAparelho_id(cursor.getString(cursor.getColumnIndex("APARELHO_ID")));
+            usuario.setIdEmpresaMultiDevice(cursor.getString(cursor.getColumnIndex("ID_EMPRESA_MULTI_DEVICE")));
 
             listaUsuario.add(usuario);
-
         } while (cursor.moveToNext());
 
         return listaUsuario;

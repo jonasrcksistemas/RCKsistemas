@@ -18,11 +18,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.rcksuporte05.rcksistemas.Helper.PedidoHelper;
+import com.example.rcksuporte05.rcksistemas.Helper.UsuarioHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.classes.Cliente;
 import com.example.rcksuporte05.rcksistemas.classes.Operacao;
 import com.example.rcksuporte05.rcksistemas.classes.TabelaPreco;
 import com.example.rcksuporte05.rcksistemas.classes.TabelaPrecoItem;
+import com.example.rcksuporte05.rcksistemas.classes.Usuario;
 import com.example.rcksuporte05.rcksistemas.classes.WebPedido;
 import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
 import com.example.rcksuporte05.rcksistemas.interfaces.ActivityCliente;
@@ -109,6 +111,7 @@ public class Pedido1 extends Fragment implements View.OnClickListener {
             AlertDialog.Builder alert = new AlertDialog.Builder(PedidoHelper.getActivityPedidoMain());
             alert.setMessage("A sincronia é necessária antes de se fazer um pedido, ou não há OPERAÇÕES DE ESTOQUE marcada para multi dispositivo!\n     Qualquer duvida entre em contato com a RCK SISTEMAS.");
             alert.setTitle("Atenção!");
+            alert.setCancelable(false);
             alert.setNeutralButton("OK", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -190,15 +193,16 @@ public class Pedido1 extends Fragment implements View.OnClickListener {
     }
 
     public WebPedido salvaPedido() {
-        bundle = getArguments();
+        Usuario usuario = UsuarioHelper.getUsuario();
+
         webPedido.setCadastro(objetoCliente);
-        webPedido.setId_empresa("1");
+        webPedido.setId_empresa(usuario.getIdEmpresaMultiDevice());
         webPedido.setId_vendedor(String.valueOf(bundle.getInt("idVendedor")));
         webPedido.setId_operacao(adapterOperacao.getItem(spOperacao.getSelectedItemPosition()).getId_operacao());
         webPedido.setId_tabela(adapterPreco.getItem(spTabelaPreco.getSelectedItemPosition()).getId_tabela());
         webPedido.setExcluido("N");
         webPedido.setUsuario_lancamento_id(String.valueOf(bundle.getInt("idUsuario")));
-        webPedido.setUsuario_lancamento_nome(String.valueOf(bundle.getString("usuario")));
+        webPedido.setUsuario_lancamento_nome(bundle.getString("usuario"));
         webPedido.setStatus("A");
 
         return webPedido;

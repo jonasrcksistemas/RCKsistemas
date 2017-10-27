@@ -3,6 +3,7 @@ package com.example.rcksuporte05.rcksistemas.interfaces;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
@@ -14,8 +15,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
 import com.example.rcksuporte05.rcksistemas.R;
@@ -34,6 +35,7 @@ public class ActivityCliente extends AppCompatActivity {
     private Toolbar toolbar;
     private List<Cliente> lista;
     private ListaAdapterClientes adaptador;
+    private EditText edtTotalClientes;
     private DBHelper db = new DBHelper(this);
 
     @Override
@@ -42,6 +44,7 @@ public class ActivityCliente extends AppCompatActivity {
         setContentView(R.layout.activity_cliente);
 
         lstClientes = (ListView) findViewById(R.id.lstClientes);
+        edtTotalClientes = (EditText) findViewById(R.id.edtTotalClientes);
         toolbar = (Toolbar) findViewById(R.id.tb_cliente);
         toolbar.setTitle("Lista de Clientes");
         if (getIntent().getIntExtra("acao", 0) == 1) {
@@ -53,7 +56,7 @@ public class ActivityCliente extends AppCompatActivity {
                 lstClientes.setAdapter(adaptador);
                 System.gc();
             } catch (Exception e) {
-                Toast.makeText(this, "Não há nenhum cliente a ser exibido!", Toast.LENGTH_LONG).show();
+                e.printStackTrace();
             }
 
             lstClientes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -75,7 +78,7 @@ public class ActivityCliente extends AppCompatActivity {
                 lstClientes.setAdapter(adaptador);
                 System.gc();
             } catch (Exception e) {
-                Toast.makeText(this, "Não há nenhum cliente a ser exibido!", Toast.LENGTH_LONG).show();
+                e.printStackTrace();
             }
 
             lstClientes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -141,15 +144,21 @@ public class ActivityCliente extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(final String query) {
-                if (query.trim().equals("")) {
-                    adaptador = new ListaAdapterClientes(ActivityCliente.this, lista);
-                } else {
-                    adaptador = new ListaAdapterClientes(ActivityCliente.this, buscaClientes(lista, query));
+                try {
+                    if (query.trim().equals("")) {
+                        adaptador = new ListaAdapterClientes(ActivityCliente.this, lista);
+                        edtTotalClientes.setText("Clientes listados: " + lista.size() + "   ");
+                        edtTotalClientes.setTextColor(Color.BLACK);
+                    } else {
+                        adaptador = new ListaAdapterClientes(ActivityCliente.this, buscaClientes(lista, query));
+                    }
+                    lstClientes.setVisibility(View.VISIBLE);
+                    lstClientes.setAdapter(adaptador);
+                    adaptador.notifyDataSetChanged();
+                    System.gc();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                lstClientes.setVisibility(View.VISIBLE);
-                lstClientes.setAdapter(adaptador);
-                adaptador.notifyDataSetChanged();
-                System.gc();
                 return false;
             }
         });
@@ -189,11 +198,30 @@ public class ActivityCliente extends AppCompatActivity {
                 if (nomeCliente.contains(upperCaseQuery) || nomeFantasia.contains(upperCaseQuery)) {
                     lista.add(cliente);
                 }
+                if (lista.size() > 0) {
+                    edtTotalClientes.setText("Clientes encontrados: " + lista.size() + "   ");
+                    edtTotalClientes.setTextColor(Color.BLACK);
+                } else {
+                    edtTotalClientes.setText("Nenhum cliente encontrado!   ");
+                    edtTotalClientes.setTextColor(Color.RED);
+                }
             } catch (NullPointerException e) {
                 e.printStackTrace();
             }
         }
         return lista;
+    }
+
+    @Override
+    protected void onResume() {
+        if (lista != null) {
+            edtTotalClientes.setText("Clientes listados: " + lista.size() + "   ");
+            edtTotalClientes.setTextColor(Color.BLACK);
+        } else {
+            edtTotalClientes.setText("Não há produtos a serem exibidos!   ");
+            edtTotalClientes.setTextColor(Color.RED);
+        }
+        super.onResume();
     }
 
     @Override

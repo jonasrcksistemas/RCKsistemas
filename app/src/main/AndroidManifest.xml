@@ -14,7 +14,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MeuTema">
         <activity android:name=".interfaces.MainActivity" />
-        <activity android:name=".interfaces.PrincipalActivity" />
+        <activity
+            android:name=".interfaces.PrincipalActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".interfaces.ActivityCliente"
             android:launchMode="singleTop">
@@ -46,7 +49,7 @@
         <activity
             android:name=".interfaces.HistoricoFinanceiroMain"
             android:screenOrientation="portrait" />
-        <activity android:name=".interfaces.ContatoActivity"></activity>
+        <activity android:name=".interfaces.ContatoActivity" />
     </application>
 
 </manifest>

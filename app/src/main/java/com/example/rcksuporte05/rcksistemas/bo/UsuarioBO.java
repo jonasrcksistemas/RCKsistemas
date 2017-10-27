@@ -84,8 +84,7 @@ public class UsuarioBO {
         usuario.setId_quando_vendedor(cursor.getString(cursor.getColumnIndex("ID_QUANDO_VENDEDOR")));
         usuario.setAparelho_id(cursor.getString(cursor.getColumnIndex("APARELHO_ID")));
         usuario.setToken(cursor.getString(cursor.getColumnIndex("TOKEN")));
-
-
+        usuario.setIdEmpresaMultiDevice(cursor.getString(cursor.getColumnIndex("ID_EMPRESA_MULTIDEVICE")));
 
         return usuario;
     }

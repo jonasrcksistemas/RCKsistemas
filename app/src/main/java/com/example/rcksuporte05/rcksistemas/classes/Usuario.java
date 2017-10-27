@@ -35,7 +35,7 @@ public class Usuario {
     private String aparelho_id;
     private String token;
     private String logado;
-    private String idEmpresa;
+    private String idEmpresaMultiDevice;
 
     public String getId_usuario() {
         return id_usuario;
@@ -301,12 +301,12 @@ public class Usuario {
         this.logado = logado;
     }
 
-    public String getIdEmpresa() {
-        return idEmpresa;
+    public String getIdEmpresaMultiDevice() {
+        return idEmpresaMultiDevice;
     }
 
-    public void setIdEmpresa(String idEmpresa) {
-        this.idEmpresa = idEmpresa;
+    public void setIdEmpresaMultiDevice(String idEmpresaMultiDevice) {
+        this.idEmpresaMultiDevice = idEmpresaMultiDevice;
     }
 }
 

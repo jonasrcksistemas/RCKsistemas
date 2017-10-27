@@ -199,6 +199,7 @@ public class PedidoHelper {
                                     int idPedido = db.contagem("SELECT MAX(ID_WEB_PEDIDO) FROM TBL_WEB_PEDIDO");
                                     for (int i = 0; listaWebPedidoItens.size() > i; i++) {
                                         listaWebPedidoItens.get(i).setId_pedido(String.valueOf(idPedido));
+                                        listaWebPedidoItens.get(i).setId_empresa(UsuarioHelper.getUsuario().getIdEmpresaMultiDevice());
                                         db.inserirTBL_WEB_PEDIDO_ITENS(listaWebPedidoItens.get(i));
                                     }
                                 }

@@ -228,14 +228,34 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                 cabecalho.put("AUTHORIZATION", UsuarioHelper.getUsuario().getToken());
                 Call<Sincronia> call = apiRotas.sincroniaApi(Integer.parseInt(UsuarioHelper.getUsuario().getId_usuario()), cabecalho);
                 try {
-                    sincronia = call.execute().body();
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            ivInternet.setVisibility(View.INVISIBLE);
-                        }
-                    });
-                    sincroniaBO.sincronizaBanco(sincronia, PrincipalActivity.this, notificacao, mNotificationManager, progress);
+                    Response<Sincronia> response = call.execute();
+                    if (response.code() == 200) {
+                        sincronia = response.body();
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                ivInternet.setVisibility(View.INVISIBLE);
+                            }
+                        });
+                        sincroniaBO.sincronizaBanco(sincronia, PrincipalActivity.this, notificacao, mNotificationManager, progress);
+                    } else {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                ivInternet.setVisibility(View.VISIBLE);
+                                Toast.makeText(PrincipalActivity.this, "Houve um problema na requisição, entre em contato no suporte para esclarecer a situação", Toast.LENGTH_LONG).show();
+                                progress.dismiss();
+                            }
+                        });
+                        notificacao.setContentText("Erro de comunicação")
+                                .setContentTitle("Houve um problema na requisição, entre em contato no suporte para esclarecer a situação")
+                                .setProgress(0, 0, false)
+                                .setSmallIcon(R.mipmap.ic_sem_internet)
+                                .setDefaults(NotificationCompat.DEFAULT_ALL)
+                                .setPriority(2)
+                                .setAutoCancel(true);
+                        mNotificationManager.notify(0, notificacao.build());
+                    }
                 } catch (IOException e) {
                     e.printStackTrace();
                     runOnUiThread(new Runnable() {

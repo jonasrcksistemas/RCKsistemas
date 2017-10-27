@@ -168,9 +168,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Usuario usuario = db.listaUsuario("SELECT * FROM TBL_WEB_USUARIO WHERE LOGIN = '" + edtLogin.getText().toString() + "'").get(0);
                 loginNaApi(usuario, alterado);
             }
-            {
-                getUsuarios();
-            }
+            getUsuarios();
         } catch (Exception e) {
             e.printStackTrace();
             runOnUiThread(new Runnable() {
@@ -192,7 +190,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         progress.show();
 
         Rotas apiRotas = Api.buildRetrofit();
-
 
         Call<List<Usuario>> call = apiRotas.getUsuarios();
 

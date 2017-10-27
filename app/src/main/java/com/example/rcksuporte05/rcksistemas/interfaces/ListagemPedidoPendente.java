@@ -61,11 +61,10 @@ public class ListagemPedidoPendente extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listagem_pedido_pendente);
 
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarPedidoPendente);
         toolbar.setTitle("Pedidos Pendentes");
         setSupportActionBar(toolbar);
-        usuario = db.listaUsuario("SELECT * FROM TBL_WEB_USUARIO WHERE LOGIN = '" + db.consulta("SELECT * FROM TBL_LOGIN;", "LOGIN") + "';").get(0);
+        usuario = UsuarioHelper.getUsuario();
         lstPedidoPendente = (ListView) findViewById(R.id.lstPedidoPendente);
         lstPedidoPendente.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
