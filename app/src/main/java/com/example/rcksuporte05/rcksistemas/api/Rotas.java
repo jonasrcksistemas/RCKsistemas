@@ -28,7 +28,7 @@ public interface Rotas {
     Call<Usuario> login(@Path("idandroid") String idandroid, @Path("idusuario") String idusuario);
 
     @GET("sincronia/{id}")
-    Call<Sincronia> sincroniaApi(@Path("id") int id, @HeaderMap Map<String, String> chaveDeAcesso);
+    Call<Sincronia> sincroniaApi(@Path("id") int id, @HeaderMap Map<String, String> chaveDeAcesso, Sincronia sincronia);
 
     @POST("webpedido/faturar")
     Call<List<WebPedido>> enviarPedidos(@Body List<WebPedido> webPedidos, @HeaderMap Map<String, String> chaveDeAcesso);
