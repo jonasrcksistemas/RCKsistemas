@@ -35,4 +35,47 @@
 
     </style>
 
+
+    <!-- Base application theme. -->
+    <style name="Theme.Dialogs" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- colorPrimary is used for the default action bar background -->
+        <item name="colorPrimary">@color/colorSwitch</item>
+
+        <!-- colorPrimaryDark is used for the status bar -->
+        <item name="colorPrimaryDark">@color/colorPrimeDarkAlternativo</item>
+
+        <!-- colorAccent is used as the default value for colorControlActivated,
+             which is used to tint widgets -->
+        <item name="colorAccent">@color/colorSwitch</item>
+
+        <!-- You can also set colorControlNormal, colorControlActivated
+             colorControlHighlight, and colorSwitchThumbNormal. -->
+
+        <item name="colorControlNormal">@color/colorPrimeDarkAlternativo</item>
+
+    </style>
+
+
+
+
+    <style name="Theme.CriarDialog" parent="@android:style/Theme.Holo.Dialog">
+
+        <item name="android:windowBackground">@color/branco</item>
+        <item name="android:textAppearance">@color/colorAccent</item>
+        <item name="android:windowActionModeOverlay">false</item>
+        <item name="android:windowNoTitle">true</item>
+
+        <item name="android:switchStyle">@android:style/Widget.Material.Light.CompoundButton.Switch</item>
+        <item name="android:switchPreferenceStyle">@null</item>
+
+        <item name="android:buttonBarStyle">@null</item>
+        <item name="android:listPreferredItemPaddingLeft">56dip</item>
+        <item name="android:listPreferredItemPaddingRight">56dip</item>
+        <item name="android:listPreferredItemPaddingStart">56dip</item>
+        <item name="android:listPreferredItemPaddingEnd">56dip</item>
+
+    </style>
+
+
+
 </resources>

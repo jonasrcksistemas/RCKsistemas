@@ -46,6 +46,7 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
     private static final int pedidosEnviados = 1;
     private static final int sair = 2;
     private static final int AtualizarBanco = 3;
+
     private Button btnCliente;
     private Button btnProduto;
     private Button btnPedidos;
@@ -115,19 +116,14 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
             startActivity(intent);
         } else if (view == btnSincroniza || view == txtSincroniza) {
             getUsuarios();
-            AlertDialog.Builder alert = new AlertDialog.Builder(this);
-            alert.setTitle("Atenção!");
-            alert.setMessage("Tem certeza que deseja iniciar a sincronia agora?");
-            alert.setNegativeButton("NÃO", null);
-            alert.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    sincronizaApi();
-                }
-            });
-            alert.show();
+            Intent intent = new Intent(PrincipalActivity.this, ActiviyDialogSincronia.class);
+            startActivity(intent);
         }
     }
+
+
+
+
 
     @Override
     public void onBackPressed() {
@@ -221,12 +217,12 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
 
         final Rotas apiRotas = Api.buildRetrofit();
 
-        Thread a = new Thread(new Runnable() {
+        final Thread a = new Thread(new Runnable() {
             @Override
             public void run() {
                 Map<String, String> cabecalho = new HashMap<>();
                 cabecalho.put("AUTHORIZATION", UsuarioHelper.getUsuario().getToken());
-                Call<Sincronia> call = apiRotas.sincroniaApi(Integer.parseInt(UsuarioHelper.getUsuario().getId_usuario()), cabecalho);
+                Call<Sincronia> call = apiRotas.sincroniaApi(Integer.parseInt(UsuarioHelper.getUsuario().getId_usuario()), cabecalho, sincronia);
                 try {
                     Response<Sincronia> response = call.execute();
                     if (response.code() == 200) {
