@@ -50,7 +50,6 @@ public class Pedido1 extends Fragment implements View.OnClickListener {
     private DBHelper db;
     private WebPedido webPedido = new WebPedido();
     private PedidoHelper pedidoHelper;
-    private int idPedido;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

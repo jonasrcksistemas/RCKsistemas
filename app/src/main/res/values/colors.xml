@@ -4,8 +4,9 @@
     <color name="colorPrimaryDark">#004d40</color>
     <color name="colorAccent">#607D8B</color>
     <color name="colorControlNormal">#00796b</color>
-    <color name="colorSwitch">#01579B</color>
-    <color name="colorPrimeDarkAlternativo">#0277BD</color>
+    <color name="colorPrimaryDarkAzul">#01579B</color>
+    <color name="colorPrimaryAzul">#0277BD</color>
+    <color name="colorControlNormalAzul">#0277BD</color>
     <color name="branco">#ffffff</color>
 
 </resources>

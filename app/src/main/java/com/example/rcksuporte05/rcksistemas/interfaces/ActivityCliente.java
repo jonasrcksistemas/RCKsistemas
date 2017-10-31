@@ -218,7 +218,7 @@ public class ActivityCliente extends AppCompatActivity {
             edtTotalClientes.setText("Clientes listados: " + lista.size() + "   ");
             edtTotalClientes.setTextColor(Color.BLACK);
         } else {
-            edtTotalClientes.setText("Não há produtos a serem exibidos!   ");
+            edtTotalClientes.setText("Não há clientes a serem exibidos!   ");
             edtTotalClientes.setTextColor(Color.RED);
         }
         super.onResume();

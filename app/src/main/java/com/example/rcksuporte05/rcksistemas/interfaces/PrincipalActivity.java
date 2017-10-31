@@ -1,13 +1,9 @@
 package com.example.rcksuporte05.rcksistemas.interfaces;
 
-import android.app.NotificationManager;
-import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
-import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -29,11 +25,8 @@ import com.example.rcksuporte05.rcksistemas.classes.Sincronia;
 import com.example.rcksuporte05.rcksistemas.classes.Usuario;
 import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -46,7 +39,6 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
     private static final int pedidosEnviados = 1;
     private static final int sair = 2;
     private static final int AtualizarBanco = 3;
-
     private Button btnCliente;
     private Button btnProduto;
     private Button btnPedidos;
@@ -93,6 +85,8 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
         tb_principal.setSubtitle("Usuario: " + UsuarioHelper.getUsuario().getNome_usuario());
         tb_principal.setLogo(R.mipmap.ic_launcher);
 
+        sincronia = new Sincronia(true, true, true);
+
         setSupportActionBar(tb_principal);
 
     }
@@ -117,12 +111,10 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
         } else if (view == btnSincroniza || view == txtSincroniza) {
             getUsuarios();
             Intent intent = new Intent(PrincipalActivity.this, ActiviyDialogSincronia.class);
+            SincroniaBO.setActivity(PrincipalActivity.this);
             startActivity(intent);
         }
     }
-
-
-
 
 
     @Override
@@ -196,86 +188,6 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
     }
 
 
-    public void sincronizaApi() {
-        final NotificationCompat.Builder notificacao = new NotificationCompat.Builder(PrincipalActivity.this)
-                .setSmallIcon(R.mipmap.ic_sincroniza_main)
-                .setContentTitle("Sincronia em andamento")
-                .setContentText("Aguarde")
-                .setPriority(2)
-                .setProgress(0, 0, true);
-        final NotificationManager mNotificationManager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        mNotificationManager.notify(0, notificacao.build());
-
-        final ProgressDialog progress = new ProgressDialog(PrincipalActivity.this);
-        progress.setMessage("Sincronia em execução");
-        progress.setTitle("Aguarde");
-        progress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        progress.setIndeterminate(true);
-        progress.setCancelable(false);
-        progress.show();
-
-        final Rotas apiRotas = Api.buildRetrofit();
-
-        final Thread a = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Map<String, String> cabecalho = new HashMap<>();
-                cabecalho.put("AUTHORIZATION", UsuarioHelper.getUsuario().getToken());
-                Call<Sincronia> call = apiRotas.sincroniaApi(Integer.parseInt(UsuarioHelper.getUsuario().getId_usuario()), cabecalho, sincronia);
-                try {
-                    Response<Sincronia> response = call.execute();
-                    if (response.code() == 200) {
-                        sincronia = response.body();
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                ivInternet.setVisibility(View.INVISIBLE);
-                            }
-                        });
-                        sincroniaBO.sincronizaBanco(sincronia, PrincipalActivity.this, notificacao, mNotificationManager, progress);
-                    } else {
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                ivInternet.setVisibility(View.VISIBLE);
-                                Toast.makeText(PrincipalActivity.this, "Houve um problema na requisição, entre em contato no suporte para esclarecer a situação", Toast.LENGTH_LONG).show();
-                                progress.dismiss();
-                            }
-                        });
-                        notificacao.setContentText("Erro de comunicação")
-                                .setContentTitle("Houve um problema na requisição, entre em contato no suporte para esclarecer a situação")
-                                .setProgress(0, 0, false)
-                                .setSmallIcon(R.mipmap.ic_sem_internet)
-                                .setDefaults(NotificationCompat.DEFAULT_ALL)
-                                .setPriority(2)
-                                .setAutoCancel(true);
-                        mNotificationManager.notify(0, notificacao.build());
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            ivInternet.setVisibility(View.VISIBLE);
-                            progress.dismiss();
-                        }
-                    });
-                    notificacao.setContentText("Erro de comunicação")
-                            .setContentTitle("Verifique sua conexão e tente novamente")
-                            .setProgress(0, 0, false)
-                            .setSmallIcon(R.mipmap.ic_sem_internet)
-                            .setDefaults(NotificationCompat.DEFAULT_ALL)
-                            .setPriority(2)
-                            .setAutoCancel(true);
-                    mNotificationManager.notify(0, notificacao.build());
-                }
-            }
-        });
-        a.start();
-    }
-
-
     public void getUsuarios() {
         Rotas apiRotas = Api.buildRetrofit();
 
@@ -328,7 +240,7 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
         System.gc();
         getUsuarios();
         if (getIntent().getIntExtra("alterado", 0) == 1) {
-            sincronizaApi();
+            sincroniaBO.sincronizaApi(new Sincronia(true, true, true));
             getIntent().putExtra("alterado", 0);
         }
         super.onResume();

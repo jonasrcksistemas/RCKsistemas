@@ -5,12 +5,19 @@ import android.app.Activity;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AlertDialog;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.example.rcksuporte05.rcksistemas.Helper.UsuarioHelper;
 import com.example.rcksuporte05.rcksistemas.R;
+import com.example.rcksuporte05.rcksistemas.api.Api;
+import com.example.rcksuporte05.rcksistemas.api.Rotas;
 import com.example.rcksuporte05.rcksistemas.classes.Cliente;
 import com.example.rcksuporte05.rcksistemas.classes.CondicoesPagamento;
 import com.example.rcksuporte05.rcksistemas.classes.Operacao;
@@ -25,6 +32,13 @@ import com.example.rcksuporte05.rcksistemas.classes.WebPedidoItens;
 import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
 import com.example.rcksuporte05.rcksistemas.interfaces.MainActivity;
 
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+import retrofit2.Call;
+import retrofit2.Response;
+
 
 /**
  * Created by RCK 03 on 06/10/2017.
@@ -32,21 +46,23 @@ import com.example.rcksuporte05.rcksistemas.interfaces.MainActivity;
 
 public class SincroniaBO {
 
-    public void sincronizaBanco(Sincronia sincronia, Activity activity, final NotificationCompat.Builder notificacao, final NotificationManager mNotificationManager, final ProgressDialog progress) {
+    private static Activity activity;
+
+    public static Activity getActivity() {
+        return activity;
+    }
+
+    public static void setActivity(Activity activity) {
+        SincroniaBO.activity = activity;
+    }
+
+    public void sincronizaBanco(Sincronia sincronia, final NotificationCompat.Builder notificacao, final NotificationManager mNotificationManager, final ProgressDialog progress) {
         //controla o progresso da notificação e do progressDialog
         int contadorNotificacaoEProgresso = 0;
 
         DBHelper db = new DBHelper(activity);
 
-        final int maxProgress = sincronia.getListaCliente().size() +
-                sincronia.getListaCondicoesPagamento().size() +
-                sincronia.getListaOperacao().size() +
-                sincronia.getListaProduto().size() +
-                sincronia.getListaTabelaPreco().size() +
-                sincronia.getListaTabelaPrecoItem().size() +
-                sincronia.getListaUsuario().size() +
-                sincronia.getListaVendedorBonusResumo().size() +
-                sincronia.getListaWebPedidos().size();
+        final int maxProgress = sincronia.getMaxProgress();
 
         activity.runOnUiThread(new Runnable() {
             @Override
@@ -57,25 +73,27 @@ public class SincroniaBO {
         });
 
         //Primeiro delete todos os itens da tabela em questao
-        db.alterar("DELETE FROM TBL_CADASTRO");
-        //insere todos os itens da tabela em questao
-        for (Cliente cliente : sincronia.getListaCliente()) {
-            notificacao.setProgress(maxProgress, contadorNotificacaoEProgresso, false);
+        if (sincronia.isCliente()) {
+            db.alterar("DELETE FROM TBL_CADASTRO");
+            //insere todos os itens da tabela em questao
+            for (Cliente cliente : sincronia.getListaCliente()) {
+                notificacao.setProgress(maxProgress, contadorNotificacaoEProgresso, false);
 
-            db.inserirTBL_CADASTRO(cliente);
+                db.inserirTBL_CADASTRO(cliente);
 
-            //incrementa o progresso da notificao
-            //ação e do progressDialog
-            contadorNotificacaoEProgresso++;
-            final int finalContadorNotificacaoEProgresso = contadorNotificacaoEProgresso;
-            //SubThread necessária para manipulação de componentes da tela
-            activity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    progress.setProgress(finalContadorNotificacaoEProgresso);
-                }
-            });
-            mNotificationManager.notify(0, notificacao.build());
+                //incrementa o progresso da notificao
+                //ação e do progressDialog
+                contadorNotificacaoEProgresso++;
+                final int finalContadorNotificacaoEProgresso = contadorNotificacaoEProgresso;
+                //SubThread necessária para manipulação de componentes da tela
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        progress.setProgress(finalContadorNotificacaoEProgresso);
+                    }
+                });
+                mNotificationManager.notify(0, notificacao.build());
+            }
         }
 
         db.alterar("DELETE FROM TBL_WEB_USUARIO");
@@ -96,22 +114,24 @@ public class SincroniaBO {
             mNotificationManager.notify(0, notificacao.build());
         }
 
-        db.alterar("DELETE FROM TBL_PRODUTO");
+        if (sincronia.isProduto()) {
+            db.alterar("DELETE FROM TBL_PRODUTO");
 
-        for (Produto produto : sincronia.getListaProduto()) {
-            notificacao.setProgress(maxProgress, contadorNotificacaoEProgresso, false);
+            for (Produto produto : sincronia.getListaProduto()) {
+                notificacao.setProgress(maxProgress, contadorNotificacaoEProgresso, false);
 
-            db.inserirTBL_PRODUTO(produto);
+                db.inserirTBL_PRODUTO(produto);
 
-            contadorNotificacaoEProgresso++;
-            final int finalContadorNotificacaoEProgresso = contadorNotificacaoEProgresso;
-            activity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    progress.setProgress(finalContadorNotificacaoEProgresso);
-                }
-            });
-            mNotificationManager.notify(0, notificacao.build());
+                contadorNotificacaoEProgresso++;
+                final int finalContadorNotificacaoEProgresso = contadorNotificacaoEProgresso;
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        progress.setProgress(finalContadorNotificacaoEProgresso);
+                    }
+                });
+                mNotificationManager.notify(0, notificacao.build());
+            }
         }
 
         db.alterar("DELETE FROM TBL_OPERACAO_ESTOQUE");
@@ -205,30 +225,32 @@ public class SincroniaBO {
             mNotificationManager.notify(0, notificacao.build());
         }
 
-        for (WebPedido webPedido : sincronia.getListaWebPedidos()) {
-            notificacao.setProgress(maxProgress, contadorNotificacaoEProgresso, false);
+        if (sincronia.isPedidos()) {
+            for (WebPedido webPedido : sincronia.getListaWebPedidos()) {
+                notificacao.setProgress(maxProgress, contadorNotificacaoEProgresso, false);
 
-            webPedido.setPedido_enviado("S");
-            if (db.contagem("SELECT COUNT(*) FROM TBL_WEB_PEDIDO WHERE ID_WEB_PEDIDO_SERVIDOR = " + webPedido.getId_web_pedido_servidor()) <= 0) {
-                db.inserirTBL_WEB_PEDIDO(webPedido);
-            } else {
-                db.atualizarTBL_WEB_PEDIDO(webPedido);
-            }
-            for (WebPedidoItens webPedidoItens : webPedido.getWebPedidoItens()) {
-                String idPedido = db.consulta("SELECT * FROM TBL_WEB_PEDIDO WHERE ID_WEB_PEDIDO_SERVIDOR = " + webPedido.getId_web_pedido_servidor(), "ID_WEB_PEDIDO");
-                webPedidoItens.setId_pedido(idPedido);
-                db.atualizarTBL_WEB_PEDIDO_ITENS(webPedidoItens);
-            }
-
-            contadorNotificacaoEProgresso++;
-            final int finalContadorNotificacaoEProgresso = contadorNotificacaoEProgresso;
-            activity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    progress.setProgress(finalContadorNotificacaoEProgresso);
+                webPedido.setPedido_enviado("S");
+                if (db.contagem("SELECT COUNT(*) FROM TBL_WEB_PEDIDO WHERE ID_WEB_PEDIDO_SERVIDOR = " + webPedido.getId_web_pedido_servidor()) <= 0) {
+                    db.inserirTBL_WEB_PEDIDO(webPedido);
+                } else {
+                    db.atualizarTBL_WEB_PEDIDO(webPedido);
                 }
-            });
+                for (WebPedidoItens webPedidoItens : webPedido.getWebPedidoItens()) {
+                    String idPedido = db.consulta("SELECT * FROM TBL_WEB_PEDIDO WHERE ID_WEB_PEDIDO_SERVIDOR = " + webPedido.getId_web_pedido_servidor(), "ID_WEB_PEDIDO");
+                    webPedidoItens.setId_pedido(idPedido);
+                    db.atualizarTBL_WEB_PEDIDO_ITENS(webPedidoItens);
+                }
+
+                contadorNotificacaoEProgresso++;
+                final int finalContadorNotificacaoEProgresso = contadorNotificacaoEProgresso;
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        progress.setProgress(finalContadorNotificacaoEProgresso);
+                    }
+                });
                 mNotificationManager.notify(0, notificacao.build());
+            }
         }
 
         Intent intent = new Intent(activity, MainActivity.class);
@@ -244,7 +266,6 @@ public class SincroniaBO {
         mNotificationManager.notify(0, notificacao.build());
 
         System.gc();
-
 
         final AlertDialog.Builder alert = new AlertDialog.Builder(activity);
         alert.setMessage("Sincronia concluida com sucesso");
@@ -266,5 +287,85 @@ public class SincroniaBO {
 
     }
 
+    public void sincronizaApi(final Sincronia sincronia) {
+        final ImageView ivInternet = (ImageView) activity.findViewById(R.id.ivInternet);
 
+        final NotificationCompat.Builder notificacao = new NotificationCompat.Builder(activity)
+                .setSmallIcon(R.mipmap.ic_sincroniza_main)
+                .setContentTitle("Sincronia em andamento")
+                .setContentText("Aguarde")
+                .setPriority(2)
+                .setProgress(0, 0, true);
+        final NotificationManager mNotificationManager =
+                (NotificationManager) activity.getSystemService(Context.NOTIFICATION_SERVICE);
+        mNotificationManager.notify(0, notificacao.build());
+
+        final ProgressDialog progress = new ProgressDialog(activity);
+        progress.setMessage("Sincronia em execução");
+        progress.setTitle("Aguarde");
+        progress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        progress.setIndeterminate(true);
+        progress.setCancelable(false);
+        progress.show();
+
+        final Rotas apiRotas = Api.buildRetrofit();
+
+        final Thread a = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Map<String, String> cabecalho = new HashMap<>();
+                cabecalho.put("AUTHORIZATION", UsuarioHelper.getUsuario().getToken());
+                Call<Sincronia> call = apiRotas.sincroniaApi(Integer.parseInt(UsuarioHelper.getUsuario().getId_usuario()), cabecalho, sincronia);
+                try {
+                    Response<Sincronia> response = call.execute();
+                    if (response.code() == 200) {
+                        Sincronia sincronia = response.body();
+                        activity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                ivInternet.setVisibility(View.INVISIBLE);
+                            }
+                        });
+                        sincronizaBanco(sincronia, notificacao, mNotificationManager, progress);
+                    } else {
+                        activity.runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                ivInternet.setVisibility(View.VISIBLE);
+                                Toast.makeText(activity, "Houve um problema na requisição, entre em contato no suporte para esclarecer a situação", Toast.LENGTH_LONG).show();
+                                progress.dismiss();
+                            }
+                        });
+                        notificacao.setContentText("Erro de comunicação")
+                                .setContentTitle("Houve um problema na requisição, entre em contato no suporte para esclarecer a situação")
+                                .setProgress(0, 0, false)
+                                .setSmallIcon(R.mipmap.ic_sem_internet)
+                                .setDefaults(NotificationCompat.DEFAULT_ALL)
+                                .setPriority(2)
+                                .setAutoCancel(true);
+                        mNotificationManager.notify(0, notificacao.build());
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            ivInternet.setVisibility(View.VISIBLE);
+                            progress.dismiss();
+                        }
+                    });
+                    notificacao.setContentText("Erro de comunicação")
+                            .setContentTitle("Verifique sua conexão e tente novamente")
+                            .setProgress(0, 0, false)
+                            .setSmallIcon(R.mipmap.ic_sem_internet)
+                            .setDefaults(NotificationCompat.DEFAULT_ALL)
+                            .setPriority(2)
+                            .setAutoCancel(true);
+                    mNotificationManager.notify(0, notificacao.build());
+                }
+                activity = null;
+            }
+        });
+        a.start();
+    }
 }

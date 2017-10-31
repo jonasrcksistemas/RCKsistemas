@@ -8,13 +8,11 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.widget.EditText;
 
 import com.example.rcksuporte05.rcksistemas.Helper.PedidoHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.UsuarioHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.TabsAdapterPedido;
-import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
 import com.example.rcksuporte05.rcksistemas.extras.SlidingTabLayout;
 
 public class ActivityPedidoMain extends AppCompatActivity {
@@ -48,6 +46,9 @@ public class ActivityPedidoMain extends AppCompatActivity {
 
         if (vizualizacao == 1) {
             toolbar.setTitle("Vizualização de Pedido");
+            toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimaryAzul));
+            stl_tabsPedido.setBackgroundColor(getResources().getColor(R.color.colorPrimaryAzul));
+            this.setTheme(R.style.Theme_MeuTemaPedido);
         } else if (pedidoHelper.getIdPedido() > 0) {
             toolbar.setTitle("Alteração do pedido");
         } else {

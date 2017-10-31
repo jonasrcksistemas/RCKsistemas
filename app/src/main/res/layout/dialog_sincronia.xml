@@ -2,57 +2,49 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
+    android:id="@+id/dialog_sincronia"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    tools:context="com.example.rcksuporte05.rcksistemas.interfaces.ActiviyDialogSincronia"
-    android:id="@+id/dialog_sincronia"
-    android:theme="@style/ThemeOverlay.AppCompat.Light"
+    android:orientation="vertical"
+    android:theme="@style/Theme.Dialogs"
+    tools:context="com.example.rcksuporte05.rcksistemas.interfaces.ActiviyDialogSincronia">
 
-    >
     <android.support.v7.widget.Toolbar
         android:id="@+id/id_toolbarSincronia"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
-        android:theme="@style/Theme.Dialogs"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         app:title="Sincronia"
-        app:titleTextColor="@color/colorAccent"
-        />
+        app:titleTextColor="@color/branco" />
 
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical"
         android:paddingBottom="@dimen/activity_vertical_margin"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin"
-        android:gravity="center">
+        android:theme="@style/Theme.MeuTemaPedido">
 
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:gravity="center"
-            >
+            android:gravity="center">
 
             <Switch
                 android:id="@+id/id_opcao_cliente"
                 android:layout_width="175dp"
                 android:layout_height="wrap_content"
+                android:checked="true"
                 android:text="Clientes   "
                 android:textColor="@color/colorAccent"
-                android:textSize="22sp"
-                android:textStyle="bold"
-                android:checked="true"
-                />
+                android:textSize="22sp" />
 
         </LinearLayout>
 
@@ -60,18 +52,16 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:gravity="center"
-            >
+            android:gravity="center">
 
             <Switch
-                 android:checked="true"
                 android:id="@+id/id_opcao_produto"
                 android:layout_width="175dp"
                 android:layout_height="wrap_content"
+                android:checked="true"
                 android:text="Produtos   "
                 android:textColor="@color/colorAccent"
-                android:textSize="22sp"
-                android:textStyle="bold" />
+                android:textSize="22sp" />
 
         </LinearLayout>
 
@@ -79,22 +69,45 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:gravity="center"
-            >
+            android:gravity="center">
 
             <Switch
-                android:checked="true"
                 android:id="@+id/id_opcao_pedidos"
                 android:layout_width="175dp"
                 android:layout_height="wrap_content"
+                android:checked="false"
                 android:text="Pedidos   "
                 android:textColor="@color/colorAccent"
-                android:textSize="22sp"
-                android:textStyle="bold"
-
-                />
+                android:textSize="22sp" />
 
         </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="horizontal"
+        android:theme="@style/Theme.Dialogs">
+
+        <Button
+            android:id="@+id/btnCancelar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/colorPrimary"
+            android:text="Cancelar"
+            android:textColor="@color/branco" />
+
+        <Button
+            android:id="@+id/btnConfirmar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/colorPrimary"
+            android:text="Confirmar"
+            android:textColor="@color/branco" />
 
     </LinearLayout>
 </LinearLayout>

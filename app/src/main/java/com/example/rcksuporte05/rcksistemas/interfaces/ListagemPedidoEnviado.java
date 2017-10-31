@@ -118,7 +118,7 @@ public class ListagemPedidoEnviado extends AppCompatActivity {
             public boolean onQueryTextChange(final String query) {
                 if (query.trim().equals("")) {
                     listaAdapterPedidoEnviado = new ListaAdapterPedidoEnviado(ListagemPedidoEnviado.this, listaPedido);
-                    edtNumerPedidoEnviados.setText(listaPedido.size() + ": Pedidos Pendentes");
+                    edtNumerPedidoEnviados.setText(listaPedido.size() + ": Pedidos Enviados");
                     edtNumerPedidoEnviados.setTextColor(Color.BLACK);
                 } else {
                     List<WebPedido> listaBusca = buscaPedidoEnviado(listaPedido, query);
@@ -174,7 +174,7 @@ public class ListagemPedidoEnviado extends AppCompatActivity {
             registerForContextMenu(lstPedidoEnviado);
 
         } catch (CursorIndexOutOfBoundsException e) {
-            Toast.makeText(this, "Nenuhm pedido foi Enviado!", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Nenhum pedido foi Enviado!", Toast.LENGTH_LONG).show();
         }
         edtNumerPedidoEnviados.setText(listaPedido.size() + ": Pedidos Enviados");
         super.onResume();
