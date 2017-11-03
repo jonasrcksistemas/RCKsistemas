@@ -33,11 +33,7 @@ public class PedidoHelper {
     private static WebPedidoItens webPedidoItem;
     private static List<WebPedidoItens> listaWebPedidoItens;
     private static int idPedido;
-    private static int positionFaixPadrao;
     private Float valorProdutos = 0.0f;
-    private Float descontoReal = 0.0f;
-    private Float mediaDesconto = 0.0f;
-    private Float totalPontos = 0.0f;
     private EditText edtTotalVenda;
     private ViewPager mViewPager;
     private DBHelper db;
@@ -101,21 +97,13 @@ public class PedidoHelper {
         System.gc();
     }
 
-    public static int getPositionFaixPadrao() {
-        return positionFaixPadrao;
-    }
-
-    public static void setPositionFaixPadrao(int positionFaixPadrao) {
-        PedidoHelper.positionFaixPadrao = positionFaixPadrao;
-    }
-
     public void calculaValorPedido(List<WebPedidoItens> produtoPedido) {
         Float resultado = Float.valueOf("0");
         for (int i = 0; produtoPedido.size() > i; i++) {
             resultado += Float.valueOf(produtoPedido.get(i).getValor_total());
         }
         valorVenda = resultado;
-        edtTotalVenda.setText(String.format("TOTAL    R$%.2f", valorVenda) + "     ");
+        edtTotalVenda.setText(String.format("TOTAL    R$%.2f", valorVenda) + "    ");
     }
 
     public void inserirProduto(WebPedidoItens webPedidoItem) {
@@ -166,22 +154,9 @@ public class PedidoHelper {
                                 webPedido.setValor_total(valorVenda.toString());
                                 for (int i = 0; listaWebPedidoItens.size() > i; i++) {
                                     valorProdutos += Float.parseFloat(listaWebPedidoItens.get(i).getValor_bruto());
-                                    descontoReal += Float.parseFloat(listaWebPedidoItens.get(i).getValor_desconto_real());
-                                    mediaDesconto += Float.parseFloat(listaWebPedidoItens.get(i).getTabela_preco_faixa().getPerc_desc_inicial());
-                                    totalPontos += Float.parseFloat(listaWebPedidoItens.get(i).getPontos_total());
                                 }
-                                mediaDesconto = (mediaDesconto / listaWebPedidoItens.size());
-                                webPedido.setPontos_total(totalPontos.toString());
-                                if (totalPontos > 0) {
-                                    webPedido.setPontos_coeficiente(String.valueOf(Float.parseFloat(webPedido.getValor_total()) / totalPontos));
-                                } else {
-                                    webPedido.setPontos_coeficiente("0");
-                                }
-                                webPedido.setDesconto_per(String.valueOf(mediaDesconto));
+
                                 webPedido.setValor_produtos(String.valueOf(valorProdutos));
-                                webPedido.setValor_desconto(String.valueOf(descontoReal));
-                                webPedido.setPontos_cor(db.consulta("SELECT I.COR_WEB, I.ID_ITEM FROM TBL_TABELA_PRECO_ITENS I JOIN TBL_TABELA_PRECO_CAB T ON T.ID_TABELA=I.ID_TABELA WHERE PERC_DESC_INICIAL<= " + mediaDesconto + " AND PERC_DESC_FINAL>= " + mediaDesconto + ";", "COR_WEB"));
-                                webPedido.setId_tabela_preco_faixa(db.consulta("SELECT I.COR_WEB, I.ID_ITEM FROM TBL_TABELA_PRECO_ITENS I JOIN TBL_TABELA_PRECO_CAB T ON T.ID_TABELA=I.ID_TABELA WHERE PERC_DESC_INICIAL<= " + mediaDesconto + " AND PERC_DESC_FINAL>= " + mediaDesconto + ";", "ID_ITEM"));
 
                                 if (PedidoHelper.getIdPedido() > 0) {
                                     db.atualizarTBL_WEB_PEDIDO(webPedido);
@@ -194,10 +169,12 @@ public class PedidoHelper {
                                         }
                                     }
                                 } else {
+                                    webPedido.setPedido_enviado("N");
                                     db.inserirTBL_WEB_PEDIDO(webPedido);
                                     int idPedido = db.contagem("SELECT MAX(ID_WEB_PEDIDO) FROM TBL_WEB_PEDIDO");
                                     for (int i = 0; listaWebPedidoItens.size() > i; i++) {
                                         listaWebPedidoItens.get(i).setId_pedido(String.valueOf(idPedido));
+                                        listaWebPedidoItens.get(i).setId_empresa(UsuarioHelper.getUsuario().getIdEmpresaMultiDevice());
                                         db.inserirTBL_WEB_PEDIDO_ITENS(listaWebPedidoItens.get(i));
                                     }
                                 }
@@ -225,7 +202,6 @@ public class PedidoHelper {
             }
         } catch (NullPointerException e) {
             e.printStackTrace();
-            Toast.makeText(activityPedidoMain, "Conclua o pedido antes de salvar o pedido!", Toast.LENGTH_SHORT).show();
             return false;
         }
     }
@@ -242,7 +218,6 @@ public class PedidoHelper {
         pedido2 = null;
         webPedido = null;
         idPedido = 0;
-        positionFaixPadrao = 0;
         System.gc();
     }
 }

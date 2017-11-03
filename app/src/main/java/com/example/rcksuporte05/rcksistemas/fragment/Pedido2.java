@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.rcksuporte05.rcksistemas.Helper.PedidoHelper;
+import com.example.rcksuporte05.rcksistemas.Helper.UsuarioHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.ListaAdapterProdutoPedido;
 import com.example.rcksuporte05.rcksistemas.classes.WebPedidoItens;
@@ -94,7 +95,7 @@ public class Pedido2 extends Fragment {
             final int pedido = PedidoHelper.getIdPedido();
             try {
 
-                listaProdutoPedido = db.listaWebPedidoItens("SELECT * FROM TBL_WEB_PEDIDO_ITENS --WHERE ID_PEDIDO = " + pedido);
+                listaProdutoPedido = db.listaWebPedidoItens("SELECT * FROM TBL_WEB_PEDIDO_ITENS WHERE ID_PEDIDO = " + pedido);
                 adapter = new ListaAdapterProdutoPedido(getContext(), listaProdutoPedido);
                 lstProdutoPedido.setAdapter(adapter);
             } catch (CursorIndexOutOfBoundsException e) {
@@ -102,6 +103,7 @@ public class Pedido2 extends Fragment {
                 alert.setTitle("Atenção!");
                 alert.setMessage("O pedido encontra-se sem produtos, deseja exclui-lo?");
                 alert.setNegativeButton("Não", null);
+                alert.setCancelable(false);
                 alert.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -126,9 +128,8 @@ public class Pedido2 extends Fragment {
 
     public void inserirProduto(WebPedidoItens webPedidoItem) {
         webPedidoItem.setId_pedido(String.valueOf(db.contagem("SELECT MAX(ID_WEB_PEDIDO) FROM TBL_WEB_PEDIDO") + 1));
-        webPedidoItem.setId_empresa("1");
+        webPedidoItem.setId_empresa(UsuarioHelper.getUsuario().getIdEmpresaMultiDevice());
         webPedidoItem.setUsuario_lancamento_id(String.valueOf(bundle.getInt("idUsuario")));
-        webPedidoItem.setId_pedido("1");
         listaProdutoPedido.add(webPedidoItem);
         adapter = new ListaAdapterProdutoPedido(getContext(), listaProdutoPedido);
         lstProdutoPedido.setAdapter(adapter);

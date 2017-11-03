@@ -2,7 +2,7 @@ package com.example.rcksuporte05.rcksistemas.classes;
 
 import java.util.List;
 
-public class WebPedido implements java.io.Serializable {
+public class WebPedido {
 
     private String id_web_pedido;
     private String id_empresa;

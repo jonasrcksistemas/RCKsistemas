@@ -2,6 +2,8 @@ package com.example.rcksuporte05.rcksistemas.interfaces;
 
 import android.app.SearchManager;
 import android.content.Context;
+import android.database.CursorIndexOutOfBoundsException;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
@@ -13,8 +15,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.ListaAdapterProdutos;
@@ -29,49 +31,44 @@ public class ActivityProduto extends AppCompatActivity {
     private SearchView busca_produto;
     private ListView lstProdutos;
     private Toolbar toolbar;
-    private List<Produto> listaAux;
     private List<Produto> lista;
-    private ListaAdapterProdutos adaptadorPrincipal;
     private ListaAdapterProdutos adaptador;
     private DBHelper db = new DBHelper(this);
-    private Thread b = new Thread();
-    private Bundle bundle = new Bundle();
+    private EditText edtTotalProdutos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_produto);
 
-
-
         lstProdutos = (ListView) findViewById(R.id.lstProdutos);
+        edtTotalProdutos = (EditText) findViewById(R.id.edtTotalProdutos);
         toolbar = (Toolbar) findViewById(R.id.tb_produto);
         toolbar.setTitle("Lista de Produtos");
         if (getIntent().getIntExtra("acao", 0) == 1) {
             try {
                 lista = db.listaProduto("SELECT * FROM TBL_PRODUTO WHERE ATIVO = 'S' ORDER BY NOME_PRODUTO");
-                listaAux = lista;
-                adaptadorPrincipal = new ListaAdapterProdutos(ActivityProduto.this, lista);
-                lstProdutos.setAdapter(adaptadorPrincipal);
+
+                adaptador = new ListaAdapterProdutos(ActivityProduto.this, lista);
+                lstProdutos.setAdapter(adaptador);
             } catch (Exception e) {
-                Toast.makeText(this, "Não há nenhum produto a ser exibido!", Toast.LENGTH_LONG).show();
+                e.printStackTrace();
             }
             lstProdutos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     ProdutoPedidoActivity produtoPedidoActivity = new ProdutoPedidoActivity();
-                    produtoPedidoActivity.pegaProduto(listaAux.get(position));
+                    produtoPedidoActivity.pegaProduto(adaptador.getItem(position));
                     finish();
                 }
             });
         } else {
             try {
                 lista = db.listaProduto("SELECT * FROM TBL_PRODUTO ORDER BY ATIVO DESC, NOME_PRODUTO");
-                listaAux = lista;
-                adaptadorPrincipal = new ListaAdapterProdutos(ActivityProduto.this, lista);
-                lstProdutos.setAdapter(adaptadorPrincipal);
+                adaptador = new ListaAdapterProdutos(ActivityProduto.this, lista);
+                lstProdutos.setAdapter(adaptador);
             } catch (Exception e) {
-                Toast.makeText(this, "Não há nenhum produto a ser exibido!", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
             }
             lstProdutos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
@@ -79,10 +76,10 @@ public class ActivityProduto extends AppCompatActivity {
                     Float preco = null;
                     String mensagem;
                     try {
-                        preco = Float.parseFloat(listaAux.get(position).getVenda_preco());
-                        mensagem = "Produto: " + listaAux.get(position).getId_produto() + "\n        " + listaAux.get(position).getNome_produto() + "\nUnidade de Medida: " + listaAux.get(position).getDescricao() + "\nPreço de Venda: R$" + String.format("%.2f", preco);
+                        preco = Float.parseFloat(adaptador.getItem(position).getVenda_preco());
+                        mensagem = "Produto: " + adaptador.getItem(position).getId_produto() + "\n        " + adaptador.getItem(position).getNome_produto() + "\nUnidade de Medida: " + adaptador.getItem(position).getDescricao() + "\nPreço de Venda: R$" + String.format("%.2f", preco);
                     } catch (NumberFormatException e) {
-                        mensagem = "Produto: " + listaAux.get(position).getId_produto() + "\n        " + listaAux.get(position).getNome_produto() + "\nUnidade de Medida: " + listaAux.get(position).getDescricao();
+                        mensagem = "Produto: " + adaptador.getItem(position).getId_produto() + "\n        " + adaptador.getItem(position).getNome_produto() + "\nUnidade de Medida: " + adaptador.getItem(position).getDescricao();
                         System.out.println("Produto sem preco");
                     }
                     AlertDialog.Builder alert = new AlertDialog.Builder(ActivityProduto.this);
@@ -121,16 +118,19 @@ public class ActivityProduto extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(final String query) {
-                if(query.trim().equals("")){
-                    adaptador = new ListaAdapterProdutos(ActivityProduto.this, lista);
+                try {
+                    if (query.trim().equals("")) {
+                        adaptador = new ListaAdapterProdutos(ActivityProduto.this, lista);
+                        edtTotalProdutos.setText("Produtos listados :" + lista.size() + "   ");
+                        edtTotalProdutos.setTextColor(Color.BLACK);
+                    } else {
+                        adaptador = new ListaAdapterProdutos(ActivityProduto.this, buscarProdutos(query));
+                    }
                     adaptador.notifyDataSetChanged();
                     lstProdutos.setAdapter(adaptador);
-                }else {
-                    adaptador = new ListaAdapterProdutos(ActivityProduto.this, buscarProdutos(lista, query));
-                    adaptador.notifyDataSetChanged();
-                    lstProdutos.setAdapter(adaptador);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-
                 return false;
             }
         });
@@ -151,23 +151,36 @@ public class ActivityProduto extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public List<Produto> buscarProdutos(List<Produto> produtos, String query) {
-        final String upperCaseQuery = query.toUpperCase();
+    public List<Produto> buscarProdutos(String query) {
+        List<Produto> lista = new ArrayList<>();
 
-        final List<Produto> lista = new ArrayList<>();
-        for (Produto produto : produtos) {
+        if (!query.trim().equals("")) {
             try {
-                final String nomeCliente = produto.getNome_produto().toUpperCase();
-                if (nomeCliente.contains(upperCaseQuery)) {
-                    lista.add(produto);
-                }
-            } catch (NullPointerException e) {
+                lista = db.listaProduto("SELECT * FROM TBL_PRODUTO WHERE NOME_PRODUTO LIKE '%" + query + "%' ORDER BY ATIVO DESC, NOME_PRODUTO");
+                edtTotalProdutos.setText("Produtos encontrados :" + lista.size() + "   ");
+                edtTotalProdutos.setTextColor(Color.BLACK);
+            } catch (CursorIndexOutOfBoundsException | NullPointerException e) {
                 e.printStackTrace();
+                edtTotalProdutos.setText("Nenhum produto encontrado   ");
+                edtTotalProdutos.setTextColor(Color.RED);
             }
         }
+        System.gc();
         return lista;
     }
 
+
+    @Override
+    protected void onResume() {
+        if (lista != null) {
+            edtTotalProdutos.setText("Produtos listados :" + lista.size() + "   ");
+            edtTotalProdutos.setTextColor(Color.BLACK);
+        } else {
+            edtTotalProdutos.setText("Não há produtos a serem exibidos!   ");
+            edtTotalProdutos.setTextColor(Color.RED);
+        }
+        super.onResume();
+    }
 
     @Override
     protected void onDestroy() {

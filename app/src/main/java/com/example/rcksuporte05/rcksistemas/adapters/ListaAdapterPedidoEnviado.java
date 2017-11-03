@@ -41,9 +41,6 @@ public class ListaAdapterPedidoEnviado extends ArrayAdapter<WebPedido> {
         TextView txtPrecoPedido = (TextView) convertView.findViewById(R.id.txtPrecoPedido);
         TextView txtHoraPedido = (TextView) convertView.findViewById(R.id.txtHoraPedido);
         TextView txtDataPedido = (TextView) convertView.findViewById(R.id.txtDataPedido);
-        TextView txtPontoCoeficiente = (TextView) convertView.findViewById(R.id.txtPontoCoeficiente);
-
-        View viewCor = convertView.findViewById(R.id.viewCor);
 
         txtIdPedido.setText(itemPosicao.getId_web_pedido_servidor());
 
@@ -58,10 +55,8 @@ public class ListaAdapterPedidoEnviado extends ArrayAdapter<WebPedido> {
             txtHoraPedido.setText("HORA : " + formatoHora.format(dataHora));
             txtDataPedido.setText("DATA : " + formatoData.format(dataHora));
         } catch (ParseException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
-        txtPontoCoeficiente.setText("COEF: " + itemPosicao.getPontos_coeficiente());
-        viewCor.setBackgroundColor(Color.parseColor(itemPosicao.getPontos_cor()));
 
         if (position % 2 == 0) {
             convertView.setBackgroundColor(Color.parseColor("#eeeeee"));

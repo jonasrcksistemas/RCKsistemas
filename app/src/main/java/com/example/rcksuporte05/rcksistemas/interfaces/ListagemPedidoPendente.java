@@ -27,6 +27,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.rcksuporte05.rcksistemas.Helper.PedidoHelper;
+import com.example.rcksuporte05.rcksistemas.Helper.UsuarioHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.ListaAdapterPedidoPendente;
 import com.example.rcksuporte05.rcksistemas.api.Api;
@@ -37,7 +38,9 @@ import com.example.rcksuporte05.rcksistemas.classes.WebPedidoItens;
 import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -51,7 +54,6 @@ public class ListagemPedidoPendente extends AppCompatActivity {
     private EditText edtNumerPedidoPendentes;
     private DBHelper db = new DBHelper(this);
     private Usuario usuario;
-    private Thread a = new Thread();
     private ProgressDialog progress;
 
     @Override
@@ -59,11 +61,10 @@ public class ListagemPedidoPendente extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listagem_pedido_pendente);
 
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarPedidoPendente);
         toolbar.setTitle("Pedidos Pendentes");
         setSupportActionBar(toolbar);
-        usuario = db.listaUsuario("SELECT * FROM TBL_WEB_USUARIO WHERE LOGIN = '" + db.consulta("SELECT * FROM TBL_LOGIN;", "LOGIN") + "';").get(0);
+        usuario = UsuarioHelper.getUsuario();
         lstPedidoPendente = (ListView) findViewById(R.id.lstPedidoPendente);
         lstPedidoPendente.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -117,7 +118,7 @@ public class ListagemPedidoPendente extends AppCompatActivity {
     public void onCreateContextMenu(final ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-        menu.setHeaderTitle("Pedido: " + listaPedido.get(info.position).getId_web_pedido());
+        menu.setHeaderTitle("Pedido: " + listaAdapterPedidoPendente.getItem(info.position).getId_web_pedido());
 
         MenuItem enviar = menu.add("Enviar pedido");
         enviar.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
@@ -125,18 +126,18 @@ public class ListagemPedidoPendente extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 AlertDialog.Builder alert = new AlertDialog.Builder(ListagemPedidoPendente.this);
                 alert.setTitle("Atenção!");
-                alert.setMessage("Deseja enviar o pedido " + listaPedido.get(info.position).getId_web_pedido() + " para ser faturado?");
+                alert.setMessage("Deseja enviar o pedido " + listaAdapterPedidoPendente.getItem(info.position).getId_web_pedido() + " para ser faturado?");
                 alert.setNegativeButton("Não", null);
                 alert.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         progress = new ProgressDialog(ListagemPedidoPendente.this);
-                        progress.setMessage("Enviando pedido " + listaPedido.get(info.position).getId_web_pedido() + "...");
+                        progress.setMessage("Enviando pedido " + listaAdapterPedidoPendente.getItem(info.position).getId_web_pedido() + "...");
                         progress.setTitle("Atenção!");
                         progress.setCancelable(false);
                         progress.show();
 
-                        enviarPedido(listaPedido.get(info.position));
+                        enviarPedido(listaAdapterPedidoPendente.getItem(info.position));
                     }
                 });
                 alert.show();
@@ -151,7 +152,7 @@ public class ListagemPedidoPendente extends AppCompatActivity {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 Intent intent = new Intent(ListagemPedidoPendente.this, ActivityPedidoMain.class);
-                PedidoHelper.setIdPedido(Integer.parseInt(listaPedido.get(info.position).getId_web_pedido()));
+                PedidoHelper.setIdPedido(Integer.parseInt(listaAdapterPedidoPendente.getItem(info.position).getId_web_pedido()));
 
                 startActivity(intent);
                 return false;
@@ -164,14 +165,14 @@ public class ListagemPedidoPendente extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 AlertDialog.Builder alert = new AlertDialog.Builder(ListagemPedidoPendente.this);
                 alert.setTitle("Atenção!");
-                alert.setMessage("Deseja realmente excluir o pedido " + listaPedido.get(info.position).getId_web_pedido() + "?");
+                alert.setMessage("Deseja realmente excluir o pedido " + listaAdapterPedidoPendente.getItem(info.position).getId_web_pedido() + "?");
                 alert.setNegativeButton("Não", null);
                 alert.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         try {
-                            db.alterar("DELETE FROM TBL_WEB_PEDIDO WHERE ID_WEB_PEDIDO = " + listaPedido.get(info.position).getId_web_pedido());
-                            db.alterar("DELETE FROM TBL_WEB_PEDIDO_ITENS WHERE ID_PEDIDO = " + listaPedido.get(info.position).getId_web_pedido());
+                            db.alterar("DELETE FROM TBL_WEB_PEDIDO WHERE ID_WEB_PEDIDO = " + listaAdapterPedidoPendente.getItem(info.position).getId_web_pedido());
+                            db.alterar("DELETE FROM TBL_WEB_PEDIDO_ITENS WHERE ID_PEDIDO = " + listaAdapterPedidoPendente.getItem(info.position).getId_web_pedido());
                             listaPedido.remove(info.position);
                             listaAdapterPedidoPendente.notifyDataSetChanged();
                             edtNumerPedidoPendentes.setText(listaPedido.size() + ": Pedidos Pendentes");
@@ -204,9 +205,9 @@ public class ListagemPedidoPendente extends AppCompatActivity {
         prepararItensPedidos();
 
         final Rotas apiRotas = Api.buildRetrofit();
-
-        Call<List<WebPedido>> call = apiRotas.enviarPedidos(listaPedido);
-
+        Map<String, String> cabecalho = new HashMap<>();
+        cabecalho.put("AUTHORIZATION", UsuarioHelper.getUsuario().getToken());
+        Call<List<WebPedido>> call = apiRotas.enviarPedidos(listaPedido, cabecalho);
 
         call.enqueue(new Callback<List<WebPedido>>() {
             @Override
@@ -235,7 +236,15 @@ public class ListagemPedidoPendente extends AppCompatActivity {
                     onResume();
                     progress.dismiss();
                 } else {
+                    notificacao.setContentText("Não foi possivel enviar os pedidos")
+                            .setContentTitle("Problema de conexão")
+                            .setProgress(0, 0, false)
+                            .setSmallIcon(R.mipmap.ic_sem_internet)
+                            .setDefaults(NotificationCompat.DEFAULT_VIBRATE)
+                            .setPriority(2);
+                    notificationManager.notify(0, notificacao.build());
                     onResume();
+                    progress.dismiss();
                     Toast.makeText(ListagemPedidoPendente.this, "Não foi possivel enviar os pedidos", Toast.LENGTH_SHORT).show();
                     progress.dismiss();
                 }
@@ -274,8 +283,11 @@ public class ListagemPedidoPendente extends AppCompatActivity {
         pedido.add(prepararItemPedido(webPedido));
 
         final Rotas apiRotas = Api.buildRetrofit();
+        Map<String, String> cabecalho = new HashMap<>();
+        cabecalho.put("AUTHORIZATION", UsuarioHelper.getUsuario().getToken());
 
-        Call<List<WebPedido>> call = apiRotas.enviarPedidos(pedido);
+        Call<List<WebPedido>> call = apiRotas.enviarPedidos(pedido, cabecalho);
+
         call.enqueue(new Callback<List<WebPedido>>() {
             @Override
             public void onResponse(Call<List<WebPedido>> call, Response<List<WebPedido>> response) {

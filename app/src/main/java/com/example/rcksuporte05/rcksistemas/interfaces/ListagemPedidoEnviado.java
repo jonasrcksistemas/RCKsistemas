@@ -79,14 +79,14 @@ public class ListagemPedidoEnviado extends AppCompatActivity {
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-        menu.setHeaderTitle("Pedido: " + listaPedido.get(info.position).getId_web_pedido_servidor());
+        menu.setHeaderTitle("Pedido: " + listaAdapterPedidoEnviado.getItem(info.position).getId_web_pedido_servidor());
 
         MenuItem visualizar = menu.add("Visualizar");
         visualizar.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 Intent intent = new Intent(ListagemPedidoEnviado.this, ActivityPedidoMain.class);
-                PedidoHelper.setIdPedido(Integer.parseInt(listaPedido.get(info.position).getId_web_pedido()));
+                PedidoHelper.setIdPedido(Integer.parseInt(listaAdapterPedidoEnviado.getItem(info.position).getId_web_pedido()));
                 intent.putExtra("vizualizacao", 1);
                 startActivity(intent);
                 return false;
@@ -118,7 +118,7 @@ public class ListagemPedidoEnviado extends AppCompatActivity {
             public boolean onQueryTextChange(final String query) {
                 if (query.trim().equals("")) {
                     listaAdapterPedidoEnviado = new ListaAdapterPedidoEnviado(ListagemPedidoEnviado.this, listaPedido);
-                    edtNumerPedidoEnviados.setText(listaPedido.size() + ": Pedidos Pendentes");
+                    edtNumerPedidoEnviados.setText(listaPedido.size() + ": Pedidos Enviados");
                     edtNumerPedidoEnviados.setTextColor(Color.BLACK);
                 } else {
                     List<WebPedido> listaBusca = buscaPedidoEnviado(listaPedido, query);
@@ -174,7 +174,7 @@ public class ListagemPedidoEnviado extends AppCompatActivity {
             registerForContextMenu(lstPedidoEnviado);
 
         } catch (CursorIndexOutOfBoundsException e) {
-            Toast.makeText(this, "Nenuhm pedido foi Enviado!", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Nenhum pedido foi Enviado!", Toast.LENGTH_LONG).show();
         }
         edtNumerPedidoEnviados.setText(listaPedido.size() + ": Pedidos Enviados");
         super.onResume();

@@ -1,6 +1,7 @@
 package com.example.rcksuporte05.rcksistemas.classes;
 
 public class TabelaPrecoItem {
+
     private String id_item;
     private String id_tabela;
     private String perc_desc_inicial;
@@ -153,10 +154,5 @@ public class TabelaPrecoItem {
 
     public void setCor_web(String cor_web) {
         this.cor_web = cor_web;
-    }
-
-    @Override
-    public String toString() {
-        return String.format("%.2f", Float.parseFloat(perc_desc_inicial)) + "% = " + pontos_premiacao;
     }
 }

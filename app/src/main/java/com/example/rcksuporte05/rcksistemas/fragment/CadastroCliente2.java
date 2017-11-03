@@ -50,13 +50,14 @@ public class CadastroCliente2 extends Fragment {
             edtEndereco.setText(ClienteHelper.getCliente().getEndereco());
             edtNumero.setText(ClienteHelper.getCliente().getEndereco_numero());
             edtBairro.setText(ClienteHelper.getCliente().getEndereco_bairro());
-            String cep = ClienteHelper.getCliente().getEndereco_cep().trim().replaceAll("[^0-9]", "");
-            if (cep.length() >= 8) {
-                edtCep.setText(cep.substring(0, 5) + "-" + cep.substring(5));
-            } else {
-                edtCep.setText(cep);
+            if (ClienteHelper.getCliente().getEndereco_cep() != null) {
+                String cep = ClienteHelper.getCliente().getEndereco_cep().trim().replaceAll("[^0-9]", "");
+                if (cep.length() >= 8) {
+                    edtCep.setText(cep.substring(0, 5) + "-" + cep.substring(5));
+                } else {
+                    edtCep.setText(cep);
+                }
             }
-
         }
         System.gc();
         return view;

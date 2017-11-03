@@ -9,7 +9,6 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,8 +20,6 @@ import com.example.rcksuporte05.rcksistemas.Helper.PedidoHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.classes.Cliente;
 import com.example.rcksuporte05.rcksistemas.classes.Operacao;
-import com.example.rcksuporte05.rcksistemas.classes.TabelaPreco;
-import com.example.rcksuporte05.rcksistemas.classes.TabelaPrecoItem;
 import com.example.rcksuporte05.rcksistemas.classes.WebPedido;
 import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
 import com.example.rcksuporte05.rcksistemas.interfaces.ActivityCliente;
@@ -32,11 +29,9 @@ public class Pedido1 extends Fragment implements View.OnClickListener {
 
     private static Cliente objetoCliente = null;
     private Spinner spOperacao;
-    private Spinner spTabelaPreco;
-    private Spinner spFaixaPadrao;
+    //    private Spinner spTabelaPreco;
     private ArrayAdapter<Operacao> adapterOperacao;
-    private ArrayAdapter<TabelaPreco> adapterPreco;
-    private ArrayAdapter<TabelaPrecoItem> adapterFaixaPadrao;
+    //    private ArrayAdapter<TabelaPreco> adapterPreco;
     private Bundle bundle;
     private TextView txtVendedorPedido;
     private Button btnBuscarCliente;
@@ -85,27 +80,7 @@ public class Pedido1 extends Fragment implements View.OnClickListener {
             adapterOperacao = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_activated_1, db.listaOperacao("SELECT * FROM TBL_OPERACAO_ESTOQUE;"));
             spOperacao.setAdapter(adapterOperacao);
 
-            spTabelaPreco = (Spinner) view.findViewById(R.id.spTabelaPreco);
-            adapterPreco = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_activated_1, db.listaTabelaPreco("SELECT * FROM TBL_TABELA_PRECO_CAB;"));
-            spTabelaPreco.setAdapter(adapterPreco);
-
-            spFaixaPadrao = (Spinner) view.findViewById(R.id.spFaixaPadrao);
-            adapterFaixaPadrao = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_activated_1, db.listaTabelaPrecoItem("SELECT * FROM TBL_TABELA_PRECO_ITENS WHERE PONTOS_PREMIACAO > 0;"));
-            spFaixaPadrao.setAdapter(adapterFaixaPadrao);
-            spFaixaPadrao.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    PedidoHelper.setPositionFaixPadrao(spFaixaPadrao.getSelectedItemPosition());
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-
-                }
-            });
-
         } catch (CursorIndexOutOfBoundsException e) {
-//            Toast.makeText(getContext(), "A sincronia é necessária antes de se fazer um pedido", Toast.LENGTH_SHORT).show();
             AlertDialog.Builder alert = new AlertDialog.Builder(PedidoHelper.getActivityPedidoMain());
             alert.setMessage("A sincronia é necessária antes de se fazer um pedido, ou não há OPERAÇÕES DE ESTOQUE marcada para multi dispositivo!\n     Qualquer duvida entre em contato com a RCK SISTEMAS.");
             alert.setTitle("Atenção!");
@@ -133,39 +108,13 @@ public class Pedido1 extends Fragment implements View.OnClickListener {
                 System.out.println(e.getMessage());
             }
 
-
-            //Seleciona Tabela de Preco correta dentro do Spinner spTabelaPreco
-            try {
-                int i = -1;
-                do {
-                    i++;
-                }
-                while (!webPedido.getId_tabela().equals(adapterPreco.getItem(i).getId_tabela()));
-                spTabelaPreco.setSelection(i);
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-
-            //Seleciona a Feixa padrão no Spinner Faixa Padrão
-            try {
-                int i = -1;
-                do {
-                    i++;
-                }
-                while (!webPedido.getId_tabela_preco_faixa().trim().equals(adapterFaixaPadrao.getItem(i).getId_item()));
-                spFaixaPadrao.setSelection(i);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
             txtAdicionarProdutos.setText("Produtos");
         }
 
         if (bundle.getInt("vizualizacao") == 1) {
+
             btnBuscarCliente.setEnabled(false);
-            spTabelaPreco.setEnabled(false);
             spOperacao.setEnabled(false);
-            spFaixaPadrao.setEnabled(false);
         }
 
         System.gc();
@@ -195,7 +144,6 @@ public class Pedido1 extends Fragment implements View.OnClickListener {
         webPedido.setId_empresa("1");
         webPedido.setId_vendedor(String.valueOf(bundle.getInt("idVendedor")));
         webPedido.setId_operacao(adapterOperacao.getItem(spOperacao.getSelectedItemPosition()).getId_operacao());
-        webPedido.setId_tabela(adapterPreco.getItem(spTabelaPreco.getSelectedItemPosition()).getId_tabela());
         webPedido.setExcluido("N");
         webPedido.setUsuario_lancamento_id(String.valueOf(bundle.getInt("idUsuario")));
         webPedido.setUsuario_lancamento_nome(String.valueOf(bundle.getString("usuario")));
@@ -209,7 +157,7 @@ public class Pedido1 extends Fragment implements View.OnClickListener {
         try {
             edtCliente.setText(objetoCliente.getNome_cadastro());
         } catch (NullPointerException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
 
         super.onResume();
@@ -233,8 +181,10 @@ public class Pedido1 extends Fragment implements View.OnClickListener {
                 Toast.makeText(getContext(), "Você precisa selecionar o cliente para consultar seu historico financeiro", Toast.LENGTH_SHORT).show();
             }
         } else if (v == btnBuscarCliente) {
+            bundle = new Bundle();
+            bundle.putInt("acao", 1);
             Intent intent = new Intent(getContext(), ActivityCliente.class);
-            intent.putExtra("acao", 1);
+            intent.putExtras(bundle);
             startActivity(intent);
         } else if (v == btnAdicionarProdutos || v == txtAdicionarProdutos) {
             pedidoHelper.moveTela(1);

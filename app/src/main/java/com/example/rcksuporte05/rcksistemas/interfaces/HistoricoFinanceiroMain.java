@@ -12,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.example.rcksuporte05.rcksistemas.Helper.HistoricoFinanceiroHelper;
+import com.example.rcksuporte05.rcksistemas.Helper.UsuarioHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.TabsAdapterHistoricoFinanceiro;
 import com.example.rcksuporte05.rcksistemas.api.Api;
@@ -23,7 +24,9 @@ import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
 import com.example.rcksuporte05.rcksistemas.extras.SlidingTabLayout;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -73,8 +76,9 @@ public class HistoricoFinanceiroMain extends AppCompatActivity {
         progress.show();
 
         Rotas apiRotas = Api.buildRetrofit();
-
-        Call<HistoricoFinanceiro> call = apiRotas.getHistoricoFinanceiro(idCliente);
+        Map<String, String> cabecalho = new HashMap<>();
+        cabecalho.put("AUTHORIZATION", UsuarioHelper.getUsuario().getToken());
+        Call<HistoricoFinanceiro> call = apiRotas.getHistoricoFinanceiro(idCliente, cabecalho);
 
         call.enqueue(new Callback<HistoricoFinanceiro>() {
             @Override

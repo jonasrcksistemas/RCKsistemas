@@ -3,6 +3,8 @@ package com.example.rcksuporte05.rcksistemas.interfaces;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.database.CursorIndexOutOfBoundsException;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
@@ -14,8 +16,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
 import com.example.rcksuporte05.rcksistemas.R;
@@ -32,12 +34,10 @@ public class ActivityCliente extends AppCompatActivity {
     //    private MenuItem novo_cliente;
     private ListView lstClientes;
     private Toolbar toolbar;
-    private List<Cliente> listaAux;
     private List<Cliente> lista;
-    private ListaAdapterClientes adaptadorPrincipal;
     private ListaAdapterClientes adaptador;
+    private EditText edtTotalClientes;
     private DBHelper db = new DBHelper(this);
-    private Thread b = new Thread();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +45,7 @@ public class ActivityCliente extends AppCompatActivity {
         setContentView(R.layout.activity_cliente);
 
         lstClientes = (ListView) findViewById(R.id.lstClientes);
+        edtTotalClientes = (EditText) findViewById(R.id.edtTotalClientes);
         toolbar = (Toolbar) findViewById(R.id.tb_cliente);
         toolbar.setTitle("Lista de Clientes");
         if (getIntent().getIntExtra("acao", 0) == 1) {
@@ -52,12 +53,11 @@ public class ActivityCliente extends AppCompatActivity {
 
             try {
                 lista = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE F_CLIENTE = 'S' AND F_VENDEDOR = 'N' AND ATIVO = 'S' ORDER BY ATIVO DESC, NOME_CADASTRO;");
-                listaAux = lista;
-                adaptadorPrincipal = new ListaAdapterClientes(ActivityCliente.this, lista);
-                lstClientes.setAdapter(adaptadorPrincipal);
+                adaptador = new ListaAdapterClientes(ActivityCliente.this, lista);
+                lstClientes.setAdapter(adaptador);
                 System.gc();
             } catch (Exception e) {
-                Toast.makeText(this, "Não há nenhum cliente a ser exibido!", Toast.LENGTH_LONG).show();
+                e.printStackTrace();
             }
 
             lstClientes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -65,8 +65,8 @@ public class ActivityCliente extends AppCompatActivity {
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Pedido1 pedido1 = new Pedido1();
                     Pedido3 pedido3 = new Pedido3();
-                    pedido1.pegaCliente(listaAux.get(position));
-                    pedido3.pegaCliente(listaAux.get(position));
+                    pedido1.pegaCliente(adaptador.getItem(position));
+                    pedido3.pegaCliente(adaptador.getItem(position));
                     System.gc();
                     finish();
                 }
@@ -75,20 +75,19 @@ public class ActivityCliente extends AppCompatActivity {
 
             try {
                 lista = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE F_CLIENTE = 'S' AND F_VENDEDOR = 'N' ORDER BY ATIVO DESC, NOME_CADASTRO;");
-                listaAux = lista;
-                adaptadorPrincipal = new ListaAdapterClientes(ActivityCliente.this, lista);
-                lstClientes.setAdapter(adaptadorPrincipal);
+                adaptador = new ListaAdapterClientes(ActivityCliente.this, lista);
+                lstClientes.setAdapter(adaptador);
                 System.gc();
             } catch (Exception e) {
-                Toast.makeText(this, "Não há nenhum cliente a ser exibido!", Toast.LENGTH_LONG).show();
+                e.printStackTrace();
             }
 
             lstClientes.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     Intent intent = new Intent(ActivityCliente.this, ContatoActivity.class);
-                    ClienteHelper.setCliente(listaAux.get(position));
-                    intent.putExtra("id_cliente", Integer.parseInt(listaAux.get(position).getId_cadastro()));
+                    ClienteHelper.setCliente(adaptador.getItem(position));
+                    intent.putExtra("id_cliente", Integer.parseInt(adaptador.getItem(position).getId_cadastro()));
                     System.gc();
                     startActivity(intent);
                 }
@@ -106,14 +105,14 @@ public class ActivityCliente extends AppCompatActivity {
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-        menu.setHeaderTitle(listaAux.get(info.position).getNome_cadastro());
+        menu.setHeaderTitle(adaptador.getItem(info.position).getNome_cadastro());
 
         MenuItem historicoFInanceiro = menu.add("Historico Financeiro");
         historicoFInanceiro.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 Intent intent = new Intent(ActivityCliente.this, HistoricoFinanceiroMain.class);
-                intent.putExtra("idCliente", Integer.parseInt(listaAux.get(info.position).getId_cadastro()));
+                intent.putExtra("idCliente", Integer.parseInt(adaptador.getItem(info.position).getId_cadastro()));
                 ActivityCliente.this.startActivity(intent);
 
                 return false;
@@ -146,15 +145,20 @@ public class ActivityCliente extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(final String query) {
-                if (query.trim().equals("")) {
-                    adaptador = new ListaAdapterClientes(ActivityCliente.this, lista);
-                } else {
-                    adaptador = new ListaAdapterClientes(ActivityCliente.this, buscaClientes(lista, query));
+                try {
+                    if (query.trim().equals("")) {
+                        adaptador = new ListaAdapterClientes(ActivityCliente.this, lista);
+                        edtTotalClientes.setText("Clientes listados: " + lista.size() + "   ");
+                        edtTotalClientes.setTextColor(Color.BLACK);
+                    } else {
+                        adaptador = new ListaAdapterClientes(ActivityCliente.this, buscaClientes(query));
+                    }
+                    lstClientes.setAdapter(adaptador);
+                    adaptador.notifyDataSetChanged();
+                    System.gc();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                lstClientes.setVisibility(View.VISIBLE);
-                lstClientes.setAdapter(adaptador);
-                adaptador.notifyDataSetChanged();
-                System.gc();
                 return false;
             }
         });
@@ -182,23 +186,35 @@ public class ActivityCliente extends AppCompatActivity {
     }
 
 
-    public List<Cliente> buscaClientes(List<Cliente> clientes, String query) {
-        final String upperCaseQuery = query.toUpperCase();
+    public List<Cliente> buscaClientes(final String query) {
+        List<Cliente> lista = new ArrayList<>();
 
-        final List<Cliente> lista = new ArrayList<>();
-        for (Cliente cliente : clientes) {
+        if (!query.trim().equals("")) {
             try {
-                final String nomeCliente = cliente.getNome_cadastro().toUpperCase();
-                final String nomeFantasia = cliente.getNome_fantasia().toUpperCase();
-
-                if (nomeCliente.contains(upperCaseQuery) || nomeFantasia.contains(upperCaseQuery)) {
-                    lista.add(cliente);
-                }
-            } catch (NullPointerException e) {
+                lista = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE NOME_CADASTRO LIKE '%" + query + "%' OR NOME_FANTASIA LIKE '%" + query + "%' OR CPF_CNPJ LIKE '" + query + "%' OR TELEFONE_PRINCIPAL LIKE '%" + query + "%' ORDER BY ATIVO DESC, NOME_CADASTRO");
+                edtTotalClientes.setText("Clientes encontrados: " + lista.size() + "   ");
+                edtTotalClientes.setTextColor(Color.BLACK);
+                return lista;
+            } catch (CursorIndexOutOfBoundsException | NullPointerException e) {
                 e.printStackTrace();
+                edtTotalClientes.setText("Nenhum cliente encontrado!   ");
+                edtTotalClientes.setTextColor(Color.RED);
             }
         }
+        System.gc();
         return lista;
+    }
+
+    @Override
+    protected void onResume() {
+        if (lista != null) {
+            edtTotalClientes.setText("Clientes listados: " + lista.size() + "   ");
+            edtTotalClientes.setTextColor(Color.BLACK);
+        } else {
+            edtTotalClientes.setText("Não há clientes a serem exibidos!   ");
+            edtTotalClientes.setTextColor(Color.RED);
+        }
+        super.onResume();
     }
 
     @Override

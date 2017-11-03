@@ -8,7 +8,8 @@
     android:orientation="vertical"
     app:theme="@style/Theme.Toolbar"
     tools:context="com.example.rcksuporte05.rcksistemas.interfaces.ActivityProduto"
-    tools:showIn="com.example.rcksuporte05.rcksistemas.ActivityProduto">
+    tools:showIn="com.example.rcksuporte05.rcksistemas.ActivityProduto"
+    android:layout_weight="1">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/tb_produto"
@@ -24,6 +25,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fastScrollEnabled="true"
-        android:scrollbars="vertical" />
+        android:scrollbars="vertical"
+        android:layout_weight="1"/>
+
+    <EditText
+        android:id="@+id/edtTotalProdutos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="#dddfdd"
+        android:focusable="false"
+        android:gravity="end"
+        android:text="Não há produtos a serem exibidos!   "/>
 
 </LinearLayout>

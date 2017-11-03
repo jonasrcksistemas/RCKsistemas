@@ -1,6 +1,7 @@
 package com.example.rcksuporte05.rcksistemas.classes;
 
 public class Produto {
+
     private String ativo;
     private String id_produto;
     private String nome_produto;
@@ -53,7 +54,7 @@ public class Produto {
     private String descricao;
 
     public String getDescricao() {
-        return this.descricao;
+        return descricao;
     }
 
     public void setDescricao(String descricao) {
@@ -61,7 +62,7 @@ public class Produto {
     }
 
     public String getAtivo() {
-        return this.ativo;
+        return ativo;
     }
 
     public void setAtivo(String ativo) {
@@ -69,7 +70,7 @@ public class Produto {
     }
 
     public String getId_produto() {
-        return this.id_produto;
+        return id_produto;
     }
 
     public void setId_produto(String id_produto) {
@@ -77,7 +78,7 @@ public class Produto {
     }
 
     public String getNome_produto() {
-        return this.nome_produto;
+        return nome_produto;
     }
 
     public void setNome_produto(String nome_produto) {
@@ -85,7 +86,7 @@ public class Produto {
     }
 
     public String getUnidade() {
-        return this.unidade;
+        return unidade;
     }
 
     public void setUnidade(String unidade) {
@@ -93,7 +94,7 @@ public class Produto {
     }
 
     public String getTipo_cadastro() {
-        return this.tipo_cadastro;
+        return tipo_cadastro;
     }
 
     public void setTipo_cadastro(String tipo_cadastro) {
@@ -101,7 +102,7 @@ public class Produto {
     }
 
     public String getId_entidade() {
-        return this.id_entidade;
+        return id_entidade;
     }
 
     public void setId_entidade(String id_entidade) {
@@ -109,7 +110,7 @@ public class Produto {
     }
 
     public String getNcm() {
-        return this.ncm;
+        return ncm;
     }
 
     public void setNcm(String ncm) {
@@ -117,7 +118,7 @@ public class Produto {
     }
 
     public String getId_grupo() {
-        return this.id_grupo;
+        return id_grupo;
     }
 
     public void setId_grupo(String id_grupo) {
@@ -125,7 +126,7 @@ public class Produto {
     }
 
     public String getId_sub_grupo() {
-        return this.id_sub_grupo;
+        return id_sub_grupo;
     }
 
     public void setId_sub_grupo(String id_sub_grupo) {
@@ -133,7 +134,7 @@ public class Produto {
     }
 
     public String getPeso_bruto() {
-        return this.peso_bruto;
+        return peso_bruto;
     }
 
     public void setPeso_bruto(String peso_bruto) {
@@ -141,7 +142,7 @@ public class Produto {
     }
 
     public String getPeso_liquido() {
-        return this.peso_liquido;
+        return peso_liquido;
     }
 
     public void setPeso_liquido(String peso_liquido) {
@@ -149,7 +150,7 @@ public class Produto {
     }
 
     public String getCodigo_em_barras() {
-        return this.codigo_em_barras;
+        return codigo_em_barras;
     }
 
     public void setCodigo_em_barras(String codigo_em_barras) {
@@ -157,7 +158,7 @@ public class Produto {
     }
 
     public String getMovimenta_estoque() {
-        return this.movimenta_estoque;
+        return movimenta_estoque;
     }
 
     public void setMovimenta_estoque(String movimenta_estoque) {
@@ -165,7 +166,7 @@ public class Produto {
     }
 
     public String getNome_da_marca() {
-        return this.nome_da_marca;
+        return nome_da_marca;
     }
 
     public void setNome_da_marca(String nome_da_marca) {
@@ -173,7 +174,7 @@ public class Produto {
     }
 
     public String getId_empresa() {
-        return this.id_empresa;
+        return id_empresa;
     }
 
     public void setId_empresa(String id_empresa) {
@@ -181,7 +182,7 @@ public class Produto {
     }
 
     public String getId_origem() {
-        return this.id_origem;
+        return id_origem;
     }
 
     public void setId_origem(String id_origem) {
@@ -189,7 +190,7 @@ public class Produto {
     }
 
     public String getCusto_produto() {
-        return this.custo_produto;
+        return custo_produto;
     }
 
     public void setCusto_produto(String custo_produto) {
@@ -197,7 +198,7 @@ public class Produto {
     }
 
     public String getCusto_per_ipi() {
-        return this.custo_per_ipi;
+        return custo_per_ipi;
     }
 
     public void setCusto_per_ipi(String custo_per_ipi) {
@@ -205,7 +206,7 @@ public class Produto {
     }
 
     public String getCusto_ipi() {
-        return this.custo_ipi;
+        return custo_ipi;
     }
 
     public void setCusto_ipi(String custo_ipi) {
@@ -213,7 +214,7 @@ public class Produto {
     }
 
     public String getCusto_per_frete() {
-        return this.custo_per_frete;
+        return custo_per_frete;
     }
 
     public void setCusto_per_frete(String custo_per_frete) {
@@ -221,7 +222,7 @@ public class Produto {
     }
 
     public String getCusto_frete() {
-        return this.custo_frete;
+        return custo_frete;
     }
 
     public void setCusto_frete(String custo_frete) {
@@ -229,7 +230,7 @@ public class Produto {
     }
 
     public String getCusto_per_icms() {
-        return this.custo_per_icms;
+        return custo_per_icms;
     }
 
     public void setCusto_per_icms(String custo_per_icms) {
@@ -237,7 +238,7 @@ public class Produto {
     }
 
     public String getCusto_icms() {
-        return this.custo_icms;
+        return custo_icms;
     }
 
     public void setCusto_icms(String custo_icms) {
@@ -245,7 +246,7 @@ public class Produto {
     }
 
     public String getCusto_per_fin() {
-        return this.custo_per_fin;
+        return custo_per_fin;
     }
 
     public void setCusto_per_fin(String custo_per_fin) {
@@ -253,7 +254,7 @@ public class Produto {
     }
 
     public String getCusto_fin() {
-        return this.custo_fin;
+        return custo_fin;
     }
 
     public void setCusto_fin(String custo_fin) {
@@ -261,7 +262,7 @@ public class Produto {
     }
 
     public String getCusto_per_subst() {
-        return this.custo_per_subst;
+        return custo_per_subst;
     }
 
     public void setCusto_per_subst(String custo_per_subst) {
@@ -269,7 +270,7 @@ public class Produto {
     }
 
     public String getCusto_subt() {
-        return this.custo_subt;
+        return custo_subt;
     }
 
     public void setCusto_subt(String custo_subt) {
@@ -277,7 +278,7 @@ public class Produto {
     }
 
     public String getCusto_per_outros() {
-        return this.custo_per_outros;
+        return custo_per_outros;
     }
 
     public void setCusto_per_outros(String custo_per_outros) {
@@ -285,7 +286,7 @@ public class Produto {
     }
 
     public String getCusto_outros() {
-        return this.custo_outros;
+        return custo_outros;
     }
 
     public void setCusto_outros(String custo_outros) {
@@ -293,7 +294,7 @@ public class Produto {
     }
 
     public String getValor_custo() {
-        return this.valor_custo;
+        return valor_custo;
     }
 
     public void setValor_custo(String valor_custo) {
@@ -301,7 +302,7 @@ public class Produto {
     }
 
     public String getExcluido() {
-        return this.excluido;
+        return excluido;
     }
 
     public void setExcluido(String excluido) {
@@ -309,7 +310,7 @@ public class Produto {
     }
 
     public String getExcluido_por() {
-        return this.excluido_por;
+        return excluido_por;
     }
 
     public void setExcluido_por(String excluido_por) {
@@ -317,7 +318,7 @@ public class Produto {
     }
 
     public String getExcluido_por_data() {
-        return this.excluido_por_data;
+        return excluido_por_data;
     }
 
     public void setExcluido_por_data(String excluido_por_data) {
@@ -325,7 +326,7 @@ public class Produto {
     }
 
     public String getExcluido_codigo_novo() {
-        return this.excluido_codigo_novo;
+        return excluido_codigo_novo;
     }
 
     public void setExcluido_codigo_novo(String excluido_codigo_novo) {
@@ -333,7 +334,7 @@ public class Produto {
     }
 
     public String getAjuste_preco_data() {
-        return this.ajuste_preco_data;
+        return ajuste_preco_data;
     }
 
     public void setAjuste_preco_data(String ajuste_preco_data) {
@@ -341,7 +342,7 @@ public class Produto {
     }
 
     public String getAjuste_preco_nfe() {
-        return this.ajuste_preco_nfe;
+        return ajuste_preco_nfe;
     }
 
     public void setAjuste_preco_nfe(String ajuste_preco_nfe) {
@@ -349,7 +350,7 @@ public class Produto {
     }
 
     public String getAjuste_preco_usuario() {
-        return this.ajuste_preco_usuario;
+        return ajuste_preco_usuario;
     }
 
     public void setAjuste_preco_usuario(String ajuste_preco_usuario) {
@@ -357,7 +358,7 @@ public class Produto {
     }
 
     public String getTotal_custo() {
-        return this.total_custo;
+        return total_custo;
     }
 
     public void setTotal_custo(String total_custo) {
@@ -365,7 +366,7 @@ public class Produto {
     }
 
     public String getTotal_credito() {
-        return this.total_credito;
+        return total_credito;
     }
 
     public void setTotal_credito(String total_credito) {
@@ -373,7 +374,7 @@ public class Produto {
     }
 
     public String getValor_custo_estoque() {
-        return this.valor_custo_estoque;
+        return valor_custo_estoque;
     }
 
     public void setValor_custo_estoque(String valor_custo_estoque) {
@@ -381,7 +382,7 @@ public class Produto {
     }
 
     public String getCusto_data_inicial() {
-        return this.custo_data_inicial;
+        return custo_data_inicial;
     }
 
     public void setCusto_data_inicial(String custo_data_inicial) {
@@ -389,7 +390,7 @@ public class Produto {
     }
 
     public String getCusto_valor_inicial() {
-        return this.custo_valor_inicial;
+        return custo_valor_inicial;
     }
 
     public void setCusto_valor_inicial(String custo_valor_inicial) {
@@ -397,7 +398,7 @@ public class Produto {
     }
 
     public String getProduto_venda() {
-        return this.produto_venda;
+        return produto_venda;
     }
 
     public void setProduto_venda(String produto_venda) {
@@ -405,7 +406,7 @@ public class Produto {
     }
 
     public String getProduto_insumo() {
-        return this.produto_insumo;
+        return produto_insumo;
     }
 
     public void setProduto_insumo(String produto_insumo) {
@@ -413,7 +414,7 @@ public class Produto {
     }
 
     public String getProduto_consumo() {
-        return this.produto_consumo;
+        return produto_consumo;
     }
 
     public void setProduto_consumo(String produto_consumo) {
@@ -421,7 +422,7 @@ public class Produto {
     }
 
     public String getProduto_producao() {
-        return this.produto_producao;
+        return produto_producao;
     }
 
     public void setProduto_producao(String produto_producao) {
@@ -429,7 +430,7 @@ public class Produto {
     }
 
     public String getVenda_perc_comissao() {
-        return this.venda_perc_comissao;
+        return venda_perc_comissao;
     }
 
     public void setVenda_perc_comissao(String venda_perc_comissao) {
@@ -437,7 +438,7 @@ public class Produto {
     }
 
     public String getVenda_preco() {
-        return this.venda_preco;
+        return venda_preco;
     }
 
     public void setVenda_preco(String venda_preco) {
@@ -445,11 +446,10 @@ public class Produto {
     }
 
     public String getVenda_perc_comissao_dois() {
-        return this.venda_perc_comissao_dois;
+        return venda_perc_comissao_dois;
     }
 
     public void setVenda_perc_comissao_dois(String venda_perc_comissao_dois) {
         this.venda_perc_comissao_dois = venda_perc_comissao_dois;
     }
-
 }

@@ -192,8 +192,4 @@ public class TabelaPreco {
         this.faixa_valor_bruto_a = faixa_valor_bruto_a;
     }
 
-    @Override
-    public String toString() {
-        return nome_tabela;
-    }
 }

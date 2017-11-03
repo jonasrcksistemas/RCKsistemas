@@ -83,6 +83,7 @@ public class Pedido3 extends Fragment implements View.OnClickListener {
             AlertDialog.Builder alert = new AlertDialog.Builder(PedidoHelper.getActivityPedidoMain());
             alert.setMessage("A sincronia é necessária antes de se fazer um pedido, ou não há CONDIÇÕES DE PAGAMENTO marcada para multi dispositivo!\n     Qualquer duvida entre em contato com a RCK SISTEMAS.");
             alert.setTitle("Atenção!");
+            alert.setCancelable(false);
             alert.setNeutralButton("OK", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -202,6 +203,7 @@ public class Pedido3 extends Fragment implements View.OnClickListener {
         webPedido.setCadastro(objetoCliente);
         webPedido.setObservacoes(edtObservacao.getText().toString());
         webPedido.setData_prev_entrega(edtDataEntrega.getText().toString().trim());
+        webPedido.setPedido_enviado("N");
 
         return webPedido;
     }

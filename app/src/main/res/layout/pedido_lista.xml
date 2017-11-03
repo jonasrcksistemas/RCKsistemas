@@ -47,17 +47,6 @@
         android:text="hora" />
 
     <TextView
-        android:id="@+id/txtPontoCoeficiente"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/txtPrecoPedido"
-        android:layout_toEndOf="@+id/txtPrecoPedido"
-        android:layout_toStartOf="@+id/txtHoraPedido"
-        android:gravity="center"
-        android:text="PontoCoeficiente"
-        android:visibility="gone" />
-
-    <TextView
         android:id="@+id/txtDataPedido"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -66,14 +55,5 @@
         android:layout_toStartOf="@+id/txtHoraPedido"
         android:gravity="center_horizontal"
         android:text="data" />
-
-    <View
-        android:id="@+id/viewCor"
-        android:layout_width="15dp"
-        android:layout_height="45dp"
-        android:layout_alignBottom="@+id/txtPrecoPedido"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentTop="true"
-        android:background="#000000" />
 
 </RelativeLayout>

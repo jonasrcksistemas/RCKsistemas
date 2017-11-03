@@ -3,6 +3,10 @@ package com.example.rcksuporte05.rcksistemas.classes;
 import java.util.List;
 
 public class Sincronia {
+    private boolean cliente;
+    private boolean produto;
+    private boolean pedidos;
+    private int maxProgress;
     private List<Cliente> listaCliente;
     private List<CondicoesPagamento> listaCondicoesPagamento;
     private List<Operacao> listaOperacao;
@@ -12,6 +16,47 @@ public class Sincronia {
     private List<Usuario> listaUsuario;
     private List<VendedorBonusResumo> listaVendedorBonusResumo;
     private List<WebPedido> listaWebPedidos;
+
+    public Sincronia() {
+    }
+
+    public Sincronia(boolean cliente, boolean produto, boolean pedidos) {
+        this.cliente = cliente;
+        this.produto = produto;
+        this.pedidos = pedidos;
+    }
+
+    public boolean isCliente() {
+        return cliente;
+    }
+
+    public void setCliente(boolean cliente) {
+        this.cliente = cliente;
+    }
+
+    public boolean isProduto() {
+        return produto;
+    }
+
+    public void setProduto(boolean produto) {
+        this.produto = produto;
+    }
+
+    public boolean isPedidos() {
+        return pedidos;
+    }
+
+    public void setPedidos(boolean pedidos) {
+        this.pedidos = pedidos;
+    }
+
+    public int getMaxProgress() {
+        return maxProgress;
+    }
+
+    public void setMaxProgress(int maxProgress) {
+        this.maxProgress = maxProgress;
+    }
 
     public List<Cliente> getListaCliente() {
         return listaCliente;

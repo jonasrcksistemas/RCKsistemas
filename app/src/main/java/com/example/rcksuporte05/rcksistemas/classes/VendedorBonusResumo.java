@@ -65,4 +65,5 @@ public class VendedorBonusResumo {
     public void setData_ultima_atualizacao(String data_ultima_atualizacao) {
         this.data_ultima_atualizacao = data_ultima_atualizacao;
     }
+
 }
