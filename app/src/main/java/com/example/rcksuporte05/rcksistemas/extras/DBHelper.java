@@ -1324,8 +1324,8 @@ public class DBHelper extends SQLiteOpenHelper {
         return retorno;
     }
 
-    public ArrayList<Cliente> listaCliente(String SQL) {
-        ArrayList<Cliente> lista = new ArrayList<>();
+    public List<Cliente> listaCliente(String SQL) {
+        List<Cliente> lista = new ArrayList<>();
         SQLiteDatabase banco = this.getReadableDatabase();
         Cursor cursor = banco.rawQuery(SQL, null);
 

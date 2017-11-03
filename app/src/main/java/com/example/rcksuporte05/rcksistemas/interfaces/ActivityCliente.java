@@ -3,6 +3,7 @@ package com.example.rcksuporte05.rcksistemas.interfaces;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.database.CursorIndexOutOfBoundsException;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -150,9 +151,8 @@ public class ActivityCliente extends AppCompatActivity {
                         edtTotalClientes.setText("Clientes listados: " + lista.size() + "   ");
                         edtTotalClientes.setTextColor(Color.BLACK);
                     } else {
-                        adaptador = new ListaAdapterClientes(ActivityCliente.this, buscaClientes(lista, query));
+                        adaptador = new ListaAdapterClientes(ActivityCliente.this, buscaClientes(query));
                     }
-                    lstClientes.setVisibility(View.VISIBLE);
                     lstClientes.setAdapter(adaptador);
                     adaptador.notifyDataSetChanged();
                     System.gc();
@@ -186,29 +186,22 @@ public class ActivityCliente extends AppCompatActivity {
     }
 
 
-    public List<Cliente> buscaClientes(List<Cliente> clientes, String query) {
-        final String upperCaseQuery = query.toUpperCase();
+    public List<Cliente> buscaClientes(final String query) {
+        List<Cliente> lista = new ArrayList<>();
 
-        final List<Cliente> lista = new ArrayList<>();
-        for (Cliente cliente : clientes) {
+        if (!query.trim().equals("")) {
             try {
-                final String nomeCliente = cliente.getNome_cadastro().toUpperCase();
-                final String nomeFantasia = cliente.getNome_fantasia().toUpperCase();
-
-                if (nomeCliente.contains(upperCaseQuery) || nomeFantasia.contains(upperCaseQuery)) {
-                    lista.add(cliente);
-                }
-                if (lista.size() > 0) {
-                    edtTotalClientes.setText("Clientes encontrados: " + lista.size() + "   ");
-                    edtTotalClientes.setTextColor(Color.BLACK);
-                } else {
-                    edtTotalClientes.setText("Nenhum cliente encontrado!   ");
-                    edtTotalClientes.setTextColor(Color.RED);
-                }
-            } catch (NullPointerException e) {
+                lista = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE NOME_CADASTRO LIKE '%" + query + "%' OR NOME_FANTASIA LIKE '%" + query + "%' OR CPF_CNPJ LIKE '" + query + "%' OR TELEFONE_PRINCIPAL LIKE '%" + query + "%' ORDER BY ATIVO DESC, NOME_CADASTRO");
+                edtTotalClientes.setText("Clientes encontrados: " + lista.size() + "   ");
+                edtTotalClientes.setTextColor(Color.BLACK);
+                return lista;
+            } catch (CursorIndexOutOfBoundsException | NullPointerException e) {
                 e.printStackTrace();
+                edtTotalClientes.setText("Nenhum cliente encontrado!   ");
+                edtTotalClientes.setTextColor(Color.RED);
             }
         }
+        System.gc();
         return lista;
     }
 

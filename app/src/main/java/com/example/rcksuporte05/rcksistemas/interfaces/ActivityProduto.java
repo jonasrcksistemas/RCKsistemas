@@ -2,6 +2,7 @@ package com.example.rcksuporte05.rcksistemas.interfaces;
 
 import android.app.SearchManager;
 import android.content.Context;
+import android.database.CursorIndexOutOfBoundsException;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
@@ -120,15 +121,13 @@ public class ActivityProduto extends AppCompatActivity {
                 try {
                     if (query.trim().equals("")) {
                         adaptador = new ListaAdapterProdutos(ActivityProduto.this, lista);
-                        adaptador.notifyDataSetChanged();
-                        lstProdutos.setAdapter(adaptador);
                         edtTotalProdutos.setText("Produtos listados :" + lista.size() + "   ");
                         edtTotalProdutos.setTextColor(Color.BLACK);
                     } else {
-                        adaptador = new ListaAdapterProdutos(ActivityProduto.this, buscarProdutos(lista, query));
-                        adaptador.notifyDataSetChanged();
-                        lstProdutos.setAdapter(adaptador);
+                        adaptador = new ListaAdapterProdutos(ActivityProduto.this, buscarProdutos(query));
                     }
+                    adaptador.notifyDataSetChanged();
+                    lstProdutos.setAdapter(adaptador);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -152,29 +151,24 @@ public class ActivityProduto extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public List<Produto> buscarProdutos(List<Produto> produtos, String query) {
-        final String upperCaseQuery = query.toUpperCase();
+    public List<Produto> buscarProdutos(String query) {
+        List<Produto> lista = new ArrayList<>();
 
-        final List<Produto> lista = new ArrayList<>();
-        for (Produto produto : produtos) {
+        if (!query.trim().equals("")) {
             try {
-                final String nomeCliente = produto.getNome_produto().toUpperCase();
-                if (nomeCliente.contains(upperCaseQuery)) {
-                    lista.add(produto);
-                }
-                if (lista.size() > 0) {
-                    edtTotalProdutos.setText("Produtos encontrados :" + lista.size() + "   ");
-                    edtTotalProdutos.setTextColor(Color.BLACK);
-                } else {
-                    edtTotalProdutos.setText("Nenhuma produto encontrado!   ");
-                    edtTotalProdutos.setTextColor(Color.RED);
-                }
-            } catch (NullPointerException e) {
+                lista = db.listaProduto("SELECT * FROM TBL_PRODUTO WHERE NOME_PRODUTO LIKE '%" + query + "%' ORDER BY ATIVO DESC, NOME_PRODUTO");
+                edtTotalProdutos.setText("Produtos encontrados :" + lista.size() + "   ");
+                edtTotalProdutos.setTextColor(Color.BLACK);
+            } catch (CursorIndexOutOfBoundsException | NullPointerException e) {
                 e.printStackTrace();
+                edtTotalProdutos.setText("Nenhum produto encontrado   ");
+                edtTotalProdutos.setTextColor(Color.RED);
             }
         }
+        System.gc();
         return lista;
     }
+
 
     @Override
     protected void onResume() {
