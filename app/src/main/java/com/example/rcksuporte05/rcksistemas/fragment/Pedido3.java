@@ -141,11 +141,6 @@ public class Pedido3 extends Fragment implements View.OnClickListener {
                     alert.show();
                 } else {
                     dialog.dismiss();
-                    /*AlertDialog.Builder alert = new AlertDialog.Builder(PedidoHelper.getActivityPedidoMain());
-                    alert.setTitle("Atenção!");
-                    alert.setMessage("O pedido não foi salvo!");
-                    alert.setNeutralButton("OK", null);
-                    alert.show();*/
                 }
             }
         });
@@ -177,7 +172,6 @@ public class Pedido3 extends Fragment implements View.OnClickListener {
         } else {
             calendar = Calendar.getInstance();
         }
-        //----
 
         new DatePickerDialog(context, new DatePickerDialog.OnDateSetListener() {
             public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
