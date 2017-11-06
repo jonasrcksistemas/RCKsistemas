@@ -8,3 +8,5 @@
 /captures
 .externalNativeBuild
 /.idea/
+app/build/
+app/src/main/java/com/example/rcksuporte05/rcksistemas/util/
