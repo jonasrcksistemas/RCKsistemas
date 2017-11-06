@@ -9,8 +9,9 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Api {
 
-    private static final String url = "http://192.168.0.105:8080/ws/";
-//    private static final String url = "http://rcksistemassuporte.ddns.com.br:1020/WhalleAPI/ws/";
+//    private static final String url = "http://192.168.0.105:8080/ws/";
+    private static final String url = "http://tksimports.ddns.com.br:725/WhalleAPI/ws/";
+//    private static final String url = "http://rcksistemassuporte.ddns.com.br:1020/TKSAPI/ws/";
 
     public static Rotas apiRotas;
 

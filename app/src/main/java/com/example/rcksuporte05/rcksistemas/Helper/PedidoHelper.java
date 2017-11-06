@@ -131,7 +131,7 @@ public class PedidoHelper {
             webPedido.setObservacoes(pedido3.salvaPedido().getObservacoes());
             webPedido.setCadastro(pedido3.salvaPedido().getCadastro());
             try {
-                webPedido.setData_prev_entrega(new SimpleDateFormat("MM-dd-yyyy").format(new SimpleDateFormat("dd/MM/yyyy").parse(pedido3.salvaPedido().getData_prev_entrega())));
+                webPedido.setData_prev_entrega(new SimpleDateFormat("yyyy-MM-dd").format(new SimpleDateFormat("dd/MM/yyyy").parse(pedido3.salvaPedido().getData_prev_entrega())));
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -146,7 +146,7 @@ public class PedidoHelper {
                             Calendar dataPedido = new GregorianCalendar();
                             Date date = new Date();
                             dataAtual.setTime(date);
-                            dataPedido.setTime(new SimpleDateFormat("MM-dd-yyyy").parse(webPedido.getData_prev_entrega()));
+                            dataPedido.setTime(new SimpleDateFormat("yyyy-MM-dd").parse(webPedido.getData_prev_entrega()));
                             String atual = new SimpleDateFormat("dd/MM/yyyy").format(dataAtual.getTime());
                             String pedido = new SimpleDateFormat("dd/MM/yyyy").format(dataPedido.getTime());
                             if (atual.equals(pedido) || !dataAtual.getTime().after(dataPedido.getTime())) {
@@ -170,6 +170,8 @@ public class PedidoHelper {
                                     }
                                 } else {
                                     webPedido.setPedido_enviado("N");
+                                    webPedido.setUsuario_lancamento_data(db.pegaDataHoraAtual());
+                                    webPedido.setData_emissao(db.pegaDataAtual());
                                     db.inserirTBL_WEB_PEDIDO(webPedido);
                                     int idPedido = db.contagem("SELECT MAX(ID_WEB_PEDIDO) FROM TBL_WEB_PEDIDO");
                                     for (int i = 0; listaWebPedidoItens.size() > i; i++) {

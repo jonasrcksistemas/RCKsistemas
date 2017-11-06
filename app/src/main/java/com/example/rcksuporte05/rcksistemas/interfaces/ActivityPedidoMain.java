@@ -46,8 +46,8 @@ public class ActivityPedidoMain extends AppCompatActivity {
 
         if (vizualizacao == 1) {
             toolbar.setTitle("Vizualização de Pedido");
-            toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimaryAzul));
             stl_tabsPedido.setBackgroundColor(getResources().getColor(R.color.colorPrimaryAzul));
+            toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimaryAzul));
             this.setTheme(R.style.Theme_MeuTemaPedido);
         } else if (pedidoHelper.getIdPedido() > 0) {
             toolbar.setTitle("Alteração do pedido");

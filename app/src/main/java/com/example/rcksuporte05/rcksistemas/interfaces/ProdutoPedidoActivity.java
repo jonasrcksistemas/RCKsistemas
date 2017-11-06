@@ -161,6 +161,8 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
             edtTotal.setFocusable(false);
             edtQuantidade.setFocusable(false);
             btnBuscarProduto.setEnabled(false);
+            toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimaryAzul));
+            this.setTheme(R.style.Theme_MeuTemaPedido);
         }
     }
 

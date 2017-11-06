@@ -110,7 +110,7 @@ public class Pedido3 extends Fragment implements View.OnClickListener {
             }
             edtObservacao.setText(webPedido.getObservacoes());
             try {
-                edtDataEntrega.setText(new SimpleDateFormat("dd/MM/yyyy").format(new SimpleDateFormat("MM-dd-yyyy").parse(webPedido.getData_prev_entrega())));
+                edtDataEntrega.setText(new SimpleDateFormat("dd/MM/yyyy").format(new SimpleDateFormat("yyyy-MM-dd").parse(webPedido.getData_prev_entrega())));
             } catch (ParseException e) {
                 e.printStackTrace();
             }
