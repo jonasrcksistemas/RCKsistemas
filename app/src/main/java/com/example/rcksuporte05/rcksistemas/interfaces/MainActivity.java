@@ -44,10 +44,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private UsuarioBO usuarioBO = new UsuarioBO();
     private DBHelper db;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         db = new DBHelper(MainActivity.this);
 

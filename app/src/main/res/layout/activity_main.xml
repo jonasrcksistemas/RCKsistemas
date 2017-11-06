@@ -37,6 +37,8 @@
         android:layout_below="@+id/edtSenha"
         android:layout_alignStart="@+id/edtSenha" />
 
+
+
     <TextView
         android:text="Senha:"
         android:layout_width="wrap_content"
