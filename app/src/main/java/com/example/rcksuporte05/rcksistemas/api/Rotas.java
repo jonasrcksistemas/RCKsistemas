@@ -24,8 +24,8 @@ public interface Rotas {
     @GET("usuario/listar")
     Call<List<Usuario>> getUsuarios();
 
-    @GET("usuario/login/{idandroid}/{idusuario}/{senha}")
-    Call<Usuario> login(@Path("idandroid") String idandroid, @Path("idusuario") String idusuario, @Path("senha") String senha);
+    @GET("usuario/login/{idandroid}/{idusuario}/{usuarioLogin}/{senha}")
+    Call<Usuario> login(@Path("idandroid") String idandroid, @Path("idusuario") String idusuario, @Path("usuarioLogin") String usuarioLogin, @Path("senha") String senha);
 
     @POST("sincronia/{id}")
     Call<Sincronia> sincroniaApi(@Path("id") int id, @HeaderMap Map<String, String> chaveDeAcesso, @Body Sincronia sincronia);

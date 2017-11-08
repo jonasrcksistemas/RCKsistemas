@@ -44,7 +44,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private DBHelper db;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,6 +66,19 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         btnEntrar.setOnClickListener(this);
         btnFechar.setOnClickListener(this);
+        try {
+
+            UsuarioHelper.setUsuario(usuarioBO.buscarUsuarioLogin(this));
+            Intent intent = new Intent(MainActivity.this, PrincipalActivity.class);
+            startActivity(intent);
+            finish();
+        } catch (/*android.database.CursorIndexOutOfBoundsException*/ Exception e) {
+            if (db.contagem("SELECT COUNT(*) FROM TBL_LOGIN WHERE LOGADO = 'S'") != 0) {
+                Toast.makeText(getApplicationContext(), "Usuario alterado", Toast.LENGTH_LONG).show();
+                db.alterar("DELETE FROM TBL_LOGIN");
+            }
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -158,7 +170,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         String idAndroit = Settings.Secure.getString(getBaseContext().getContentResolver(), Settings.Secure.ANDROID_ID);
 
-        Call<Usuario> call = apiRotas.login(idAndroit, usuario.getId_usuario(), edtSenha.getText().toString());
+        Call<Usuario> call = apiRotas.login(idAndroit, usuario.getId_usuario(), edtLogin.getText().toString(), edtSenha.getText().toString());
 
         call.enqueue(new Callback<Usuario>() {
             @Override

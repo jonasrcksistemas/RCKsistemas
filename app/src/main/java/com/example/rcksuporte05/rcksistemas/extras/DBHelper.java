@@ -25,7 +25,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private final static String NomeBanco = "Banco.db";
 
     public DBHelper(Context context) {
-        super(context, NomeBanco, null, 2);
+        super(context, NomeBanco, null, 3);
     }
 
     @Override

@@ -205,6 +205,14 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                     Usuario usuarioLogin = db.listaUsuario("SELECT * FROM TBL_WEB_USUARIO WHERE ID_USUARIO = " + UsuarioHelper.getUsuario().getId_usuario()).get(0);
                     if (aparelhoId.equals(usuarioLogin.getAparelho_id())) {
                         loginNaApi(usuarioLogin);
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Este usuario está logado em outro aparelho!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Por favor, refaça o seu login!", Toast.LENGTH_LONG).show();
+                        db.alterar("UPDATE TBL_LOGIN SET LOGADO = 'N';");
+                        Intent intent = new Intent(PrincipalActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                        System.gc();
                     }
                 }
             }
@@ -224,7 +232,7 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
 
         String idAndroit = Settings.Secure.getString(getBaseContext().getContentResolver(), Settings.Secure.ANDROID_ID);
 
-        Call<Usuario> call = apiRotas.login(idAndroit, usuario.getId_usuario(), db.consulta("SELECT * FROM TBL_LOGIN", "SENHA"));
+        Call<Usuario> call = apiRotas.login(idAndroit, usuario.getId_usuario(), db.consulta("SELECT * FROM TBL_LOGIN", "LOGIN"), db.consulta("SELECT * FROM TBL_LOGIN", "SENHA"));
 
         call.enqueue(new Callback<Usuario>() {
             @Override
@@ -237,7 +245,7 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                         UsuarioHelper.setUsuario(usuario1);
                         break;
                     case 500:
-                        Toast.makeText(getApplicationContext(), "Este usuario está logado em outro aparelho!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Foi encontrada uma divergencia em seu cadastro!", Toast.LENGTH_SHORT).show();
                         Toast.makeText(getApplicationContext(), "Por favor, refaça o seu login!", Toast.LENGTH_LONG).show();
                         db.alterar("UPDATE TBL_LOGIN SET LOGADO = 'N';");
                         Intent intent = new Intent(PrincipalActivity.this, MainActivity.class);
