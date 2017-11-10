@@ -2,12 +2,12 @@ package com.example.rcksuporte05.rcksistemas.interfaces;
 
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.database.CursorIndexOutOfBoundsException;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
@@ -18,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.example.rcksuporte05.rcksistemas.Helper.ProdutoHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.ListaAdapterProdutos;
 import com.example.rcksuporte05.rcksistemas.classes.Produto;
@@ -73,20 +74,10 @@ public class ActivityProduto extends AppCompatActivity {
             lstProdutos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Float preco = null;
-                    String mensagem;
-                    try {
-                        preco = Float.parseFloat(adaptador.getItem(position).getVenda_preco());
-                        mensagem = "Produto: " + adaptador.getItem(position).getId_produto() + "\n        " + adaptador.getItem(position).getNome_produto() + "\nUnidade de Medida: " + adaptador.getItem(position).getDescricao() + "\nPreço de Venda: R$" + String.format("%.2f", preco);
-                    } catch (NumberFormatException e) {
-                        mensagem = "Produto: " + adaptador.getItem(position).getId_produto() + "\n        " + adaptador.getItem(position).getNome_produto() + "\nUnidade de Medida: " + adaptador.getItem(position).getDescricao();
-                        System.out.println("Produto sem preco");
-                    }
-                    AlertDialog.Builder alert = new AlertDialog.Builder(ActivityProduto.this);
-                    alert.setMessage(mensagem);
-                    alert.setPositiveButton("OK", null);
-                    alert.setTitle("Produto: ");
-                    alert.show();
+                    Intent intent = new Intent(ActivityProduto.this, ActivityDialogProdutoDetalhe.class);
+                    ProdutoHelper.setProduto(adaptador.getItem(position));
+                    startActivity(intent);
+
                 }
             });
         }
