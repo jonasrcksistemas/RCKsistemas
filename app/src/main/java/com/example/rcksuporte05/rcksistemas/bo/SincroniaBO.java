@@ -229,11 +229,10 @@ public class SincroniaBO {
                 notificacao.setProgress(maxProgress, contadorNotificacaoEProgresso, false);
 
                 webPedido.setPedido_enviado("S");
-                if (db.contagem("SELECT COUNT(*) FROM TBL_WEB_PEDIDO WHERE ID_WEB_PEDIDO_SERVIDOR = " + webPedido.getId_web_pedido_servidor()) <= 0) {
-                    db.inserirTBL_WEB_PEDIDO(webPedido);
-                } else {
-                    db.atualizarTBL_WEB_PEDIDO(webPedido);
+                if (db.contagem("SELECT COUNT(*) FROM TBL_WEB_PEDIDO WHERE ID_WEB_PEDIDO_SERVIDOR = " + webPedido.getId_web_pedido_servidor()) > 0) {
+                    db.alterar("DELETE FROM TBL_WEB_PEDIDO WHERE ID_WEB_PEDIDO_SERVIDOR = " + webPedido.getId_web_pedido_servidor());
                 }
+                db.inserirTBL_WEB_PEDIDO(webPedido);
                 for (WebPedidoItens webPedidoItens : webPedido.getWebPedidoItens()) {
                     String idPedido = db.consulta("SELECT * FROM TBL_WEB_PEDIDO WHERE ID_WEB_PEDIDO_SERVIDOR = " + webPedido.getId_web_pedido_servidor(), "ID_WEB_PEDIDO");
                     webPedidoItens.setId_pedido(idPedido);
