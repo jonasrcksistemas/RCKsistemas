@@ -50,27 +50,27 @@ public class ActivityDialogProdutoDetalhe extends Activity {
         setContentView(R.layout.dialog_produto_detalhe);
         ButterKnife.bind(this);
 
-        toolbarProduto.setTitle("cod: "+ ProdutoHelper.getProduto().getId_produto());
+        toolbarProduto.setTitle("cod: " + ProdutoHelper.getProduto().getId_produto());
         txtProduto.setText(ProdutoHelper.getProduto().getNome_produto());
         txtUnidadeMedida.setText(ProdutoHelper.getProduto().getDescricao());
 
-        if(ProdutoHelper.getProduto().getAtivo().equals("S")){
+        if (ProdutoHelper.getProduto().getAtivo().equals("S")) {
             ativo.setText("Ativo: SIM");
-        }else
-            ativo.setText("Ativo: "+ProdutoHelper.getProduto().getAtivo());
+        } else
+            ativo.setText("Ativo: " + ProdutoHelper.getProduto().getAtivo());
 
-        if(ProdutoHelper.getProduto().getVenda_preco() == null || ProdutoHelper.getProduto().getVenda_preco().trim().equals("")){
-          layoutProduto.setVisibility(View.GONE);
-        }else{
+        if (ProdutoHelper.getProduto().getVenda_preco() == null || ProdutoHelper.getProduto().getVenda_preco().trim().equals("")) {
+            layoutProduto.setVisibility(View.GONE);
+        } else {
             Float valor = Float.parseFloat(ProdutoHelper.getProduto().getVenda_preco());
-            txtValorProduto.setText("R$ "+String.format("%.2f", valor));
+            txtValorProduto.setText("R$ " + String.format("%.2f", valor).replace(".", ","));
         }
 
 
     }
 
     @OnClick(R.id.ok_produto_detalhe)
-    public void onClick(){
+    public void onClick() {
         ProdutoHelper.setProduto(null);
         System.gc();
         finish();

@@ -44,15 +44,15 @@ public class ListaAdapterProdutos extends ArrayAdapter<Produto> {
 
         String preco = null;
         try {
-            preco = String.format("%.2f", Float.parseFloat(itemPosicao.getVenda_preco()));
+            preco = String.format("%.2f", Float.parseFloat(itemPosicao.getVenda_preco())).replace(".", ",");
         } catch (Exception e) {
             System.out.println("Produto sem preço");
         }
 
-        if (!itemPosicao.getVenda_preco().equalsIgnoreCase(" ")) {
+        if (!itemPosicao.getVenda_preco().trim().equalsIgnoreCase("")) {
             precoProduto.setText("R$" + preco);
         } else {
-            precoProduto.setText(itemPosicao.getVenda_preco());
+            precoProduto.setText(itemPosicao.getVenda_preco().replace(".", ","));
         }
 
         textViewUnidadeMedida.setText(itemPosicao.getDescricao());
