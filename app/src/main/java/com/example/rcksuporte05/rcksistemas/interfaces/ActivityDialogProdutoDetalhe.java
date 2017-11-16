@@ -57,7 +57,7 @@ public class ActivityDialogProdutoDetalhe extends Activity {
         if (ProdutoHelper.getProduto().getAtivo().equals("S")) {
             ativo.setText("Ativo: SIM");
         } else
-            ativo.setText("Ativo: " + ProdutoHelper.getProduto().getAtivo());
+            ativo.setText("Ativo: NÃO");
 
         if (ProdutoHelper.getProduto().getVenda_preco() == null || ProdutoHelper.getProduto().getVenda_preco().trim().equals("")) {
             layoutProduto.setVisibility(View.GONE);

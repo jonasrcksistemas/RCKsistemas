@@ -14,7 +14,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MeuTema">
         <activity android:name=".interfaces.MainActivity" />
-        <activity android:name=".interfaces.PrincipalActivity" />
+        <activity
+            android:name=".interfaces.PrincipalActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".interfaces.ActivityCliente"
             android:launchMode="singleTop">
@@ -42,7 +44,8 @@
             android:name=".interfaces.ProdutoPedidoActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".interfaces.ListagemPedidoPendente" />
-        <activity android:name=".interfaces.ListagemPedidoEnviado"
+        <activity
+            android:name=".interfaces.ListagemPedidoEnviado"
             android:theme="@style/Theme.MeuTemaPedido" />
         <activity
             android:name=".interfaces.HistoricoFinanceiroMain"
@@ -50,6 +53,9 @@
         <activity android:name=".interfaces.ContatoActivity"></activity>
         <activity
             android:name=".interfaces.ActiviyDialogSincronia"
+            android:theme="@style/Theme.CriarDialog" />
+        <activity
+            android:name=".interfaces.ActivityDialogProdutoDetalhe"
             android:theme="@style/Theme.CriarDialog" />
     </application>
 

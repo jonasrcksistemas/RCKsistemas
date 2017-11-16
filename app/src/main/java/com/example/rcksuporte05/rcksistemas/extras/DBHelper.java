@@ -25,7 +25,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private final static String NomeBanco = "Banco.db";
 
     public DBHelper(Context context) {
-        super(context, NomeBanco, null, 4);
+        super(context, NomeBanco, null, 3);
     }
 
     @Override
@@ -1111,7 +1111,7 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("JUSTIFICATIVA_EXCLUSAO", webPedido.getJustificativa_exclusao());
         content.put("USUARIO_LANCAMENTO_ID", webPedido.getUsuario_lancamento_id());
         content.put("USUARIO_LANCAMENTO_NOME", webPedido.getUsuario_lancamento_nome());
-        content.put("USUARIO_LANCAMENTO_DATA", this.pegaDataHoraAtual());
+        content.put("USUARIO_LANCAMENTO_DATA", webPedido.getUsuario_lancamento_data());
         content.put("OBSERVACOES", webPedido.getObservacoes());
         content.put("STATUS", webPedido.getStatus());
         content.put("ID_PEDIDO_VENDA", webPedido.getId_pedido_venda());

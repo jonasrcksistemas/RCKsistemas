@@ -36,7 +36,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private EditText edtSenha;
     private Button btnEntrar;
     private Button btnFechar;
-    private Bundle bundleUsuario;
     private MenuItem sincroniza;
     private Toolbar tb_main;
     private ProgressDialog progress;
@@ -66,18 +65,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         btnEntrar.setOnClickListener(this);
         btnFechar.setOnClickListener(this);
         try {
-            Usuario usuario = usuarioBO.buscarUsuarioLogin(this);
 
-            if (usuario.getSenha().equals(db.consulta("SELECT SENHA FROM TBL_LOGIN WHERE LOGADO = 'S'", "SENHA"))) {
-                Intent intent = new Intent(MainActivity.this, PrincipalActivity.class);
-                UsuarioHelper.setUsuario(usuario);
-                startActivity(intent);
-                db.close();
-                finish();
-            }
-
+            UsuarioHelper.setUsuario(usuarioBO.buscarUsuarioLogin(this));
+            Intent intent = new Intent(MainActivity.this, PrincipalActivity.class);
+            startActivity(intent);
+            finish();
         } catch (/*android.database.CursorIndexOutOfBoundsException*/ Exception e) {
-            if (db.contagem("SELECT COUNT(*) FROM TBL_LOGIN") != 0) {
+            if (db.contagem("SELECT COUNT(*) FROM TBL_LOGIN WHERE LOGADO = 'S'") != 0) {
                 Toast.makeText(getApplicationContext(), "Usuario alterado", Toast.LENGTH_LONG).show();
                 db.alterar("DELETE FROM TBL_LOGIN");
             }
@@ -89,59 +83,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View view) {
         if (view == btnEntrar) {
             if (edtLogin.getText().toString().equalsIgnoreCase("")) {
-                Toast.makeText(this, "Por favor insira seu usuario", Toast.LENGTH_SHORT).show();
+                edtLogin.setError("Por favor insira seu usuario");
+                edtLogin.setText("");
+                edtLogin.requestFocus();
             } else {
-                final DBHelper db = new DBHelper(this);
-                try {
-                    if (edtSenha.getText().toString().equals(db.consulta("SELECT SENHA FROM TBL_WEB_USUARIO WHERE ATIVO = 'S' AND LOGIN = '" + edtLogin.getText().toString() + "';", "SENHA").trim())) {
-                        try {
-                            if (!edtLogin.getText().toString().equals(db.consulta("SELECT LOGIN FROM TBL_LOGIN;", "LOGIN").trim())) {
-//                                Toast.makeText(this, "Usuario diferente", Toast.LENGTH_SHORT).show();
-                                AlertDialog.Builder alertUsuario = new AlertDialog.Builder(MainActivity.this);
-                                alertUsuario.setMessage("Novo usuario detectado, o banco de dados será limpo e será necessário novo sincronia. \n   Deseja continuar?");
-                                alertUsuario.setTitle("Atenção!");
-                                alertUsuario.setNegativeButton("NÃO", null);
-                                alertUsuario.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        db.alterar("DELETE FROM TBL_CADASTRO");
-                                        logar(1);
-                                    }
-                                });
-                                alertUsuario.show();
-                            } else {
-                                logar(0);
-                            }
-                        } catch (CursorIndexOutOfBoundsException e) {
-                            if (db.contagem("SELECT COUNT(*) FROM TBL_LOGIN") > 0) {
-                                AlertDialog.Builder alertUsuario = new AlertDialog.Builder(MainActivity.this);
-                                alertUsuario.setMessage("Novo usuario detectado, o banco de dados será limpo e será necessário novo sincronia. \n   Deseja continuar?");
-                                alertUsuario.setTitle("Atenção!");
-                                alertUsuario.setNegativeButton("NÃO", null);
-                                alertUsuario.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        db.alterar("DELETE FROM TBL_CADASTRO");
-                                        logar(1);
-                                    }
-                                });
-                                alertUsuario.show();
-                            } else {
-                                logar(0);
-                            }
-                        }
-
-
-                    } else {
-                        Toast.makeText(MainActivity.this, "Senha incorreta", Toast.LENGTH_SHORT).show();
-                        edtSenha.setText("");
-                        edtSenha.requestFocus();
-                    }
-                } catch (CursorIndexOutOfBoundsException e) {
-                    Toast.makeText(this, "Usuario inexistente", Toast.LENGTH_SHORT).show();
-                    edtLogin.setText("");
+                if (edtSenha.getText().toString().equalsIgnoreCase("")) {
+                    edtSenha.setError("Por favor informe sua senha");
                     edtSenha.setText("");
-                    edtLogin.requestFocus();
+                    edtSenha.requestFocus();
+                } else {
+                    logar(0);
                 }
             }
         } else if (view == btnFechar) {
@@ -164,21 +115,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     public void logar(final int alterado) {
         try {
-            if (alterado == 0) {
+            if (alterado != 1) {
                 Usuario usuario = db.listaUsuario("SELECT * FROM TBL_WEB_USUARIO WHERE LOGIN = '" + edtLogin.getText().toString() + "'").get(0);
                 loginNaApi(usuario, alterado);
             }
             getUsuarios();
-        } catch (Exception e) {
+        } catch (CursorIndexOutOfBoundsException e) {
             e.printStackTrace();
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Toast.makeText(MainActivity.this, "Você precisa estar conectado a internet para poder logar!", Toast.LENGTH_SHORT).show();
-                    edtSenha.setText("");
-                    edtSenha.requestFocus();
-                }
-            });
+            edtLogin.setError("Usuario inexistente!");
+            edtLogin.setText("");
+            edtLogin.requestFocus();
+            edtSenha.setText("");
         }
     }
 
@@ -200,7 +147,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 if (!usuarioBO.sincronizaNobanco(usuarioList, MainActivity.this))
                     Toast.makeText(MainActivity.this, "Houve um erro ao salvar os usuarios", Toast.LENGTH_LONG).show();
                 progress.dismiss();
-                edtLogin.requestFocus();
             }
 
             @Override
@@ -222,29 +168,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         String idAndroit = Settings.Secure.getString(getBaseContext().getContentResolver(), Settings.Secure.ANDROID_ID);
 
-        Call<Usuario> call = apiRotas.login(idAndroit, usuario.getId_usuario());
+        Call<Usuario> call = apiRotas.login(idAndroit, usuario.getId_usuario(), edtLogin.getText().toString(), edtSenha.getText().toString());
 
         call.enqueue(new Callback<Usuario>() {
             @Override
             public void onResponse(Call<Usuario> call, Response<Usuario> response) {
                 Usuario usuario1 = response.body();
-                if (response.code() == 200) {
-                    Intent intent = new Intent(MainActivity.this, PrincipalActivity.class);
-                    usuario1.setLogado("S");
-                    if (db.contagem("SELECT COUNT(*) FROM TBL_LOGIN") > 0) {
-                        db.atualizarTBL_LOGIN(usuario1);
-                    } else {
-                        db.insertTBL_LOGIN(usuario1);
-                    }
-                    intent.putExtra("alterado", alterado);
-                    db.close();
-                    System.gc();
-                    UsuarioHelper.setUsuario(usuario1);
-                    progress.dismiss();
-                    startActivity(intent);
-                    finish();
+                switch (response.code()) {
+                    case 200:
+                        Intent intent = new Intent(MainActivity.this, PrincipalActivity.class);
+                        usuario1.setLogado("S");
+                        if (db.contagem("SELECT COUNT(*) FROM TBL_LOGIN") > 0) {
+                            db.atualizarTBL_LOGIN(usuario1);
+                        } else {
+                            db.insertTBL_LOGIN(usuario1);
+                        }
+                        intent.putExtra("alterado", alterado);
+                        db.close();
+                        System.gc();
+                        UsuarioHelper.setUsuario(usuario1);
+                        progress.dismiss();
+                        startActivity(intent);
+                        finish();
+                        break;
+                    case 500:
+                        edtSenha.setError("Senha incorreta");
+                        edtSenha.setText("");
+                        edtSenha.requestFocus();
+                        progress.dismiss();
+                        break;
                 }
-
             }
 
             @Override

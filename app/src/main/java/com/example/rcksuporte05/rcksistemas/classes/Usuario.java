@@ -34,8 +34,8 @@ public class Usuario {
     private String id_quando_vendedor;
     private String aparelho_id;
     private String token;
-    private String logado;
     private String idEmpresaMultiDevice;
+    private String logado;
 
     public String getId_usuario() {
         return id_usuario;
@@ -293,14 +293,6 @@ public class Usuario {
         this.token = token;
     }
 
-    public String getLogado() {
-        return logado;
-    }
-
-    public void setLogado(String logado) {
-        this.logado = logado;
-    }
-
     public String getIdEmpresaMultiDevice() {
         return idEmpresaMultiDevice;
     }
@@ -308,5 +300,12 @@ public class Usuario {
     public void setIdEmpresaMultiDevice(String idEmpresaMultiDevice) {
         this.idEmpresaMultiDevice = idEmpresaMultiDevice;
     }
-}
 
+    public String getLogado() {
+        return logado;
+    }
+
+    public void setLogado(String logado) {
+        this.logado = logado;
+    }
+}

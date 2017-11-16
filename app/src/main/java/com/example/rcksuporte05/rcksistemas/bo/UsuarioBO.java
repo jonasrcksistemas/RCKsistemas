@@ -45,7 +45,7 @@ public class UsuarioBO {
 
         SQLiteDatabase con = db.getReadableDatabase();
         Cursor cursor;
-        cursor = con.rawQuery("SELECT U.*, L.TOKEN FROM TBL_WEB_USUARIO U INNER JOIN TBL_LOGIN L ON U.LOGIN = L.LOGIN", null);
+        cursor = con.rawQuery("SELECT U.*, L.TOKEN FROM TBL_WEB_USUARIO U INNER JOIN TBL_LOGIN L ON U.LOGIN = L.LOGIN WHERE L.LOGADO = 'S'", null);
         cursor.moveToFirst();
 
         Usuario usuario = new Usuario();

@@ -202,18 +202,9 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                     Toast.makeText(PrincipalActivity.this, "Houve um erro ao salvar os usuarios", Toast.LENGTH_LONG).show();
                 else {
                     String aparelhoId = Settings.Secure.getString(getBaseContext().getContentResolver(), Settings.Secure.ANDROID_ID);
-                    String idLogin = db.consulta("SELECT * FROM TBL_WEB_USUARIO WHERE ID_USUARIO = " + UsuarioHelper.getUsuario().getId_usuario(), "APARELHO_ID");
-                    if (aparelhoId.equals(idLogin)) {
-                        if (UsuarioHelper.getUsuario().getSenha().equals(db.consulta("SELECT SENHA FROM TBL_WEB_USUARIO WHERE ATIVO = 'S' AND LOGIN = '" + UsuarioHelper.getUsuario().getLogin() + "';", "SENHA").trim())) {
-                            System.out.println("Usuario ok!");
-                        } else {
-                            Toast.makeText(getApplicationContext(), "Por favor, refaça o seu login!", Toast.LENGTH_LONG).show();
-                            db.alterar("UPDATE TBL_LOGIN SET LOGADO = 'N';");
-                            Intent intent = new Intent(PrincipalActivity.this, MainActivity.class);
-                            startActivity(intent);
-                            finish();
-                            System.gc();
-                        }
+                    Usuario usuarioLogin = db.listaUsuario("SELECT * FROM TBL_WEB_USUARIO WHERE ID_USUARIO = " + UsuarioHelper.getUsuario().getId_usuario()).get(0);
+                    if (aparelhoId.equals(usuarioLogin.getAparelho_id())) {
+                        loginNaApi(usuarioLogin);
                     } else {
                         Toast.makeText(getApplicationContext(), "Este usuario está logado em outro aparelho!", Toast.LENGTH_SHORT).show();
                         Toast.makeText(getApplicationContext(), "Por favor, refaça o seu login!", Toast.LENGTH_LONG).show();
@@ -226,11 +217,48 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                 }
             }
 
+
             @Override
             public void onFailure(Call<List<Usuario>> call, Throwable t) {
                 t.printStackTrace();
                 Toast.makeText(PrincipalActivity.this, "Não foi possivel sincronizar com o servidor, por favor verifique sua conexão", Toast.LENGTH_LONG).show();
                 ivInternet.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+
+    public void loginNaApi(final Usuario usuario) {
+        Rotas apiRotas = Api.buildRetrofit();
+
+        String idAndroit = Settings.Secure.getString(getBaseContext().getContentResolver(), Settings.Secure.ANDROID_ID);
+
+        Call<Usuario> call = apiRotas.login(idAndroit, usuario.getId_usuario(), db.consulta("SELECT * FROM TBL_LOGIN", "LOGIN"), db.consulta("SELECT * FROM TBL_LOGIN", "SENHA"));
+
+        call.enqueue(new Callback<Usuario>() {
+            @Override
+            public void onResponse(Call<Usuario> call, Response<Usuario> response) {
+                Usuario usuario1 = response.body();
+                switch (response.code()) {
+                    case 200:
+                        System.gc();
+                        System.out.println("Usuario ok");
+                        UsuarioHelper.setUsuario(usuario1);
+                        break;
+                    case 500:
+                        Toast.makeText(getApplicationContext(), "Foi encontrada uma divergencia em seu cadastro!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Por favor, refaça o seu login!", Toast.LENGTH_LONG).show();
+                        db.alterar("UPDATE TBL_LOGIN SET LOGADO = 'N';");
+                        Intent intent = new Intent(PrincipalActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                        System.gc();
+                        break;
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Usuario> call, Throwable t) {
+                System.out.println("Não foi possivel validar usuario!");
             }
         });
     }

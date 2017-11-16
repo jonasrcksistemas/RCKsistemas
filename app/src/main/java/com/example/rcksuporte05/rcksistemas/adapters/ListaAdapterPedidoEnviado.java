@@ -58,7 +58,7 @@ public class ListaAdapterPedidoEnviado extends ArrayAdapter<WebPedido> {
             txtHoraPedido.setText("HORA : " + formatoHora.format(dataHora));
             txtDataPedido.setText("DATA : " + formatoData.format(dataHora));
         } catch (ParseException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         txtPontoCoeficiente.setText("COEF: " + itemPosicao.getPontos_coeficiente());
         viewCor.setBackgroundColor(Color.parseColor(itemPosicao.getPontos_cor()));

@@ -12,7 +12,6 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.example.rcksuporte05.rcksistemas.Helper.UsuarioHelper;
 import com.example.rcksuporte05.rcksistemas.R;
@@ -230,11 +229,10 @@ public class SincroniaBO {
                 notificacao.setProgress(maxProgress, contadorNotificacaoEProgresso, false);
 
                 webPedido.setPedido_enviado("S");
-                if (db.contagem("SELECT COUNT(*) FROM TBL_WEB_PEDIDO WHERE ID_WEB_PEDIDO_SERVIDOR = " + webPedido.getId_web_pedido_servidor()) <= 0) {
-                    db.inserirTBL_WEB_PEDIDO(webPedido);
-                } else {
-                    db.atualizarTBL_WEB_PEDIDO(webPedido);
+                if (db.contagem("SELECT COUNT(*) FROM TBL_WEB_PEDIDO WHERE ID_WEB_PEDIDO_SERVIDOR = " + webPedido.getId_web_pedido_servidor()) > 0) {
+                    db.alterar("DELETE FROM TBL_WEB_PEDIDO WHERE ID_WEB_PEDIDO_SERVIDOR = " + webPedido.getId_web_pedido_servidor());
                 }
+                db.inserirTBL_WEB_PEDIDO(webPedido);
                 for (WebPedidoItens webPedidoItens : webPedido.getWebPedidoItens()) {
                     String idPedido = db.consulta("SELECT * FROM TBL_WEB_PEDIDO WHERE ID_WEB_PEDIDO_SERVIDOR = " + webPedido.getId_web_pedido_servidor(), "ID_WEB_PEDIDO");
                     webPedidoItens.setId_pedido(idPedido);
@@ -332,7 +330,7 @@ public class SincroniaBO {
                             @Override
                             public void run() {
                                 ivInternet.setVisibility(View.VISIBLE);
-                                Toast.makeText(activity, "Houve um problema na requisição, entre em contato no suporte para esclarecer a situação", Toast.LENGTH_LONG).show();
+                                System.out.println("Houve um problema na requisição, entre em contato no suporte para esclarecer a situação");
                                 progress.dismiss();
                             }
                         });

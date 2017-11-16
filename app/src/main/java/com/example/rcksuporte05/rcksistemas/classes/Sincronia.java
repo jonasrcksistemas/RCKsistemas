@@ -18,7 +18,8 @@ public class Sincronia {
     private List<VendedorBonusResumo> listaVendedorBonusResumo;
     private List<WebPedido> listaWebPedidos;
 
-    public Sincronia(){}
+    public Sincronia() {
+    }
 
     public Sincronia(boolean cliente, boolean produto, boolean pedidos){
         this.cliente = cliente;
