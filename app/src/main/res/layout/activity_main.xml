@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
@@ -9,6 +9,7 @@
     tools:context="com.example.rcksuporte05.rcksistemas.interfaces.MainActivity">
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
@@ -45,8 +46,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:background="@drawable/botao_login"
+                    android:drawableRight="@mipmap/ic_usuario"
                     android:hint="Login"
-                    android:inputType="textCapCharacters|textCapWords" />
+                    android:inputType="textCapCharacters|textCapWords"
+                    android:textColorHint="#000000" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -60,22 +64,30 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/txtLogin"
                     android:layout_centerInParent="true"
-                    android:hint="senha"
-                    android:inputType="text|textPassword" />
+                    android:background="@drawable/botao_login"
+                    android:drawableRight="@mipmap/ic_senha"
+                    android:hint="Senha"
+                    android:inputType="text|textPassword"
+                    android:textColorHint="#000000" />
 
             </android.support.design.widget.TextInputLayout>
 
         </LinearLayout>
+
+        <Button
+            android:id="@+id/btnEntrar"
+            android:layout_width="190dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="38dp"
+            android:background="#e6b220"
+            android:text="Acessar" />
     </LinearLayout>
 
-
-    <Button
-        android:id="@+id/btnEntrar"
-        android:layout_width="190dp"
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="38dp"
-        android:background="#e6b220"
-        android:text="Acessar" />
+        android:layout_gravity="center_horizontal|bottom"
+        android:layout_marginBottom="50dp" />
 
-</LinearLayout>
+</android.support.design.widget.CoordinatorLayout>
