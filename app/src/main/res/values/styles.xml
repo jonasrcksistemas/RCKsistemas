@@ -103,5 +103,10 @@
 
     </style>
 
+    <style name="AppTheme.Button" parent="Widget.AppCompat.Button.Colored">
+        <item name="colorButtonNormal">#e6b220</item>
+        <item name="android:textColor">@color/branco</item>
+    </style>
+
 
 </resources>

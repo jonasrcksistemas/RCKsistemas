@@ -1,16 +1,12 @@
 package com.example.rcksuporte05.rcksistemas.interfaces;
 
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.CursorIndexOutOfBoundsException;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -35,9 +31,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private EditText edtLogin;
     private EditText edtSenha;
     private Button btnEntrar;
-    private Button btnFechar;
-    private MenuItem sincroniza;
-    private Toolbar tb_main;
+    private Button btnAtualizarUsuarios;
     private ProgressDialog progress;
     private List<Usuario> usuarioList = new ArrayList<>();
     private UsuarioBO usuarioBO = new UsuarioBO();
@@ -53,17 +47,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         edtLogin = (EditText) findViewById(R.id.edtLogin);
         edtSenha = (EditText) findViewById(R.id.edtSenha);
         btnEntrar = (Button) findViewById(R.id.btnEntrar);
-        btnFechar = (Button) findViewById(R.id.btnFechar);
-
-        tb_main = (Toolbar) findViewById(R.id.tb_main);
-        tb_main.setTitle("Bem vindo ao " + getString(R.string.app_name));
-        tb_main.setSubtitle("Login");
-        tb_main.setLogo(R.mipmap.ic_launcher);
-
-        setSupportActionBar(tb_main);
+        btnAtualizarUsuarios = (Button) findViewById(R.id.btnAtualizar);
 
         btnEntrar.setOnClickListener(this);
-        btnFechar.setOnClickListener(this);
+        btnAtualizarUsuarios.setOnClickListener(this);
         try {
 
             UsuarioHelper.setUsuario(usuarioBO.buscarUsuarioLogin(this));
@@ -95,21 +82,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     logar(0);
                 }
             }
-        } else if (view == btnFechar) {
-            AlertDialog.Builder alert = new AlertDialog.Builder(this);
-            alert.setMessage("Deseja realmente sair da aplicação?");
-            alert.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int i) {
-                    Intent intent = new Intent(Intent.ACTION_MAIN);
-                    intent.addCategory(Intent.CATEGORY_HOME);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);//***Change Here***
-                    startActivity(intent);
-                    finish();
-                }
-            });
-            alert.setNegativeButton("NÃO", null);
-            alert.show();
+        } else if (view == btnAtualizarUsuarios) {
+            getUsuarios();
         }
     }
 
@@ -212,29 +186,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 edtSenha.requestFocus();
             }
         });
-    }
-
-
-    @Override
-    public boolean onPrepareOptionsMenu(Menu menu) {
-        return super.onPrepareOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        sincroniza = menu.findItem(R.id.menu_sincroniza);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.menu_sincroniza:
-                getUsuarios();
-                return true;
-        }
-        return false;
     }
 
     @Override
