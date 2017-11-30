@@ -84,10 +84,12 @@
             android:text="Acessar" />
     </LinearLayout>
 
-    <android.support.design.widget.FloatingActionButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <Button
+        android:id="@+id/informacao"
+        android:layout_width="64px"
+        android:layout_height="64px"
         android:layout_gravity="center_horizontal|bottom"
-        android:layout_marginBottom="50dp" />
+        android:layout_marginBottom="65dp"
+        android:background="@mipmap/ic_info" />
 
 </android.support.design.widget.CoordinatorLayout>

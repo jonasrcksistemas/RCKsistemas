@@ -36,6 +36,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private List<Usuario> usuarioList = new ArrayList<>();
     private UsuarioBO usuarioBO = new UsuarioBO();
     private DBHelper db;
+    private Button informacao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,9 +49,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         edtSenha = (EditText) findViewById(R.id.edtSenha);
         btnEntrar = (Button) findViewById(R.id.btnEntrar);
         btnAtualizarUsuarios = (Button) findViewById(R.id.btnAtualizar);
+        informacao = (Button) findViewById(R.id.informacao);
 
         btnEntrar.setOnClickListener(this);
         btnAtualizarUsuarios.setOnClickListener(this);
+        informacao.setOnClickListener(this);
         try {
 
             UsuarioHelper.setUsuario(usuarioBO.buscarUsuarioLogin(this));
@@ -84,6 +87,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         } else if (view == btnAtualizarUsuarios) {
             getUsuarios();
+        } else if (view == informacao) {
+            Intent intent = new Intent(MainActivity.this, infoDialog.class);
+            startActivity(intent);
         }
     }
 

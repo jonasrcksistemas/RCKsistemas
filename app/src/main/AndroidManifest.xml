@@ -50,12 +50,15 @@
         <activity
             android:name=".interfaces.HistoricoFinanceiroMain"
             android:screenOrientation="portrait" />
-        <activity android:name=".interfaces.ContatoActivity"></activity>
+        <activity android:name=".interfaces.ContatoActivity" />
         <activity
             android:name=".interfaces.ActiviyDialogSincronia"
             android:theme="@style/Theme.CriarDialog" />
         <activity
             android:name=".interfaces.ActivityDialogProdutoDetalhe"
+            android:theme="@style/Theme.CriarDialog" />
+        <activity
+            android:name=".interfaces.infoDialog"
             android:theme="@style/Theme.CriarDialog" />
     </application>
 
