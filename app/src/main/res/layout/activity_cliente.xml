@@ -18,14 +18,13 @@
         app:theme="@style/Theme.Toolbar"
         tools:context=".interfaces.ActivityCliente" />
 
-    <ListView
-        android:id="@+id/lstClientes"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:fastScrollAlwaysVisible="false"
-        android:fastScrollEnabled="true"
-        android:scrollbars="vertical" />
+     <android.support.v7.widget.RecyclerView
+         android:id="@+id/listaRecycler"
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:layout_weight="1"
+         />
+
 
     <EditText
         android:id="@+id/edtTotalClientes"
@@ -36,5 +35,4 @@
         android:focusable="false"
         android:gravity="end"
         android:text="total"/>
-
 </LinearLayout>
