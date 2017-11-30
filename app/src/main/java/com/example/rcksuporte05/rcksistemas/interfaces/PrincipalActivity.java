@@ -39,6 +39,7 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
     private static final int pedidosEnviados = 1;
     private static final int sair = 2;
     private static final int AtualizarBanco = 3;
+    private static final int Sobre = 3;
     private Button btnCliente;
     private Button btnProduto;
     private Button btnPedidos;
@@ -145,6 +146,7 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
         menu.add(0, pedidosPendentes, 0, "Pedidos pendentes");
         menu.add(0, pedidosEnviados, 0, "Pedidos enviados");
         menu.add(0, sair, 0, "Sair");
+        menu.add(0, Sobre, 0, "Informações do sistema");
 
         if (UsuarioHelper.getUsuario().getNome_usuario().equalsIgnoreCase("RCK SISTEMAS")) {
             menu.add(0, AtualizarBanco, 0, "Atualizar Banco");
@@ -181,6 +183,10 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
             case pedidosEnviados:
                 Intent telaPedidoEnviado = new Intent(PrincipalActivity.this, ListagemPedidoEnviado.class);
                 startActivity(telaPedidoEnviado);
+                break;
+            case Sobre:
+                Intent intent = new Intent(PrincipalActivity.this, infoDialog.class);
+                startActivity(intent);
                 break;
         }
 

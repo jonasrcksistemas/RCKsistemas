@@ -4,7 +4,7 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#325960"
+    android:background="@drawable/splash"
     android:orientation="vertical"
     tools:context="com.example.rcksuporte05.rcksistemas.interfaces.MainActivity">
 
@@ -86,10 +86,10 @@
 
     <Button
         android:id="@+id/informacao"
-        android:layout_width="64px"
-        android:layout_height="64px"
+        android:layout_width="84px"
+        android:layout_height="84px"
         android:layout_gravity="center_horizontal|bottom"
-        android:layout_marginBottom="65dp"
+        android:layout_marginBottom="75dp"
         android:background="@mipmap/ic_info" />
 
 </android.support.design.widget.CoordinatorLayout>

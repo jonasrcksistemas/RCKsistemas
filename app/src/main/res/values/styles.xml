@@ -103,10 +103,23 @@
 
     </style>
 
-    <style name="AppTheme.Button" parent="Widget.AppCompat.Button.Colored">
-        <item name="colorButtonNormal">#e6b220</item>
-        <item name="android:textColor">@color/branco</item>
-    </style>
+    <!-- Base application theme. -->
+    <style name="Theme.Main" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- colorPrimary is used for the default action bar background -->
+        <item name="colorPrimary">@color/colorPrimary</item>
 
+        <!-- colorPrimaryDark is used for the status bar -->
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+
+        <!-- colorAccent is used as the default value for colorControlActivated,
+             which is used to tint widgets -->
+        <item name="colorAccent">#000000</item>
+
+        <!-- You can also set colorControlNormal, colorControlActivated
+             colorControlHighlight, and colorSwitchThumbNormal. -->
+
+        <item name="colorControlNormal">@color/colorControlNormal</item>
+
+    </style>
 
 </resources>

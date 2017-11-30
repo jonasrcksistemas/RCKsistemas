@@ -13,7 +13,9 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/Theme.MeuTema">
-        <activity android:name=".interfaces.MainActivity" />
+        <activity
+            android:name=".interfaces.MainActivity"
+            android:theme="@style/Theme.Main" />
         <activity
             android:name=".interfaces.PrincipalActivity"
             android:screenOrientation="portrait" />
