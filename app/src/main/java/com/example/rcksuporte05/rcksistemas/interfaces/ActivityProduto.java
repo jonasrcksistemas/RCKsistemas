@@ -9,77 +9,98 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.ListView;
 
 import com.example.rcksuporte05.rcksistemas.Helper.ProdutoHelper;
 import com.example.rcksuporte05.rcksistemas.R;
-import com.example.rcksuporte05.rcksistemas.adapters.ListaAdapterProdutos;
+import com.example.rcksuporte05.rcksistemas.adapters.ListaProdutoAdpter;
+import com.example.rcksuporte05.rcksistemas.adapters.RecyclerTouchListener;
 import com.example.rcksuporte05.rcksistemas.classes.Produto;
 import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class ActivityProduto extends AppCompatActivity {
     private MenuItem novo_produto;
     private SearchView busca_produto;
-    private ListView lstProdutos;
+    //private ListView lstProdutos;
     private Toolbar toolbar;
     private List<Produto> lista;
-    private ListaAdapterProdutos adaptador;
+    //private ListaAdapterProdutos adaptador;
     private DBHelper db = new DBHelper(this);
     private EditText edtTotalProdutos;
+    private ListaProdutoAdpter listaProdutoAdpter;
+
+    @BindView(R.id.listaProdutoRecycler)
+    RecyclerView listaProdutoRecyclerView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_produto);
+        ButterKnife.bind(this);
 
-        lstProdutos = (ListView) findViewById(R.id.lstProdutos);
+
+
         edtTotalProdutos = (EditText) findViewById(R.id.edtTotalProdutos);
         toolbar = (Toolbar) findViewById(R.id.tb_produto);
         toolbar.setTitle("Lista de Produtos");
         if (getIntent().getIntExtra("acao", 0) == 1) {
             try {
                 lista = db.listaProduto("SELECT * FROM TBL_PRODUTO WHERE ATIVO = 'S' ORDER BY NOME_PRODUTO");
+                preecheRecyclerProduto(this,lista);
 
-                adaptador = new ListaAdapterProdutos(ActivityProduto.this, lista);
-                lstProdutos.setAdapter(adaptador);
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            lstProdutos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            listaProdutoRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(this, listaProdutoRecyclerView, new RecyclerTouchListener.ClickListener() {
                 @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                public void onClick(View view, int position) {
                     ProdutoPedidoActivity produtoPedidoActivity = new ProdutoPedidoActivity();
-                    produtoPedidoActivity.pegaProduto(adaptador.getItem(position));
+                    produtoPedidoActivity.pegaProduto(listaProdutoAdpter.getItem(position));
                     finish();
                 }
-            });
+
+                @Override
+                public void onLongClick(View view, int position) {
+
+                }
+            }));
+
         } else {
             try {
                 lista = db.listaProduto("SELECT * FROM TBL_PRODUTO ORDER BY ATIVO DESC, NOME_PRODUTO");
-                adaptador = new ListaAdapterProdutos(ActivityProduto.this, lista);
-                lstProdutos.setAdapter(adaptador);
+                preecheRecyclerProduto(this,lista);
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            lstProdutos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            listaProdutoRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(this, listaProdutoRecyclerView, new RecyclerTouchListener.ClickListener() {
                 @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                public void onClick(View view, int position) {
                     Intent intent = new Intent(ActivityProduto.this, ActivityDialogProdutoDetalhe.class);
-                    ProdutoHelper.setProduto(adaptador.getItem(position));
+                    ProdutoHelper.setProduto(listaProdutoAdpter.getItem(position));
                     startActivity(intent);
+                }
+
+                @Override
+                public void onLongClick(View view, int position) {
 
                 }
-            });
+            }));
+
+
         }
 
         setSupportActionBar(toolbar);
@@ -111,14 +132,14 @@ public class ActivityProduto extends AppCompatActivity {
             public boolean onQueryTextChange(final String query) {
                 try {
                     if (query.trim().equals("")) {
-                        adaptador = new ListaAdapterProdutos(ActivityProduto.this, lista);
+                        listaProdutoAdpter = new ListaProdutoAdpter(lista);
                         edtTotalProdutos.setText("Produtos listados :" + lista.size() + "   ");
                         edtTotalProdutos.setTextColor(Color.BLACK);
                     } else {
-                        adaptador = new ListaAdapterProdutos(ActivityProduto.this, buscarProdutos(query));
+                        listaProdutoAdpter = new ListaProdutoAdpter(buscarProdutos(query));
                     }
-                    adaptador.notifyDataSetChanged();
-                    lstProdutos.setAdapter(adaptador);
+                    listaProdutoAdpter.notifyDataSetChanged();
+                    listaProdutoRecyclerView.setAdapter(listaProdutoAdpter);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -160,6 +181,18 @@ public class ActivityProduto extends AppCompatActivity {
         return lista;
     }
 
+    public void preecheRecyclerProduto(Context context, List<Produto> produtos){
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(context);
+        listaProdutoRecyclerView.setLayoutManager(layoutManager);
+
+        listaProdutoAdpter = new ListaProdutoAdpter(produtos);
+
+        listaProdutoRecyclerView.setAdapter(listaProdutoAdpter);
+
+        listaProdutoAdpter.notifyDataSetChanged();
+
+
+    }
 
     @Override
     protected void onResume() {

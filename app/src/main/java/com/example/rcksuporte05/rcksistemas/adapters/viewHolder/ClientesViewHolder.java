@@ -13,11 +13,11 @@ import butterknife.ButterKnife;
 
 public class ClientesViewHolder extends RecyclerView.ViewHolder{
     @BindView(R.id.nomeListaCliente)
-    TextView textViewNome;
+    public TextView textViewNome;
     @BindView(R.id.telefoneListaCliente)
-    TextView textViewTelefone;
+    public TextView textViewTelefone;
     @BindView(R.id.textViewNomeFantasia)
-    TextView textViewNomeFantasia;
+    public TextView textViewNomeFantasia;
 
     public ClientesViewHolder(View itemView) {
         super(itemView);

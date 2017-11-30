@@ -22,8 +22,8 @@ import android.widget.EditText;
 
 import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
 import com.example.rcksuporte05.rcksistemas.R;
+import com.example.rcksuporte05.rcksistemas.adapters.ListaClienteAdapter;
 import com.example.rcksuporte05.rcksistemas.adapters.RecyclerTouchListener;
-import com.example.rcksuporte05.rcksistemas.adapters.viewHolder.ListaClientesAdapter;
 import com.example.rcksuporte05.rcksistemas.classes.Cliente;
 import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
 import com.example.rcksuporte05.rcksistemas.fragment.Pedido1;
@@ -42,7 +42,7 @@ public class ActivityCliente extends AppCompatActivity {
     private List<Cliente> lista;
     private EditText edtTotalClientes;
     private DBHelper db = new DBHelper(this);
-    private ListaClientesAdapter listaClientesAdapter;
+    private ListaClienteAdapter listaClienteAdapter;
 
     @BindView(R.id.listaRecycler)
     RecyclerView listaDeClientes;
@@ -57,6 +57,8 @@ public class ActivityCliente extends AppCompatActivity {
         edtTotalClientes = (EditText) findViewById(R.id.edtTotalClientes);
         toolbar = (Toolbar) findViewById(R.id.tb_cliente);
         toolbar.setTitle("Lista de Clientes");
+        toolbar.setTitle("Lista de Clientes");
+        toolbar.setTitle("Lista de Clientes");
         if (getIntent().getIntExtra("acao", 0) == 1) {
             toolbar.setTitle("Pesquisa de Clientes");
 
@@ -64,9 +66,9 @@ public class ActivityCliente extends AppCompatActivity {
                 lista = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE F_CLIENTE = 'S' AND F_VENDEDOR = 'N' AND ATIVO = 'S' ORDER BY ATIVO DESC, NOME_CADASTRO;");
                 RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
                 listaDeClientes.setLayoutManager(layoutManager);
-                listaClientesAdapter = new ListaClientesAdapter(lista);
-                listaDeClientes.setAdapter(listaClientesAdapter);
-                listaClientesAdapter.notifyDataSetChanged();
+                listaClienteAdapter = new ListaClienteAdapter(lista);
+                listaDeClientes.setAdapter(listaClienteAdapter);
+                listaClienteAdapter.notifyDataSetChanged();
                 System.gc();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -78,8 +80,8 @@ public class ActivityCliente extends AppCompatActivity {
             public void onClick(View view, int position) {
                 Pedido1 pedido1 = new Pedido1();
                 Pedido3 pedido3 = new Pedido3();
-                pedido1.pegaCliente(listaClientesAdapter.getItem(position));
-                pedido3.pegaCliente(listaClientesAdapter.getItem(position));
+                pedido1.pegaCliente(listaClienteAdapter.getItem(position));
+                pedido3.pegaCliente(listaClienteAdapter.getItem(position));
                 System.gc();
                 finish();
             }
@@ -97,9 +99,9 @@ public class ActivityCliente extends AppCompatActivity {
 
                 RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
                 listaDeClientes.setLayoutManager(layoutManager);
-                listaClientesAdapter = new ListaClientesAdapter(lista);
-                listaDeClientes.setAdapter(listaClientesAdapter);
-                listaClientesAdapter.notifyDataSetChanged();
+                listaClienteAdapter = new ListaClienteAdapter(lista);
+                listaDeClientes.setAdapter(listaClienteAdapter);
+                listaClienteAdapter.notifyDataSetChanged();
                 System.gc();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -110,8 +112,8 @@ public class ActivityCliente extends AppCompatActivity {
                 @Override
                 public void onClick(View view, int position) {
                     Intent intent = new Intent(ActivityCliente.this, ContatoActivity.class);
-                    ClienteHelper.setCliente(listaClientesAdapter.getItem(position));
-                    intent.putExtra("id_cliente", Integer.parseInt(listaClientesAdapter.getItem(position).getId_cadastro()));
+                    ClienteHelper.setCliente(listaClienteAdapter.getItem(position));
+                    intent.putExtra("id_cliente", Integer.parseInt(listaClienteAdapter.getItem(position).getId_cadastro()));
                     System.gc();
                     startActivity(intent);
                 }
@@ -135,14 +137,14 @@ public class ActivityCliente extends AppCompatActivity {
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-        menu.setHeaderTitle(listaClientesAdapter.getItem(info.position).getNome_cadastro());
+        menu.setHeaderTitle(listaClienteAdapter.getItem(info.position).getNome_cadastro());
 
         MenuItem historicoFInanceiro = menu.add("Historico Financeiro");
         historicoFInanceiro.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 Intent intent = new Intent(ActivityCliente.this, HistoricoFinanceiroMain.class);
-                intent.putExtra("idCliente", Integer.parseInt(listaClientesAdapter.getItem(info.position).getId_cadastro()));
+                intent.putExtra("idCliente", Integer.parseInt(listaClienteAdapter.getItem(info.position).getId_cadastro()));
                 ActivityCliente.this.startActivity(intent);
 
                 return false;
@@ -177,14 +179,14 @@ public class ActivityCliente extends AppCompatActivity {
             public boolean onQueryTextChange(final String query) {
                 try {
                     if (query.trim().equals("")) {
-                        listaClientesAdapter = new ListaClientesAdapter(lista);
+                        listaClienteAdapter = new ListaClienteAdapter(lista);
                         edtTotalClientes.setText("Clientes listados: " + lista.size() + "   ");
                         edtTotalClientes.setTextColor(Color.BLACK);
                     } else {
-                        listaClientesAdapter = new ListaClientesAdapter(buscaClientes(query));
+                        listaClienteAdapter = new ListaClienteAdapter(buscaClientes(query));
                     }
-                    listaDeClientes.setAdapter(listaClientesAdapter);
-                    listaClientesAdapter.notifyDataSetChanged();
+                    listaDeClientes.setAdapter(listaClienteAdapter);
+                    listaClienteAdapter.notifyDataSetChanged();
                     System.gc();
                 } catch (Exception e) {
                     e.printStackTrace();
