@@ -54,6 +54,7 @@
             android:textStyle="bold|italic" />
 
         <LinearLayout
+            android:id="@+id/lyGps"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
@@ -75,6 +76,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/lyMail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
@@ -96,6 +98,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/lyChamada"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
@@ -117,6 +120,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/lyWhats"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
@@ -132,10 +136,18 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:maxLines="1"
-                android:text="67 99323-5558 "
+                android:text=" 67 99323-5558 "
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium" />
 
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/versaoAPP"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:text="Versão do Aplicativo: " />
 
     </LinearLayout>
 
