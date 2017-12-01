@@ -5,8 +5,8 @@ import java.util.List;
 public class Sincronia {
     private boolean cliente;
     private boolean produto;
-    private boolean pedidos;
-
+    private boolean pedidosFinalizados;
+    private boolean pedidosPendentes;
     private int maxProgress;
     private List<Cliente> listaCliente;
     private List<CondicoesPagamento> listaCondicoesPagamento;
@@ -16,15 +16,14 @@ public class Sincronia {
     private List<TabelaPrecoItem> listaTabelaPrecoItem;
     private List<Usuario> listaUsuario;
     private List<VendedorBonusResumo> listaVendedorBonusResumo;
-    private List<WebPedido> listaWebPedidos;
+    private List<WebPedido> listaWebPedidosPendentes;
+    private List<WebPedido> listaWebPedidosFinalizados;
 
-    public Sincronia() {
-    }
-
-    public Sincronia(boolean cliente, boolean produto, boolean pedidos){
+    public Sincronia(boolean cliente, boolean produto, boolean pedidosFinalizados, boolean pedidosPendentes) {
         this.cliente = cliente;
         this.produto = produto;
-        this.pedidos = pedidos;
+        this.pedidosFinalizados = pedidosFinalizados;
+        this.pedidosPendentes = pedidosPendentes;
     }
 
     public boolean isCliente() {
@@ -41,14 +40,6 @@ public class Sincronia {
 
     public void setProduto(boolean produto) {
         this.produto = produto;
-    }
-
-    public boolean isPedidos() {
-        return pedidos;
-    }
-
-    public void setPedidos(boolean pedidos) {
-        this.pedidos = pedidos;
     }
 
     public int getMaxProgress() {
@@ -123,11 +114,35 @@ public class Sincronia {
         this.listaVendedorBonusResumo = listaVendedorBonusResumo;
     }
 
-    public List<WebPedido> getListaWebPedidos() {
-        return listaWebPedidos;
+    public List<WebPedido> getListaWebPedidosPendentes() {
+        return listaWebPedidosPendentes;
     }
 
-    public void setListaWebPedidos(List<WebPedido> listaWebPedidos) {
-        this.listaWebPedidos = listaWebPedidos;
+    public void setListaWebPedidosPendentes(List<WebPedido> listaWebPedidosPendentes) {
+        this.listaWebPedidosPendentes = listaWebPedidosPendentes;
+    }
+
+    public boolean isPedidosFinalizados() {
+        return pedidosFinalizados;
+    }
+
+    public void setPedidosFinalizados(boolean pedidosFinalizados) {
+        this.pedidosFinalizados = pedidosFinalizados;
+    }
+
+    public boolean isPedidosPendentes() {
+        return pedidosPendentes;
+    }
+
+    public void setPedidosPendentes(boolean pedidosPendentes) {
+        this.pedidosPendentes = pedidosPendentes;
+    }
+
+    public List<WebPedido> getListaWebPedidosFinalizados() {
+        return listaWebPedidosFinalizados;
+    }
+
+    public void setListaWebPedidosFinalizados(List<WebPedido> listaWebPedidosFinalizados) {
+        this.listaWebPedidosFinalizados = listaWebPedidosFinalizados;
     }
 }

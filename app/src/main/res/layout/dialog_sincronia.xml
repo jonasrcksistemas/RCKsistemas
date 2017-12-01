@@ -39,10 +39,10 @@
 
             <Switch
                 android:id="@+id/id_opcao_cliente"
-                android:layout_width="175dp"
+                android:layout_width="245dp"
                 android:layout_height="wrap_content"
                 android:checked="true"
-                android:text="Clientes   "
+                android:text="Clientes"
                 android:textColor="@color/colorAccent"
                 android:textSize="22sp" />
 
@@ -56,10 +56,10 @@
 
             <Switch
                 android:id="@+id/id_opcao_produto"
-                android:layout_width="175dp"
+                android:layout_width="245dp"
                 android:layout_height="wrap_content"
                 android:checked="true"
-                android:text="Produtos   "
+                android:text="Produtos"
                 android:textColor="@color/colorAccent"
                 android:textSize="22sp" />
 
@@ -73,10 +73,28 @@
 
             <Switch
                 android:id="@+id/id_opcao_pedidos"
-                android:layout_width="175dp"
+                android:layout_width="245dp"
                 android:layout_height="wrap_content"
                 android:checked="false"
-                android:text="Pedidos   "
+                android:text="Pedidos Enviados"
+                android:textColor="@color/colorAccent"
+                android:textSize="22sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <Switch
+                android:id="@+id/id_opcao_pedidos_pendentes"
+                android:layout_width="245dp"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:maxLines="1"
+                android:text="Pedidos Pendentes"
                 android:textColor="@color/colorAccent"
                 android:textSize="22sp" />
 

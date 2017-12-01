@@ -2,8 +2,6 @@ package com.example.rcksuporte05.rcksistemas.interfaces;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.Button;
 import android.widget.Switch;
 
 import com.example.rcksuporte05.rcksistemas.R;
@@ -29,6 +27,9 @@ public class ActiviyDialogSincronia extends Activity {
     @BindView(R.id.id_opcao_produto)
     Switch id_opcao_produto;
 
+    @BindView(R.id.id_opcao_pedidos_pendentes)
+    Switch id_opcao_pedidos_pendentes;
+
     private SincroniaBO sincroniaBO = new SincroniaBO();
 
     @Override
@@ -39,14 +40,14 @@ public class ActiviyDialogSincronia extends Activity {
     }
 
     @OnClick(R.id.btnConfirmar)
-    public void btnConfirmar(){
-        Sincronia sincronia = new Sincronia(id_opcao_cliente.isChecked(), id_opcao_produto.isChecked(), id_opcao_pedidos.isChecked());
+    public void btnConfirmar() {
+        Sincronia sincronia = new Sincronia(id_opcao_cliente.isChecked(), id_opcao_produto.isChecked(), id_opcao_pedidos.isChecked(), id_opcao_pedidos_pendentes.isChecked());
         sincroniaBO.sincronizaApi(sincronia);
         finish();
     }
 
     @OnClick(R.id.btnCancelar)
-    public void btnCancelar(){
+    public void btnCancelar() {
         finish();
     }
 }
