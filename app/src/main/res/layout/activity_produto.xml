@@ -20,13 +20,12 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         tools:context=".interfaces.ActivityProduto" />
 
-    <ListView
-        android:id="@+id/lstProdutos"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/listaProdutoRecycler"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fastScrollEnabled="true"
-        android:scrollbars="vertical"
-        android:layout_weight="1"/>
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        />
 
     <EditText
         android:id="@+id/edtTotalProdutos"

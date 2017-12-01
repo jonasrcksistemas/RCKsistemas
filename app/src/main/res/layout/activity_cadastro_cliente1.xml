@@ -345,7 +345,7 @@
                 android:layout_height="30dp"
                 android:layout_alignBottom="@+id/edtTelefonePrincipal"
                 android:layout_alignParentEnd="true"
-                android:background="@mipmap/ic_ligar"
+                android:background="@mipmap/ic_telefone"
                 android:scaleType="centerCrop" />
 
             <Button
@@ -354,7 +354,7 @@
                 android:layout_height="30dp"
                 android:layout_alignBottom="@+id/edtTelefone1"
                 android:layout_alignParentEnd="true"
-                android:background="@mipmap/ic_ligar"
+                android:background="@mipmap/ic_telefone"
                 android:scaleType="centerCrop" />
 
             <Button
@@ -363,7 +363,7 @@
                 android:layout_height="30dp"
                 android:layout_alignBottom="@+id/edtTelefone2"
                 android:layout_alignParentEnd="true"
-                android:background="@mipmap/ic_ligar"
+                android:background="@mipmap/ic_telefone"
                 android:scaleType="centerCrop" />
 
         </RelativeLayout>

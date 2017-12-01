@@ -32,6 +32,7 @@ public class ContatoActivity extends AppCompatActivity {
     private LinearLayout lyEmail;
     private LinearLayout lyGps;
     private LinearLayout lyNomeCliente;
+    private LinearLayout lyFinanceiro;
     private Cliente cliente;
 
     @Override
@@ -53,6 +54,7 @@ public class ContatoActivity extends AppCompatActivity {
             lyEmail = (LinearLayout) findViewById(R.id.lyEmail);
             lyGps = (LinearLayout) findViewById(R.id.lyGps);
             lyNomeCliente = (LinearLayout) findViewById(R.id.lyNomeCliente);
+            lyFinanceiro = (LinearLayout) findViewById(R.id.lyFinanceiro);
 
             toolbar.setTitle("Contato");
             txtRazaoSocial.setText(cliente.getNome_cadastro());
@@ -174,6 +176,18 @@ public class ContatoActivity extends AppCompatActivity {
                 }
             });
 
+            lyFinanceiro.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(ContatoActivity.this, HistoricoFinanceiroMain.class);
+                    intent.putExtra("idCliente", Integer.parseInt(cliente.getId_cadastro()));
+                    System.gc();
+                    startActivity(intent);
+                    CadastroClienteMain cadastroClienteMain = new CadastroClienteMain();
+                    cadastroClienteMain.finish();
+                }
+            });
+
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -183,6 +197,7 @@ public class ContatoActivity extends AppCompatActivity {
             finish();
         }
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
