@@ -39,7 +39,7 @@ public class ListaAdapterPedidoQuitado extends ArrayAdapter<WebPedido> {
         TextView txtIdPedido = (TextView) convertView.findViewById(R.id.txtIdPedido);
         TextView txtNomeCliente = (TextView) convertView.findViewById(R.id.txtNomeCliente);
         TextView txtPrecoPedido = (TextView) convertView.findViewById(R.id.txtPrecoPedido);
-        TextView txtHoraPedido = (TextView) convertView.findViewById(R.id.txtHoraPedido);
+        //TextView txtHoraPedido = (TextView) convertView.findViewById(R.id.txtHoraPedido);
         TextView txtPontoCoeficiente = (TextView) convertView.findViewById(R.id.txtPontoCoeficiente);
 
         View viewCor = convertView.findViewById(R.id.viewCor);
@@ -53,7 +53,7 @@ public class ListaAdapterPedidoQuitado extends ArrayAdapter<WebPedido> {
         try {
             hora = formatoEntrada.parse(itemPosicao.getUsuario_lancamento_data());
             SimpleDateFormat formatoHora = new SimpleDateFormat("HH:mm:ss");
-            txtHoraPedido.setText(formatoHora.format(hora));
+            //txtHoraPedido.setText(formatoHora.format(hora));
         } catch (ParseException e) {
             System.out.println(e.getMessage());
         }

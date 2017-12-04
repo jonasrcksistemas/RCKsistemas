@@ -34,10 +34,8 @@ import butterknife.ButterKnife;
 public class ActivityProduto extends AppCompatActivity {
     private MenuItem novo_produto;
     private SearchView busca_produto;
-    //private ListView lstProdutos;
     private Toolbar toolbar;
     private List<Produto> lista;
-    //private ListaAdapterProdutos adaptador;
     private DBHelper db = new DBHelper(this);
     private EditText edtTotalProdutos;
     private ListaProdutoAdpter listaProdutoAdpter;

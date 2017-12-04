@@ -1,27 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <TextView
         android:id="@+id/txtIdPedido"
-        android:layout_width="wrap_content"
+        android:layout_width="40dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="12dp"
-        android:layout_marginTop="12dp"
-        android:text="IdPedido"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="4dp"
+        android:text="15554"
         android:textColor="#535353"
+        android:gravity="center"
+        android:textSize="12sp"
         android:textStyle="bold" />
 
     <TextView
         android:id="@+id/txtNomeCliente"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="15dp"
-        android:layout_marginTop="12dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="13dp"
+        android:layout_marginStart="13dp"
         android:layout_toEndOf="@+id/txtIdPedido"
+        android:layout_toRightOf="@+id/txtIdPedido"
         android:ellipsize="end"
         android:maxLines="1"
         android:text="nomeCliente" />
@@ -30,50 +35,78 @@
         android:id="@+id/txtPrecoPedido"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/txtIdPedido"
-        android:layout_marginLeft="12dp"
-        android:layout_marginTop="12dp"
+        android:layout_alignBaseline="@+id/txtDataEntrega"
+        android:layout_alignBottom="@+id/txtDataEntrega"
+        android:layout_toLeftOf="@+id/viewCor"
+        android:layout_toStartOf="@+id/viewCor"
+        android:layout_marginRight="5dp"
         android:text="precoPedido"
         android:textColor="#000000"
         android:textStyle="bold" />
 
-    <TextView
-        android:id="@+id/txtHoraPedido"
+    <ImageView
+        android:id="@+id/img_data_emissao"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/txtPrecoPedido"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="30dp"
-        android:text="hora" />
+        android:layout_alignBottom="@+id/txtDataEmissaoPedido"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/txtNomeCliente"
+        android:layout_toLeftOf="@+id/txtNomeCliente"
+        android:layout_toStartOf="@+id/txtNomeCliente"
+        android:src="@mipmap/ic_clip_board" />
 
     <TextView
-        android:id="@+id/txtPontoCoeficiente"
+        android:id="@+id/txtDataEmissaoPedido"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/txtPrecoPedido"
-        android:layout_toEndOf="@+id/txtPrecoPedido"
-        android:layout_toStartOf="@+id/txtHoraPedido"
-        android:gravity="center"
-        android:text="PontoCoeficiente"
-        android:visibility="gone" />
+        android:layout_below="@+id/txtNomeCliente"
+        android:layout_marginTop="10dp"
+        android:layout_toEndOf="@+id/txtIdPedido"
+        android:layout_toRightOf="@+id/txtIdPedido"
+        android:text="data missao"
+        android:textColor="#000000"
+
+        />
+
+    <ImageView
+        android:id="@+id/img_data_entrega"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/txtDataEmissaoPedido"
+        android:layout_below="@+id/txtIdPedido"
+        android:layout_toEndOf="@+id/txtDataEmissaoPedido"
+        android:layout_toRightOf="@+id/txtDataEmissaoPedido"
+        android:src="@mipmap/ic_truck" />
 
     <TextView
-        android:id="@+id/txtDataPedido"
+        android:id="@+id/txtDataEntrega"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/txtPrecoPedido"
-        android:layout_toEndOf="@+id/txtPrecoPedido"
-        android:layout_toStartOf="@+id/txtHoraPedido"
+        android:layout_above="@+id/view"
+        android:layout_toEndOf="@+id/img_data_entrega"
+        android:layout_toRightOf="@+id/img_data_entrega"
         android:gravity="center_horizontal"
-        android:text="data" />
+        android:text="data entrega"
+        android:textColor="#000000" />
 
     <View
         android:id="@+id/viewCor"
         android:layout_width="15dp"
         android:layout_height="45dp"
-        android:layout_alignBottom="@+id/txtPrecoPedido"
-        android:layout_alignParentEnd="true"
+        android:layout_above="@+id/view"
         android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:background="#000000" />
 
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/img_data_emissao"
+        android:background="#dfdfdf"
+        android:focusable="false" />
 </RelativeLayout>

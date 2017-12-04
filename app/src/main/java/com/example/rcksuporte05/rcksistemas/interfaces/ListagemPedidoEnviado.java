@@ -10,6 +10,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.ContextMenu;
@@ -18,12 +20,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.rcksuporte05.rcksistemas.Helper.PedidoHelper;
 import com.example.rcksuporte05.rcksistemas.R;
-import com.example.rcksuporte05.rcksistemas.adapters.ListaAdapterPedidoEnviado;
+import com.example.rcksuporte05.rcksistemas.adapters.ListaPedidoAdapter;
+import com.example.rcksuporte05.rcksistemas.adapters.RecyclerTouchListener;
 import com.example.rcksuporte05.rcksistemas.classes.Usuario;
 import com.example.rcksuporte05.rcksistemas.classes.WebPedido;
 import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
@@ -31,36 +33,62 @@ import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class ListagemPedidoEnviado extends AppCompatActivity {
 
-    private ListView lstPedidoEnviado;
-    private ListaAdapterPedidoEnviado listaAdapterPedidoEnviado;
     private List<WebPedido> listaPedido = new ArrayList();
     private EditText edtNumerPedidoEnviados;
     private DBHelper db = new DBHelper(this);
     private Usuario usuario;
-    private Thread a = new Thread();
+
+
+    @BindView(R.id.listaPedidoEnviados)
+    RecyclerView recyclerViewPedidos;
+
+    private ListaPedidoAdapter listaPedidoAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        notificationManager.cancel(0);
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listagem_pedido_enviado);
+        ButterKnife.bind(this);
 
+        NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        notificationManager.cancel(0);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarPedidoEnviado);
         toolbar.setTitle("Pedidos Enviados");
         setSupportActionBar(toolbar);
         usuario = db.listaUsuario("SELECT * FROM TBL_WEB_USUARIO WHERE LOGIN = '" + db.consulta("SELECT * FROM TBL_LOGIN;", "LOGIN") + "';").get(0);
-        lstPedidoEnviado = (ListView) findViewById(R.id.lstPedidoEnviado);
-        lstPedidoEnviado.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+        try {
+            listaPedido = db.listaWebPedido("SELECT * FROM TBL_WEB_PEDIDO WHERE PEDIDO_ENVIADO = 'S' AND USUARIO_LANCAMENTO_ID = " + usuario.getId_usuario() + " ORDER BY ID_WEB_PEDIDO_SERVIDOR DESC;");
+
+            preencheListaRecycler(listaPedido);
+
+            ///registerForContextMenu(lstPedidoEnviado);
+
+        } catch (CursorIndexOutOfBoundsException e) {
+            Toast.makeText(this, "Nenhum pedido foi Enviado!", Toast.LENGTH_LONG).show();
+        }
+
+        recyclerViewPedidos.addOnItemTouchListener(new RecyclerTouchListener(this, recyclerViewPedidos, new RecyclerTouchListener.ClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(ListagemPedidoEnviado.this, "Pressione e segure sobre o pedido para vizualiza-lo!", Toast.LENGTH_SHORT).show();
+            public void onClick(View view, int position) {
+                Intent intent = new Intent(ListagemPedidoEnviado.this, ActivityPedidoMain.class);
+                PedidoHelper.setIdPedido(Integer.parseInt(listaPedidoAdapter.getItem(position).getId_web_pedido()));
+                intent.putExtra("vizualizacao", 1);
+                startActivity(intent);
             }
-        });
+
+            @Override
+            public void onLongClick(View view, int position) {
+
+            }
+        }));
+
         edtNumerPedidoEnviados = (EditText) findViewById(R.id.edtNumeroPedidoEnviado);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
@@ -79,14 +107,14 @@ public class ListagemPedidoEnviado extends AppCompatActivity {
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-        menu.setHeaderTitle("Pedido: " + listaAdapterPedidoEnviado.getItem(info.position).getId_web_pedido_servidor());
+        menu.setHeaderTitle("Pedido: " + listaPedidoAdapter.getItem(info.position).getId_web_pedido_servidor());
 
         MenuItem visualizar = menu.add("Visualizar");
         visualizar.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 Intent intent = new Intent(ListagemPedidoEnviado.this, ActivityPedidoMain.class);
-                PedidoHelper.setIdPedido(Integer.parseInt(listaAdapterPedidoEnviado.getItem(info.position).getId_web_pedido()));
+                PedidoHelper.setIdPedido(Integer.parseInt(listaPedidoAdapter.getItem(info.position).getId_web_pedido()));
                 intent.putExtra("vizualizacao", 1);
                 startActivity(intent);
                 return false;
@@ -117,12 +145,12 @@ public class ListagemPedidoEnviado extends AppCompatActivity {
             @Override
             public boolean onQueryTextChange(final String query) {
                 if (query.trim().equals("")) {
-                    listaAdapterPedidoEnviado = new ListaAdapterPedidoEnviado(ListagemPedidoEnviado.this, listaPedido);
+                    preencheListaRecycler(listaPedido);
                     edtNumerPedidoEnviados.setText(listaPedido.size() + ": Pedidos Enviados");
                     edtNumerPedidoEnviados.setTextColor(Color.BLACK);
                 } else {
                     List<WebPedido> listaBusca = buscaPedidoEnviado(listaPedido, query);
-                    listaAdapterPedidoEnviado = new ListaAdapterPedidoEnviado(ListagemPedidoEnviado.this, listaBusca);
+                    listaPedidoAdapter = new ListaPedidoAdapter(listaBusca);
                     if (listaBusca.size() > 0) {
                         edtNumerPedidoEnviados.setText(listaBusca.size() + ": Pedidos Encontrados");
                         edtNumerPedidoEnviados.setTextColor(Color.BLACK);
@@ -131,9 +159,9 @@ public class ListagemPedidoEnviado extends AppCompatActivity {
                         edtNumerPedidoEnviados.setTextColor(Color.RED);
                     }
                 }
-                lstPedidoEnviado.setVisibility(View.VISIBLE);
-                lstPedidoEnviado.setAdapter(listaAdapterPedidoEnviado);
-                listaAdapterPedidoEnviado.notifyDataSetChanged();
+                recyclerViewPedidos.setVisibility(View.VISIBLE);
+                recyclerViewPedidos.setAdapter(listaPedidoAdapter);
+                listaPedidoAdapter.notifyDataSetChanged();
                 System.gc();
                 return false;
             }
@@ -163,15 +191,25 @@ public class ListagemPedidoEnviado extends AppCompatActivity {
         return lista;
     }
 
+    public void preencheListaRecycler(List<WebPedido> listaPedidos) {
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerViewPedidos.setLayoutManager(layoutManager);
+
+        listaPedidoAdapter = new ListaPedidoAdapter(listaPedidos);
+
+        recyclerViewPedidos.setAdapter(listaPedidoAdapter);
+
+        listaPedidoAdapter.notifyDataSetChanged();
+    }
+
     @Override
     protected void onResume() {
         try {
             listaPedido = db.listaWebPedido("SELECT * FROM TBL_WEB_PEDIDO WHERE PEDIDO_ENVIADO = 'S' AND USUARIO_LANCAMENTO_ID = " + usuario.getId_usuario() + " ORDER BY ID_WEB_PEDIDO_SERVIDOR DESC;");
 
-            listaAdapterPedidoEnviado = new ListaAdapterPedidoEnviado(ListagemPedidoEnviado.this, listaPedido);
-            lstPedidoEnviado.setAdapter(listaAdapterPedidoEnviado);
+            preencheListaRecycler(listaPedido);
 
-            registerForContextMenu(lstPedidoEnviado);
+            ///registerForContextMenu(lstPedidoEnviado);
 
         } catch (CursorIndexOutOfBoundsException e) {
             Toast.makeText(this, "Nenhum pedido foi Enviado!", Toast.LENGTH_LONG).show();
