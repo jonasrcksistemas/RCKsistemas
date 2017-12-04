@@ -33,6 +33,7 @@ import com.example.rcksuporte05.rcksistemas.interfaces.MainActivity;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import retrofit2.Call;
@@ -46,6 +47,7 @@ import retrofit2.Response;
 public class SincroniaBO {
 
     private static Activity activity;
+    private DBHelper db = new DBHelper(activity);
 
     public static Activity getActivity() {
         return activity;
@@ -58,8 +60,6 @@ public class SincroniaBO {
     public void sincronizaBanco(Sincronia sincronia, final NotificationCompat.Builder notificacao, final NotificationManager mNotificationManager, final ProgressDialog progress) {
         //controla o progresso da notificação e do progressDialog
         int contadorNotificacaoEProgresso = 0;
-
-        DBHelper db = new DBHelper(activity);
 
         final int maxProgress = sincronia.getMaxProgress();
 
@@ -224,8 +224,29 @@ public class SincroniaBO {
             mNotificationManager.notify(0, notificacao.build());
         }
 
-        if (sincronia.isPedidos()) {
-            for (WebPedido webPedido : sincronia.getListaWebPedidos()) {
+        if (sincronia.isPedidosPendentes()) {
+            for (WebPedido webPedido : sincronia.getListaWebPedidosPendentes()) {
+                notificacao.setProgress(maxProgress, contadorNotificacaoEProgresso, false);
+
+                db.atualizarTBL_WEB_PEDIDO(webPedido);
+                for (WebPedidoItens pedidoIten : webPedido.getWebPedidoItens()) {
+                    db.atualizarTBL_WEB_PEDIDO_ITENS(pedidoIten);
+                }
+            }
+
+            contadorNotificacaoEProgresso++;
+            final int finalContadorNotificacaoEProgresso = contadorNotificacaoEProgresso;
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    progress.setProgress(finalContadorNotificacaoEProgresso);
+                }
+            });
+            mNotificationManager.notify(0, notificacao.build());
+        }
+
+        if (sincronia.isPedidosFinalizados()) {
+            for (WebPedido webPedido : sincronia.getListaWebPedidosFinalizados()) {
                 notificacao.setProgress(maxProgress, contadorNotificacaoEProgresso, false);
 
                 webPedido.setPedido_enviado("S");
@@ -313,7 +334,13 @@ public class SincroniaBO {
             public void run() {
                 Map<String, String> cabecalho = new HashMap<>();
                 cabecalho.put("AUTHORIZATION", UsuarioHelper.getUsuario().getToken());
+
+                if (sincronia.isPedidosPendentes()) {
+                    final List<WebPedido> listaPedido = db.listaWebPedido("SELECT * FROM TBL_WEB_PEDIDO WHERE PEDIDO_ENVIADO = 'N' AND USUARIO_LANCAMENTO_ID = " + UsuarioHelper.getUsuario().getId_usuario() + " ORDER BY ID_WEB_PEDIDO DESC;");
+                    sincronia.setListaWebPedidosPendentes(prepararItensPedidos(listaPedido));
+                }
                 Call<Sincronia> call = apiRotas.sincroniaApi(Integer.parseInt(UsuarioHelper.getUsuario().getId_usuario()), cabecalho, sincronia);
+
                 try {
                     Response<Sincronia> response = call.execute();
                     if (response.code() == 200) {
@@ -365,5 +392,15 @@ public class SincroniaBO {
             }
         });
         a.start();
+    }
+
+    public List<WebPedido> prepararItensPedidos(List<WebPedido> listaPedido) {
+        for (WebPedido pedido : listaPedido) {
+            List<WebPedidoItens> webPedidoItenses;
+
+            webPedidoItenses = db.listaWebPedidoItens("SELECT * FROM TBL_WEB_PEDIDO_ITENS WHERE ID_PEDIDO = " + pedido.getId_web_pedido());
+            pedido.setWebPedidoItens(webPedidoItenses);
+        }
+        return listaPedido;
     }
 }

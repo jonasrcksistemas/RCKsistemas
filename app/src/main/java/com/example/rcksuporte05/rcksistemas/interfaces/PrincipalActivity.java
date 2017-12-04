@@ -35,19 +35,21 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class PrincipalActivity extends AppCompatActivity implements View.OnClickListener {
-    private static final int pedidosPendentes = 0;
-    private static final int pedidosEnviados = 1;
-    private static final int sair = 2;
-    private static final int AtualizarBanco = 3;
+    private static final int sair = 1;
+    private static final int AtualizarBanco = 2;
     private static final int Sobre = 3;
     private Button btnCliente;
     private Button btnProduto;
     private Button btnPedidos;
     private Button btnSincroniza;
+    private Button btnPedidoFinalizado;
+    private Button btnPedidoPendente;
     private TextView txtPedido;
     private TextView txtCliente;
     private TextView txtProduto;
     private TextView txtSincroniza;
+    private TextView txtPedidoPendente;
+    private TextView txtPedidoFinalizado;
     private int aperta = 0;
     private Toolbar tb_principal;
     private ImageView ivInternet;
@@ -69,24 +71,32 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
         btnProduto = (Button) findViewById(R.id.btnProduto);
         btnPedidos = (Button) findViewById(R.id.btnPedido);
         btnSincroniza = (Button) findViewById(R.id.btnSincroniza);
+        btnPedidoFinalizado = (Button) findViewById(R.id.btnPedidoFinalizado);
+        btnPedidoPendente = (Button) findViewById(R.id.btnPedidoPendente);
         txtPedido = (TextView) findViewById(R.id.txtPedido);
         txtProduto = (TextView) findViewById(R.id.txtProduto);
         txtCliente = (TextView) findViewById(R.id.txtCliente);
         txtSincroniza = (TextView) findViewById(R.id.txtSincroniza);
+        txtPedidoFinalizado = (TextView) findViewById(R.id.txtPedidoFinalizado);
+        txtPedidoPendente = (TextView) findViewById(R.id.txtPedidoPendente);
         ivInternet = (ImageView) findViewById(R.id.ivInternet);
         txtPedido.setOnClickListener(this);
         txtCliente.setOnClickListener(this);
         txtProduto.setOnClickListener(this);
+        txtPedidoPendente.setOnClickListener(this);
+        txtPedidoFinalizado.setOnClickListener(this);
         btnPedidos.setOnClickListener(this);
         btnProduto.setOnClickListener(this);
         btnCliente.setOnClickListener(this);
         btnSincroniza.setOnClickListener(this);
+        btnPedidoPendente.setOnClickListener(this);
+        btnPedidoFinalizado.setOnClickListener(this);
         tb_principal = (Toolbar) findViewById(R.id.tb_principal);
         tb_principal.setTitle(getString(R.string.app_name));
         tb_principal.setSubtitle("Usuario: " + UsuarioHelper.getUsuario().getNome_usuario());
         tb_principal.setLogo(R.mipmap.ic_launcher);
 
-        sincronia = new Sincronia(true, true, true);
+        sincronia = new Sincronia(true, true, true, false);
 
         setSupportActionBar(tb_principal);
 
@@ -114,6 +124,12 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
             Intent intent = new Intent(PrincipalActivity.this, ActiviyDialogSincronia.class);
             SincroniaBO.setActivity(PrincipalActivity.this);
             startActivity(intent);
+        } else if (view == btnPedidoFinalizado || view == txtPedidoFinalizado) {
+            Intent telaPedidoEnviado = new Intent(PrincipalActivity.this, ListagemPedidoEnviado.class);
+            startActivity(telaPedidoEnviado);
+        } else if (view == btnPedidoPendente || view == txtPedidoPendente) {
+            Intent telaPedidoPendentes = new Intent(PrincipalActivity.this, ListagemPedidoPendente.class);
+            startActivity(telaPedidoPendentes);
         }
     }
 
@@ -143,8 +159,6 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        menu.add(0, pedidosPendentes, 0, "Pedidos pendentes");
-        menu.add(0, pedidosEnviados, 0, "Pedidos enviados");
         menu.add(0, sair, 0, "Sair");
         menu.add(0, Sobre, 0, "Informações do sistema");
 
@@ -175,14 +189,6 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                     }
                 });
                 alert.show();
-                break;
-            case pedidosPendentes:
-                Intent telaPedidoPendentes = new Intent(PrincipalActivity.this, ListagemPedidoPendente.class);
-                startActivity(telaPedidoPendentes);
-                break;
-            case pedidosEnviados:
-                Intent telaPedidoEnviado = new Intent(PrincipalActivity.this, ListagemPedidoEnviado.class);
-                startActivity(telaPedidoEnviado);
                 break;
             case Sobre:
                 Intent intent = new Intent(PrincipalActivity.this, infoDialog.class);
@@ -274,7 +280,7 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
         System.gc();
         getUsuarios();
         if (getIntent().getIntExtra("alterado", 0) == 1) {
-            sincroniaBO.sincronizaApi(new Sincronia(true, true, true));
+            sincroniaBO.sincronizaApi(new Sincronia(true, true, true, false));
             getIntent().putExtra("alterado", 0);
         }
         super.onResume();
