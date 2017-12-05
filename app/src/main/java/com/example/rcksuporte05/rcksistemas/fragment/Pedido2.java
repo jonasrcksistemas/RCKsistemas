@@ -1,237 +1,268 @@
 package com.example.rcksuporte05.rcksistemas.fragment;
 
+import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.database.CursorIndexOutOfBoundsException;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ListView;
-import android.widget.TextView;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.rcksuporte05.rcksistemas.Helper.PedidoHelper;
-import com.example.rcksuporte05.rcksistemas.Helper.UsuarioHelper;
 import com.example.rcksuporte05.rcksistemas.R;
-import com.example.rcksuporte05.rcksistemas.adapters.ListaAdapterProdutoPedido;
-import com.example.rcksuporte05.rcksistemas.classes.WebPedidoItens;
+import com.example.rcksuporte05.rcksistemas.classes.Cliente;
+import com.example.rcksuporte05.rcksistemas.classes.CondicoesPagamento;
+import com.example.rcksuporte05.rcksistemas.classes.TabelaPreco;
+import com.example.rcksuporte05.rcksistemas.classes.TabelaPrecoItem;
+import com.example.rcksuporte05.rcksistemas.classes.WebPedido;
 import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
-import com.example.rcksuporte05.rcksistemas.interfaces.ProdutoPedidoActivity;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 public class Pedido2 extends Fragment {
 
-    private static WebPedidoItens webPedidoIten;
-    private static ListaAdapterProdutoPedido adapter;
-    DBHelper db = new DBHelper(PedidoHelper.getActivityPedidoMain());
-    private List<WebPedidoItens> listaProdutoPedido = new ArrayList<>();
-    private ListView lstProdutoPedido;
-    private Button btnInserirProduto;
-    private Button btnFinalizarPedido;
-    private TextView txtFinalizarPedido;
+    private static Cliente objetoCliente = null;
+    private Spinner spPagamento;
+    private Spinner spTabelaPreco;
+    private Spinner spFaixaPadrao;
+    private ArrayAdapter<TabelaPreco> adapterPreco;
+    private ArrayAdapter<TabelaPrecoItem> adapterFaixaPadrao;
+    private ArrayAdapter<CondicoesPagamento> adapterPagamento;
+    private DBHelper db;
+    private EditText edtObservacao;
+    private Button btnSalvarPedido;
+    private WebPedido webPedido = new WebPedido();
     private Bundle bundle;
-    private int posicao;
+    private PedidoHelper pedidoHelper;
+    private EditText edtDataEntrega;
+    private Button btnDataEntrega;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_pedido2, container, false);
 
-        final PedidoHelper pedidoHelper = new PedidoHelper(this);
+        db = new DBHelper(PedidoHelper.getActivityPedidoMain());
+
+        pedidoHelper = new PedidoHelper(this);
+
         bundle = getArguments();
-        lstProdutoPedido = (ListView) view.findViewById(R.id.lstProdutosPedido);
 
-        lstProdutoPedido.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (bundle.getInt("vizualizacao") == 1) {
-                    Toast.makeText(getContext(), "Pressione e segure sobre o produto para vizualiza-lo!", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getContext(), "Pressione e segure sobre o produto para altera-lo!", Toast.LENGTH_SHORT).show();
+        edtObservacao = (EditText) view.findViewById(R.id.edtObservacao);
+        edtDataEntrega = (EditText) view.findViewById(R.id.edtDataEntrega);
+        btnDataEntrega = (Button) view.findViewById(R.id.btnDataEntrega);
+
+        try {
+            spPagamento = (Spinner) view.findViewById(R.id.spPagamento);
+
+            adapterPagamento = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_activated_1, db.listaCondicoesPagamento("SELECT * FROM TBL_CONDICOES_PAG_CAB;"));
+            spPagamento.setAdapter(adapterPagamento);
+
+            spTabelaPreco = (Spinner) view.findViewById(R.id.spTabelaPreco);
+            adapterPreco = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_activated_1, db.listaTabelaPreco("SELECT * FROM TBL_TABELA_PRECO_CAB;"));
+            spTabelaPreco.setAdapter(adapterPreco);
+
+            spFaixaPadrao = (Spinner) view.findViewById(R.id.spFaixaPadrao);
+            adapterFaixaPadrao = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_activated_1, db.listaTabelaPrecoItem("SELECT * FROM TBL_TABELA_PRECO_ITENS WHERE PONTOS_PREMIACAO > 0;"));
+            spFaixaPadrao.setAdapter(adapterFaixaPadrao);
+            spFaixaPadrao.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    if (position > 0)
+                        PedidoHelper.setPositionFaixPadrao(position);
                 }
-            }
-        });
 
-        btnFinalizarPedido = (Button) view.findViewById(R.id.btnFinalizarPedido);
-        btnFinalizarPedido.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                pedidoHelper.moveTela(2);
-            }
-        });
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
 
-        txtFinalizarPedido = (TextView) view.findViewById(R.id.txtFinalizarPedido);
-        txtFinalizarPedido.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                pedidoHelper.moveTela(2);
-            }
-        });
-
-        btnInserirProduto = (Button) view.findViewById(R.id.btnInserirProduto);
-        btnInserirProduto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (pedidoHelper.verificaCliente()) {
-                    Intent intent = new Intent(getContext(), ProdutoPedidoActivity.class);
-                    posicao = listaProdutoPedido.size();
-                    startActivity(intent);
-                } else {
-                    Toast.makeText(getContext(), "Selecione um cliente antes de prosseguir!", Toast.LENGTH_SHORT).show();
-                    pedidoHelper.moveTela(0);
                 }
-            }
-        });
+            });
+
+        } catch (CursorIndexOutOfBoundsException e) {
+            AlertDialog.Builder alert = new AlertDialog.Builder(PedidoHelper.getActivityPedidoMain());
+            alert.setMessage("A sincronia é necessária antes de se fazer um pedido, ou não há CONDIÇÕES DE PAGAMENTO marcada para multi dispositivo!\n     Qualquer duvida entre em contato com a RCK SISTEMAS.");
+            alert.setTitle("Atenção!");
+            alert.setCancelable(false);
+            alert.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    PedidoHelper.getActivityPedidoMain().finish();
+                }
+            });
+            alert.show();
+        }
 
         if (PedidoHelper.getIdPedido() > 0) {
-            final int pedido = PedidoHelper.getIdPedido();
-            try {
+            webPedido = db.listaWebPedido("SELECT * FROM TBL_WEB_PEDIDO WHERE ID_WEB_PEDIDO = " + PedidoHelper.getIdPedido()).get(0);
+            objetoCliente = webPedido.getCadastro();
 
-                listaProdutoPedido = db.listaWebPedidoItens("SELECT * FROM TBL_WEB_PEDIDO_ITENS WHERE ID_PEDIDO = " + pedido);
-                adapter = new ListaAdapterProdutoPedido(getContext(), listaProdutoPedido);
-                lstProdutoPedido.setAdapter(adapter);
-            } catch (CursorIndexOutOfBoundsException e) {
-                AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
-                alert.setTitle("Atenção!");
-                alert.setMessage("O pedido encontra-se sem produtos, deseja exclui-lo?");
-                alert.setNegativeButton("Não", null);
-                alert.setCancelable(false);
-                alert.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        db.alterar("DELETE FROM TBL_WEB_PEDIDO WHERE ID_WEB_PEDIDO = " + pedido);
-                        db.alterar("DELETE FROM TBL_WEB_PEDIDO_ITENS WHERE ID_PEDIDO = " + pedido);
-                        PedidoHelper.getActivityPedidoMain().finish();
-                    }
-                });
-                alert.show();
+            //Seleciona Condição de pagamento correta dentro do Spinner spPagamento
+            try {
+                int i = -1;
+                do {
+                    i++;
+                }
+                while (!webPedido.getId_condicao_pagamento().equals(adapterPagamento.getItem(i).getId_condicao()));
+                spPagamento.setSelection(i);
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+
+            //Seleciona a Faixa padrão no Spinner Faixa Padrão
+            try {
+                int i = -1;
+                do {
+                    i++;
+                }
+                while (!webPedido.getId_tabela_preco_faixa().trim().equals(adapterFaixaPadrao.getItem(i).getId_item()));
+                spFaixaPadrao.setSelection(i);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            //Seleciona Tabela de Preco correta dentro do Spinner spTabelaPreco
+            try {
+                int i = -1;
+                do {
+                    i++;
+                }
+                while (!webPedido.getId_tabela().equals(adapterPreco.getItem(i).getId_tabela()));
+                spTabelaPreco.setSelection(i);
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+
+            edtObservacao.setText(webPedido.getObservacoes());
+            try {
+                edtDataEntrega.setText(new SimpleDateFormat("dd/MM/yyyy").format(new SimpleDateFormat("yyyy-MM-dd").parse(webPedido.getData_prev_entrega())));
+            } catch (ParseException e) {
                 e.printStackTrace();
             }
         }
 
-        if (bundle.getInt("vizualizacao") == 1) {
-            btnInserirProduto.setVisibility(View.INVISIBLE);
-        }
+        btnSalvarPedido = (Button) view.findViewById(R.id.btnSalvarPedido);
+        btnSalvarPedido.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (edtDataEntrega.getText().toString().trim().replaceAll("[^0-9]", "").isEmpty()) {
+                    Toast.makeText(getContext(), "ATENÇÂO - Você precisa informar a data de entrega", Toast.LENGTH_LONG).show();
+                } else {
+                    ProgressDialog dialog = new ProgressDialog(PedidoHelper.getActivityPedidoMain());
+                    dialog.setTitle("Atenção!");
+                    dialog.setMessage("Salvando o Pedido");
+                    dialog.setCancelable(false);
+                    dialog.show();
 
-        registerForContextMenu(lstProdutoPedido);
+                    if (pedidoHelper.salvaPedido()) {
+                        dialog.dismiss();
+                        AlertDialog.Builder alert = new AlertDialog.Builder(PedidoHelper.getActivityPedidoMain());
+                        alert.setTitle("Atenção!");
+                        alert.setMessage("Pedido salvo com sucesso!");
+                        alert.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                PedidoHelper.getActivityPedidoMain().finish();
+                            }
+                        });
+                        alert.setCancelable(false);
+                        alert.show();
+                    } else {
+                        dialog.dismiss();
+                    /*AlertDialog.Builder alert = new AlertDialog.Builder(PedidoHelper.getActivityPedidoMain());
+                    alert.setTitle("Atenção!");
+                    alert.setMessage("O pedido não foi salvo!");
+                    alert.setNeutralButton("OK", null);
+                    alert.show();*/
+                    }
+                }
+            }
+        });
+
+        if (bundle.getInt("vizualizacao") == 1) {
+            btnSalvarPedido.setVisibility(View.INVISIBLE);
+            edtObservacao.setFocusable(false);
+            spPagamento.setEnabled(false);
+            spFaixaPadrao.setEnabled(false);
+            spTabelaPreco.setEnabled(false);
+            edtDataEntrega.setFocusable(false);
+        } else {
+            btnDataEntrega.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mostraDatePickerDialog(PedidoHelper.getActivityPedidoMain(), edtDataEntrega);
+                }
+            });
+        }
         System.gc();
+
         return (view);
     }
 
-    public void inserirProduto(WebPedidoItens webPedidoItem) {
-        webPedidoItem.setId_pedido(String.valueOf(db.contagem("SELECT MAX(ID_WEB_PEDIDO) FROM TBL_WEB_PEDIDO") + 1));
-        webPedidoItem.setId_empresa(UsuarioHelper.getUsuario().getIdEmpresaMultiDevice());
-        webPedidoItem.setUsuario_lancamento_id(String.valueOf(bundle.getInt("idUsuario")));
-        listaProdutoPedido.add(webPedidoItem);
-        adapter = new ListaAdapterProdutoPedido(getContext(), listaProdutoPedido);
-        lstProdutoPedido.setAdapter(adapter);
+    public void mostraDatePickerDialog(Context context, final EditText campoTexto) {
+        final Calendar calendar;
+        //Prepara data anterior caso ja tenha sido selecionada
+        if (campoTexto.getTag() != null) {
+            calendar = ((Calendar) campoTexto.getTag());
+        } else {
+            calendar = Calendar.getInstance();
+        }
+
+        new DatePickerDialog(context, new DatePickerDialog.OnDateSetListener() {
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                Calendar newDate = Calendar.getInstance();
+                newDate.set(year, monthOfYear, dayOfMonth);
+                campoTexto.setText(new SimpleDateFormat("dd/MM/yyyy").format(newDate.getTime()));
+                campoTexto.setTag(newDate);
+            }
+
+        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
     }
 
-    public void alterarProduto(WebPedidoItens webPedidoItem, int position) {
-        webPedidoItem.setId_empresa("1");
-        webPedidoItem.setUsuario_lancamento_id(String.valueOf(bundle.getInt("idUsuario")));
-        listaProdutoPedido.set(position, webPedidoItem);
-        adapter = new ListaAdapterProdutoPedido(getContext(), listaProdutoPedido);
-        lstProdutoPedido.setAdapter(adapter);
+    public void pegaCliente(Cliente cliente) {
+        objetoCliente = cliente;
+        if (PedidoHelper.getIdPedido() > 0) {
+            db = new DBHelper(PedidoHelper.getActivityPedidoMain());
+            db.alterar("UPDATE TBL_WEB_PEDIDO SET ID_CADASTRO = " + objetoCliente.getId_cadastro() + " WHERE ID_WEB_PEDIDO = " + PedidoHelper.getIdPedido());
+        }
     }
 
-    public List<WebPedidoItens> salvaPedidos() {
-        return listaProdutoPedido;
+    public WebPedido salvaPedido() {
+        webPedido.setId_condicao_pagamento(adapterPagamento.getItem(spPagamento.getSelectedItemPosition()).getId_condicao());
+        webPedido.setId_tabela(adapterPreco.getItem(spTabelaPreco.getSelectedItemPosition()).getId_tabela());
+        webPedido.setCadastro(objetoCliente);
+        webPedido.setObservacoes(edtObservacao.getText().toString());
+        webPedido.setData_prev_entrega(edtDataEntrega.getText().toString().trim());
+        webPedido.setPedido_enviado("N");
+
+        return webPedido;
     }
 
     @Override
     public void onResume() {
-        PedidoHelper pedidoHelper = new PedidoHelper(PedidoHelper.getActivityPedidoMain());
-        pedidoHelper.calculaValorPedido(listaProdutoPedido);
-        lstProdutoPedido.setSelection(posicao);
-        System.gc();
+        try {
+            if (PedidoHelper.getPositionFaixPadrao() > 0)
+                spFaixaPadrao.setSelection(PedidoHelper.getPositionFaixPadrao());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         super.onResume();
     }
 
     @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-        menu.setHeaderTitle(listaProdutoPedido.get(info.position).getNome_produto());
-
-        if (bundle.getInt("vizualizacao") != 1) {
-            MenuItem alterar = menu.add("Alterar");
-            alterar.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem item) {
-                    Intent intent = new Intent(getContext(), ProdutoPedidoActivity.class);
-                    intent.putExtra("pedido", 1);
-                    intent.putExtra("position", info.position);
-                    posicao = info.position;
-                    PedidoHelper.setWebPedidoItem(listaProdutoPedido.get(info.position));
-                    startActivity(intent);
-                    return false;
-                }
-            });
-            if (listaProdutoPedido.size() > 1) {
-
-                MenuItem deletar = menu.add("Excluir");
-                deletar.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
-                        alert.setTitle("Atenção!");
-                        alert.setMessage("Tem certeza que deseja remover este produto do pedido?");
-                        alert.setNegativeButton("Não", null);
-                        alert.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                try {
-                                    if (!listaProdutoPedido.get(info.position).getId_web_item().trim().isEmpty()) {
-                                        db.alterar("DELETE FROM TBL_WEB_PEDIDO_ITENS WHERE ID_WEB_ITEM = " + listaProdutoPedido.get(info.position).getId_web_item());
-                                    }
-                                } catch (NullPointerException e) {
-                                    System.out.println(e.getMessage());
-                                }
-                                listaProdutoPedido.remove(info.position);
-                                adapter.notifyDataSetChanged();
-                                PedidoHelper pedidoHelper = new PedidoHelper(PedidoHelper.getActivityPedidoMain());
-                                pedidoHelper.calculaValorPedido(listaProdutoPedido);
-                            }
-                        });
-                        alert.show();
-                        return false;
-                    }
-                });
-            }
-        } else {
-            MenuItem alterar = menu.add("Vizualizar");
-            alterar.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem item) {
-                    Intent intent = new Intent(getContext(), ProdutoPedidoActivity.class);
-                    intent.putExtra("pedido", 1);
-                    intent.putExtra("vizualizacao", 1);
-                    intent.putExtra("position", info.position);
-                    posicao = info.position;
-                    PedidoHelper.setWebPedidoItem(listaProdutoPedido.get(info.position));
-                    startActivity(intent);
-                    return false;
-                }
-            });
-        }
-    }
-
-    @Override
     public void onDestroy() {
-        try {
-            webPedidoIten = null;
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
+        objetoCliente = null;
         System.gc();
         super.onDestroy();
     }
