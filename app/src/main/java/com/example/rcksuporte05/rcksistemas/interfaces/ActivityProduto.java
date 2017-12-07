@@ -17,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import com.example.rcksuporte05.rcksistemas.Helper.ProdutoHelper;
 import com.example.rcksuporte05.rcksistemas.R;
@@ -24,6 +25,7 @@ import com.example.rcksuporte05.rcksistemas.adapters.ListaProdutoAdpter;
 import com.example.rcksuporte05.rcksistemas.adapters.RecyclerTouchListener;
 import com.example.rcksuporte05.rcksistemas.classes.Produto;
 import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
+import com.example.rcksuporte05.rcksistemas.util.DividerItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -184,7 +186,7 @@ public class ActivityProduto extends AppCompatActivity {
         listaProdutoRecyclerView.setLayoutManager(layoutManager);
 
         listaProdutoAdpter = new ListaProdutoAdpter(produtos);
-
+        listaProdutoRecyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayout.VERTICAL));
         listaProdutoRecyclerView.setAdapter(listaProdutoAdpter);
 
         listaProdutoAdpter.notifyDataSetChanged();

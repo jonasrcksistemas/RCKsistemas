@@ -8,5 +8,7 @@
     <color name="colorPrimaryAzul">#0277BD</color>
     <color name="colorControlNormalAzul">#0277BD</color>
     <color name="branco">#ffffff</color>
+    <color name="row_activated">#e0e0e0</color>
+    <color name="bg_action_mode">#757575</color>
 
 </resources>

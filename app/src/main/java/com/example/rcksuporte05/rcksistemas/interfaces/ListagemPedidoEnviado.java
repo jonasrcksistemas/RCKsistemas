@@ -9,7 +9,9 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -20,12 +22,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.rcksuporte05.rcksistemas.Helper.PedidoHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.ListaPedidoAdapter;
-import com.example.rcksuporte05.rcksistemas.adapters.RecyclerTouchListener;
 import com.example.rcksuporte05.rcksistemas.classes.Usuario;
 import com.example.rcksuporte05.rcksistemas.classes.WebPedido;
 import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
@@ -36,16 +38,18 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ListagemPedidoEnviado extends AppCompatActivity {
+public class ListagemPedidoEnviado extends AppCompatActivity  implements SwipeRefreshLayout.OnRefreshListener, ListaPedidoAdapter.PedidoAdapterListener {
 
     private List<WebPedido> listaPedido = new ArrayList();
     private EditText edtNumerPedidoEnviados;
     private DBHelper db = new DBHelper(this);
     private Usuario usuario;
 
-
     @BindView(R.id.listaPedidoEnviados)
     RecyclerView recyclerViewPedidos;
+
+    @BindView(R.id.swipe_refresh_layout_pedido_enviado)
+    SwipeRefreshLayout swipeRefreshLayout;
 
     private ListaPedidoAdapter listaPedidoAdapter;
 
@@ -58,6 +62,8 @@ public class ListagemPedidoEnviado extends AppCompatActivity {
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         notificationManager.cancel(0);
 
+        swipeRefreshLayout.setOnRefreshListener(this);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarPedidoEnviado);
         toolbar.setTitle("Pedidos Enviados");
         setSupportActionBar(toolbar);
@@ -68,26 +74,13 @@ public class ListagemPedidoEnviado extends AppCompatActivity {
 
             preencheListaRecycler(listaPedido);
 
-            ///registerForContextMenu(lstPedidoEnviado);
+
 
         } catch (CursorIndexOutOfBoundsException e) {
             Toast.makeText(this, "Nenhum pedido foi Enviado!", Toast.LENGTH_LONG).show();
         }
 
-        recyclerViewPedidos.addOnItemTouchListener(new RecyclerTouchListener(this, recyclerViewPedidos, new RecyclerTouchListener.ClickListener() {
-            @Override
-            public void onClick(View view, int position) {
-                Intent intent = new Intent(ListagemPedidoEnviado.this, ActivityPedidoMain.class);
-                PedidoHelper.setIdPedido(Integer.parseInt(listaPedidoAdapter.getItem(position).getId_web_pedido()));
-                intent.putExtra("vizualizacao", 1);
-                startActivity(intent);
-            }
 
-            @Override
-            public void onLongClick(View view, int position) {
-
-            }
-        }));
 
         edtNumerPedidoEnviados = (EditText) findViewById(R.id.edtNumeroPedidoEnviado);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -150,7 +143,7 @@ public class ListagemPedidoEnviado extends AppCompatActivity {
                     edtNumerPedidoEnviados.setTextColor(Color.BLACK);
                 } else {
                     List<WebPedido> listaBusca = buscaPedidoEnviado(listaPedido, query);
-                    listaPedidoAdapter = new ListaPedidoAdapter(listaBusca);
+                    preencheListaRecycler(listaBusca);
                     if (listaBusca.size() > 0) {
                         edtNumerPedidoEnviados.setText(listaBusca.size() + ": Pedidos Encontrados");
                         edtNumerPedidoEnviados.setTextColor(Color.BLACK);
@@ -159,9 +152,7 @@ public class ListagemPedidoEnviado extends AppCompatActivity {
                         edtNumerPedidoEnviados.setTextColor(Color.RED);
                     }
                 }
-                recyclerViewPedidos.setVisibility(View.VISIBLE);
-                recyclerViewPedidos.setAdapter(listaPedidoAdapter);
-                listaPedidoAdapter.notifyDataSetChanged();
+
                 System.gc();
                 return false;
             }
@@ -195,11 +186,13 @@ public class ListagemPedidoEnviado extends AppCompatActivity {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerViewPedidos.setLayoutManager(layoutManager);
 
-        listaPedidoAdapter = new ListaPedidoAdapter(listaPedidos);
+        listaPedidoAdapter = new ListaPedidoAdapter(listaPedidos, this);
 
+        recyclerViewPedidos.addItemDecoration(new DividerItemDecoration(this, LinearLayout.VERTICAL));
         recyclerViewPedidos.setAdapter(listaPedidoAdapter);
 
         listaPedidoAdapter.notifyDataSetChanged();
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
@@ -209,12 +202,38 @@ public class ListagemPedidoEnviado extends AppCompatActivity {
 
             preencheListaRecycler(listaPedido);
 
-            ///registerForContextMenu(lstPedidoEnviado);
-
         } catch (CursorIndexOutOfBoundsException e) {
             Toast.makeText(this, "Nenhum pedido foi Enviado!", Toast.LENGTH_LONG).show();
         }
         edtNumerPedidoEnviados.setText(listaPedido.size() + ": Pedidos Enviados");
         super.onResume();
     }
+
+    @Override
+    public void onRefresh() {
+        swipeRefreshLayout.setRefreshing(true);
+        listaPedido = db.listaWebPedido("SELECT * FROM TBL_WEB_PEDIDO WHERE PEDIDO_ENVIADO = 'S' AND USUARIO_LANCAMENTO_ID = " + usuario.getId_usuario() + " ORDER BY ID_WEB_PEDIDO_SERVIDOR DESC;");
+
+        preencheListaRecycler(listaPedido);
+    }
+
+
+    @Override
+    public void onPedidoRowClicked(int position) {
+            Intent intent = new Intent(ListagemPedidoEnviado.this, ActivityPedidoMain.class);
+            PedidoHelper.setIdPedido(Integer.parseInt(listaPedidoAdapter.getItem(position).getId_web_pedido()));
+            intent.putExtra("vizualizacao", 1);
+            startActivity(intent);
+
+    }
+
+    @Override
+    public void onRowLongClicked(int position) {
+
+    }
+
+
+
+
+
 }

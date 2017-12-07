@@ -13,8 +13,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -25,20 +27,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.ListView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.rcksuporte05.rcksistemas.Helper.PedidoHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.UsuarioHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.ListaPedidoAdapter;
-import com.example.rcksuporte05.rcksistemas.adapters.RecyclerTouchListener;
 import com.example.rcksuporte05.rcksistemas.api.Api;
 import com.example.rcksuporte05.rcksistemas.api.Rotas;
 import com.example.rcksuporte05.rcksistemas.classes.Usuario;
 import com.example.rcksuporte05.rcksistemas.classes.WebPedido;
 import com.example.rcksuporte05.rcksistemas.classes.WebPedidoItens;
 import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
+import com.example.rcksuporte05.rcksistemas.util.DividerItemDecoration;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -51,18 +53,21 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ListagemPedidoPendente extends AppCompatActivity {
+public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, ListaPedidoAdapter.PedidoAdapterListener{
 
-    private ListView lstPedidoPendente;
-   // private ListaAdapterPedidoPendente listaAdapterPedidoPendente;
     private List<WebPedido> listaPedido = new ArrayList();
     private EditText edtNumerPedidoPendentes;
     private DBHelper db = new DBHelper(this);
     private Usuario usuario;
     private ProgressDialog progress;
+    ActionModeCallback actionModeCallback;
+    private ActionMode actionMode;
 
     @BindView(R.id.listaPedidosPendentes)
     RecyclerView recyclerViewPedidos;
+
+    @BindView(R.id.swipe_refresh_layout_pedido_pedido)
+    SwipeRefreshLayout swipeRefreshLayout;
 
     private ListaPedidoAdapter listaPedidoAdapter;
 
@@ -80,21 +85,23 @@ public class ListagemPedidoPendente extends AppCompatActivity {
         edtNumerPedidoPendentes = (EditText) findViewById(R.id.edtNumeroPedidoPendente);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        recyclerViewPedidos.addOnItemTouchListener(new RecyclerTouchListener(this, recyclerViewPedidos, new RecyclerTouchListener.ClickListener() {
-            @Override
-            public void onClick(View view, int position) {
-                Intent intent = new Intent(ListagemPedidoPendente.this, ActivityPedidoMain.class);
-                PedidoHelper.setIdPedido(Integer.parseInt(listaPedidoAdapter.getItem(position).getId_web_pedido()));
 
-                startActivity(intent);
-            }
 
-            @Override
-            public void onLongClick(View view, int position) {
+        swipeRefreshLayout.setOnRefreshListener(this);
 
-            }
-        }));
+        actionModeCallback = new ActionModeCallback();
 
+
+        swipeRefreshLayout.post(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        listaPedido = db.listaWebPedido("SELECT * FROM TBL_WEB_PEDIDO WHERE PEDIDO_ENVIADO = 'N' AND USUARIO_LANCAMENTO_ID = " + usuario.getId_usuario() + " ORDER BY ID_WEB_PEDIDO DESC;");
+                        swipeRefreshLayout.setRefreshing(true);
+                        preechePedidosRecycler(listaPedido);
+                    }
+                }
+        );
 
     }
 
@@ -119,7 +126,7 @@ public class ListagemPedidoPendente extends AppCompatActivity {
                             progress.setCancelable(false);
                             progress.show();
 
-                            enviarPedidos();
+                            enviarPedidos(listaPedido);
                         }
                     });
                     alert.show();
@@ -212,7 +219,7 @@ public class ListagemPedidoPendente extends AppCompatActivity {
     }
 
 
-    public void enviarPedidos() {
+    public void enviarPedidos(final List<WebPedido> listaParaEnvio) {
 
         final NotificationCompat.Builder notificacao = new NotificationCompat.Builder(ListagemPedidoPendente.this)
                 .setSmallIcon(R.mipmap.ic_enviar_pedidos)
@@ -229,7 +236,7 @@ public class ListagemPedidoPendente extends AppCompatActivity {
         final Rotas apiRotas = Api.buildRetrofit();
         Map<String, String> cabecalho = new HashMap<>();
         cabecalho.put("AUTHORIZATION", UsuarioHelper.getUsuario().getToken());
-        Call<List<WebPedido>> call = apiRotas.enviarPedidos(listaPedido, cabecalho);
+        Call<List<WebPedido>> call = apiRotas.enviarPedidos(listaParaEnvio, cabecalho);
 
         call.enqueue(new Callback<List<WebPedido>>() {
             @Override
@@ -247,7 +254,7 @@ public class ListagemPedidoPendente extends AppCompatActivity {
                     PendingIntent pendingIntent = PendingIntent.getActivity(ListagemPedidoPendente.this, 0, new Intent(ListagemPedidoPendente.this, ListagemPedidoEnviado.class), 0);
 
                     notificacao.setContentTitle("Pedidos enviados com sucesso!")
-                            .setContentText(listaPedido.size() + " pedidos enviados.")
+                            .setContentText(listaParaEnvio.size() + " pedidos enviados.")
                             .setSmallIcon(R.mipmap.ic_sincronia_sucesso)
                             .setPriority(2)
                             .setDefaults(NotificationCompat.DEFAULT_ALL)
@@ -392,7 +399,7 @@ public class ListagemPedidoPendente extends AppCompatActivity {
 
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView;
-        MenuItem item = menu.findItem(R.id.busca_pedido_pendente);
+        final MenuItem item = menu.findItem(R.id.busca_pedido_pendente);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             searchView = (SearchView) item.getActionView();
@@ -413,7 +420,7 @@ public class ListagemPedidoPendente extends AppCompatActivity {
                     edtNumerPedidoPendentes.setTextColor(Color.BLACK);
                 } else {
                     List<WebPedido> listaBusca = buscaPedidoPendente(listaPedido, query);
-                    listaPedidoAdapter = new ListaPedidoAdapter(listaBusca);
+                    preechePedidosRecycler(listaBusca);
                     if (listaBusca.size() > 0) {
                         edtNumerPedidoPendentes.setText(listaBusca.size() + ": Pedidos Encontrados");
                         edtNumerPedidoPendentes.setTextColor(Color.BLACK);
@@ -422,9 +429,7 @@ public class ListagemPedidoPendente extends AppCompatActivity {
                         edtNumerPedidoPendentes.setTextColor(Color.RED);
                     }
                 }
-                recyclerViewPedidos.setVisibility(View.VISIBLE);
-                recyclerViewPedidos.setAdapter(listaPedidoAdapter);
-                listaPedidoAdapter.notifyDataSetChanged();
+
                 System.gc();
                 return false;
             }
@@ -458,12 +463,12 @@ public class ListagemPedidoPendente extends AppCompatActivity {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerViewPedidos.setLayoutManager(layoutManager);
 
-        listaPedidoAdapter = new ListaPedidoAdapter(listaPedido);
-
+        listaPedidoAdapter = new ListaPedidoAdapter(listaPedido, this);
+        recyclerViewPedidos.addItemDecoration(new DividerItemDecoration(this, LinearLayout.VERTICAL));
         recyclerViewPedidos.setAdapter(listaPedidoAdapter);
 
         listaPedidoAdapter.notifyDataSetChanged();
-
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
@@ -473,7 +478,11 @@ public class ListagemPedidoPendente extends AppCompatActivity {
 
             preechePedidosRecycler(listaPedido);
 
-            //registerForContextMenu(lstPedidoPendente);
+            if(actionMode == null){
+                listaPedidoAdapter.clearSelections();
+            }else
+                actionMode.finish();
+
 
         } catch (CursorIndexOutOfBoundsException e) {
             listaPedido.clear();
@@ -482,4 +491,129 @@ public class ListagemPedidoPendente extends AppCompatActivity {
         edtNumerPedidoPendentes.setText(listaPedido.size() + ": Pedidos Pendentes");
         super.onResume();
     }
+
+    @Override
+    public void onPedidoRowClicked(int position) {
+        if (listaPedidoAdapter.getSelectedItemCount() > 0) {
+            enableActionMode(position);
+        } else {
+            Intent intent = new Intent(ListagemPedidoPendente.this, ActivityPedidoMain.class);
+            PedidoHelper.setIdPedido(Integer.parseInt(listaPedidoAdapter.getItem(position).getId_web_pedido()));
+            startActivity(intent);
+        }
+    }
+
+    @Override
+    public void onRowLongClicked(int position) {
+            enableActionMode(position);
+    }
+
+    private void enableActionMode(int position) {
+        if (actionMode == null) {
+            actionMode = startSupportActionMode(actionModeCallback);
+        }
+        toggleSelection(position);
+    }
+
+    private void toggleSelection(int position) {
+        listaPedidoAdapter.toggleSelection(position);
+        int count = listaPedidoAdapter.getSelectedItemCount();
+
+        if (count == 0) {
+            actionMode.finish();
+        } else {
+            actionMode.setTitle(String.valueOf(count));
+            actionMode.invalidate();
+        }
+    }
+
+    @Override
+    public void onRefresh() {
+        swipeRefreshLayout.setRefreshing(true);
+        listaPedido = db.listaWebPedido("SELECT * FROM TBL_WEB_PEDIDO WHERE PEDIDO_ENVIADO = 'N' AND USUARIO_LANCAMENTO_ID = " + usuario.getId_usuario() + " ORDER BY ID_WEB_PEDIDO DESC;");
+
+        preechePedidosRecycler(listaPedido);
+
+    }
+
+
+    private class ActionModeCallback implements ActionMode.Callback {
+        @Override
+        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+            mode.getMenuInflater().inflate(R.menu.menu_action_mode, menu);
+
+            // disable swipe refresh if action mode is enabled
+            swipeRefreshLayout.setEnabled(false);
+            return true;
+        }
+
+        @Override
+        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+            return false;
+        }
+
+        @Override
+        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+            switch (item.getItemId()) {
+                case R.id.action_delete:
+                    // delete all the selected messages
+                    Toast.makeText(ListagemPedidoPendente.this, "Chegou no delete!", Toast.LENGTH_LONG).show();
+                    mode.finish();
+                    return true;
+                case R.id.action_mode_menu_pedido_pendente:
+                     final List<WebPedido> pedidosSelecionados = listaPedidoAdapter.getItensSelecionados();
+                     if(pedidosSelecionados.size() == 1){
+                         AlertDialog.Builder alert = new AlertDialog.Builder(ListagemPedidoPendente.this);
+                         alert.setTitle("Atenção!");
+                         alert.setMessage("Deseja enviar o pedido " + pedidosSelecionados.get(0).getId_web_pedido() + " para ser faturado?");
+                         alert.setNegativeButton("Não", null);
+                         alert.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                                     @Override
+                                     public void onClick(DialogInterface dialog, int which) {
+                                         progress = new ProgressDialog(ListagemPedidoPendente.this);
+                                         progress.setMessage("Enviando pedido " + pedidosSelecionados.get(0).getId_web_pedido() + "...");
+                                         progress.setTitle("Atenção!");
+                                         progress.setCancelable(false);
+                                         progress.show();
+                                         enviarPedido(pedidosSelecionados.get(0));
+                                     }
+                                 }
+                         );
+                         alert.show();
+                     }else{
+                         AlertDialog.Builder alert = new AlertDialog.Builder(ListagemPedidoPendente.this);
+                         alert.setTitle("Atenção!");
+                         alert.setMessage("Deseja sincronizar os pedidos?");
+                         alert.setNegativeButton("NÃO", null);
+                         alert.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
+                             @Override
+                             public void onClick(DialogInterface dialog, int which) {
+                                 progress = new ProgressDialog(ListagemPedidoPendente.this);
+                                 progress.setMessage("Enviando pedidos...");
+                                 progress.setTitle("Atenção!");
+                                 progress.setCancelable(false);
+                                 progress.show();
+
+                                 enviarPedidos(pedidosSelecionados);
+                             }
+                         });
+                         alert.show();
+                     }
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        @Override
+        public void onDestroyActionMode(ActionMode mode) {
+            listaPedidoAdapter.clearSelections();
+            swipeRefreshLayout.setEnabled(true);
+            actionMode = null;
+            onRefresh();
+        }
+
+
+    }
+
 }

@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
 import com.example.rcksuporte05.rcksistemas.R;
@@ -28,6 +29,7 @@ import com.example.rcksuporte05.rcksistemas.classes.Cliente;
 import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
 import com.example.rcksuporte05.rcksistemas.fragment.Pedido1;
 import com.example.rcksuporte05.rcksistemas.fragment.Pedido3;
+import com.example.rcksuporte05.rcksistemas.util.DividerItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,10 +67,7 @@ public class ActivityCliente extends AppCompatActivity {
             try {
                 lista = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE F_CLIENTE = 'S' AND F_VENDEDOR = 'N' AND ATIVO = 'S' ORDER BY ATIVO DESC, NOME_CADASTRO;");
                 RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-                listaDeClientes.setLayoutManager(layoutManager);
-                listaClienteAdapter = new ListaClienteAdapter(lista);
-                listaDeClientes.setAdapter(listaClienteAdapter);
-                listaClienteAdapter.notifyDataSetChanged();
+                preencheLista(lista);
                 System.gc();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -97,11 +96,7 @@ public class ActivityCliente extends AppCompatActivity {
             try {
                 lista = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE F_CLIENTE = 'S' AND F_VENDEDOR = 'N' ORDER BY ATIVO DESC, NOME_CADASTRO;");
 
-                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-                listaDeClientes.setLayoutManager(layoutManager);
-                listaClienteAdapter = new ListaClienteAdapter(lista);
-                listaDeClientes.setAdapter(listaClienteAdapter);
-                listaClienteAdapter.notifyDataSetChanged();
+               preencheLista(lista);
                 System.gc();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -235,6 +230,16 @@ public class ActivityCliente extends AppCompatActivity {
         }
         System.gc();
         return lista;
+    }
+
+    public void preencheLista(List<Cliente> clientes){
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        listaDeClientes.setLayoutManager(layoutManager);
+        listaClienteAdapter = new ListaClienteAdapter(clientes);
+        listaDeClientes.addItemDecoration(new DividerItemDecoration(this, LinearLayout.VERTICAL));
+        listaDeClientes.setAdapter(listaClienteAdapter);
+        listaClienteAdapter.notifyDataSetChanged();
+
     }
 
     @Override

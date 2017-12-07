@@ -7,6 +7,7 @@
     <item
         android:id="@+id/busca_pedido_enviados"
         android:icon="@drawable/ic_search"
+        android:orderInCategory="100"
         android:title="Habilita busca de Pedidos"
         app:actionViewClass="android.support.v7.widget.SearchView"
         app:showAsAction="collapseActionView|ifRoom" />

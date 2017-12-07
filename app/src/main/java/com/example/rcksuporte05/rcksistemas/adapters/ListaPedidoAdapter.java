@@ -2,6 +2,8 @@ package com.example.rcksuporte05.rcksistemas.adapters;
 
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.util.SparseBooleanArray;
+import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,11 +22,19 @@ import java.util.List;
 
 public class ListaPedidoAdapter extends RecyclerView.Adapter<PedidoViewHolder> {
     private List<WebPedido> pedidos = new ArrayList<>();
+    private PedidoAdapterListener listener;
+    private SparseBooleanArray selectedItems;
 
 
-    public ListaPedidoAdapter(List<WebPedido> pedidos) {
+    private static int currentSelectedIndex = -1;
+
+    public ListaPedidoAdapter(List<WebPedido> pedidos, PedidoAdapterListener listener) {
         this.pedidos = pedidos;
+        this.selectedItems = new SparseBooleanArray();
+        this.listener = listener;
+
     }
+
 
     @Override
     public PedidoViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -56,17 +66,77 @@ public class ListaPedidoAdapter extends RecyclerView.Adapter<PedidoViewHolder> {
 
         holder.viewCor.setBackgroundColor(Color.parseColor(pedidos.get(position).getPontos_cor()));
 
+        holder.itemView.setActivated(selectedItems.get(position, false));
+
+        applyClickEvents(holder, position);
 
 
+    }
+    private void applyClickEvents(PedidoViewHolder holder, final int position) {
+        holder.itemListaPedido.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                listener.onRowLongClicked(position);
+                view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+                return true;
+            }
+        });
+
+        holder.itemListaPedido.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.onPedidoRowClicked(position);
+            }
+        });
+
+    }
+
+    public void toggleSelection(int pos) {
+        currentSelectedIndex = pos;
+        if (selectedItems.get(pos, false)) {
+            selectedItems.delete(pos);
+
+        } else {
+            selectedItems.put(pos, true);
+
+        }
+        notifyItemChanged(pos);
+    }
+
+    public int getSelectedItemCount() {
+        return selectedItems.size();
     }
 
     public WebPedido getItem(int position){
         return pedidos.get(position);
     }
 
+    public List<WebPedido> getItensSelecionados(){
+        List<WebPedido> pedidosSelecionados = new ArrayList<>();
+        for (int i = 0; i < selectedItems.size(); i++) {
+            pedidosSelecionados.add(pedidos.get(selectedItems.keyAt(i)));
+        }
+
+        return pedidosSelecionados;
+    }
+
+    public void clearSelections() {
+        selectedItems.clear();
+        notifyDataSetChanged();
+    }
 
     @Override
     public int getItemCount() {
         return pedidos.size();
+    }
+
+
+
+    public interface PedidoAdapterListener {
+
+
+        void onPedidoRowClicked(int position);
+
+        void onRowLongClicked(int position);
     }
 }

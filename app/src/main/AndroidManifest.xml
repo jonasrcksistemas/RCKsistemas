@@ -45,10 +45,13 @@
         <activity
             android:name=".interfaces.ProdutoPedidoActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".interfaces.ListagemPedidoPendente" />
+        <activity android:name=".interfaces.ListagemPedidoPendente"
+                  android:theme="@style/AppTheme.NoActionBar"
+            />
         <activity
             android:name=".interfaces.ListagemPedidoEnviado"
-            android:theme="@style/Theme.MeuTemaPedido" />
+            android:theme="@style/Theme.MeuTema"
+            />
         <activity
             android:name=".interfaces.HistoricoFinanceiroMain"
             android:screenOrientation="portrait" />
