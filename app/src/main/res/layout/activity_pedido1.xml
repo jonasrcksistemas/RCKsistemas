@@ -7,149 +7,34 @@
     android:orientation="vertical"
     tools:context="com.example.rcksuporte05.rcksistemas.interfaces.ActivityPedidoMain">
 
-    <ScrollView
-        android:id="@+id/scrollView"
+    <ListView
+        android:id="@+id/lstProdutosPedido"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingBottom="@dimen/activity_vertical_margin"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin"
-            android:paddingTop="@dimen/activity_vertical_margin">
-
-            <TextView
-                android:id="@+id/txtCliente"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:text="CLIENTE"
-                android:textColor="@color/colorAccent" />
-
-            <EditText
-                android:id="@+id/edtCliente"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/txtCliente"
-                android:layout_toStartOf="@+id/btnBuscarCliente"
-                android:background="@drawable/borda_edittext"
-                android:focusable="false"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
-
-            <Button
-                android:id="@+id/btnBuscarCliente"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_alignBottom="@+id/edtCliente"
-                android:layout_alignParentEnd="true"
-                android:background="@mipmap/ic_search_dark" />
-
-            <TextView
-                android:id="@+id/txtOperacao"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/txtVendedorPedido"
-                android:layout_marginTop="12dp"
-                android:text="OPERAÇÃO"
-                android:textColor="@color/colorAccent" />
-
-            <Spinner
-                android:id="@+id/spOperacao"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/txtOperacao"
-                android:layout_toEndOf="@+id/txtOperacao" />
-
-            <TextView
-                android:id="@+id/txtVendedorPedido"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/edtCliente"
-                android:layout_marginTop="12dp"
-                android:text="VENDEDOR"
-                android:textColor="@color/colorAccent" />
-
-            <TextView
-                android:id="@+id/txtPontoCoeficiente"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/spOperacao"
-                android:layout_marginTop="12dp"
-                android:text="TABELA DE PREÇO"
-                android:textColor="@color/colorAccent" />
-
-            <Spinner
-                android:id="@+id/spTabelaPreco"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/txtPontoCoeficiente"
-                android:layout_toEndOf="@+id/txtPontoCoeficiente" />
-
-            <TextView
-                android:id="@+id/txtFaixaDesconto"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/spTabelaPreco"
-                android:layout_marginTop="12dp"
-                android:text="FAIXA DE DESCONTO"
-                android:textColor="@color/colorAccent" />
-
-            <Spinner
-                android:id="@+id/spFaixaPadrao"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/txtFaixaDesconto"
-                android:layout_toEndOf="@+id/txtFaixaDesconto" />
-
-            <Button
-                android:id="@+id/btnHistoricoFinanceiro"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_below="@+id/spFaixaPadrao"
-                android:layout_marginTop="5dp"
-                android:background="@mipmap/ic_financeiro" />
-
-            <TextView
-                android:id="@+id/txtHistoricoFinanceiro"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBottom="@+id/btnHistoricoFinanceiro"
-                android:layout_alignTop="@+id/btnHistoricoFinanceiro"
-                android:layout_toEndOf="@+id/btnHistoricoFinanceiro"
-                android:gravity="center_vertical"
-                android:text="Historico Financeiro"
-                android:textColor="@color/colorAccent" />
-
-
-        </RelativeLayout>
-
-    </ScrollView>
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:clipToPadding="false"
+        android:fastScrollAlwaysVisible="false"
+        android:paddingBottom="90dp"
+        android:scrollbars="vertical" />
 
     <Button
-        android:id="@+id/btnAdicionarProdutos"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:id="@+id/btnInserirProduto"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="40dp"
-        android:layout_marginStart="30dp"
-        android:background="@drawable/style_button2"
-        android:text=">>"
-        android:textColor="#000000"
-        android:textSize="20dp" />
-
-    <TextView
-        android:id="@+id/txtAdicionarProdutos"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/btnAdicionarProdutos"
-        android:layout_alignTop="@+id/btnAdicionarProdutos"
-        android:layout_marginStart="4dp"
-        android:layout_toEndOf="@+id/btnAdicionarProdutos"
-        android:gravity="center_vertical"
-        android:text="Adicionar Produtos"
-        android:textColor="#000000" />
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="30dp"
+        android:layout_marginEnd="30dp"
+        android:layout_marginRight="30dp"
+        android:background="@drawable/style_button"
+        android:elevation="48dp"
+        android:gravity="center_horizontal|center_vertical"
+        android:text="+"
+        android:textColor="@color/colorPrimaryDark"
+        android:textSize="25sp" />
 
 </RelativeLayout>

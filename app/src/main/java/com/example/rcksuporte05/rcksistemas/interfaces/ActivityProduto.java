@@ -34,6 +34,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class ActivityProduto extends AppCompatActivity {
+    @BindView(R.id.listaProdutoRecycler)
+    RecyclerView listaProdutoRecyclerView;
     private MenuItem novo_produto;
     private SearchView busca_produto;
     private Toolbar toolbar;
@@ -42,16 +44,11 @@ public class ActivityProduto extends AppCompatActivity {
     private EditText edtTotalProdutos;
     private ListaProdutoAdpter listaProdutoAdpter;
 
-    @BindView(R.id.listaProdutoRecycler)
-    RecyclerView listaProdutoRecyclerView;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_produto);
         ButterKnife.bind(this);
-
-
 
         edtTotalProdutos = (EditText) findViewById(R.id.edtTotalProdutos);
         toolbar = (Toolbar) findViewById(R.id.tb_produto);
@@ -59,7 +56,7 @@ public class ActivityProduto extends AppCompatActivity {
         if (getIntent().getIntExtra("acao", 0) == 1) {
             try {
                 lista = db.listaProduto("SELECT * FROM TBL_PRODUTO WHERE ATIVO = 'S' ORDER BY NOME_PRODUTO");
-                preecheRecyclerProduto(this,lista);
+                preecheRecyclerProduto(this, lista);
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -69,7 +66,9 @@ public class ActivityProduto extends AppCompatActivity {
                 @Override
                 public void onClick(View view, int position) {
                     ProdutoPedidoActivity produtoPedidoActivity = new ProdutoPedidoActivity();
+                    Intent intent = new Intent(ActivityProduto.this, ProdutoPedidoActivity.class);
                     produtoPedidoActivity.pegaProduto(listaProdutoAdpter.getItem(position));
+                    startActivity(intent);
                     finish();
                 }
 
@@ -82,7 +81,7 @@ public class ActivityProduto extends AppCompatActivity {
         } else {
             try {
                 lista = db.listaProduto("SELECT * FROM TBL_PRODUTO ORDER BY ATIVO DESC, NOME_PRODUTO");
-                preecheRecyclerProduto(this,lista);
+                preecheRecyclerProduto(this, lista);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -181,7 +180,7 @@ public class ActivityProduto extends AppCompatActivity {
         return lista;
     }
 
-    public void preecheRecyclerProduto(Context context, List<Produto> produtos){
+    public void preecheRecyclerProduto(Context context, List<Produto> produtos) {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(context);
         listaProdutoRecyclerView.setLayoutManager(layoutManager);
 

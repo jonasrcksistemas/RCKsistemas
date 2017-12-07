@@ -6,17 +6,13 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.example.rcksuporte05.rcksistemas.classes.CondicoesPagamento;
 import com.example.rcksuporte05.rcksistemas.classes.Usuario;
 import com.example.rcksuporte05.rcksistemas.fragment.Pedido1;
 import com.example.rcksuporte05.rcksistemas.fragment.Pedido2;
-import com.example.rcksuporte05.rcksistemas.fragment.Pedido3;
-
-import java.util.List;
 
 public class TabsAdapterPedido extends FragmentPagerAdapter {
     private Context context;
-    private String[] titles = {"Cliente", "Produtos", "Finalização"};
+    private String[] titles = {"Produtos", "Finalização"};
     private String usuario;
     private int idUsuario;
     private int idVendedor;
@@ -40,9 +36,6 @@ public class TabsAdapterPedido extends FragmentPagerAdapter {
                 break;
             case 1:
                 frag = new Pedido2();
-                break;
-            case 2:
-                frag = new Pedido3();
                 break;
         }
 

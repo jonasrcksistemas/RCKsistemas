@@ -65,6 +65,9 @@
         <activity
             android:name=".interfaces.infoDialog"
             android:theme="@style/Theme.CriarDialog" />
+        <activity
+            android:name=".interfaces.SpinnerFaixaDesconto"
+            android:theme="@style/Theme.CriarDialog" />
     </application>
 
 </manifest>

@@ -2,6 +2,8 @@ package com.example.rcksuporte05.rcksistemas.Helper;
 
 import android.support.v4.view.ViewPager;
 import android.widget.EditText;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.rcksuporte05.rcksistemas.R;
@@ -10,7 +12,6 @@ import com.example.rcksuporte05.rcksistemas.classes.WebPedidoItens;
 import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
 import com.example.rcksuporte05.rcksistemas.fragment.Pedido1;
 import com.example.rcksuporte05.rcksistemas.fragment.Pedido2;
-import com.example.rcksuporte05.rcksistemas.fragment.Pedido3;
 import com.example.rcksuporte05.rcksistemas.interfaces.ActivityPedidoMain;
 import com.example.rcksuporte05.rcksistemas.interfaces.ProdutoPedidoActivity;
 
@@ -26,14 +27,13 @@ public class PedidoHelper {
     private static Float valorVenda;
     private static ActivityPedidoMain activityPedidoMain;
     private static ProdutoPedidoActivity produtoPedidoActivity;
-    private static Pedido3 pedido3;
     private static Pedido2 pedido2;
     private static Pedido1 pedido1;
     private static WebPedido webPedido;
     private static WebPedidoItens webPedidoItem;
     private static List<WebPedidoItens> listaWebPedidoItens;
     private static int idPedido;
-    private static int positionFaixPadrao;
+    private static int positionFaixPadrao = -1;
     private Float valorProdutos = 0.0f;
     private Float descontoReal = 0.0f;
     private Float mediaDesconto = 0.0f;
@@ -54,7 +54,6 @@ public class PedidoHelper {
 
     public PedidoHelper(ProdutoPedidoActivity produtoPedidoActivity) {
         this.produtoPedidoActivity = produtoPedidoActivity;
-
         System.gc();
     }
 
@@ -65,11 +64,6 @@ public class PedidoHelper {
 
     public PedidoHelper(Pedido2 pedido2) {
         this.pedido2 = pedido2;
-        System.gc();
-    }
-
-    public PedidoHelper(Pedido3 pedido3) {
-        this.pedido3 = pedido3;
         db = new DBHelper(activityPedidoMain);
         System.gc();
     }
@@ -109,6 +103,15 @@ public class PedidoHelper {
         PedidoHelper.positionFaixPadrao = positionFaixPadrao;
     }
 
+    public static void pintaTxtNomeCliente(int color) {
+        TextView txtNomeCliente = (TextView) activityPedidoMain.findViewById(R.id.txtNomeCliente);
+        txtNomeCliente.setTextColor(color);
+    }
+
+    public static void mudaSpinnerPedido2() {
+        Spinner spinner = (Spinner) pedido2.getActivity().findViewById(R.id.spFaixaPadrao);
+    }
+
     public void calculaValorPedido(List<WebPedidoItens> produtoPedido) {
         Float resultado = Float.valueOf("0");
         for (int i = 0; produtoPedido.size() > i; i++) {
@@ -119,11 +122,11 @@ public class PedidoHelper {
     }
 
     public void inserirProduto(WebPedidoItens webPedidoItem) {
-        pedido2.inserirProduto(webPedidoItem);
+        pedido1.inserirProduto(webPedidoItem);
     }
 
     public void alterarProduto(WebPedidoItens webPedidoIten, int position) {
-        pedido2.alterarProduto(webPedidoIten, position);
+        pedido1.alterarProduto(webPedidoIten, position);
     }
 
     public void moveTela(int position) {
@@ -133,22 +136,25 @@ public class PedidoHelper {
     }
 
     public boolean verificaCliente() {
-        return pedido1.verificaCliente();
+        return activityPedidoMain.verificaCliente();
     }
 
     public boolean salvaPedido() {
         try {
-            webPedido = pedido1.salvaPedido();
-            webPedido.setId_condicao_pagamento(pedido3.salvaPedido().getId_condicao_pagamento());
-            webPedido.setObservacoes(pedido3.salvaPedido().getObservacoes());
-            webPedido.setCadastro(pedido3.salvaPedido().getCadastro());
+            webPedido = activityPedidoMain.salvaPedido();
+            webPedido.setId_condicao_pagamento(pedido2.salvaPedido().getId_condicao_pagamento());
+            webPedido.setId_tabela(pedido2.salvaPedido().getId_tabela());
+            webPedido.setCadastro(pedido2.salvaPedido().getCadastro());
+            webPedido.setObservacoes(pedido2.salvaPedido().getObservacoes());
+            webPedido.setData_prev_entrega(pedido2.salvaPedido().getData_prev_entrega());
+            webPedido.setPedido_enviado(pedido2.salvaPedido().getPedido_enviado());
             try {
-                webPedido.setData_prev_entrega(new SimpleDateFormat("yyyy-MM-dd").format(new SimpleDateFormat("dd/MM/yyyy").parse(pedido3.salvaPedido().getData_prev_entrega())));
+                webPedido.setData_prev_entrega(new SimpleDateFormat("yyyy-MM-dd").format(new SimpleDateFormat("dd/MM/yyyy").parse(pedido2.salvaPedido().getData_prev_entrega())));
             } catch (ParseException e) {
                 e.printStackTrace();
             }
 
-            listaWebPedidoItens = pedido2.salvaPedidos();
+            listaWebPedidoItens = pedido1.salvaPedidos();
             try {
                 if (webPedido.getCadastro() != null) {
                     if (listaWebPedidoItens.size() > 0) {
@@ -184,6 +190,7 @@ public class PedidoHelper {
                                 webPedido.setId_tabela_preco_faixa(db.consulta("SELECT I.COR_WEB, I.ID_ITEM FROM TBL_TABELA_PRECO_ITENS I JOIN TBL_TABELA_PRECO_CAB T ON T.ID_TABELA=I.ID_TABELA WHERE PERC_DESC_INICIAL<= " + mediaDesconto + " AND PERC_DESC_FINAL>= " + mediaDesconto + ";", "ID_ITEM"));
 
                                 if (PedidoHelper.getIdPedido() > 0) {
+                                    webPedido.setId_web_pedido(String.valueOf(PedidoHelper.getIdPedido()));
                                     db.atualizarTBL_WEB_PEDIDO(webPedido);
                                     for (int i = 0; listaWebPedidoItens.size() > i; i++) {
                                         if (listaWebPedidoItens.get(i).getId_web_item() == null) {
@@ -242,7 +249,7 @@ public class PedidoHelper {
         activityPedidoMain = null;
         produtoPedidoActivity = null;
         pedido1 = null;
-        pedido2 = null;
+        pedido1 = null;
         webPedido = null;
         idPedido = 0;
         positionFaixPadrao = 0;
