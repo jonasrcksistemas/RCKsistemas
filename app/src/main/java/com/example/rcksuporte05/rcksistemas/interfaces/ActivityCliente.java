@@ -37,16 +37,15 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class ActivityCliente extends AppCompatActivity {
+    @BindView(R.id.listaRecycler)
+    RecyclerView listaDeClientes;
     //    private MenuItem novo_cliente;
-   // private ListView lstClientes;
+    // private ListView lstClientes;
     private Toolbar toolbar;
     private List<Cliente> lista;
     private EditText edtTotalClientes;
     private DBHelper db = new DBHelper(this);
     private ListaClienteAdapter listaClienteAdapter;
-
-    @BindView(R.id.listaRecycler)
-    RecyclerView listaDeClientes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +64,6 @@ public class ActivityCliente extends AppCompatActivity {
 
             try {
                 lista = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE F_CLIENTE = 'S' AND F_VENDEDOR = 'N' AND ATIVO = 'S' ORDER BY ATIVO DESC, NOME_CADASTRO;");
-                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
                 preencheLista(lista);
                 System.gc();
             } catch (Exception e) {
@@ -76,10 +74,10 @@ public class ActivityCliente extends AppCompatActivity {
 
                 @Override
                 public void onClick(View view, int position) {
-                    Pedido2 pedido2 = new Pedido2();
                     ActivityPedidoMain activityPedidoMain = new ActivityPedidoMain();
-                    pedido2.pegaCliente(listaClienteAdapter.getItem(position));
+                    Pedido2 pedido2 = new Pedido2();
                     activityPedidoMain.pegaCliente(listaClienteAdapter.getItem(position));
+                    pedido2.pegaCliente(listaClienteAdapter.getItem(position));
                     System.gc();
                     finish();
                 }
@@ -95,7 +93,7 @@ public class ActivityCliente extends AppCompatActivity {
             try {
                 lista = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE F_CLIENTE = 'S' AND F_VENDEDOR = 'N' ORDER BY ATIVO DESC, NOME_CADASTRO;");
 
-               preencheLista(lista);
+                preencheLista(lista);
                 System.gc();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -152,6 +150,7 @@ public class ActivityCliente extends AppCompatActivity {
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.menu_cliente, menu);
 
+//        novo_cliente = menu.findItem(R.id.menu_item_novo_cliente);
 
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView;
@@ -230,7 +229,7 @@ public class ActivityCliente extends AppCompatActivity {
         return lista;
     }
 
-    public void preencheLista(List<Cliente> clientes){
+    public void preencheLista(List<Cliente> clientes) {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         listaDeClientes.setLayoutManager(layoutManager);
         listaClienteAdapter = new ListaClienteAdapter(clientes);

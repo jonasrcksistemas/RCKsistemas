@@ -33,7 +33,6 @@ import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.ListaPedidoAdapter;
 import com.example.rcksuporte05.rcksistemas.api.Api;
 import com.example.rcksuporte05.rcksistemas.api.Rotas;
-import com.example.rcksuporte05.rcksistemas.bo.PedidoBO;
 import com.example.rcksuporte05.rcksistemas.classes.Usuario;
 import com.example.rcksuporte05.rcksistemas.classes.WebPedido;
 import com.example.rcksuporte05.rcksistemas.classes.WebPedidoItens;
@@ -60,7 +59,7 @@ public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRe
     private ProgressDialog progress;
     ActionModeCallback actionModeCallback;
     private ActionMode actionMode;
-    private PedidoBO pedidoBO = new PedidoBO();
+
     @BindView(R.id.listaPedidosPendentes)
     RecyclerView recyclerViewPedidos;
 
@@ -83,11 +82,9 @@ public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRe
         edtNumerPedidoPendentes = (EditText) findViewById(R.id.edtNumeroPedidoPendente);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerViewPedidos.setLayoutManager(layoutManager);
         recyclerViewPedidos.addItemDecoration(new DividerItemDecoration(this, LinearLayout.VERTICAL));
-
-
 
         swipeRefreshLayout.setOnRefreshListener(this);
 
@@ -268,7 +265,6 @@ public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRe
                             .setAutoCancel(true);
                     notificationManager.notify(0, notificacao.build());
                     onResume();
-                    actionMode.finish();
                     progress.dismiss();
                 } else {
                     notificacao.setContentText("Não foi possivel enviar os pedidos")
@@ -389,8 +385,13 @@ public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRe
     }
 
     public void preechePedidosRecycler(List<WebPedido> listaPedido){
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerViewPedidos.setLayoutManager(layoutManager);
+
         listaPedidoAdapter = new ListaPedidoAdapter(listaPedido, this);
+        recyclerViewPedidos.addItemDecoration(new DividerItemDecoration(this, LinearLayout.VERTICAL));
         recyclerViewPedidos.setAdapter(listaPedidoAdapter);
+
         listaPedidoAdapter.notifyDataSetChanged();
         swipeRefreshLayout.setRefreshing(false);
     }
@@ -527,44 +528,44 @@ public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRe
                     }
                     return true;
                 case R.id.action_mode_menu_pedido_pendente:
-                     final List<WebPedido> pedidosSelecionadosEnviar = listaPedidoAdapter.getItensSelecionados();
-                     if(pedidosSelecionadosEnviar.size() == 1){
-                         AlertDialog.Builder alert = new AlertDialog.Builder(ListagemPedidoPendente.this);
-                         alert.setTitle("Atenção!");
-                         alert.setMessage("Deseja enviar o pedido " + pedidosSelecionadosEnviar.get(0).getId_web_pedido() + " para ser faturado?");
-                         alert.setNegativeButton("Não", null);
-                         alert.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-                                     @Override
-                                     public void onClick(DialogInterface dialog, int which) {
-                                         progress = new ProgressDialog(ListagemPedidoPendente.this);
-                                         progress.setMessage("Enviando pedido " + pedidosSelecionadosEnviar.get(0).getId_web_pedido() + "...");
-                                         progress.setTitle("Atenção!");
-                                         progress.setCancelable(false);
-                                         progress.show();
-                                         enviarPedido(pedidosSelecionadosEnviar.get(0));
-                                     }
-                                 }
-                         );
-                         alert.show();
-                     }else{
-                         AlertDialog.Builder alert = new AlertDialog.Builder(ListagemPedidoPendente.this);
-                         alert.setTitle("Atenção!");
-                         alert.setMessage("Deseja sincronizar os pedidos?");
-                         alert.setNegativeButton("NÃO", null);
-                         alert.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
-                             @Override
-                             public void onClick(DialogInterface dialog, int which) {
-                                 progress = new ProgressDialog(ListagemPedidoPendente.this);
-                                 progress.setMessage("Enviando pedidos...");
-                                 progress.setTitle("Atenção!");
-                                 progress.setCancelable(false);
-                                 progress.show();
+                    final List<WebPedido> pedidosSelecionadosEnviar = listaPedidoAdapter.getItensSelecionados();
+                    if (pedidosSelecionadosEnviar.size() == 1) {
+                        AlertDialog.Builder alert = new AlertDialog.Builder(ListagemPedidoPendente.this);
+                        alert.setTitle("Atenção!");
+                        alert.setMessage("Deseja enviar o pedido " + pedidosSelecionadosEnviar.get(0).getId_web_pedido() + " para ser faturado?");
+                        alert.setNegativeButton("Não", null);
+                        alert.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        progress = new ProgressDialog(ListagemPedidoPendente.this);
+                                        progress.setMessage("Enviando pedido " + pedidosSelecionadosEnviar.get(0).getId_web_pedido() + "...");
+                                        progress.setTitle("Atenção!");
+                                        progress.setCancelable(false);
+                                        progress.show();
+                                        enviarPedido(pedidosSelecionadosEnviar.get(0));
+                                    }
+                                }
+                        );
+                        alert.show();
+                    } else {
+                        AlertDialog.Builder alert = new AlertDialog.Builder(ListagemPedidoPendente.this);
+                        alert.setTitle("Atenção!");
+                        alert.setMessage("Deseja sincronizar os pedidos?");
+                        alert.setNegativeButton("NÃO", null);
+                        alert.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                progress = new ProgressDialog(ListagemPedidoPendente.this);
+                                progress.setMessage("Enviando pedidos...");
+                                progress.setTitle("Atenção!");
+                                progress.setCancelable(false);
+                                progress.show();
 
-                                 enviarPedidos(pedidosSelecionadosEnviar);
-                             }
-                         });
-                         alert.show();
-                     }
+                                enviarPedidos(pedidosSelecionadosEnviar);
+                            }
+                        });
+                        alert.show();
+                    }
                     return true;
                 default:
                     return false;

@@ -3,18 +3,16 @@ package com.example.rcksuporte05.rcksistemas.fragment;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.CursorIndexOutOfBoundsException;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
-import android.view.ContextMenu;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ListView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.rcksuporte05.rcksistemas.Helper.PedidoHelper;
@@ -26,20 +24,27 @@ import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
 import com.example.rcksuporte05.rcksistemas.interfaces.ActivityProduto;
 import com.example.rcksuporte05.rcksistemas.interfaces.ProdutoPedidoActivity;
 import com.example.rcksuporte05.rcksistemas.interfaces.SpinnerFaixaDesconto;
+import com.example.rcksuporte05.rcksistemas.util.DividerItemDecoration;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Pedido1 extends Fragment {
+public class Pedido1 extends Fragment implements ListaAdapterProdutoPedido.ProdutoPedidoAdapterListener {
 
-    private static WebPedidoItens webPedidoIten;
-    private static ListaAdapterProdutoPedido adapter;
-    DBHelper db = new DBHelper(PedidoHelper.getActivityPedidoMain());
+    private static ListaAdapterProdutoPedido listaAdapterProdutoPedido;
+    private DBHelper db = new DBHelper(PedidoHelper.getActivityPedidoMain());
     private List<WebPedidoItens> listaProdutoPedido = new ArrayList<>();
-    private ListView lstProdutoPedido;
+    private RecyclerView lstProdutoPedido;
     private Button btnInserirProduto;
     private Bundle bundle;
-    private int posicao;
+
+    public static ListaAdapterProdutoPedido getListaAdapterProdutoPedido() {
+        return listaAdapterProdutoPedido;
+    }
+
+    public static void setListaAdapterProdutoPedido(ListaAdapterProdutoPedido listaAdapterProdutoPedido) {
+        Pedido1.listaAdapterProdutoPedido = listaAdapterProdutoPedido;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -47,18 +52,11 @@ public class Pedido1 extends Fragment {
 
         final PedidoHelper pedidoHelper = new PedidoHelper(this);
         bundle = getArguments();
-        lstProdutoPedido = (ListView) view.findViewById(R.id.lstProdutosPedido);
+        lstProdutoPedido = (RecyclerView) view.findViewById(R.id.lstProdutosPedido);
 
-        lstProdutoPedido.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (bundle.getInt("vizualizacao") == 1) {
-                    Toast.makeText(getContext(), "Pressione e segure sobre o produto para vizualiza-lo!", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(getContext(), "Pressione e segure sobre o produto para altera-lo!", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getContext());
+        lstProdutoPedido.setLayoutManager(layoutManager);
+        lstProdutoPedido.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayout.VERTICAL));
 
         btnInserirProduto = (Button) view.findViewById(R.id.btnInserirProduto);
         btnInserirProduto.setOnClickListener(new View.OnClickListener() {
@@ -67,17 +65,15 @@ public class Pedido1 extends Fragment {
                 if (pedidoHelper.verificaCliente()) {
                     if (PedidoHelper.getPositionFaixPadrao() < 0) {
                         Intent intent = new Intent(getContext(), SpinnerFaixaDesconto.class);
-                        posicao = listaProdutoPedido.size();
                         startActivity(intent);
                     } else {
                         Intent intent = new Intent(getContext(), ActivityProduto.class);
-                        posicao = listaProdutoPedido.size();
                         intent.putExtra("acao", 1);
                         startActivity(intent);
                     }
                 } else {
                     Toast.makeText(getContext(), "Selecione um cliente antes de prosseguir!", Toast.LENGTH_SHORT).show();
-                    PedidoHelper.pintaTxtNomeCliente(Color.YELLOW);
+                    PedidoHelper.pintaTxtNomeCliente();
                     pedidoHelper.moveTela(0);
                 }
             }
@@ -86,10 +82,8 @@ public class Pedido1 extends Fragment {
         if (PedidoHelper.getIdPedido() > 0) {
             final int pedido = PedidoHelper.getIdPedido();
             try {
-
                 listaProdutoPedido = db.listaWebPedidoItens("SELECT * FROM TBL_WEB_PEDIDO_ITENS WHERE ID_PEDIDO = " + pedido);
-                adapter = new ListaAdapterProdutoPedido(getContext(), listaProdutoPedido);
-                lstProdutoPedido.setAdapter(adapter);
+                preencheLista(listaProdutoPedido);
             } catch (CursorIndexOutOfBoundsException e) {
                 AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
                 alert.setTitle("Atenção!");
@@ -113,7 +107,6 @@ public class Pedido1 extends Fragment {
             btnInserirProduto.setVisibility(View.INVISIBLE);
         }
 
-        registerForContextMenu(lstProdutoPedido);
         System.gc();
         return (view);
     }
@@ -123,109 +116,86 @@ public class Pedido1 extends Fragment {
         webPedidoItem.setId_empresa(UsuarioHelper.getUsuario().getIdEmpresaMultiDevice());
         webPedidoItem.setUsuario_lancamento_id(String.valueOf(bundle.getInt("idUsuario")));
         listaProdutoPedido.add(webPedidoItem);
-        adapter = new ListaAdapterProdutoPedido(getContext(), listaProdutoPedido);
-        lstProdutoPedido.setAdapter(adapter);
+        preencheLista(listaProdutoPedido);
     }
 
     public void alterarProduto(WebPedidoItens webPedidoItem, int position) {
         webPedidoItem.setId_empresa("1");
         webPedidoItem.setUsuario_lancamento_id(String.valueOf(bundle.getInt("idUsuario")));
         listaProdutoPedido.set(position, webPedidoItem);
-        adapter = new ListaAdapterProdutoPedido(getContext(), listaProdutoPedido);
-        lstProdutoPedido.setAdapter(adapter);
+        preencheLista(listaProdutoPedido);
+    }
+
+    public void removeProdutos(List<WebPedidoItens> webPedidoItens) {
+//        listaAdapterProdutoPedido
     }
 
     public List<WebPedidoItens> salvaPedidos() {
         return listaProdutoPedido;
     }
 
+    public void preencheLista(List<WebPedidoItens> webPedidoItens) {
+        listaAdapterProdutoPedido = new ListaAdapterProdutoPedido(webPedidoItens, this);
+        lstProdutoPedido.setAdapter(listaAdapterProdutoPedido);
+        listaAdapterProdutoPedido.notifyDataSetChanged();
+
+    }
+
     @Override
     public void onResume() {
         PedidoHelper pedidoHelper = new PedidoHelper(PedidoHelper.getActivityPedidoMain());
         pedidoHelper.calculaValorPedido(listaProdutoPedido);
-        lstProdutoPedido.setSelection(posicao);
         System.gc();
         super.onResume();
     }
 
     @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-        menu.setHeaderTitle(listaProdutoPedido.get(info.position).getNome_produto());
-
-        if (bundle.getInt("vizualizacao") != 1) {
-            MenuItem alterar = menu.add("Alterar");
-            alterar.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem item) {
-                    Intent intent = new Intent(getContext(), ProdutoPedidoActivity.class);
-                    intent.putExtra("pedido", 1);
-                    intent.putExtra("position", info.position);
-                    posicao = info.position;
-                    PedidoHelper.setWebPedidoItem(listaProdutoPedido.get(info.position));
-                    startActivity(intent);
-                    return false;
-                }
-            });
-            if (listaProdutoPedido.size() > 1) {
-
-                MenuItem deletar = menu.add("Excluir");
-                deletar.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                    @Override
-                    public boolean onMenuItemClick(MenuItem item) {
-                        AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
-                        alert.setTitle("Atenção!");
-                        alert.setMessage("Tem certeza que deseja remover este produto do pedido?");
-                        alert.setNegativeButton("Não", null);
-                        alert.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                try {
-                                    if (!listaProdutoPedido.get(info.position).getId_web_item().trim().isEmpty()) {
-                                        db.alterar("DELETE FROM TBL_WEB_PEDIDO_ITENS WHERE ID_WEB_ITEM = " + listaProdutoPedido.get(info.position).getId_web_item());
-                                    }
-                                } catch (NullPointerException e) {
-                                    System.out.println(e.getMessage());
-                                }
-                                listaProdutoPedido.remove(info.position);
-                                adapter.notifyDataSetChanged();
-                                PedidoHelper pedidoHelper = new PedidoHelper(PedidoHelper.getActivityPedidoMain());
-                                pedidoHelper.calculaValorPedido(listaProdutoPedido);
-                            }
-                        });
-                        alert.show();
-                        return false;
-                    }
-                });
-            }
-        } else {
-            MenuItem alterar = menu.add("Vizualizar");
-            alterar.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-                @Override
-                public boolean onMenuItemClick(MenuItem item) {
-                    Intent intent = new Intent(getContext(), ProdutoPedidoActivity.class);
-                    intent.putExtra("pedido", 1);
-                    intent.putExtra("vizualizacao", 1);
-                    intent.putExtra("position", info.position);
-                    posicao = info.position;
-                    PedidoHelper.setWebPedidoItem(listaProdutoPedido.get(info.position));
-                    startActivity(intent);
-                    return false;
-                }
-            });
-        }
-    }
-
-    @Override
     public void onDestroy() {
         try {
-            webPedidoIten = null;
             PedidoHelper.setPositionFaixPadrao(-1);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
         System.gc();
         super.onDestroy();
+    }
+
+    @Override
+    public void onRowClicked(int position) {
+        if (listaAdapterProdutoPedido.getSelectedItemCount() > 0) {
+            toggleSelection(position);
+        } else {
+            if (bundle.getInt("vizualizacao") != 1) {
+                Intent intent = new Intent(getContext(), ProdutoPedidoActivity.class);
+                intent.putExtra("pedido", 1);
+                intent.putExtra("position", position);
+                PedidoHelper.setWebPedidoItem(listaProdutoPedido.get(position));
+                startActivity(intent);
+            } else {
+                Intent intent = new Intent(getContext(), ProdutoPedidoActivity.class);
+                intent.putExtra("pedido", 1);
+                intent.putExtra("vizualizacao", 1);
+                intent.putExtra("position", position);
+                PedidoHelper.setWebPedidoItem(listaProdutoPedido.get(position));
+                startActivity(intent);
+            }
+        }
+    }
+
+    @Override
+    public void onLongRowClicked(int position) {
+        PedidoHelper.getActivityPedidoMain().enableActionMode(position);
+    }
+
+    public void toggleSelection(int position) {
+        listaAdapterProdutoPedido.toggleSelection(position);
+        int count = listaAdapterProdutoPedido.getSelectedItemCount();
+
+        if (count == 0) {
+            PedidoHelper.getActivityPedidoMain().actionMode.finish();
+        } else {
+            PedidoHelper.getActivityPedidoMain().actionMode.setTitle(String.valueOf(count));
+            PedidoHelper.getActivityPedidoMain().actionMode.invalidate();
+        }
     }
 }

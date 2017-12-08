@@ -1,51 +1,117 @@
 package com.example.rcksuporte05.rcksistemas.adapters;
 
-import android.content.Context;
 import android.graphics.Color;
+import android.support.v7.widget.RecyclerView;
+import android.util.SparseBooleanArray;
+import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
 
 import com.example.rcksuporte05.rcksistemas.R;
+import com.example.rcksuporte05.rcksistemas.adapters.viewHolder.ProdutoPedidoViewHolder;
 import com.example.rcksuporte05.rcksistemas.classes.WebPedidoItens;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class ListaAdapterProdutoPedido extends ArrayAdapter<WebPedidoItens> {
-    private Context context;
+public class ListaAdapterProdutoPedido extends RecyclerView.Adapter<ProdutoPedidoViewHolder> {
+    private static int currentSelectedIndex = -1;
     private List<WebPedidoItens> lista;
+    private ProdutoPedidoAdapterListener listener;
+    private SparseBooleanArray selectedItems;
 
-    public ListaAdapterProdutoPedido(Context context, List<WebPedidoItens> lista) {
-        super(context, 0, lista);
-
-        this.context = context;
+    public ListaAdapterProdutoPedido(List<WebPedidoItens> lista, ProdutoPedidoAdapterListener listener) {
+        this.listener = listener;
         this.lista = lista;
+        this.selectedItems = new SparseBooleanArray();
     }
 
-    public View getView(int position, View convertView, ViewGroup parent) {
-        WebPedidoItens itemPosicao = this.lista.get(position);
+    @Override
+    public ProdutoPedidoViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.produto_pedido_lista, parent, false);
 
-        convertView = LayoutInflater.from(this.context).inflate(R.layout.produto_pedido_lista, null);
+        return new ProdutoPedidoViewHolder(view);
+    }
 
-        TextView nomeListaProduto = (TextView) convertView.findViewById(R.id.nomeListaProduto);
-        TextView precoProduto = (TextView) convertView.findViewById(R.id.precoProduto);
-        TextView textViewUnidadeMedida = (TextView) convertView.findViewById(R.id.textViewUnidadeMedida);
-        TextView idPosition = (TextView) convertView.findViewById(R.id.idPosition);
-        View viewCor = convertView.findViewById(R.id.viewCor);
+    @Override
+    public void onBindViewHolder(ProdutoPedidoViewHolder holder, int position) {
+        holder.nomeListaProduto.setText(lista.get(position).getNome_produto());
+        holder.precoProduto.setText(String.format("%.2f", Float.parseFloat(lista.get(position).getQuantidade())) + " x " + String.format("R$%.2f", Float.parseFloat(lista.get(position).getValor_unitario())) + " = " + String.format("R$%.2f", Float.parseFloat(lista.get(position).getValor_total())));
+        holder.textViewUnidadeMedida.setText(lista.get(position).getDescricao());
+        holder.idPosition.setText(String.valueOf(position + 1));
 
-        nomeListaProduto.setText(itemPosicao.getNome_produto());
-        precoProduto.setText(String.format("%.2f", Float.parseFloat(itemPosicao.getQuantidade())) + " x " + String.format("R$%.2f", Float.parseFloat(itemPosicao.getValor_unitario())) + " = " + String.format("R$%.2f", Float.parseFloat(itemPosicao.getValor_total())));
-        textViewUnidadeMedida.setText(itemPosicao.getDescricao());
-        idPosition.setText(String.valueOf(position + 1));
+        holder.viewCor.setBackgroundColor(Color.parseColor(lista.get(position).getTabela_preco_faixa().getCor_web()));
 
-        viewCor.setBackgroundColor(Color.parseColor(itemPosicao.getTabela_preco_faixa().getCor_web()));
+        holder.itemView.setActivated(selectedItems.get(position, false));
 
-        if (position % 2 == 0) {
-            convertView.setBackgroundColor(Color.parseColor("#eeeeee"));
+        applyClickEvents(holder, position);
+    }
+
+    @Override
+    public int getItemCount() {
+        if (lista != null)
+            return lista.size();
+
+        return 0;
+    }
+
+    private void applyClickEvents(final ProdutoPedidoViewHolder holder, final int position) {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listener.onRowClicked(position);
+                view.performHapticFeedback(HapticFeedbackConstants.CONTEXT_CLICK);
+            }
+        });
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                listener.onLongRowClicked(position);
+                view.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+                return false;
+            }
+        });
+    }
+
+    public void toggleSelection(int pos) {
+        currentSelectedIndex = pos;
+        if (selectedItems.get(pos, false)) {
+            selectedItems.delete(pos);
+        } else {
+            selectedItems.put(pos, true);
+
+        }
+        notifyItemChanged(pos);
+    }
+
+    public int getSelectedItemCount() {
+        return selectedItems.size();
+    }
+
+    public WebPedidoItens getItem(int position) {
+        return lista.get(position);
+    }
+
+    public List<WebPedidoItens> getItensSelecionados() {
+        List<WebPedidoItens> webPedidoItensSelecionados = new ArrayList<>();
+        for (int i = 0; i < selectedItems.size(); i++) {
+            webPedidoItensSelecionados.add(lista.get(selectedItems.keyAt(i)));
         }
 
-        return convertView;
+        return webPedidoItensSelecionados;
+    }
+
+    public void clearSelections() {
+        selectedItems.clear();
+        notifyDataSetChanged();
+    }
+
+    public interface ProdutoPedidoAdapterListener {
+
+        void onRowClicked(int position);
+
+        void onLongRowClicked(int position);
     }
 }

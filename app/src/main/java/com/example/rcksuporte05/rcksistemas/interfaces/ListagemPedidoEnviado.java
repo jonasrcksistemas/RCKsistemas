@@ -16,11 +16,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -38,19 +35,16 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ListagemPedidoEnviado extends AppCompatActivity  implements SwipeRefreshLayout.OnRefreshListener, ListaPedidoAdapter.PedidoAdapterListener {
-
-    private List<WebPedido> listaPedido = new ArrayList();
-    private EditText edtNumerPedidoEnviados;
-    private DBHelper db = new DBHelper(this);
-    private Usuario usuario;
+public class ListagemPedidoEnviado extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, ListaPedidoAdapter.PedidoAdapterListener {
 
     @BindView(R.id.listaPedidoEnviados)
     RecyclerView recyclerViewPedidos;
-
     @BindView(R.id.swipe_refresh_layout_pedido_enviado)
     SwipeRefreshLayout swipeRefreshLayout;
-
+    private List<WebPedido> listaPedido;
+    private EditText edtNumerPedidoEnviados;
+    private DBHelper db = new DBHelper(this);
+    private Usuario usuario;
     private ListaPedidoAdapter listaPedidoAdapter;
 
     @Override
@@ -74,13 +68,13 @@ public class ListagemPedidoEnviado extends AppCompatActivity  implements SwipeRe
 
             preencheListaRecycler(listaPedido);
 
-
-
         } catch (CursorIndexOutOfBoundsException e) {
             Toast.makeText(this, "Nenhum pedido foi Enviado!", Toast.LENGTH_LONG).show();
         }
 
-
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerViewPedidos.setLayoutManager(layoutManager);
+        recyclerViewPedidos.addItemDecoration(new DividerItemDecoration(this, LinearLayout.VERTICAL));
 
         edtNumerPedidoEnviados = (EditText) findViewById(R.id.edtNumeroPedidoEnviado);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -94,25 +88,6 @@ public class ListagemPedidoEnviado extends AppCompatActivity  implements SwipeRe
                 break;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-        menu.setHeaderTitle("Pedido: " + listaPedidoAdapter.getItem(info.position).getId_web_pedido_servidor());
-
-        MenuItem visualizar = menu.add("Visualizar");
-        visualizar.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                Intent intent = new Intent(ListagemPedidoEnviado.this, ActivityPedidoMain.class);
-                PedidoHelper.setIdPedido(Integer.parseInt(listaPedidoAdapter.getItem(info.position).getId_web_pedido()));
-                intent.putExtra("vizualizacao", 1);
-                startActivity(intent);
-                return false;
-            }
-        });
     }
 
     @Override
@@ -183,12 +158,9 @@ public class ListagemPedidoEnviado extends AppCompatActivity  implements SwipeRe
     }
 
     public void preencheListaRecycler(List<WebPedido> listaPedidos) {
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerViewPedidos.setLayoutManager(layoutManager);
 
         listaPedidoAdapter = new ListaPedidoAdapter(listaPedidos, this);
 
-        recyclerViewPedidos.addItemDecoration(new DividerItemDecoration(this, LinearLayout.VERTICAL));
         recyclerViewPedidos.setAdapter(listaPedidoAdapter);
 
         listaPedidoAdapter.notifyDataSetChanged();
@@ -220,10 +192,10 @@ public class ListagemPedidoEnviado extends AppCompatActivity  implements SwipeRe
 
     @Override
     public void onPedidoRowClicked(int position) {
-            Intent intent = new Intent(ListagemPedidoEnviado.this, ActivityPedidoMain.class);
-            PedidoHelper.setIdPedido(Integer.parseInt(listaPedidoAdapter.getItem(position).getId_web_pedido()));
-            intent.putExtra("vizualizacao", 1);
-            startActivity(intent);
+        Intent intent = new Intent(ListagemPedidoEnviado.this, ActivityPedidoMain.class);
+        PedidoHelper.setIdPedido(Integer.parseInt(listaPedidoAdapter.getItem(position).getId_web_pedido()));
+        intent.putExtra("vizualizacao", 1);
+        startActivity(intent);
 
     }
 
@@ -231,9 +203,6 @@ public class ListagemPedidoEnviado extends AppCompatActivity  implements SwipeRe
     public void onRowLongClicked(int position) {
 
     }
-
-
-
 
 
 }
