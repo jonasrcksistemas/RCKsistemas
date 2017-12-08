@@ -9,7 +9,6 @@ import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -18,8 +17,8 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.rcksuporte05.rcksistemas.Helper.PedidoHelper;
@@ -35,14 +34,14 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ListagemPedidoEnviado extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, ListaPedidoAdapter.PedidoAdapterListener {
+public class ListagemPedidoEnviado extends AppCompatActivity implements ListaPedidoAdapter.PedidoAdapterListener {
 
     @BindView(R.id.listaPedidoEnviados)
     RecyclerView recyclerViewPedidos;
-    @BindView(R.id.swipe_refresh_layout_pedido_enviado)
-    SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.edtNumeroPedidoEnviado)
+    TextView edtNumerPedidoEnviados;
+
     private List<WebPedido> listaPedido;
-    private EditText edtNumerPedidoEnviados;
     private DBHelper db = new DBHelper(this);
     private Usuario usuario;
     private ListaPedidoAdapter listaPedidoAdapter;
@@ -56,7 +55,6 @@ public class ListagemPedidoEnviado extends AppCompatActivity implements SwipeRef
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         notificationManager.cancel(0);
 
-        swipeRefreshLayout.setOnRefreshListener(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarPedidoEnviado);
         toolbar.setTitle("Pedidos Enviados");
@@ -76,7 +74,7 @@ public class ListagemPedidoEnviado extends AppCompatActivity implements SwipeRef
         recyclerViewPedidos.setLayoutManager(layoutManager);
         recyclerViewPedidos.addItemDecoration(new DividerItemDecoration(this, LinearLayout.VERTICAL));
 
-        edtNumerPedidoEnviados = (EditText) findViewById(R.id.edtNumeroPedidoEnviado);
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
@@ -164,7 +162,6 @@ public class ListagemPedidoEnviado extends AppCompatActivity implements SwipeRef
         recyclerViewPedidos.setAdapter(listaPedidoAdapter);
 
         listaPedidoAdapter.notifyDataSetChanged();
-        swipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
@@ -181,13 +178,6 @@ public class ListagemPedidoEnviado extends AppCompatActivity implements SwipeRef
         super.onResume();
     }
 
-    @Override
-    public void onRefresh() {
-        swipeRefreshLayout.setRefreshing(true);
-        listaPedido = db.listaWebPedido("SELECT * FROM TBL_WEB_PEDIDO WHERE PEDIDO_ENVIADO = 'S' AND USUARIO_LANCAMENTO_ID = " + usuario.getId_usuario() + " ORDER BY ID_WEB_PEDIDO_SERVIDOR DESC;");
-
-        preencheListaRecycler(listaPedido);
-    }
 
 
     @Override

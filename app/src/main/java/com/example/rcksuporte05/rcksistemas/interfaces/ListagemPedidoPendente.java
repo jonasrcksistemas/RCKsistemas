@@ -33,6 +33,7 @@ import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.ListaPedidoAdapter;
 import com.example.rcksuporte05.rcksistemas.api.Api;
 import com.example.rcksuporte05.rcksistemas.api.Rotas;
+import com.example.rcksuporte05.rcksistemas.bo.PedidoBO;
 import com.example.rcksuporte05.rcksistemas.classes.Usuario;
 import com.example.rcksuporte05.rcksistemas.classes.WebPedido;
 import com.example.rcksuporte05.rcksistemas.classes.WebPedidoItens;
@@ -59,6 +60,7 @@ public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRe
     private ProgressDialog progress;
     ActionModeCallback actionModeCallback;
     private ActionMode actionMode;
+    private PedidoBO pedidoBO = new PedidoBO();
 
     @BindView(R.id.listaPedidosPendentes)
     RecyclerView recyclerViewPedidos;

@@ -61,8 +61,7 @@
             android:name=".interfaces.ActiviyDialogSincronia"
             android:theme="@style/Theme.CriarDialog" />
         <activity
-            android:name=".interfaces.ActivityDialogProdutoDetalhe"
-            android:theme="@style/Theme.CriarDialog" />
+            android:name=".interfaces.ActivityDialogProdutoDetalhe" />
         <activity
             android:name=".interfaces.infoDialog"
             android:theme="@style/Theme.CriarDialog" />
