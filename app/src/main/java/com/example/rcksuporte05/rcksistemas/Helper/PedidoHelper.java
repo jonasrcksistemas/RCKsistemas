@@ -1,5 +1,6 @@
 package com.example.rcksuporte05.rcksistemas.Helper;
 
+import android.graphics.Color;
 import android.support.v4.view.ViewPager;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -103,9 +104,9 @@ public class PedidoHelper {
         PedidoHelper.positionFaixPadrao = positionFaixPadrao;
     }
 
-    public static void pintaTxtNomeCliente(int color) {
+    public static void pintaTxtNomeCliente() {
         TextView txtNomeCliente = (TextView) activityPedidoMain.findViewById(R.id.txtNomeCliente);
-        txtNomeCliente.setTextColor(color);
+        txtNomeCliente.setTextColor(Color.YELLOW);
     }
 
     public static void mudaSpinnerPedido2() {
@@ -151,6 +152,7 @@ public class PedidoHelper {
             try {
                 webPedido.setData_prev_entrega(new SimpleDateFormat("yyyy-MM-dd").format(new SimpleDateFormat("dd/MM/yyyy").parse(pedido2.salvaPedido().getData_prev_entrega())));
             } catch (ParseException e) {
+                webPedido.setData_prev_entrega(null);
                 e.printStackTrace();
             }
 
@@ -223,11 +225,12 @@ public class PedidoHelper {
                         }
                     } else {
                         Toast.makeText(activityPedidoMain, "O pedido não pode ser salvo sem produtos!", Toast.LENGTH_SHORT).show();
-                        moveTela(1);
+                        moveTela(0);
                         return false;
                     }
                 } else {
                     Toast.makeText(activityPedidoMain, "O pedido não pode ser salvo sem selecionar o cliente!", Toast.LENGTH_SHORT).show();
+                    pintaTxtNomeCliente();
                     return false;
                 }
             } catch (Exception e) {

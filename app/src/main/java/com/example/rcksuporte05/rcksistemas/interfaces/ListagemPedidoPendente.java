@@ -21,11 +21,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -53,22 +50,19 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, ListaPedidoAdapter.PedidoAdapterListener{
+public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, ListaPedidoAdapter.PedidoAdapterListener {
 
+    ActionModeCallback actionModeCallback;
+    @BindView(R.id.listaPedidosPendentes)
+    RecyclerView recyclerViewPedidos;
+    @BindView(R.id.swipe_refresh_layout_pedido_pedido)
+    SwipeRefreshLayout swipeRefreshLayout;
     private List<WebPedido> listaPedido = new ArrayList();
     private EditText edtNumerPedidoPendentes;
     private DBHelper db = new DBHelper(this);
     private Usuario usuario;
     private ProgressDialog progress;
-    ActionModeCallback actionModeCallback;
     private ActionMode actionMode;
-
-    @BindView(R.id.listaPedidosPendentes)
-    RecyclerView recyclerViewPedidos;
-
-    @BindView(R.id.swipe_refresh_layout_pedido_pedido)
-    SwipeRefreshLayout swipeRefreshLayout;
-
     private ListaPedidoAdapter listaPedidoAdapter;
 
 
@@ -85,12 +79,13 @@ public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRe
         edtNumerPedidoPendentes = (EditText) findViewById(R.id.edtNumeroPedidoPendente);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerViewPedidos.setLayoutManager(layoutManager);
+        recyclerViewPedidos.addItemDecoration(new DividerItemDecoration(this, LinearLayout.VERTICAL));
 
         swipeRefreshLayout.setOnRefreshListener(this);
 
         actionModeCallback = new ActionModeCallback();
-
 
         swipeRefreshLayout.post(
                 new Runnable() {
@@ -142,82 +137,6 @@ public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRe
         }
         return super.onOptionsItemSelected(item);
     }
-
-    @Override
-    public void onCreateContextMenu(final ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-        menu.setHeaderTitle("Pedido: " + listaPedidoAdapter.getItem(info.position).getId_web_pedido());
-
-        MenuItem enviar = menu.add("Enviar pedido");
-        enviar.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                AlertDialog.Builder alert = new AlertDialog.Builder(ListagemPedidoPendente.this);
-                alert.setTitle("Atenção!");
-                alert.setMessage("Deseja enviar o pedido " + listaPedidoAdapter.getItem(info.position).getId_web_pedido() + " para ser faturado?");
-                alert.setNegativeButton("Não", null);
-                alert.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        progress = new ProgressDialog(ListagemPedidoPendente.this);
-                        progress.setMessage("Enviando pedido " + listaPedidoAdapter.getItem(info.position).getId_web_pedido() + "...");
-                        progress.setTitle("Atenção!");
-                        progress.setCancelable(false);
-                        progress.show();
-
-                        enviarPedido(listaPedidoAdapter.getItem(info.position));
-                    }
-                });
-                alert.show();
-                return false;
-            }
-
-        });
-
-
-        MenuItem alterar = menu.add("Alterar");
-        alterar.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                Intent intent = new Intent(ListagemPedidoPendente.this, ActivityPedidoMain.class);
-                PedidoHelper.setIdPedido(Integer.parseInt(listaPedidoAdapter.getItem(info.position).getId_web_pedido()));
-
-                startActivity(intent);
-                return false;
-            }
-        });
-
-        MenuItem excluir = menu.add("Excluir");
-        excluir.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                AlertDialog.Builder alert = new AlertDialog.Builder(ListagemPedidoPendente.this);
-                alert.setTitle("Atenção!");
-                alert.setMessage("Deseja realmente excluir o pedido " + listaPedidoAdapter.getItem(info.position).getId_web_pedido() + "?");
-                alert.setNegativeButton("Não", null);
-                alert.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        try {
-                            db.alterar("DELETE FROM TBL_WEB_PEDIDO WHERE ID_WEB_PEDIDO = " + listaPedidoAdapter.getItem(info.position).getId_web_pedido());
-                            db.alterar("DELETE FROM TBL_WEB_PEDIDO_ITENS WHERE ID_PEDIDO = " + listaPedidoAdapter.getItem(info.position).getId_web_pedido());
-                            listaPedido.remove(info.position);
-                            listaPedidoAdapter.notifyDataSetChanged();
-                            edtNumerPedidoPendentes.setText(listaPedido.size() + ": Pedidos Pendentes");
-                            Toast.makeText(ListagemPedidoPendente.this, "Pedido exlcuido com sucesso!", Toast.LENGTH_LONG).show();
-                        } catch (Exception e) {
-                            System.out.println(e.getMessage());
-                            Toast.makeText(ListagemPedidoPendente.this, "Não foi possivel excluir o pedido!", Toast.LENGTH_LONG).show();
-                        }
-                    }
-                });
-                alert.show();
-                return false;
-            }
-        });
-    }
-
 
     public void enviarPedidos(final List<WebPedido> listaParaEnvio) {
 
@@ -459,12 +378,9 @@ public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRe
         return lista;
     }
 
-    public void preechePedidosRecycler(List<WebPedido> listaPedido){
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerViewPedidos.setLayoutManager(layoutManager);
+    public void preechePedidosRecycler(List<WebPedido> listaPedido) {
 
         listaPedidoAdapter = new ListaPedidoAdapter(listaPedido, this);
-        recyclerViewPedidos.addItemDecoration(new DividerItemDecoration(this, LinearLayout.VERTICAL));
         recyclerViewPedidos.setAdapter(listaPedidoAdapter);
 
         listaPedidoAdapter.notifyDataSetChanged();
@@ -478,9 +394,9 @@ public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRe
 
             preechePedidosRecycler(listaPedido);
 
-            if(actionMode == null){
+            if (actionMode == null) {
                 listaPedidoAdapter.clearSelections();
-            }else
+            } else
                 actionMode.finish();
 
 
@@ -505,7 +421,7 @@ public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRe
 
     @Override
     public void onRowLongClicked(int position) {
-            enableActionMode(position);
+        enableActionMode(position);
     }
 
     private void enableActionMode(int position) {
@@ -515,7 +431,7 @@ public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRe
         toggleSelection(position);
     }
 
-    private void toggleSelection(int position) {
+    public void toggleSelection(int position) {
         listaPedidoAdapter.toggleSelection(position);
         int count = listaPedidoAdapter.getSelectedItemCount();
 
@@ -561,44 +477,44 @@ public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRe
                     mode.finish();
                     return true;
                 case R.id.action_mode_menu_pedido_pendente:
-                     final List<WebPedido> pedidosSelecionados = listaPedidoAdapter.getItensSelecionados();
-                     if(pedidosSelecionados.size() == 1){
-                         AlertDialog.Builder alert = new AlertDialog.Builder(ListagemPedidoPendente.this);
-                         alert.setTitle("Atenção!");
-                         alert.setMessage("Deseja enviar o pedido " + pedidosSelecionados.get(0).getId_web_pedido() + " para ser faturado?");
-                         alert.setNegativeButton("Não", null);
-                         alert.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-                                     @Override
-                                     public void onClick(DialogInterface dialog, int which) {
-                                         progress = new ProgressDialog(ListagemPedidoPendente.this);
-                                         progress.setMessage("Enviando pedido " + pedidosSelecionados.get(0).getId_web_pedido() + "...");
-                                         progress.setTitle("Atenção!");
-                                         progress.setCancelable(false);
-                                         progress.show();
-                                         enviarPedido(pedidosSelecionados.get(0));
-                                     }
-                                 }
-                         );
-                         alert.show();
-                     }else{
-                         AlertDialog.Builder alert = new AlertDialog.Builder(ListagemPedidoPendente.this);
-                         alert.setTitle("Atenção!");
-                         alert.setMessage("Deseja sincronizar os pedidos?");
-                         alert.setNegativeButton("NÃO", null);
-                         alert.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
-                             @Override
-                             public void onClick(DialogInterface dialog, int which) {
-                                 progress = new ProgressDialog(ListagemPedidoPendente.this);
-                                 progress.setMessage("Enviando pedidos...");
-                                 progress.setTitle("Atenção!");
-                                 progress.setCancelable(false);
-                                 progress.show();
+                    final List<WebPedido> pedidosSelecionados = listaPedidoAdapter.getItensSelecionados();
+                    if (pedidosSelecionados.size() == 1) {
+                        AlertDialog.Builder alert = new AlertDialog.Builder(ListagemPedidoPendente.this);
+                        alert.setTitle("Atenção!");
+                        alert.setMessage("Deseja enviar o pedido " + pedidosSelecionados.get(0).getId_web_pedido() + " para ser faturado?");
+                        alert.setNegativeButton("Não", null);
+                        alert.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        progress = new ProgressDialog(ListagemPedidoPendente.this);
+                                        progress.setMessage("Enviando pedido " + pedidosSelecionados.get(0).getId_web_pedido() + "...");
+                                        progress.setTitle("Atenção!");
+                                        progress.setCancelable(false);
+                                        progress.show();
+                                        enviarPedido(pedidosSelecionados.get(0));
+                                    }
+                                }
+                        );
+                        alert.show();
+                    } else {
+                        AlertDialog.Builder alert = new AlertDialog.Builder(ListagemPedidoPendente.this);
+                        alert.setTitle("Atenção!");
+                        alert.setMessage("Deseja sincronizar os pedidos?");
+                        alert.setNegativeButton("NÃO", null);
+                        alert.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                progress = new ProgressDialog(ListagemPedidoPendente.this);
+                                progress.setMessage("Enviando pedidos...");
+                                progress.setTitle("Atenção!");
+                                progress.setCancelable(false);
+                                progress.show();
 
-                                 enviarPedidos(pedidosSelecionados);
-                             }
-                         });
-                         alert.show();
-                     }
+                                enviarPedidos(pedidosSelecionados);
+                            }
+                        });
+                        alert.show();
+                    }
                     return true;
                 default:
                     return false;

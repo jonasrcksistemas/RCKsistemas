@@ -27,8 +27,7 @@ import com.example.rcksuporte05.rcksistemas.adapters.ListaClienteAdapter;
 import com.example.rcksuporte05.rcksistemas.adapters.RecyclerTouchListener;
 import com.example.rcksuporte05.rcksistemas.classes.Cliente;
 import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
-import com.example.rcksuporte05.rcksistemas.fragment.Pedido1;
-import com.example.rcksuporte05.rcksistemas.fragment.Pedido3;
+import com.example.rcksuporte05.rcksistemas.fragment.Pedido2;
 import com.example.rcksuporte05.rcksistemas.util.DividerItemDecoration;
 
 import java.util.ArrayList;
@@ -38,16 +37,15 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class ActivityCliente extends AppCompatActivity {
+    @BindView(R.id.listaRecycler)
+    RecyclerView listaDeClientes;
     //    private MenuItem novo_cliente;
-   // private ListView lstClientes;
+    // private ListView lstClientes;
     private Toolbar toolbar;
     private List<Cliente> lista;
     private EditText edtTotalClientes;
     private DBHelper db = new DBHelper(this);
     private ListaClienteAdapter listaClienteAdapter;
-
-    @BindView(R.id.listaRecycler)
-    RecyclerView listaDeClientes;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,37 +64,36 @@ public class ActivityCliente extends AppCompatActivity {
 
             try {
                 lista = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE F_CLIENTE = 'S' AND F_VENDEDOR = 'N' AND ATIVO = 'S' ORDER BY ATIVO DESC, NOME_CADASTRO;");
-                RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
                 preencheLista(lista);
                 System.gc();
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
-        listaDeClientes.addOnItemTouchListener(new RecyclerTouchListener(this, listaDeClientes, new RecyclerTouchListener.ClickListener() {
+            listaDeClientes.addOnItemTouchListener(new RecyclerTouchListener(this, listaDeClientes, new RecyclerTouchListener.ClickListener() {
 
-            @Override
-            public void onClick(View view, int position) {
-                Pedido1 pedido1 = new Pedido1();
-                Pedido3 pedido3 = new Pedido3();
-                pedido1.pegaCliente(listaClienteAdapter.getItem(position));
-                pedido3.pegaCliente(listaClienteAdapter.getItem(position));
-                System.gc();
-                finish();
-            }
+                @Override
+                public void onClick(View view, int position) {
+                    ActivityPedidoMain activityPedidoMain = new ActivityPedidoMain();
+                    Pedido2 pedido2 = new Pedido2();
+                    activityPedidoMain.pegaCliente(listaClienteAdapter.getItem(position));
+                    pedido2.pegaCliente(listaClienteAdapter.getItem(position));
+                    System.gc();
+                    finish();
+                }
 
-            @Override
-            public void onLongClick(View view, int position) {
+                @Override
+                public void onLongClick(View view, int position) {
 
-            }
-        }));
+                }
+            }));
 
         } else {
 
             try {
                 lista = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE F_CLIENTE = 'S' AND F_VENDEDOR = 'N' ORDER BY ATIVO DESC, NOME_CADASTRO;");
 
-               preencheLista(lista);
+                preencheLista(lista);
                 System.gc();
             } catch (Exception e) {
                 e.printStackTrace();
@@ -232,7 +229,7 @@ public class ActivityCliente extends AppCompatActivity {
         return lista;
     }
 
-    public void preencheLista(List<Cliente> clientes){
+    public void preencheLista(List<Cliente> clientes) {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         listaDeClientes.setLayoutManager(layoutManager);
         listaClienteAdapter = new ListaClienteAdapter(clientes);

@@ -17,7 +17,6 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.example.rcksuporte05.rcksistemas.Helper.PedidoHelper;
 import com.example.rcksuporte05.rcksistemas.R;
@@ -92,7 +91,7 @@ public class Pedido2 extends Fragment {
 
         } catch (CursorIndexOutOfBoundsException e) {
             AlertDialog.Builder alert = new AlertDialog.Builder(PedidoHelper.getActivityPedidoMain());
-            alert.setMessage("A sincronia é necessária antes de se fazer um pedido, ou não há CONDIÇÕES DE PAGAMENTO marcada para multi dispositivo!\n     Qualquer duvida entre em contato com a RCK SISTEMAS.");
+            alert.setMessage("É necessário executar a sincronização pelo menos uma vez antes de efetuar um pedido");
             alert.setTitle("Atenção!");
             alert.setCancelable(false);
             alert.setNeutralButton("OK", new DialogInterface.OnClickListener() {
@@ -156,36 +155,32 @@ public class Pedido2 extends Fragment {
         btnSalvarPedido.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (edtDataEntrega.getText().toString().trim().replaceAll("[^0-9]", "").isEmpty()) {
-                    Toast.makeText(getContext(), "ATENÇÂO - Você precisa informar a data de entrega", Toast.LENGTH_LONG).show();
-                } else {
-                    ProgressDialog dialog = new ProgressDialog(PedidoHelper.getActivityPedidoMain());
-                    dialog.setTitle("Atenção!");
-                    dialog.setMessage("Salvando o Pedido");
-                    dialog.setCancelable(false);
-                    dialog.show();
+                ProgressDialog dialog = new ProgressDialog(PedidoHelper.getActivityPedidoMain());
+                dialog.setTitle("Atenção!");
+                dialog.setMessage("Salvando o Pedido");
+                dialog.setCancelable(false);
+                dialog.show();
 
-                    if (pedidoHelper.salvaPedido()) {
-                        dialog.dismiss();
-                        AlertDialog.Builder alert = new AlertDialog.Builder(PedidoHelper.getActivityPedidoMain());
-                        alert.setTitle("Atenção!");
-                        alert.setMessage("Pedido salvo com sucesso!");
-                        alert.setNeutralButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                PedidoHelper.getActivityPedidoMain().finish();
-                            }
-                        });
-                        alert.setCancelable(false);
-                        alert.show();
-                    } else {
-                        dialog.dismiss();
+                if (pedidoHelper.salvaPedido()) {
+                    dialog.dismiss();
+                    AlertDialog.Builder alert = new AlertDialog.Builder(PedidoHelper.getActivityPedidoMain());
+                    alert.setTitle("Atenção!");
+                    alert.setMessage("Pedido salvo com sucesso!");
+                    alert.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            PedidoHelper.getActivityPedidoMain().finish();
+                        }
+                    });
+                    alert.setCancelable(false);
+                    alert.show();
+                } else {
+                    dialog.dismiss();
                     /*AlertDialog.Builder alert = new AlertDialog.Builder(PedidoHelper.getActivityPedidoMain());
                     alert.setTitle("Atenção!");
                     alert.setMessage("O pedido não foi salvo!");
                     alert.setNeutralButton("OK", null);
                     alert.show();*/
-                    }
                 }
             }
         });

@@ -49,7 +49,7 @@
                     android:background="@drawable/botao_login"
                     android:drawableRight="@mipmap/ic_usuario"
                     android:hint="Login"
-                    android:inputType="textCapCharacters|textCapWords"
+                    android:inputType="textCapCharacters"
                     android:textColorHint="#000000" />
 
             </android.support.design.widget.TextInputLayout>

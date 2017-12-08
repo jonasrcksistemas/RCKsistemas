@@ -16,6 +16,7 @@
         <activity
             android:name=".interfaces.MainActivity"
             android:theme="@style/Theme.Main" />
+        android:theme="@style/Theme.Main" />
         <activity
             android:name=".interfaces.PrincipalActivity"
             android:screenOrientation="portrait" />
@@ -41,17 +42,17 @@
         <activity android:name=".interfaces.CadastroClienteMain" />
         <activity
             android:name=".interfaces.ActivityPedidoMain"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".interfaces.ProdutoPedidoActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".interfaces.ListagemPedidoPendente"
-                  android:theme="@style/AppTheme.NoActionBar"
-            />
+        <activity
+            android:name=".interfaces.ListagemPedidoPendente"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".interfaces.ListagemPedidoEnviado"
-            android:theme="@style/Theme.MeuTema"
-            />
+            android:theme="@style/Theme.MeuTemaPedido" />
         <activity
             android:name=".interfaces.HistoricoFinanceiroMain"
             android:screenOrientation="portrait" />
