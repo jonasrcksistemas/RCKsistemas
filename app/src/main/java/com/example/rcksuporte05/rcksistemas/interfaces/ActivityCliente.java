@@ -27,8 +27,7 @@ import com.example.rcksuporte05.rcksistemas.adapters.ListaClienteAdapter;
 import com.example.rcksuporte05.rcksistemas.adapters.RecyclerTouchListener;
 import com.example.rcksuporte05.rcksistemas.classes.Cliente;
 import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
-import com.example.rcksuporte05.rcksistemas.fragment.Pedido1;
-import com.example.rcksuporte05.rcksistemas.fragment.Pedido3;
+import com.example.rcksuporte05.rcksistemas.fragment.Pedido2;
 import com.example.rcksuporte05.rcksistemas.util.DividerItemDecoration;
 
 import java.util.ArrayList;
@@ -73,23 +72,23 @@ public class ActivityCliente extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-        listaDeClientes.addOnItemTouchListener(new RecyclerTouchListener(this, listaDeClientes, new RecyclerTouchListener.ClickListener() {
+            listaDeClientes.addOnItemTouchListener(new RecyclerTouchListener(this, listaDeClientes, new RecyclerTouchListener.ClickListener() {
 
-            @Override
-            public void onClick(View view, int position) {
-                Pedido1 pedido1 = new Pedido1();
-                Pedido3 pedido3 = new Pedido3();
-                pedido1.pegaCliente(listaClienteAdapter.getItem(position));
-                pedido3.pegaCliente(listaClienteAdapter.getItem(position));
-                System.gc();
-                finish();
-            }
+                @Override
+                public void onClick(View view, int position) {
+                    Pedido2 pedido2 = new Pedido2();
+                    ActivityPedidoMain activityPedidoMain = new ActivityPedidoMain();
+                    pedido2.pegaCliente(listaClienteAdapter.getItem(position));
+                    activityPedidoMain.pegaCliente(listaClienteAdapter.getItem(position));
+                    System.gc();
+                    finish();
+                }
 
-            @Override
-            public void onLongClick(View view, int position) {
+                @Override
+                public void onLongClick(View view, int position) {
 
-            }
-        }));
+                }
+            }));
 
         } else {
 
@@ -153,7 +152,6 @@ public class ActivityCliente extends AppCompatActivity {
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.menu_cliente, menu);
 
-//        novo_cliente = menu.findItem(R.id.menu_item_novo_cliente);
 
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView;

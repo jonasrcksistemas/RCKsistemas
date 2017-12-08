@@ -50,7 +50,7 @@
             />
         <activity
             android:name=".interfaces.ListagemPedidoEnviado"
-            android:theme="@style/Theme.MeuTema"
+            android:theme="@style/Theme.MeuTemaPedido"
             />
         <activity
             android:name=".interfaces.HistoricoFinanceiroMain"
