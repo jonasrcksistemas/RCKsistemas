@@ -72,4 +72,6 @@ public class ListaProdutoAdpter  extends RecyclerView.Adapter<ProdutoViewHolder>
 
         return 0;
     }
+
+
 }

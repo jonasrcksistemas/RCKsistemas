@@ -16,12 +16,13 @@ public class PedidoBO {
     DBHelper db;
 
 
-    public void excluirPedido(Context context, List<WebPedido> webPedidos) {
+
+    public void excluirPedido(Context context, List<WebPedido> webPedidos){
         db = new DBHelper(context);
 
-        for (WebPedido pedido : webPedidos) {
+        for(WebPedido pedido : webPedidos){
             db.alterar("DELETE FROM TBL_WEB_PEDIDO WHERE ID_WEB_PEDIDO = " + pedido.getId_web_pedido());
-            db.alterar("DELETE FROM TBL_WEB_PEDIDO_ITENS WHERE ID_PEDIDO = " + pedido.getId_web_pedido());
+            db.alterar("DELETE FROM TBL_WEB_PEDIDO_ITENS WHERE ID_PEDIDO = " +pedido.getId_web_pedido());
         }
 
     }

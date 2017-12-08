@@ -120,6 +120,11 @@ public class ListaPedidoAdapter extends RecyclerView.Adapter<PedidoViewHolder> {
         return pedidosSelecionados;
     }
 
+    public void remove(WebPedido pedido){
+        pedidos.remove(pedido);
+        notifyDataSetChanged();
+    }
+
     public void clearSelections() {
         selectedItems.clear();
         notifyDataSetChanged();
@@ -131,10 +136,7 @@ public class ListaPedidoAdapter extends RecyclerView.Adapter<PedidoViewHolder> {
     }
 
 
-
     public interface PedidoAdapterListener {
-
-
         void onPedidoRowClicked(int position);
 
         void onRowLongClicked(int position);
