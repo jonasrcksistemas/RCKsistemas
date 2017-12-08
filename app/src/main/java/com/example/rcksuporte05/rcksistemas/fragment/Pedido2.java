@@ -20,6 +20,7 @@ import android.widget.Spinner;
 
 import com.example.rcksuporte05.rcksistemas.Helper.PedidoHelper;
 import com.example.rcksuporte05.rcksistemas.R;
+import com.example.rcksuporte05.rcksistemas.bo.PedidoBO;
 import com.example.rcksuporte05.rcksistemas.classes.Cliente;
 import com.example.rcksuporte05.rcksistemas.classes.CondicoesPagamento;
 import com.example.rcksuporte05.rcksistemas.classes.TabelaPreco;

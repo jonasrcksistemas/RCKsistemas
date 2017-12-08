@@ -1,5 +1,6 @@
 package com.example.rcksuporte05.rcksistemas.fragment;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.CursorIndexOutOfBoundsException;
@@ -31,10 +32,11 @@ import java.util.List;
 
 public class Pedido1 extends Fragment implements ListaAdapterProdutoPedido.ProdutoPedidoAdapterListener {
 
+    public static List<WebPedidoItens> listaProdutoRemovido = new ArrayList<>();
     private static ListaAdapterProdutoPedido listaAdapterProdutoPedido;
+    private static List<WebPedidoItens> listaProdutoPedido = new ArrayList<>();
+    private static RecyclerView lstProdutoPedido;
     private DBHelper db = new DBHelper(PedidoHelper.getActivityPedidoMain());
-    private List<WebPedidoItens> listaProdutoPedido = new ArrayList<>();
-    private RecyclerView lstProdutoPedido;
     private Button btnInserirProduto;
     private Bundle bundle;
 
@@ -45,6 +47,19 @@ public class Pedido1 extends Fragment implements ListaAdapterProdutoPedido.Produ
     public static void setListaAdapterProdutoPedido(ListaAdapterProdutoPedido listaAdapterProdutoPedido) {
         Pedido1.listaAdapterProdutoPedido = listaAdapterProdutoPedido;
     }
+
+    public static void removeProdutos(final List<WebPedidoItens> webPedidoItens, Context context) {
+        for (WebPedidoItens webPedidoIten : webPedidoItens) {
+            listaProdutoPedido.remove(webPedidoIten);
+            if (PedidoHelper.getIdPedido() > 0) {
+                listaProdutoRemovido = webPedidoItens;
+            }
+        }
+        listaAdapterProdutoPedido.getList(listaProdutoPedido);
+        lstProdutoPedido.setAdapter(listaAdapterProdutoPedido);
+        listaAdapterProdutoPedido.notifyDataSetChanged();
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -126,10 +141,6 @@ public class Pedido1 extends Fragment implements ListaAdapterProdutoPedido.Produ
         preencheLista(listaProdutoPedido);
     }
 
-    public void removeProdutos(List<WebPedidoItens> webPedidoItens) {
-//        listaAdapterProdutoPedido
-    }
-
     public List<WebPedidoItens> salvaPedidos() {
         return listaProdutoPedido;
     }
@@ -138,7 +149,6 @@ public class Pedido1 extends Fragment implements ListaAdapterProdutoPedido.Produ
         listaAdapterProdutoPedido = new ListaAdapterProdutoPedido(webPedidoItens, this);
         lstProdutoPedido.setAdapter(listaAdapterProdutoPedido);
         listaAdapterProdutoPedido.notifyDataSetChanged();
-
     }
 
     @Override
@@ -153,6 +163,10 @@ public class Pedido1 extends Fragment implements ListaAdapterProdutoPedido.Produ
     public void onDestroy() {
         try {
             PedidoHelper.setPositionFaixPadrao(-1);
+            listaProdutoRemovido.clear();
+            listaAdapterProdutoPedido = null;
+            listaProdutoPedido.clear();
+            lstProdutoPedido = null;
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
@@ -180,11 +194,14 @@ public class Pedido1 extends Fragment implements ListaAdapterProdutoPedido.Produ
                 startActivity(intent);
             }
         }
+
     }
 
     @Override
     public void onLongRowClicked(int position) {
-        PedidoHelper.getActivityPedidoMain().enableActionMode(position);
+        if (bundle.getInt("vizualizacao") != 1) {
+            PedidoHelper.getActivityPedidoMain().enableActionMode(position);
+        }
     }
 
     public void toggleSelection(int position) {

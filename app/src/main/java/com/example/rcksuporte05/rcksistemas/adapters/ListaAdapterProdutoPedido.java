@@ -44,7 +44,9 @@ public class ListaAdapterProdutoPedido extends RecyclerView.Adapter<ProdutoPedid
 
         holder.viewCor.setBackgroundColor(Color.parseColor(lista.get(position).getTabela_preco_faixa().getCor_web()));
 
-        holder.itemView.setActivated(selectedItems.get(position, false));
+        holder.itemView
+                .setBackgroundColor(selectedItems.get(position) ? Color.parseColor("#dfdfdf")
+                        : Color.TRANSPARENT);
 
         applyClickEvents(holder, position);
     }
@@ -106,6 +108,10 @@ public class ListaAdapterProdutoPedido extends RecyclerView.Adapter<ProdutoPedid
     public void clearSelections() {
         selectedItems.clear();
         notifyDataSetChanged();
+    }
+
+    public void getList(List<WebPedidoItens> webPedidoItens) {
+        lista = webPedidoItens;
     }
 
     public interface ProdutoPedidoAdapterListener {

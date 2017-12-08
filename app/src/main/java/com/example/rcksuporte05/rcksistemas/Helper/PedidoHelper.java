@@ -8,6 +8,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.rcksuporte05.rcksistemas.R;
+import com.example.rcksuporte05.rcksistemas.bo.PedidoBO;
 import com.example.rcksuporte05.rcksistemas.classes.WebPedido;
 import com.example.rcksuporte05.rcksistemas.classes.WebPedidoItens;
 import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
@@ -133,7 +134,6 @@ public class PedidoHelper {
     public void moveTela(int position) {
         mViewPager = (ViewPager) activityPedidoMain.findViewById(R.id.vp_tabsPedido);
         mViewPager.setCurrentItem(position);
-        System.gc();
     }
 
     public boolean verificaCliente() {
@@ -190,6 +190,10 @@ public class PedidoHelper {
                                 webPedido.setValor_desconto(String.valueOf(descontoReal));
                                 webPedido.setPontos_cor(db.consulta("SELECT I.COR_WEB, I.ID_ITEM FROM TBL_TABELA_PRECO_ITENS I JOIN TBL_TABELA_PRECO_CAB T ON T.ID_TABELA=I.ID_TABELA WHERE PERC_DESC_INICIAL<= " + mediaDesconto + " AND PERC_DESC_FINAL>= " + mediaDesconto + ";", "COR_WEB"));
                                 webPedido.setId_tabela_preco_faixa(db.consulta("SELECT I.COR_WEB, I.ID_ITEM FROM TBL_TABELA_PRECO_ITENS I JOIN TBL_TABELA_PRECO_CAB T ON T.ID_TABELA=I.ID_TABELA WHERE PERC_DESC_INICIAL<= " + mediaDesconto + " AND PERC_DESC_FINAL>= " + mediaDesconto + ";", "ID_ITEM"));
+                                if (Pedido1.listaProdutoRemovido.size() > 0 && PedidoHelper.getIdPedido() > 0) {
+                                    PedidoBO pedidoBO = new PedidoBO();
+                                    pedidoBO.excluiItenPedido(PedidoHelper.getActivityPedidoMain(), Pedido1.listaProdutoRemovido);
+                                }
 
                                 if (PedidoHelper.getIdPedido() > 0) {
                                     webPedido.setId_web_pedido(String.valueOf(PedidoHelper.getIdPedido()));
