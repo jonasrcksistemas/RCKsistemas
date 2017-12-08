@@ -35,8 +35,8 @@ import butterknife.OnClick;
 
 public class ActivityPedidoMain extends AppCompatActivity {
 
+    public static ActionMode actionMode;
     private static Cliente objetoCliente = null;
-    public ActionMode actionMode;
     @BindView(R.id.stl_tabsPedido)
     SlidingTabLayout stl_tabsPedido;
     @BindView(R.id.vp_tabsPedido)
@@ -278,7 +278,7 @@ public class ActivityPedidoMain extends AppCompatActivity {
 
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            mode.getMenuInflater().inflate(R.menu.menu_action_mode, menu);
+            mode.getMenuInflater().inflate(R.menu.menu_action_mode_produtos, menu);
             return true;
         }
 
@@ -291,7 +291,7 @@ public class ActivityPedidoMain extends AppCompatActivity {
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.action_delete:
-                    Toast.makeText(ActivityPedidoMain.this, Pedido1.getListaAdapterProdutoPedido().getItensSelecionados().get(0).getNome_produto(), Toast.LENGTH_LONG).show();
+                    pedido1.removeProdutos(pedido1.getListaAdapterProdutoPedido().getItensSelecionados(), ActivityPedidoMain.this);
                     mode.finish();
                     return true;
             }
