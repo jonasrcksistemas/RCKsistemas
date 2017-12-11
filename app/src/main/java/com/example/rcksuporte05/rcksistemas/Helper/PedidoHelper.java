@@ -3,7 +3,6 @@ package com.example.rcksuporte05.rcksistemas.Helper;
 import android.graphics.Color;
 import android.support.v4.view.ViewPager;
 import android.widget.EditText;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -110,8 +109,8 @@ public class PedidoHelper {
         txtNomeCliente.setTextColor(Color.YELLOW);
     }
 
-    public static void mudaSpinnerPedido2() {
-        Spinner spinner = (Spinner) pedido2.getActivity().findViewById(R.id.spFaixaPadrao);
+    public static EditText editTextDataEntrega() {
+        return (EditText) activityPedidoMain.findViewById(R.id.edtDataEntrega);
     }
 
     public void calculaValorPedido(List<WebPedidoItens> produtoPedido) {
@@ -221,10 +220,14 @@ public class PedidoHelper {
                                 return true;
                             } else {
                                 Toast.makeText(activityPedidoMain, "A data de entrega não pode ser menor que a data de emissão da venda", Toast.LENGTH_SHORT).show();
+                                editTextDataEntrega().setBackgroundResource(R.drawable.borda_edittext_erro);
+
                                 return false;
                             }
                         } else {
                             Toast.makeText(activityPedidoMain, "ATENÇÃO - Você precisa informar a data de entrega", Toast.LENGTH_SHORT).show();
+                            editTextDataEntrega().setBackgroundResource(R.drawable.borda_edittext_erro);
+
                             return false;
                         }
                     } else {

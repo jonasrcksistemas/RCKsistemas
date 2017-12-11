@@ -20,7 +20,6 @@ import android.widget.Spinner;
 
 import com.example.rcksuporte05.rcksistemas.Helper.PedidoHelper;
 import com.example.rcksuporte05.rcksistemas.R;
-import com.example.rcksuporte05.rcksistemas.bo.PedidoBO;
 import com.example.rcksuporte05.rcksistemas.classes.Cliente;
 import com.example.rcksuporte05.rcksistemas.classes.CondicoesPagamento;
 import com.example.rcksuporte05.rcksistemas.classes.TabelaPreco;
@@ -221,6 +220,7 @@ public class Pedido2 extends Fragment {
                 newDate.set(year, monthOfYear, dayOfMonth);
                 campoTexto.setText(new SimpleDateFormat("dd/MM/yyyy").format(newDate.getTime()));
                 campoTexto.setTag(newDate);
+                PedidoHelper.editTextDataEntrega().setBackgroundResource(R.drawable.borda_edittext);
             }
 
         }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();

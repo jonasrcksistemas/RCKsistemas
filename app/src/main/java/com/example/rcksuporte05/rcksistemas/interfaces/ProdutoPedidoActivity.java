@@ -292,9 +292,11 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
                                 }
                             } else {
                                 Toast.makeText(this, "A quantidade não pode ser zero!", Toast.LENGTH_SHORT).show();
+                                edtQuantidade.setError("A quantidade não pode ser zero!");
                             }
                         } else {
                             Toast.makeText(this, "Informe a quantidade", Toast.LENGTH_SHORT).show();
+                            edtQuantidade.setError("Informe a quantidade");
                         }
                     } else {
                         Toast.makeText(this, "Informe um produto", Toast.LENGTH_SHORT).show();
