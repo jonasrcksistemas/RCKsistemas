@@ -56,8 +56,6 @@ public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRe
     ActionModeCallback actionModeCallback;
     @BindView(R.id.listaPedidosPendentes)
     RecyclerView recyclerViewPedidos;
-    @BindView(R.id.swipe_refresh_layout_pedido_pedido)
-    SwipeRefreshLayout swipeRefreshLayout;
     private List<WebPedido> listaPedido = new ArrayList();
     private EditText edtNumerPedidoPendentes;
     private DBHelper db = new DBHelper(this);
@@ -85,21 +83,7 @@ public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRe
         recyclerViewPedidos.setLayoutManager(layoutManager);
         recyclerViewPedidos.addItemDecoration(new DividerItemDecoration(this, LinearLayout.VERTICAL));
 
-        swipeRefreshLayout.setOnRefreshListener(this);
-
         actionModeCallback = new ActionModeCallback();
-
-
-        swipeRefreshLayout.post(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        listaPedido = db.listaWebPedido("SELECT * FROM TBL_WEB_PEDIDO WHERE PEDIDO_ENVIADO = 'N' AND USUARIO_LANCAMENTO_ID = " + usuario.getId_usuario() + " ORDER BY ID_WEB_PEDIDO DESC;");
-                        swipeRefreshLayout.setRefreshing(true);
-                        preechePedidosRecycler(listaPedido);
-                    }
-                }
-        );
 
     }
 
@@ -140,7 +124,6 @@ public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRe
         }
         return super.onOptionsItemSelected(item);
     }
-
 
 
     public void enviarPedidos(final List<WebPedido> listaParaEnvio) {
@@ -392,7 +375,6 @@ public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRe
         recyclerViewPedidos.setAdapter(listaPedidoAdapter);
 
         listaPedidoAdapter.notifyDataSetChanged();
-        swipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
@@ -453,7 +435,6 @@ public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRe
 
     @Override
     public void onRefresh() {
-        swipeRefreshLayout.setRefreshing(true);
         listaPedido = db.listaWebPedido("SELECT * FROM TBL_WEB_PEDIDO WHERE PEDIDO_ENVIADO = 'N' AND USUARIO_LANCAMENTO_ID = " + usuario.getId_usuario() + " ORDER BY ID_WEB_PEDIDO DESC;");
 
         preechePedidosRecycler(listaPedido);
@@ -466,8 +447,6 @@ public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRe
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             mode.getMenuInflater().inflate(R.menu.menu_action_mode, menu);
 
-            // disable swipe refresh if action mode is enabled
-            swipeRefreshLayout.setEnabled(false);
             return true;
         }
 
@@ -574,7 +553,6 @@ public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRe
         @Override
         public void onDestroyActionMode(ActionMode mode) {
             listaPedidoAdapter.clearSelections();
-            swipeRefreshLayout.setEnabled(true);
             actionMode = null;
             onRefresh();
         }

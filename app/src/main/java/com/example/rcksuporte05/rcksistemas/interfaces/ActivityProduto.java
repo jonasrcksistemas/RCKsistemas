@@ -19,7 +19,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
-import com.example.rcksuporte05.rcksistemas.Helper.ProdutoHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.ListaProdutoAdpter;
 import com.example.rcksuporte05.rcksistemas.adapters.RecyclerTouchListener;
@@ -59,58 +58,56 @@ public class ActivityProduto extends AppCompatActivity {
         listaProdutoRecyclerView.setLayoutManager(layoutManager);
         listaProdutoRecyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayout.VERTICAL));
 
-
         try {
             lista = db.listaProduto("SELECT * FROM TBL_PRODUTO WHERE ATIVO = 'S' ORDER BY NOME_PRODUTO");
             preecheRecyclerProduto(this, lista);
 
-        if (getIntent().getIntExtra("acao", 0) == 1) {
-            try {
-                lista = db.listaProduto("SELECT * FROM TBL_PRODUTO WHERE ATIVO = 'S' ORDER BY NOME_PRODUTO");
-                preecheRecyclerProduto(this, lista);
-
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         if (getIntent().getIntExtra("acao", 0) == 1) {
+            if (getIntent().getIntExtra("acao", 0) == 1) {
 
-            listaProdutoRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(this, listaProdutoRecyclerView, new RecyclerTouchListener.ClickListener() {
-                @Override
-                public void onClick(View view, int position) {
-                    ProdutoPedidoActivity produtoPedidoActivity = new ProdutoPedidoActivity();
-                    Intent intent = new Intent(ActivityProduto.this, ProdutoPedidoActivity.class);
-                    produtoPedidoActivity.pegaProduto(listaProdutoAdpter.getItem(position));
-                    startActivity(intent);
-                    finish();
-                }
+                listaProdutoRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(this, listaProdutoRecyclerView, new RecyclerTouchListener.ClickListener() {
+                    @Override
+                    public void onClick(View view, int position) {
+                        ProdutoPedidoActivity produtoPedidoActivity = new ProdutoPedidoActivity();
+                        Intent intent = new Intent(ActivityProduto.this, ProdutoPedidoActivity.class);
+                        produtoPedidoActivity.pegaProduto(listaProdutoAdpter.getItem(position));
+                        startActivity(intent);
+                        finish();
+                    }
 
-                @Override
-                public void onLongClick(View view, int position) {
+                    @Override
+                    public void onLongClick(View view, int position) {
 
-                }
-            }));
+                    }
+                }));
 
-        } else {
-            listaProdutoRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(this, listaProdutoRecyclerView, new RecyclerTouchListener.ClickListener() {
-                @Override
-                public void onClick(View view, int position) {
-//                    Intent intent = new Intent(ActivityProduto.this, ActivityDialogProdutoDetalhe.class);
-//                    ProdutoHelper.setProduto(listaProdutoAdpter.getItem(position));
-//                    startActivity(intent);
-                }
+            } else {
+                listaProdutoRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(this, listaProdutoRecyclerView, new RecyclerTouchListener.ClickListener() {
+                    @Override
+                    public void onClick(View view, int position) {
+                    /*Intent intent = new Intent(ActivityProduto.this, ActivityDialogProdutoDetalhe.class);
+                    ProdutoHelper.setProduto(listaProdutoAdpter.getItem(position));
+                    startActivity(intent);*/
+                    }
 
-                @Override
-                public void onLongClick(View view, int position) {
+                    @Override
+                    public void onLongClick(View view, int position) {
 
-                }
-            }));
+                    }
+                }));
 
+
+            }
 
         }
-
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

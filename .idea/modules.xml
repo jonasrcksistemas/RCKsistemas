@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/RCKsistemas.iml" filepath="$PROJECT_DIR$/RCKsistemas.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/forcadevendas.iml" filepath="$PROJECT_DIR$/forcadevendas.iml" />
+      <module fileurl="file://C:\Users\RCKSUPORTE05\AndroidStudioProjects\RCKsistemas\forcadevendas.iml" filepath="C:\Users\RCKSUPORTE05\AndroidStudioProjects\RCKsistemas\forcadevendas.iml" />
     </modules>
   </component>
 </project>
