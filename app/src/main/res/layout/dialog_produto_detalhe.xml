@@ -6,8 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:theme="@style/Theme.Dialogs"
     tools:context=".interfaces.ActivityDialogProdutoDetalhe">
+
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbarProdutoDetalhe"
@@ -18,11 +18,9 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1"
         android:orientation="vertical"
         android:paddingBottom="@dimen/activity_vertical_margin"
         android:paddingLeft="@dimen/activity_horizontal_margin"
@@ -30,7 +28,7 @@
         android:paddingTop="@dimen/activity_vertical_margin">
 
         <android.support.v7.widget.CardView
-            android:id="@+id/card_view"
+            android:id="@+id/card_viewProduto"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -42,7 +40,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/txtAtivo"
+                    android:id="@+id/txtCodigo"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
@@ -50,7 +48,7 @@
 
 
                 <LinearLayout
-                    android:id="@+id/lyNomeCliente"
+                    android:id="@+id/lyNomeProduto"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -152,20 +150,4 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:gravity="end|bottom">
-
-        <Button
-            android:id="@+id/ok_produto_detalhe"
-            android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            android:layout_gravity="bottom|end"
-            android:background="@color/branco"
-            android:text="OK"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.SearchResult.Subtitle" />
-
-    </LinearLayout>
 </LinearLayout>

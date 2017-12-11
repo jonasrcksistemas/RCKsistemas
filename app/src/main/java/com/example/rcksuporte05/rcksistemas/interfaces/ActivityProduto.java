@@ -53,9 +53,21 @@ public class ActivityProduto extends AppCompatActivity {
         edtTotalProdutos = (EditText) findViewById(R.id.edtTotalProdutos);
         toolbar = (Toolbar) findViewById(R.id.tb_produto);
         toolbar.setTitle("Lista de Produtos");
+
+
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        listaProdutoRecyclerView.setLayoutManager(layoutManager);
+        listaProdutoRecyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayout.VERTICAL));
+
+
         try {
             lista = db.listaProduto("SELECT * FROM TBL_PRODUTO WHERE ATIVO = 'S' ORDER BY NOME_PRODUTO");
             preecheRecyclerProduto(this, lista);
+
+        if (getIntent().getIntExtra("acao", 0) == 1) {
+            try {
+                lista = db.listaProduto("SELECT * FROM TBL_PRODUTO WHERE ATIVO = 'S' ORDER BY NOME_PRODUTO");
+                preecheRecyclerProduto(this, lista);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -82,9 +94,9 @@ public class ActivityProduto extends AppCompatActivity {
             listaProdutoRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(this, listaProdutoRecyclerView, new RecyclerTouchListener.ClickListener() {
                 @Override
                 public void onClick(View view, int position) {
-                    Intent intent = new Intent(ActivityProduto.this, ActivityDialogProdutoDetalhe.class);
-                    ProdutoHelper.setProduto(listaProdutoAdpter.getItem(position));
-                    startActivity(intent);
+//                    Intent intent = new Intent(ActivityProduto.this, ActivityDialogProdutoDetalhe.class);
+//                    ProdutoHelper.setProduto(listaProdutoAdpter.getItem(position));
+//                    startActivity(intent);
                 }
 
                 @Override
