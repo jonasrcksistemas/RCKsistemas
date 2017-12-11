@@ -1,6 +1,5 @@
 package com.example.rcksuporte05.rcksistemas.adapters;
 
-import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -35,12 +34,6 @@ public class ListaProdutoAdpter  extends RecyclerView.Adapter<ProdutoViewHolder>
     @Override
     public void onBindViewHolder(ProdutoViewHolder holder, int position) {
 
-        if (produtos.get(position).getAtivo().equalsIgnoreCase("N")) {
-            holder.nomeListaProduto.setTextColor(Color.parseColor("#78909c"));
-            holder.textViewUnidadeMedida.setTextColor(Color.parseColor("#78909c"));
-            holder.precoProduto.setTextColor(Color.parseColor("#78909c"));
-        }
-
         holder.nomeListaProduto.setText(produtos.get(position).getNome_produto());
 
         String preco = null;
@@ -51,12 +44,12 @@ public class ListaProdutoAdpter  extends RecyclerView.Adapter<ProdutoViewHolder>
         }
 
         if (!produtos.get(position).getVenda_preco().trim().equalsIgnoreCase("")) {
-            holder.precoProduto.setText("R$" + preco);
+            holder.precoProduto.setText("R$ " + preco);
         } else {
             holder.precoProduto.setText(produtos.get(position).getVenda_preco().replace(".", ","));
         }
 
-        holder.textViewUnidadeMedida.setText(produtos.get(position).getDescricao());
+        holder.textUN.setText(produtos.get(position).getUnidade());
 
         System.gc();
     }

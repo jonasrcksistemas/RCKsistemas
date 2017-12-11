@@ -100,14 +100,14 @@
     <!-- Base application theme. -->
     <style name="Theme.MeuTemaPedido" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- colorPrimary is used for the default action bar background -->
-        <item name="colorPrimary">@color/colorAccent</item>
+        <item name="colorPrimary">@color/colorControlNormalAzul</item>
 
         <!-- colorPrimaryDark is used for the status bar -->
-        <item name="colorPrimaryDark">@color/colorAccentDarck</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkAzul</item>
 
         <!-- colorAccent is used as the default value for colorControlActivated,
              which is used to tint widgets -->
-        <item name="colorAccent">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
 
 
         <item name="android:colorBackground">@color/branco</item>
