@@ -33,6 +33,7 @@ import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.ListaPedidoAdapter;
 import com.example.rcksuporte05.rcksistemas.api.Api;
 import com.example.rcksuporte05.rcksistemas.api.Rotas;
+import com.example.rcksuporte05.rcksistemas.bo.PedidoBO;
 import com.example.rcksuporte05.rcksistemas.classes.Usuario;
 import com.example.rcksuporte05.rcksistemas.classes.WebPedido;
 import com.example.rcksuporte05.rcksistemas.classes.WebPedidoItens;
@@ -50,22 +51,20 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, ListaPedidoAdapter.PedidoAdapterListener{
+public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRefreshLayout.OnRefreshListener, ListaPedidoAdapter.PedidoAdapterListener {
 
+    ActionModeCallback actionModeCallback;
+    @BindView(R.id.listaPedidosPendentes)
+    RecyclerView recyclerViewPedidos;
+    @BindView(R.id.swipe_refresh_layout_pedido_pedido)
+    SwipeRefreshLayout swipeRefreshLayout;
     private List<WebPedido> listaPedido = new ArrayList();
     private EditText edtNumerPedidoPendentes;
     private DBHelper db = new DBHelper(this);
     private Usuario usuario;
     private ProgressDialog progress;
-    ActionModeCallback actionModeCallback;
     private ActionMode actionMode;
-
-    @BindView(R.id.listaPedidosPendentes)
-    RecyclerView recyclerViewPedidos;
-
-    @BindView(R.id.swipe_refresh_layout_pedido_pedido)
-    SwipeRefreshLayout swipeRefreshLayout;
-
+    private PedidoBO pedidoBO = new PedidoBO();
     private ListaPedidoAdapter listaPedidoAdapter;
 
 
@@ -82,7 +81,7 @@ public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRe
         edtNumerPedidoPendentes = (EditText) findViewById(R.id.edtNumeroPedidoPendente);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerViewPedidos.setLayoutManager(layoutManager);
         recyclerViewPedidos.addItemDecoration(new DividerItemDecoration(this, LinearLayout.VERTICAL));
 
@@ -141,7 +140,6 @@ RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         }
         return super.onOptionsItemSelected(item);
     }
-
 
 
     public void enviarPedidos(final List<WebPedido> listaParaEnvio) {
@@ -384,7 +382,7 @@ RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         return lista;
     }
 
-    public void preechePedidosRecycler(List<WebPedido> listaPedido){
+    public void preechePedidosRecycler(List<WebPedido> listaPedido) {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerViewPedidos.setLayoutManager(layoutManager);
 
@@ -403,9 +401,9 @@ RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
 
             preechePedidosRecycler(listaPedido);
 
-            if(actionMode == null){
+            if (actionMode == null) {
                 listaPedidoAdapter.clearSelections();
-            }else
+            } else
                 actionMode.finish();
 
 
@@ -430,7 +428,7 @@ RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
 
     @Override
     public void onRowLongClicked(int position) {
-            enableActionMode(position);
+        enableActionMode(position);
     }
 
     private void enableActionMode(int position) {
@@ -502,7 +500,7 @@ RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
                         });
                         alert.show();
                         mode.finish();
-                    }else {
+                    } else {
                         AlertDialog.Builder alert = new AlertDialog.Builder(ListagemPedidoPendente.this);
                         alert.setTitle("Atenção!");
                         alert.setMessage("Deseja realmente excluir os pedidos?");
@@ -512,7 +510,7 @@ RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
                             public void onClick(DialogInterface dialog, int which) {
                                 try {
                                     pedidoBO.excluirPedido(ListagemPedidoPendente.this, pedidosSelecionadosDelete);
-                                    for (WebPedido pedido : pedidosSelecionadosDelete){
+                                    for (WebPedido pedido : pedidosSelecionadosDelete) {
                                         listaPedidoAdapter.remove(pedido);
                                     }
                                     onResume();
