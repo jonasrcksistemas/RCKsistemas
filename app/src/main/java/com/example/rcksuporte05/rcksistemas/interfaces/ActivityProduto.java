@@ -19,6 +19,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
+import com.example.rcksuporte05.rcksistemas.Helper.ProdutoHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.ListaProdutoAdpter;
 import com.example.rcksuporte05.rcksistemas.adapters.RecyclerTouchListener;
@@ -52,18 +53,26 @@ public class ActivityProduto extends AppCompatActivity {
         edtTotalProdutos = (EditText) findViewById(R.id.edtTotalProdutos);
         toolbar = (Toolbar) findViewById(R.id.tb_produto);
         toolbar.setTitle("Lista de Produtos");
+
+
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         listaProdutoRecyclerView.setLayoutManager(layoutManager);
         listaProdutoRecyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayout.VERTICAL));
+
+
+        try {
+            lista = db.listaProduto("SELECT * FROM TBL_PRODUTO WHERE ATIVO = 'S' ORDER BY NOME_PRODUTO");
+            preecheRecyclerProduto(this, lista);
 
         if (getIntent().getIntExtra("acao", 0) == 1) {
             try {
                 lista = db.listaProduto("SELECT * FROM TBL_PRODUTO WHERE ATIVO = 'S' ORDER BY NOME_PRODUTO");
                 preecheRecyclerProduto(this, lista);
 
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        if (getIntent().getIntExtra("acao", 0) == 1) {
 
             listaProdutoRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(this, listaProdutoRecyclerView, new RecyclerTouchListener.ClickListener() {
                 @Override
@@ -82,12 +91,6 @@ public class ActivityProduto extends AppCompatActivity {
             }));
 
         } else {
-            try {
-                lista = db.listaProduto("SELECT * FROM TBL_PRODUTO ORDER BY ATIVO DESC, NOME_PRODUTO");
-                preecheRecyclerProduto(this, lista);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
             listaProdutoRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(this, listaProdutoRecyclerView, new RecyclerTouchListener.ClickListener() {
                 @Override
                 public void onClick(View view, int position) {
@@ -184,7 +187,11 @@ public class ActivityProduto extends AppCompatActivity {
     }
 
     public void preecheRecyclerProduto(Context context, List<Produto> produtos) {
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(context);
+        listaProdutoRecyclerView.setLayoutManager(layoutManager);
+
         listaProdutoAdpter = new ListaProdutoAdpter(produtos);
+        listaProdutoRecyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayout.VERTICAL));
         listaProdutoRecyclerView.setAdapter(listaProdutoAdpter);
 
         listaProdutoAdpter.notifyDataSetChanged();
