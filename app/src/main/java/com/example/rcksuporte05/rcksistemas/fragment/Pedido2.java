@@ -164,8 +164,7 @@ public class Pedido2 extends Fragment {
                 if (pedidoHelper.salvaPedido()) {
                     dialog.dismiss();
                     AlertDialog.Builder alert = new AlertDialog.Builder(PedidoHelper.getActivityPedidoMain());
-                    alert.setTitle("Atenção!");
-                    alert.setMessage("Pedido salvo com sucesso!");
+                    alert.setTitle("Pedido salvo com sucesso!");
                     alert.setNeutralButton("OK", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {

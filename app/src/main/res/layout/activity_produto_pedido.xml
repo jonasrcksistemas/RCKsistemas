@@ -182,7 +182,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/edtDesconto"
                 android:layout_marginTop="12dp"
-                android:text="PÇ. PAGO"
+                android:text="PREÇO UNITARIO PAGO"
                 android:textColor="@color/colorAccent" />
 
             <EditText

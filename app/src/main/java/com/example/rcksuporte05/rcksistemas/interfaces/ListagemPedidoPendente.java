@@ -208,7 +208,6 @@ public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRe
         final NotificationCompat.Builder notificacao = new NotificationCompat.Builder(ListagemPedidoPendente.this)
                 .setSmallIcon(R.mipmap.ic_enviar_pedidos)
                 .setContentTitle("Enviando pedido " + webPedido.getId_web_pedido())
-                .setContentText("Estabelecendo Conexão")
                 .setProgress(0, 0, true)
                 .setPriority(2);
         final NotificationManager notificationManager =
@@ -238,7 +237,6 @@ public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRe
                     PendingIntent pendingIntent = PendingIntent.getActivity(ListagemPedidoPendente.this, 0, new Intent(ListagemPedidoPendente.this, ListagemPedidoEnviado.class), 0);
 
                     notificacao.setContentTitle("Pedido " + webPedidosEnviados.get(0).getId_web_pedido_servidor() + " enviado com sucesso!")
-                            .setContentText(listaPedido.size() + " pedidos enviados.")
                             .setSmallIcon(R.mipmap.ic_sincronia_sucesso)
                             .setPriority(2)
                             .setDefaults(NotificationCompat.DEFAULT_ALL)

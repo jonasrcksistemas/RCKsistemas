@@ -58,10 +58,10 @@
     <!-- Base application theme. -->
     <style name="Theme.Dialogs" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- colorPrimary is used for the default action bar background -->
-        <item name="colorPrimary">@color/colorPrimaryDarkAzul</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
 
         <!-- colorPrimaryDark is used for the status bar -->
-        <item name="colorPrimaryDark">@color/colorPrimaryAzul</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
 
         <!-- colorAccent is used as the default value for colorControlActivated,
              which is used to tint widgets -->

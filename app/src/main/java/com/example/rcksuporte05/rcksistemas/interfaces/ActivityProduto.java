@@ -66,7 +66,6 @@ public class ActivityProduto extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        if (getIntent().getIntExtra("acao", 0) == 1) {
             if (getIntent().getIntExtra("acao", 0) == 1) {
 
                 listaProdutoRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(this, listaProdutoRecyclerView, new RecyclerTouchListener.ClickListener() {
@@ -85,13 +84,13 @@ public class ActivityProduto extends AppCompatActivity {
                     }
                 }));
 
-            } else {
+            } else if(getIntent().getIntExtra("acao", 0) == 2){
                 listaProdutoRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(this, listaProdutoRecyclerView, new RecyclerTouchListener.ClickListener() {
                     @Override
                     public void onClick(View view, int position) {
-                    /*Intent intent = new Intent(ActivityProduto.this, ActivityDialogProdutoDetalhe.class);
-                    ProdutoHelper.setProduto(listaProdutoAdpter.getItem(position));
-                    startActivity(intent);*/
+                        ProdutoPedidoActivity produtoPedidoActivity = new ProdutoPedidoActivity();
+                        produtoPedidoActivity.pegaProduto(listaProdutoAdpter.getItem(position));
+                        finish();
                     }
 
                     @Override
@@ -103,7 +102,7 @@ public class ActivityProduto extends AppCompatActivity {
 
             }
 
-        }
+
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
@@ -135,7 +134,7 @@ public class ActivityProduto extends AppCompatActivity {
                 try {
                     if (query.trim().equals("")) {
                         listaProdutoAdpter = new ListaProdutoAdpter(lista);
-                        edtTotalProdutos.setText("Produtos listados :" + lista.size() + "   ");
+                        edtTotalProdutos.setText("Produtos listados: " + lista.size() + "   ");
                         edtTotalProdutos.setTextColor(Color.BLACK);
                     } else {
                         listaProdutoAdpter = new ListaProdutoAdpter(buscarProdutos(query));
@@ -171,7 +170,7 @@ public class ActivityProduto extends AppCompatActivity {
         if (!query.trim().equals("")) {
             try {
                 lista = db.listaProduto("SELECT * FROM TBL_PRODUTO WHERE NOME_PRODUTO LIKE '%" + query + "%' ORDER BY ATIVO DESC, NOME_PRODUTO");
-                edtTotalProdutos.setText("Produtos encontrados :" + lista.size() + "   ");
+                edtTotalProdutos.setText("Produtos encontrados: " + lista.size() + "   ");
                 edtTotalProdutos.setTextColor(Color.BLACK);
             } catch (CursorIndexOutOfBoundsException | NullPointerException e) {
                 e.printStackTrace();
@@ -184,11 +183,7 @@ public class ActivityProduto extends AppCompatActivity {
     }
 
     public void preecheRecyclerProduto(Context context, List<Produto> produtos) {
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(context);
-        listaProdutoRecyclerView.setLayoutManager(layoutManager);
-
         listaProdutoAdpter = new ListaProdutoAdpter(produtos);
-        listaProdutoRecyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayout.VERTICAL));
         listaProdutoRecyclerView.setAdapter(listaProdutoAdpter);
 
         listaProdutoAdpter.notifyDataSetChanged();
@@ -199,7 +194,7 @@ public class ActivityProduto extends AppCompatActivity {
     @Override
     protected void onResume() {
         if (lista != null) {
-            edtTotalProdutos.setText("Produtos listados :" + lista.size() + "   ");
+            edtTotalProdutos.setText("Produtos listados: " + lista.size() + "   ");
             edtTotalProdutos.setTextColor(Color.BLACK);
         } else {
             edtTotalProdutos.setText("Não há produtos a serem exibidos!   ");

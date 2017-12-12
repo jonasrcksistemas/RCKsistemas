@@ -23,6 +23,7 @@ import com.example.rcksuporte05.rcksistemas.classes.Produto;
 import com.example.rcksuporte05.rcksistemas.classes.TabelaPrecoItem;
 import com.example.rcksuporte05.rcksistemas.classes.WebPedidoItens;
 import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
+import com.example.rcksuporte05.rcksistemas.util.MascaraMonetaria;
 
 import java.util.Objects;
 
@@ -44,6 +45,7 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
     private ArrayAdapter<TabelaPrecoItem> adapterFaixaPadrao;
     private MenuItem salvar_produto;
     private Float precoVenda;
+    private Float precoUnitario;
     private Float quantidade;
     private Float descontoReais;
     private Float precoPago;
@@ -117,7 +119,7 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ProdutoPedidoActivity.this, ActivityProduto.class);
-                intent.putExtra("acao", 1);
+                intent.putExtra("acao", 2);
                 startActivity(intent);
             }
         });
@@ -190,7 +192,7 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
         if (objetoProduto != null) {
             try {
                 edtNomeProduto.setText(objetoProduto.getNome_produto());
-                edtTabelaPreco.setText(objetoProduto.getVenda_preco());
+                edtTabelaPreco.setText(MascaraMonetaria.mascaraReal(objetoProduto.getVenda_preco()));
                 precoVenda = Float.parseFloat(objetoProduto.getVenda_preco());
                 try {
                     quantidade = Float.parseFloat(String.valueOf(edtQuantidade.getText()));
@@ -202,13 +204,13 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
                 precoPago = ((precoVenda * quantidade) - descontoReais) / quantidade;
                 total = ((precoVenda * quantidade) /*- descontoReais*/);
 
-                edtPrecoPago.setText(String.format("R$%.4f", precoPago));
-                edtDescontoReais.setText(String.format("%.2f", descontoReais));
+                edtPrecoPago.setText(MascaraMonetaria.mascaraReal(precoPago));
+                edtDescontoReais.setText(MascaraMonetaria.mascaraReal(descontoReais));
                 edtTotal.setText(String.format("R$%.2f", 0));
-                edtValorProdutos.setText(String.format("R$%.2f", valorBruto));
+                edtValorProdutos.setText(MascaraMonetaria.mascaraReal(valorBruto));
 
             } catch (Exception e) {
-                edtValorProdutos.setText(String.format("R$%.2f", Float.parseFloat(objetoProduto.getVenda_preco())));
+                edtValorProdutos.setText(MascaraMonetaria.mascaraReal(Float.parseFloat(objetoProduto.getVenda_preco())));
                 System.out.println(e.toString());
             }
         } else if (webPedidoItem != null) {
@@ -227,14 +229,14 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
                 total = ((precoVenda * quantidade) /*- descontoReais*/);
 
                 edtQuantidade.setText(quantidade.toString());
-                edtPrecoPago.setText(String.format("R$%.4f", precoPago));
-                edtDescontoReais.setText(String.format("%.2f", descontoReais));
+                edtPrecoPago.setText(MascaraMonetaria.mascaraReal(precoPago));
+                edtDescontoReais.setText(MascaraMonetaria.mascaraReal(descontoReais));
                 edtTotal.setText(String.format("R$%.2f", 0.f));
-                edtValorProdutos.setText(String.format("R$%.2f", valorBruto));
+                edtValorProdutos.setText(MascaraMonetaria.mascaraReal(valorBruto));
 
             } catch (Exception e) {
                 e.printStackTrace();
-                edtValorProdutos.setText(String.format("R$%.2f", Float.parseFloat(objetoProduto.getVenda_preco())));
+                edtValorProdutos.setText(MascaraMonetaria.mascaraReal(Float.parseFloat(objetoProduto.getVenda_preco())));
             }
         }
 
@@ -264,14 +266,14 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
                         if (!edtQuantidade.getText().toString().isEmpty()) {
                             if (Float.parseFloat(edtQuantidade.getText().toString()) > 0) {
                                 if (!edtTabelaPreco.getText().toString().trim().isEmpty()) {
-                                    if (Float.parseFloat(edtTabelaPreco.getText().toString()) > 0) {
+                                    if (Float.parseFloat(objetoProduto.getVenda_preco()) > 0) {
 
                                         WebPedidoItens webPedidoItem = new WebPedidoItens(objetoProduto, adapterFaixaPadrao.getItem(spFaixaPadrao.getSelectedItemPosition()));
                                         webPedidoItem.setQuantidade(quantidade.toString());
                                         webPedidoItem.setValor_total(total.toString());
                                         webPedidoItem.setValor_unitario(edtTabelaPreco.getText().toString());
                                         webPedidoItem.setValor_bruto(valorBruto.toString());
-                                        webPedidoItem.setValor_unitario(edtTabelaPreco.getText().toString());
+                                        webPedidoItem.setValor_unitario(objetoProduto.getVenda_preco());
                                         webPedidoItem.setValor_preco_pago(precoPago.toString());
                                         webPedidoItem.setValor_desconto_real(descontoReais.toString());
                                         webPedidoItem.setPontos_total(String.valueOf(total * Float.parseFloat(adapterFaixaPadrao.getItem(spFaixaPadrao.getSelectedItemPosition()).getPontos_premiacao())));
@@ -306,12 +308,12 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
                         if (!edtQuantidade.getText().toString().isEmpty()) {
                             if (Float.parseFloat(edtQuantidade.getText().toString()) > 0) {
                                 if (!edtTabelaPreco.getText().toString().isEmpty()) {
-                                    if (Float.parseFloat(edtTabelaPreco.getText().toString()) > 0) {
+                                    if (Float.parseFloat(webPedidoItem.getValor_unitario()) > 0) {
 
                                         if (objetoProduto != null) {
                                             webPedidoItem.setProduto(objetoProduto);
                                         }
-                                        webPedidoItem.setValor_unitario(edtTabelaPreco.getText().toString());
+                                        webPedidoItem.setValor_unitario(objetoProduto.getVenda_preco());
                                         webPedidoItem.setTabela_preco_faixa(adapterFaixaPadrao.getItem(spFaixaPadrao.getSelectedItemPosition()));
                                         webPedidoItem.setQuantidade(quantidade.toString());
                                         webPedidoItem.setValor_total(total.toString());
@@ -353,7 +355,7 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
 
     public void calculaDesconto() {
         if (objetoProduto != null) {
-            edtDesconto.setText(String.format("%.2f", Float.parseFloat(adapterFaixaPadrao.getItem(spFaixaPadrao.getSelectedItemPosition()).getPerc_desc_inicial())) + "%");
+            edtDesconto.setText(MascaraMonetaria.mascaraReal(Float.parseFloat(adapterFaixaPadrao.getItem(spFaixaPadrao.getSelectedItemPosition()).getPerc_desc_inicial())) + "%");
             try {
                 precoVenda = Float.parseFloat(objetoProduto.getVenda_preco());
                 quantidade = Float.parseFloat(edtQuantidade.getText().toString());
@@ -362,10 +364,10 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
                 precoPago = ((precoVenda * quantidade) - descontoReais) / quantidade;
                 total = ((precoVenda * quantidade) - descontoReais);
 
-                edtPrecoPago.setText(String.format("R$%.4f", precoPago));
-                edtDescontoReais.setText(String.format("%.2f", descontoReais));
-                edtTotal.setText(String.format("R$%.2f", total));
-                edtValorProdutos.setText(String.format("R$%.2f", valorBruto));
+                edtPrecoPago.setText(MascaraMonetaria.mascaraReal(precoPago));
+                edtDescontoReais.setText(MascaraMonetaria.mascaraReal(descontoReais));
+                edtTotal.setText(MascaraMonetaria.mascaraReal(total));
+                edtValorProdutos.setText(MascaraMonetaria.mascaraReal( valorBruto));
             } catch (NumberFormatException | NullPointerException e) {
                 try {
                     edtTotal.setText("R$00,00");
@@ -376,7 +378,7 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
                 }
             }
         } else if (webPedidoItem != null) {
-            edtDesconto.setText(String.format("%.2f", Float.parseFloat(adapterFaixaPadrao.getItem(spFaixaPadrao.getSelectedItemPosition()).getPerc_desc_inicial())) + "%");
+            edtDesconto.setText(MascaraMonetaria.mascaraReal(Float.parseFloat(adapterFaixaPadrao.getItem(spFaixaPadrao.getSelectedItemPosition()).getPerc_desc_inicial())) + "%");
             try {
                 precoVenda = Float.parseFloat(webPedidoItem.getVenda_preco());
                 quantidade = Float.parseFloat(edtQuantidade.getText().toString());
@@ -385,10 +387,10 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
                 precoPago = ((precoVenda * quantidade) - descontoReais) / quantidade;
                 total = ((precoVenda * quantidade) - descontoReais);
 
-                edtPrecoPago.setText(String.format("R$%.4f", precoPago));
-                edtDescontoReais.setText(String.format("%.2f", descontoReais));
-                edtTotal.setText(String.format("R$%.2f", total));
-                edtValorProdutos.setText(String.format("R$%.2f", valorBruto));
+                edtPrecoPago.setText(MascaraMonetaria.mascaraReal(precoPago));
+                edtDescontoReais.setText(MascaraMonetaria.mascaraReal(descontoReais));
+                edtTotal.setText(MascaraMonetaria.mascaraReal(total));
+                edtValorProdutos.setText(MascaraMonetaria.mascaraReal(valorBruto));
             } catch (NumberFormatException | NullPointerException e) {
                 try {
                     edtTotal.setText("R$00,00");

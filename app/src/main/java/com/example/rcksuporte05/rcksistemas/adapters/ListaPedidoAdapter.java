@@ -56,7 +56,7 @@ public class ListaPedidoAdapter extends RecyclerView.Adapter<PedidoViewHolder> {
 
         try {
 
-            holder.txtDataEmissaoPedido.setText(new SimpleDateFormat("dd/MM/dd").format(new SimpleDateFormat("yyyy-MM-dd").parse(pedidos.get(position).getData_prev_entrega())));
+            holder.txtDataEmissaoPedido.setText(new SimpleDateFormat("dd/MM/dd").format(new SimpleDateFormat("yyyy-MM-dd").parse(pedidos.get(position).getData_emissao())));
 
             holder.txtDataEntrega.setText(new SimpleDateFormat("dd/MM/dd").format(new SimpleDateFormat("yyyy-MM-dd").parse(pedidos.get(position).getData_prev_entrega())));
         } catch (Exception e) {
