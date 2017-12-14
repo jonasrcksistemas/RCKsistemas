@@ -10,10 +10,10 @@ import android.widget.TextView;
 
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.classes.HistoricoFinanceiroQuitado;
+import com.example.rcksuporte05.rcksistemas.util.MascaraMonetaria;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 public class ListaAdapterHistoricoFinanceiroQuitado extends ArrayAdapter<HistoricoFinanceiroQuitado> {
@@ -45,12 +45,8 @@ public class ListaAdapterHistoricoFinanceiroQuitado extends ArrayAdapter<Histori
         TextView txtPontualidade = (TextView) convertView.findViewById(R.id.txtPontualidade);
 
         try {
-            SimpleDateFormat formatoEntrada = new SimpleDateFormat("yyyy-mm-dd");
-            Date dataVencimento = formatoEntrada.parse(itemPosicao.getData_emissao());
-            Date dataPagamento = formatoEntrada.parse(itemPosicao.getData_baixa());
-            SimpleDateFormat dataExibicao = new SimpleDateFormat("dd/mm/yy");
-            txtVencimento.setText(dataExibicao.format(dataVencimento));
-            txtPagamento.setText(dataExibicao.format(dataPagamento));
+            txtVencimento.setText(new SimpleDateFormat("dd/mm/yy").format(new SimpleDateFormat("yyyy-mm-dd").parse(itemPosicao.getData_emissao())));
+            txtPagamento.setText(new SimpleDateFormat("dd/mm/yy").format(new SimpleDateFormat("yyyy-mm-dd").parse(itemPosicao.getData_baixa())));
             txtPontualidade.setText(itemPosicao.getPontualidade());
         } catch (ParseException e) {
             System.out.println(e.getMessage());
@@ -58,13 +54,12 @@ public class ListaAdapterHistoricoFinanceiroQuitado extends ArrayAdapter<Histori
         txtDocumento.setText(itemPosicao.getDocumento());
         txtParcela.setText(itemPosicao.getParcela());
 
-        txtValor.setText(String.format("R$%.2f", Float.parseFloat(itemPosicao.getValor_total())));
+        txtValor.setText(MascaraMonetaria.mascaraReal(itemPosicao.getValor_total()));
         if (itemPosicao.getPontualidade_status().trim().equals("A")) {
             txtValor.setTextColor(Color.RED);
         } else {
             txtValor.setTextColor(Color.parseColor("#4caf50"));
         }
-
 
         return convertView;
     }

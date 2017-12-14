@@ -1,5 +1,6 @@
 package com.example.rcksuporte05.rcksistemas.adapters;
 
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,6 +52,11 @@ public class ListaClienteAdapter extends RecyclerView.Adapter<ClientesViewHolder
             }
         }
 
+        if (clientes.get(position).getAtivo().equals("N")) {
+            holder.textViewNome.setTextColor(Color.parseColor("#78909c"));
+            holder.textViewNomeFantasia.setTextColor(Color.parseColor("#78909c"));
+            holder.textViewTelefone.setTextColor(Color.parseColor("#78909c"));
+        }
     }
 
 

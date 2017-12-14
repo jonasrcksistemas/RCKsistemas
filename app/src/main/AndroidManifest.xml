@@ -60,14 +60,15 @@
         <activity
             android:name=".interfaces.ActiviyDialogSincronia"
             android:theme="@style/Theme.CriarDialog" />
-        <activity
-            android:name=".interfaces.ActivityDialogProdutoDetalhe" />
+        <activity android:name=".interfaces.ActivityDialogProdutoDetalhe" />
         <activity
             android:name=".interfaces.infoDialog"
             android:theme="@style/Theme.CriarDialog" />
         <activity
             android:name=".interfaces.SpinnerFaixaDesconto"
             android:theme="@style/Theme.CriarDialog" />
+        <activity android:name=".interfaces.FinanceiroResumoActivity" />
+        <activity android:name=".interfaces.FinanceiroDetalheActivity"></activity>
     </application>
 
 </manifest>

@@ -10,10 +10,10 @@ import android.widget.TextView;
 
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.classes.HistoricoFinanceiroPendente;
+import com.example.rcksuporte05.rcksistemas.util.MascaraMonetaria;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 public class ListaAdapterHistoricoFinanceiroPendentes extends ArrayAdapter<HistoricoFinanceiroPendente> {
@@ -46,19 +46,15 @@ public class ListaAdapterHistoricoFinanceiroPendentes extends ArrayAdapter<Histo
 
         try {
             txtDocumento.setHeight(50);
-            SimpleDateFormat formatoEntrada = new SimpleDateFormat("yyyy-mm-dd");
-            Date dataEmissao = formatoEntrada.parse(itemPosicao.getData_emissao());
-            Date dataVencimento = formatoEntrada.parse(itemPosicao.getData_vencimento());
-            SimpleDateFormat dataExibicao = new SimpleDateFormat("dd/mm/yy");
-            txtEmissao.setText(dataExibicao.format(dataEmissao));
-            txtVencimento.setText(dataExibicao.format(dataVencimento));
+            txtEmissao.setText(new SimpleDateFormat("dd/MM/yy").format(new SimpleDateFormat("yyyy-MM-dd").parse(itemPosicao.getData_emissao())));
+            txtVencimento.setText(new SimpleDateFormat("dd/MM/yy").format(new SimpleDateFormat("yyyy-MM-dd").parse(itemPosicao.getData_vencimento())));
         } catch (ParseException e) {
             System.out.println(e.getMessage());
         }
         txtDocumento.setText(itemPosicao.getDocumento());
         txtParcela.setText(itemPosicao.getParcela());
         txtDiasVenc.setText(itemPosicao.getDias_atrazo());
-        txtValor.setText(String.format("R$%.2f", Float.parseFloat(itemPosicao.getValor_total())));
+        txtValor.setText(MascaraMonetaria.mascaraReal(itemPosicao.getValor_total()));
 
         if (Integer.parseInt(itemPosicao.getDias_atrazo()) > 0) {
             txtValor.setTextColor(Color.RED);

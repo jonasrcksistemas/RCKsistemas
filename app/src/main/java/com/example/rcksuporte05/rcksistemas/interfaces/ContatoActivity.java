@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
+import com.example.rcksuporte05.rcksistemas.Helper.HistoricoFinanceiroHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.classes.Cliente;
 
@@ -179,8 +180,8 @@ public class ContatoActivity extends AppCompatActivity {
             lyFinanceiro.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(ContatoActivity.this, HistoricoFinanceiroMain.class);
-                    intent.putExtra("idCliente", Integer.parseInt(cliente.getId_cadastro()));
+                    Intent intent = new Intent(ContatoActivity.this, FinanceiroResumoActivity.class);
+                    HistoricoFinanceiroHelper.setCliente(ClienteHelper.getCliente());
                     System.gc();
                     startActivity(intent);
                     CadastroClienteMain cadastroClienteMain = new CadastroClienteMain();
