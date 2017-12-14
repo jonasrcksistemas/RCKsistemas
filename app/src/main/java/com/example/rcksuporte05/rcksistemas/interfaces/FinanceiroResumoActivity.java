@@ -88,8 +88,6 @@ public class FinanceiroResumoActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-        carregarHistoricoFinanceiro(Integer.parseInt(HistoricoFinanceiroHelper.getCliente().getId_cadastro()));
     }
 
     @Override
@@ -155,6 +153,20 @@ public class FinanceiroResumoActivity extends AppCompatActivity {
                 progress.dismiss();
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        try {
+            txtVencida.setText(MascaraMonetaria.mascaraReal(HistoricoFinanceiroHelper.getHistoricoFinanceiro().getTotalVencida()));
+
+            txtAvencer.setText(MascaraMonetaria.mascaraReal(HistoricoFinanceiroHelper.getHistoricoFinanceiro().getTotalAvencer()));
+
+            txtQuitada.setText(MascaraMonetaria.mascaraReal(HistoricoFinanceiroHelper.getHistoricoFinanceiro().getTotalQuitado()));
+        } catch (NullPointerException e) {
+            carregarHistoricoFinanceiro(Integer.parseInt(HistoricoFinanceiroHelper.getCliente().getId_cadastro()));
+        }
+        super.onResume();
     }
 
     @Override
