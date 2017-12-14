@@ -16,7 +16,7 @@ import butterknife.OnClick;
  * Created by RCK 03 on 26/10/2017.
  */
 
-public class ActiviyDialogSincronia extends Activity {
+public class ActivityDialogSincronia extends Activity {
 
     @BindView(R.id.id_opcao_pedidos)
     Switch id_opcao_pedidos;

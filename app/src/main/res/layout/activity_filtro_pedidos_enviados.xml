@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:theme="@style/Theme.Dialogs">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
+        app:title="Filtro de Pedidos Enviados"
+        app:titleTextColor="@color/branco" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin"
+        android:theme="@style/Theme.MeuTemaPedido">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="124dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="28dp"
+                android:layout_marginStart="28dp"
+                android:layout_marginTop="2dp"
+                android:text="A partir do Dia: "
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/data_filtro"
+                android:layout_width="95dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="2dp"
+                android:background="@drawable/borda_filtro_data"
+                android:textAlignment="center"
+                android:textSize="16sp" />
+
+            <Button
+                android:id="@+id/button"
+                android:layout_width="34dp"
+                android:layout_height="29dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="2dp"
+                android:background="@mipmap/ic_calendario" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/txtOU"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="28dp"
+                android:layout_marginStart="28dp"
+                android:layout_marginTop="5dp"
+                android:text="OU" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/txtQuantidadeDePedidos"
+                android:layout_width="124dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="28dp"
+                android:layout_marginStart="28dp"
+                android:layout_marginTop="2dp"
+                android:text="Limitar Quantidade: " />
+
+
+            <EditText
+                android:id="@+id/edtQuantidadePedidos"
+                android:layout_width="95dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginStart="5dp"
+                android:layout_marginTop="2dp"
+                android:background="@drawable/borda_filtro_data" />
+        </LinearLayout>
+
+    </LinearLayout>
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      android:gravity="end"
+      android:layout_marginBottom="8dp"
+      android:layout_marginRight="8dp"
+        >
+
+      <Button
+          android:layout_width="wrap_content"
+          android:layout_height="35dp"
+          android:layout_gravity="end"
+          android:background="?android:attr/selectableItemBackground"
+          android:text="Confirmar" />
+  </LinearLayout>
+
+</LinearLayout>

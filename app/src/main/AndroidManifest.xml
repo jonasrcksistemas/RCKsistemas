@@ -58,7 +58,7 @@
             android:screenOrientation="portrait" />
         <activity android:name=".interfaces.ContatoActivity" />
         <activity
-            android:name=".interfaces.ActiviyDialogSincronia"
+            android:name=".interfaces.ActivityDialogSincronia"
             android:theme="@style/Theme.CriarDialog" />
         <activity
             android:name=".interfaces.ActivityDialogProdutoDetalhe" />
@@ -68,6 +68,8 @@
         <activity
             android:name=".interfaces.SpinnerFaixaDesconto"
             android:theme="@style/Theme.CriarDialog" />
+        <activity android:name=".interfaces.ActivityDialogFiltroPedidos"
+                  android:theme="@style/Theme.CriarDialog"/>
     </application>
 
 </manifest>

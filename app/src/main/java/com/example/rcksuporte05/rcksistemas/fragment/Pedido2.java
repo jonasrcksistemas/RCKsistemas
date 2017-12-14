@@ -17,6 +17,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.example.rcksuporte05.rcksistemas.Helper.PedidoHelper;
 import com.example.rcksuporte05.rcksistemas.R;
@@ -30,6 +31,9 @@ import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class Pedido2 extends Fragment {
 
@@ -48,13 +52,17 @@ public class Pedido2 extends Fragment {
     private PedidoHelper pedidoHelper;
     private EditText edtDataEntrega;
     private Button btnDataEntrega;
+    @BindView(R.id.txtDataEmissao)
+    TextView txtDataEmissao;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_pedido2, container, false);
+        ButterKnife.bind(this, view);
+
 
         db = new DBHelper(PedidoHelper.getActivityPedidoMain());
-
+        txtDataEmissao.setText(db.pegaDataAtual());
         pedidoHelper = new PedidoHelper(this);
 
         bundle = getArguments();
@@ -145,8 +153,18 @@ public class Pedido2 extends Fragment {
 
             edtObservacao.setText(webPedido.getObservacoes());
             try {
+                txtDataEmissao.setText(new SimpleDateFormat("dd/MM/yyyy").format(new SimpleDateFormat("yyyy-MM-dd").parse(webPedido.getData_emissao())));
                 edtDataEntrega.setText(new SimpleDateFormat("dd/MM/yyyy").format(new SimpleDateFormat("yyyy-MM-dd").parse(webPedido.getData_prev_entrega())));
             } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }else {
+            try {
+
+                txtDataEmissao.setText(new SimpleDateFormat("dd/MM/yyyy")
+                        .format(new SimpleDateFormat("yyyy-MM-dd")
+                                .parse(db.pegaDataAtual())));
+            }catch (ParseException e){
                 e.printStackTrace();
             }
         }

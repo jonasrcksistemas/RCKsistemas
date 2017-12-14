@@ -121,7 +121,7 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
             startActivity(intent);
         } else if (view == btnSincroniza || view == txtSincroniza) {
             getUsuarios();
-            Intent intent = new Intent(PrincipalActivity.this, ActiviyDialogSincronia.class);
+            Intent intent = new Intent(PrincipalActivity.this, ActivityDialogSincronia.class);
             SincroniaBO.setActivity(PrincipalActivity.this);
             startActivity(intent);
         } else if (view == btnPedidoFinalizado || view == txtPedidoFinalizado) {
@@ -161,6 +161,7 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
     public boolean onCreateOptionsMenu(Menu menu) {
         menu.add(0, sair, 0, "Sair");
         menu.add(0, Sobre, 0, "Informações do sistema");
+
 
         if (UsuarioHelper.getUsuario().getNome_usuario().equalsIgnoreCase("RCK SISTEMAS")) {
             menu.add(0, AtualizarBanco, 0, "Atualizar Banco");

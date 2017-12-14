@@ -355,7 +355,7 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
 
     public void calculaDesconto() {
         if (objetoProduto != null) {
-            edtDesconto.setText(MascaraMonetaria.mascaraReal(Float.parseFloat(adapterFaixaPadrao.getItem(spFaixaPadrao.getSelectedItemPosition()).getPerc_desc_inicial())) + "%");
+            edtDesconto.setText("  "+String.valueOf(Float.parseFloat(adapterFaixaPadrao.getItem(spFaixaPadrao.getSelectedItemPosition()).getPerc_desc_inicial())) + "%  ");
             try {
                 precoVenda = Float.parseFloat(objetoProduto.getVenda_preco());
                 quantidade = Float.parseFloat(edtQuantidade.getText().toString());
@@ -378,7 +378,7 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
                 }
             }
         } else if (webPedidoItem != null) {
-            edtDesconto.setText(MascaraMonetaria.mascaraReal(Float.parseFloat(adapterFaixaPadrao.getItem(spFaixaPadrao.getSelectedItemPosition()).getPerc_desc_inicial())) + "%");
+            edtDesconto.setText("  "+String.valueOf(Float.parseFloat(adapterFaixaPadrao.getItem(spFaixaPadrao.getSelectedItemPosition()).getPerc_desc_inicial())) + "%  ");
             try {
                 precoVenda = Float.parseFloat(webPedidoItem.getVenda_preco());
                 quantidade = Float.parseFloat(edtQuantidade.getText().toString());

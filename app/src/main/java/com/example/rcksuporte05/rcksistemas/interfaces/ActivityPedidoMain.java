@@ -92,6 +92,8 @@ public class ActivityPedidoMain extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarFragsPedido);
 
+
+
         vizualizacao = getIntent().getIntExtra("vizualizacao", 0);
 
         tabsAdapterPedido = new TabsAdapterPedido(getSupportFragmentManager(), ActivityPedidoMain.this, UsuarioHelper.getUsuario(), vizualizacao);
@@ -156,6 +158,7 @@ public class ActivityPedidoMain extends AppCompatActivity {
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
     }
 
     public WebPedido salvaPedido() {
