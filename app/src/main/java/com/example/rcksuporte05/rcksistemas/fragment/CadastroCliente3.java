@@ -12,9 +12,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
+import com.example.rcksuporte05.rcksistemas.Helper.HistoricoFinanceiroHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.interfaces.CadastroClienteMain;
-import com.example.rcksuporte05.rcksistemas.interfaces.HistoricoFinanceiroMain;
+import com.example.rcksuporte05.rcksistemas.interfaces.FinanceiroResumoActivity;
 
 public class CadastroCliente3 extends Fragment implements View.OnClickListener {
     private EditText edtPaisCobranca;
@@ -103,8 +104,8 @@ public class CadastroCliente3 extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         if (v == btnHistoricoFinanceiro || v == txtHistoricoFinanceiro) {
             if (ClienteHelper.getCliente() != null) {
-                Intent intent = new Intent(getContext(), HistoricoFinanceiroMain.class);
-                intent.putExtra("idCliente", Integer.parseInt(ClienteHelper.getCliente().getId_cadastro()));
+                Intent intent = new Intent(getContext(), FinanceiroResumoActivity.class);
+                HistoricoFinanceiroHelper.setCliente(ClienteHelper.getCliente());
                 System.gc();
                 getContext().startActivity(intent);
                 CadastroClienteMain cadastroClienteMain = new CadastroClienteMain();

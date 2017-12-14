@@ -22,6 +22,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
+import com.example.rcksuporte05.rcksistemas.Helper.HistoricoFinanceiroHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.ListaClienteAdapter;
 import com.example.rcksuporte05.rcksistemas.adapters.RecyclerTouchListener;
@@ -124,25 +125,6 @@ public class ActivityCliente extends AppCompatActivity {
 //        registerForContextMenu(listaDeClientes);
 
         System.gc();
-    }
-
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        final AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) menuInfo;
-        menu.setHeaderTitle(listaClienteAdapter.getItem(info.position).getNome_cadastro());
-
-        MenuItem historicoFInanceiro = menu.add("Historico Financeiro");
-        historicoFInanceiro.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                Intent intent = new Intent(ActivityCliente.this, HistoricoFinanceiroMain.class);
-                intent.putExtra("idCliente", Integer.parseInt(listaClienteAdapter.getItem(info.position).getId_cadastro()));
-                ActivityCliente.this.startActivity(intent);
-
-                return false;
-            }
-        });
-        super.onCreateContextMenu(menu, v, menuInfo);
     }
 
     @Override

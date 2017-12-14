@@ -12,11 +12,9 @@ public class MascaraMonetaria  {
     public static String mascaraReal(Float valor){
         Locale meuLocal = new Locale( "pt", "BR" );
         NumberFormat nf = NumberFormat.getCurrencyInstance(meuLocal);
-
         String valorString = String.valueOf(valor);
 
         String valorFinal = nf.format(Float.parseFloat(valorString));
-
 
         return valorFinal;
     }

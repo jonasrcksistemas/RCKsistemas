@@ -3,15 +3,19 @@ package com.example.rcksuporte05.rcksistemas.classes;
 import java.util.List;
 
 public class HistoricoFinanceiro {
-    List<HistoricoFinanceiroPendente> listaPendente;
-    List<HistoricoFinanceiroQuitado> listaQuitado;
+    private List<HistoricoFinanceiroPendente> listaVencida;
+    private List<HistoricoFinanceiroPendente> listaAvencer;
+    private List<HistoricoFinanceiroQuitado> listaQuitado;
+    private Float totalVencida = 0.f;
+    private Float totalAvencer = 0.f;
+    private Float totalQuitado = 0.f;
 
-    public List<HistoricoFinanceiroPendente> getListaPendente() {
-        return listaPendente;
+    public List<HistoricoFinanceiroPendente> getListaVencida() {
+        return listaVencida;
     }
 
-    public void setListaPendente(List<HistoricoFinanceiroPendente> listaPendente) {
-        this.listaPendente = listaPendente;
+    public void setListaVencida(List<HistoricoFinanceiroPendente> listaVencida) {
+        this.listaVencida = listaVencida;
     }
 
     public List<HistoricoFinanceiroQuitado> getListaQuitado() {
@@ -22,6 +26,35 @@ public class HistoricoFinanceiro {
         this.listaQuitado = listaQuitado;
     }
 
+    public List<HistoricoFinanceiroPendente> getListaAvencer() {
+        return listaAvencer;
+    }
 
+    public void setListaAvencer(List<HistoricoFinanceiroPendente> listaAvencer) {
+        this.listaAvencer = listaAvencer;
+    }
 
+    public Float getTotalVencida() {
+        return totalVencida;
+    }
+
+    public void setTotalVencida(Float totalVencida) {
+        this.totalVencida = totalVencida;
+    }
+
+    public Float getTotalAvencer() {
+        return totalAvencer;
+    }
+
+    public void setTotalAvencer(Float totalAvencer) {
+        this.totalAvencer = totalAvencer;
+    }
+
+    public Float getTotalQuitado() {
+        return totalQuitado;
+    }
+
+    public void setTotalQuitado(Float totalQuitado) {
+        this.totalQuitado = totalQuitado;
+    }
 }

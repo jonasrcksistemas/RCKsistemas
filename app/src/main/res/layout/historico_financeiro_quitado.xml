@@ -14,7 +14,7 @@
         android:background="#eeeeee"
         android:stretchColumns="0,1,2,3,4,5,6">
 
-        <TableRow android:id="@+id/trLinhaColuna">
+        <TableRow android:id="@+id/trLinhaColunaQuitado">
 
             <TextView
                 android:id="@+id/txtDocumento"

@@ -18,6 +18,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.rcksuporte05.rcksistemas.Helper.HistoricoFinanceiroHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.PedidoHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.UsuarioHelper;
 import com.example.rcksuporte05.rcksistemas.R;
@@ -62,8 +63,8 @@ public class ActivityPedidoMain extends AppCompatActivity {
     @OnClick(R.id.BtnFinanceiro)
     public void financeiro() {
         if (objetoCliente != null) {
-            Intent intent = new Intent(this, HistoricoFinanceiroMain.class);
-            intent.putExtra("idCliente", Integer.parseInt(objetoCliente.getId_cadastro()));
+            Intent intent = new Intent(this, FinanceiroResumoActivity.class);
+            HistoricoFinanceiroHelper.setCliente(objetoCliente);
             this.startActivity(intent);
         } else {
             txtNomeCliente.setTextColor(Color.YELLOW);
