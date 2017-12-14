@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     app:theme="@style/Theme.Toolbar"
+    android:background="@color/branco"
     tools:context="com.example.rcksuporte05.rcksistemas.interfaces.PrincipalActivity">
 
     <android.support.v7.widget.Toolbar
@@ -46,19 +47,10 @@
 
             <Button
                 android:id="@+id/btnPedido"
-                android:layout_width="76dp"
-                android:layout_height="76dp"
+                android:layout_width="136dp"
+                android:layout_height="136dp"
                 android:layout_gravity="center"
                 android:background="@mipmap/ic_pedidos" />
-
-            <TextView
-                android:id="@+id/txtPedido"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="Adicionar Pedido"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-                android:textColor="@color/colorAccent" />
 
         </LinearLayout>
 
@@ -71,19 +63,10 @@
 
             <Button
                 android:id="@+id/btnSincroniza"
-                android:layout_width="76dp"
-                android:layout_height="76dp"
+                android:layout_width="136dp"
+                android:layout_height="136dp"
                 android:layout_gravity="center"
                 android:background="@mipmap/ic_sincroniza_servidor" />
-
-            <TextView
-                android:id="@+id/txtSincroniza"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="Sincronizar"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-                android:textColor="@color/colorAccent" />
 
         </LinearLayout>
 
@@ -104,19 +87,10 @@
 
             <Button
                 android:id="@+id/btnPedidoPendente"
-                android:layout_width="76dp"
-                android:layout_height="76dp"
+                android:layout_width="136dp"
+                android:layout_height="136dp"
                 android:layout_gravity="center"
                 android:background="@mipmap/ic_pedido_pendente" />
-
-            <TextView
-                android:id="@+id/txtPedidoPendente"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="Pedidos Pendentes"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-                android:textColor="@color/colorAccent" />
 
         </LinearLayout>
 
@@ -129,20 +103,11 @@
 
             <Button
                 android:id="@+id/btnPedidoFinalizado"
-                android:layout_width="76dp"
-                android:layout_height="76dp"
+                android:layout_width="136dp"
+                android:layout_height="136dp"
                 android:layout_gravity="center"
                 android:background="@mipmap/ic_pedido_finalizado"
                 android:scaleType="centerCrop" />
-
-            <TextView
-                android:id="@+id/txtPedidoFinalizado"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="Pedidos Enviados"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-                android:textColor="@color/colorAccent" />
 
         </LinearLayout>
 
@@ -163,20 +128,11 @@
 
             <Button
                 android:id="@+id/btnCliente"
-                android:layout_width="76dp"
-                android:layout_height="76dp"
+                android:layout_width="136dp"
+                android:layout_height="136dp"
                 android:layout_gravity="center_horizontal"
                 android:background="@mipmap/ic_clientes"
                 android:scaleType="centerCrop" />
-
-            <TextView
-                android:id="@+id/txtCliente"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="Clientes"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-                android:textColor="@color/colorAccent" />
 
         </LinearLayout>
 
@@ -189,20 +145,11 @@
 
             <Button
                 android:id="@+id/btnProduto"
-                android:layout_width="76dp"
-                android:layout_height="76dp"
+                android:layout_width="136dp"
+                android:layout_height="136dp"
                 android:layout_gravity="center"
                 android:background="@mipmap/ic_produtos"
                 android:scaleType="centerCrop" />
-
-            <TextView
-                android:id="@+id/txtProduto"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:text="Produtos"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-                android:textColor="@color/colorAccent" />
 
         </LinearLayout>
 
