@@ -216,7 +216,7 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
         } else if (webPedidoItem != null) {
             try {
                 edtNomeProduto.setText(webPedidoItem.getNome_produto());
-                edtTabelaPreco.setText(webPedidoItem.getValor_unitario());
+                edtTabelaPreco.setText(MascaraMonetaria.mascaraReal(webPedidoItem.getVenda_preco()));
                 precoVenda = Float.parseFloat(webPedidoItem.getVenda_preco());
                 try {
                     quantidade = Float.parseFloat(edtQuantidade.getText().toString());
@@ -313,7 +313,7 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
                                         if (objetoProduto != null) {
                                             webPedidoItem.setProduto(objetoProduto);
                                         }
-                                        webPedidoItem.setValor_unitario(objetoProduto.getVenda_preco());
+//                                        webPedidoItem.setValor_unitario(edtTabelaPreco.getText().toString());
                                         webPedidoItem.setTabela_preco_faixa(adapterFaixaPadrao.getItem(spFaixaPadrao.getSelectedItemPosition()));
                                         webPedidoItem.setQuantidade(quantidade.toString());
                                         webPedidoItem.setValor_total(total.toString());
