@@ -44,12 +44,6 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
     private Button btnSincroniza;
     private Button btnPedidoFinalizado;
     private Button btnPedidoPendente;
-    private TextView txtPedido;
-    private TextView txtCliente;
-    private TextView txtProduto;
-    private TextView txtSincroniza;
-    private TextView txtPedidoPendente;
-    private TextView txtPedidoFinalizado;
     private int aperta = 0;
     private Toolbar tb_principal;
     private ImageView ivInternet;
@@ -73,18 +67,7 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
         btnSincroniza = (Button) findViewById(R.id.btnSincroniza);
         btnPedidoFinalizado = (Button) findViewById(R.id.btnPedidoFinalizado);
         btnPedidoPendente = (Button) findViewById(R.id.btnPedidoPendente);
-        txtPedido = (TextView) findViewById(R.id.txtPedido);
-        txtProduto = (TextView) findViewById(R.id.txtProduto);
-        txtCliente = (TextView) findViewById(R.id.txtCliente);
-        txtSincroniza = (TextView) findViewById(R.id.txtSincroniza);
-        txtPedidoFinalizado = (TextView) findViewById(R.id.txtPedidoFinalizado);
-        txtPedidoPendente = (TextView) findViewById(R.id.txtPedidoPendente);
         ivInternet = (ImageView) findViewById(R.id.ivInternet);
-        txtPedido.setOnClickListener(this);
-        txtCliente.setOnClickListener(this);
-        txtProduto.setOnClickListener(this);
-        txtPedidoPendente.setOnClickListener(this);
-        txtPedidoFinalizado.setOnClickListener(this);
         btnPedidos.setOnClickListener(this);
         btnProduto.setOnClickListener(this);
         btnCliente.setOnClickListener(this);
@@ -105,29 +88,29 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
     @Override
     public void onClick(View view) {
 
-        if (view == btnCliente || view == txtCliente) {
+        if (view == btnCliente) {
             getUsuarios();
             Intent intent = new Intent(PrincipalActivity.this, ActivityCliente.class);
             startActivity(intent);
-        } else if (view == btnProduto || view == txtProduto) {
+        } else if (view == btnProduto) {
             getUsuarios();
 
             Intent intent = new Intent(PrincipalActivity.this, ActivityProduto.class);
             startActivity(intent);
-        } else if (view == btnPedidos || view == txtPedido) {
+        } else if (view == btnPedidos) {
             getUsuarios();
             Intent intent = new Intent(PrincipalActivity.this, ActivityPedidoMain.class);
 
             startActivity(intent);
-        } else if (view == btnSincroniza || view == txtSincroniza) {
+        } else if (view == btnSincroniza) {
             getUsuarios();
             Intent intent = new Intent(PrincipalActivity.this, ActivityDialogSincronia.class);
             SincroniaBO.setActivity(PrincipalActivity.this);
             startActivity(intent);
-        } else if (view == btnPedidoFinalizado || view == txtPedidoFinalizado) {
+        } else if (view == btnPedidoFinalizado) {
             Intent telaPedidoEnviado = new Intent(PrincipalActivity.this, ListagemPedidoEnviado.class);
             startActivity(telaPedidoEnviado);
-        } else if (view == btnPedidoPendente || view == txtPedidoPendente) {
+        } else if (view == btnPedidoPendente) {
             Intent telaPedidoPendentes = new Intent(PrincipalActivity.this, ListagemPedidoPendente.class);
             startActivity(telaPedidoPendentes);
         }
