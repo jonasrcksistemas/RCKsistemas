@@ -53,9 +53,6 @@
         <activity
             android:name=".interfaces.ListagemPedidoEnviado"
             android:theme="@style/Theme.MeuTemaPedido" />
-        <activity
-            android:name=".interfaces.HistoricoFinanceiroMain"
-            android:screenOrientation="portrait" />
         <activity android:name=".interfaces.ContatoActivity" />
         <activity
             android:name=".interfaces.ActivityDialogSincronia"
@@ -67,6 +64,8 @@
         <activity
             android:name=".interfaces.SpinnerFaixaDesconto"
             android:theme="@style/Theme.CriarDialog" />
+        <activity android:name=".interfaces.FinanceiroResumoActivity" />
+        <activity android:name=".interfaces.FinanceiroDetalheActivity"></activity>
     </application>
 
 </manifest>

@@ -6,7 +6,7 @@ import android.os.Bundle;
 import com.example.rcksuporte05.rcksistemas.R;
 
 /**
- * Created by RCK 03 on 13/12/2017.
+ * Created by RCK 04 on 13/12/2017.
  */
 
 public class ActivityDialogFiltroPedidos extends Activity {
