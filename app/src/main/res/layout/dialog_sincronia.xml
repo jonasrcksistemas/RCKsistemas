@@ -44,7 +44,7 @@
                 android:checked="true"
                 android:text="Clientes"
                 android:textColor="@color/colorAccent"
-                android:textSize="22sp" />
+                android:textSize="16sp" />
 
         </LinearLayout>
 
@@ -61,7 +61,7 @@
                 android:checked="true"
                 android:text="Produtos"
                 android:textColor="@color/colorAccent"
-                android:textSize="22sp" />
+                android:textSize="16sp" />
 
         </LinearLayout>
 
@@ -76,9 +76,9 @@
                 android:layout_width="245dp"
                 android:layout_height="wrap_content"
                 android:checked="false"
-                android:text="Pedidos Enviados"
+                android:text="Pedidos enviados"
                 android:textColor="@color/colorAccent"
-                android:textSize="22sp" />
+                android:textSize="16sp" />
 
         </LinearLayout>
 
@@ -94,9 +94,9 @@
                 android:layout_height="wrap_content"
                 android:checked="false"
                 android:maxLines="1"
-                android:text="Pedidos Pendentes"
+                android:text="Pedidos pendentes"
                 android:textColor="@color/colorAccent"
-                android:textSize="22sp" />
+                android:textSize="16sp" />
 
         </LinearLayout>
 

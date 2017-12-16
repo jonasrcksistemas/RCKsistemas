@@ -193,7 +193,7 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onResponse(Call<List<Usuario>> call, Response<List<Usuario>> response) {
                 usuarioList = response.body();
-                ivInternet.setVisibility(View.INVISIBLE);
+                ivInternet.setVisibility(View.GONE);
                 if (!usuarioBO.sincronizaNobanco(usuarioList, PrincipalActivity.this))
                     Toast.makeText(PrincipalActivity.this, "Houve um erro ao salvar os usuarios", Toast.LENGTH_LONG).show();
                 else {

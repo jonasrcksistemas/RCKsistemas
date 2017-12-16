@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
@@ -31,8 +32,8 @@
             android:paddingRight="@dimen/activity_horizontal_margin">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="160dp"
+                android:layout_height="110dp"
                 android:layout_gravity="center"
                 android:layout_marginBottom="30dp"
                 android:background="@drawable/ic_splash" />
@@ -86,10 +87,14 @@
 
     <Button
         android:id="@+id/informacao"
-        android:layout_width="84px"
-        android:layout_height="84px"
+        android:layout_width="64px"
+        android:layout_height="64px"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
         android:layout_gravity="center_horizontal|bottom"
-        android:layout_marginBottom="75dp"
-        android:background="@mipmap/ic_info" />
+        android:layout_marginBottom="22dp"
+        android:background="@mipmap/ic_info"
+        app:layout_anchor="@+id/linearLayout"
+        app:layout_anchorGravity="bottom|center" />
 
-</android.support.design.widget.CoordinatorLayout>
+</RelativeLayout>

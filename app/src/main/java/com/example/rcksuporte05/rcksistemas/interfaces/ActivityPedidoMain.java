@@ -106,9 +106,9 @@ public class ActivityPedidoMain extends AppCompatActivity {
 
         if (vizualizacao == 1) {
             toolbar.setTitle("Vizualização de Pedido");
-            toolbar2.setBackgroundColor(getResources().getColor(R.color.colorPrimaryAzul));
-            toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimaryAzul));
-            stl_tabsPedido.setBackgroundColor(getResources().getColor(R.color.colorPrimaryAzul));
+            toolbar2.setBackgroundColor(getResources().getColor(R.color.colorPrimaryCinza));
+            toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimaryCinza));
+            stl_tabsPedido.setBackgroundColor(getResources().getColor(R.color.colorPrimaryCinza));
             spOperacao.setEnabled(false);
             txtNomeCliente.setFocusable(false);
 

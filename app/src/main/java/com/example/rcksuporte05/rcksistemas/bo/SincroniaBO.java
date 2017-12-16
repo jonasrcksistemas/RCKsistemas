@@ -348,7 +348,7 @@ public class SincroniaBO {
                         activity.runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                ivInternet.setVisibility(View.INVISIBLE);
+                                ivInternet.setVisibility(View.GONE);
                             }
                         });
                         sincronizaBanco(sincronia, notificacao, mNotificationManager, progress);

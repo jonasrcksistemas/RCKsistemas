@@ -60,7 +60,7 @@
                 android:layout_below="@id/txtNomeCliente"
                 android:layout_marginTop="15dp"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-                android:theme="@style/Theme.MeuTema" />
+                android:theme="@style/Theme.MeuTemaPedido" />
 
             <Button
                 android:id="@+id/BtnFinanceiro"

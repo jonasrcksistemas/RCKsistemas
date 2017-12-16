@@ -12,6 +12,8 @@
     <color name="row_activated">#e0e0e0</color>
     <color name="bg_action_mode">#757575</color>
     <color name="colorPedidoEnviado">#B2DFDB</color>
+    <color name="colorPrimaryCinza">#607d8a</color>
+    <color name="colorPrimaryDarkCinza">#546e7b</color>
 
 
 </resources>
