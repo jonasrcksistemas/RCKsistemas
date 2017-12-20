@@ -94,22 +94,23 @@
                 android:layout_below="@+id/lySpinner"
                 android:orientation="horizontal"
                 >
-                
-                <RelativeLayout
+
+                <LinearLayout
+                    android:gravity="center"
                     android:id="@+id/rlDataEmissao"
                     android:layout_width="wrap_content"
                     android:layout_height="70dp"
                     android:layout_weight="1"
-                    >
+                    android:orientation="vertical">
+
 
                     <TextView
                         android:id="@+id/txtDaDataDeEmissao"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="DATA DE EMISSAO"
-                        android:layout_marginTop="16dp"
-                        android:textColor="@color/colorAccent"
-                        />
+                        android:layout_marginTop="10dp"
+                        android:textColor="@color/colorAccent" />
 
                     <TextView
                         android:id="@+id/txtDataEmissao"
@@ -118,18 +119,16 @@
                         android:text="13/12/2017"
                         android:layout_below="@+id/txtDaDataDeEmissao"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-                        android:layout_marginTop="8dp"
-                        />
+                        android:layout_marginTop="8dp" />
 
-                    
-                </RelativeLayout>
-                
+
+                </LinearLayout>
+
                 <RelativeLayout
                     android:id="@+id/rlDtaEntrega"
                     android:layout_width="wrap_content"
                     android:layout_height="70dp"
-                    android:layout_weight="1"
-                    >
+                    android:layout_weight="1">
 
                     <TextView
                         android:id="@+id/txtDataEntrega"
@@ -149,6 +148,7 @@
                         android:background="@drawable/borda_edittext"
                         android:focusable="false"
                         android:text="  /  /    "
+                        android:gravity="center"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
 
                     <Button

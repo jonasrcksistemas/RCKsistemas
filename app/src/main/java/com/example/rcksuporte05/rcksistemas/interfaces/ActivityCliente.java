@@ -13,16 +13,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
-import com.example.rcksuporte05.rcksistemas.Helper.HistoricoFinanceiroHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.ListaClienteAdapter;
 import com.example.rcksuporte05.rcksistemas.adapters.RecyclerTouchListener;
@@ -60,16 +57,17 @@ public class ActivityCliente extends AppCompatActivity {
         toolbar.setTitle("Lista de Clientes");
         toolbar.setTitle("Lista de Clientes");
         toolbar.setTitle("Lista de Clientes");
+        try {
+            lista = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE F_CLIENTE = 'S' AND F_VENDEDOR = 'N' AND ATIVO = 'S' ORDER BY ATIVO DESC, NOME_CADASTRO;");
+            preencheLista(lista);
+            System.gc();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         if (getIntent().getIntExtra("acao", 0) == 1) {
             toolbar.setTitle("Pesquisa de Clientes");
 
-            try {
-                lista = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE F_CLIENTE = 'S' AND F_VENDEDOR = 'N' AND ATIVO = 'S' ORDER BY ATIVO DESC, NOME_CADASTRO;");
-                preencheLista(lista);
-                System.gc();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
 
             listaDeClientes.addOnItemTouchListener(new RecyclerTouchListener(this, listaDeClientes, new RecyclerTouchListener.ClickListener() {
 
@@ -90,16 +88,6 @@ public class ActivityCliente extends AppCompatActivity {
             }));
 
         } else {
-
-            try {
-                lista = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE F_CLIENTE = 'S' AND F_VENDEDOR = 'N' ORDER BY ATIVO DESC, NOME_CADASTRO;");
-
-                preencheLista(lista);
-                System.gc();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
 
             listaDeClientes.addOnItemTouchListener(new RecyclerTouchListener(this, listaDeClientes, new RecyclerTouchListener.ClickListener() {
                 @Override
@@ -197,7 +185,7 @@ public class ActivityCliente extends AppCompatActivity {
 
         if (!query.trim().equals("")) {
             try {
-                lista = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE NOME_CADASTRO LIKE '%" + query + "%' OR NOME_FANTASIA LIKE '%" + query + "%' OR CPF_CNPJ LIKE '" + query + "%' OR TELEFONE_PRINCIPAL LIKE '%" + query + "%' ORDER BY ATIVO DESC, NOME_CADASTRO");
+                lista = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE ATIVO = 'S' AND (NOME_CADASTRO LIKE '%" + query + "%' OR NOME_FANTASIA LIKE '%" + query + "%' OR CPF_CNPJ LIKE '" + query + "%' OR TELEFONE_PRINCIPAL LIKE '%" + query + "%') ORDER BY ATIVO DESC, NOME_CADASTRO");
                 edtTotalClientes.setText("Clientes encontrados: " + lista.size() + "   ");
                 edtTotalClientes.setTextColor(Color.BLACK);
                 return lista;

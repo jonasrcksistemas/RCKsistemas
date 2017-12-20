@@ -72,11 +72,12 @@
             android:gravity="center">
 
             <Switch
-                android:id="@+id/id_opcao_pedidos"
+                android:id="@+id/id_opcao_pedidos_pendentes"
                 android:layout_width="245dp"
                 android:layout_height="wrap_content"
-                android:checked="false"
-                android:text="Pedidos enviados"
+                android:checked="true"
+                android:maxLines="1"
+                android:text="Pedidos pendentes"
                 android:textColor="@color/colorAccent"
                 android:textSize="16sp" />
 
@@ -89,12 +90,11 @@
             android:gravity="center">
 
             <Switch
-                android:id="@+id/id_opcao_pedidos_pendentes"
+                android:id="@+id/id_opcao_pedidos"
                 android:layout_width="245dp"
                 android:layout_height="wrap_content"
                 android:checked="false"
-                android:maxLines="1"
-                android:text="Pedidos pendentes"
+                android:text="Pedidos enviados"
                 android:textColor="@color/colorAccent"
                 android:textSize="16sp" />
 

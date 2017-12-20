@@ -178,7 +178,7 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
             edtQuantidade.setFocusable(false);
             spFaixaPadrao.setEnabled(false);
             btnBuscarProduto.setEnabled(false);
-            toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimaryAzul));
+            toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimaryCinza));
             this.setTheme(R.style.Theme_MeuTemaPedido);
         }
     }
@@ -226,7 +226,7 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
                 descontoReais = (Float.parseFloat(adapterFaixaPadrao.getItem(spFaixaPadrao.getSelectedItemPosition()).getPerc_desc_inicial()) / 100 * (precoVenda * quantidade));
                 valorBruto = Float.parseFloat(webPedidoItem.getVenda_preco()) * quantidade;
                 precoPago = ((precoVenda * quantidade) - descontoReais) / quantidade;
-                total = ((precoVenda * quantidade) /*- descontoReais*/);
+                total = (precoVenda * quantidade);
 
                 edtQuantidade.setText(quantidade.toString());
                 edtPrecoPago.setText(MascaraMonetaria.mascaraReal(precoPago));

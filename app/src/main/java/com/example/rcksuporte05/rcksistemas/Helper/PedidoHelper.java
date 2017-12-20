@@ -226,6 +226,7 @@ public class PedidoHelper {
 
                                 return false;
                             }
+
                         } else {
                             Toast.makeText(activityPedidoMain, "ATENÇÃO - Você precisa informar a data de entrega", Toast.LENGTH_SHORT).show();
                             editTextDataEntrega().setBackgroundResource(R.drawable.borda_edittext_erro);
