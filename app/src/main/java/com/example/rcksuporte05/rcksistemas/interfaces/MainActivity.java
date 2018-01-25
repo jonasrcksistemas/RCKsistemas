@@ -1,6 +1,7 @@
 package com.example.rcksuporte05.rcksistemas.interfaces;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.CursorIndexOutOfBoundsException;
 import android.os.Bundle;
@@ -158,18 +159,36 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     case 200:
                         Intent intent = new Intent(MainActivity.this, PrincipalActivity.class);
                         usuario1.setLogado("S");
-                        if (db.contagem("SELECT COUNT(*) FROM TBL_LOGIN") > 0) {
-                            db.atualizarTBL_LOGIN(usuario1);
+                        if (usuario1.getIdEmpresaMultiDevice() != null && Integer.parseInt(usuario1.getIdEmpresaMultiDevice()) > 0) {
+                            if (db.contagem("SELECT COUNT(*) FROM TBL_LOGIN") > 0) {
+                                db.atualizarTBL_LOGIN(usuario1);
+                            } else {
+                                db.insertTBL_LOGIN(usuario1);
+                            }
+                            intent.putExtra("alterado", alterado);
+                            db.close();
+                            System.gc();
+                            UsuarioHelper.setUsuario(usuario1);
+                            progress.dismiss();
+                            startActivity(intent);
+                            finish();
                         } else {
-                            db.insertTBL_LOGIN(usuario1);
+                            AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
+                            alert.setTitle("Atenção");
+                            alert.setMessage("O usuario em questão não tem o codigo da empresa informado em seu cadastro, é necessário a correção no cadastro deste usuário!\n    " +
+                                    "Em caso de duvida, favor entrar em contato com a RCK sistemas!");
+                            alert.setCancelable(false);
+                            alert.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    edtLogin.setText("");
+                                    edtSenha.setText("");
+                                    edtLogin.requestFocus();
+                                }
+                            });
+                            progress.dismiss();
+                            alert.show();
                         }
-                        intent.putExtra("alterado", alterado);
-                        db.close();
-                        System.gc();
-                        UsuarioHelper.setUsuario(usuario1);
-                        progress.dismiss();
-                        startActivity(intent);
-                        finish();
                         break;
                     case 500:
                         edtSenha.setError("Senha incorreta");

@@ -12,7 +12,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.rcksuporte05.rcksistemas.Helper.UsuarioHelper;
@@ -236,9 +235,27 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                 Usuario usuario1 = response.body();
                 switch (response.code()) {
                     case 200:
-                        System.gc();
-                        System.out.println("Usuario ok");
-                        UsuarioHelper.setUsuario(usuario1);
+                        if (usuario1.getIdEmpresaMultiDevice() != null && Integer.parseInt(usuario1.getIdEmpresaMultiDevice()) > 0) {
+                            System.gc();
+                            System.out.println("Usuario ok");
+                            UsuarioHelper.setUsuario(usuario1);
+                        } else {
+                            AlertDialog.Builder alert = new AlertDialog.Builder(PrincipalActivity.this);
+                            alert.setTitle("Atenção");
+                            alert.setMessage("O usuario em questão não tem o codigo da empresa informado em seu cadastro, é necessário a correção no cadastro deste usuário!\n    " +
+                                    "Em caso de duvida, favor entrar em contato com a RCK sistemas!");
+                            alert.setCancelable(false);
+                            alert.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Intent intent = new Intent(PrincipalActivity.this, MainActivity.class);
+                                    startActivity(intent);
+                                    db.alterar("UPDATE TBL_LOGIN SET LOGADO = 'N'");
+                                    finish();
+                                }
+                            });
+                            alert.show();
+                        }
                         break;
                     case 500:
                         Toast.makeText(getApplicationContext(), "Foi encontrada uma divergencia em seu cadastro!", Toast.LENGTH_SHORT).show();
