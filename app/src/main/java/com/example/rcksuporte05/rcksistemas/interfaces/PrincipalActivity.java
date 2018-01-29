@@ -201,8 +201,8 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
             case Foto:
                 AlertDialog.Builder fotoAcao = new AlertDialog.Builder(PrincipalActivity.this);
                 fotoAcao.setTitle("Escolha a forma de capturar a imagem");
-                String[] lista = {"Camera", "Galeria"};
-                fotoAcao.setItems(lista, new DialogInterface.OnClickListener() {
+                String[] array = {"Camera", "Galeria"};
+                fotoAcao.setItems(array, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
@@ -225,7 +225,7 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                                 }
                                 break;
                             case 1:
-                                Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+                                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
                                 startActivityForResult(Intent.createChooser(intent, "Selecione uma imagem"), 789);
                                 break;
                         }
@@ -244,47 +244,17 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
         Bitmap bitmap = null;
         if (requestCode == 123) {
             if (resultCode == Activity.RESULT_OK) {
-                int rotate = 0;
-                int w = 0;
-                int h = 0;
-                Matrix mtx = new Matrix();
 
                 Intent novaIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri);
                 sendBroadcast(novaIntent);
 
+                Intent intent = new Intent(PrincipalActivity.this, FotoActivity.class);
+
                 try {
-                    bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(uri));
-
-                    w = bitmap.getWidth();
-                    h = bitmap.getHeight();
-                    mtx = new Matrix();
-
-                    ExifInterface exif = new ExifInterface(uri.getPath());
-
-                    int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
-
-                    switch (orientation) {
-                        case ExifInterface.ORIENTATION_ROTATE_270:
-                            rotate = 270;
-                            break;
-                        case ExifInterface.ORIENTATION_ROTATE_180:
-                            rotate = 180;
-                            break;
-                        case ExifInterface.ORIENTATION_ROTATE_90:
-                            rotate = 90;
-                            break;
-                    }
-
-                    mtx.postRotate(rotate);
-
+                    FotoHelper.setFoto(rotateBitmap(BitmapFactory.decodeStream(getContentResolver().openInputStream(uri)), uri));
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
                 }
-                Intent intent = new Intent(PrincipalActivity.this, FotoActivity.class);
-                Bitmap bmrt = Bitmap.createBitmap(bitmap, 0, 0, w, h, mtx, true);
-                FotoHelper.setFoto(bmrt);
                 startActivity(intent);
             }
         } else if (requestCode == 456) {
@@ -298,9 +268,8 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
         } else if (requestCode == 789) {
             if (resultCode == Activity.RESULT_OK) {
                 if (data != null) {
-                    Uri imagemSelecionada = data.getData();
                     try {
-                        bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(imagemSelecionada));
+                        bitmap = rotateBitmap(BitmapFactory.decodeStream(getContentResolver().openInputStream(data.getData())), data.getData());
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
@@ -310,6 +279,46 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                 }
             }
         }
+    }
+
+    public Bitmap rotateBitmap(Bitmap bitmap, Uri uri) {
+
+        int rotate = 0;
+        int w = 0;
+        int h = 0;
+        Matrix mtx = new Matrix();
+
+        try {
+
+            w = bitmap.getWidth();
+            h = bitmap.getHeight();
+            mtx = new Matrix();
+
+            ExifInterface exif = new ExifInterface(uri.getPath());
+
+            int orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+
+            switch (orientation) {
+                case ExifInterface.ORIENTATION_ROTATE_270:
+                    rotate = 270;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    rotate = 180;
+                    break;
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    rotate = 90;
+                    break;
+            }
+
+            mtx.postRotate(rotate);
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return Bitmap.createBitmap(bitmap, 0, 0, w, h, mtx, true);
     }
 
     public void getUsuarios() {
