@@ -1,5 +1,6 @@
 package com.example.rcksuporte05.rcksistemas.api;
 
+import com.example.rcksuporte05.rcksistemas.classes.Foto;
 import com.example.rcksuporte05.rcksistemas.classes.HistoricoFinanceiro;
 import com.example.rcksuporte05.rcksistemas.classes.Sincronia;
 import com.example.rcksuporte05.rcksistemas.classes.Usuario;
@@ -36,5 +37,6 @@ public interface Rotas {
     @GET("historicofinanceiro/listar/{id}")
     Call<HistoricoFinanceiro> getHistoricoFinanceiro(@Path("id") int idCliente, @HeaderMap Map<String, String> chaveDeAcesso);
 
-
+    @POST("foto/salvarimagem")
+    Call<Foto> salvarImagem(@Body Foto foto);
 }
