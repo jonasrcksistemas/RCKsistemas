@@ -15,7 +15,7 @@
         android:theme="@style/Theme.MeuTema">
         <activity
             android:name=".interfaces.MainActivity"
-            android:theme="@style/Theme.Main" />
+
         android:theme="@style/Theme.Main" />
         <activity
             android:name=".interfaces.PrincipalActivity"
@@ -69,6 +69,10 @@
 
         <activity
             android:name=".interfaces.FinanceiroResumoActivity"
+            android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".interfaces.ActivityCadastroProspect"
             android:screenOrientation="portrait" />
 
         <activity android:name=".interfaces.FinanceiroDetalheActivity" />

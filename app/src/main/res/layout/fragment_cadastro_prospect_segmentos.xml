@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin">
+
+            <TextView
+                android:id="@+id/txtSeguimentoProspect"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Seguimentos "
+                android:textColor="@color/colorAccent"
+                android:textStyle="bold"
+                />
+
+            <RadioGroup
+                android:id="@+id/rdSeguimentoProspect"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_below="@id/txtSeguimentoProspect"
+                >
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    >
+
+                    <RadioButton
+                        android:id="@+id/as1a4cks"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="AS 1 e 4 CKS"
+                        />
+
+                    <RadioButton
+                        android:id="@+id/as5a10cks"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="AS 5 a 10 CKS"
+                        />
+
+                    <RadioButton
+                        android:id="@+id/as11a19cks"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="AS 11 a 19 CKS"
+                        />
+
+                    <RadioButton
+                        android:id="@+id/asacimade20cks"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="AS acima de 20 CKS"
+                        />
+
+                    <RadioButton
+                        android:id="@+id/idHipermercado"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Hipermercado"
+                        />
+
+                    <RadioButton
+                        android:id="@+id/idConveniencia"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Conveniência"
+                        />
+
+                    <RadioButton
+                        android:id="@+id/idLojaSuplemento"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Loja Suplementos"
+                        />
+
+                    <RadioButton
+                        android:id="@+id/idLojaProdutosNatural"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Loja Produtos Naturais"
+                        />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <RadioButton
+                        android:id="@+id/idAcademiaDeEsporte"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Academia de Esportes"
+                        />
+
+                    <RadioButton
+                        android:id="@+id/idFarmaciaDrogaria"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Farmacia/Drograrias"
+                        />
+
+                    <RadioButton
+                        android:id="@+id/idManipulacaoMedicamentos"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Manipulação Medicamentos"
+                        />
+                    <RadioButton
+                        android:id="@+id/idMercearia"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Mercearia"
+                        />
+                    <RadioButton
+                        android:id="@+id/idArtigoEsportivos"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Artigos Esportivos"
+                        />
+                    <RadioButton
+                        android:id="@+id/idEventos"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Eventos"
+                        />
+                    <RadioButton
+                        android:id="@+id/idOutros"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Outros (Especifique)"
+                        />
+
+                </LinearLayout>
+
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/txtOutrosProspect"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/rdSeguimentoProspect"
+                android:text="Especifique Outros"
+                android:textColor="@color/colorAccent"
+                android:textStyle="bold"
+                android:layout_marginTop="12dp"
+                />
+            <EditText
+                android:id="@+id/edtOutrosProspect"
+                android:layout_width="match_parent"
+                android:layout_height="96dp"
+                android:layout_below="@+id/txtOutrosProspect"
+                android:background="@drawable/borda_edittext"
+                android:inputType="textCapSentences|textMultiLine"
+                android:maxLength="300"
+                android:gravity="top"
+            />
+
+
+        </RelativeLayout>
+    </ScrollView>
+
+</LinearLayout>

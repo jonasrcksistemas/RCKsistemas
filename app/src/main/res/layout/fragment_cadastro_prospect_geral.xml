@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_cadastro_cliente"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="com.example.rcksuporte05.rcksistemas.interfaces.ActivityCadastroProspect">
+
+     <ScrollView
+         android:layout_width="match_parent"
+         android:layout_height="match_parent">
+
+          <RelativeLayout
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:paddingBottom="@dimen/activity_vertical_margin"
+              android:paddingLeft="@dimen/activity_horizontal_margin"
+              android:paddingRight="@dimen/activity_horizontal_margin"
+              android:paddingTop="@dimen/activity_vertical_margin">
+
+               <TextView
+                   android:id="@+id/txtIdProspect"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_alignParentLeft="true"
+                   android:layout_alignParentStart="true"
+                   android:layout_alignParentTop="true"
+                   android:text="ID: 0000"
+                   android:textColor="@color/colorAccent"
+                   android:textStyle="bold" />
+
+               <TextView
+                   android:id="@+id/txtPessoaProspect"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_below="@+id/txtIdProspect"
+                   android:layout_marginTop="12dp"
+                   android:text="PESSOA"
+                   android:textColor="@color/colorAccent"
+                   android:textStyle="bold" />
+
+               <RadioGroup
+                   android:id="@+id/rdPessoaProspect"
+                   android:layout_width="match_parent"
+                   android:layout_height="match_parent"
+                   android:layout_alignParentEnd="true"
+                   android:layout_alignParentLeft="true"
+                   android:layout_alignParentRight="true"
+                   android:layout_alignParentStart="true"
+                   android:layout_below="@+id/txtPessoaProspect"
+                   android:layout_toEndOf="@+id/txtIdProspect"
+                   android:layout_toRightOf="@+id/txtIdProspect"
+                   android:background="#ededed"
+                   android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/rdFisicaProspect"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="23dp"
+                        android:layout_marginStart="23dp"
+                        android:text="Física"
+                        android:textColor="@color/colorAccent" />
+
+                    <RadioButton
+                        android:id="@+id/rdJuridicaProspect"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="80dp"
+                        android:layout_marginStart="80dp"
+                        android:text="Jurídica"
+                        android:textColor="@color/colorAccent" />
+
+               </RadioGroup>
+
+               <TextView
+                   android:id="@+id/txtNomeClienteProspect"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_alignParentLeft="true"
+                   android:layout_alignParentStart="true"
+                   android:layout_below="@+id/rdPessoaProspect"
+                   android:layout_marginTop="12dp"
+                   android:text="NOME"
+                   android:textColor="@color/colorAccent"
+                   android:textStyle="bold" />
+
+               <EditText
+                   android:id="@+id/edtNomeClienteProspect"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:layout_alignParentLeft="true"
+                   android:layout_alignParentStart="true"
+                   android:layout_below="@+id/txtNomeClienteProspect"
+                   android:background="@drawable/borda_edittext"
+                   android:hint="Nome"
+                   android:inputType="textCapCharacters|textMultiLine"
+                   android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+               <TextView
+                   android:id="@+id/txtRazaoSocialProspect"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_alignParentLeft="true"
+                   android:layout_alignParentStart="true"
+                   android:layout_below="@+id/edtNomeClienteProspect"
+                   android:layout_marginTop="12dp"
+                   android:text="NOME FANTASIA"
+                   android:textColor="@color/colorAccent"
+                   android:textStyle="bold" />
+
+
+               <EditText
+                   android:id="@+id/edtNomeFantasiaProspect"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:layout_alignParentEnd="true"
+                   android:layout_alignParentLeft="true"
+                   android:layout_alignParentRight="true"
+                   android:layout_alignParentStart="true"
+                   android:layout_below="@+id/txtRazaoSocialProspect"
+                   android:background="@drawable/borda_edittext"
+                   android:hint="Nome Fantasia"
+                   android:inputType="textCapCharacters|textMultiLine"
+                   android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+               <TextView
+                   android:id="@+id/txtCpfCnpjProspect"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_below="@+id/edtNomeFantasiaProspect"
+                   android:layout_marginTop="12dp"
+                   android:text="CPF"
+                   android:textColor="@color/colorAccent"
+                   android:textStyle="bold" />
+
+               <EditText
+                   android:id="@+id/edtCpfCnpjProspect"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:layout_alignParentEnd="true"
+                   android:layout_alignParentLeft="true"
+                   android:layout_alignParentRight="true"
+                   android:layout_alignParentStart="true"
+                   android:layout_below="@+id/txtCpfCnpjProspect"
+                   android:layout_toEndOf="@+id/txtCpfCnpjProspect"
+                   android:layout_toRightOf="@+id/txtCpfCnpjProspect"
+                   android:background="@drawable/borda_edittext"
+                   android:hint="CPF"
+                   android:inputType="textFilter|number|textMultiLine"
+                   android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+               <TextView
+                   android:id="@+id/txtInscEstadualProspect"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_alignParentLeft="true"
+                   android:layout_alignParentStart="true"
+                   android:layout_below="@+id/edtCpfCnpjProspect"
+                   android:layout_marginTop="12dp"
+                   android:text="INSCRIÇÃO ESTADUAL"
+                   android:textColor="@color/colorAccent"
+                   android:textStyle="bold" />
+
+
+               <EditText
+                   android:id="@+id/edtInscEstadualProspect"
+                   android:layout_width="130dp"
+                   android:layout_height="wrap_content"
+                   android:layout_alignParentLeft="true"
+                   android:layout_alignParentStart="true"
+                   android:layout_below="@+id/txtInscEstadualProspect"
+                   android:layout_toLeftOf="@+id/spIe"
+                   android:layout_toStartOf="@+id/spIe"
+                   android:background="@drawable/borda_edittext"
+                   android:hint="Inscrição Estadual"
+                   android:inputType="textFilter|numberSigned|textMultiLine"
+                   android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+               <Spinner
+                   android:id="@+id/spIe"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_alignParentEnd="true"
+                   android:layout_alignParentRight="true"
+                   android:layout_alignTop="@+id/edtInscEstadualProspect" />
+
+
+               <TextView
+                   android:id="@+id/txtInscMunicipalProspect"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_below="@+id/edtInscEstadualProspect"
+                   android:layout_marginTop="12dp"
+                   android:text="INSCRIÇÃO MUNICIPAL"
+                   android:textColor="@color/colorAccent"
+                   android:textStyle="bold" />
+
+               <EditText
+                   android:id="@+id/edtInscMunicipalProspect"
+                   android:layout_width="match_parent"
+                   android:layout_height="wrap_content"
+                   android:layout_below="@+id/txtInscMunicipalProspect"
+                   android:background="@drawable/borda_edittext"
+                   android:hint="Inscrição Municipal"
+                   android:inputType="textFilter|numberSigned|textMultiLine"
+                   android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+               <TextView
+                   android:id="@+id/txtRotaProspect"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_below="@id/edtInscMunicipalProspect"
+                   android:text="Dia de Rota" />
+
+               <RadioGroup
+                   android:id="@+id/rdRotaProspect"
+                   android:layout_width="match_parent"
+                   android:layout_height="match_parent"
+                   android:layout_alignParentEnd="true"
+                   android:layout_alignParentLeft="true"
+                   android:layout_alignParentRight="true"
+                   android:layout_alignParentStart="true"
+                   android:layout_below="@+id/txtRotaProspect"
+                   android:layout_toEndOf="@+id/txtRotaProspect"
+                   android:layout_toRightOf="@+id/txtIdProspect"
+                   android:background="#ededed"
+                   android:orientation="horizontal">
+                   <LinearLayout
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:orientation="vertical"
+                       >
+                        <RadioButton
+                            android:id="@+id/rdSegrospect"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Segunda"
+                            android:textColor="@color/colorAccent" />
+
+                        <RadioButton
+                            android:id="@+id/rdTercaProspect"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Terça"
+                            android:textColor="@color/colorAccent" />
+
+                        <RadioButton
+                            android:id="@+id/rdQuartaProspect"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Quarta"
+                            android:textColor="@color/colorAccent" />
+                   </LinearLayout>
+
+                   <LinearLayout
+                       android:layout_width="wrap_content"
+                       android:layout_height="wrap_content"
+                       android:orientation="vertical"
+                       >
+
+                        <RadioButton
+                            android:id="@+id/rdQuintaProspect"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="45dp"
+                            android:text="Quinta"
+                            android:textColor="@color/colorAccent" />
+
+                        <RadioButton
+                            android:id="@+id/rdSextaProspect"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="45dp"
+                            android:text="Sexta"
+                            android:textColor="@color/colorAccent" />
+                   </LinearLayout>
+
+               </RadioGroup>
+
+
+          </RelativeLayout>
+     </ScrollView>
+</LinearLayout>

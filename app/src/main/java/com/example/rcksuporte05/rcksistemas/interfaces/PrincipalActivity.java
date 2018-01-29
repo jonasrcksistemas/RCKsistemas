@@ -12,7 +12,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.rcksuporte05.rcksistemas.Helper.UsuarioHelper;
@@ -90,7 +89,7 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
 
         if (view == btnCliente) {
             getUsuarios();
-            Intent intent = new Intent(PrincipalActivity.this, ActivityCliente.class);
+            Intent intent = new Intent(PrincipalActivity.this, ActivityCadastroProspect.class);
             startActivity(intent);
         } else if (view == btnProduto) {
             getUsuarios();
