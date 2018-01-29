@@ -6,13 +6,17 @@
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission-sdk-23 android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission-sdk-23 android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MeuTema">
+        android:theme="@style/Theme.MeuTema"
+        android:hardwareAccelerated="false"
+        android:largeHeap="true">
         <activity
             android:name=".interfaces.MainActivity"
             android:theme="@style/Theme.Main" />
@@ -66,12 +70,11 @@
         <activity
             android:name=".interfaces.SpinnerFaixaDesconto"
             android:theme="@style/Theme.CriarDialog" />
-
         <activity
             android:name=".interfaces.FinanceiroResumoActivity"
             android:screenOrientation="portrait" />
-
         <activity android:name=".interfaces.FinanceiroDetalheActivity" />
+        <activity android:name=".interfaces.FotoActivity"></activity>
     </application>
 
 </manifest>

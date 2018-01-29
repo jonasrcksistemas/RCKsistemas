@@ -1,0 +1,12 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:mContext="com.example.rcksuporte05.rcksistemas.interfaces.ListagemPedidoEnviado">
+    <item
+        android:id="@+id/uploadFoto"
+        android:icon="@mipmap/ic_enviar_pedidos_selecionados"
+        android:orderInCategory="2"
+        android:title="Enviar pedidos selecioandos"
+        app:showAsAction="always" />
+
+</menu>
