@@ -145,4 +145,10 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <style name="Button" parent="Widget.AppCompat.Button.Colored">
+        <item name="colorButtonNormal">@color/corBotao</item>
+        <item name="android:textColor">@color/branco</item>
+        <item name="android:checkableBehavior">all</item>
+    </style>
+
 </resources>

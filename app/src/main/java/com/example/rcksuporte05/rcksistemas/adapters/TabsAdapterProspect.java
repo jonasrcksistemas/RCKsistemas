@@ -4,6 +4,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import com.example.rcksuporte05.rcksistemas.fragment.CadastroProspectFotoSalvar;
 import com.example.rcksuporte05.rcksistemas.fragment.CadastroProspectGeral;
 import com.example.rcksuporte05.rcksistemas.fragment.CadastroProspectEndereco;
 import com.example.rcksuporte05.rcksistemas.fragment.CadastroProspectContatos;
@@ -17,7 +18,8 @@ import com.example.rcksuporte05.rcksistemas.fragment.CadastroProspectSegmentos;
  */
 
 public class TabsAdapterProspect extends FragmentPagerAdapter{
-    private String[] titles = {"Geral", "Endereços", "Contato","Segmentos", "Motivos não Cadastramento", "Observações Comerciais"};
+    private String[] titles = {"Geral", "Endereços", "Contato","Segmentos", "Motivos não Cadastramento", "Observações Comerciais",
+    "adicionar Foto e Salvar"};
 
     public TabsAdapterProspect(FragmentManager fm) {
         super(fm);
@@ -45,6 +47,9 @@ public class TabsAdapterProspect extends FragmentPagerAdapter{
 
             case 5:
                 frag = new CadastroProspectObservacoesComerciais();
+                break;
+            case 6:
+                frag = new CadastroProspectFotoSalvar();
                 break;
         }
 
