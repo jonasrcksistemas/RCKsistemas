@@ -47,6 +47,7 @@ public class Prospect {
     private String fotoSecundariaBase64;
     private Bitmap fotoPrincipal;
     private Bitmap fotoSecundaria;
+    private String idEmpresa;
 
     public String getId_prospect() {
         return id_prospect;
@@ -358,5 +359,13 @@ public class Prospect {
 
     public void setFotoSecundaria(Bitmap fotoSecundaria) {
         this.fotoSecundaria = fotoSecundaria;
+    }
+
+    public String getIdEmpresa() {
+        return idEmpresa;
+    }
+
+    public void setIdEmpresa(String idEmpresa) {
+        this.idEmpresa = idEmpresa;
     }
 }
