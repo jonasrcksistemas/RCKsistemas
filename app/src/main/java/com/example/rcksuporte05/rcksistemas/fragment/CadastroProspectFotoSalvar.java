@@ -22,7 +22,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.example.rcksuporte05.rcksistemas.Helper.FotoHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.interfaces.FotoActivity;
 import com.example.rcksuporte05.rcksistemas.util.FotoUtil;
@@ -106,7 +105,7 @@ public class CadastroProspectFotoSalvar extends Fragment {
                 Intent intent = new Intent(getActivity(), FotoActivity.class);
 
                 try {
-                    FotoHelper.setFoto(FotoUtil.rotateBitmap(BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(uri)), uri));
+                    imagemProspect.setImageBitmap(FotoUtil.rotateBitmap(BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(uri)), uri));
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -114,12 +113,9 @@ public class CadastroProspectFotoSalvar extends Fragment {
             }
         } else if (requestCode == 456) {
             if (resultCode == Activity.RESULT_OK) {
-                try {
-                    imagemProspect.setImageBitmap(FotoUtil.rotateBitmap(BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(uri)), uri));
-                } catch (FileNotFoundException e) {
-                    System.out.println("------------------------------ops------------------------------");
-                    e.printStackTrace();
-                }
+                Bundle bundle = data.getExtras();
+                bitmap = (Bitmap) bundle.get("data");
+                imagemProspect.setImageBitmap(bitmap);
             }
         } else if (requestCode == 789) {
             if (resultCode == Activity.RESULT_OK) {
@@ -129,9 +125,7 @@ public class CadastroProspectFotoSalvar extends Fragment {
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
-                    Intent intent = new Intent(getActivity(), FotoActivity.class);
-                    FotoHelper.setFoto(bitmap);
-                    startActivity(intent);
+                    imagemProspect.setImageBitmap(bitmap);
                 }
             }
         }

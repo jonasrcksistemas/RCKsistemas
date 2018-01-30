@@ -23,12 +23,13 @@
                 android:theme="@style/Button" />
 
             <ImageView
+                android:layout_width="match_parent"
                 android:id="@+id/imagemProspect"
-                android:layout_width="140dp"
-                android:layout_height="110dp"
-                android:layout_below="@+id/btnAddFoto"
-                android:layout_marginTop="12dp"
-                />
+                android:layout_height="match_parent"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/btnAddFoto" />
 
 
         </RelativeLayout>
