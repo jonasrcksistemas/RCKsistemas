@@ -72,13 +72,21 @@ public class CadastroProspectFotoSalvar extends Fragment {
                             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
                         }
 
+                        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA}, 0);
+                        }
+
                         Intent intentCamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                         intentCamera.putExtra(MediaStore.EXTRA_OUTPUT, uri);
                         try {
                             startActivityForResult(intentCamera, 123);
                         } catch (FileUriExposedException e) {
                             Intent captura = new Intent("android.media.action.IMAGE_CAPTURE");
-                            startActivityForResult(captura, 456);
+                            try {
+                                startActivityForResult(captura, 456);
+                            } catch (Exception ex) {
+                                e.printStackTrace();
+                            }
                         }
                         break;
                     case 1:

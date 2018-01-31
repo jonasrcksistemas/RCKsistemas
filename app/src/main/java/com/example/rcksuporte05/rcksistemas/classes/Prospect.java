@@ -45,9 +45,10 @@ public class Prospect {
     private String contaCorrente;
     private String fotoPrincipalBase64;
     private String fotoSecundariaBase64;
+    private String idEmpresa;
+    private String diaVisita;
     private Bitmap fotoPrincipal;
     private Bitmap fotoSecundaria;
-    private String idEmpresa;
 
     public String getId_prospect() {
         return id_prospect;
@@ -367,5 +368,13 @@ public class Prospect {
 
     public void setIdEmpresa(String idEmpresa) {
         this.idEmpresa = idEmpresa;
+    }
+
+    public String getDiaVisita() {
+        return diaVisita;
+    }
+
+    public void setDiaVisita(String diaVisita) {
+        this.diaVisita = diaVisita;
     }
 }
