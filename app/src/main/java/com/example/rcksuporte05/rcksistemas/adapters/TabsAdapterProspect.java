@@ -44,7 +44,6 @@ public class TabsAdapterProspect extends FragmentPagerAdapter{
             case 4:
                 frag = new CadastroProspectMotivos();
                 break;
-
             case 5:
                 frag = new CadastroProspectObservacoesComerciais();
                 break;

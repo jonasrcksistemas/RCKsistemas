@@ -173,21 +173,43 @@
                 android:id="@+id/edtCep"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
+                android:layout_alignEnd="@+id/txtUfProspect"
+                android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
+                android:layout_alignRight="@+id/txtUfProspect"
                 android:layout_below="@+id/txtCepProspect"
                 android:background="@drawable/borda_edittext"
                 android:hint="CEP"
                 android:inputType="textFilter|number"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+            <TextView
+                android:id="@+id/txtComplementoProspect"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Complemento: "
+                android:layout_below="@+id/edtCep"
+                android:textColor="@color/colorAccent"
+                android:textStyle="bold"
+                android:layout_marginTop="12dp"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentLeft="true" />
+                />
+
+            <EditText
+                android:id="@+id/edtComplementoProspect"
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                android:inputType="textCapSentences|textMultiLine"
+                android:maxLength="300"
+                android:gravity="top"
+                android:background="@drawable/borda_edittext"
+                android:layout_below="@+id/txtComplementoProspect"/>
 
             <TextView
                 android:id="@+id/txtRdSituacaoPredio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/edtCep"
+                android:layout_below="@+id/edtComplementoProspect"
                 android:text="Predio: "
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold"
@@ -195,8 +217,9 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 />
 
+
             <RadioGroup
-                android:id="@+id/rdSituacaoPredio"
+                android:id="@+id/rgSituacaoPredio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/txtRdSituacaoPredio"

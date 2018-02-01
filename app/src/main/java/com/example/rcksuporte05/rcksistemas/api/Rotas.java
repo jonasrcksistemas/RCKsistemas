@@ -2,6 +2,8 @@ package com.example.rcksuporte05.rcksistemas.api;
 
 import com.example.rcksuporte05.rcksistemas.classes.Foto;
 import com.example.rcksuporte05.rcksistemas.classes.HistoricoFinanceiro;
+import com.example.rcksuporte05.rcksistemas.classes.MotivoNaoCadastramento;
+import com.example.rcksuporte05.rcksistemas.classes.Segmento;
 import com.example.rcksuporte05.rcksistemas.classes.Sincronia;
 import com.example.rcksuporte05.rcksistemas.classes.Usuario;
 import com.example.rcksuporte05.rcksistemas.classes.WebPedido;
@@ -39,4 +41,10 @@ public interface Rotas {
 
     @POST("foto/salvarimagem")
     Call<Foto> salvarImagem(@Body Foto foto);
+
+    @GET("segmento/listar")
+    Call<List<Segmento>> buscarTodosSegmentos(@HeaderMap Map<String, String> chaveDeAcesso);
+
+    @GET("motivonaocadastramento/listar")
+    Call<List<MotivoNaoCadastramento>> buscarTodosMotivos(@HeaderMap Map<String, String> chaveDeAcesso);
 }

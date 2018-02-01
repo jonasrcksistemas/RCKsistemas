@@ -73,6 +73,7 @@ public class ListaPedidoAdapter extends RecyclerView.Adapter<PedidoViewHolder> {
 
 
     }
+
     private void applyClickEvents(PedidoViewHolder holder, final int position) {
         holder.itemListaPedido.setOnLongClickListener(new View.OnLongClickListener() {
             @Override

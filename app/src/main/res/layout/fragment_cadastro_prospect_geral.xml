@@ -30,6 +30,16 @@
                    android:textColor="@color/colorAccent"
                    android:textStyle="bold" />
 
+               <Button
+                   android:id="@+id/btnTeste"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:layout_above="@+id/rgPessoaProspect"
+                   android:layout_marginBottom="9dp"
+                   android:layout_toEndOf="@+id/txtInscEstadualProspect"
+                   android:layout_toRightOf="@+id/txtInscEstadualProspect"
+                   android:text="teste" />
+
                <TextView
                    android:id="@+id/txtPessoaProspect"
                    android:layout_width="wrap_content"
@@ -41,7 +51,7 @@
                    android:textStyle="bold" />
 
                <RadioGroup
-                   android:id="@+id/rdPessoaProspect"
+                   android:id="@+id/rgPessoaProspect"
                    android:layout_width="match_parent"
                    android:layout_height="match_parent"
                    android:layout_alignParentEnd="true"
@@ -80,9 +90,9 @@
                    android:layout_height="wrap_content"
                    android:layout_alignParentLeft="true"
                    android:layout_alignParentStart="true"
-                   android:layout_below="@+id/rdPessoaProspect"
+                   android:layout_below="@+id/rgPessoaProspect"
                    android:layout_marginTop="12dp"
-                   android:text="NOME"
+                   android:text="Razão Social"
                    android:textColor="@color/colorAccent"
                    android:textStyle="bold" />
 
@@ -94,8 +104,7 @@
                    android:layout_alignParentStart="true"
                    android:layout_below="@+id/txtNomeClienteProspect"
                    android:background="@drawable/borda_edittext"
-                   android:hint="Nome"
-                   android:inputType="textCapCharacters|textMultiLine"
+                   android:hint="Razão Social"
                    android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
                <TextView
@@ -215,7 +224,7 @@
                    android:text="Dia de Rota" />
 
                <RadioGroup
-                   android:id="@+id/rdRotaProspect"
+                   android:id="@+id/rgRotaProspect"
                    android:layout_width="match_parent"
                    android:layout_height="match_parent"
                    android:layout_alignParentEnd="true"
@@ -226,12 +235,8 @@
                    android:layout_toEndOf="@+id/txtRotaProspect"
                    android:layout_toRightOf="@+id/txtIdProspect"
                    android:background="#ededed"
-                   android:orientation="horizontal">
-                   <LinearLayout
-                       android:layout_width="wrap_content"
-                       android:layout_height="wrap_content"
-                       android:orientation="vertical"
-                       >
+                   android:orientation="vertical">
+
                         <RadioButton
                             android:id="@+id/rdSegrospect"
                             android:layout_width="wrap_content"
@@ -252,19 +257,12 @@
                             android:layout_height="wrap_content"
                             android:text="Quarta"
                             android:textColor="@color/colorAccent" />
-                   </LinearLayout>
 
-                   <LinearLayout
-                       android:layout_width="wrap_content"
-                       android:layout_height="wrap_content"
-                       android:orientation="vertical"
-                       >
 
                         <RadioButton
                             android:id="@+id/rdQuintaProspect"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="45dp"
                             android:text="Quinta"
                             android:textColor="@color/colorAccent" />
 
@@ -272,10 +270,8 @@
                             android:id="@+id/rdSextaProspect"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="45dp"
                             android:text="Sexta"
                             android:textColor="@color/colorAccent" />
-                   </LinearLayout>
 
                </RadioGroup>
 

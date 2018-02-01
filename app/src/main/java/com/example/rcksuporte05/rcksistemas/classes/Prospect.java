@@ -23,8 +23,9 @@ public class Prospect {
     private String endereco_numero;
     private String endereco_complemento;
     private String endereco_uf;
-    private String endereco_id_municipio;
+    private String endereco_municipio;
     private String endereco_cep;
+    private String nome_pais;
     private String situaçãoPredio;
     private String nomeResponsavel;
     private String funcaoResponsavel;
@@ -47,6 +48,10 @@ public class Prospect {
     private String fotoSecundariaBase64;
     private Bitmap fotoPrincipal;
     private Bitmap fotoSecundaria;
+    private String diaVisita;
+   private String dataRetorno;
+   private int idRdPessoa;
+   private int idRdSituacaoPredio;
 
     public String getId_prospect() {
         return id_prospect;
@@ -144,6 +149,22 @@ public class Prospect {
         this.endereco_bairro = endereco_bairro;
     }
 
+    public String getNome_pais() {
+        return nome_pais;
+    }
+
+    public void setNome_pais(String nome_pais) {
+        this.nome_pais = nome_pais;
+    }
+
+    public String getDataRetorno() {
+        return dataRetorno;
+    }
+
+    public void setDataRetorno(String dataRetorno) {
+        this.dataRetorno = dataRetorno;
+    }
+
     public String getEndereco_numero() {
         return endereco_numero;
     }
@@ -168,12 +189,12 @@ public class Prospect {
         this.endereco_uf = endereco_uf;
     }
 
-    public String getEndereco_id_municipio() {
-        return endereco_id_municipio;
+    public String getEndereco_municipio() {
+        return endereco_municipio;
     }
 
-    public void setEndereco_id_municipio(String endereco_id_municipio) {
-        this.endereco_id_municipio = endereco_id_municipio;
+    public void setEndereco_municipio(String endereco_municipio) {
+        this.endereco_municipio = endereco_municipio;
     }
 
     public String getEndereco_cep() {
@@ -358,5 +379,29 @@ public class Prospect {
 
     public void setFotoSecundaria(Bitmap fotoSecundaria) {
         this.fotoSecundaria = fotoSecundaria;
+    }
+
+    public String getDiaVisita() {
+        return diaVisita;
+    }
+
+    public void setDiaVisita(String diaVisita) {
+        this.diaVisita = diaVisita;
+    }
+
+    public int getIdRdPessoa() {
+        return idRdPessoa;
+    }
+
+    public void setIdRdPessoa(int idRdPessoa) {
+        this.idRdPessoa = idRdPessoa;
+    }
+
+    public int getIdRdSituacaoPredio() {
+        return idRdSituacaoPredio;
+    }
+
+    public void setIdRdSituacaoPredio(int idRdSituacaoPredio) {
+        this.idRdSituacaoPredio = idRdSituacaoPredio;
     }
 }

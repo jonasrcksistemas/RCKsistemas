@@ -1,5 +1,6 @@
 package com.example.rcksuporte05.rcksistemas.interfaces;
 
+import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -7,20 +8,33 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
+import com.example.rcksuporte05.rcksistemas.Helper.ProspectHelper;
+import com.example.rcksuporte05.rcksistemas.Helper.UsuarioHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.TabsAdapterProspect;
+import com.example.rcksuporte05.rcksistemas.api.Api;
+import com.example.rcksuporte05.rcksistemas.api.Rotas;
+import com.example.rcksuporte05.rcksistemas.classes.MotivoNaoCadastramento;
+import com.example.rcksuporte05.rcksistemas.classes.Segmento;
 import com.example.rcksuporte05.rcksistemas.extras.SlidingTabLayout;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by RCK 03 on 25/01/2018.
  */
 
-public class ActivityCadastroProspect extends AppCompatActivity{
-     TabsAdapterProspect tabsAdapterProspect;
-
+public class ActivityCadastroProspect extends AppCompatActivity {
+    TabsAdapterProspect tabsAdapterProspect;
+    ProgressDialog progress;
 
     @BindView(R.id.toolbarFragsProspect)
     Toolbar toolbar;
@@ -36,12 +50,54 @@ public class ActivityCadastroProspect extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cadastro_prospect);
         ButterKnife.bind(this);
+        buscarSegmentos();
+        buscarMotivos();
 
         toolbar.setTitle("Cadastro de Prospect");
 
 
         tabsAdapterProspect = new TabsAdapterProspect(getSupportFragmentManager());
         mViewPager.setAdapter(tabsAdapterProspect);
+
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                                               @Override
+                                               public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                                                   switch (position) {
+                                                       case 0:
+                                                           ProspectHelper.getCadastroProspectGeral().inserirDadosDaFrame();
+                                                           break;
+                                                       case 1:
+                                                           ProspectHelper.getCadastroProspectEndereco().inserirDadosDaFrame();
+                                                           break;
+                                                       case 2:
+                                                           ProspectHelper.getCadastroProspectContatos().insereDadosdaFrame();
+                                                           break;
+                                                       case 3:
+                                                           ProspectHelper.getCadastroProspectSegmentos().insereDadosDaFrame();
+                                                           break;
+                                                       case 4:
+                                                            ProspectHelper.getCadastroProspectMotivos().insereDadosDaFrame();
+                                                           break;
+
+                                                       case 5:
+                                                           ProspectHelper.getCadastroProspectObservacoesComerciais().insereDadosDaFrame();
+                                                           break;
+                                                       case 6:
+                                                           break;
+                                                   }
+                                               }
+
+                                               @Override
+                                               public void onPageSelected(int position) {
+
+                                               }
+
+                                               @Override
+                                               public void onPageScrollStateChanged(int state) {
+
+                                               }
+                                           }
+        );
 
         mSlidingTabLayout.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         mSlidingTabLayout.setSelectedIndicatorColors(Color.WHITE);
@@ -59,6 +115,58 @@ public class ActivityCadastroProspect extends AppCompatActivity{
         }
     }
 
+    public void buscarSegmentos() {
+        progress = new ProgressDialog(ActivityCadastroProspect.this);
+        progress.setMessage("Carregando historico financeiro!");
+        progress.setCancelable(false);
+        progress.show();
+
+        Rotas apiRotas = Api.buildRetrofit();
+        Map<String, String> cabecalho = new HashMap<>();
+        cabecalho.put("AUTHORIZATION", UsuarioHelper.getUsuario().getToken());
+        Call<List<Segmento>> call = apiRotas.buscarTodosSegmentos(cabecalho);
+
+        call.enqueue(new Callback<List<Segmento>>() {
+            @Override
+            public void onResponse(Call<List<Segmento>> call, Response<List<Segmento>> response) {
+                if (response.code() == 200)
+                    ProspectHelper.setSegmentos(response.body());
+
+                progress.dismiss();
+            }
+
+            @Override
+            public void onFailure(Call<List<Segmento>> call, Throwable t) {
+                progress.dismiss();
+            }
+        });
+
+    }
+
+    public void buscarMotivos() {
+
+
+        Rotas apiRotas = Api.buildRetrofit();
+        Map<String, String> cabecalho = new HashMap<>();
+        cabecalho.put("AUTHORIZATION", UsuarioHelper.getUsuario().getToken());
+        Call<List<MotivoNaoCadastramento>> call = apiRotas.buscarTodosMotivos(cabecalho);
+
+        call.enqueue(new Callback<List<MotivoNaoCadastramento>>() {
+            @Override
+            public void onResponse(Call<List<MotivoNaoCadastramento>> call, Response<List<MotivoNaoCadastramento>> response) {
+                if (response.code() == 200)
+                    ProspectHelper.setMotivos(response.body());
+
+            }
+
+            @Override
+            public void onFailure(Call<List<MotivoNaoCadastramento>> call, Throwable t) {
+
+            }
+
+
+        });
+    }
 
     @Override
     protected void onResume() {
