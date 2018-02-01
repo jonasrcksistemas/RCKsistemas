@@ -106,7 +106,7 @@
                android:layout_alignStart="@+id/edtAgenciaProspect"
                android:layout_alignTop="@+id/txtBancoProspect"
                android:background="@drawable/borda_edittext"
-               android:inputType="number" />
+               />
 
            <TextView
                android:id="@+id/txtAgenciaProspect"

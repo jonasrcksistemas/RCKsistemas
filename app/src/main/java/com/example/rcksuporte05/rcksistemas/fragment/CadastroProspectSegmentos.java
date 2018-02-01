@@ -21,7 +21,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * Created by RCK 03 on 26/01/2018.
@@ -53,10 +52,6 @@ public class CadastroProspectSegmentos extends Fragment implements SegmentoAdapt
         return view;
     }
 
-    @OnClick(R.id.btnTesteSegmento)
-    public void teste(){
-        insereDadosDaFrame();
-    }
 
     public void insereDadosNaTela(){
 

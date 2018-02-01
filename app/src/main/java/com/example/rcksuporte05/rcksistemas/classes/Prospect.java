@@ -414,11 +414,4 @@ public class Prospect {
         this.idEmpresa = idEmpresa;
     }
 
-    public String getDiaVisita() {
-        return diaVisita;
-    }
-
-    public void setDiaVisita(String diaVisita) {
-        this.diaVisita = diaVisita;
-    }
 }

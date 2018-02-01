@@ -517,7 +517,7 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("ENDERECO_BAIRRO", prospect.getEndereco_numero());
         content.put("ENDERECO_NUMERO", prospect.getEndereco_complemento());
         content.put("ENDERECO_COMPLEMENTO", prospect.getEndereco_uf());
-        content.put("ENDERECO_UF", prospect.getEndereco_id_municipio());
+        content.put("ENDERECO_UF", prospect.getEndereco_municipio());
         content.put("ENDERECO_ID_MUNICIPIO", prospect.getEndereco_cep());
         content.put("ENDERECO_CEP", prospect.getSituaçãoPredio());
         content.put("SITUACAO_PREDIO", prospect.getNomeResponsavel());
@@ -581,7 +581,7 @@ public class DBHelper extends SQLiteOpenHelper {
             prospect.setEndereco_numero(cursor.getString(cursor.getColumnIndex("ENDERECO_BAIRRO")));
             prospect.setEndereco_complemento(cursor.getString(cursor.getColumnIndex("ENDERECO_NUMERO")));
             prospect.setEndereco_uf(cursor.getString(cursor.getColumnIndex("ENDERECO_COMPLEMENTO")));
-            prospect.setEndereco_id_municipio(cursor.getString(cursor.getColumnIndex("ENDERECO_UF")));
+            prospect.setEndereco_municipio(cursor.getString(cursor.getColumnIndex("ENDERECO_UF")));
             prospect.setEndereco_cep(cursor.getString(cursor.getColumnIndex("ENDERECO_ID_MUNICIPIO")));
             prospect.setSituaçãoPredio(cursor.getString(cursor.getColumnIndex("ENDERECO_CEP")));
             prospect.setNomeResponsavel(cursor.getString(cursor.getColumnIndex("SITUACAO_PREDIO")));
