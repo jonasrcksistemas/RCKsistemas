@@ -22,7 +22,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.example.rcksuporte05.rcksistemas.Helper.FotoHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.interfaces.FotoActivity;
 import com.example.rcksuporte05.rcksistemas.util.FotoUtil;
@@ -73,13 +72,21 @@ public class CadastroProspectFotoSalvar extends Fragment {
                             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
                         }
 
+                        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA}, 0);
+                        }
+
                         Intent intentCamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                         intentCamera.putExtra(MediaStore.EXTRA_OUTPUT, uri);
                         try {
                             startActivityForResult(intentCamera, 123);
                         } catch (FileUriExposedException e) {
                             Intent captura = new Intent("android.media.action.IMAGE_CAPTURE");
-                            startActivityForResult(captura, 456);
+                            try {
+                                startActivityForResult(captura, 456);
+                            } catch (Exception ex) {
+                                e.printStackTrace();
+                            }
                         }
                         break;
                     case 1:
@@ -106,7 +113,7 @@ public class CadastroProspectFotoSalvar extends Fragment {
                 Intent intent = new Intent(getActivity(), FotoActivity.class);
 
                 try {
-                    FotoHelper.setFoto(FotoUtil.rotateBitmap(BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(uri)), uri));
+                    imagemProspect.setImageBitmap(FotoUtil.rotateBitmap(BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(uri)), uri));
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -114,12 +121,9 @@ public class CadastroProspectFotoSalvar extends Fragment {
             }
         } else if (requestCode == 456) {
             if (resultCode == Activity.RESULT_OK) {
-                try {
-                    imagemProspect.setImageBitmap(FotoUtil.rotateBitmap(BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(uri)), uri));
-                } catch (FileNotFoundException e) {
-                    System.out.println("------------------------------ops------------------------------");
-                    e.printStackTrace();
-                }
+                Bundle bundle = data.getExtras();
+                bitmap = (Bitmap) bundle.get("data");
+                imagemProspect.setImageBitmap(bitmap);
             }
         } else if (requestCode == 789) {
             if (resultCode == Activity.RESULT_OK) {
@@ -129,9 +133,7 @@ public class CadastroProspectFotoSalvar extends Fragment {
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
-                    Intent intent = new Intent(getActivity(), FotoActivity.class);
-                    FotoHelper.setFoto(bitmap);
-                    startActivity(intent);
+                    imagemProspect.setImageBitmap(bitmap);
                 }
             }
         }

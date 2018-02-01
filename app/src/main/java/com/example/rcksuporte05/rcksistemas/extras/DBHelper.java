@@ -9,8 +9,11 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.rcksuporte05.rcksistemas.classes.Cliente;
 import com.example.rcksuporte05.rcksistemas.classes.CondicoesPagamento;
+import com.example.rcksuporte05.rcksistemas.classes.MotivoNaoCadastramento;
 import com.example.rcksuporte05.rcksistemas.classes.Operacao;
 import com.example.rcksuporte05.rcksistemas.classes.Produto;
+import com.example.rcksuporte05.rcksistemas.classes.Prospect;
+import com.example.rcksuporte05.rcksistemas.classes.Segmento;
 import com.example.rcksuporte05.rcksistemas.classes.TabelaPreco;
 import com.example.rcksuporte05.rcksistemas.classes.TabelaPrecoItem;
 import com.example.rcksuporte05.rcksistemas.classes.Usuario;
@@ -25,7 +28,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private final static String NomeBanco = "Banco.db";
 
     public DBHelper(Context context) {
-        super(context, NomeBanco, null, 3);
+        super(context, NomeBanco, null, 4);
     }
 
     @Override
@@ -359,106 +362,113 @@ public class DBHelper extends SQLiteOpenHelper {
                 "ITEM_ENVIADO VARCHAR(1) DEFAULT 'N'," +
                 "ID_WEB_ITEM_SERVIDOR INTEGER);");
 
+        db.execSQL("CREATE TABLE IF NOT EXISTS TBL_PROSPECT " +
+                "(ATIVO VARCHAR(1) DEFAULT 'S' NOT NULL," +
+                "ID_PROSPECT INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "ID_CADASTRO INTEGER," +
+                "ID_SEGMENTO INTEGER," +
+                "ID_MOTIVONAOCADASTRAMENTO INTEGER," +
+                "NOME_CADASTRO VARCHAR(60)," +
+                "NOME_FANTASIA VARCHAR(60)," +
+                "PESSOA_F_J VARCHAR(1)," +
+                "CPF_CNPJ VARCHAR(14)," +
+                "INSCRI_ESTADUAL VARCHAR(20)," +
+                "INSCRI_MUNICIPAL VARCHAR(20)," +
+                "ENDERECO VARCHAR(60)," +
+                "ENDERECO_BAIRRO VARCHAR(60)," +
+                "ENDERECO_NUMERO VARCHAR(20)," +
+                "ENDERECO_COMPLEMENTO VARCHAR(20)," +
+                "ENDERECO_UF CHAR(2) NOT NULL," +
+                "ENDERECO_ID_MUNICIPIO VARCHAR(50)," +
+                "ENDERECO_CEP VARCHAR(8)," +
+                "SITUACAO_PREDIO VARCHAR(1)," +
+                "NOME_RESPONSAVEL VARCHAR(60)," +
+                "FUNCAO_RESPONSAVEL VARCHAR(60)," +
+                "CELULAR1 VARCHAR(20)," +
+                "CELULAR2 VARCHAR(20)," +
+                "TELEFONEFIXO VARCHAR(20)," +
+                "EMAIL1 VARCHAR(80)," +
+                "EMAIL2 VARCHAR(80)," +
+                "FORNECEDOR1 VARCHAR," +
+                "TELEFONE_FORNECEDOR1 VARCHAR(20)," +
+                "FORNECEDOR2 VARCHAR," +
+                "TELEFONE_FORNECEDOR2 VARCHAR(20)," +
+                "OBSERVACOES_COMERCIAIS VARCHAR(300)," +
+                "LIMITE_CREDITO_SUGERIDO DECIMAL(12,2)," +
+                "LIMITE_PRAZO_SUGERIDO DECIMAL(12,2)," +
+                "NOME_BANCO VARCHAR(60)," +
+                "AGENCIA VARCHAR(6)," +
+                "CONTA_CORRENTE VARCHAR(7)," +
+                "ID_EMPRESA INTEGER NOT NULL, " +
+                "DIA_VISITA VARCHAR(20));");
+
+        db.execSQL("CREATE TABLE IF NOT EXISTS TBL_SEGMENTO" +
+                "(ATIVO VARCHAR(1) DEFAULT 'S' NOT NULL," +
+                "ID_SETOR INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "NOME_SETOR VARCHAR(60)," +
+                "DESCRICAO_OUTROS VARCHAR(300));");
+
+        db.execSQL("CREATE TABLE IF NOT EXISTS TBL_CADASTRO_MOTIVO_NAO_CAD" +
+                "(ID_ITEM INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "MOTIVO VARCHAR(300)," +
+                "DESCRICAO_OUTROS VARCHAR(300));");
+
         System.gc();
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        if (newVersion > oldVersion) {
-            try {
-                db.execSQL("DROP TABLE TBL_MUNICIPIOS;");
-                db.execSQL("DROP TABLE TBL_PAISES;");
-                db.execSQL("DROP TABLE TBL_CADASTRO;");
-                db.execSQL("CREATE TABLE IF NOT EXISTS TBL_CADASTRO " +
-                        "(ATIVO VARCHAR(1) DEFAULT 'S'  NOT NULL ," +
-                        " ID_EMPRESA INTEGER NOT NULL," +
-                        " ID_CADASTRO INTEGER PRIMARY KEY," +
-                        " PESSOA_F_J VARCHAR(1)," +
-                        " DATA_ANIVERSARIO DATE," +
-                        " NOME_CADASTRO VARCHAR(60)," +
-                        " NOME_FANTASIA VARCHAR(60)," +
-                        " CPF_CNPJ VARCHAR(14)," +
-                        " INSCRI_ESTADUAL VARCHAR(20)," +
-                        " INSCRI_MUNICIPAL VARCHAR(20)," +
-                        " ENDERECO VARCHAR(60)," +
-                        " ENDERECO_BAIRRO VARCHAR(60)," +
-                        " ENDERECO_NUMERO VARCHAR(20)," +
-                        " ENDERECO_COMPLEMENTO VARCHAR(20)," +
-                        " ENDERECO_UF CHAR(2) NOT NULL," +
-                        " ENDERECO_ID_MUNICIPIO VARCHAR(50)," +
-                        " ENDERECO_CEP VARCHAR(8)," +
-                        " USUARIO_ID INTEGER," +
-                        " USUARIO_NOME VARCHAR(60)," +
-                        " USUARIO_DATA TIMESTAMP," +
-                        " F_CLIENTE VARCHAR(1) DEFAULT 'N'  NOT NULL," +
-                        " F_FORNECEDOR VARCHAR(1) DEFAULT 'N'  NOT NULL," +
-                        " F_FUNCIONARIO VARCHAR(1) DEFAULT 'N'  NOT NULL," +
-                        " F_VENDEDOR VARCHAR(1) DEFAULT 'N'  NOT NULL," +
-                        " F_TRANSPORTADOR VARCHAR(1) DEFAULT 'N'  NOT NULL," +
-                        " DATA_ULTIMA_COMPRA DATE," +
-                        " NOME_VENDEDOR VARCHAR(60)," +
-                        " F_ID_CLIENTE INTEGER," +
-                        " ID_ENTIDADE INTEGER NOT NULL," +
-                        " F_ID_FORNECEDOR INTEGER," +
-                        " F_ID_VENDEDOR SMALLINT," +
-                        " F_ID_TRANSPORTADOR INTEGER," +
-                        " TELEFONE_PRINCIPAL VARCHAR(20)," +
-                        " EMAIL_PRINCIPAL VARCHAR(100)," +
-                        " NOME_PAIS VARCHAR(60) ," +
-                        " F_ID_FUNCIONARIO INTEGER," +
-                        " AVISAR_COM_DIAS INTEGER DEFAULT 0 ," +
-                        " OBSERVACOES BLOB," +
-                        " PADRAO_ID_C_CUSTO INTEGER," +
-                        " PADRAO_ID_C_GERENCIADORA INTEGER," +
-                        " PADRAO_ID_C_ANALITICA INTEGER," +
-                        " COB_ENDERECO VARCHAR(60)," +
-                        " COB_ENDERECO_BAIRRO VARCHAR(60)," +
-                        " COB_ENDERECO_NUMERO VARCHAR(20)," +
-                        " COB_ENDERECO_COMPLEMENTO VARCHAR(20)," +
-                        " COB_ENDERECO_UF VARCHAR(2)," +
-                        " COB_ENDERECO_ID_MUNICIPIO VARCHAR(60)," +
-                        " COB_ENDERECO_CEP VARCHAR(8)," +
-                        " NOME_PAIS_COB ," +
-                        " LIMITE_CREDITO DECIMAL(12, 2)," +
-                        " LIMITE_DISPONIVEL DECIMAL(12, 2)," +
-                        " PESSOA_CONTATO_FINANCEIRO VARCHAR(80)," +
-                        " EMAIL_FINANCEIRO VARCHAR(80)," +
-                        " OBSERVACOES_FATURAMENTO VARCHAR(300)," +
-                        " OBSERVACOES_FINANCEIRO VARCHAR(300)," +
-                        " TELEFONE_DOIS VARCHAR(20)," +
-                        " TELEFONE_TRES VARCHAR(20)," +
-                        " PESSOA_CONTATO_PRINCIPAL VARCHAR(80)," +
-                        " IND_DA_IE_DESTINATARIO INTEGER," +
-                        " COMISSAO_PERCENTUAL DECIMAL(12, 4)," +
-                        " ID_SETOR INTEGER," +
-                        " NFE_EMAIL_ENVIAR VARCHAR(1)," +
-                        " NFE_EMAIL_UM VARCHAR(60)," +
-                        " NFE_EMAIL_DOIS VARCHAR(60)," +
-                        " NFE_EMAIL_TRES VARCHAR(60)," +
-                        " NFE_EMAIL_QUATRO VARCHAR(60)," +
-                        " NFE_EMAIL_CINCO VARCHAR(60)," +
-                        " ID_GRUPO_VENDEDOR INTEGER," +
-                        " VENDEDOR_USA_PORTAL VARCHAR(1)," +
-                        " VENDEDOR_ID_USER_PORTAL INTEGER," +
-                        " F_TARIFA VARCHAR(1)," +
-                        " F_ID_TARIFA INTEGER," +
-                        " F_PRODUTOR VARCHAR(1)," +
-                        " RG_NUMERO VARCHAR(30)," +
-                        " RG_SSP VARCHAR(10)," +
-                        " CONTA_CONTABIL VARCHAR(15)," +
-                        " MOTORISTA VARCHAR(1)," +
-                        " F_ID_MOTORISTA INTEGER," +
-                        " HABILITACAO_NUMERO VARCHAR(20)," +
-                        " HABILITACAO_CATEGORIA VARCHAR(10)," +
-                        " HABILITACAO_VENCIMENTO DATE," +
-                        " MOT_ID_TRANSPORTADORA INTEGER," +
-                        " LOCAL_CADASTRO VARCHAR(20));");
+        if(newVersion > oldVersion){
+            db.execSQL("CREATE TABLE IF NOT EXISTS TBL_PROSPECT " +
+                    "(ATIVO VARCHAR(1) DEFAULT 'S' NOT NULL," +
+                    "ID_PROSPECT INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "ID_CADASTRO INTEGER," +
+                    "ID_SEGMENTO INTEGER," +
+                    "ID_MOTIVONAOCADASTRAMENTO INTEGER," +
+                    "NOME_CADASTRO VARCHAR(60)," +
+                    "NOME_FANTASIA VARCHAR(60)," +
+                    "PESSOA_F_J VARCHAR(1)," +
+                    "CPF_CNPJ VARCHAR(14)," +
+                    "INSCRI_ESTADUAL VARCHAR(20)," +
+                    "INSCRI_MUNICIPAL VARCHAR(20)," +
+                    "ENDERECO VARCHAR(60)," +
+                    "ENDERECO_BAIRRO VARCHAR(60)," +
+                    "ENDERECO_NUMERO VARCHAR(20)," +
+                    "ENDERECO_COMPLEMENTO VARCHAR(20)," +
+                    "ENDERECO_UF CHAR(2) NOT NULL," +
+                    "ENDERECO_ID_MUNICIPIO VARCHAR(50)," +
+                    "ENDERECO_CEP VARCHAR(8)," +
+                    "SITUACAO_PREDIO VARCHAR(1)," +
+                    "NOME_RESPONSAVEL VARCHAR(60)," +
+                    "FUNCAO_RESPONSAVEL VARCHAR(60)," +
+                    "CELULAR1 VARCHAR(20)," +
+                    "CELULAR2 VARCHAR(20)," +
+                    "TELEFONEFIXO VARCHAR(20)," +
+                    "EMAIL1 VARCHAR(80)," +
+                    "EMAIL2 VARCHAR(80)," +
+                    "FORNECEDOR1 VARCHAR," +
+                    "TELEFONE_FORNECEDOR1 VARCHAR(20)," +
+                    "FORNECEDOR2 VARCHAR," +
+                    "TELEFONE_FORNECEDOR2 VARCHAR(20)," +
+                    "OBSERVACOES_COMERCIAIS VARCHAR(300)," +
+                    "LIMITE_CREDITO_SUGERIDO DECIMAL(12,2)," +
+                    "LIMITE_PRAZO_SUGERIDO DECIMAL(12,2)," +
+                    "NOME_BANCO VARCHAR(60)," +
+                    "AGENCIA VARCHAR(6)," +
+                    "CONTA_CORRENTE VARCHAR(7)," +
+                    "ID_EMPRESA INTEGER NOT NULL, " +
+                    "DIA_VISITA VARCHAR(20));");
 
-                db.execSQL("ALTER TABLE TBL_LOGIN ADD COLUMN TOKEN VARCHAR(60)");
-                db.execSQL("ALTER TABLE TBL_WEB_USUARIO ADD COLUMN ID_EMPRESA_MULTI_DEVICE INTEGER");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            db.execSQL("CREATE TABLE IF NOT EXISTS TBL_SEGMENTO" +
+                    "(ATIVO VARCHAR(1) DEFAULT 'S' NOT NULL," +
+                    "ID_SETOR INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "NOME_SETOR VARCHAR(60)," +
+                    "DESCRICAO_OUTROS VARCHAR(300));");
+
+            db.execSQL("CREATE TABLE IF NOT EXISTS TBL_CADASTRO_MOTIVO_NAO_CAD" +
+                    "(ID_ITEM INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "MOTIVO VARCHAR(300)," +
+                    "DESCRICAO_OUTROS VARCHAR(300));");
         }
     }
 
@@ -487,6 +497,192 @@ public class DBHelper extends SQLiteOpenHelper {
         cursor.moveToFirst();
         resultado += cursor.getString(0);
         return resultado;
+    }
+
+    public void atualizarTBL_PROSPECT(Prospect prospect) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues content = new ContentValues();
+        content.put("ATIVO", prospect.getId_prospect());
+        content.put("ID_PROSPECT", prospect.getId_cadastro());
+        content.put("ID_CADASTRO", prospect.getSegmento().getIdSetor());
+        content.put("ID_SEGMENTO", prospect.getMotivoNaoCadastramento().getIdItem());
+        content.put("ID_MOTIVONAOCADASTRAMENTO", prospect.getNome_cadastro());
+        content.put("NOME_CADASTRO", prospect.getNome_fantasia());
+        content.put("NOME_FANTASIA", prospect.getPessoa_f_j());
+        content.put("PESSOA_F_J", prospect.getCpf_cnpj());
+        content.put("CPF_CNPJ", prospect.getInscri_estadual());
+        content.put("INSCRI_ESTADUAL", prospect.getInscri_municipal());
+        content.put("INSCRI_MUNICIPAL", prospect.getEndereco());
+        content.put("ENDERECO", prospect.getEndereco_bairro());
+        content.put("ENDERECO_BAIRRO", prospect.getEndereco_numero());
+        content.put("ENDERECO_NUMERO", prospect.getEndereco_complemento());
+        content.put("ENDERECO_COMPLEMENTO", prospect.getEndereco_uf());
+        content.put("ENDERECO_UF", prospect.getEndereco_id_municipio());
+        content.put("ENDERECO_ID_MUNICIPIO", prospect.getEndereco_cep());
+        content.put("ENDERECO_CEP", prospect.getSituaçãoPredio());
+        content.put("SITUACAO_PREDIO", prospect.getNomeResponsavel());
+        content.put("NOME_RESPONSAVEL", prospect.getFuncaoResponsavel());
+        content.put("FUNCAO_RESPONSAVEL", prospect.getCelular1());
+        content.put("CELULAR1", prospect.getCelular2());
+        content.put("CELULAR2", prospect.getTelefoneFixo());
+        content.put("TELEFONEFIXO", prospect.getEmail1());
+        content.put("EMAIL1", prospect.getEmail2());
+        content.put("EMAIL2", prospect.getFornecedor1());
+        content.put("FORNECEDOR1", prospect.getTelefoneFornecedor1());
+        content.put("TELEFONE_FORNECEDOR1", prospect.getFornecedor2());
+        content.put("FORNECEDOR2", prospect.getTelefoneFornecedor2());
+        content.put("TELEFONE_FORNECEDOR2", prospect.getObservacoesComerciais());
+        content.put("OBSERVACOES_COMERCIAIS", prospect.getLimiteDeCreditoSugerido());
+        content.put("LIMITE_CREDITO_SUGERIDO", prospect.getLimiteDePrazoSugerido());
+        content.put("LIMITE_PRAZO_SUGERIDO", prospect.getNomeBanco());
+        content.put("NOME_BANCO", prospect.getAgencia());
+        content.put("AGENCIA", prospect.getContaCorrente());
+        content.put("CONTA_CORRENTE", prospect.getFotoPrincipalBase64());
+        content.put("ID_EMPRESA", prospect.getFotoSecundariaBase64());
+        content.put("DIA_VISITA", prospect.getDiaVisita());
+
+        if (prospect.getId_prospect() != null && contagem("SELECT COUNT(ID_PROSPECT) FROM TBL_PROSPECT WHERE ID_PROSPECT = " + prospect.getId_prospect()) > 0) {
+            db.update("TBL_PROSPECT", content, "ID_PROSPECT = " + prospect.getId_prospect(), null);
+        } else {
+            db.insert("TBL_PROSPECT", null, content);
+        }
+    }
+
+    public List<Prospect> listaProspect(String SQL) {
+        List<Prospect> listaProspects = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor;
+
+        cursor = db.rawQuery(SQL, null);
+        cursor.moveToFirst();
+        do {
+            Prospect prospect = new Prospect();
+
+            prospect.setId_prospect(cursor.getString(cursor.getColumnIndex("ATIVO")));
+            prospect.setId_cadastro(cursor.getString(cursor.getColumnIndex("ID_PROSPECT")));
+            try {
+                prospect.setSegmento(listaSegmento("SELECT * FROM TBL_SEGMENTO WHERE ID_SETOR = " + cursor.getString(cursor.getColumnIndex("ID_CADASTRO")) + ";").get(0));
+            } catch (CursorIndexOutOfBoundsException e) {
+                e.printStackTrace();
+            }
+            try {
+                prospect.setMotivoNaoCadastramento(listaMotivoNaoCadastramento("SELECT * FROM TBL_CADASTRO_MOTIVO_NAO_CAD WHERE ID_ITEM = " + cursor.getString(cursor.getColumnIndex("ID_SEGMENTO")) + ";").get(0));
+            } catch (CursorIndexOutOfBoundsException e) {
+                e.printStackTrace();
+            }
+            prospect.setNome_cadastro(cursor.getString(cursor.getColumnIndex("ID_MOTIVONAOCADASTRAMENTO")));
+            prospect.setNome_fantasia(cursor.getString(cursor.getColumnIndex("NOME_CADASTRO")));
+            prospect.setPessoa_f_j(cursor.getString(cursor.getColumnIndex("NOME_FANTASIA")));
+            prospect.setCpf_cnpj(cursor.getString(cursor.getColumnIndex("PESSOA_F_J")));
+            prospect.setInscri_estadual(cursor.getString(cursor.getColumnIndex("CPF_CNPJ")));
+            prospect.setInscri_municipal(cursor.getString(cursor.getColumnIndex("INSCRI_ESTADUAL")));
+            prospect.setEndereco(cursor.getString(cursor.getColumnIndex("INSCRI_MUNICIPAL")));
+            prospect.setEndereco_bairro(cursor.getString(cursor.getColumnIndex("ENDERECO")));
+            prospect.setEndereco_numero(cursor.getString(cursor.getColumnIndex("ENDERECO_BAIRRO")));
+            prospect.setEndereco_complemento(cursor.getString(cursor.getColumnIndex("ENDERECO_NUMERO")));
+            prospect.setEndereco_uf(cursor.getString(cursor.getColumnIndex("ENDERECO_COMPLEMENTO")));
+            prospect.setEndereco_id_municipio(cursor.getString(cursor.getColumnIndex("ENDERECO_UF")));
+            prospect.setEndereco_cep(cursor.getString(cursor.getColumnIndex("ENDERECO_ID_MUNICIPIO")));
+            prospect.setSituaçãoPredio(cursor.getString(cursor.getColumnIndex("ENDERECO_CEP")));
+            prospect.setNomeResponsavel(cursor.getString(cursor.getColumnIndex("SITUACAO_PREDIO")));
+            prospect.setFuncaoResponsavel(cursor.getString(cursor.getColumnIndex("NOME_RESPONSAVEL")));
+            prospect.setCelular1(cursor.getString(cursor.getColumnIndex("FUNCAO_RESPONSAVEL")));
+            prospect.setCelular2(cursor.getString(cursor.getColumnIndex("CELULAR1")));
+            prospect.setTelefoneFixo(cursor.getString(cursor.getColumnIndex("CELULAR2")));
+            prospect.setEmail1(cursor.getString(cursor.getColumnIndex("TELEFONEFIXO")));
+            prospect.setEmail2(cursor.getString(cursor.getColumnIndex("EMAIL1")));
+            prospect.setFornecedor1(cursor.getString(cursor.getColumnIndex("EMAIL2")));
+            prospect.setTelefoneFornecedor1(cursor.getString(cursor.getColumnIndex("FORNECEDOR1")));
+            prospect.setFornecedor2(cursor.getString(cursor.getColumnIndex("TELEFONE_FORNECEDOR1")));
+            prospect.setTelefoneFornecedor2(cursor.getString(cursor.getColumnIndex("FORNECEDOR2")));
+            prospect.setObservacoesComerciais(cursor.getString(cursor.getColumnIndex("TELEFONE_FORNECEDOR2")));
+            prospect.setLimiteDeCreditoSugerido(cursor.getString(cursor.getColumnIndex("OBSERVACOES_COMERCIAIS")));
+            prospect.setLimiteDePrazoSugerido(cursor.getString(cursor.getColumnIndex("LIMITE_CREDITO_SUGERIDO")));
+            prospect.setNomeBanco(cursor.getString(cursor.getColumnIndex("LIMITE_PRAZO_SUGERIDO")));
+            prospect.setAgencia(cursor.getString(cursor.getColumnIndex("NOME_BANCO")));
+            prospect.setContaCorrente(cursor.getString(cursor.getColumnIndex("AGENCIA")));
+            prospect.setFotoPrincipalBase64(cursor.getString(cursor.getColumnIndex("CONTA_CORRENTE")));
+            prospect.setFotoSecundariaBase64(cursor.getString(cursor.getColumnIndex("ID_EMPRESA")));
+            prospect.setIdEmpresa(cursor.getString(cursor.getColumnIndex("DIA_VISITA")));
+            prospect.setDiaVisita(cursor.getString(cursor.getColumnIndex("")));
+
+            listaProspects.add(prospect);
+        } while (cursor.moveToNext());
+        cursor.close();
+
+        return listaProspects;
+    }
+
+    public void atualizarTBL_SEGMENTO(Segmento segmento) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues content = new ContentValues();
+        content.put("ATIVO", segmento.getAtivo());
+        content.put("ID_SETOR", segmento.getIdSetor());
+        content.put("NOME_SETOR", segmento.getNomeSetor());
+        content.put("DESCRICAO_OUTROS", segmento.getDescricaoOutros());
+
+        if (segmento.getIdSetor() != null && contagem("SELECT COUNT(ID_SETOR) FROM TBL_SEGMENTO WHERE ID_SETOR = " + segmento.getIdSetor()) > 0) {
+            db.update("TBL_SEGMENTO", content, "ID_SETOR = " + segmento.getIdSetor(), null);
+        } else {
+            db.insert("TBL_SEGMENTO", null, content);
+        }
+    }
+
+    public List<Segmento> listaSegmento(String SQL) {
+        List<Segmento> listaSegmentos = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor;
+
+        cursor = db.rawQuery(SQL, null);
+        cursor.moveToFirst();
+        do {
+            Segmento segmento = new Segmento();
+
+            segmento.setAtivo(cursor.getString(cursor.getColumnIndex("ATIVO")));
+            segmento.setIdSetor(cursor.getString(cursor.getColumnIndex("ID_SETOR")));
+            segmento.setNomeSetor(cursor.getString(cursor.getColumnIndex("NOME_SETOR")));
+            segmento.setDescricaoOutros(cursor.getString(cursor.getColumnIndex("DESCRICAO_OUTROS")));
+
+            listaSegmentos.add(segmento);
+        } while (cursor.moveToNext());
+        cursor.close();
+
+        return listaSegmentos;
+    }
+
+    public void atualizarTBL_CADASTRO_MOTIVO_NAO_CAD(MotivoNaoCadastramento motivoNaoCadastramento) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues content = new ContentValues();
+        content.put("ID_ITEM", motivoNaoCadastramento.getIdItem());
+        content.put("MOTIVO", motivoNaoCadastramento.getMotivo());
+        content.put("DESCRICAO_OUTROS", motivoNaoCadastramento.getDescricaoOutros());
+
+        if (motivoNaoCadastramento.getIdItem() != null && contagem("SELECT COUNT(ID_ITEM) FROM TBL_CADASTRO_MOTIVO_NAO_CAD WHERE ID_ITEM = " + motivoNaoCadastramento.getIdItem()) > 0) {
+            db.update("TBL_CADASTRO_MOTIVO_NAO_CAD", content, "ID_ITEM = " + motivoNaoCadastramento.getIdItem(), null);
+        } else {
+            db.insert("TBL_CADASTRO_MOTIVO_NAO_CAD", null, content);
+        }
+    }
+
+    public List<MotivoNaoCadastramento> listaMotivoNaoCadastramento(String SQL) {
+        List<MotivoNaoCadastramento> listaMotivoNaoCadastramentos = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor;
+
+        cursor = db.rawQuery(SQL, null);
+        cursor.moveToNext();
+        do {
+            MotivoNaoCadastramento motivoNaoCadastramento = new MotivoNaoCadastramento();
+
+            motivoNaoCadastramento.setIdItem(cursor.getString(cursor.getColumnIndex("ID_ITEM")));
+            motivoNaoCadastramento.setMotivo(cursor.getString(cursor.getColumnIndex("MOTIVO")));
+            motivoNaoCadastramento.setDescricaoOutros(cursor.getString(cursor.getColumnIndex("DESCRICAO_OUTROS")));
+
+            listaMotivoNaoCadastramentos.add(motivoNaoCadastramento);
+        } while (cursor.moveToNext());
+        cursor.close();
+
+        return listaMotivoNaoCadastramentos;
     }
 
     public void inserirTBL_WEB_USUARIO(Usuario usuario) throws android.database.sqlite.SQLiteConstraintException {
