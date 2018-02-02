@@ -56,102 +56,96 @@ public class CadastroProspectEndereco extends Fragment {
          view = inflater.inflate(R.layout.fragment_cadastro_prospect_ederecos, container, false);
         ButterKnife.bind(this, view);
 
-        injetaDadosNaTela();
+//        injetaDadosNaTela();
         ProspectHelper.setCadastroProspectEndereco(this);
         return view;
     }
 
-    public void injetaDadosNaTela(){
-
-        if(ProspectHelper.getProspect().getEndereco() != null){
-            edtEnderecoProspect.setText(ProspectHelper.getProspect().getEndereco());
-
-        }
-        if(ProspectHelper.getProspect().getEndereco_numero() != null){
-            edtNumeroProspect.setText(ProspectHelper.getProspect().getEndereco_numero());
-
-        }
-        if(ProspectHelper.getProspect().getEndereco_bairro() != null){
-            edtBairroProspect.setText(ProspectHelper.getProspect().getEndereco_bairro());
-
-        }
-        if(ProspectHelper.getProspect().getNome_pais() != null){
-            edtPaisProspect.setText(ProspectHelper.getProspect().getNome_pais());
-
-        }
-        if(ProspectHelper.getProspect().getEndereco_bairro() != null){
-            edtUfProspect.setText(ProspectHelper.getProspect().getEndereco_bairro());
-
-        }
-        if(ProspectHelper.getProspect().getEndereco_municipio() != null){
-            edtMunicipioProspect.setText(ProspectHelper.getProspect().getEndereco_municipio());
-
-        }
-        if(ProspectHelper.getProspect().getEndereco_cep() != null){
-            edtCep.setText(ProspectHelper.getProspect().getEndereco_cep());
-
-        }
-        if(ProspectHelper.getProspect().getSituaçãoPredio() != null){
-
-
-        }
-
-
-
-
-
-    }
-
-
-    public void inserirDadosDaFrame(){
-        if(edtEnderecoProspect.getText() != null && !edtEnderecoProspect.getText().toString().equals("")){
-            ProspectHelper.getProspect().setEndereco(edtEnderecoProspect.getText().toString());
-        }else{
-            System.out.println("Fazer algo para obrigar!");
-        }
-
-        if(edtNumeroProspect.getText() != null && !edtNumeroProspect.getText().toString().equals("")){
-            ProspectHelper.getProspect().setEndereco_numero(edtNumeroProspect.getText().toString());
-        }else{
-            System.out.println("Fazer algo para obrigar!");
-        }
-
-        if(edtBairroProspect.getText() != null && !edtBairroProspect.getText().toString().equals("")){
-            ProspectHelper.getProspect().setEndereco_bairro(edtBairroProspect.getText().toString());
-        }else{
-            System.out.println("Fazer algo para obrigar!");
-        }
-
-        if(edtPaisProspect.getText() != null && !edtPaisProspect.getText().toString().equals("")){
-            ProspectHelper.getProspect().setNome_pais(edtPaisProspect.getText().toString());
-        }else{
-            System.out.println("Fazer algo para obrigar!");
-        }
-
-        if(edtUfProspect.getText() != null && !edtUfProspect.getText().toString().equals("")){
-            ProspectHelper.getProspect().setEndereco_bairro(edtUfProspect.getText().toString());
-        }else{
-            System.out.println("Fazer algo para obrigar!");
-        }
-
-        if(edtMunicipioProspect.getText() != null && !edtMunicipioProspect.getText().toString().equals("")){
-            ProspectHelper.getProspect().setEndereco_municipio(edtMunicipioProspect.getText().toString());
-        }else{
-            System.out.println("Fazer algo para obrigar!");
-        }
-
-        if(edtCep.getText() != null && !edtCep.getText().toString().equals("")){
-            ProspectHelper.getProspect().setEndereco_cep(edtCep.getText().toString());
-        }else{
-            System.out.println("Fazer algo para obrigar!");
-        }
-
-        if(rgSituacaoPredio.getCheckedRadioButtonId() > 0){
-            rdSituacaoPredio = (RadioButton) view.findViewById(rgSituacaoPredio.getCheckedRadioButtonId());
-            ProspectHelper.getProspect().setSituaçãoPredio(rdSituacaoPredio.getText().toString());
-        }
-
-    }
+//    public void injetaDadosNaTela(){
+//
+//        if(ProspectHelper.getProspect().getEndereco() != null){
+//            edtEnderecoProspect.setText(ProspectHelper.getProspect().getEndereco());
+//
+//        }
+//        if(ProspectHelper.getProspect().getEndereco_numero() != null){
+//            edtNumeroProspect.setText(ProspectHelper.getProspect().getEndereco_numero());
+//
+//        }
+//        if(ProspectHelper.getProspect().getEndereco_bairro() != null){
+//            edtBairroProspect.setText(ProspectHelper.getProspect().getEndereco_bairro());
+//
+//        }
+//        if(ProspectHelper.getProspect().get getNome_pais() != null){
+//            edtPaisProspect.setText(ProspectHelper.getProspect().getNome_pais());
+//
+//        }
+//        if(ProspectHelper.getProspect().getEndereco_bairro() != null){
+//            edtUfProspect.setText(ProspectHelper.getProspect().getEndereco_bairro());
+//
+//        }
+//        if(ProspectHelper.getProspect().getEndereco_municipio() != null){
+//            edtMunicipioProspect.setText(ProspectHelper.getProspect().getEndereco_municipio());
+//
+//        }
+//        if(ProspectHelper.getProspect().getEndereco_cep() != null){
+//            edtCep.setText(ProspectHelper.getProspect().getEndereco_cep());
+//
+//        }
+//        if(ProspectHelper.getProspect().getSituaçãoPredio() != null){
+//
+//        }
+//    }
+//
+//
+//    public void inserirDadosDaFrame(){
+//        if(edtEnderecoProspect.getText() != null && !edtEnderecoProspect.getText().toString().equals("")){
+//            ProspectHelper.getProspect().setEndereco(edtEnderecoProspect.getText().toString());
+//        }else{
+//            System.out.println("Fazer algo para obrigar!");
+//        }
+//
+//        if(edtNumeroProspect.getText() != null && !edtNumeroProspect.getText().toString().equals("")){
+//            ProspectHelper.getProspect().setEndereco_numero(edtNumeroProspect.getText().toString());
+//        }else{
+//            System.out.println("Fazer algo para obrigar!");
+//        }
+//
+//        if(edtBairroProspect.getText() != null && !edtBairroProspect.getText().toString().equals("")){
+//            ProspectHelper.getProspect().setEndereco_bairro(edtBairroProspect.getText().toString());
+//        }else{
+//            System.out.println("Fazer algo para obrigar!");
+//        }
+//
+//        if(edtPaisProspect.getText() != null && !edtPaisProspect.getText().toString().equals("")){
+//            ProspectHelper.getProspect().setNome_pais(edtPaisProspect.getText().toString());
+//        }else{
+//            System.out.println("Fazer algo para obrigar!");
+//        }
+//
+//        if(edtUfProspect.getText() != null && !edtUfProspect.getText().toString().equals("")){
+//            ProspectHelper.getProspect().setEndereco_bairro(edtUfProspect.getText().toString());
+//        }else{
+//            System.out.println("Fazer algo para obrigar!");
+//        }
+//
+//        if(edtMunicipioProspect.getText() != null && !edtMunicipioProspect.getText().toString().equals("")){
+//            ProspectHelper.getProspect().setEndereco_municipio(edtMunicipioProspect.getText().toString());
+//        }else{
+//            System.out.println("Fazer algo para obrigar!");
+//        }
+//
+//        if(edtCep.getText() != null && !edtCep.getText().toString().equals("")){
+//            ProspectHelper.getProspect().setEndereco_cep(edtCep.getText().toString());
+//        }else{
+//            System.out.println("Fazer algo para obrigar!");
+//        }
+//
+//        if(rgSituacaoPredio.getCheckedRadioButtonId() > 0){
+//            rdSituacaoPredio = (RadioButton) view.findViewById(rgSituacaoPredio.getCheckedRadioButtonId());
+//            ProspectHelper.getProspect().setSituaçãoPredio(rdSituacaoPredio.getText().toString());
+//        }
+//
+//    }
 
     @Override
     public void onDestroyView() {

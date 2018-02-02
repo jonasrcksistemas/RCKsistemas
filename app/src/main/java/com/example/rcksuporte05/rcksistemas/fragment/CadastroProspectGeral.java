@@ -46,6 +46,12 @@ public class CadastroProspectGeral extends Fragment {
     @BindView(R.id.rgRotaProspect)
     RadioGroup rgRotaProspect;
 
+    @BindView(R.id.rdFisicaProspect)
+    RadioButton  rdFisicaProspect;
+
+    @BindView(R.id.rdJuridicaProspect)
+    RadioButton rdJuridicaProspect;
+
     View view;
     RadioButton radioButtonRota;
     RadioButton radioButtonPessoa;
@@ -70,7 +76,11 @@ public class CadastroProspectGeral extends Fragment {
 
     private void injetaDadosNaTela() {
         if(ProspectHelper.getProspect().getPessoa_f_j() != null && ProspectHelper.getProspect().getPessoa_f_j().equals("")){
-
+            if(ProspectHelper.getProspect().getPessoa_f_j().equals("F")){
+                rdFisicaProspect.setChecked(true);
+            }else if(ProspectHelper.getProspect().getPessoa_f_j().equals("J")){
+                rdJuridicaProspect.setChecked(true);
+            }
         }
         if(ProspectHelper.getProspect().getNome_cadastro() != null && ProspectHelper.getProspect().getNome_cadastro().equals("")){
             edtNomeClienteProspect.setText(ProspectHelper.getProspect().getNome_cadastro());
@@ -100,8 +110,11 @@ public class CadastroProspectGeral extends Fragment {
 
         if(rgPessoa.getCheckedRadioButtonId()>0){
             radioButtonPessoa = (RadioButton) view.findViewById(rgPessoa.getCheckedRadioButtonId());
-            ProspectHelper.getProspect().setIdRdPessoa(rgPessoa.getCheckedRadioButtonId());
-            ProspectHelper.getProspect().setPessoa_f_j(radioButtonPessoa.getText().toString().toLowerCase());
+            if(radioButtonPessoa.getText().toString().toLowerCase().equals("física")){
+                ProspectHelper.getProspect().setPessoa_f_j("F");
+            }else if(radioButtonPessoa.getText().toString().toLowerCase().equals("jurídica")){
+                ProspectHelper.getProspect().setPessoa_f_j("J");
+            }
         }
 
         if(edtNomeClienteProspect.getText() != null && !edtNomeClienteProspect.getText().toString().equals("")){

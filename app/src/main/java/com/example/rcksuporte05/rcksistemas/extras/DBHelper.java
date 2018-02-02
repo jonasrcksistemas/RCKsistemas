@@ -10,9 +10,10 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.example.rcksuporte05.rcksistemas.classes.Cliente;
 import com.example.rcksuporte05.rcksistemas.classes.CondicoesPagamento;
 import com.example.rcksuporte05.rcksistemas.classes.MotivoNaoCadastramento;
+import com.example.rcksuporte05.rcksistemas.classes.Municipio;
 import com.example.rcksuporte05.rcksistemas.classes.Operacao;
+import com.example.rcksuporte05.rcksistemas.classes.Pais;
 import com.example.rcksuporte05.rcksistemas.classes.Produto;
-import com.example.rcksuporte05.rcksistemas.classes.Prospect;
 import com.example.rcksuporte05.rcksistemas.classes.Segmento;
 import com.example.rcksuporte05.rcksistemas.classes.TabelaPreco;
 import com.example.rcksuporte05.rcksistemas.classes.TabelaPrecoItem;
@@ -160,6 +161,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 " MOT_ID_TRANSPORTADORA INTEGER," +
                 " LOCAL_CADASTRO VARCHAR(20)," +
                 " ID_EMPRESA_MULTIDEVICE INTEGER);");
+
+        db.execSQL("CREATE TABLE IF NOT EXISTS TBL_PAISES (ID_PAIS INTEGER PRIMARY KEY, NOME_PAIS VARCHAR(60) NOT NULL, SINCRONIZADO VARCHAR(1));");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS TBL_PRODUTO (ATIVO VARCHAR(1) DEFAULT 'S'  NOT NULL," +
                 " ID_PRODUTO VARCHAR(20) PRIMARY KEY," +
@@ -316,7 +319,6 @@ public class DBHelper extends SQLiteOpenHelper {
                 " ID_WEB_PEDIDO_SERVIDOR INTEGER," +
                 " DATA_PREV_ENTREGA DATE);");
 
-        db.execSQL("CREATE TABLE IF NOT EXISTS TBL_OPERACAO_ESTOQUE (ATIVO CHAR(1) DEFAULT 'S'  NOT NULL, ID_OPERACAO INTEGER DEFAULT 0 PRIMARY KEY, NOME_OPERACAO VARCHAR(60) NOT NULL);");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS TBL_WEB_PEDIDO_ITENS (ID_WEB_ITEM INTEGER PRIMARY KEY AUTOINCREMENT ," +
                 "ID_PEDIDO INTEGER NOT NULL," +
@@ -413,6 +415,17 @@ public class DBHelper extends SQLiteOpenHelper {
                 "MOTIVO VARCHAR(300)," +
                 "DESCRICAO_OUTROS VARCHAR(300));");
 
+        db.execSQL("CREATE TABLE IF NOT EXISTS TBL_PAISES " +
+                "(ID_PAIS INTEGER PRIMARY KEY, " +
+                "NOME_PAIS VARCHAR(60) NOT NULL);");
+
+
+        db.execSQL("CREATE TABLE IF NOT EXISTS TBL_MUNICIPIOS   " +
+                "(ID_MUNICIPIO INTEGER PRIMARY KEY," +
+                "NOME_MUNICIPIO VARCHAR(50)," +
+                "UF VARCHAR(4)," +
+                "CEP VARCHAR(12));");
+
         System.gc();
     }
 
@@ -469,6 +482,17 @@ public class DBHelper extends SQLiteOpenHelper {
                     "(ID_ITEM INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "MOTIVO VARCHAR(300)," +
                     "DESCRICAO_OUTROS VARCHAR(300));");
+
+            db.execSQL("CREATE TABLE IF NOT EXISTS TBL_PAISES " +
+                    "(ID_PAIS INTEGER PRIMARY KEY, " +
+                    "NOME_PAIS VARCHAR(60) NOT NULL);");
+
+
+            db.execSQL("CREATE TABLE IF NOT EXISTS TBL_MUNICIPIOS   " +
+                    "(ID_MUNICIPIO INTEGER PRIMARY KEY," +
+                    "NOME_MUNICIPIO VARCHAR(50)," +
+                    "UF VARCHAR(4)," +
+                    "CEP VARCHAR(12));");
         }
     }
 
@@ -498,7 +522,7 @@ public class DBHelper extends SQLiteOpenHelper {
         resultado += cursor.getString(0);
         return resultado;
     }
-
+   /*
     public void atualizarTBL_PROSPECT(Prospect prospect) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content = new ContentValues();
@@ -612,7 +636,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
         return listaProspects;
     }
-
+  */
     public void atualizarTBL_SEGMENTO(Segmento segmento) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content = new ContentValues();
@@ -1958,4 +1982,60 @@ public class DBHelper extends SQLiteOpenHelper {
 
         return listaUsuario;
     }
+
+
+    public void inserirTBL_MUNICIPIOS(Municipio municipio) throws android.database.sqlite.SQLiteConstraintException {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues content = new ContentValues();
+        content.put("ID_MUNICIPIO", municipio.getId_municipio());
+        content.put("NOME_MUNICIPIO", municipio.getNome_municipio());
+        content.put("UF", municipio.getUf());
+        content.put("CEP", municipio.getCep());
+        db.insert("TBL_MUNICIPIOS", null, content);
+        System.gc();
+    }
+
+    public List<Municipio> listaMunicipios(){
+        List<Municipio> municipios = new ArrayList<>();
+        SQLiteDatabase banco = this.getReadableDatabase();
+        Cursor cursor;
+
+        cursor = banco.rawQuery("SELECT * FROM TBL_MUNICIOS", null);
+        cursor.moveToFirst();
+
+        do{
+           Municipio municipio = new Municipio();
+
+           municipio.setId_municipio(cursor.getString(cursor.getColumnIndex("ID_MUNICIPIO")));
+           municipio.setNome_municipio(cursor.getString(cursor.getColumnIndex("NOME_MUNICIPIO")));
+           municipio.setUf(cursor.getString(cursor.getColumnIndex("UF")));
+           municipio.setCep(cursor.getColumnName(cursor.getColumnIndex("CEP")));
+
+        }while (cursor.moveToNext());
+
+
+
+
+        return municipios;
+    }
+
+    public void inserirTBL_PAISES(Pais pais) throws android.database.sqlite.SQLiteConstraintException {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues content = new ContentValues();
+        content.put("ID_PAIS", pais.getId_pais());
+        content.put("NOME_PAIS", pais.getNome_pais());
+        db.insert("TBL_PAISES", null, content);
+        System.gc();
+    }
+
+
+    public void atualizarTBL_PAISES(String ID_PAIS, String NOME_PAIS) throws android.database.sqlite.SQLiteConstraintException {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues content = new ContentValues();
+        content.put("NOME_PAIS", NOME_PAIS);
+        db.update("TBL_PAISES", content, "ID_PAIS = " + ID_PAIS, null);
+        System.gc();
+    }
+
+
 }

@@ -1,17 +1,18 @@
 package com.example.rcksuporte05.rcksistemas.classes;
 
-import android.graphics.Bitmap;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by RCK 03 on 30/01/2018.
  */
 
 public class Prospect {
-
-    private String id_prospect; //F_ID_PROSPECT  NA TBL_CADASTRO
-    private String id_cadastro; // ID NA TBL_CADASTRO
+    private String id_prospect;
+    private String id_cadastro;
     private Segmento segmento;
     private MotivoNaoCadastramento motivoNaoCadastramento;
+    private List<Contato> listaContato = new ArrayList<>();
     private String nome_cadastro;
     private String nome_fantasia;
     private String pessoa_f_j;
@@ -23,36 +24,20 @@ public class Prospect {
     private String endereco_numero;
     private String endereco_complemento;
     private String endereco_uf;
-    private String endereco_municipio;
+    private String endereco_id_municipio;
     private String endereco_cep;
-    private String nome_pais;
-    private String situaçãoPredio;
-    private String nomeResponsavel;
-    private String funcaoResponsavel;
-    private String celular1;
-    private String celular2;
-    private String telefoneFixo;
-    private String email1;
-    private String email2;
-    private String fornecedor1;
-    private String telefoneFornecedor1;
-    private String fornecedor2;
-    private String telefoneFornecedor2;
+    private String situacaoPredio;
     private String observacoesComerciais;
     private String limiteDeCreditoSugerido;
     private String limiteDePrazoSugerido;
-    private String nomeBanco;
     private String agencia;
     private String contaCorrente;
+    private String idEmpresa;
+    private String diaVisita;
+    private String dataRetorno;
     private String fotoPrincipalBase64;
     private String fotoSecundariaBase64;
-    private String idEmpresa;
-    private Bitmap fotoPrincipal;
-    private Bitmap fotoSecundaria;
-    private String diaVisita;
-   private String dataRetorno;
-   private int idRdPessoa;
-   private int idRdSituacaoPredio;
+
 
     public String getId_prospect() {
         return id_prospect;
@@ -84,6 +69,14 @@ public class Prospect {
 
     public void setMotivoNaoCadastramento(MotivoNaoCadastramento motivoNaoCadastramento) {
         this.motivoNaoCadastramento = motivoNaoCadastramento;
+    }
+
+    public List<Contato> getListaContato() {
+        return listaContato;
+    }
+
+    public void setListaContato(List<Contato> listaContato) {
+        this.listaContato = listaContato;
     }
 
     public String getNome_cadastro() {
@@ -150,22 +143,6 @@ public class Prospect {
         this.endereco_bairro = endereco_bairro;
     }
 
-    public String getNome_pais() {
-        return nome_pais;
-    }
-
-    public void setNome_pais(String nome_pais) {
-        this.nome_pais = nome_pais;
-    }
-
-    public String getDataRetorno() {
-        return dataRetorno;
-    }
-
-    public void setDataRetorno(String dataRetorno) {
-        this.dataRetorno = dataRetorno;
-    }
-
     public String getEndereco_numero() {
         return endereco_numero;
     }
@@ -190,12 +167,12 @@ public class Prospect {
         this.endereco_uf = endereco_uf;
     }
 
-    public String getEndereco_municipio() {
-        return endereco_municipio;
+    public String getEndereco_id_municipio() {
+        return endereco_id_municipio;
     }
 
-    public void setEndereco_municipio(String endereco_municipio) {
-        this.endereco_municipio = endereco_municipio;
+    public void setEndereco_id_municipio(String endereco_id_municipio) {
+        this.endereco_id_municipio = endereco_id_municipio;
     }
 
     public String getEndereco_cep() {
@@ -206,100 +183,12 @@ public class Prospect {
         this.endereco_cep = endereco_cep;
     }
 
-    public String getSituaçãoPredio() {
-        return situaçãoPredio;
+    public String getSituacaoPredio() {
+        return situacaoPredio;
     }
 
-    public void setSituaçãoPredio(String situaçãoPredio) {
-        this.situaçãoPredio = situaçãoPredio;
-    }
-
-    public String getNomeResponsavel() {
-        return nomeResponsavel;
-    }
-
-    public void setNomeResponsavel(String nomeResponsavel) {
-        this.nomeResponsavel = nomeResponsavel;
-    }
-
-    public String getFuncaoResponsavel() {
-        return funcaoResponsavel;
-    }
-
-    public void setFuncaoResponsavel(String funcaoResponsavel) {
-        this.funcaoResponsavel = funcaoResponsavel;
-    }
-
-    public String getCelular1() {
-        return celular1;
-    }
-
-    public void setCelular1(String celular1) {
-        this.celular1 = celular1;
-    }
-
-    public String getCelular2() {
-        return celular2;
-    }
-
-    public void setCelular2(String celular2) {
-        this.celular2 = celular2;
-    }
-
-    public String getTelefoneFixo() {
-        return telefoneFixo;
-    }
-
-    public void setTelefoneFixo(String telefoneFixo) {
-        this.telefoneFixo = telefoneFixo;
-    }
-
-    public String getEmail1() {
-        return email1;
-    }
-
-    public void setEmail1(String email1) {
-        this.email1 = email1;
-    }
-
-    public String getEmail2() {
-        return email2;
-    }
-
-    public void setEmail2(String email2) {
-        this.email2 = email2;
-    }
-
-    public String getFornecedor1() {
-        return fornecedor1;
-    }
-
-    public void setFornecedor1(String fornecedor1) {
-        this.fornecedor1 = fornecedor1;
-    }
-
-    public String getTelefoneFornecedor1() {
-        return telefoneFornecedor1;
-    }
-
-    public void setTelefoneFornecedor1(String telefoneFornecedor1) {
-        this.telefoneFornecedor1 = telefoneFornecedor1;
-    }
-
-    public String getFornecedor2() {
-        return fornecedor2;
-    }
-
-    public void setFornecedor2(String fornecedor2) {
-        this.fornecedor2 = fornecedor2;
-    }
-
-    public String getTelefoneFornecedor2() {
-        return telefoneFornecedor2;
-    }
-
-    public void setTelefoneFornecedor2(String telefoneFornecedor2) {
-        this.telefoneFornecedor2 = telefoneFornecedor2;
+    public void setSituacaoPredio(String situacaoPredio) {
+        this.situacaoPredio = situacaoPredio;
     }
 
     public String getObservacoesComerciais() {
@@ -326,14 +215,6 @@ public class Prospect {
         this.limiteDePrazoSugerido = limiteDePrazoSugerido;
     }
 
-    public String getNomeBanco() {
-        return nomeBanco;
-    }
-
-    public void setNomeBanco(String nomeBanco) {
-        this.nomeBanco = nomeBanco;
-    }
-
     public String getAgencia() {
         return agencia;
     }
@@ -348,6 +229,30 @@ public class Prospect {
 
     public void setContaCorrente(String contaCorrente) {
         this.contaCorrente = contaCorrente;
+    }
+
+    public String getIdEmpresa() {
+        return idEmpresa;
+    }
+
+    public void setIdEmpresa(String idEmpresa) {
+        this.idEmpresa = idEmpresa;
+    }
+
+    public String getDiaVisita() {
+        return diaVisita;
+    }
+
+    public void setDiaVisita(String diaVisita) {
+        this.diaVisita = diaVisita;
+    }
+
+    public String getDataRetorno() {
+        return dataRetorno;
+    }
+
+    public void setDataRetorno(String dataRetorno) {
+        this.dataRetorno = dataRetorno;
     }
 
     public String getFotoPrincipalBase64() {
@@ -365,53 +270,4 @@ public class Prospect {
     public void setFotoSecundariaBase64(String fotoSecundariaBase64) {
         this.fotoSecundariaBase64 = fotoSecundariaBase64;
     }
-
-    public Bitmap getFotoPrincipal() {
-        return fotoPrincipal;
-    }
-
-    public void setFotoPrincipal(Bitmap fotoPrincipal) {
-        this.fotoPrincipal = fotoPrincipal;
-    }
-
-    public Bitmap getFotoSecundaria() {
-        return fotoSecundaria;
-    }
-
-    public void setFotoSecundaria(Bitmap fotoSecundaria) {
-        this.fotoSecundaria = fotoSecundaria;
-    }
-
-    public String getDiaVisita() {
-        return diaVisita;
-    }
-
-    public void setDiaVisita(String diaVisita) {
-        this.diaVisita = diaVisita;
-    }
-
-    public int getIdRdPessoa() {
-        return idRdPessoa;
-    }
-
-    public void setIdRdPessoa(int idRdPessoa) {
-        this.idRdPessoa = idRdPessoa;
-    }
-
-    public int getIdRdSituacaoPredio() {
-        return idRdSituacaoPredio;
-    }
-
-    public void setIdRdSituacaoPredio(int idRdSituacaoPredio) {
-        this.idRdSituacaoPredio = idRdSituacaoPredio;
-    }
-
-    public String getIdEmpresa() {
-        return idEmpresa;
-    }
-
-    public void setIdEmpresa(String idEmpresa) {
-        this.idEmpresa = idEmpresa;
-    }
-
 }

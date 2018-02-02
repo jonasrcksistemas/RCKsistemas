@@ -23,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.example.rcksuporte05.rcksistemas.Helper.ProspectHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.interfaces.FotoActivity;
 import com.example.rcksuporte05.rcksistemas.util.DatePickerUtil;
@@ -64,6 +65,16 @@ public class CadastroProspectFotoSalvar extends Fragment {
 
         return view;
     }
+
+    public void insereDadosDaFrame(){
+        if(edtDataRetorno.getText() != null && !edtDataRetorno.getText().toString().equals("")){
+            ProspectHelper.getProspect().setDataRetorno(edtDataRetorno.getText().toString().trim());
+        }
+    }
+
+
+
+
 
     @OnClick(R.id.btnAddFoto)
     public void foto() {
