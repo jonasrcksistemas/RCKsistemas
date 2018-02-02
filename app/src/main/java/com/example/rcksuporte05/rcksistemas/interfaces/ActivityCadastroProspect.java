@@ -64,23 +64,34 @@ public class ActivityCadastroProspect extends AppCompatActivity {
                                                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                                                    switch (position) {
                                                        case 0:
-                                                           ProspectHelper.getCadastroProspectGeral().inserirDadosDaFrame();
+                                                           if(ProspectHelper.getCadastroProspectGeral() != null) {
+                                                               ProspectHelper.getCadastroProspectGeral().inserirDadosDaFrame();
+                                                           }
                                                            break;
                                                        case 1:
-                                                           ProspectHelper.getCadastroProspectEndereco().inserirDadosDaFrame();
+                                                           if(ProspectHelper.getCadastroProspectEndereco() != null){
+                                                               ProspectHelper.getCadastroProspectEndereco().inserirDadosDaFrame();
+                                                           }
                                                            break;
                                                        case 2:
-                                                           ProspectHelper.getCadastroProspectContatos().insereDadosdaFrame();
+                                                           if(ProspectHelper.getCadastroProspectContatos() != null){
+                                                               ProspectHelper.getCadastroProspectContatos().insereDadosdaFrame();
+                                                           }
                                                            break;
                                                        case 3:
-                                                           ProspectHelper.getCadastroProspectSegmentos().insereDadosDaFrame();
+                                                           if(ProspectHelper.getCadastroProspectSegmentos() != null){
+                                                               ProspectHelper.getCadastroProspectSegmentos().insereDadosDaFrame();
+                                                           }
                                                            break;
                                                        case 4:
-                                                            ProspectHelper.getCadastroProspectMotivos().insereDadosDaFrame();
+                                                           if(ProspectHelper.getCadastroProspectMotivos() != null){
+                                                               ProspectHelper.getCadastroProspectMotivos().insereDadosDaFrame();
+                                                           }
                                                            break;
-
                                                        case 5:
-                                                           ProspectHelper.getCadastroProspectObservacoesComerciais().insereDadosDaFrame();
+                                                           if(ProspectHelper.getCadastroProspectObservacoesComerciais() != null){
+                                                               ProspectHelper.getCadastroProspectObservacoesComerciais().insereDadosDaFrame();
+                                                           }
                                                            break;
                                                        case 6:
                                                            break;

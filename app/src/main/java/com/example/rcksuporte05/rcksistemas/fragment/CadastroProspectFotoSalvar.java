@@ -20,10 +20,12 @@ import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.interfaces.FotoActivity;
+import com.example.rcksuporte05.rcksistemas.util.DatePickerUtil;
 import com.example.rcksuporte05.rcksistemas.util.FotoUtil;
 
 import java.io.File;
@@ -43,12 +45,21 @@ public class CadastroProspectFotoSalvar extends Fragment {
 
     @BindView(R.id.imagemProspect)
     ImageView imagemProspect;
+    @BindView(R.id.edtDataRetorno)
+    EditText edtDataRetorno;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_cadastro_prospect_foto_salvar, container, false);
         ButterKnife.bind(this, view);
+
+        edtDataRetorno.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatePickerUtil.mostraDatePickerDialog(getContext(), edtDataRetorno);
+            }
+        });
 
 
         return view;

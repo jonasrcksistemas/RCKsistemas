@@ -3,13 +3,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:paddingBottom="@dimen/activity_vertical_margin"
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingRight="@dimen/activity_horizontal_margin"
@@ -26,12 +23,67 @@
                 android:layout_width="match_parent"
                 android:id="@+id/imagemProspect"
                 android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/btnAddFoto"
+                android:layout_above="@+id/dataDeRetorno"
+                />
+
+
+            <TextView
+                android:id="@+id/dataDeRetorno"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/btnSalvarParcial"
+                android:layout_alignEnd="@+id/btnSalvarParcial"
+                android:layout_alignRight="@+id/btnSalvarParcial"
+                android:layout_marginBottom="21dp"
+                android:text="Data Retorno: "
+                android:textColor="@color/colorAccent"
+                android:textStyle="bold" />
+
+
+            <EditText
+                android:id="@+id/edtDataRetorno"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/dataDeRetorno"
+                android:layout_alignBottom="@+id/dataDeRetorno"
+                android:layout_marginLeft="9dp"
+                android:layout_marginStart="9dp"
+                android:layout_toEndOf="@+id/dataDeRetorno"
+                android:layout_toRightOf="@+id/dataDeRetorno"
+                android:background="@drawable/borda_edittext"
+                android:focusable="false"
+                android:gravity="center"
+                android:text="  /  /    "
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
+
+
+            <Button
+                android:id="@+id/btnSalvarParcial"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_below="@+id/btnAddFoto" />
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
+                android:text="Salvar"
+                android:theme="@style/Button" />
 
+
+            <Button
+                android:id="@+id/btnSalvarProspect"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
+                android:text="Salvar Prospect"
+                android:theme="@style/Button"
+                android:layout_alignParentEnd="true" />
 
         </RelativeLayout>
-    </ScrollView>
 </LinearLayout>
