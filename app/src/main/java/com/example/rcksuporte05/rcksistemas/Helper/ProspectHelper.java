@@ -1,6 +1,8 @@
 package com.example.rcksuporte05.rcksistemas.Helper;
 
 import com.example.rcksuporte05.rcksistemas.classes.MotivoNaoCadastramento;
+import com.example.rcksuporte05.rcksistemas.classes.Municipio;
+import com.example.rcksuporte05.rcksistemas.classes.Pais;
 import com.example.rcksuporte05.rcksistemas.classes.Prospect;
 import com.example.rcksuporte05.rcksistemas.classes.Segmento;
 import com.example.rcksuporte05.rcksistemas.fragment.CadastroProspectContatos;
@@ -21,6 +23,8 @@ public class ProspectHelper {
     private static Prospect prospect;
     private static List<Segmento> segmentos;
     private static List<MotivoNaoCadastramento> motivos;
+    private static List<Pais> paises;
+    public static List<Municipio> municipios;
     private static CadastroProspectGeral cadastroProspectGeral;
     private static CadastroProspectEndereco cadastroProspectEndereco;
     private static CadastroProspectContatos cadastroProspectContatos;
@@ -112,6 +116,22 @@ public class ProspectHelper {
         ProspectHelper.motivos = motivos;
     }
 
+    public static List<Pais> getPaises() {
+        return paises;
+    }
+
+    public static void setPaises(List<Pais> paises) {
+        ProspectHelper.paises = paises;
+    }
+
+    public static List<Municipio> getMunicipios() {
+        return municipios;
+    }
+
+    public static void setMunicipios(List<Municipio> municipios) {
+        ProspectHelper.municipios = municipios;
+    }
+
     public void clear(){
         prospect = null;
         cadastroProspectGeral = null;
@@ -123,6 +143,8 @@ public class ProspectHelper {
         cadastroProspectFotoSalvar = null;
         segmentos = null;
         motivos = null;
+        paises = null;
+        municipios = null;
         System.gc();
     }
 }

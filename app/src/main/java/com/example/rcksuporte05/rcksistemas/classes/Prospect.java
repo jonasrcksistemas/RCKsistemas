@@ -30,6 +30,7 @@ public class Prospect {
     private String observacoesComerciais;
     private String limiteDeCreditoSugerido;
     private String limiteDePrazoSugerido;
+    private String nomeBanco;
     private String agencia;
     private String contaCorrente;
     private String idEmpresa;
@@ -269,5 +270,13 @@ public class Prospect {
 
     public void setFotoSecundariaBase64(String fotoSecundariaBase64) {
         this.fotoSecundariaBase64 = fotoSecundariaBase64;
+    }
+
+    public String getNomeBanco() {
+        return nomeBanco;
+    }
+
+    public void setNomeBanco(String nomeBanco) {
+        this.nomeBanco = nomeBanco;
     }
 }

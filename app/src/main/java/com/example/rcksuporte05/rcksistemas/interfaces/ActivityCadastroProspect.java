@@ -16,6 +16,7 @@ import com.example.rcksuporte05.rcksistemas.api.Api;
 import com.example.rcksuporte05.rcksistemas.api.Rotas;
 import com.example.rcksuporte05.rcksistemas.classes.MotivoNaoCadastramento;
 import com.example.rcksuporte05.rcksistemas.classes.Segmento;
+import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
 import com.example.rcksuporte05.rcksistemas.extras.SlidingTabLayout;
 
 import java.util.HashMap;
@@ -36,6 +37,8 @@ public class ActivityCadastroProspect extends AppCompatActivity {
     TabsAdapterProspect tabsAdapterProspect;
     ProgressDialog progress;
 
+    private DBHelper db;
+
     @BindView(R.id.toolbarFragsProspect)
     Toolbar toolbar;
 
@@ -45,13 +48,18 @@ public class ActivityCadastroProspect extends AppCompatActivity {
     @BindView(R.id.vp_tabs_prospect)
     ViewPager mViewPager;
 
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cadastro_prospect);
         ButterKnife.bind(this);
+        db = new DBHelper(this);
+
         buscarSegmentos();
         buscarMotivos();
+        buscarPais();
+        buscarMunicipios();
 
         toolbar.setTitle("Cadastro de Prospect");
 
@@ -182,5 +190,14 @@ public class ActivityCadastroProspect extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+    }
+
+
+    public void buscarPais(){
+        ProspectHelper.setPaises(db.listaPaises());
+    }
+
+    public void buscarMunicipios(){
+        ProspectHelper.setMunicipios(db.listaMunicipios());
     }
 }

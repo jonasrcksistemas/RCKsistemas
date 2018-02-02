@@ -64,7 +64,7 @@ public class CadastroProspectContatos extends Fragment {
         View view = inflater.inflate(R.layout.fragment_cadastro_prospect_contatos, container, false);
         ButterKnife.bind(this, view);
 
-        injetaDadosNaTela();
+//        injetaDadosNaTela();
         ProspectHelper.setCadastroProspectContatos(this);
         return view;
     }
@@ -76,6 +76,7 @@ public class CadastroProspectContatos extends Fragment {
         System.out.println("dsdsadas");
     }
 
+    /*
     public void injetaDadosNaTela(){
         if(ProspectHelper.getProspect().getNomeResponsavel() != null){
             edtResponsavelProspect.setText(ProspectHelper.getProspect().getNomeResponsavel());
@@ -149,6 +150,6 @@ public class CadastroProspectContatos extends Fragment {
             ProspectHelper.getProspect().setTelefoneFornecedor2(edtTelFonecedor2.getText().toString());
         }
     }
-
+    */
 
 }

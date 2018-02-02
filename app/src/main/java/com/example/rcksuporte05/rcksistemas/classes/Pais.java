@@ -29,4 +29,9 @@ public class Pais {
     public void setNome_pais(String nome_pais) {
         this.nome_pais = nome_pais;
     }
+
+    @Override
+    public String toString() {
+        return nome_pais;
+    }
 }

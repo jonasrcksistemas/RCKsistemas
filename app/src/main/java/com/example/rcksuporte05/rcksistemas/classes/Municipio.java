@@ -54,4 +54,9 @@ public class Municipio {
         this.cep = cep;
     }
 
+
+    @Override
+    public String toString() {
+        return  nome_municipio;
+    }
 }

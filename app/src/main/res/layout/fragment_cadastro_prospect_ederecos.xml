@@ -108,61 +108,60 @@
                 android:textStyle="bold"
                 android:layout_alignParentLeft="true" />
 
-            <EditText
-                android:id="@+id/edtPaisProspect"
-                android:layout_width="150dp"
+            <Spinner
+                android:id="@+id/spPaisProspect"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/txtPaisProspect"
-                android:background="@drawable/borda_edittext" />
+                android:gravity="end|center_vertical" />
+
 
             <TextView
                 android:id="@+id/txtUfProspect"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/edtBairroProspect"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="12dp"
-                android:layout_toEndOf="@+id/edtPaisProspect"
+                android:layout_above="@+id/spPaisProspect"
+                android:layout_alignEnd="@+id/rgSituacaoPredio"
+                android:layout_alignRight="@+id/rgSituacaoPredio"
+                android:layout_marginEnd="21dp"
+                android:layout_marginRight="21dp"
                 android:text="UF"
                 android:textColor="@color/colorAccent"
-                android:textStyle="bold"
-                android:layout_marginLeft="12dp"
-                android:layout_toRightOf="@+id/edtPaisProspect" />
+                android:textStyle="bold" />
 
-            <EditText
-                android:id="@+id/edtUfProspect"
-                android:layout_width="match_parent"
+            <Spinner
+                android:id="@+id/spUfProspect"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
                 android:layout_alignStart="@id/txtUfProspect"
                 android:layout_below="@id/txtUfProspect"
-                android:background="@drawable/borda_edittext"
-                android:layout_alignLeft="@id/txtUfProspect" />
+                android:layout_alignLeft="@id/txtUfProspect"
+                />
 
             <TextView
                 android:id="@+id/txtMunicipioProspect"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/edtPaisProspect"
+                android:layout_below="@+id/spPaisProspect"
                 android:layout_marginTop="12dp"
                 android:text="MUNICIPIO"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
 
-            <EditText
-                android:id="@+id/edtMunicipioProspect"
-                android:layout_width="match_parent"
+            <Spinner
+                android:id="@+id/spMunicipioProspect"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/txtMunicipioProspect"
-                android:background="@drawable/borda_edittext" />
+                android:layout_alignEnd="@+id/txtMunicipioProspect"
+                android:layout_alignRight="@+id/txtMunicipioProspect" />
 
             <TextView
                 android:id="@+id/txtCepProspect"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
-                android:layout_below="@+id/edtMunicipioProspect"
+                android:layout_below="@+id/spMunicipioProspect"
                 android:layout_marginTop="12dp"
                 android:text="CEP"
                 android:textColor="@color/colorAccent"

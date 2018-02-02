@@ -2029,6 +2029,27 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
 
+    public List<Pais> listaPaises(){
+        List<Pais> paises = new ArrayList<>();
+        SQLiteDatabase banco = this.getReadableDatabase();
+        Cursor cursor;
+
+        cursor = banco.rawQuery("SELECT * FROM TBL_MUNICIOS", null);
+        cursor.moveToFirst();
+
+        do {
+            Pais pais = new Pais();
+
+            pais.setId_pais(cursor.getString(cursor.getColumnIndex("ID_PAIS")));
+            pais.setNome_pais(cursor.getString(cursor.getColumnIndex("NOME_PAIS")));
+
+            paises.add(pais);
+        }while (cursor.moveToNext());
+
+
+        return paises;
+    }
+
     public void atualizarTBL_PAISES(String ID_PAIS, String NOME_PAIS) throws android.database.sqlite.SQLiteConstraintException {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content = new ContentValues();
