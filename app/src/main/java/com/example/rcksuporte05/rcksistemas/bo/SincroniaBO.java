@@ -19,7 +19,9 @@ import com.example.rcksuporte05.rcksistemas.api.Api;
 import com.example.rcksuporte05.rcksistemas.api.Rotas;
 import com.example.rcksuporte05.rcksistemas.classes.Cliente;
 import com.example.rcksuporte05.rcksistemas.classes.CondicoesPagamento;
+import com.example.rcksuporte05.rcksistemas.classes.Municipio;
 import com.example.rcksuporte05.rcksistemas.classes.Operacao;
+import com.example.rcksuporte05.rcksistemas.classes.Pais;
 import com.example.rcksuporte05.rcksistemas.classes.Produto;
 import com.example.rcksuporte05.rcksistemas.classes.Sincronia;
 import com.example.rcksuporte05.rcksistemas.classes.TabelaPreco;
@@ -222,6 +224,45 @@ public class SincroniaBO {
                 }
             });
             mNotificationManager.notify(0, notificacao.build());
+        }
+
+        db.alterar("DELETE FROM TBL_PAISES");
+
+        for (Pais pais : sincronia.getListaPais()) {
+            notificacao.setProgress(maxProgress, contadorNotificacaoEProgresso, false);
+
+            db.inserirTBL_PAISES(pais);
+
+            contadorNotificacaoEProgresso++;
+            final int finalContadorNotificacaoEProgresso = contadorNotificacaoEProgresso;
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    progress.setProgress(finalContadorNotificacaoEProgresso);
+                }
+            });
+            mNotificationManager.notify(0, notificacao.build());
+        }
+
+        if (sincronia.isMunicipio()) {
+
+            db.alterar("DELETE FROM TBL_MUNICIPIOS");
+
+            for (Municipio municipio : sincronia.getListaMunicipios()) {
+                notificacao.setProgress(maxProgress, contadorNotificacaoEProgresso, false);
+
+                db.inserirTBL_MUNICIPIOS(municipio);
+
+                contadorNotificacaoEProgresso++;
+                final int finalContadorNotificacaoEProgresso = contadorNotificacaoEProgresso;
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        progress.setProgress(finalContadorNotificacaoEProgresso);
+                    }
+                });
+                mNotificationManager.notify(0, notificacao.build());
+            }
         }
 
         if (sincronia.isPedidosPendentes()) {

@@ -77,7 +77,7 @@ public class CadastroProspectContatos extends Fragment {
     }
 
     public void injetaDadosNaTela(){
-        if(ProspectHelper.getProspect().getNomeResponsavel() != null){
+        /*if(ProspectHelper.getProspect().getNomeResponsavel() != null){
             edtResponsavelProspect.setText(ProspectHelper.getProspect().getNomeResponsavel());
         }
         if(ProspectHelper.getProspect().getFuncaoResponsavel() != null){
@@ -109,13 +109,13 @@ public class CadastroProspectContatos extends Fragment {
         }
         if(ProspectHelper.getProspect().getTelefoneFornecedor2() != null){
             edtTelFonecedor2.setText(ProspectHelper.getProspect().getTelefoneFornecedor2());
-        }
+        }*/
 
     }
 
 
     public void insereDadosdaFrame(){
-        if(edtResponsavelProspect.getText() != null){
+        /*if(edtResponsavelProspect.getText() != null){
             ProspectHelper.getProspect().setNomeResponsavel(edtFuncaoResponsavelProspect.getText().toString());
         }
         if(edtFuncaoResponsavelProspect.getText() != null){
@@ -147,7 +147,7 @@ public class CadastroProspectContatos extends Fragment {
         }
         if(edtTelFonecedor2.getText() != null){
             ProspectHelper.getProspect().setTelefoneFornecedor2(edtTelFonecedor2.getText().toString());
-        }
+        }*/
     }
 
 

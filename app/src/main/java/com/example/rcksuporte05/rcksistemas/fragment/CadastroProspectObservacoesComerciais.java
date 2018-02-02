@@ -65,9 +65,9 @@ public class CadastroProspectObservacoesComerciais extends Fragment {
                 edtLimiteDePrazoSugerido.setText(ProspectHelper.getProspect().getLimiteDePrazoSugerido());
             }
 
-            if(ProspectHelper.getProspect().getNomeBanco() != null){
+            /*if(ProspectHelper.getProspect().getNomeBanco() != null){
                 edtBancoProspect.setText(ProspectHelper.getProspect().getNomeBanco());
-            }
+            }*/
 
             if(ProspectHelper.getProspect().getContaCorrente() != null){
                 edtContaCorrenteProspect.setText(ProspectHelper.getProspect().getContaCorrente());
@@ -90,9 +90,9 @@ public class CadastroProspectObservacoesComerciais extends Fragment {
             if(edtLimiteDePrazoSugerido.getText() != null){
                 ProspectHelper.getProspect().setLimiteDePrazoSugerido(edtLimiteDePrazoSugerido.getText().toString());
             }
-            if(edtBancoProspect.getText() != null){
+            /*if(edtBancoProspect.getText() != null){
                 ProspectHelper.getProspect().setNomeBanco(edtBancoProspect.getText().toString());
-            }
+            }*/
             if(edtContaCorrenteProspect.getText() != null){
                 ProspectHelper.getProspect().setContaCorrente(edtContaCorrenteProspect.getText().toString());
             }

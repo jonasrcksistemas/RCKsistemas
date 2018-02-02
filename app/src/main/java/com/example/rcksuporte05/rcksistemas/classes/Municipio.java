@@ -11,9 +11,6 @@ public class Municipio {
     private String cep;
 
     public String getId_municipio() {
-        if (id_municipio.equals("anyType{}")) {
-            id_municipio = "";
-        }
         return id_municipio;
     }
 
@@ -22,9 +19,6 @@ public class Municipio {
     }
 
     public String getNome_municipio() {
-        if (nome_municipio.equals("anyType{}")) {
-            nome_municipio = "";
-        }
         return nome_municipio;
     }
 
@@ -33,9 +27,6 @@ public class Municipio {
     }
 
     public String getUf() {
-        if (uf.equals("anyType{}")) {
-            uf = "";
-        }
         return uf;
     }
 
@@ -44,9 +35,6 @@ public class Municipio {
     }
 
     public String getCep() {
-        if (cep.equals("anyType{}")) {
-            cep = "";
-        }
         return cep;
     }
 
