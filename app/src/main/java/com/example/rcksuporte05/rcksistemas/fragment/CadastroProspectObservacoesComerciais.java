@@ -29,14 +29,6 @@ public class CadastroProspectObservacoesComerciais extends Fragment {
     @BindView(R.id.edtLimiteDePrazoSugerido)
     EditText edtLimiteDePrazoSugerido;
 
-    @BindView(R.id.edtBancoProspect)
-    EditText edtBancoProspect;
-
-    @BindView(R.id.edtContaCorrenteProspect)
-    EditText edtContaCorrenteProspect;
-
-    @BindView(R.id.edtAgenciaProspect)
-    EditText edtAgenciaProspect;
 
 
 
@@ -45,63 +37,54 @@ public class CadastroProspectObservacoesComerciais extends Fragment {
         public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
             View view = inflater.inflate(R.layout.fragment_cadastro_prospect_observacao_comercial, container, false);
             ButterKnife.bind(this, view);
-            injetaDadosNaTela();
+//            injetaDadosNaTela();
 
             ProspectHelper.setCadastroProspectObservacoesComerciais(this);
             return view;
         }
 
-        public void injetaDadosNaTela(){
-
-            if(ProspectHelper.getProspect().getObservacoesComerciais() != null){
-                edtObservacaoComercial.setText(ProspectHelper.getProspect().getObservacoesComerciais());
-            }
-
-            if(ProspectHelper.getProspect().getLimiteDeCreditoSugerido() != null){
-                edtLimiteCreditoSugerido.setText(ProspectHelper.getProspect().getLimiteDeCreditoSugerido());
-            }
-
-            if(ProspectHelper.getProspect().getLimiteDePrazoSugerido() != null){
-                edtLimiteDePrazoSugerido.setText(ProspectHelper.getProspect().getLimiteDePrazoSugerido());
-            }
-
-            /*if(ProspectHelper.getProspect().getNomeBanco() != null){
-                edtBancoProspect.setText(ProspectHelper.getProspect().getNomeBanco());
-            }*/
-
-            if(ProspectHelper.getProspect().getContaCorrente() != null){
-                edtContaCorrenteProspect.setText(ProspectHelper.getProspect().getContaCorrente());
-            }
-
-            if(ProspectHelper.getProspect().getAgencia() != null){
-                edtAgenciaProspect.setText(ProspectHelper.getProspect().getAgencia());
-            }
-
-        }
-
-
-        public void insereDadosDaFrame(){
-            if(edtObservacaoComercial.getText() != null){
-                ProspectHelper.getProspect().setObservacoesComerciais(edtObservacaoComercial.getText().toString());
-            }
-            if(edtLimiteCreditoSugerido.getText() != null){
-                ProspectHelper.getProspect().setLimiteDeCreditoSugerido(edtLimiteCreditoSugerido.getText().toString());
-            }
-            if(edtLimiteDePrazoSugerido.getText() != null){
-                ProspectHelper.getProspect().setLimiteDePrazoSugerido(edtLimiteDePrazoSugerido.getText().toString());
-            }
-            /*if(edtBancoProspect.getText() != null){
-                ProspectHelper.getProspect().setNomeBanco(edtBancoProspect.getText().toString());
-            }*/
-            if(edtContaCorrenteProspect.getText() != null){
-                ProspectHelper.getProspect().setContaCorrente(edtContaCorrenteProspect.getText().toString());
-            }
-            if(edtAgenciaProspect.getText() != null){
-                ProspectHelper.getProspect().setAgencia(edtAgenciaProspect.getText().toString());
-            }
+//        public void injetaDadosNaTela(){
+//
+//            if(ProspectHelper.getProspect().getObservacoesComerciais() != null){
+//                edtObservacaoComercial.setText(ProspectHelper.getProspect().getObservacoesComerciais());
+//            }
+//
+//            if(ProspectHelper.getProspect().getLimiteDeCreditoSugerido() != null){
+//                edtLimiteCreditoSugerido.setText(ProspectHelper.getProspect().getLimiteDeCreditoSugerido());
+//            }
+//
+//            if(ProspectHelper.getProspect().getLimiteDePrazoSugerido() != null){
+//                edtLimiteDePrazoSugerido.setText(ProspectHelper.getProspect().getLimiteDePrazoSugerido());
+//            }
+//
+//            /*if(ProspectHelper.getProspect().getNomeBanco() != null){
+//                edtBancoProspect.setText(ProspectHelper.getProspect().getNomeBanco());
+//            }*/
+//
+//            if(ProspectHelper.getProspect().getContaCorrente() != null){
+//                edtContaCorrenteProspect.setText(ProspectHelper.getProspect().getContaCorrente());
+//            }
+//
+//            if(ProspectHelper.getProspect().getAgencia() != null){
+//                edtAgenciaProspect.setText(ProspectHelper.getProspect().getAgencia());
+//            }
+//
+//        }
 
 
-        }
+//        public void insereDadosDaFrame(){
+//            if(edtObservacaoComercial.getText() != null){
+//                ProspectHelper.getProspect().setObservacoesComerciais(edtObservacaoComercial.getText().toString());
+//            }
+//            if(edtLimiteCreditoSugerido.getText() != null){
+//                ProspectHelper.getProspect().setLimiteDeCreditoSugerido(edtLimiteCreditoSugerido.getText().toString());
+//            }
+//            if(edtLimiteDePrazoSugerido.getText() != null){
+//                ProspectHelper.getProspect().setLimiteDePrazoSugerido(edtLimiteDePrazoSugerido.getText().toString());
+//            }
+//
+//
+//        }
 
 
 }

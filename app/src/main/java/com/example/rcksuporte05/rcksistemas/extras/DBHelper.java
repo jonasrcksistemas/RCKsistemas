@@ -7,6 +7,7 @@ import android.database.CursorIndexOutOfBoundsException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.example.rcksuporte05.rcksistemas.classes.Banco;
 import com.example.rcksuporte05.rcksistemas.classes.Cliente;
 import com.example.rcksuporte05.rcksistemas.classes.CondicoesPagamento;
 import com.example.rcksuporte05.rcksistemas.classes.MotivoNaoCadastramento;
@@ -426,6 +427,12 @@ public class DBHelper extends SQLiteOpenHelper {
                 "UF VARCHAR(4)," +
                 "CEP VARCHAR(12));");
 
+        db.execSQL("CREATE TABLE IF NOT EXISTS TBL_BANCOS_FEBRABAN " +
+                "(CODIGO_FEBRABAN VARCHAR(6) NOT NULL," +
+                " NOME_BANCO VARCHAR(60)," +
+                " HOME_PAGE VARCHAR(60)," +
+                " PRIMARY KEY (CODIGO_FEBRABAN));");
+
         System.gc();
     }
 
@@ -493,6 +500,12 @@ public class DBHelper extends SQLiteOpenHelper {
                     "NOME_MUNICIPIO VARCHAR(50)," +
                     "UF VARCHAR(4)," +
                     "CEP VARCHAR(12));");
+
+            db.execSQL("CREATE TABLE IF NOT EXISTS TBL_BANCOS_FEBRABAN " +
+                    "(CODIGO_FEBRABAN VARCHAR(6) NOT NULL," +
+                    " NOME_BANCO VARCHAR(60)," +
+                    " HOME_PAGE VARCHAR(60)," +
+                    " PRIMARY KEY (CODIGO_FEBRABAN));");
         }
     }
 
@@ -2061,5 +2074,35 @@ public class DBHelper extends SQLiteOpenHelper {
         System.gc();
     }
 
+    public void insertBancos(Banco banco){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues content = new ContentValues();
+        content.put("CODIGO_FEBRABAN", banco.getCodigo_febraban());
+        content.put("NOME_BANCO", banco.getNome_banco());
+        content.put("HOME_PAGR", banco.getHome_page());
+        db.insert("TBL_BANCOS_FEBRABAN", null, content);
 
+    }
+
+    public List<Banco> listaBancos(){
+        List<Banco> bancos = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor;
+
+        cursor = db.rawQuery("SELECT * FROM TBL_BANCOS_FEBRABAN", null);
+        cursor.moveToFirst();
+
+        do {
+           Banco banco = new Banco();
+
+           banco.setCodigo_febraban(cursor.getString(cursor.getColumnIndex("CODIGO_FEBRABAN")));
+           banco.setNome_banco(cursor.getString(cursor.getColumnIndex("NOME_BANCO")));
+           banco.setHome_page(cursor.getString(cursor.getColumnIndex("HOME_PAGE")));
+
+           bancos.add(banco);
+        }while (cursor.moveToNext());
+
+
+        return bancos;
+    }
 }

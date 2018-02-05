@@ -12,6 +12,8 @@ public class Prospect {
     private String id_cadastro;
     private Segmento segmento;
     private MotivoNaoCadastramento motivoNaoCadastramento;
+    private ReferenciaBancaria referenciaBancaria;
+    private ReferenciaComercial referenciaComercial;
     private List<Contato> listaContato = new ArrayList<>();
     private String nome_cadastro;
     private String nome_fantasia;
@@ -27,12 +29,8 @@ public class Prospect {
     private String endereco_id_municipio;
     private String endereco_cep;
     private String situacaoPredio;
-    private String observacoesComerciais;
     private String limiteDeCreditoSugerido;
     private String limiteDePrazoSugerido;
-    private String nomeBanco;
-    private String agencia;
-    private String contaCorrente;
     private String idEmpresa;
     private String diaVisita;
     private String dataRetorno;
@@ -192,14 +190,6 @@ public class Prospect {
         this.situacaoPredio = situacaoPredio;
     }
 
-    public String getObservacoesComerciais() {
-        return observacoesComerciais;
-    }
-
-    public void setObservacoesComerciais(String observacoesComerciais) {
-        this.observacoesComerciais = observacoesComerciais;
-    }
-
     public String getLimiteDeCreditoSugerido() {
         return limiteDeCreditoSugerido;
     }
@@ -214,22 +204,6 @@ public class Prospect {
 
     public void setLimiteDePrazoSugerido(String limiteDePrazoSugerido) {
         this.limiteDePrazoSugerido = limiteDePrazoSugerido;
-    }
-
-    public String getAgencia() {
-        return agencia;
-    }
-
-    public void setAgencia(String agencia) {
-        this.agencia = agencia;
-    }
-
-    public String getContaCorrente() {
-        return contaCorrente;
-    }
-
-    public void setContaCorrente(String contaCorrente) {
-        this.contaCorrente = contaCorrente;
     }
 
     public String getIdEmpresa() {
@@ -272,11 +246,19 @@ public class Prospect {
         this.fotoSecundariaBase64 = fotoSecundariaBase64;
     }
 
-    public String getNomeBanco() {
-        return nomeBanco;
+    public ReferenciaBancaria getReferenciaBancaria() {
+        return referenciaBancaria;
     }
 
-    public void setNomeBanco(String nomeBanco) {
-        this.nomeBanco = nomeBanco;
+    public void setReferenciaBancaria(ReferenciaBancaria referenciaBancaria) {
+        this.referenciaBancaria = referenciaBancaria;
+    }
+
+    public ReferenciaComercial getReferenciaComercial() {
+        return referenciaComercial;
+    }
+
+    public void setReferenciaComercial(ReferenciaComercial referenciaComercial) {
+        this.referenciaComercial = referenciaComercial;
     }
 }

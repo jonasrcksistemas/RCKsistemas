@@ -77,25 +77,18 @@ public class CadastroProspectEndereco extends Fragment {
 
         if(ProspectHelper.getProspect().getEndereco() != null){
             edtEnderecoProspect.setText(ProspectHelper.getProspect().getEndereco());
-
         }
+
         if(ProspectHelper.getProspect().getEndereco_numero() != null){
             edtNumeroProspect.setText(ProspectHelper.getProspect().getEndereco_numero());
-
         }
+
         if(ProspectHelper.getProspect().getEndereco_bairro() != null){
             edtBairroProspect.setText(ProspectHelper.getProspect().getEndereco_bairro());
-
-        }
-
-        if(ProspectHelper.getProspect().getEndereco_bairro() != null){
-
-
         }
 
         if(ProspectHelper.getProspect().getEndereco_cep() != null){
             edtCep.setText(ProspectHelper.getProspect().getEndereco_cep());
-
         }
 
     }

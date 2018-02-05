@@ -65,6 +65,7 @@ public class ActivityAdicionaContato extends AppCompatActivity{
 
 
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
 
@@ -111,8 +112,8 @@ public class ActivityAdicionaContato extends AppCompatActivity{
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         if (getIntent().getIntExtra("vizualizacao", 0) != 1) {
-            getMenuInflater().inflate(R.menu.menu_salvar_contato, menu);
-            menuItem = menu.findItem(R.id.menu_salvar_contato);
+            getMenuInflater().inflate(R.menu.menu_salvar, menu);
+            menuItem = menu.findItem(R.id.menu_salvar);
         }
         return true;
     }
