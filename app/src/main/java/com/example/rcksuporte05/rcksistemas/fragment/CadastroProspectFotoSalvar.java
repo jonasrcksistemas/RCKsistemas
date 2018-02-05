@@ -73,7 +73,10 @@ public class CadastroProspectFotoSalvar extends Fragment {
     }
 
 
+    @OnClick(R.id.btnSalvarParcial)
+    public void salvarParcial(){
 
+    }
 
 
     @OnClick(R.id.btnAddFoto)

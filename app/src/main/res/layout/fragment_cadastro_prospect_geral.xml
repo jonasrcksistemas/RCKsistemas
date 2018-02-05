@@ -30,16 +30,6 @@
                    android:textColor="@color/colorAccent"
                    android:textStyle="bold" />
 
-               <Button
-                   android:id="@+id/btnTeste"
-                   android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"
-                   android:layout_above="@+id/rgPessoaProspect"
-                   android:layout_marginBottom="9dp"
-                   android:layout_toEndOf="@+id/txtInscEstadualProspect"
-                   android:layout_toRightOf="@+id/txtInscEstadualProspect"
-                   android:text="teste" />
-
                <TextView
                    android:id="@+id/txtPessoaProspect"
                    android:layout_width="wrap_content"

@@ -34,16 +34,6 @@ public class CadastroProspectEndereco extends Fragment {
     @BindView(R.id.edtBairroProspect)
     EditText edtBairroProspect;
 
-    @BindView(R.id.edtPaisProspect)
-    EditText edtPaisProspect;
-
-
-    @BindView(R.id.edtUfProspect)
-    EditText edtUfProspect;
-
-    @BindView(R.id.edtMunicipioProspect)
-    EditText edtMunicipioProspect;
-
     @BindView(R.id.edtCep)
     EditText edtCep;
 
@@ -56,12 +46,9 @@ public class CadastroProspectEndereco extends Fragment {
     @BindView(R.id.spPaisProspect)
     Spinner spPaisProspect;
 
-
-
     ArrayAdapter<Municipio> municipioAdapter;
     ArrayAdapter<Pais> paisAdapter;
     View view;
-
 
     @Nullable
     @Override
@@ -69,11 +56,15 @@ public class CadastroProspectEndereco extends Fragment {
         view = inflater.inflate(R.layout.fragment_cadastro_prospect_ederecos, container, false);
         ButterKnife.bind(this, view);
 
-        municipioAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_activated_1,ProspectHelper.getMunicipios());
-        spMunicipioProspect.setAdapter(municipioAdapter);
+        if(ProspectHelper.getMunicipios().size() > 0){
+            municipioAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_activated_1,ProspectHelper.getMunicipios());
+            spMunicipioProspect.setAdapter(municipioAdapter);
+        }
 
-        paisAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_activated_1, ProspectHelper.getPaises());
-        spPaisProspect.setAdapter(paisAdapter);
+        if(ProspectHelper.getPaises().size() > 0){
+            paisAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_activated_1, ProspectHelper.getPaises());
+            spPaisProspect.setAdapter(paisAdapter);
+        }
 
         injetaDadosNaTela();
         ProspectHelper.setCadastroProspectEndereco(this);
@@ -96,7 +87,7 @@ public class CadastroProspectEndereco extends Fragment {
         }
 
         if(ProspectHelper.getProspect().getEndereco_bairro() != null){
-            edtUfProspect.setText(ProspectHelper.getProspect().getEndereco_bairro());
+
 
         }
 
@@ -126,15 +117,6 @@ public class CadastroProspectEndereco extends Fragment {
         }else{
             System.out.println("Fazer algo para obrigar!");
         }
-
-
-
-        if(edtUfProspect.getText() != null && !edtUfProspect.getText().toString().equals("")){
-            ProspectHelper.getProspect().setEndereco_bairro(edtUfProspect.getText().toString());
-        }else{
-            System.out.println("Fazer algo para obrigar!");
-        }
-
 
 
         if(edtCep.getText() != null && !edtCep.getText().toString().equals("")){

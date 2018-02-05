@@ -83,7 +83,7 @@ public class ActivityCadastroProspect extends AppCompatActivity {
                                                            break;
                                                        case 2:
                                                            if(ProspectHelper.getCadastroProspectContatos() != null){
-                                                               ProspectHelper.getCadastroProspectContatos().insereDadosdaFrame();
+                                                               //ProspectHelper.getCadastroProspectContatos().insereDadosdaFrame();
                                                            }
                                                            break;
                                                        case 3:

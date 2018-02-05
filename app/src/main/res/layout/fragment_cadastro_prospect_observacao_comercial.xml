@@ -152,6 +152,99 @@
                android:inputType="number"
                />
 
+           <TextView
+               android:id="@+id/txtReferenciaComercialProspect"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_below="@id/edtContaCorrenteProspect"
+               android:layout_marginTop="12dp"
+               android:text="Referências Comercias"
+               android:textSize="18sp"
+               android:textColor="@color/colorAccent"
+               android:textStyle="bold" />
+
+           <TextView
+               android:id="@+id/Fornecedor1"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_below="@+id/txtReferenciaComercialProspect"
+               android:text="Fornecedor 1"
+               android:textColor="@color/colorAccent"
+               android:textStyle="bold" />
+
+           <EditText
+               android:id="@+id/edtFonecedor1"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:layout_alignParentLeft="true"
+               android:layout_alignParentStart="true"
+               android:layout_below="@+id/Fornecedor1"
+               android:background="@drawable/borda_edittext"
+               android:inputType="number"
+               android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+           <TextView
+               android:id="@+id/txtTelFornecedor1"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_below="@+id/edtFonecedor1"
+               android:text="Tel Fornecedor 2"
+               android:textColor="@color/colorAccent"
+               android:textStyle="bold" />
+
+           <EditText
+               android:id="@+id/edtTelFonecedor1"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:layout_alignParentLeft="true"
+               android:layout_alignParentStart="true"
+               android:layout_below="@+id/txtTelFornecedor1"
+               android:background="@drawable/borda_edittext"
+               android:inputType="number"
+               android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+
+           <TextView
+               android:id="@+id/Fornecedor2"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_below="@+id/edtTelFonecedor1"
+               android:text="Fornecedor 2"
+               android:textColor="@color/colorAccent"
+               android:textStyle="bold" />
+
+           <EditText
+               android:id="@+id/edtFonecedor2"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:layout_alignParentLeft="true"
+               android:layout_alignParentStart="true"
+               android:layout_below="@+id/Fornecedor2"
+               android:background="@drawable/borda_edittext"
+               android:inputType="number"
+               android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+
+           <TextView
+               android:id="@+id/txtTelFornecedor2"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_below="@+id/edtFonecedor2"
+               android:text="Tel Fornecedor 2"
+               android:textColor="@color/colorAccent"
+               android:textStyle="bold" />
+
+           <EditText
+               android:id="@+id/edtTelFonecedor2"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:layout_alignParentLeft="true"
+               android:layout_alignParentStart="true"
+               android:layout_below="@+id/txtTelFornecedor2"
+               android:background="@drawable/borda_edittext"
+               android:inputType="number"
+               android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
 
 
 

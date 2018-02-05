@@ -1995,26 +1995,26 @@ public class DBHelper extends SQLiteOpenHelper {
         System.gc();
     }
 
-    public List<Municipio> listaMunicipios(){
+    public List<Municipio> listaMunicipios() {
         List<Municipio> municipios = new ArrayList<>();
         SQLiteDatabase banco = this.getReadableDatabase();
         Cursor cursor;
 
-        cursor = banco.rawQuery("SELECT * FROM TBL_MUNICIOS", null);
+        cursor = banco.rawQuery("SELECT * FROM TBL_MUNICIPIOS", null);
         cursor.moveToFirst();
+        try {
+            do {
+                Municipio municipio = new Municipio();
 
-        do{
-           Municipio municipio = new Municipio();
+                municipio.setId_municipio(cursor.getString(cursor.getColumnIndex("ID_MUNICIPIO")));
+                municipio.setNome_municipio(cursor.getString(cursor.getColumnIndex("NOME_MUNICIPIO")));
+                municipio.setUf(cursor.getString(cursor.getColumnIndex("UF")));
+                municipio.setCep(cursor.getColumnName(cursor.getColumnIndex("CEP")));
 
-           municipio.setId_municipio(cursor.getString(cursor.getColumnIndex("ID_MUNICIPIO")));
-           municipio.setNome_municipio(cursor.getString(cursor.getColumnIndex("NOME_MUNICIPIO")));
-           municipio.setUf(cursor.getString(cursor.getColumnIndex("UF")));
-           municipio.setCep(cursor.getColumnName(cursor.getColumnIndex("CEP")));
-
-        }while (cursor.moveToNext());
-
-
-
+            } while (cursor.moveToNext());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return municipios;
     }
@@ -2034,18 +2034,21 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase banco = this.getReadableDatabase();
         Cursor cursor;
 
-        cursor = banco.rawQuery("SELECT * FROM TBL_MUNICIOS", null);
+        cursor = banco.rawQuery("SELECT * FROM TBL_PAISES", null);
         cursor.moveToFirst();
 
-        do {
-            Pais pais = new Pais();
+        try {
+            do {
+                Pais pais = new Pais();
 
-            pais.setId_pais(cursor.getString(cursor.getColumnIndex("ID_PAIS")));
-            pais.setNome_pais(cursor.getString(cursor.getColumnIndex("NOME_PAIS")));
+                pais.setId_pais(cursor.getString(cursor.getColumnIndex("ID_PAIS")));
+                pais.setNome_pais(cursor.getString(cursor.getColumnIndex("NOME_PAIS")));
 
-            paises.add(pais);
-        }while (cursor.moveToNext());
-
+                paises.add(pais);
+            }while (cursor.moveToNext());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
         return paises;
     }

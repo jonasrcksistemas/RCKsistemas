@@ -15,7 +15,6 @@ import com.example.rcksuporte05.rcksistemas.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * Created by RCK 03 on 25/01/2018.
@@ -67,11 +66,6 @@ public class CadastroProspectGeral extends Fragment {
         ProspectHelper.setCadastroProspectGeral(this);
 
         return view;
-    }
-
-    @OnClick(R.id.btnTeste)
-    public void teste(){
-        inserirDadosDaFrame();
     }
 
     private void injetaDadosNaTela() {
