@@ -3,6 +3,7 @@ package com.example.rcksuporte05.rcksistemas.api;
 import com.example.rcksuporte05.rcksistemas.classes.Foto;
 import com.example.rcksuporte05.rcksistemas.classes.HistoricoFinanceiro;
 import com.example.rcksuporte05.rcksistemas.classes.MotivoNaoCadastramento;
+import com.example.rcksuporte05.rcksistemas.classes.Prospect;
 import com.example.rcksuporte05.rcksistemas.classes.Segmento;
 import com.example.rcksuporte05.rcksistemas.classes.Sincronia;
 import com.example.rcksuporte05.rcksistemas.classes.Usuario;
@@ -47,4 +48,7 @@ public interface Rotas {
 
     @GET("motivonaocadastramento/listar")
     Call<List<MotivoNaoCadastramento>> buscarTodosMotivos(@HeaderMap Map<String, String> chaveDeAcesso);
+
+    @POST("prospect/salvar")
+    Call<Prospect> salvarProspect(@HeaderMap Map<String, String> chaveDeAcesso, @Body Prospect prospect);
 }

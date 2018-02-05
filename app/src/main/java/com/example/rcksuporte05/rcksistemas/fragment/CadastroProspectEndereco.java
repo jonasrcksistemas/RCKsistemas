@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 
@@ -49,6 +50,7 @@ public class CadastroProspectEndereco extends Fragment {
     ArrayAdapter<Municipio> municipioAdapter;
     ArrayAdapter<Pais> paisAdapter;
     View view;
+    RadioButton rdSituacaoPredio;
 
     @Nullable
     @Override
@@ -125,10 +127,10 @@ public class CadastroProspectEndereco extends Fragment {
             System.out.println("Fazer algo para obrigar!");
         }
 
-//        if(rgSituacaoPredio.getCheckedRadioButtonId() > 0){
-//            rdSituacaoPredio = (RadioButton) view.findViewById(rgSituacaoPredio.getCheckedRadioButtonId());
-//            ProspectHelper.getProspect().setSituaçãoPredio(rdSituacaoPredio.getText().toString());
-//        }
+        if(rgSituacaoPredio.getCheckedRadioButtonId() > 0){
+            rdSituacaoPredio = (RadioButton) view.findViewById(rgSituacaoPredio.getCheckedRadioButtonId());
+            ProspectHelper.getProspect().setSituacaoPredio(rdSituacaoPredio.getText().toString());
+        }
 
     }
 

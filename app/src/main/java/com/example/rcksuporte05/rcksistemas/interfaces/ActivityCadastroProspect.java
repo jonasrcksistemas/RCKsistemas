@@ -78,13 +78,10 @@ public class ActivityCadastroProspect extends AppCompatActivity {
                                                            break;
                                                        case 1:
                                                            if(ProspectHelper.getCadastroProspectEndereco() != null){
-//                                                               ProspectHelper.getCadastroProspectEndereco().inserirDadosDaFrame();
+                                                               ProspectHelper.getCadastroProspectEndereco().inserirDadosDaFrame();
                                                            }
                                                            break;
                                                        case 2:
-                                                           if(ProspectHelper.getCadastroProspectContatos() != null){
-                                                               //ProspectHelper.getCadastroProspectContatos().insereDadosdaFrame();
-                                                           }
                                                            break;
                                                        case 3:
                                                            if(ProspectHelper.getCadastroProspectSegmentos() != null){
@@ -163,8 +160,6 @@ public class ActivityCadastroProspect extends AppCompatActivity {
     }
 
     public void buscarMotivos() {
-
-
         Rotas apiRotas = Api.buildRetrofit();
         Map<String, String> cabecalho = new HashMap<>();
         cabecalho.put("AUTHORIZATION", UsuarioHelper.getUsuario().getToken());
