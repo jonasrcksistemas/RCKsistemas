@@ -665,12 +665,12 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
-    public List<Segmento> listaSegmento(String SQL) {
+    public List<Segmento> listaSegmento() {
         List<Segmento> listaSegmentos = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor;
 
-        cursor = db.rawQuery(SQL, null);
+        cursor = db.rawQuery("SELECT * FROM TBL_SEGMENTO", null);
         cursor.moveToFirst();
         do {
             Segmento segmento = new Segmento();
@@ -2081,7 +2081,7 @@ public class DBHelper extends SQLiteOpenHelper {
         ContentValues content = new ContentValues();
         content.put("CODIGO_FEBRABAN", banco.getCodigo_febraban());
         content.put("NOME_BANCO", banco.getNome_banco());
-        content.put("HOME_PAGR", banco.getHome_page());
+        content.put("HOME_PAGE", banco.getHome_page());
         db.insert("TBL_BANCOS_FEBRABAN", null, content);
 
     }

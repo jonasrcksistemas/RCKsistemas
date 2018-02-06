@@ -42,7 +42,11 @@ public class CadastroProspectObservacoesComerciais extends Fragment implements R
     @BindView(R.id.recyclerReferenciaComercial)
     RecyclerView recyclerReferenciaComercial;
 
+    @BindView(R.id.recyclerBancos)
+    RecyclerView recyclerBancos;
+
     ReferenciaComercialAdapter referenciaComercialAdapter;
+    ReferenciaBancariaAdapter referenciaBancariaAdapter;
 
 
     @Nullable
@@ -53,6 +57,10 @@ public class CadastroProspectObservacoesComerciais extends Fragment implements R
 
         recyclerReferenciaComercial.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerReferenciaComercial.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayout.VERTICAL));
+
+        recyclerBancos.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerBancos.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayout.VERTICAL));
+
 
         injetaDadosNaTela();
 
@@ -90,6 +98,12 @@ public class CadastroProspectObservacoesComerciais extends Fragment implements R
             referenciaComercialAdapter = new ReferenciaComercialAdapter(ProspectHelper.getProspect().getReferenciaComercial(),this);
             recyclerReferenciaComercial.setAdapter(referenciaComercialAdapter);
             referenciaComercialAdapter.notifyDataSetChanged();
+        }
+
+        if(ProspectHelper.getProspect().getReferenciaBancaria().size()> 0){
+            referenciaBancariaAdapter = new ReferenciaBancariaAdapter(ProspectHelper.getProspect().getReferenciaBancaria(),this);
+            recyclerBancos.setAdapter(referenciaBancariaAdapter);
+            referenciaBancariaAdapter.notifyDataSetChanged();
         }
 
     }

@@ -85,14 +85,14 @@ public class ActivityAdicionaReferenciaComercial extends AppCompatActivity{
         if(edtFonecedorProspect.getText() != null && !edtFonecedorProspect.getText().toString().trim().isEmpty()){
             referenciaComercial.setNome_fornecedor_referencia(edtFonecedorProspect.getText().toString());
         }else{
-            Toast.makeText(ActivityAdicionaReferenciaComercial.this, "O campo Fornecedor é obrigatorio!", Toast.LENGTH_LONG);
+            Toast.makeText(ActivityAdicionaReferenciaComercial.this, "O campo Fornecedor é obrigatorio!", Toast.LENGTH_LONG).show();
             edtFonecedorProspect.requestFocus();
             return false;
         }
-        if(edtTelFonecedorProspect.getText() != null && !edtTelFonecedorProspect.getText().toString().trim().isEmpty()){
+        if(edtTelFonecedorProspect.getText() != null && !edtTelFonecedorProspect.getText().toString().replaceAll("[^0-9]", "").trim().isEmpty() && edtTelFonecedorProspect.getText().toString().replaceAll("[^0-9]", "").length() >= 8 && edtTelFonecedorProspect.getText().toString().replaceAll("[^0-9]", "").length() <= 11){
             referenciaComercial.setTelefone(edtTelFonecedorProspect.getText().toString());
         }else{
-            Toast.makeText(ActivityAdicionaReferenciaComercial.this, "O campo Telefone é obrigatorio!", Toast.LENGTH_LONG);
+            Toast.makeText(ActivityAdicionaReferenciaComercial.this, "Campo Telefone invalido ou vazio!", Toast.LENGTH_LONG).show();
             edtTelFonecedorProspect.requestFocus();
             return false;
         }

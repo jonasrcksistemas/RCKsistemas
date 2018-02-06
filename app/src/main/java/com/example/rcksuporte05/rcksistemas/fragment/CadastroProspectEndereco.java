@@ -82,7 +82,6 @@ public class CadastroProspectEndereco extends Fragment {
             R.array.SE,
             R.array.SP,
             R.array.TO};
-    private String[] UF = getResources().getStringArray(R.array.uf);
 
 
     @Override
@@ -90,7 +89,7 @@ public class CadastroProspectEndereco extends Fragment {
         view = inflater.inflate(R.layout.fragment_cadastro_prospect_ederecos, container, false);
         ButterKnife.bind(this, view);
 
-        ufAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_activated_1, UF);
+        ufAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_activated_1, getResources().getStringArray(R.array.uf));
         spUfProspect.setAdapter(ufAdapter);
 
         spUfProspect.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -187,7 +186,7 @@ public class CadastroProspectEndereco extends Fragment {
         }
 
         ProspectHelper.getProspect().setId_pais(paisAdapter.getItem(spPaisProspect.getSelectedItemPosition()).getId_pais());
-        ProspectHelper.getProspect().setEndereco_uf(UF[spUfProspect.getSelectedItemPosition()]);
+        ProspectHelper.getProspect().setEndereco_uf(getResources().getStringArray(R.array.uf)[spUfProspect.getSelectedItemPosition()]);
         ProspectHelper.getProspect().setNome_municipio(municipioAdapter.getItem(spMunicipioProspect.getSelectedItemPosition()).toString());
 
     }

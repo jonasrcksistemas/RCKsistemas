@@ -32,4 +32,9 @@ public class Banco {
     public void setHome_page(String home_page) {
         this.home_page = home_page;
     }
+
+    @Override
+    public String toString() {
+        return codigo_febraban+" "+nome_banco;
+    }
 }

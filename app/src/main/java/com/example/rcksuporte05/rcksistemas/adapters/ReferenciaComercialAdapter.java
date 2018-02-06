@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.viewHolder.ReferenciaComercialViewHolder;
 import com.example.rcksuporte05.rcksistemas.classes.ReferenciaComercial;
+import com.example.rcksuporte05.rcksistemas.util.MascaraTelefone;
 
 import java.util.List;
 
@@ -36,7 +37,10 @@ public class ReferenciaComercialAdapter extends RecyclerView.Adapter<ReferenciaC
     @Override
     public void onBindViewHolder(ReferenciaComercialViewHolder holder, int position) {
         holder.txtNomeFornecedorProspectlist.setText(referencias.get(position).getNome_fornecedor_referencia());
-        holder.txtTelefoneFornecedorProspectList.setText(referencias.get(position).getTelefone());
+        if(referencias.get(position).getTelefone() != null && !referencias.get(position).getTelefone().replaceAll("[^0-9]", "").trim().isEmpty() && referencias.get(position).getTelefone().replaceAll("[^0-9]", "").length() >= 8 && referencias.get(position).getTelefone().replaceAll("[^0-9]", "").length() <= 11)
+        holder.txtTelefoneFornecedorProspectList.setText(MascaraTelefone.formataTelefone(referencias.get(position).getTelefone()));
+        else
+            holder.txtTelefoneFornecedorProspectList.setText("Telefone não informado");
 
     }
 

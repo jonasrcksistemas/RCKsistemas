@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.rcksuporte05.rcksistemas.Helper.ProspectHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.classes.Banco;
 import com.example.rcksuporte05.rcksistemas.classes.ReferenciaBancaria;
@@ -40,6 +41,7 @@ public class ActivityAdicionaBanco extends AppCompatActivity {
 
     MenuItem menuItem;
     DBHelper db;
+    ArrayAdapter<Banco> adapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -85,9 +87,10 @@ public class ActivityAdicionaBanco extends AppCompatActivity {
     public boolean insereDadosdaFrame() {
         ReferenciaBancaria bancos = new ReferenciaBancaria();
 
-//        if (edtBancoProspect.getText() != null) {
-//           bancos.set  edtBancoProspect.getText().toString());
-//        }
+        if (spBancoProspect.getSelectedItemPosition() >= 0) {
+            bancos.setNome_banco(adapter.getItem(spBancoProspect.getSelectedItemPosition()).getNome_banco());
+            bancos.setCodigo_febraban(adapter.getItem(spBancoProspect.getSelectedItemPosition()).getCodigo_febraban());
+        }
         if (edtContaCorrenteProspect.getText() != null && !edtContaCorrenteProspect.getText().toString().trim().isEmpty()) {
             bancos.setConta_corrente(edtContaCorrenteProspect.getText().toString());
         } else {
@@ -103,11 +106,12 @@ public class ActivityAdicionaBanco extends AppCompatActivity {
             return false;
         }
 
+        ProspectHelper.getProspect().getReferenciaBancaria().add(bancos);
         return true;
     }
 
     private void preencheBancos() {
-        ArrayAdapter<Banco> adapter = new ArrayAdapter<Banco>(ActivityAdicionaBanco.this, android.R.layout.simple_spinner_dropdown_item, db.listaBancos());
+        adapter = new ArrayAdapter<Banco>(ActivityAdicionaBanco.this, android.R.layout.simple_spinner_dropdown_item, db.listaBancos());
         spBancoProspect.setAdapter(adapter);
     }
 }

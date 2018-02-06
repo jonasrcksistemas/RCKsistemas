@@ -46,9 +46,10 @@
 
         <Spinner
             android:id="@+id/spBancoProspect"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/txtBancoProspect"
+            android:layout_marginTop="12dp"
+            android:layout_below="@+id/txtInformacoesBancarias"
             android:layout_alignLeft="@+id/edtContaCorrenteProspect"
             android:layout_alignStart="@+id/edtContaCorrenteProspect" />
 

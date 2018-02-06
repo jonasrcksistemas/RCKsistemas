@@ -15,7 +15,6 @@ import com.example.rcksuporte05.rcksistemas.adapters.TabsAdapterProspect;
 import com.example.rcksuporte05.rcksistemas.api.Api;
 import com.example.rcksuporte05.rcksistemas.api.Rotas;
 import com.example.rcksuporte05.rcksistemas.classes.MotivoNaoCadastramento;
-import com.example.rcksuporte05.rcksistemas.classes.Segmento;
 import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
 import com.example.rcksuporte05.rcksistemas.extras.SlidingTabLayout;
 
@@ -59,7 +58,7 @@ public class ActivityCadastroProspect extends AppCompatActivity {
         buscarSegmentos();
         buscarMotivos();
         buscarPais();
-        buscarMunicipios();
+
 
         toolbar.setTitle("Cadastro de Prospect");
 
@@ -132,31 +131,7 @@ public class ActivityCadastroProspect extends AppCompatActivity {
     }
 
     public void buscarSegmentos() {
-        progress = new ProgressDialog(ActivityCadastroProspect.this);
-        progress.setMessage("Carregando historico financeiro!");
-        progress.setCancelable(false);
-        progress.show();
-
-        Rotas apiRotas = Api.buildRetrofit();
-        Map<String, String> cabecalho = new HashMap<>();
-        cabecalho.put("AUTHORIZATION", UsuarioHelper.getUsuario().getToken());
-        Call<List<Segmento>> call = apiRotas.buscarTodosSegmentos(cabecalho);
-
-        call.enqueue(new Callback<List<Segmento>>() {
-            @Override
-            public void onResponse(Call<List<Segmento>> call, Response<List<Segmento>> response) {
-                if (response.code() == 200)
-                    ProspectHelper.setSegmentos(response.body());
-
-                progress.dismiss();
-            }
-
-            @Override
-            public void onFailure(Call<List<Segmento>> call, Throwable t) {
-                progress.dismiss();
-            }
-        });
-
+       ProspectHelper.setSegmentos(db.listaSegmento());
     }
 
     public void buscarMotivos() {
@@ -177,8 +152,6 @@ public class ActivityCadastroProspect extends AppCompatActivity {
             public void onFailure(Call<List<MotivoNaoCadastramento>> call, Throwable t) {
 
             }
-
-
         });
     }
 
@@ -192,7 +165,4 @@ public class ActivityCadastroProspect extends AppCompatActivity {
         ProspectHelper.setPaises(db.listaPaises());
     }
 
-    public void buscarMunicipios(){
-        ProspectHelper.setMunicipios(db.listaMunicipios());
-    }
 }
