@@ -10,6 +10,7 @@ public class ReferenciaBancaria {
     private String nome_banco;
     private String conta_corrente;
     private String agencia;
+    private String id_cadastro;
 
     public String getId_referencia_bancaria() {
         return id_referencia_bancaria;
@@ -49,5 +50,13 @@ public class ReferenciaBancaria {
 
     public void setAgencia(String agencia) {
         this.agencia = agencia;
+    }
+
+    public String getId_cadastro() {
+        return id_cadastro;
+    }
+
+    public void setId_cadastro(String id_cadastro) {
+        this.id_cadastro = id_cadastro;
     }
 }
