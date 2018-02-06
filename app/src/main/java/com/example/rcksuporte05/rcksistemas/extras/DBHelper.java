@@ -2074,7 +2074,7 @@ public class DBHelper extends SQLiteOpenHelper {
         System.gc();
     }
 
-    public void insertBancos(Banco banco){
+    public void insertBanco(Banco banco){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content = new ContentValues();
         content.put("CODIGO_FEBRABAN", banco.getCodigo_febraban());
@@ -2086,21 +2086,26 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public List<Banco> listaBancos(){
         List<Banco> bancos = new ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor;
+        try {
 
-        cursor = db.rawQuery("SELECT * FROM TBL_BANCOS_FEBRABAN", null);
-        cursor.moveToFirst();
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor;
 
-        do {
-           Banco banco = new Banco();
+            cursor = db.rawQuery("SELECT * FROM TBL_BANCOS_FEBRABAN", null);
+            cursor.moveToFirst();
 
-           banco.setCodigo_febraban(cursor.getString(cursor.getColumnIndex("CODIGO_FEBRABAN")));
-           banco.setNome_banco(cursor.getString(cursor.getColumnIndex("NOME_BANCO")));
-           banco.setHome_page(cursor.getString(cursor.getColumnIndex("HOME_PAGE")));
+            do {
+                Banco banco = new Banco();
 
-           bancos.add(banco);
-        }while (cursor.moveToNext());
+                banco.setCodigo_febraban(cursor.getString(cursor.getColumnIndex("CODIGO_FEBRABAN")));
+                banco.setNome_banco(cursor.getString(cursor.getColumnIndex("NOME_BANCO")));
+                banco.setHome_page(cursor.getString(cursor.getColumnIndex("HOME_PAGE")));
+
+                bancos.add(banco);
+            }while (cursor.moveToNext());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
 
         return bancos;

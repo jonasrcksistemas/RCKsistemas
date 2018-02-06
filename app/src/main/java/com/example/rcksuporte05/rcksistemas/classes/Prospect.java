@@ -12,8 +12,8 @@ public class Prospect {
     private String id_cadastro;
     private Segmento segmento;
     private MotivoNaoCadastramento motivoNaoCadastramento;
-    private ReferenciaBancaria referenciaBancaria;
-    private ReferenciaComercial referenciaComercial;
+    private List<ReferenciaBancaria> referenciaBancaria = new ArrayList<>();
+    private List<ReferenciaComercial> referenciaComercial = new ArrayList<>();
     private List<Contato> listaContato = new ArrayList<>();
     private String nome_cadastro;
     private String nome_fantasia;
@@ -36,6 +36,7 @@ public class Prospect {
     private String dataRetorno;
     private String fotoPrincipalBase64;
     private String fotoSecundariaBase64;
+    private String observacoesComerciais;
 
 
     public String getId_prospect() {
@@ -246,19 +247,27 @@ public class Prospect {
         this.fotoSecundariaBase64 = fotoSecundariaBase64;
     }
 
-    public ReferenciaBancaria getReferenciaBancaria() {
+    public List<ReferenciaBancaria> getReferenciaBancaria() {
         return referenciaBancaria;
     }
 
-    public void setReferenciaBancaria(ReferenciaBancaria referenciaBancaria) {
+    public void setReferenciaBancaria(List<ReferenciaBancaria> referenciaBancaria) {
         this.referenciaBancaria = referenciaBancaria;
     }
 
-    public ReferenciaComercial getReferenciaComercial() {
+    public List<ReferenciaComercial> getReferenciaComercial() {
         return referenciaComercial;
     }
 
-    public void setReferenciaComercial(ReferenciaComercial referenciaComercial) {
+    public void setReferenciaComercial(List<ReferenciaComercial> referenciaComercial) {
         this.referenciaComercial = referenciaComercial;
+    }
+
+    public String getObservacoesComerciais() {
+        return observacoesComerciais;
+    }
+
+    public void setObservacoesComerciais(String observacoesComerciais) {
+        this.observacoesComerciais = observacoesComerciais;
     }
 }

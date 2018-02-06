@@ -124,7 +124,7 @@ public class ActivityAdicionaContato extends AppCompatActivity{
             case android.R.id.home:
                 finish();
                 break;
-            case R.id.menu_salvar_contato:
+            case R.id.menu_salvar:
                     if(insereDadosdaFrame()){
                         finish();
                     }
