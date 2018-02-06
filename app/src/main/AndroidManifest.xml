@@ -81,6 +81,8 @@
 
         <activity android:name=".interfaces.FinanceiroDetalheActivity" />
         <activity android:name=".interfaces.ActivityAdicionaContato" />
+        <activity android:name=".interfaces.ActivityAdicionaBanco" />
+        <activity android:name=".interfaces.ActivityAdicionaReferenciaComercial" />
     </application>
 
 </manifest>

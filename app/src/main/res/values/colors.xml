@@ -15,6 +15,7 @@
     <color name="colorPrimaryCinza">#607d8a</color>
     <color name="colorPrimaryDarkCinza">#546e7b</color>
     <color name="corBotao">#e6b220</color>
+    <color name="fundoClaro">#e5f0fa</color>
 
 
 </resources>

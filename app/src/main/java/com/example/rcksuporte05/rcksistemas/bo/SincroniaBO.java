@@ -17,12 +17,15 @@ import com.example.rcksuporte05.rcksistemas.Helper.UsuarioHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.api.Api;
 import com.example.rcksuporte05.rcksistemas.api.Rotas;
+import com.example.rcksuporte05.rcksistemas.classes.Banco;
 import com.example.rcksuporte05.rcksistemas.classes.Cliente;
 import com.example.rcksuporte05.rcksistemas.classes.CondicoesPagamento;
+import com.example.rcksuporte05.rcksistemas.classes.MotivoNaoCadastramento;
 import com.example.rcksuporte05.rcksistemas.classes.Municipio;
 import com.example.rcksuporte05.rcksistemas.classes.Operacao;
 import com.example.rcksuporte05.rcksistemas.classes.Pais;
 import com.example.rcksuporte05.rcksistemas.classes.Produto;
+import com.example.rcksuporte05.rcksistemas.classes.Segmento;
 import com.example.rcksuporte05.rcksistemas.classes.Sincronia;
 import com.example.rcksuporte05.rcksistemas.classes.TabelaPreco;
 import com.example.rcksuporte05.rcksistemas.classes.TabelaPrecoItem;
@@ -234,6 +237,55 @@ public class SincroniaBO {
             db.inserirTBL_PAISES(pais);
 
             contadorNotificacaoEProgresso++;
+            final int finalContadorNotificacaoEProgresso = contadorNotificacaoEProgresso;
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    progress.setProgress(finalContadorNotificacaoEProgresso);
+                }
+            });
+            mNotificationManager.notify(0, notificacao.build());
+        }
+
+        db.alterar("DELETE FROM TBL_BANCOS_FEBRABAN");
+
+        for(Banco banco: sincronia.getBancos()){
+            notificacao.setProgress(maxProgress, contadorNotificacaoEProgresso, false);
+
+            db.insertBanco(banco);
+
+            contadorNotificacaoEProgresso++;
+
+            final int finalContadorNotificacaoEProgresso = contadorNotificacaoEProgresso;
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    progress.setProgress(finalContadorNotificacaoEProgresso);
+                }
+            });
+            mNotificationManager.notify(0, notificacao.build());
+        }
+
+        for(Segmento segmento : sincronia.getSegmentos()){
+            db.atualizarTBL_SEGMENTO(segmento);
+
+            contadorNotificacaoEProgresso++;
+
+            final int finalContadorNotificacaoEProgresso = contadorNotificacaoEProgresso;
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    progress.setProgress(finalContadorNotificacaoEProgresso);
+                }
+            });
+            mNotificationManager.notify(0, notificacao.build());
+        }
+
+        for(MotivoNaoCadastramento motivo: sincronia.getMotivos()){
+            db.atualizarTBL_CADASTRO_MOTIVO_NAO_CAD(motivo);
+
+            contadorNotificacaoEProgresso++;
+
             final int finalContadorNotificacaoEProgresso = contadorNotificacaoEProgresso;
             activity.runOnUiThread(new Runnable() {
                 @Override

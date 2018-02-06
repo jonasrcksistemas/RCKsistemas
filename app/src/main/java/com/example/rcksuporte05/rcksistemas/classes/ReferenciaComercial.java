@@ -8,6 +8,7 @@ public class ReferenciaComercial {
     private String id_referencia_comercial;
     private String nome_fornecedor_referencia;
     private String telefone;
+    private String id_cadastro;
 
     public String getId_referencia_comercial() {
         return id_referencia_comercial;
@@ -31,5 +32,13 @@ public class ReferenciaComercial {
 
     public void setTelefone(String telefone) {
         this.telefone = telefone;
+    }
+
+    public String getId_cadastro() {
+        return id_cadastro;
+    }
+
+    public void setId_cadastro(String id_cadastro) {
+        this.id_cadastro = id_cadastro;
     }
 }

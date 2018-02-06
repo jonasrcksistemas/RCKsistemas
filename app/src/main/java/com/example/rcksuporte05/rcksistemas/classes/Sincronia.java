@@ -21,6 +21,9 @@ public class Sincronia {
     private List<WebPedido> listaWebPedidosFinalizados;
     private List<Municipio> listaMunicipios;
     private List<Pais> listaPais;
+    private List<Banco> bancos;
+    private List<Segmento> segmentos;
+    private List<MotivoNaoCadastramento> motivos;
 
     public Sincronia(boolean cliente, boolean produto, boolean pedidosFinalizados, boolean pedidosPendentes, boolean municipio) {
         this.cliente = cliente;
@@ -172,5 +175,29 @@ public class Sincronia {
 
     public void setListaPais(List<Pais> listaPais) {
         this.listaPais = listaPais;
+    }
+
+    public List<Banco> getBancos() {
+        return bancos;
+    }
+
+    public void setBancos(List<Banco> bancos) {
+        this.bancos = bancos;
+    }
+
+    public List<Segmento> getSegmentos() {
+        return segmentos;
+    }
+
+    public void setSegmentos(List<Segmento> segmentos) {
+        this.segmentos = segmentos;
+    }
+
+    public List<MotivoNaoCadastramento> getMotivos() {
+        return motivos;
+    }
+
+    public void setMotivos(List<MotivoNaoCadastramento> motivos) {
+        this.motivos = motivos;
     }
 }

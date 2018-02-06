@@ -12,6 +12,8 @@ public class Prospect {
     private String id_cadastro;
     private Segmento segmento;
     private MotivoNaoCadastramento motivoNaoCadastramento;
+    private List<ReferenciaBancaria> referenciaBancaria = new ArrayList<>();
+    private List<ReferenciaComercial> referenciaComercial = new ArrayList<>();
     private List<Contato> listaContato = new ArrayList<>();
     private String nome_cadastro;
     private String nome_fantasia;
@@ -29,17 +31,14 @@ public class Prospect {
     private String id_pais;
     private String usuario_id;
     private String situacaoPredio;
-    private String observacoesComerciais;
     private String limiteDeCreditoSugerido;
     private String limiteDePrazoSugerido;
-    private String nomeBanco;
-    private String agencia;
-    private String contaCorrente;
     private String idEmpresa;
     private String diaVisita;
     private String dataRetorno;
     private String fotoPrincipalBase64;
     private String fotoSecundariaBase64;
+    private String observacoesComerciais;
 
 
     public String getId_prospect() {
@@ -186,14 +185,6 @@ public class Prospect {
         this.situacaoPredio = situacaoPredio;
     }
 
-    public String getObservacoesComerciais() {
-        return observacoesComerciais;
-    }
-
-    public void setObservacoesComerciais(String observacoesComerciais) {
-        this.observacoesComerciais = observacoesComerciais;
-    }
-
     public String getLimiteDeCreditoSugerido() {
         return limiteDeCreditoSugerido;
     }
@@ -208,22 +199,6 @@ public class Prospect {
 
     public void setLimiteDePrazoSugerido(String limiteDePrazoSugerido) {
         this.limiteDePrazoSugerido = limiteDePrazoSugerido;
-    }
-
-    public String getAgencia() {
-        return agencia;
-    }
-
-    public void setAgencia(String agencia) {
-        this.agencia = agencia;
-    }
-
-    public String getContaCorrente() {
-        return contaCorrente;
-    }
-
-    public void setContaCorrente(String contaCorrente) {
-        this.contaCorrente = contaCorrente;
     }
 
     public String getIdEmpresa() {
@@ -266,12 +241,28 @@ public class Prospect {
         this.fotoSecundariaBase64 = fotoSecundariaBase64;
     }
 
-    public String getNomeBanco() {
-        return nomeBanco;
+    public List<ReferenciaBancaria> getReferenciaBancaria() {
+        return referenciaBancaria;
     }
 
-    public void setNomeBanco(String nomeBanco) {
-        this.nomeBanco = nomeBanco;
+    public void setReferenciaBancaria(List<ReferenciaBancaria> referenciaBancaria) {
+        this.referenciaBancaria = referenciaBancaria;
+    }
+
+    public List<ReferenciaComercial> getReferenciaComercial() {
+        return referenciaComercial;
+    }
+
+    public void setReferenciaComercial(List<ReferenciaComercial> referenciaComercial) {
+        this.referenciaComercial = referenciaComercial;
+    }
+
+    public String getObservacoesComerciais() {
+        return observacoesComerciais;
+    }
+
+    public void setObservacoesComerciais(String observacoesComerciais) {
+        this.observacoesComerciais = observacoesComerciais;
     }
 
     public String getId_pais() {

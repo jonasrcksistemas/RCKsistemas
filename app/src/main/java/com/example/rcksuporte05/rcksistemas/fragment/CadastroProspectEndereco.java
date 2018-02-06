@@ -85,6 +85,7 @@ public class CadastroProspectEndereco extends Fragment {
             R.array.SE,
             R.array.SP,
             R.array.TO};
+    private String[] UF = getResources().getStringArray(R.array.uf);
 
 
     @Override
@@ -94,9 +95,6 @@ public class CadastroProspectEndereco extends Fragment {
 
         ufAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_activated_1, getResources().getStringArray(R.array.uf));
         spUfProspect.setAdapter(ufAdapter);
-
-        /*municipioAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_activated_1, getResources().getStringArray(listaUf[spUfProspect.getSelectedItemPosition()]));
-        spMunicipioProspect.setAdapter(municipioAdapter);*/
 
         spUfProspect.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override

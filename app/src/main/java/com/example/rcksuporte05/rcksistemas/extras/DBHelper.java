@@ -7,6 +7,7 @@ import android.database.CursorIndexOutOfBoundsException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.example.rcksuporte05.rcksistemas.classes.Banco;
 import com.example.rcksuporte05.rcksistemas.classes.Cliente;
 import com.example.rcksuporte05.rcksistemas.classes.CondicoesPagamento;
 import com.example.rcksuporte05.rcksistemas.classes.MotivoNaoCadastramento;
@@ -426,6 +427,14 @@ public class DBHelper extends SQLiteOpenHelper {
                 "UF VARCHAR(4)," +
                 "CEP VARCHAR(12));");
 
+        db.execSQL("CREATE TABLE IF NOT EXISTS TBL_BANCOS_FEBRABAN " +
+                "(CODIGO_FEBRABAN VARCHAR(6) NOT NULL," +
+                " NOME_BANCO VARCHAR(60)," +
+                " HOME_PAGE VARCHAR(60)," +
+                " PRIMARY KEY (CODIGO_FEBRABAN));");
+
+
+
         System.gc();
     }
 
@@ -493,6 +502,14 @@ public class DBHelper extends SQLiteOpenHelper {
                     "NOME_MUNICIPIO VARCHAR(50)," +
                     "UF VARCHAR(4)," +
                     "CEP VARCHAR(12));");
+
+            db.execSQL("CREATE TABLE IF NOT EXISTS TBL_BANCOS_FEBRABAN " +
+                    "(CODIGO_FEBRABAN VARCHAR(6) NOT NULL," +
+                    " NOME_BANCO VARCHAR(60)," +
+                    " HOME_PAGE VARCHAR(60)," +
+                    " PRIMARY KEY (CODIGO_FEBRABAN));");
+
+
         }
     }
 
@@ -652,12 +669,12 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
-    public List<Segmento> listaSegmento(String SQL) {
+    public List<Segmento> listaSegmento() {
         List<Segmento> listaSegmentos = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor;
 
-        cursor = db.rawQuery(SQL, null);
+        cursor = db.rawQuery("SELECT * FROM TBL_SEGMENTO ORDER BY NOME_SETOR", null);
         cursor.moveToFirst();
         do {
             Segmento segmento = new Segmento();
@@ -688,23 +705,27 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
-    public List<MotivoNaoCadastramento> listaMotivoNaoCadastramento(String SQL) {
+    public List<MotivoNaoCadastramento> listaMotivoNaoCadastramento() {
         List<MotivoNaoCadastramento> listaMotivoNaoCadastramentos = new ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor;
+        try{
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor;
 
-        cursor = db.rawQuery(SQL, null);
-        cursor.moveToNext();
-        do {
-            MotivoNaoCadastramento motivoNaoCadastramento = new MotivoNaoCadastramento();
+            cursor = db.rawQuery("SELECT * FROM TBL_CADASTRO_MOTIVO_NAO_CAD ORDER BY MOTIVO", null);
+            cursor.moveToNext();
+            do {
+                MotivoNaoCadastramento motivoNaoCadastramento = new MotivoNaoCadastramento();
 
-            motivoNaoCadastramento.setIdItem(cursor.getString(cursor.getColumnIndex("ID_ITEM")));
-            motivoNaoCadastramento.setMotivo(cursor.getString(cursor.getColumnIndex("MOTIVO")));
-            motivoNaoCadastramento.setDescricaoOutros(cursor.getString(cursor.getColumnIndex("DESCRICAO_OUTROS")));
+                motivoNaoCadastramento.setIdItem(cursor.getString(cursor.getColumnIndex("ID_ITEM")));
+                motivoNaoCadastramento.setMotivo(cursor.getString(cursor.getColumnIndex("MOTIVO")));
+                motivoNaoCadastramento.setDescricaoOutros(cursor.getString(cursor.getColumnIndex("DESCRICAO_OUTROS")));
 
-            listaMotivoNaoCadastramentos.add(motivoNaoCadastramento);
-        } while (cursor.moveToNext());
-        cursor.close();
+                listaMotivoNaoCadastramentos.add(motivoNaoCadastramento);
+            } while (cursor.moveToNext());
+            cursor.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
         return listaMotivoNaoCadastramentos;
     }
@@ -2063,5 +2084,40 @@ public class DBHelper extends SQLiteOpenHelper {
         System.gc();
     }
 
+    public void insertBanco(Banco banco){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues content = new ContentValues();
+        content.put("CODIGO_FEBRABAN", banco.getCodigo_febraban());
+        content.put("NOME_BANCO", banco.getNome_banco());
+        content.put("HOME_PAGE", banco.getHome_page());
+        db.insert("TBL_BANCOS_FEBRABAN", null, content);
 
+    }
+
+    public List<Banco> listaBancos(){
+        List<Banco> bancos = new ArrayList<>();
+        try {
+
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor;
+
+            cursor = db.rawQuery("SELECT * FROM TBL_BANCOS_FEBRABAN", null);
+            cursor.moveToFirst();
+
+            do {
+                Banco banco = new Banco();
+
+                banco.setCodigo_febraban(cursor.getString(cursor.getColumnIndex("CODIGO_FEBRABAN")));
+                banco.setNome_banco(cursor.getString(cursor.getColumnIndex("NOME_BANCO")));
+                banco.setHome_page(cursor.getString(cursor.getColumnIndex("HOME_PAGE")));
+
+                bancos.add(banco);
+            }while (cursor.moveToNext());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+
+        return bancos;
+    }
 }

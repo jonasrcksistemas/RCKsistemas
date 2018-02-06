@@ -1,24 +1,34 @@
 package com.example.rcksuporte05.rcksistemas.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import com.example.rcksuporte05.rcksistemas.Helper.ProspectHelper;
 import com.example.rcksuporte05.rcksistemas.R;
+import com.example.rcksuporte05.rcksistemas.adapters.ReferenciaBancariaAdapter;
+import com.example.rcksuporte05.rcksistemas.adapters.ReferenciaComercialAdapter;
+import com.example.rcksuporte05.rcksistemas.interfaces.ActivityAdicionaBanco;
+import com.example.rcksuporte05.rcksistemas.interfaces.ActivityAdicionaReferenciaComercial;
+import com.example.rcksuporte05.rcksistemas.util.DividerItemDecoration;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by RCK 03 on 29/01/2018.
  */
 
-public class CadastroProspectObservacoesComerciais extends Fragment {
+public class CadastroProspectObservacoesComerciais extends Fragment implements ReferenciaComercialAdapter.ReferenciaComercialListener, ReferenciaBancariaAdapter.ReferenciaBancariaListener{
 
     @BindView(R.id.edtObservacaoComercial)
     EditText edtObservacaoComercial;
@@ -29,79 +39,101 @@ public class CadastroProspectObservacoesComerciais extends Fragment {
     @BindView(R.id.edtLimiteDePrazoSugerido)
     EditText edtLimiteDePrazoSugerido;
 
-    @BindView(R.id.edtBancoProspect)
-    EditText edtBancoProspect;
+    @BindView(R.id.recyclerReferenciaComercial)
+    RecyclerView recyclerReferenciaComercial;
 
-    @BindView(R.id.edtContaCorrenteProspect)
-    EditText edtContaCorrenteProspect;
+    @BindView(R.id.recyclerBancos)
+    RecyclerView recyclerBancos;
 
-    @BindView(R.id.edtAgenciaProspect)
-    EditText edtAgenciaProspect;
+    ReferenciaComercialAdapter referenciaComercialAdapter;
+    ReferenciaBancariaAdapter referenciaBancariaAdapter;
 
 
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_cadastro_prospect_observacao_comercial, container, false);
+        ButterKnife.bind(this, view);
 
-        @Nullable
-        @Override
-        public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-            View view = inflater.inflate(R.layout.fragment_cadastro_prospect_observacao_comercial, container, false);
-            ButterKnife.bind(this, view);
-            injetaDadosNaTela();
+        recyclerReferenciaComercial.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerReferenciaComercial.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayout.VERTICAL));
 
-            ProspectHelper.setCadastroProspectObservacoesComerciais(this);
-            return view;
+        recyclerBancos.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerBancos.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayout.VERTICAL));
+
+
+        injetaDadosNaTela();
+
+        ProspectHelper.setCadastroProspectObservacoesComerciais(this);
+        return view;
+    }
+
+    @OnClick(R.id.btnAddReferencia)
+    public void addReferenciaComercial() {
+        Intent intent = new Intent(getContext(), ActivityAdicionaReferenciaComercial.class);
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.btnAddBancos)
+    public void addBancos(){
+        Intent intent = new Intent(getContext(), ActivityAdicionaBanco.class);
+        startActivity(intent);
+    }
+
+    public void injetaDadosNaTela() {
+
+        if (ProspectHelper.getProspect().getObservacoesComerciais() != null) {
+            edtObservacaoComercial.setText(ProspectHelper.getProspect().getObservacoesComerciais());
         }
 
-        public void injetaDadosNaTela(){
-
-            if(ProspectHelper.getProspect().getObservacoesComerciais() != null){
-                edtObservacaoComercial.setText(ProspectHelper.getProspect().getObservacoesComerciais());
-            }
-
-            if(ProspectHelper.getProspect().getLimiteDeCreditoSugerido() != null){
-                edtLimiteCreditoSugerido.setText(ProspectHelper.getProspect().getLimiteDeCreditoSugerido());
-            }
-
-            if(ProspectHelper.getProspect().getLimiteDePrazoSugerido() != null){
-                edtLimiteDePrazoSugerido.setText(ProspectHelper.getProspect().getLimiteDePrazoSugerido());
-            }
-
-            /*if(ProspectHelper.getProspect().getNomeBanco() != null){
-                edtBancoProspect.setText(ProspectHelper.getProspect().getNomeBanco());
-            }*/
-
-            if(ProspectHelper.getProspect().getContaCorrente() != null){
-                edtContaCorrenteProspect.setText(ProspectHelper.getProspect().getContaCorrente());
-            }
-
-            if(ProspectHelper.getProspect().getAgencia() != null){
-                edtAgenciaProspect.setText(ProspectHelper.getProspect().getAgencia());
-            }
-
+        if (ProspectHelper.getProspect().getLimiteDeCreditoSugerido() != null) {
+            edtLimiteCreditoSugerido.setText(ProspectHelper.getProspect().getLimiteDeCreditoSugerido());
         }
 
-
-        public void insereDadosDaFrame(){
-            if(edtObservacaoComercial.getText() != null){
-                ProspectHelper.getProspect().setObservacoesComerciais(edtObservacaoComercial.getText().toString());
-            }
-            if(edtLimiteCreditoSugerido.getText() != null){
-                ProspectHelper.getProspect().setLimiteDeCreditoSugerido(edtLimiteCreditoSugerido.getText().toString());
-            }
-            if(edtLimiteDePrazoSugerido.getText() != null){
-                ProspectHelper.getProspect().setLimiteDePrazoSugerido(edtLimiteDePrazoSugerido.getText().toString());
-            }
-            /*if(edtBancoProspect.getText() != null){
-                ProspectHelper.getProspect().setNomeBanco(edtBancoProspect.getText().toString());
-            }*/
-            if(edtContaCorrenteProspect.getText() != null){
-                ProspectHelper.getProspect().setContaCorrente(edtContaCorrenteProspect.getText().toString());
-            }
-            if(edtAgenciaProspect.getText() != null){
-                ProspectHelper.getProspect().setAgencia(edtAgenciaProspect.getText().toString());
-            }
-
-
+        if (ProspectHelper.getProspect().getLimiteDePrazoSugerido() != null) {
+            edtLimiteDePrazoSugerido.setText(ProspectHelper.getProspect().getLimiteDePrazoSugerido());
         }
 
+        if(ProspectHelper.getProspect().getReferenciaComercial().size() >0){
+            referenciaComercialAdapter = new ReferenciaComercialAdapter(ProspectHelper.getProspect().getReferenciaComercial(),this);
+            recyclerReferenciaComercial.setAdapter(referenciaComercialAdapter);
+            referenciaComercialAdapter.notifyDataSetChanged();
+        }
 
+        if(ProspectHelper.getProspect().getReferenciaBancaria().size()> 0){
+            referenciaBancariaAdapter = new ReferenciaBancariaAdapter(ProspectHelper.getProspect().getReferenciaBancaria(),this);
+            recyclerBancos.setAdapter(referenciaBancariaAdapter);
+            referenciaBancariaAdapter.notifyDataSetChanged();
+        }
+
+    }
+
+
+    public void insereDadosDaFrame() {
+        if (edtObservacaoComercial.getText() != null) {
+            ProspectHelper.getProspect().setObservacoesComerciais(edtObservacaoComercial.getText().toString());
+        }
+        if (edtLimiteCreditoSugerido.getText() != null) {
+            ProspectHelper.getProspect().setLimiteDeCreditoSugerido(edtLimiteCreditoSugerido.getText().toString());
+        }
+        if (edtLimiteDePrazoSugerido.getText() != null) {
+            ProspectHelper.getProspect().setLimiteDePrazoSugerido(edtLimiteDePrazoSugerido.getText().toString());
+        }
+    }
+
+    @Override
+    public void onResume() {
+        injetaDadosNaTela();
+        super.onResume();
+    }
+
+    @Override
+    public void onClickBancos(int position) {
+
+    }
+
+    @Override
+    public void onClickReferencia(int position) {
+
+    }
 }

@@ -78,176 +78,73 @@
                 />
 
            <TextView
-               android:id="@+id/txtInformacoesBancarias"
+               android:id="@+id/txtReferenciaComercial"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
+               android:text="Refêrencia Comercial"
+               android:layout_marginTop="12dp"
+               android:textStyle="bold"
+               android:textColor="@color/colorAccent"
                android:layout_below="@+id/edtLimiteDePrazoSugerido"
-               android:layout_marginTop="12dp"
-               android:text="Informações Bancarias: "
-               android:textColor="@color/colorAccent"
-               android:textSize="18sp"
-               android:textStyle="bold" />
-
-           <TextView
-               android:id="@+id/txtBancoProspect"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:layout_below="@+id/txtInformacoesBancarias"
-               android:layout_marginTop="12dp"
-               android:text="Banco: "
-               android:textColor="@color/colorAccent"
-               android:textStyle="bold" />
-
-           <EditText
-               android:id="@+id/edtBancoProspect"
-               android:layout_width="90dp"
-               android:layout_height="25dp"
-               android:layout_alignLeft="@+id/edtAgenciaProspect"
-               android:layout_alignStart="@+id/edtAgenciaProspect"
-               android:layout_alignTop="@+id/txtBancoProspect"
-               android:background="@drawable/borda_edittext"
                />
-
-           <TextView
-               android:id="@+id/txtAgenciaProspect"
+           <RelativeLayout
+               android:id="@+id/rlRecyclerReferenciaComercial"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="8dp"
+               android:layout_below="@+id/txtReferenciaComercial"
+               android:background="@color/fundoClaro"
+               >
+               <android.support.v7.widget.RecyclerView
+                   android:id="@+id/recyclerReferenciaComercial"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content">
+               </android.support.v7.widget.RecyclerView>
+           </RelativeLayout>
+           <Button
+               android:id="@+id/btnAddReferencia"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
-               android:layout_below="@+id/txtBancoProspect"
+               android:layout_below="@+id/rlRecyclerReferenciaComercial"
                android:layout_marginTop="12dp"
-               android:text="Conta Corrente: "
-               android:textColor="@color/colorAccent"
-               android:textStyle="bold" />
+               android:text="Adicionar Refêrencia"
+               android:theme="@style/Button" />
 
-           <EditText
-               android:id="@+id/edtAgenciaProspect"
-               android:layout_width="80dp"
-               android:layout_height="25dp"
-               android:layout_alignLeft="@+id/edtContaCorrenteProspect"
-               android:layout_alignStart="@+id/edtContaCorrenteProspect"
-               android:layout_alignTop="@+id/txtAgenciaProspect"
-               android:background="@drawable/borda_edittext"
-               android:inputType="number"
+           <TextView
+               android:id="@+id/txtReferenciaBancaria"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text="Bancos"
+               android:layout_marginTop="12dp"
+               android:textStyle="bold"
+               android:textColor="@color/colorAccent"
+               android:layout_below="@+id/btnAddReferencia"
                />
-
-
-
-           <TextView
-               android:id="@+id/txtCCProspect"
+           <RelativeLayout
+               android:id="@+id/rlRecyclerBancos"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:layout_marginTop="8dp"
+               android:layout_below="@+id/txtReferenciaBancaria"
+               android:background="@color/fundoClaro"
+               >
+               <android.support.v7.widget.RecyclerView
+                   android:id="@+id/recyclerBancos"
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content">
+               </android.support.v7.widget.RecyclerView>
+           </RelativeLayout>
+           <Button
+               android:id="@+id/btnAddBancos"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
-               android:layout_below="@+id/edtAgenciaProspect"
+               android:layout_below="@+id/rlRecyclerBancos"
+               android:layout_alignParentBottom="true"
+               android:layout_alignParentLeft="true"
+               android:layout_alignParentStart="true"
                android:layout_marginTop="12dp"
-               android:text="Conta Corrente: "
-               android:textColor="@color/colorAccent"
-               android:textStyle="bold" />
-
-           <EditText
-               android:id="@+id/edtContaCorrenteProspect"
-               android:layout_width="80dp"
-               android:layout_height="25dp"
-               android:layout_alignBaseline="@+id/txtCCProspect"
-               android:layout_alignBottom="@+id/txtCCProspect"
-               android:layout_centerHorizontal="true"
-               android:background="@drawable/borda_edittext"
-               android:inputType="number"
-               />
-
-           <TextView
-               android:id="@+id/txtReferenciaComercialProspect"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:layout_below="@id/edtContaCorrenteProspect"
-               android:layout_marginTop="12dp"
-               android:text="Referências Comercias"
-               android:textSize="18sp"
-               android:textColor="@color/colorAccent"
-               android:textStyle="bold" />
-
-           <TextView
-               android:id="@+id/Fornecedor1"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:layout_below="@+id/txtReferenciaComercialProspect"
-               android:text="Fornecedor 1"
-               android:textColor="@color/colorAccent"
-               android:textStyle="bold" />
-
-           <EditText
-               android:id="@+id/edtFonecedor1"
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:layout_alignParentLeft="true"
-               android:layout_alignParentStart="true"
-               android:layout_below="@+id/Fornecedor1"
-               android:background="@drawable/borda_edittext"
-               android:inputType="number"
-               android:textAppearance="@style/TextAppearance.AppCompat.Small" />
-
-           <TextView
-               android:id="@+id/txtTelFornecedor1"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:layout_below="@+id/edtFonecedor1"
-               android:text="Tel Fornecedor 2"
-               android:textColor="@color/colorAccent"
-               android:textStyle="bold" />
-
-           <EditText
-               android:id="@+id/edtTelFonecedor1"
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:layout_alignParentLeft="true"
-               android:layout_alignParentStart="true"
-               android:layout_below="@+id/txtTelFornecedor1"
-               android:background="@drawable/borda_edittext"
-               android:inputType="number"
-               android:textAppearance="@style/TextAppearance.AppCompat.Small" />
-
-
-           <TextView
-               android:id="@+id/Fornecedor2"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:layout_below="@+id/edtTelFonecedor1"
-               android:text="Fornecedor 2"
-               android:textColor="@color/colorAccent"
-               android:textStyle="bold" />
-
-           <EditText
-               android:id="@+id/edtFonecedor2"
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:layout_alignParentLeft="true"
-               android:layout_alignParentStart="true"
-               android:layout_below="@+id/Fornecedor2"
-               android:background="@drawable/borda_edittext"
-               android:inputType="number"
-               android:textAppearance="@style/TextAppearance.AppCompat.Small" />
-
-
-           <TextView
-               android:id="@+id/txtTelFornecedor2"
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:layout_below="@+id/edtFonecedor2"
-               android:text="Tel Fornecedor 2"
-               android:textColor="@color/colorAccent"
-               android:textStyle="bold" />
-
-           <EditText
-               android:id="@+id/edtTelFonecedor2"
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:layout_alignParentLeft="true"
-               android:layout_alignParentStart="true"
-               android:layout_below="@+id/txtTelFornecedor2"
-               android:background="@drawable/borda_edittext"
-               android:inputType="number"
-               android:textAppearance="@style/TextAppearance.AppCompat.Small" />
-
-
-
-
+               android:text="Adicionar Bancos"
+               android:theme="@style/Button" />
        </RelativeLayout>
    </ScrollView>
 </LinearLayout>
