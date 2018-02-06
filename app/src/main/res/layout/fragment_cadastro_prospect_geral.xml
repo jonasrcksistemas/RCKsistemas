@@ -264,8 +264,6 @@
                             android:textColor="@color/colorAccent" />
 
                </RadioGroup>
-
-
           </RelativeLayout>
      </ScrollView>
 </LinearLayout>

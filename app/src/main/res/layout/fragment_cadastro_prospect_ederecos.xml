@@ -152,9 +152,7 @@
                 android:id="@+id/spMunicipioProspect"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/txtMunicipioProspect"
-                android:layout_alignEnd="@+id/txtMunicipioProspect"
-                android:layout_alignRight="@+id/txtMunicipioProspect" />
+                android:layout_below="@+id/txtMunicipioProspect" />
 
             <TextView
                 android:id="@+id/txtCepProspect"
