@@ -93,6 +93,9 @@ public class CadastroProspectFotoSalvar extends Fragment {
         progress.setCancelable(false);
         progress.show();
 
+        ProspectHelper.getProspect().setIdEmpresa(UsuarioHelper.getUsuario().getIdEmpresaMultiDevice());
+        ProspectHelper.getProspect().setUsuario_id(UsuarioHelper.getUsuario().getId_usuario());
+
         Rotas apiRotas = Api.buildRetrofit();
         Map<String, String> cabecalho = new HashMap<>();
         cabecalho.put("AUTHORIZATION", UsuarioHelper.getUsuario().getToken());
@@ -105,7 +108,6 @@ public class CadastroProspectFotoSalvar extends Fragment {
                     Toast.makeText(getContext(), "Foiiiii lek!", Toast.LENGTH_LONG).show();
                 }else
                     Toast.makeText(getContext(), "NÃO FOIIIIII!", Toast.LENGTH_LONG).show();
-
 
                 progress.dismiss();
             }

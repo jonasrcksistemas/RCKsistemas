@@ -32,7 +32,9 @@ public class ProspectHelper {
     private static CadastroProspectMotivos cadastroProspectMotivos;
     private static CadastroProspectObservacoesComerciais cadastroProspectObservacoesComerciais;
     private static CadastroProspectFotoSalvar cadastroProspectFotoSalvar;
-
+    private static int posicaoPais = -1;
+    private static int posicaoUf = -1;
+    private static int posicaoMunicipio = -1;
 
     public static Prospect getProspect() {
         return prospect;
@@ -41,8 +43,6 @@ public class ProspectHelper {
     public static void setProspect(Prospect prospect) {
         ProspectHelper.prospect = prospect;
     }
-
-
 
     public static CadastroProspectGeral getCadastroProspectGeral() {
         return cadastroProspectGeral;
@@ -132,6 +132,30 @@ public class ProspectHelper {
         ProspectHelper.municipios = municipios;
     }
 
+    public static int getPosicaoPais() {
+        return posicaoPais;
+    }
+
+    public static void setPosicaoPais(int posicaoPais) {
+        ProspectHelper.posicaoPais = posicaoPais;
+    }
+
+    public static int getPosicaoUf() {
+        return posicaoUf;
+    }
+
+    public static void setPosicaoUf(int posicaoUf) {
+        ProspectHelper.posicaoUf = posicaoUf;
+    }
+
+    public static int getPosicaoMunicipio() {
+        return posicaoMunicipio;
+    }
+
+    public static void setPosicaoMunicipio(int posicaoMunicipio) {
+        ProspectHelper.posicaoMunicipio = posicaoMunicipio;
+    }
+
     public void clear(){
         prospect = null;
         cadastroProspectGeral = null;
@@ -145,6 +169,9 @@ public class ProspectHelper {
         motivos = null;
         paises = null;
         municipios = null;
+        posicaoPais = -1;
+        posicaoUf = -1;
+        posicaoMunicipio = -1;
         System.gc();
     }
 }
