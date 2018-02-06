@@ -433,6 +433,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 " HOME_PAGE VARCHAR(60)," +
                 " PRIMARY KEY (CODIGO_FEBRABAN));");
 
+
+
         System.gc();
     }
 
@@ -506,6 +508,8 @@ public class DBHelper extends SQLiteOpenHelper {
                     " NOME_BANCO VARCHAR(60)," +
                     " HOME_PAGE VARCHAR(60)," +
                     " PRIMARY KEY (CODIGO_FEBRABAN));");
+
+
         }
     }
 
@@ -670,7 +674,7 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor;
 
-        cursor = db.rawQuery("SELECT * FROM TBL_SEGMENTO", null);
+        cursor = db.rawQuery("SELECT * FROM TBL_SEGMENTO ORDER BY NOME_SETOR", null);
         cursor.moveToFirst();
         do {
             Segmento segmento = new Segmento();
@@ -701,23 +705,27 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
-    public List<MotivoNaoCadastramento> listaMotivoNaoCadastramento(String SQL) {
+    public List<MotivoNaoCadastramento> listaMotivoNaoCadastramento() {
         List<MotivoNaoCadastramento> listaMotivoNaoCadastramentos = new ArrayList<>();
-        SQLiteDatabase db = this.getReadableDatabase();
-        Cursor cursor;
+        try{
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor;
 
-        cursor = db.rawQuery(SQL, null);
-        cursor.moveToNext();
-        do {
-            MotivoNaoCadastramento motivoNaoCadastramento = new MotivoNaoCadastramento();
+            cursor = db.rawQuery("SELECT * FROM TBL_CADASTRO_MOTIVO_NAO_CAD ORDER BY MOTIVO", null);
+            cursor.moveToNext();
+            do {
+                MotivoNaoCadastramento motivoNaoCadastramento = new MotivoNaoCadastramento();
 
-            motivoNaoCadastramento.setIdItem(cursor.getString(cursor.getColumnIndex("ID_ITEM")));
-            motivoNaoCadastramento.setMotivo(cursor.getString(cursor.getColumnIndex("MOTIVO")));
-            motivoNaoCadastramento.setDescricaoOutros(cursor.getString(cursor.getColumnIndex("DESCRICAO_OUTROS")));
+                motivoNaoCadastramento.setIdItem(cursor.getString(cursor.getColumnIndex("ID_ITEM")));
+                motivoNaoCadastramento.setMotivo(cursor.getString(cursor.getColumnIndex("MOTIVO")));
+                motivoNaoCadastramento.setDescricaoOutros(cursor.getString(cursor.getColumnIndex("DESCRICAO_OUTROS")));
 
-            listaMotivoNaoCadastramentos.add(motivoNaoCadastramento);
-        } while (cursor.moveToNext());
-        cursor.close();
+                listaMotivoNaoCadastramentos.add(motivoNaoCadastramento);
+            } while (cursor.moveToNext());
+            cursor.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
 
         return listaMotivoNaoCadastramentos;
     }

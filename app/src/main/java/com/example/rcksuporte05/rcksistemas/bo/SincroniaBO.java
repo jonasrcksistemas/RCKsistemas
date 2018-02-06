@@ -20,6 +20,7 @@ import com.example.rcksuporte05.rcksistemas.api.Rotas;
 import com.example.rcksuporte05.rcksistemas.classes.Banco;
 import com.example.rcksuporte05.rcksistemas.classes.Cliente;
 import com.example.rcksuporte05.rcksistemas.classes.CondicoesPagamento;
+import com.example.rcksuporte05.rcksistemas.classes.MotivoNaoCadastramento;
 import com.example.rcksuporte05.rcksistemas.classes.Municipio;
 import com.example.rcksuporte05.rcksistemas.classes.Operacao;
 import com.example.rcksuporte05.rcksistemas.classes.Pais;
@@ -267,6 +268,21 @@ public class SincroniaBO {
 
         for(Segmento segmento : sincronia.getSegmentos()){
             db.atualizarTBL_SEGMENTO(segmento);
+
+            contadorNotificacaoEProgresso++;
+
+            final int finalContadorNotificacaoEProgresso = contadorNotificacaoEProgresso;
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    progress.setProgress(finalContadorNotificacaoEProgresso);
+                }
+            });
+            mNotificationManager.notify(0, notificacao.build());
+        }
+
+        for(MotivoNaoCadastramento motivo: sincronia.getMotivos()){
+            db.atualizarTBL_CADASTRO_MOTIVO_NAO_CAD(motivo);
 
             contadorNotificacaoEProgresso++;
 

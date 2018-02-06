@@ -9,24 +9,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import com.example.rcksuporte05.rcksistemas.Helper.ProspectHelper;
-import com.example.rcksuporte05.rcksistemas.Helper.UsuarioHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.TabsAdapterProspect;
-import com.example.rcksuporte05.rcksistemas.api.Api;
-import com.example.rcksuporte05.rcksistemas.api.Rotas;
-import com.example.rcksuporte05.rcksistemas.classes.MotivoNaoCadastramento;
 import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
 import com.example.rcksuporte05.rcksistemas.extras.SlidingTabLayout;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Created by RCK 03 on 25/01/2018.
@@ -135,24 +124,7 @@ public class ActivityCadastroProspect extends AppCompatActivity {
     }
 
     public void buscarMotivos() {
-        Rotas apiRotas = Api.buildRetrofit();
-        Map<String, String> cabecalho = new HashMap<>();
-        cabecalho.put("AUTHORIZATION", UsuarioHelper.getUsuario().getToken());
-        Call<List<MotivoNaoCadastramento>> call = apiRotas.buscarTodosMotivos(cabecalho);
-
-        call.enqueue(new Callback<List<MotivoNaoCadastramento>>() {
-            @Override
-            public void onResponse(Call<List<MotivoNaoCadastramento>> call, Response<List<MotivoNaoCadastramento>> response) {
-                if (response.code() == 200)
-                    ProspectHelper.setMotivos(response.body());
-
-            }
-
-            @Override
-            public void onFailure(Call<List<MotivoNaoCadastramento>> call, Throwable t) {
-
-            }
-        });
+      ProspectHelper.setMotivos(db.listaMotivoNaoCadastramento());
     }
 
     @Override
