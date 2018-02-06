@@ -45,6 +45,6 @@ public class Municipio {
 
     @Override
     public String toString() {
-        return  nome_municipio;
+        return getNome_municipio();
     }
 }

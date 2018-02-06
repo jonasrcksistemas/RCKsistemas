@@ -2024,6 +2024,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 municipio.setUf(cursor.getString(cursor.getColumnIndex("UF")));
                 municipio.setCep(cursor.getColumnName(cursor.getColumnIndex("CEP")));
 
+                municipios.add(municipio);
+
             } while (cursor.moveToNext());
         } catch (Exception e) {
             e.printStackTrace();

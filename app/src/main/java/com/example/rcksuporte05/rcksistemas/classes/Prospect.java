@@ -26,8 +26,10 @@ public class Prospect {
     private String endereco_numero;
     private String endereco_complemento;
     private String endereco_uf;
-    private String endereco_id_municipio;
+    private String nome_municipio;
     private String endereco_cep;
+    private String id_pais;
+    private String usuario_id;
     private String situacaoPredio;
     private String limiteDeCreditoSugerido;
     private String limiteDePrazoSugerido;
@@ -167,14 +169,6 @@ public class Prospect {
         this.endereco_uf = endereco_uf;
     }
 
-    public String getEndereco_id_municipio() {
-        return endereco_id_municipio;
-    }
-
-    public void setEndereco_id_municipio(String endereco_id_municipio) {
-        this.endereco_id_municipio = endereco_id_municipio;
-    }
-
     public String getEndereco_cep() {
         return endereco_cep;
     }
@@ -269,5 +263,29 @@ public class Prospect {
 
     public void setObservacoesComerciais(String observacoesComerciais) {
         this.observacoesComerciais = observacoesComerciais;
+    }
+
+    public String getId_pais() {
+        return id_pais;
+    }
+
+    public void setId_pais(String id_pais) {
+        this.id_pais = id_pais;
+    }
+
+    public String getUsuario_id() {
+        return usuario_id;
+    }
+
+    public void setUsuario_id(String usuario_id) {
+        this.usuario_id = usuario_id;
+    }
+
+    public String getNome_municipio() {
+        return nome_municipio;
+    }
+
+    public void setNome_municipio(String nome_municipio) {
+        this.nome_municipio = nome_municipio;
     }
 }
