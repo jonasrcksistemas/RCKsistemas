@@ -104,6 +104,7 @@ public class ActivityAdicionaContato extends AppCompatActivity{
             contato.setEmail(edtEmailProspect.getText().toString());
         }
 
+        contato.setAtivo("S");
         ProspectHelper.getProspect().getListaContato().add(contato);
         return true;
     }

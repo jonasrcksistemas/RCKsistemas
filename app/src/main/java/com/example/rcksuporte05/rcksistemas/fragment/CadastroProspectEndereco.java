@@ -49,6 +49,9 @@ public class CadastroProspectEndereco extends Fragment {
     @BindView(R.id.spUfProspect)
     Spinner spUfProspect;
 
+    @BindView(R.id.edtComplementoProspect)
+    EditText edtComplementoProspect;
+
     ArrayAdapter municipioAdapter;
     ArrayAdapter ufAdapter;
     ArrayAdapter<Pais> paisAdapter;
@@ -82,6 +85,7 @@ public class CadastroProspectEndereco extends Fragment {
             R.array.SE,
             R.array.SP,
             R.array.TO};
+    private String[] UF = getResources().getStringArray(R.array.uf);
 
 
     @Override
@@ -97,6 +101,13 @@ public class CadastroProspectEndereco extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 municipioAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_activated_1, getResources().getStringArray(listaUf[position]));
                 spMunicipioProspect.setAdapter(municipioAdapter);
+                try {
+                    if (ProspectHelper.getPosicaoMunicipio() > -1) {
+                        spMunicipioProspect.setSelection(ProspectHelper.getPosicaoMunicipio());
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 
             @Override
@@ -108,7 +119,7 @@ public class CadastroProspectEndereco extends Fragment {
         if(ProspectHelper.getPaises().size() > 0){
             paisAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_activated_1, ProspectHelper.getPaises());
             spPaisProspect.setAdapter(paisAdapter);
-            spPaisProspect.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            /*spPaisProspect.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     if (position != 2) {
@@ -122,7 +133,7 @@ public class CadastroProspectEndereco extends Fragment {
                 public void onNothingSelected(AdapterView<?> parent) {
 
                 }
-            });
+            });*/
         }
 
         injetaDadosNaTela();
@@ -147,6 +158,18 @@ public class CadastroProspectEndereco extends Fragment {
 
         if(ProspectHelper.getProspect().getEndereco_cep() != null){
             edtCep.setText(ProspectHelper.getProspect().getEndereco_cep());
+        }
+
+        if (ProspectHelper.getPosicaoPais() > -1) {
+            spPaisProspect.setSelection(ProspectHelper.getPosicaoPais());
+        }
+
+        if (ProspectHelper.getPosicaoUf() > -1) {
+            spUfProspect.setSelection(ProspectHelper.getPosicaoUf());
+        }
+
+        if (ProspectHelper.getPosicaoMunicipio() > -1) {
+            spMunicipioProspect.setSelection(ProspectHelper.getPosicaoMunicipio());
         }
 
     }
@@ -184,11 +207,24 @@ public class CadastroProspectEndereco extends Fragment {
         } else {
             System.out.println("Fazer algo para obrigar!");
         }
-//
-//        ProspectHelper.getProspect().setId_pais(paisAdapter.getItem(spPaisProspect.getSelectedItemPosition()).getId_pais());
-//        ProspectHelper.getProspect().setEndereco_uf(getResources().getStringArray(R.array.uf)[spUfProspect.getSelectedItemPosition()]);
-//        ProspectHelper.getProspect().setNome_municipio(municipioAdapter.getItem(spMunicipioProspect.getSelectedItemPosition()).toString());
 
+        if (edtComplementoProspect.getText() != null && !edtComplementoProspect.getText().toString().trim().isEmpty()) {
+            ProspectHelper.getProspect().setEndereco_complemento(edtComplementoProspect.getText().toString());
+        } else {
+            System.out.println("Fazer algo para obrigar!");
+        }
+
+        try {
+            ProspectHelper.getProspect().setId_pais(paisAdapter.getItem(spPaisProspect.getSelectedItemPosition()).getId_pais());
+            ProspectHelper.getProspect().setEndereco_uf(getResources().getStringArray(R.array.uf)[spUfProspect.getSelectedItemPosition()]);
+            ProspectHelper.getProspect().setNome_municipio(getResources().getStringArray(listaUf[spUfProspect.getSelectedItemPosition()])[spMunicipioProspect.getSelectedItemPosition()]);
+        } catch (ArrayIndexOutOfBoundsException e) {
+            e.printStackTrace();
+        }
+
+        ProspectHelper.setPosicaoPais(spPaisProspect.getSelectedItemPosition());
+        ProspectHelper.setPosicaoUf(spUfProspect.getSelectedItemPosition());
+        ProspectHelper.setPosicaoMunicipio(spMunicipioProspect.getSelectedItemPosition());
     }
 
     @Override

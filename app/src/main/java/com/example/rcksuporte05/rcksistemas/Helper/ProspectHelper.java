@@ -1,9 +1,5 @@
 package com.example.rcksuporte05.rcksistemas.Helper;
 
-import android.support.v4.view.ViewPager;
-import android.widget.Toast;
-
-import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.classes.MotivoNaoCadastramento;
 import com.example.rcksuporte05.rcksistemas.classes.Municipio;
 import com.example.rcksuporte05.rcksistemas.classes.Pais;
@@ -39,6 +35,9 @@ public class ProspectHelper {
     private static CadastroProspectObservacoesComerciais cadastroProspectObservacoesComerciais;
     private static CadastroProspectFotoSalvar cadastroProspectFotoSalvar;
     private static ViewPager mViewPager;
+    private static int posicaoPais = -1;
+    private static int posicaoUf = -1;
+    private static int posicaoMunicipio = -1;
 
 
     public static Prospect getProspect() {
@@ -145,6 +144,30 @@ public class ProspectHelper {
 
     public static void setMunicipios(List<Municipio> municipios) {
         ProspectHelper.municipios = municipios;
+    }
+
+    public static int getPosicaoPais() {
+        return posicaoPais;
+    }
+
+    public static void setPosicaoPais(int posicaoPais) {
+        ProspectHelper.posicaoPais = posicaoPais;
+    }
+
+    public static int getPosicaoUf() {
+        return posicaoUf;
+    }
+
+    public static void setPosicaoUf(int posicaoUf) {
+        ProspectHelper.posicaoUf = posicaoUf;
+    }
+
+    public static int getPosicaoMunicipio() {
+        return posicaoMunicipio;
+    }
+
+    public static void setPosicaoMunicipio(int posicaoMunicipio) {
+        ProspectHelper.posicaoMunicipio = posicaoMunicipio;
     }
 
     public static void moveTela(int position){
