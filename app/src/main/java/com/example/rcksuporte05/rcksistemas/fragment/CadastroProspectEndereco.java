@@ -184,10 +184,10 @@ public class CadastroProspectEndereco extends Fragment {
         } else {
             System.out.println("Fazer algo para obrigar!");
         }
-
-        ProspectHelper.getProspect().setId_pais(paisAdapter.getItem(spPaisProspect.getSelectedItemPosition()).getId_pais());
-        ProspectHelper.getProspect().setEndereco_uf(getResources().getStringArray(R.array.uf)[spUfProspect.getSelectedItemPosition()]);
-        ProspectHelper.getProspect().setNome_municipio(municipioAdapter.getItem(spMunicipioProspect.getSelectedItemPosition()).toString());
+//
+//        ProspectHelper.getProspect().setId_pais(paisAdapter.getItem(spPaisProspect.getSelectedItemPosition()).getId_pais());
+//        ProspectHelper.getProspect().setEndereco_uf(getResources().getStringArray(R.array.uf)[spUfProspect.getSelectedItemPosition()]);
+//        ProspectHelper.getProspect().setNome_municipio(municipioAdapter.getItem(spMunicipioProspect.getSelectedItemPosition()).toString());
 
     }
 

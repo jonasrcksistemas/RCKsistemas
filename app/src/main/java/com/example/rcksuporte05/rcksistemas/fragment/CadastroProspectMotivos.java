@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 
 import com.example.rcksuporte05.rcksistemas.Helper.ProspectHelper;
@@ -29,6 +30,9 @@ public class CadastroProspectMotivos extends Fragment implements MotivoAdapter.M
     @BindView(R.id.recyclerMotivos)
     RecyclerView recyclerMotivos;
 
+    @BindView(R.id.edtOutrosMotivosProspect)
+    public EditText edtOutrosMotivosProspect;
+
     MotivoAdapter motivoAdapter;
 
     @Nullable
@@ -48,7 +52,12 @@ public class CadastroProspectMotivos extends Fragment implements MotivoAdapter.M
 
     public void insereDadosNaTela(){
         if(ProspectHelper.getProspect().getMotivoNaoCadastramento() != null){
-            motivoAdapter.marcarSelecionado(ProspectHelper.getProspect().getMotivoNaoCadastramento());
+            MotivoNaoCadastramento motivo = ProspectHelper.getProspect().getMotivoNaoCadastramento();
+            motivoAdapter.marcarSelecionado(motivo);
+        }
+
+        if(ProspectHelper.getProspect().getObservacoesComerciais() != null){
+            edtOutrosMotivosProspect.setText(ProspectHelper.getProspect().getObservacoesComerciais());
         }
 
     }
@@ -60,6 +69,10 @@ public class CadastroProspectMotivos extends Fragment implements MotivoAdapter.M
 
         if(motivoSelecionado.size() > 0){
             ProspectHelper.getProspect().setMotivoNaoCadastramento(motivoSelecionado.get(0));
+        }
+
+        if(edtOutrosMotivosProspect.getText() !=null){
+            ProspectHelper.getProspect().setObservacoesComerciais(edtOutrosMotivosProspect.getText().toString());
         }
 
     }

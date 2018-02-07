@@ -1,5 +1,9 @@
 package com.example.rcksuporte05.rcksistemas.Helper;
 
+import android.support.v4.view.ViewPager;
+import android.widget.Toast;
+
+import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.classes.MotivoNaoCadastramento;
 import com.example.rcksuporte05.rcksistemas.classes.Municipio;
 import com.example.rcksuporte05.rcksistemas.classes.Pais;
@@ -12,6 +16,7 @@ import com.example.rcksuporte05.rcksistemas.fragment.CadastroProspectGeral;
 import com.example.rcksuporte05.rcksistemas.fragment.CadastroProspectMotivos;
 import com.example.rcksuporte05.rcksistemas.fragment.CadastroProspectObservacoesComerciais;
 import com.example.rcksuporte05.rcksistemas.fragment.CadastroProspectSegmentos;
+import com.example.rcksuporte05.rcksistemas.interfaces.ActivityCadastroProspect;
 
 import java.util.List;
 
@@ -25,6 +30,7 @@ public class ProspectHelper {
     private static List<MotivoNaoCadastramento> motivos;
     private static List<Pais> paises;
     public static List<Municipio> municipios;
+    private static ActivityCadastroProspect activityMain;
     private static CadastroProspectGeral cadastroProspectGeral;
     private static CadastroProspectEndereco cadastroProspectEndereco;
     private static CadastroProspectContatos cadastroProspectContatos;
@@ -32,6 +38,7 @@ public class ProspectHelper {
     private static CadastroProspectMotivos cadastroProspectMotivos;
     private static CadastroProspectObservacoesComerciais cadastroProspectObservacoesComerciais;
     private static CadastroProspectFotoSalvar cadastroProspectFotoSalvar;
+    private static ViewPager mViewPager;
 
 
     public static Prospect getProspect() {
@@ -46,6 +53,14 @@ public class ProspectHelper {
 
     public static CadastroProspectGeral getCadastroProspectGeral() {
         return cadastroProspectGeral;
+    }
+
+    public static ActivityCadastroProspect getActivityMain() {
+        return activityMain;
+    }
+
+    public static void setActivityMain(ActivityCadastroProspect activityMain) {
+        ProspectHelper.activityMain = activityMain;
     }
 
     public static void setCadastroProspectGeral(CadastroProspectGeral cadastroProspectGeral) {
@@ -132,7 +147,87 @@ public class ProspectHelper {
         ProspectHelper.municipios = municipios;
     }
 
-    public void clear(){
+    public static void moveTela(int position){
+        mViewPager = (ViewPager) activityMain.findViewById(R.id.vp_tabs_prospect);
+        if(mViewPager.getCurrentItem() != position){
+            mViewPager.setCurrentItem(position);
+        }
+    }
+
+    public static void salvarProspect(){
+        //Tela geral
+        if(prospect.getPessoa_f_j() == null || prospect.getPessoa_f_j().equals("")){
+            moveTela(0);
+            cadastroProspectGeral.edtNomeClienteProspect.requestFocus();
+            Toast.makeText(cadastroProspectGeral.getContext(),"Escolher Pessoa Fisica ou Juridica é obrigatorio", Toast.LENGTH_LONG).show();
+        }
+
+        if(prospect.getNome_cadastro() == null || prospect.getNome_cadastro().trim().equals("")){
+            moveTela(0);
+            cadastroProspectGeral.edtNomeClienteProspect.setError("Campo Obrigatorio");
+            cadastroProspectGeral.edtNomeClienteProspect.requestFocus();
+        }
+
+        if(prospect.getNome_fantasia() == null || prospect.getNome_fantasia().equals("")){
+            moveTela(0);
+            cadastroProspectGeral.edtNomeFantasiaProspect.setError("Campo Obrigatorio");
+            cadastroProspectGeral.edtNomeFantasiaProspect.requestFocus();
+        }
+        if(prospect.getCpf_cnpj() == null || prospect.getCpf_cnpj().equals("")){
+           moveTela(0);
+           cadastroProspectGeral.edtCpfCnpjProspect.setError("Campo Obrigatorio");
+           cadastroProspectGeral.edtCpfCnpjProspect.requestFocus();
+        }
+        if(prospect.getPessoa_f_j() !=null && prospect.getPessoa_f_j().equals("J")){
+            if(prospect.getInscri_estadual() == null || !prospect.getInscri_estadual().equals("")){
+               moveTela(0);
+               cadastroProspectGeral.edtInscEstadualProspect.setError("Campo Obrigatorio");
+               cadastroProspectGeral.edtInscEstadualProspect.requestFocus();
+
+            }
+        }
+
+
+
+        //tela 2 Endereços
+
+        //tela 3 Contato
+        if (prospect.getListaContato().size() < 1){
+            moveTela(2);
+            try{
+                Toast.makeText(cadastroProspectMotivos.getContext(),"Pelo menos 1 contato é Obrigatorio!", Toast.LENGTH_LONG).show();
+            }catch (NullPointerException e){
+                Toast.makeText(activityMain,"Pelo menos 1 contato é Obrigatorio!", Toast.LENGTH_LONG).show();
+            }
+
+        }
+
+        //Tela 4 seguimentos
+        if(prospect.getSegmento() == null){
+            moveTela(3);
+            Toast.makeText(activityMain,"Escolha o segmento!", Toast.LENGTH_LONG).show();
+        }else if(prospect.getSegmento().getNomeSetor().toLowerCase().contains("outros")){
+//            cadastroProspectSegmentos.edtOutrosSegmentosProspect.setError("Campo Obrigado quando Outros Selecionado");
+//            cadastroProspectSegmentos.edtOutrosSegmentosProspect.requestFocus();
+        }
+
+
+        //tela 5 motivo não cadastramento
+        if(prospect.getMotivoNaoCadastramento() == null){
+            moveTela(4);
+            Toast.makeText(activityMain,"Escolha um Motivo para o Não cadastramento!", Toast.LENGTH_LONG).show();
+        }
+
+        //tela 6 Observações Comerciais
+        if(prospect.getReferenciaComercial().size() >= 2){
+           moveTela(5);
+           Toast.makeText(activityMain, "Insira Pelo Menos 2 referencias comercias ",  Toast.LENGTH_LONG).show();
+        }
+
+
+    }
+
+    public static void clear(){
         prospect = null;
         cadastroProspectGeral = null;
         cadastroProspectEndereco = null;

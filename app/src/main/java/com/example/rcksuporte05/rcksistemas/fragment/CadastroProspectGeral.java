@@ -25,31 +25,31 @@ public class CadastroProspectGeral extends Fragment {
 
 
     @BindView(R.id.edtNomeClienteProspect)
-    EditText edtNomeClienteProspect;
+    public EditText edtNomeClienteProspect;
 
     @BindView(R.id.edtNomeFantasiaProspect)
-    EditText edtNomeFantasiaProspect;
+    public EditText edtNomeFantasiaProspect;
 
     @BindView(R.id.edtCpfCnpjProspect)
-    EditText edtCpfCnpjProspect;
+    public EditText edtCpfCnpjProspect;
 
     @BindView(R.id.edtInscEstadualProspect)
-    EditText edtInscEstadualProspect;
+    public EditText edtInscEstadualProspect;
 
     @BindView(R.id.edtInscMunicipalProspect)
-    EditText edtInscMunicipalProspect;
+    public EditText edtInscMunicipalProspect;
 
     @BindView(R.id.rgPessoaProspect)
-    RadioGroup rgPessoa;
+    public RadioGroup rgPessoaFisicaJuridica;
 
     @BindView(R.id.rgRotaProspect)
-    RadioGroup rgRotaProspect;
+    public RadioGroup rgRotaProspect;
 
     @BindView(R.id.rdFisicaProspect)
-    RadioButton  rdFisicaProspect;
+    public RadioButton  rdFisicaProspect;
 
     @BindView(R.id.rdJuridicaProspect)
-    RadioButton rdJuridicaProspect;
+    public RadioButton rdJuridicaProspect;
 
     View view;
     RadioButton radioButtonRota;
@@ -102,8 +102,8 @@ public class CadastroProspectGeral extends Fragment {
 
     public void inserirDadosDaFrame(){
 
-        if(rgPessoa.getCheckedRadioButtonId()>0){
-            radioButtonPessoa = (RadioButton) view.findViewById(rgPessoa.getCheckedRadioButtonId());
+        if(rgPessoaFisicaJuridica.getCheckedRadioButtonId()>0){
+            radioButtonPessoa = (RadioButton) view.findViewById(rgPessoaFisicaJuridica.getCheckedRadioButtonId());
             if(radioButtonPessoa.getText().toString().toLowerCase().equals("física")){
                 ProspectHelper.getProspect().setPessoa_f_j("F");
             }else if(radioButtonPessoa.getText().toString().toLowerCase().equals("jurídica")){
@@ -111,7 +111,7 @@ public class CadastroProspectGeral extends Fragment {
             }
         }
 
-        if(edtNomeClienteProspect.getText() != null && !edtNomeClienteProspect.getText().toString().equals("")){
+        if(edtNomeClienteProspect.getText() != null && !edtNomeClienteProspect.getText().toString().trim().equals("")){
             ProspectHelper.getProspect().setNome_cadastro(edtNomeClienteProspect.getText().toString());
         }else{
             System.out.println("mensagem por obrigatoriedade");

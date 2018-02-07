@@ -34,8 +34,7 @@ public class ActivityCadastroProspect extends AppCompatActivity {
     SlidingTabLayout mSlidingTabLayout;
 
     @BindView(R.id.vp_tabs_prospect)
-    ViewPager mViewPager;
-
+    public ViewPager mViewPager;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -108,6 +107,7 @@ public class ActivityCadastroProspect extends AppCompatActivity {
         mSlidingTabLayout.setViewPager(mViewPager);
 
         setSupportActionBar(toolbar);
+        ProspectHelper.setActivityMain(this);
     }
 
     @Override
@@ -137,4 +137,9 @@ public class ActivityCadastroProspect extends AppCompatActivity {
         ProspectHelper.setPaises(db.listaPaises());
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ProspectHelper.clear();
+    }
 }
