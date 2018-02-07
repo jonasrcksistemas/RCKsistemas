@@ -156,8 +156,12 @@ public class ProspectHelper {
         ProspectHelper.posicaoMunicipio = posicaoMunicipio;
     }
 
-    public void clear(){
+    public static void clear() {
         prospect = null;
+        segmentos = null;
+        motivos = null;
+        paises = null;
+        municipios = null;
         cadastroProspectGeral = null;
         cadastroProspectEndereco = null;
         cadastroProspectContatos = null;
@@ -165,10 +169,6 @@ public class ProspectHelper {
         cadastroProspectMotivos = null;
         cadastroProspectObservacoesComerciais = null;
         cadastroProspectFotoSalvar = null;
-        segmentos = null;
-        motivos = null;
-        paises = null;
-        municipios = null;
         posicaoPais = -1;
         posicaoUf = -1;
         posicaoMunicipio = -1;
