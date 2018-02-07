@@ -122,6 +122,10 @@ public class CadastroProspectFotoSalvar extends Fragment {
 
     }
 
+    @OnClick(R.id.btnSalvarProspect)
+    public void salvarProspect(){
+        ProspectHelper.salvarProspect();
+    }
 
     @OnClick(R.id.btnAddFoto)
     public void foto() {

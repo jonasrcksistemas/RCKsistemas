@@ -58,7 +58,6 @@ public class MotivoAdapter extends RecyclerView.Adapter<MotivoViewHolder> {
     }
 
     public void toggleSelection(int pos) {
-
         if (selectedItems.get(pos, false)) {
             selectedItems.delete(pos);
         } else {
@@ -67,12 +66,8 @@ public class MotivoAdapter extends RecyclerView.Adapter<MotivoViewHolder> {
 
         if(posAnterior >= 0){
             selectedItems.delete(posAnterior);
-            selectedItems.put(posAnterior, false);
         }
         posAnterior = pos;
-
-
-
     }
 
 
