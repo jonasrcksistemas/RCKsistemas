@@ -18,7 +18,6 @@ public class Sincronia {
     private List<VendedorBonusResumo> listaVendedorBonusResumo;
     private List<WebPedido> listaWebPedidosPendentes;
     private List<WebPedido> listaWebPedidosFinalizados;
-    private List<Municipio> listaMunicipios;
     private List<Pais> listaPais;
     private List<Banco> bancos;
     private List<Segmento> segmentos;

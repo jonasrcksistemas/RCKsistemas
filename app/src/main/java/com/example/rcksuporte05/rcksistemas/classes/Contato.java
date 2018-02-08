@@ -2,6 +2,7 @@ package com.example.rcksuporte05.rcksistemas.classes;
 
 public class Contato {
     private String id_contato;
+    private String id_contato_servidor;
     private String id_cadastro;
     private String ativo;
     private String pessoa_contato;
@@ -22,7 +23,6 @@ public class Contato {
     private String fornecedor2;
     private String tel_fornec1;
     private String tel_fornec2;
-    private String contato_principal;
 
     public String getId_contato() {
         return id_contato;
@@ -192,11 +192,11 @@ public class Contato {
         this.tel_fornec2 = tel_fornec2;
     }
 
-    public String getContato_principal() {
-        return contato_principal;
+    public String getId_contato_servidor() {
+        return id_contato_servidor;
     }
 
-    public void setContato_principal(String contato_principal) {
-        this.contato_principal = contato_principal;
+    public void setId_contato_servidor(String id_contato_servidor) {
+        this.id_contato_servidor = id_contato_servidor;
     }
 }

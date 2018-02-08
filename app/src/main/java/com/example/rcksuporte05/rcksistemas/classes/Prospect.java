@@ -9,6 +9,7 @@ import java.util.List;
 
 public class Prospect {
     private String id_prospect;
+    private String id_prospect_servidor;
     private String id_cadastro;
     private Segmento segmento;
     private MotivoNaoCadastramento motivoNaoCadastramento;
@@ -75,10 +76,6 @@ public class Prospect {
 
     public List<Contato> getListaContato() {
         return listaContato;
-    }
-
-    public void setListaContato(List<Contato> listaContato) {
-        this.listaContato = listaContato;
     }
 
     public String getNome_cadastro() {
@@ -245,16 +242,8 @@ public class Prospect {
         return referenciaBancaria;
     }
 
-    public void setReferenciaBancaria(List<ReferenciaBancaria> referenciaBancaria) {
-        this.referenciaBancaria = referenciaBancaria;
-    }
-
     public List<ReferenciaComercial> getReferenciaComercial() {
         return referenciaComercial;
-    }
-
-    public void setReferenciaComercial(List<ReferenciaComercial> referenciaComercial) {
-        this.referenciaComercial = referenciaComercial;
     }
 
     public String getObservacoesComerciais() {
@@ -287,5 +276,25 @@ public class Prospect {
 
     public void setNome_municipio(String nome_municipio) {
         this.nome_municipio = nome_municipio;
+    }
+
+    public String getId_prospect_servidor() {
+        return id_prospect_servidor;
+    }
+
+    public void setId_prospect_servidor(String id_prospect_servidor) {
+        this.id_prospect_servidor = id_prospect_servidor;
+    }
+
+    public void setReferenciaBancaria(List<ReferenciaBancaria> referenciaBancaria) {
+        this.referenciaBancaria = referenciaBancaria;
+    }
+
+    public void setReferenciaComercial(List<ReferenciaComercial> referenciaComercial) {
+        this.referenciaComercial = referenciaComercial;
+    }
+
+    public void setListaContato(List<Contato> listaContato) {
+        this.listaContato = listaContato;
     }
 }

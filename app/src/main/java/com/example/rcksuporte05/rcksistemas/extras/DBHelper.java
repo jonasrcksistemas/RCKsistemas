@@ -7,14 +7,18 @@ import android.database.CursorIndexOutOfBoundsException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.example.rcksuporte05.rcksistemas.Helper.UsuarioHelper;
 import com.example.rcksuporte05.rcksistemas.classes.Banco;
 import com.example.rcksuporte05.rcksistemas.classes.Cliente;
 import com.example.rcksuporte05.rcksistemas.classes.CondicoesPagamento;
+import com.example.rcksuporte05.rcksistemas.classes.Contato;
 import com.example.rcksuporte05.rcksistemas.classes.MotivoNaoCadastramento;
-import com.example.rcksuporte05.rcksistemas.classes.Municipio;
 import com.example.rcksuporte05.rcksistemas.classes.Operacao;
 import com.example.rcksuporte05.rcksistemas.classes.Pais;
 import com.example.rcksuporte05.rcksistemas.classes.Produto;
+import com.example.rcksuporte05.rcksistemas.classes.Prospect;
+import com.example.rcksuporte05.rcksistemas.classes.ReferenciaBancaria;
+import com.example.rcksuporte05.rcksistemas.classes.ReferenciaComercial;
 import com.example.rcksuporte05.rcksistemas.classes.Segmento;
 import com.example.rcksuporte05.rcksistemas.classes.TabelaPreco;
 import com.example.rcksuporte05.rcksistemas.classes.TabelaPrecoItem;
@@ -367,43 +371,37 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE IF NOT EXISTS TBL_PROSPECT " +
                 "(ATIVO VARCHAR(1) DEFAULT 'S' NOT NULL," +
                 "ID_PROSPECT INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "ID_PROSPECT_SERVIDOR INTEGER," +
                 "ID_CADASTRO INTEGER," +
-                "ID_PROSPECT_SERVIDOR INTEGER,"+
                 "ID_SEGMENTO INTEGER," +
-                "ID_MOTIVONAOCADASTRAMENTO INTEGER," +
+                "ID_MOTIVO_NAO_CADASTRAMENTO INTEGER," +
+                "REFERENCIA_BANCARIA INTEGER," +
+                "REFERENCIA_COMERCIAL INTEGER," +
+                "LISTA_CONTATO INTEGER," +
                 "NOME_CADASTRO VARCHAR(60)," +
                 "NOME_FANTASIA VARCHAR(60)," +
                 "PESSOA_F_J VARCHAR(1)," +
-                "CPF_CNPJ VARCHAR(14)," +
+                "CPF_CNPJ VARCHAR(20)," +
                 "INSCRI_ESTADUAL VARCHAR(20)," +
                 "INSCRI_MUNICIPAL VARCHAR(20)," +
                 "ENDERECO VARCHAR(60)," +
                 "ENDERECO_BAIRRO VARCHAR(60)," +
                 "ENDERECO_NUMERO VARCHAR(20)," +
-                "ENDERECO_COMPLEMENTO VARCHAR(20)," +
-                "ENDERECO_UF CHAR(2) NOT NULL," +
-                "ENDERECO_ID_MUNICIPIO VARCHAR(50)," +
-                "ENDERECO_CEP VARCHAR(8)," +
+                "ENDERECO_COMPLEMENTO VARCHAR(300)," +
+                "ENDERECO_UF VARCHAR(2)," +
+                "NOME_MUNICIPIO VARCHAR(60)," +
+                "ENDERECO_CEP VARCHAR(20)," +
+                "ID_PAIS INTEGER," +
+                "USUARIO_ID INTEGER," +
                 "SITUACAO_PREDIO VARCHAR(1)," +
-                "NOME_RESPONSAVEL VARCHAR(60)," +
-                "FUNCAO_RESPONSAVEL VARCHAR(60)," +
-                "CELULAR1 VARCHAR(20)," +
-                "CELULAR2 VARCHAR(20)," +
-                "TELEFONEFIXO VARCHAR(20)," +
-                "EMAIL1 VARCHAR(80)," +
-                "EMAIL2 VARCHAR(80)," +
-                "FORNECEDOR1 VARCHAR," +
-                "TELEFONE_FORNECEDOR1 VARCHAR(20)," +
-                "FORNECEDOR2 VARCHAR," +
-                "TELEFONE_FORNECEDOR2 VARCHAR(20)," +
-                "OBSERVACOES_COMERCIAIS VARCHAR(300)," +
                 "LIMITE_CREDITO_SUGERIDO DECIMAL(12,2)," +
                 "LIMITE_PRAZO_SUGERIDO DECIMAL(12,2)," +
-                "NOME_BANCO VARCHAR(60)," +
-                "AGENCIA VARCHAR(6)," +
-                "CONTA_CORRENTE VARCHAR(7)," +
-                "ID_EMPRESA INTEGER NOT NULL, " +
-                "DIA_VISITA VARCHAR(20));");
+                "ID_EMPRESA INTEGER," +
+                "DIA_VISITA VARCHAR(20)," +
+                "DATA_RETORNO DATE," +
+                "FOTO_PRINCIPALB_ASE64 BLOB," +
+                "FOTO_SECUNDARIA_BASE64 BLOB," +
+                "OBSERVACOES_COMERCIAIS VARCHAR(300));");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS TBL_SEGMENTO" +
                 "(ATIVO VARCHAR(1) DEFAULT 'S' NOT NULL," +
@@ -420,20 +418,49 @@ public class DBHelper extends SQLiteOpenHelper {
                 "(ID_PAIS INTEGER PRIMARY KEY, " +
                 "NOME_PAIS VARCHAR(60) NOT NULL);");
 
-
-        db.execSQL("CREATE TABLE IF NOT EXISTS TBL_MUNICIPIOS   " +
-                "(ID_MUNICIPIO INTEGER PRIMARY KEY," +
-                "NOME_MUNICIPIO VARCHAR(50)," +
-                "UF VARCHAR(4)," +
-                "CEP VARCHAR(12));");
-
         db.execSQL("CREATE TABLE IF NOT EXISTS TBL_BANCOS_FEBRABAN " +
                 "(CODIGO_FEBRABAN VARCHAR(6) NOT NULL," +
                 " NOME_BANCO VARCHAR(60)," +
                 " HOME_PAGE VARCHAR(60)," +
                 " PRIMARY KEY (CODIGO_FEBRABAN));");
 
+        db.execSQL("CREATE TABLE IF NOT EXISTS TBL_REFERENCIA_BANCARIA" +
+                "(ID_REFERENCIA_BANCARIA INTEGER," +
+                "CODIGO_FEBRABAN INTEGER," +
+                "NOME_BANCO VARCHAR(60)," +
+                "CONTA_CORRENTE VARCHAR(60)," +
+                "AGENCIA VARCHAR(60)," +
+                "ID_CADASTRO INTEGER);");
 
+        db.execSQL("CREATE TABLE IF NOT EXISTS TBL_REFERENCIA_COMERCIAL" +
+                "(ID_REFERENCIA_COMERCIAL INTEGER," +
+                "NOME_FORNECEDOR_REFERENCIA VARCHAR(60)," +
+                "TELEFONE VARCHAR(20)," +
+                "ID_CADASTRO INTEGER);");
+
+        db.execSQL("CREATE TABLE IF NOT EXISTS TBL_CADASTRO_CONTATO" +
+                "(ID_CONTATO INTEGER," +
+                "ID_CONTATO_SERVIDOR INTEGER," +
+                "ID_CADASTRO INTEGER," +
+                "ATIVO VARCHAR(1)," +
+                "PESSOA_CONTATO VARCHAR(60)," +
+                "FUNCAO VARCHAR(60)," +
+                "EMAIL VARCHAR(60)," +
+                "TIPO_TELEFONE VARCHAR(60)," +
+                "OPERADORA VARCHAR(60)," +
+                "NUMERO_TELEFONE VARCHAR(20)," +
+                "DATA_ANIVERSARIO DATE," +
+                "OBSERVACAO VARCHAR(300)," +
+                "USUARIO_ID INTEGER," +
+                "USUARIO_NOME VARCHAR(60)," +
+                "USUARIO_DATA DATE," +
+                "CELULAR VARCHAR(20)," +
+                "CELULAR2 VARCHAR(20)," +
+                "EMAIL2 VARCHAR(60)," +
+                "FORNECEDOR1 VARCHAR(60)," +
+                "FORNECEDOR2 VARCHAR(60)," +
+                "TEL_FORNEC1 VARCHAR(20)," +
+                "TEL_FORNEC2 VARCHAR(20));");
 
         System.gc();
     }
@@ -444,42 +471,37 @@ public class DBHelper extends SQLiteOpenHelper {
             db.execSQL("CREATE TABLE IF NOT EXISTS TBL_PROSPECT " +
                     "(ATIVO VARCHAR(1) DEFAULT 'S' NOT NULL," +
                     "ID_PROSPECT INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "ID_PROSPECT_SERVIDOR INTEGER," +
                     "ID_CADASTRO INTEGER," +
                     "ID_SEGMENTO INTEGER," +
-                    "ID_MOTIVONAOCADASTRAMENTO INTEGER," +
+                    "ID_MOTIVO_NAO_CADASTRAMENTO INTEGER," +
+                    "REFERENCIA_BANCARIA INTEGER," +
+                    "REFERENCIA_COMERCIAL INTEGER," +
+                    "LISTA_CONTATO INTEGER," +
                     "NOME_CADASTRO VARCHAR(60)," +
                     "NOME_FANTASIA VARCHAR(60)," +
                     "PESSOA_F_J VARCHAR(1)," +
-                    "CPF_CNPJ VARCHAR(14)," +
+                    "CPF_CNPJ VARCHAR(20)," +
                     "INSCRI_ESTADUAL VARCHAR(20)," +
                     "INSCRI_MUNICIPAL VARCHAR(20)," +
                     "ENDERECO VARCHAR(60)," +
                     "ENDERECO_BAIRRO VARCHAR(60)," +
                     "ENDERECO_NUMERO VARCHAR(20)," +
-                    "ENDERECO_COMPLEMENTO VARCHAR(20)," +
-                    "ENDERECO_UF CHAR(2) NOT NULL," +
-                    "ENDERECO_ID_MUNICIPIO VARCHAR(50)," +
-                    "ENDERECO_CEP VARCHAR(8)," +
+                    "ENDERECO_COMPLEMENTO VARCHAR(300)," +
+                    "ENDERECO_UF VARCHAR(2)," +
+                    "NOME_MUNICIPIO VARCHAR(60)," +
+                    "ENDERECO_CEP VARCHAR(20)," +
+                    "ID_PAIS INTEGER," +
+                    "USUARIO_ID INTEGER," +
                     "SITUACAO_PREDIO VARCHAR(1)," +
-                    "NOME_RESPONSAVEL VARCHAR(60)," +
-                    "FUNCAO_RESPONSAVEL VARCHAR(60)," +
-                    "CELULAR1 VARCHAR(20)," +
-                    "CELULAR2 VARCHAR(20)," +
-                    "TELEFONEFIXO VARCHAR(20)," +
-                    "EMAIL1 VARCHAR(80)," +
-                    "EMAIL2 VARCHAR(80)," +
-                    "FORNECEDOR1 VARCHAR," +
-                    "TELEFONE_FORNECEDOR1 VARCHAR(20)," +
-                    "FORNECEDOR2 VARCHAR," +
-                    "TELEFONE_FORNECEDOR2 VARCHAR(20)," +
-                    "OBSERVACOES_COMERCIAIS VARCHAR(300)," +
                     "LIMITE_CREDITO_SUGERIDO DECIMAL(12,2)," +
                     "LIMITE_PRAZO_SUGERIDO DECIMAL(12,2)," +
-                    "NOME_BANCO VARCHAR(60)," +
-                    "AGENCIA VARCHAR(6)," +
-                    "CONTA_CORRENTE VARCHAR(7)," +
-                    "ID_EMPRESA INTEGER NOT NULL, " +
-                    "DIA_VISITA VARCHAR(20));");
+                    "ID_EMPRESA INTEGER," +
+                    "DIA_VISITA VARCHAR(20)," +
+                    "DATA_RETORNO DATE," +
+                    "FOTO_PRINCIPALB_ASE64 BLOB," +
+                    "FOTO_SECUNDARIA_BASE64 BLOB," +
+                    "OBSERVACOES_COMERCIAIS VARCHAR(300));");
 
             db.execSQL("CREATE TABLE IF NOT EXISTS TBL_SEGMENTO" +
                     "(ATIVO VARCHAR(1) DEFAULT 'S' NOT NULL," +
@@ -496,20 +518,53 @@ public class DBHelper extends SQLiteOpenHelper {
                     "(ID_PAIS INTEGER PRIMARY KEY, " +
                     "NOME_PAIS VARCHAR(60) NOT NULL);");
 
-
-            db.execSQL("CREATE TABLE IF NOT EXISTS TBL_MUNICIPIOS   " +
-                    "(ID_MUNICIPIO INTEGER PRIMARY KEY," +
-                    "NOME_MUNICIPIO VARCHAR(50)," +
-                    "UF VARCHAR(4)," +
-                    "CEP VARCHAR(12));");
-
             db.execSQL("CREATE TABLE IF NOT EXISTS TBL_BANCOS_FEBRABAN " +
                     "(CODIGO_FEBRABAN VARCHAR(6) NOT NULL," +
                     " NOME_BANCO VARCHAR(60)," +
                     " HOME_PAGE VARCHAR(60)," +
                     " PRIMARY KEY (CODIGO_FEBRABAN));");
 
+            db.execSQL("CREATE TABLE IF NOT EXISTS TBL_REFERENCIA_BANCARIA" +
+                    "(ID_REFERENCIA_BANCARIA INTEGER," +
+                    "CODIGO_FEBRABAN INTEGER," +
+                    "NOME_BANCO VARCHAR(60)," +
+                    "CONTA_CORRENTE VARCHAR(60)," +
+                    "AGENCIA VARCHAR(60)," +
+                    "ID_CADASTRO INTEGER," +
+                    "USUARIO_ID INTEGER," +
+                    "NOME_USUARIO VARCHAR(60));");
 
+            db.execSQL("CREATE TABLE IF NOT EXISTS TBL_REFERENCIA_COMERCIAL" +
+                    "(ID_REFERENCIA_COMERCIAL INTEGER," +
+                    "NOME_FORNECEDOR_REFERENCIA VARCHAR(60)," +
+                    "TELEFONE VARCHAR(20)," +
+                    "ID_CADASTRO INTEGER," +
+                    "USUARIO_ID INTEGER," +
+                    "NOME_USUARIO VARCHAR(60));");
+
+            db.execSQL("CREATE TABLE IF NOT EXISTS TBL_CADASTRO_CONTATO" +
+                    "(ID_CONTATO INTEGER," +
+                    "ID_CONTATO_SERVIDOR INTEGER," +
+                    "ID_CADASTRO INTEGER," +
+                    "ATIVO VARCHAR(1)," +
+                    "PESSOA_CONTATO VARCHAR(60)," +
+                    "FUNCAO VARCHAR(60)," +
+                    "EMAIL VARCHAR(60)," +
+                    "TIPO_TELEFONE VARCHAR(60)," +
+                    "OPERADORA VARCHAR(60)," +
+                    "NUMERO_TELEFONE VARCHAR(20)," +
+                    "DATA_ANIVERSARIO DATE," +
+                    "OBSERVACAO VARCHAR(300)," +
+                    "USUARIO_ID INTEGER," +
+                    "USUARIO_NOME VARCHAR(60)," +
+                    "USUARIO_DATA DATE," +
+                    "CELULAR VARCHAR(20)," +
+                    "CELULAR2 VARCHAR(20)," +
+                    "EMAIL2 VARCHAR(60)," +
+                    "FORNECEDOR1 VARCHAR(60)," +
+                    "FORNECEDOR2 VARCHAR(60)," +
+                    "TEL_FORNEC1 VARCHAR(20)," +
+                    "TEL_FORNEC2 VARCHAR(20));");
         }
     }
 
@@ -540,119 +595,268 @@ public class DBHelper extends SQLiteOpenHelper {
         return resultado;
     }
 
-//    public void atualizarTBL_PROSPECT(Prospect prospect) {
-//        SQLiteDatabase db = this.getWritableDatabase();
-//        ContentValues content = new ContentValues();
-//        content.put("ATIVO", prospect.getId_prospect());
-//        content.put("ID_PROSPECT", prospect.getId_cadastro());
-//        content.put("ID_CADASTRO", prospect.getSegmento().getIdSetor());
-//        content.put("ID_SEGMENTO", prospect.getMotivoNaoCadastramento().getIdItem());
-//        content.put("ID_MOTIVONAOCADASTRAMENTO", prospect.getNome_cadastro());
-//        content.put("NOME_CADASTRO", prospect.getNome_fantasia());
-//        content.put("NOME_FANTASIA", prospect.getPessoa_f_j());
-//        content.put("PESSOA_F_J", prospect.getCpf_cnpj());
-//        content.put("CPF_CNPJ", prospect.getInscri_estadual());
-//        content.put("INSCRI_ESTADUAL", prospect.getInscri_municipal());
-//        content.put("INSCRI_MUNICIPAL", prospect.getEndereco());
-//        content.put("ENDERECO", prospect.getEndereco_bairro());
-//        content.put("ENDERECO_BAIRRO", prospect.getEndereco_numero());
-//        content.put("ENDERECO_NUMERO", prospect.getEndereco_complemento());
-//        content.put("ENDERECO_COMPLEMENTO", prospect.getEndereco_uf());
-//        content.put("ENDERECO_UF", prospect.getEndereco_municipio());
-//        content.put("ENDERECO_ID_MUNICIPIO", prospect.getEndereco_cep());
-//        content.put("ENDERECO_CEP", prospect.getSituaçãoPredio());
-//        content.put("SITUACAO_PREDIO", prospect.getNomeResponsavel());
-//        content.put("NOME_RESPONSAVEL", prospect.getFuncaoResponsavel());
-//        content.put("FUNCAO_RESPONSAVEL", prospect.getCelular1());
-//        content.put("CELULAR1", prospect.getCelular2());
-//        content.put("CELULAR2", prospect.getTelefoneFixo());
-//        content.put("TELEFONEFIXO", prospect.getEmail1());
-//        content.put("EMAIL1", prospect.getEmail2());
-//        content.put("EMAIL2", prospect.getFornecedor1());
-//        content.put("FORNECEDOR1", prospect.getTelefoneFornecedor1());
-//        content.put("TELEFONE_FORNECEDOR1", prospect.getFornecedor2());
-//        content.put("FORNECEDOR2", prospect.getTelefoneFornecedor2());
-//        content.put("TELEFONE_FORNECEDOR2", prospect.getObservacoesComerciais());
-//        content.put("OBSERVACOES_COMERCIAIS", prospect.getLimiteDeCreditoSugerido());
-//        content.put("LIMITE_CREDITO_SUGERIDO", prospect.getLimiteDePrazoSugerido());
-//        content.put("LIMITE_PRAZO_SUGERIDO", prospect.getNomeBanco());
-//        content.put("NOME_BANCO", prospect.getAgencia());
-//        content.put("AGENCIA", prospect.getContaCorrente());
-//        content.put("CONTA_CORRENTE", prospect.getFotoPrincipalBase64());
-//        content.put("ID_EMPRESA", prospect.getFotoSecundariaBase64());
-//        content.put("DIA_VISITA", prospect.getDiaVisita());
-//
-//        if (prospect.getId_prospect() != null && contagem("SELECT COUNT(ID_PROSPECT) FROM TBL_PROSPECT WHERE ID_PROSPECT = " + prospect.getId_prospect()) > 0) {
-//            db.update("TBL_PROSPECT", content, "ID_PROSPECT = " + prospect.getId_prospect(), null);
-//        } else {
-//            db.insert("TBL_PROSPECT", null, content);
-//        }
-//    }
+    public void atualizarTBL_PROSPECT(Prospect prospect) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues content = new ContentValues();
+        String idCadastro = String.valueOf(contagem("SELECT MAX(ID_PROSPECT) FROM TBL_PROSPECT") + 1);
 
-//    public List<Prospect> listaProspect(String SQL) {
-//        List<Prospect> listaProspects = new ArrayList<>();
-//        SQLiteDatabase db = this.getReadableDatabase();
-//        Cursor cursor;
-//
-//        cursor = db.rawQuery(SQL, null);
-//        cursor.moveToFirst();
-//        do {
-//            Prospect prospect = new Prospect();
-//
-//            prospect.setId_prospect(cursor.getString(cursor.getColumnIndex("ATIVO")));
-//            prospect.setId_cadastro(cursor.getString(cursor.getColumnIndex("ID_PROSPECT")));
-//            try {
-//                prospect.setSegmento(listaSegmento("SELECT * FROM TBL_SEGMENTO WHERE ID_SETOR = " + cursor.getString(cursor.getColumnIndex("ID_CADASTRO")) + ";").get(0));
-//            } catch (CursorIndexOutOfBoundsException e) {
-//                e.printStackTrace();
-//            }
-//            try {
-//                prospect.setMotivoNaoCadastramento(listaMotivoNaoCadastramento("SELECT * FROM TBL_CADASTRO_MOTIVO_NAO_CAD WHERE ID_ITEM = " + cursor.getString(cursor.getColumnIndex("ID_SEGMENTO")) + ";").get(0));
-//            } catch (CursorIndexOutOfBoundsException e) {
-//                e.printStackTrace();
-//            }
-//            prospect.setNome_cadastro(cursor.getString(cursor.getColumnIndex("ID_MOTIVONAOCADASTRAMENTO")));
-//            prospect.setNome_fantasia(cursor.getString(cursor.getColumnIndex("NOME_CADASTRO")));
-//            prospect.setPessoa_f_j(cursor.getString(cursor.getColumnIndex("NOME_FANTASIA")));
-//            prospect.setCpf_cnpj(cursor.getString(cursor.getColumnIndex("PESSOA_F_J")));
-//            prospect.setInscri_estadual(cursor.getString(cursor.getColumnIndex("CPF_CNPJ")));
-//            prospect.setInscri_municipal(cursor.getString(cursor.getColumnIndex("INSCRI_ESTADUAL")));
-//            prospect.setEndereco(cursor.getString(cursor.getColumnIndex("INSCRI_MUNICIPAL")));
-//            prospect.setEndereco_bairro(cursor.getString(cursor.getColumnIndex("ENDERECO")));
-//            prospect.setEndereco_numero(cursor.getString(cursor.getColumnIndex("ENDERECO_BAIRRO")));
-//            prospect.setEndereco_complemento(cursor.getString(cursor.getColumnIndex("ENDERECO_NUMERO")));
-//            prospect.setEndereco_uf(cursor.getString(cursor.getColumnIndex("ENDERECO_COMPLEMENTO")));
-//            prospect.setEndereco_municipio(cursor.getString(cursor.getColumnIndex("ENDERECO_UF")));
-//            prospect.setEndereco_cep(cursor.getString(cursor.getColumnIndex("ENDERECO_ID_MUNICIPIO")));
-//            prospect.setSituaçãoPredio(cursor.getString(cursor.getColumnIndex("ENDERECO_CEP")));
-//            prospect.setNomeResponsavel(cursor.getString(cursor.getColumnIndex("SITUACAO_PREDIO")));
-//            prospect.setFuncaoResponsavel(cursor.getString(cursor.getColumnIndex("NOME_RESPONSAVEL")));
-//            prospect.setCelular1(cursor.getString(cursor.getColumnIndex("FUNCAO_RESPONSAVEL")));
-//            prospect.setCelular2(cursor.getString(cursor.getColumnIndex("CELULAR1")));
-//            prospect.setTelefoneFixo(cursor.getString(cursor.getColumnIndex("CELULAR2")));
-//            prospect.setEmail1(cursor.getString(cursor.getColumnIndex("TELEFONEFIXO")));
-//            prospect.setEmail2(cursor.getString(cursor.getColumnIndex("EMAIL1")));
-//            prospect.setFornecedor1(cursor.getString(cursor.getColumnIndex("EMAIL2")));
-//            prospect.setTelefoneFornecedor1(cursor.getString(cursor.getColumnIndex("FORNECEDOR1")));
-//            prospect.setFornecedor2(cursor.getString(cursor.getColumnIndex("TELEFONE_FORNECEDOR1")));
-//            prospect.setTelefoneFornecedor2(cursor.getString(cursor.getColumnIndex("FORNECEDOR2")));
-//            prospect.setObservacoesComerciais(cursor.getString(cursor.getColumnIndex("TELEFONE_FORNECEDOR2")));
-//            prospect.setLimiteDeCreditoSugerido(cursor.getString(cursor.getColumnIndex("OBSERVACOES_COMERCIAIS")));
-//            prospect.setLimiteDePrazoSugerido(cursor.getString(cursor.getColumnIndex("LIMITE_CREDITO_SUGERIDO")));
-//            prospect.setNomeBanco(cursor.getString(cursor.getColumnIndex("LIMITE_PRAZO_SUGERIDO")));
-//            prospect.setAgencia(cursor.getString(cursor.getColumnIndex("NOME_BANCO")));
-//            prospect.setContaCorrente(cursor.getString(cursor.getColumnIndex("AGENCIA")));
-//            prospect.setFotoPrincipalBase64(cursor.getString(cursor.getColumnIndex("CONTA_CORRENTE")));
-//            prospect.setFotoSecundariaBase64(cursor.getString(cursor.getColumnIndex("ID_EMPRESA")));
-//            prospect.setIdEmpresa(cursor.getString(cursor.getColumnIndex("DIA_VISITA")));
-//            prospect.setDiaVisita(cursor.getString(cursor.getColumnIndex("")));
-//
-//            listaProspects.add(prospect);
-//        } while (cursor.moveToNext());
-//        cursor.close();
-//
-//        return listaProspects;
-//    }
+        content.put("ID_PROSPECT_SERVIDOR", prospect.getId_prospect_servidor());
+        content.put("ID_CADASTRO", prospect.getId_cadastro());
+        content.put("ID_SEGMENTO", prospect.getSegmento().getIdSetor());
+        content.put("ID_MOTIVO_NAO_CADASTRAMENTO", prospect.getMotivoNaoCadastramento().getIdItem());
+        content.put("NOME_CADASTRO", prospect.getNome_cadastro());
+        content.put("NOME_FANTASIA", prospect.getNome_fantasia());
+        content.put("PESSOA_F_J", prospect.getPessoa_f_j());
+        content.put("CPF_CNPJ", prospect.getCpf_cnpj());
+        content.put("INSCRI_ESTADUAL", prospect.getInscri_estadual());
+        content.put("INSCRI_MUNICIPAL", prospect.getInscri_municipal());
+        content.put("ENDERECO", prospect.getEndereco());
+        content.put("ENDERECO_BAIRRO", prospect.getEndereco_bairro());
+        content.put("ENDERECO_NUMERO", prospect.getEndereco_numero());
+        content.put("ENDERECO_COMPLEMENTO", prospect.getEndereco_complemento());
+        content.put("ENDERECO_UF", prospect.getEndereco_uf());
+        content.put("NOME_MUNICIPIO", prospect.getNome_municipio());
+        content.put("ENDERECO_CEP", prospect.getEndereco_cep());
+        content.put("ID_PAIS", prospect.getId_pais());
+        content.put("USUARIO_ID", prospect.getUsuario_id());
+        content.put("SITUACAO_PREDIO", prospect.getSituacaoPredio());
+        content.put("LIMITE_CREDITO_SUGERIDO", prospect.getLimiteDeCreditoSugerido());
+        content.put("LIMITE_PRAZO_SUGERIDO", prospect.getLimiteDePrazoSugerido());
+        content.put("ID_EMPRESA", prospect.getIdEmpresa());
+        content.put("DIA_VISITA", prospect.getDiaVisita());
+        content.put("DATA_RETORNO", prospect.getDataRetorno());
+        content.put("FOTO_PRINCIPALB_ASE64", prospect.getFotoPrincipalBase64());
+        content.put("FOTO_SECUNDARIA_BASE64", prospect.getFotoSecundariaBase64());
+
+        if (prospect.getId_prospect() != null && contagem("SELECT COUNT(ID_PROSPECT) FROM TBL_PROSPECT WHERE ID_PROSPECT = " + prospect.getId_prospect()) > 0) {
+            content.put("ID_PROSPECT", prospect.getId_prospect());
+            atualizarTBL_REFERENCIA_BANCARIA(prospect.getReferenciaBancaria(), prospect.getId_prospect());
+            atualizarTBL_REFERENCIA_COMERCIAL(prospect.getReferenciaComercial(), prospect.getId_prospect());
+            atualizarTBL_CADASTRO_CONTATO(prospect.getListaContato(), prospect.getId_prospect());
+            db.update("TBL_PROSPECT", content, "ID_PROSPECT = " + prospect.getId_prospect(), null);
+        } else {
+            content.put("ID_PROSPECT", idCadastro);
+            atualizarTBL_REFERENCIA_BANCARIA(prospect.getReferenciaBancaria(), idCadastro);
+            atualizarTBL_REFERENCIA_COMERCIAL(prospect.getReferenciaComercial(), idCadastro);
+            atualizarTBL_CADASTRO_CONTATO(prospect.getListaContato(), idCadastro);
+            db.insert("TBL_PROSPECT", null, content);
+        }
+    }
+
+    public List<Prospect> listaProspect() {
+        List<Prospect> listaProspect = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor;
+
+        cursor = db.rawQuery("SELECT * FROM TBL_PROSPECT ORDER BY ID_PROSPECT DESC", null);
+        cursor.moveToFirst();
+        do {
+            Prospect prospect = new Prospect();
+
+            prospect.setId_prospect(cursor.getString(cursor.getColumnIndex("ID_PROSPECT")));
+            prospect.setId_prospect_servidor(cursor.getString(cursor.getColumnIndex("ID_PROSPECT_SERVIDOR")));
+            prospect.setId_cadastro(cursor.getString(cursor.getColumnIndex("ID_CADASTRO")));
+            prospect.setSegmento(listaSegmento(cursor.getString(cursor.getColumnIndex("ID_SEGMENTO"))));
+            prospect.setMotivoNaoCadastramento(listaMotivoNaoCadastramento(cursor.getString(cursor.getColumnIndex("ID_MOTIVO_NAO_CADASTRAMENTO"))));
+            prospect.setReferenciaBancaria(listaReferenciaBancaria(cursor.getString(cursor.getColumnIndex("ID_PROSPECT"))));
+            prospect.setReferenciaComercial(listaReferenciacomercial(cursor.getString(cursor.getColumnIndex("ID_PROSPECT"))));
+            prospect.setListaContato(listaContato(cursor.getString(cursor.getColumnIndex("LISTA_CONTATO"))));
+            prospect.setNome_cadastro(cursor.getString(cursor.getColumnIndex("NOME_CADASTRO")));
+            prospect.setNome_fantasia(cursor.getString(cursor.getColumnIndex("NOME_FANTASIA")));
+            prospect.setPessoa_f_j(cursor.getString(cursor.getColumnIndex("PESSOA_F_J")));
+            prospect.setCpf_cnpj(cursor.getString(cursor.getColumnIndex("CPF_CNPJ")));
+            prospect.setInscri_estadual(cursor.getString(cursor.getColumnIndex("INSCRI_ESTADUAL")));
+            prospect.setInscri_municipal(cursor.getString(cursor.getColumnIndex("INSCRI_MUNICIPAL")));
+            prospect.setEndereco(cursor.getString(cursor.getColumnIndex("ENDERECO")));
+            prospect.setEndereco_bairro(cursor.getString(cursor.getColumnIndex("ENDERECO_BAIRRO")));
+            prospect.setEndereco_numero(cursor.getString(cursor.getColumnIndex("ENDERECO_NUMERO")));
+            prospect.setEndereco_complemento(cursor.getString(cursor.getColumnIndex("ENDERECO_COMPLEMENTO")));
+            prospect.setEndereco_uf(cursor.getString(cursor.getColumnIndex("ENDERECO_UF")));
+            prospect.setNome_municipio(cursor.getString(cursor.getColumnIndex("NOME_MUNICIPIO")));
+            prospect.setEndereco_cep(cursor.getString(cursor.getColumnIndex("ENDERECO_CEP")));
+            prospect.setId_pais(cursor.getString(cursor.getColumnIndex("ID_PAIS")));
+            prospect.setUsuario_id(cursor.getString(cursor.getColumnIndex("USUARIO_ID")));
+            prospect.setSituacaoPredio(cursor.getString(cursor.getColumnIndex("SITUACAO_PREDIO")));
+            prospect.setLimiteDeCreditoSugerido(cursor.getString(cursor.getColumnIndex("LIMITE_CREDITO_SUGERIDO")));
+            prospect.setLimiteDePrazoSugerido(cursor.getString(cursor.getColumnIndex("LIMITE_PRAZO_SUGERIDO")));
+            prospect.setIdEmpresa(cursor.getString(cursor.getColumnIndex("ID_EMPRESA")));
+            prospect.setDiaVisita(cursor.getString(cursor.getColumnIndex("DIA_VISITA")));
+            prospect.setDataRetorno(cursor.getString(cursor.getColumnIndex("DATA_RETORNO")));
+            prospect.setFotoPrincipalBase64(cursor.getString(cursor.getColumnIndex("FOTO_PRINCIPALB_ASE64")));
+            prospect.setFotoSecundariaBase64(cursor.getString(cursor.getColumnIndex("FOTO_SECUNDARIA_BASE64")));
+            prospect.setObservacoesComerciais(cursor.getString(cursor.getColumnIndex("OBSERVACOES_COMERCIAIS")));
+
+            listaProspect.add(prospect);
+        } while (cursor.moveToNext());
+        cursor.close();
+
+        return listaProspect;
+    }
+
+    public void atualizarTBL_REFERENCIA_BANCARIA(List<ReferenciaBancaria> ListaReferenciaBancaria, String idCadastro) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues content = new ContentValues();
+
+        for (ReferenciaBancaria referenciaBancaria : ListaReferenciaBancaria) {
+            content.put("ID_REFERENCIA_BANCARIA", referenciaBancaria.getId_referencia_bancaria());
+            content.put("CODIGO_FEBRABAN", referenciaBancaria.getCodigo_febraban());
+            content.put("NOME_BANCO", referenciaBancaria.getNome_banco());
+            content.put("CONTA_CORRENTE", referenciaBancaria.getConta_corrente());
+            content.put("AGENCIA", referenciaBancaria.getAgencia());
+            content.put("USUARIO_ID", UsuarioHelper.getUsuario().getId_usuario());
+            content.put("NOME_USUARIO", UsuarioHelper.getUsuario().getNome_usuario());
+
+            if (referenciaBancaria.getId_referencia_bancaria() != null && contagem("SELECT COUNT(ID_REFERENCIA_BANCARIA) FROM TBL_REFERENCIA_BANCARIA WHERE ID_REFERENCIA_BANCARIA = " + referenciaBancaria.getId_referencia_bancaria()) > 0) {
+                content.put("ID_CADASTRO", referenciaBancaria.getId_cadastro());
+                db.update("TBL_REFERENCIA_BANCARIA", content, "ID_REFERENCIA_BANCARIA = " + referenciaBancaria.getId_referencia_bancaria(), null);
+            } else {
+                content.put("ID_CADASTRO", idCadastro);
+                db.insert("TBL_REFERENCIA_BANCARIA", null, content);
+            }
+        }
+    }
+
+    public List<ReferenciaBancaria> listaReferenciaBancaria(String idCadastro) {
+        List<ReferenciaBancaria> listaReferenciaBancaria = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor;
+
+        cursor = db.rawQuery("SELECT * FROM TBL_REFERENCIA_BANCARIA WHERE ID_CADASTRO = " + idCadastro + "ORDER BY ID_REFERENCIA_BANCARIA", null);
+        cursor.moveToFirst();
+
+        do {
+            ReferenciaBancaria referenciaBancaria = new ReferenciaBancaria();
+
+            referenciaBancaria.setId_referencia_bancaria(cursor.getString(cursor.getColumnIndex("ID_REFERENCIA_BANCARIA")));
+            referenciaBancaria.setCodigo_febraban(cursor.getString(cursor.getColumnIndex("CODIGO_FEBRABAN")));
+            referenciaBancaria.setNome_banco(cursor.getString(cursor.getColumnIndex("NOME_BANCO")));
+            referenciaBancaria.setConta_corrente(cursor.getString(cursor.getColumnIndex("CONTA_CORRENTE")));
+            referenciaBancaria.setAgencia(cursor.getString(cursor.getColumnIndex("AGENCIA")));
+            referenciaBancaria.setId_cadastro(cursor.getString(cursor.getColumnIndex("ID_CADASTRO")));
+
+            listaReferenciaBancaria.add(referenciaBancaria);
+        } while (cursor.moveToNext());
+        cursor.close();
+
+        return listaReferenciaBancaria;
+    }
+
+    public void atualizarTBL_REFERENCIA_COMERCIAL(List<ReferenciaComercial> listaReferenciaComercial, String idCadastro) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues content = new ContentValues();
+
+        for (ReferenciaComercial referenciaComercial : listaReferenciaComercial) {
+
+            content.put("ID_REFERENCIA_COMERCIAL", referenciaComercial.getId_referencia_comercial());
+            content.put("NOME_FORNECEDOR_REFERENCIA", referenciaComercial.getNome_fornecedor_referencia());
+            content.put("TELEFONE", referenciaComercial.getTelefone());
+            content.put("USUARIO_ID", UsuarioHelper.getUsuario().getId_usuario());
+            content.put("NOME_USUARIO", UsuarioHelper.getUsuario().getNome_usuario());
+
+            if (referenciaComercial.getId_referencia_comercial() != null && contagem("SELECT COUNT(ID_REFERENCIA_COMERCIAL) FROM TBL_REFERENCIA_COMERCIAL WHERE ID_REFERENCIA_COMERCIAL = " + referenciaComercial.getId_referencia_comercial()) > 0) {
+                content.put("ID_CADASTRO", referenciaComercial.getId_cadastro());
+                db.update("TBL_REFERENCIA_COMERCIAL", content, "ID_REFERENCIA_COMERCIAL = " + referenciaComercial.getId_referencia_comercial(), null);
+            } else {
+                content.put("ID_CADASTRO", idCadastro);
+                db.insert("TBL_REFERENCIA_COMERCIAL", null, content);
+            }
+        }
+    }
+
+    public List<ReferenciaComercial> listaReferenciacomercial(String idReferenciaComercial) {
+        List<ReferenciaComercial> listaReferenciacomercial = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor;
+
+        cursor = db.rawQuery("SELECT * FROM TBL_REFERENCIA_COMERCIAL WHERE ID_REFERENCIA_COMERCIAL = " + idReferenciaComercial + "ORDER BY ID_REFERENCIA_COMERCIAL", null);
+        cursor.moveToFirst();
+        do {
+            ReferenciaComercial referenciaComercial = new ReferenciaComercial();
+
+            referenciaComercial.setId_referencia_comercial(cursor.getString(cursor.getColumnIndex("ID_REFERENCIA_COMERCIAL")));
+            referenciaComercial.setNome_fornecedor_referencia(cursor.getString(cursor.getColumnIndex("NOME_FORNECEDOR_REFERENCIA")));
+            referenciaComercial.setTelefone(cursor.getString(cursor.getColumnIndex("TELEFONE")));
+            referenciaComercial.setId_cadastro(cursor.getString(cursor.getColumnIndex("ID_CADASTRO")));
+
+            listaReferenciacomercial.add(referenciaComercial);
+        } while (cursor.moveToNext());
+        return listaReferenciacomercial;
+    }
+
+    public void atualizarTBL_CADASTRO_CONTATO(List<Contato> listaContato, String idCadastro) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues content = new ContentValues();
+
+        for (Contato contato : listaContato) {
+            content.put("ID_CONTATO", contato.getId_contato());
+            content.put("ID_CONTATO_SERVIDOR", contato.getId_contato_servidor());
+            content.put("ATIVO", contato.getAtivo());
+            content.put("PESSOA_CONTATO", contato.getPessoa_contato());
+            content.put("FUNCAO", contato.getFuncao());
+            content.put("EMAIL", contato.getEmail());
+            content.put("TIPO_TELEFONE", contato.getTipo_telefone());
+            content.put("OPERADORA", contato.getOperadora());
+            content.put("NUMERO_TELEFONE", contato.getNumero_telefone());
+            content.put("DATA_ANIVERSARIO", contato.getData_aniversario());
+            content.put("OBSERVACAO", contato.getObservacao());
+            content.put("USUARIO_ID", contato.getUsuario_id());
+            content.put("USUARIO_NOME", contato.getUsuario_nome());
+            content.put("USUARIO_DATA", contato.getUsuario_data());
+            content.put("CELULAR", contato.getCelular());
+            content.put("CELULAR2", contato.getCelular2());
+            content.put("EMAIL2", contato.getEmail2());
+            content.put("FORNECEDOR1", contato.getFornecedor1());
+            content.put("FORNECEDOR2", contato.getFornecedor2());
+            content.put("TEL_FORNEC1", contato.getTel_fornec1());
+            content.put("TEL_FORNEC2", contato.getTel_fornec2());
+
+            if (contato.getId_contato() != null && contagem("SELECT COUNT(ID_CONTATO) FROM TBL_CADASTRO_CONTATO WHERE ID_CONTATO = " + contato.getId_contato()) > 0) {
+                content.put("ID_CADASTRO", contato.getId_cadastro());
+                db.update("TBL_CADASTRO_CONTATO", content, "ID_CONTATO = " + contato.getId_contato(), null);
+            } else {
+                content.put("ID_CADASTRO", idCadastro);
+                db.insert("TBL_CADASTRO_CONTATO", null, content);
+            }
+        }
+    }
+
+    public List<Contato> listaContato(String idCadastro) {
+        List<Contato> listaContato = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor;
+
+        cursor = db.rawQuery("SELECT * FROM TBL_CADASTRO_CONTATO WHERE ID_CADASTRO = " + idCadastro, null);
+        cursor.moveToFirst();
+
+        do {
+            Contato contato = new Contato();
+
+            contato.setId_contato(cursor.getString(cursor.getColumnIndex("ID_CONTATO")));
+            contato.setId_contato_servidor(cursor.getString(cursor.getColumnIndex("ID_CONTATO_SERVIDOR")));
+            contato.setAtivo(cursor.getString(cursor.getColumnIndex("ATIVO")));
+            contato.setPessoa_contato(cursor.getString(cursor.getColumnIndex("PESSOA_CONTATO")));
+            contato.setFuncao(cursor.getString(cursor.getColumnIndex("FUNCAO")));
+            contato.setEmail(cursor.getString(cursor.getColumnIndex("EMAIL")));
+            contato.setTipo_telefone(cursor.getString(cursor.getColumnIndex("TIPO_TELEFONE")));
+            contato.setOperadora(cursor.getString(cursor.getColumnIndex("OPERADORA")));
+            contato.setNumero_telefone(cursor.getString(cursor.getColumnIndex("NUMERO_TELEFONE")));
+            contato.setData_aniversario(cursor.getString(cursor.getColumnIndex("DATA_ANIVERSARIO")));
+            contato.setObservacao(cursor.getString(cursor.getColumnIndex("OBSERVACAO")));
+            contato.setUsuario_id(cursor.getString(cursor.getColumnIndex("USUARIO_ID")));
+            contato.setUsuario_nome(cursor.getString(cursor.getColumnIndex("USUARIO_NOME")));
+            contato.setUsuario_data(cursor.getString(cursor.getColumnIndex("USUARIO_DATA")));
+            contato.setCelular(cursor.getString(cursor.getColumnIndex("CELULAR")));
+            contato.setCelular2(cursor.getString(cursor.getColumnIndex("CELULAR2")));
+            contato.setEmail2(cursor.getString(cursor.getColumnIndex("EMAIL2")));
+            contato.setFornecedor1(cursor.getString(cursor.getColumnIndex("FORNECEDOR1")));
+            contato.setFornecedor2(cursor.getString(cursor.getColumnIndex("FORNECEDOR2")));
+            contato.setTel_fornec1(cursor.getString(cursor.getColumnIndex("TEL_FORNEC1")));
+            contato.setTel_fornec2(cursor.getString(cursor.getColumnIndex("TEL_FORNEC2")));
+
+            listaContato.add(contato);
+        } while (cursor.moveToNext());
+        return listaContato;
+    }
 
     public void atualizarTBL_SEGMENTO(Segmento segmento) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -689,6 +893,26 @@ public class DBHelper extends SQLiteOpenHelper {
         cursor.close();
 
         return listaSegmentos;
+    }
+
+    public Segmento listaSegmento(String idSetor) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor;
+
+        cursor = db.rawQuery("SELECT * FROM TBL_SEGMENTO WHERE ID_SETOR = " + idSetor + " ORDER BY NOME_SETOR", null);
+        cursor.moveToFirst();
+        Segmento segmento = new Segmento();
+        do {
+
+            segmento.setAtivo(cursor.getString(cursor.getColumnIndex("ATIVO")));
+            segmento.setIdSetor(cursor.getString(cursor.getColumnIndex("ID_SETOR")));
+            segmento.setNomeSetor(cursor.getString(cursor.getColumnIndex("NOME_SETOR")));
+            segmento.setDescricaoOutros(cursor.getString(cursor.getColumnIndex("DESCRICAO_OUTROS")));
+
+        } while (cursor.moveToNext());
+        cursor.close();
+
+        return segmento;
     }
 
     public void atualizarTBL_CADASTRO_MOTIVO_NAO_CAD(MotivoNaoCadastramento motivoNaoCadastramento) {
@@ -728,6 +952,25 @@ public class DBHelper extends SQLiteOpenHelper {
         }
 
         return listaMotivoNaoCadastramentos;
+    }
+
+    public MotivoNaoCadastramento listaMotivoNaoCadastramento(String idItem) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor;
+
+        cursor = db.rawQuery("SELECT * FROM TBL_CADASTRO_MOTIVO_NAO_CAD WHERE ID_ITEM = " + idItem + " ORDER BY MOTIVO", null);
+        cursor.moveToNext();
+        MotivoNaoCadastramento motivoNaoCadastramento = new MotivoNaoCadastramento();
+        do {
+
+            motivoNaoCadastramento.setIdItem(cursor.getString(cursor.getColumnIndex("ID_ITEM")));
+            motivoNaoCadastramento.setMotivo(cursor.getString(cursor.getColumnIndex("MOTIVO")));
+            motivoNaoCadastramento.setDescricaoOutros(cursor.getString(cursor.getColumnIndex("DESCRICAO_OUTROS")));
+
+        } while (cursor.moveToNext());
+        cursor.close();
+
+        return motivoNaoCadastramento;
     }
 
     public void inserirTBL_WEB_USUARIO(Usuario usuario) throws android.database.sqlite.SQLiteConstraintException {
@@ -2002,44 +2245,6 @@ public class DBHelper extends SQLiteOpenHelper {
         } while (cursor.moveToNext());
 
         return listaUsuario;
-    }
-
-
-    public void inserirTBL_MUNICIPIOS(Municipio municipio) throws android.database.sqlite.SQLiteConstraintException {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues content = new ContentValues();
-        content.put("ID_MUNICIPIO", municipio.getId_municipio());
-        content.put("NOME_MUNICIPIO", municipio.getNome_municipio());
-        content.put("UF", municipio.getUf());
-        content.put("CEP", municipio.getCep());
-        db.insert("TBL_MUNICIPIOS", null, content);
-        System.gc();
-    }
-
-    public List<Municipio> listaMunicipios() {
-        List<Municipio> municipios = new ArrayList<>();
-        SQLiteDatabase banco = this.getReadableDatabase();
-        Cursor cursor;
-
-        cursor = banco.rawQuery("SELECT * FROM TBL_MUNICIPIOS", null);
-        cursor.moveToFirst();
-        try {
-            do {
-                Municipio municipio = new Municipio();
-
-                municipio.setId_municipio(cursor.getString(cursor.getColumnIndex("ID_MUNICIPIO")));
-                municipio.setNome_municipio(cursor.getString(cursor.getColumnIndex("NOME_MUNICIPIO")));
-                municipio.setUf(cursor.getString(cursor.getColumnIndex("UF")));
-                municipio.setCep(cursor.getColumnName(cursor.getColumnIndex("CEP")));
-
-                municipios.add(municipio);
-
-            } while (cursor.moveToNext());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return municipios;
     }
 
     public void inserirTBL_PAISES(Pais pais) throws android.database.sqlite.SQLiteConstraintException {

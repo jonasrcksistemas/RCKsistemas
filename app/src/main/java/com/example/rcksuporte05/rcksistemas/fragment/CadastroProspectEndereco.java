@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.rcksuporte05.rcksistemas.Helper.ProspectHelper;
 import com.example.rcksuporte05.rcksistemas.R;
@@ -98,15 +99,16 @@ public class CadastroProspectEndereco extends Fragment {
         spUfProspect.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                municipioAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_activated_1, getResources().getStringArray(listaUf[position]));
-                spMunicipioProspect.setAdapter(municipioAdapter);
+                if (paisAdapter.getItem(spPaisProspect.getSelectedItemPosition()).getId_pais().equals("1058")) {
+                    municipioAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_activated_1, getResources().getStringArray(listaUf[position]));
+                    spMunicipioProspect.setAdapter(municipioAdapter);
+                }
                 try {
-                    if (ProspectHelper.getPosicaoMunicipio() > -1) {
-                        spMunicipioProspect.setSelection(ProspectHelper.getPosicaoMunicipio());
-                    }
+                    spMunicipioProspect.setSelection(ProspectHelper.getPosicaoMunicipio());
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                ProspectHelper.setPosicaoUf(position);
             }
 
             @Override
@@ -118,22 +120,45 @@ public class CadastroProspectEndereco extends Fragment {
         if(ProspectHelper.getPaises().size() > 0){
             paisAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_activated_1, ProspectHelper.getPaises());
             spPaisProspect.setAdapter(paisAdapter);
-            /*spPaisProspect.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            spPaisProspect.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    if (position != 2) {
-                        spUfProspect.setSelection(8);
+                    if (!paisAdapter.getItem(position).getId_pais().equals("1058")) {
+                        String[] uf = {"EX"};
+                        ufAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_activated_1, uf);
+                        spUfProspect.setAdapter(ufAdapter);
+                        municipioAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_activated_1, getResources().getStringArray(listaUf[8]));
+                        spMunicipioProspect.setAdapter(municipioAdapter);
                     } else {
-                        spUfProspect.setSelection(12);
+                        ufAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_activated_1, getResources().getStringArray(R.array.uf));
+                        spUfProspect.setAdapter(ufAdapter);
                     }
+                    try {
+                        spUfProspect.setSelection(ProspectHelper.getPosicaoUf());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                    ProspectHelper.setPosicaoPais(position);
                 }
 
                 @Override
                 public void onNothingSelected(AdapterView<?> parent) {
 
                 }
-            });*/
+            });
         }
+
+        spMunicipioProspect.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                ProspectHelper.setPosicaoMunicipio(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         injetaDadosNaTela();
         ProspectHelper.setCadastroProspectEndereco(this);
@@ -160,15 +185,27 @@ public class CadastroProspectEndereco extends Fragment {
         }
 
         if (ProspectHelper.getPosicaoPais() > -1) {
-            spPaisProspect.setSelection(ProspectHelper.getPosicaoPais());
+            try {
+                spPaisProspect.setSelection(ProspectHelper.getPosicaoPais());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         if (ProspectHelper.getPosicaoUf() > -1) {
-            spUfProspect.setSelection(ProspectHelper.getPosicaoUf());
+            try {
+                spUfProspect.setSelection(ProspectHelper.getPosicaoUf());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         if (ProspectHelper.getPosicaoMunicipio() > -1) {
-            spMunicipioProspect.setSelection(ProspectHelper.getPosicaoMunicipio());
+            try {
+                spMunicipioProspect.setSelection(ProspectHelper.getPosicaoMunicipio());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
     }
@@ -219,15 +256,13 @@ public class CadastroProspectEndereco extends Fragment {
             ProspectHelper.getProspect().setNome_municipio(getResources().getStringArray(listaUf[spUfProspect.getSelectedItemPosition()])[spMunicipioProspect.getSelectedItemPosition()]);
         } catch (ArrayIndexOutOfBoundsException e) {
             e.printStackTrace();
+        } catch (NullPointerException e) {
+            Toast.makeText(getActivity(), "Você precisa sincronizar ao menos uma vez", Toast.LENGTH_LONG).show();
+            getActivity().finish();
         }
 
         ProspectHelper.setPosicaoPais(spPaisProspect.getSelectedItemPosition());
         ProspectHelper.setPosicaoUf(spUfProspect.getSelectedItemPosition());
         ProspectHelper.setPosicaoMunicipio(spMunicipioProspect.getSelectedItemPosition());
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
     }
 }
