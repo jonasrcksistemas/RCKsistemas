@@ -1,6 +1,7 @@
 package com.example.rcksuporte05.rcksistemas.interfaces;
 
 import android.app.ProgressDialog;
+import android.database.CursorIndexOutOfBoundsException;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -120,11 +121,20 @@ public class ActivityCadastroProspect extends AppCompatActivity {
     }
 
     public void buscarSegmentos() {
-       ProspectHelper.setSegmentos(db.listaSegmento());
+       try {
+           ProspectHelper.setSegmentos(db.listaSegmento());
+       }catch (CursorIndexOutOfBoundsException e){
+            e.printStackTrace();
+       }
     }
 
     public void buscarMotivos() {
-      ProspectHelper.setMotivos(db.listaMotivoNaoCadastramento());
+        try {
+            ProspectHelper.setMotivos(db.listaMotivoNaoCadastramento());
+        } catch (CursorIndexOutOfBoundsException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override
@@ -133,8 +143,13 @@ public class ActivityCadastroProspect extends AppCompatActivity {
     }
 
 
-    public void buscarPais(){
-        ProspectHelper.setPaises(db.listaPaises());
+    public void buscarPais() {
+        try {
+            ProspectHelper.setPaises(db.listaPaises());
+        } catch (CursorIndexOutOfBoundsException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override

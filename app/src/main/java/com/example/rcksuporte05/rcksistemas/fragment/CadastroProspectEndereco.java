@@ -26,31 +26,31 @@ import butterknife.ButterKnife;
 public class CadastroProspectEndereco extends Fragment {
 
     @BindView(R.id.edtEnderecoProspect)
-    EditText edtEnderecoProspect;
+    public EditText edtEnderecoProspect;
 
     @BindView(R.id.edtNumeroProspect)
-    EditText edtNumeroProspect;
+    public EditText edtNumeroProspect;
 
     @BindView(R.id.edtBairroProspect)
-    EditText edtBairroProspect;
+    public EditText edtBairroProspect;
 
     @BindView(R.id.edtCep)
-    EditText edtCep;
+    public EditText edtCep;
 
     @BindView(R.id.rgSituacaoPredio)
-    RadioGroup rgSituacaoPredio;
+    public RadioGroup rgSituacaoPredio;
 
     @BindView(R.id.spMunicipioProspect)
-    Spinner spMunicipioProspect;
+    public Spinner spMunicipioProspect;
 
     @BindView(R.id.spPaisProspect)
-    Spinner spPaisProspect;
+    public Spinner spPaisProspect;
 
     @BindView(R.id.spUfProspect)
-    Spinner spUfProspect;
+    public Spinner spUfProspect;
 
     @BindView(R.id.edtComplementoProspect)
-    EditText edtComplementoProspect;
+    public EditText edtComplementoProspect;
 
     ArrayAdapter municipioAdapter;
     ArrayAdapter ufAdapter;
@@ -85,7 +85,6 @@ public class CadastroProspectEndereco extends Fragment {
             R.array.SE,
             R.array.SP,
             R.array.TO};
-    private String[] UF = getResources().getStringArray(R.array.uf);
 
 
     @Override
@@ -176,26 +175,26 @@ public class CadastroProspectEndereco extends Fragment {
 
 
     public void inserirDadosDaFrame(){
-        if(edtEnderecoProspect.getText() != null && !edtEnderecoProspect.getText().toString().equals("")){
+        if(edtEnderecoProspect.getText() != null){
             ProspectHelper.getProspect().setEndereco(edtEnderecoProspect.getText().toString());
         }else{
             System.out.println("Fazer algo para obrigar!");
         }
 
-        if(edtNumeroProspect.getText() != null && !edtNumeroProspect.getText().toString().equals("")){
+        if(edtNumeroProspect.getText() != null){
             ProspectHelper.getProspect().setEndereco_numero(edtNumeroProspect.getText().toString());
         }else{
             System.out.println("Fazer algo para obrigar!");
         }
 
-        if(edtBairroProspect.getText() != null && !edtBairroProspect.getText().toString().equals("")){
+        if(edtBairroProspect.getText() != null){
             ProspectHelper.getProspect().setEndereco_bairro(edtBairroProspect.getText().toString());
         }else{
             System.out.println("Fazer algo para obrigar!");
         }
 
 
-        if(edtCep.getText() != null && !edtCep.getText().toString().equals("")){
+        if(edtCep.getText() != null){
             ProspectHelper.getProspect().setEndereco_cep(edtCep.getText().toString());
         }else{
             System.out.println("Fazer algo para obrigar!");

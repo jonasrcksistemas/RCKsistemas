@@ -43,10 +43,9 @@ public class ActivityDialogSincronia extends Activity {
     @OnClick(R.id.btnConfirmar)
     public void btnConfirmar() {
         DBHelper db = new DBHelper(this);
-        boolean municipio = false;
 //        if (db.contagem("SELECT COUNT(*) FROM TBL_MUNICIPIOS") < 5564)
 //            municipio = true;
-        Sincronia sincronia = new Sincronia(id_opcao_cliente.isChecked(), id_opcao_produto.isChecked(), id_opcao_pedidos.isChecked(), id_opcao_pedidos_pendentes.isChecked(), municipio);
+        Sincronia sincronia = new Sincronia(id_opcao_cliente.isChecked(), id_opcao_produto.isChecked(), id_opcao_pedidos.isChecked(), id_opcao_pedidos_pendentes.isChecked());
         sincroniaBO.sincronizaApi(sincronia);
         finish();
     }

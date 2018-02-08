@@ -58,9 +58,10 @@ public class CadastroProspectFotoSalvar extends Fragment {
     @BindView(R.id.imagemProspect)
     ImageView imagemProspect;
     @BindView(R.id.edtDataRetorno)
-    EditText edtDataRetorno;
+    public EditText edtDataRetorno;
 
     ProgressDialog progress;
+
 
     @Nullable
     @Override
@@ -75,12 +76,14 @@ public class CadastroProspectFotoSalvar extends Fragment {
             }
         });
 
-
+        ProspectHelper.setCadastroProspectFotoSalvar(this);
         return view;
     }
 
     public void insereDadosDaFrame(){
-        if(edtDataRetorno.getText() != null && !edtDataRetorno.getText().toString().equals("")){
+        if(ProspectHelper.getProspect().getDataRetorno() == null || ProspectHelper.getProspect().getDataRetorno().trim().isEmpty()){
+            edtDataRetorno.setBackgroundResource(R.drawable.borda_edittext_erro);
+        }else{
             ProspectHelper.getProspect().setDataRetorno(edtDataRetorno.getText().toString().trim());
         }
     }

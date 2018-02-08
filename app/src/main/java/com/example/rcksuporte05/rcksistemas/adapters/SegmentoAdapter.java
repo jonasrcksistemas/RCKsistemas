@@ -10,6 +10,7 @@ import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.viewHolder.SegmentoViewHolder;
 import com.example.rcksuporte05.rcksistemas.classes.Segmento;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -74,15 +75,15 @@ public class SegmentoAdapter extends RecyclerView.Adapter<SegmentoViewHolder> {
     }
 
     public List<Segmento> itensSelecionados(){
-
+        List<Segmento> segmentosSelecionados = new ArrayList<>();
         if (selectedItems.size() > 0) {
             for (int i = 0; i < selectedItems.size(); i++) {
-                segmentos.add(segmentos.get(selectedItems.keyAt(i)));
+                segmentosSelecionados.add(segmentos.get(selectedItems.keyAt(i)));
             }
         }
 
 
-        return segmentos;
+        return segmentosSelecionados;
     }
 
     public void limpaSelected(){
