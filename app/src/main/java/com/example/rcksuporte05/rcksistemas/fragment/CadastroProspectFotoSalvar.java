@@ -105,16 +105,16 @@ public class CadastroProspectFotoSalvar extends Fragment {
             @Override
             public void onResponse(Call<Prospect> call, Response<Prospect> response) {
                 if(response.code() == 200){
-                    Toast.makeText(getContext(), "Foiiiii lek!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "Prospect enviado com Sucesso", Toast.LENGTH_LONG).show();
                 }else
-                    Toast.makeText(getContext(), "NÃO FOIIIIII!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "Falha ao enviar prospect", Toast.LENGTH_LONG).show();
 
                 progress.dismiss();
             }
 
             @Override
             public void onFailure(Call<Prospect> call, Throwable t) {
-                Toast.makeText(getContext(), "OPS!", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "Erro de conexão, verifique seu acesso a internet", Toast.LENGTH_LONG).show();
                 progress.dismiss();
 
             }

@@ -19,7 +19,6 @@ public class Sincronia {
     private List<VendedorBonusResumo> listaVendedorBonusResumo;
     private List<WebPedido> listaWebPedidosPendentes;
     private List<WebPedido> listaWebPedidosFinalizados;
-    private List<Municipio> listaMunicipios;
     private List<Pais> listaPais;
     private List<Banco> bancos;
     private List<Segmento> segmentos;
@@ -159,14 +158,6 @@ public class Sincronia {
 
     public void setMunicipio(boolean municipio) {
         this.municipio = municipio;
-    }
-
-    public List<Municipio> getListaMunicipios() {
-        return listaMunicipios;
-    }
-
-    public void setListaMunicipios(List<Municipio> listaMunicipios) {
-        this.listaMunicipios = listaMunicipios;
     }
 
     public List<Pais> getListaPais() {

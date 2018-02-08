@@ -1,7 +1,10 @@
 package com.example.rcksuporte05.rcksistemas.Helper;
 
+import android.support.v4.view.ViewPager;
+import android.widget.Toast;
+
+import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.classes.MotivoNaoCadastramento;
-import com.example.rcksuporte05.rcksistemas.classes.Municipio;
 import com.example.rcksuporte05.rcksistemas.classes.Pais;
 import com.example.rcksuporte05.rcksistemas.classes.Prospect;
 import com.example.rcksuporte05.rcksistemas.classes.Segmento;
@@ -25,7 +28,6 @@ public class ProspectHelper {
     private static List<Segmento> segmentos;
     private static List<MotivoNaoCadastramento> motivos;
     private static List<Pais> paises;
-    public static List<Municipio> municipios;
     private static ActivityCadastroProspect activityMain;
     private static CadastroProspectGeral cadastroProspectGeral;
     private static CadastroProspectEndereco cadastroProspectEndereco;
@@ -47,8 +49,6 @@ public class ProspectHelper {
     public static void setProspect(Prospect prospect) {
         ProspectHelper.prospect = prospect;
     }
-
-
 
     public static CadastroProspectGeral getCadastroProspectGeral() {
         return cadastroProspectGeral;
@@ -136,14 +136,6 @@ public class ProspectHelper {
 
     public static void setPaises(List<Pais> paises) {
         ProspectHelper.paises = paises;
-    }
-
-    public static List<Municipio> getMunicipios() {
-        return municipios;
-    }
-
-    public static void setMunicipios(List<Municipio> municipios) {
-        ProspectHelper.municipios = municipios;
     }
 
     public static int getPosicaoPais() {
@@ -255,7 +247,6 @@ public class ProspectHelper {
         segmentos = null;
         motivos = null;
         paises = null;
-        municipios = null;
         cadastroProspectGeral = null;
         cadastroProspectEndereco = null;
         cadastroProspectContatos = null;
