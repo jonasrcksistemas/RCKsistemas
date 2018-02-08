@@ -151,14 +151,6 @@ public class Sincronia {
         this.listaWebPedidosFinalizados = listaWebPedidosFinalizados;
     }
 
-    public List<Municipio> getListaMunicipios() {
-        return listaMunicipios;
-    }
-
-    public void setListaMunicipios(List<Municipio> listaMunicipios) {
-        this.listaMunicipios = listaMunicipios;
-    }
-
     public List<Pais> getListaPais() {
         return listaPais;
     }
