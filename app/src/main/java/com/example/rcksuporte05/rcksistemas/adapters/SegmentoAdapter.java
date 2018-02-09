@@ -22,12 +22,13 @@ public class SegmentoAdapter extends RecyclerView.Adapter<SegmentoViewHolder> {
     private List<Segmento> segmentos;
     private SegmentoListener listener;
     private SparseBooleanArray selectedItems;
-    private int posAnterior = -1;
+    private int posAnterior;
 
     public SegmentoAdapter(List<Segmento> segmentos, SegmentoListener listener) {
         this.segmentos = segmentos;
         this.listener = listener;
         this.selectedItems = new SparseBooleanArray();
+        this.posAnterior = -1;
     }
 
     @Override
@@ -57,7 +58,6 @@ public class SegmentoAdapter extends RecyclerView.Adapter<SegmentoViewHolder> {
 
 
     public void toggleSelection(int pos) {
-
         if (selectedItems.get(pos, false)) {
             selectedItems.delete(pos);
         } else {
@@ -66,22 +66,15 @@ public class SegmentoAdapter extends RecyclerView.Adapter<SegmentoViewHolder> {
 
         if(posAnterior >= 0){
             selectedItems.delete(posAnterior);
-            selectedItems.put(posAnterior, false);
         }
         posAnterior = pos;
-
-
-
     }
 
-    public List<Segmento> itensSelecionados(){
+    public List<Segmento> getItensSelecionados() {
         List<Segmento> segmentosSelecionados = new ArrayList<>();
-        if (selectedItems.size() > 0) {
-            for (int i = 0; i < selectedItems.size(); i++) {
-                segmentosSelecionados.add(segmentos.get(selectedItems.keyAt(i)));
-            }
+        for (int i = 0; i < selectedItems.size(); i++) {
+            segmentosSelecionados.add(segmentos.get(selectedItems.keyAt(i)));
         }
-
 
         return segmentosSelecionados;
     }

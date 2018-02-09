@@ -64,7 +64,7 @@ public class CadastroProspectSegmentos extends Fragment implements SegmentoAdapt
 
     public void insereDadosDaFrame(){
         List<Segmento> segmentoList;
-        segmentoList = segmentoAdapter.itensSelecionados();
+        segmentoList = segmentoAdapter.getItensSelecionados();
         if(segmentoList.size() > 0){
             ProspectHelper.getProspect().setSegmento(segmentoList.get(0));
             if(segmentoList.get(0).getNomeSetor().toLowerCase().contains("outros")){
