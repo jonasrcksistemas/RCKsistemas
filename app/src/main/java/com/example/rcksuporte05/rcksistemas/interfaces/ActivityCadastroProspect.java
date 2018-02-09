@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.widget.Toast;
 
 import com.example.rcksuporte05.rcksistemas.Helper.ProspectHelper;
 import com.example.rcksuporte05.rcksistemas.R;
@@ -142,7 +143,11 @@ public class ActivityCadastroProspect extends AppCompatActivity {
 
 
     public void buscarPais(){
-        try {ProspectHelper.setPaises(db.listaPaises());} catch (CursorIndexOutOfBoundsException e) {
+        try {
+            ProspectHelper.setPaises(db.listaPaises());
+        } catch (CursorIndexOutOfBoundsException e) {
+            Toast.makeText(this, "Você precisa fazer a sincronia pelo menos uma vez!", Toast.LENGTH_LONG).show();
+            finish();
             e.printStackTrace();
         }
     }

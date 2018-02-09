@@ -7,7 +7,6 @@ public class Sincronia {
     private boolean produto;
     private boolean pedidosFinalizados;
     private boolean pedidosPendentes;
-    private boolean municipio;
     private int maxProgress;
     private List<Cliente> listaCliente;
     private List<CondicoesPagamento> listaCondicoesPagamento;

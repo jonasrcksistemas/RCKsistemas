@@ -3,7 +3,6 @@ package com.example.rcksuporte05.rcksistemas.fragment;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -23,10 +22,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.example.rcksuporte05.rcksistemas.Helper.ProspectHelper;
-import com.example.rcksuporte05.rcksistemas.Helper.UsuarioHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
 import com.example.rcksuporte05.rcksistemas.interfaces.FotoActivity;
@@ -35,15 +32,12 @@ import com.example.rcksuporte05.rcksistemas.util.FotoUtil;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.HashMap;
-import java.util.Map;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Created by RCK 03 on 29/01/2018.
@@ -52,15 +46,13 @@ import retrofit2.Response;
 public class CadastroProspectFotoSalvar extends Fragment {
 
     private Uri uri;
+    private DBHelper db;
 
     @BindView(R.id.imagemProspect)
     ImageView imagemProspect;
+
     @BindView(R.id.edtDataRetorno)
     public EditText edtDataRetorno;
-
-    ProgressDialog progress;
-
-    DBHelper db;
 
     @Nullable
     @Override
@@ -73,31 +65,63 @@ public class CadastroProspectFotoSalvar extends Fragment {
             @Override
             public void onClick(View v) {
                 DatePickerUtil.mostraDatePickerDialog(getContext(), edtDataRetorno);
+                edtDataRetorno.setBackgroundResource(R.drawable.borda_edittext);
             }
         });
+
+        insereDadosNaTela();
 
         ProspectHelper.setCadastroProspectFotoSalvar(this);
         return view;
     }
 
     public void insereDadosDaFrame(){
-        if(ProspectHelper.getProspect().getDataRetorno() == null || ProspectHelper.getProspect().getDataRetorno().trim().isEmpty()){
-            edtDataRetorno.setBackgroundResource(R.drawable.borda_edittext_erro);
-        }else{
-            ProspectHelper.getProspect().setDataRetorno(edtDataRetorno.getText().toString().trim());
+        try {
+            ProspectHelper.getProspect().setDataRetorno(new SimpleDateFormat("yyyy-MM-dd").format(new SimpleDateFormat("dd/MM/yyyy").parse(edtDataRetorno.getText().toString().trim())));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void insereDadosNaTela() {
+        try {
+            if (ProspectHelper.getProspect().getDataRetorno() != null && !ProspectHelper.getProspect().getDataRetorno().trim().isEmpty())
+                edtDataRetorno.setText(new SimpleDateFormat("dd/MM/yyyy").format(new SimpleDateFormat("yyyy-MM-dd").parse(ProspectHelper.getProspect().getDataRetorno())));
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
     }
 
 
     @OnClick(R.id.btnSalvarParcial)
     public void salvarParcial(){
-        db.atualizarTBL_PROSPECT(ProspectHelper.getProspect());
+        AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+        alert.setTitle("Atenção");
+        alert.setMessage("Tem certeza que deseja salvar esse prospect para continuar mais tarde?");
+        alert.setNegativeButton("NÃO", null);
+        alert.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                db.atualizarTBL_PROSPECT(ProspectHelper.getProspect());
+            }
+        });
+        alert.show();
     }
 
     @OnClick(R.id.btnSalvarProspect)
     public void salvarProspect(){
         if(ProspectHelper.salvarProspect()){
-           db.atualizarTBL_PROSPECT(ProspectHelper.getProspect());
+            AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+            alert.setTitle("Atenção");
+            alert.setMessage("Tem certeza que deseja salvar esse prospect permanentemente?");
+            alert.setNegativeButton("NÃO", null);
+            alert.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    db.atualizarTBL_PROSPECT(ProspectHelper.getProspect());
+                }
+            });
+            alert.show();
         }
     }
 
