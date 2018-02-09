@@ -28,9 +28,7 @@ import android.widget.Toast;
 import com.example.rcksuporte05.rcksistemas.Helper.ProspectHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.UsuarioHelper;
 import com.example.rcksuporte05.rcksistemas.R;
-import com.example.rcksuporte05.rcksistemas.api.Api;
-import com.example.rcksuporte05.rcksistemas.api.Rotas;
-import com.example.rcksuporte05.rcksistemas.classes.Prospect;
+import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
 import com.example.rcksuporte05.rcksistemas.interfaces.FotoActivity;
 import com.example.rcksuporte05.rcksistemas.util.DatePickerUtil;
 import com.example.rcksuporte05.rcksistemas.util.FotoUtil;
@@ -58,15 +56,18 @@ public class CadastroProspectFotoSalvar extends Fragment {
     @BindView(R.id.imagemProspect)
     ImageView imagemProspect;
     @BindView(R.id.edtDataRetorno)
-    EditText edtDataRetorno;
+    public EditText edtDataRetorno;
 
     ProgressDialog progress;
+
+    DBHelper db;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_cadastro_prospect_foto_salvar, container, false);
         ButterKnife.bind(this, view);
+        db = new DBHelper(getContext());
 
         edtDataRetorno.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -75,12 +76,14 @@ public class CadastroProspectFotoSalvar extends Fragment {
             }
         });
 
-
+        ProspectHelper.setCadastroProspectFotoSalvar(this);
         return view;
     }
 
     public void insereDadosDaFrame(){
-        if(edtDataRetorno.getText() != null && !edtDataRetorno.getText().toString().equals("")){
+        if(ProspectHelper.getProspect().getDataRetorno() == null || ProspectHelper.getProspect().getDataRetorno().trim().isEmpty()){
+            edtDataRetorno.setBackgroundResource(R.drawable.borda_edittext_erro);
+        }else{
             ProspectHelper.getProspect().setDataRetorno(edtDataRetorno.getText().toString().trim());
         }
     }
@@ -88,44 +91,14 @@ public class CadastroProspectFotoSalvar extends Fragment {
 
     @OnClick(R.id.btnSalvarParcial)
     public void salvarParcial(){
-        insereDadosDaFrame();
-        progress = new ProgressDialog(getContext());
-        progress.setMessage("Carregando historico financeiro!");
-        progress.setCancelable(false);
-        progress.show();
-
-        ProspectHelper.getProspect().setIdEmpresa(UsuarioHelper.getUsuario().getIdEmpresaMultiDevice());
-        ProspectHelper.getProspect().setUsuario_id(UsuarioHelper.getUsuario().getId_usuario());
-
-        Rotas apiRotas = Api.buildRetrofit();
-        Map<String, String> cabecalho = new HashMap<>();
-        cabecalho.put("AUTHORIZATION", UsuarioHelper.getUsuario().getToken());
-        Call<Prospect> call = apiRotas.salvarProspect(cabecalho, ProspectHelper.getProspect());
-
-        call.enqueue(new Callback<Prospect>() {
-            @Override
-            public void onResponse(Call<Prospect> call, Response<Prospect> response) {
-                if(response.code() == 200){
-                    Toast.makeText(getContext(), "Prospect enviado com Sucesso", Toast.LENGTH_LONG).show();
-                }else
-                    Toast.makeText(getContext(), "Falha ao enviar prospect", Toast.LENGTH_LONG).show();
-
-                progress.dismiss();
-            }
-
-            @Override
-            public void onFailure(Call<Prospect> call, Throwable t) {
-                Toast.makeText(getContext(), "Erro de conexão, verifique seu acesso a internet", Toast.LENGTH_LONG).show();
-                progress.dismiss();
-
-            }
-        });
-
+        db.atualizarTBL_PROSPECT(ProspectHelper.getProspect());
     }
 
     @OnClick(R.id.btnSalvarProspect)
     public void salvarProspect(){
-        ProspectHelper.salvarProspect();
+        if(ProspectHelper.salvarProspect()){
+           db.atualizarTBL_PROSPECT(ProspectHelper.getProspect());
+        }
     }
 
     @OnClick(R.id.btnAddFoto)

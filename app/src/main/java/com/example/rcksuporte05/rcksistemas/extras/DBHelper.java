@@ -873,7 +873,7 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
-    public List<Segmento> listaSegmento() {
+    public List<Segmento> listaSegmento() throws CursorIndexOutOfBoundsException{
         List<Segmento> listaSegmentos = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor;
@@ -2257,7 +2257,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
 
-    public List<Pais> listaPaises(){
+    public List<Pais> listaPaises() throws CursorIndexOutOfBoundsException{
         List<Pais> paises = new ArrayList<>();
         SQLiteDatabase banco = this.getReadableDatabase();
         Cursor cursor;
@@ -2265,7 +2265,7 @@ public class DBHelper extends SQLiteOpenHelper {
         cursor = banco.rawQuery("SELECT * FROM TBL_PAISES", null);
         cursor.moveToFirst();
 
-        try {
+
             do {
                 Pais pais = new Pais();
 
@@ -2274,9 +2274,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
                 paises.add(pais);
             }while (cursor.moveToNext());
-        }catch (Exception e){
-            e.printStackTrace();
-        }
+
 
         return paises;
     }

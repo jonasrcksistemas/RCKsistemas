@@ -124,17 +124,13 @@ public class ActivityCadastroProspect extends AppCompatActivity {
     }
 
     public void buscarSegmentos() {
-        try {
-            ProspectHelper.setSegmentos(db.listaSegmento());
-        } catch (CursorIndexOutOfBoundsException e) {
+       try {ProspectHelper.setSegmentos(db.listaSegmento());}catch (CursorIndexOutOfBoundsException e){
             e.printStackTrace();
-        }
+       }
     }
 
     public void buscarMotivos() {
-        try {
-            ProspectHelper.setMotivos(db.listaMotivoNaoCadastramento());
-        } catch (CursorIndexOutOfBoundsException e) {
+      try {ProspectHelper.setMotivos(db.listaMotivoNaoCadastramento());} catch (CursorIndexOutOfBoundsException e) {
             e.printStackTrace();
         }
     }
@@ -146,9 +142,7 @@ public class ActivityCadastroProspect extends AppCompatActivity {
 
 
     public void buscarPais(){
-        try {
-            ProspectHelper.setPaises(db.listaPaises());
-        } catch (CursorIndexOutOfBoundsException e) {
+        try {ProspectHelper.setPaises(db.listaPaises());} catch (CursorIndexOutOfBoundsException e) {
             e.printStackTrace();
         }
     }
