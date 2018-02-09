@@ -87,6 +87,9 @@ public class ActivityCadastroProspect extends AppCompatActivity {
                                                            }
                                                            break;
                                                        case 6:
+                                                           if (ProspectHelper.getCadastroProspectFotoSalvar() != null) {
+                                                               ProspectHelper.getCadastroProspectFotoSalvar().insereDadosDaFrame();
+                                                           }
                                                            break;
                                                    }
                                                }

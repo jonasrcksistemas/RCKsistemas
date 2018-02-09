@@ -7,7 +7,6 @@ public class Sincronia {
     private boolean produto;
     private boolean pedidosFinalizados;
     private boolean pedidosPendentes;
-    private boolean municipio;
     private int maxProgress;
     private List<Cliente> listaCliente;
     private List<CondicoesPagamento> listaCondicoesPagamento;
@@ -24,12 +23,11 @@ public class Sincronia {
     private List<Segmento> segmentos;
     private List<MotivoNaoCadastramento> motivos;
 
-    public Sincronia(boolean cliente, boolean produto, boolean pedidosFinalizados, boolean pedidosPendentes, boolean municipio) {
+    public Sincronia(boolean cliente, boolean produto, boolean pedidosFinalizados, boolean pedidosPendentes) {
         this.cliente = cliente;
         this.produto = produto;
         this.pedidosFinalizados = pedidosFinalizados;
         this.pedidosPendentes = pedidosPendentes;
-        this.municipio = municipio;
     }
 
     public boolean isCliente() {
@@ -150,14 +148,6 @@ public class Sincronia {
 
     public void setListaWebPedidosFinalizados(List<WebPedido> listaWebPedidosFinalizados) {
         this.listaWebPedidosFinalizados = listaWebPedidosFinalizados;
-    }
-
-    public boolean isMunicipio() {
-        return municipio;
-    }
-
-    public void setMunicipio(boolean municipio) {
-        this.municipio = municipio;
     }
 
     public List<Pais> getListaPais() {

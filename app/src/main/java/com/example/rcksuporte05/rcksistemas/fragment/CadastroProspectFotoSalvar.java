@@ -88,6 +88,7 @@ public class CadastroProspectFotoSalvar extends Fragment {
 
     @OnClick(R.id.btnSalvarParcial)
     public void salvarParcial(){
+        insereDadosDaFrame();
         progress = new ProgressDialog(getContext());
         progress.setMessage("Carregando historico financeiro!");
         progress.setCancelable(false);

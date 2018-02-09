@@ -70,12 +70,14 @@ public class CadastroProspectObservacoesComerciais extends Fragment implements R
 
     @OnClick(R.id.btnAddReferencia)
     public void addReferenciaComercial() {
+        insereDadosDaFrame();
         Intent intent = new Intent(getContext(), ActivityAdicionaReferenciaComercial.class);
         startActivity(intent);
     }
 
     @OnClick(R.id.btnAddBancos)
     public void addBancos(){
+        insereDadosDaFrame();
         Intent intent = new Intent(getContext(), ActivityAdicionaBanco.class);
         startActivity(intent);
     }
