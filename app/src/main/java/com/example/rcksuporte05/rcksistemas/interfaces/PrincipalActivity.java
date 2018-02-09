@@ -63,6 +63,8 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
     private Button btnSincroniza;
     private Button btnPedidoFinalizado;
     private Button btnPedidoPendente;
+    private Button btnProspectNovo;
+    private Button btnProspectLista;
     private int aperta = 0;
     private Toolbar tb_principal;
     private ImageView ivInternet;
@@ -87,6 +89,8 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
         btnSincroniza = (Button) findViewById(R.id.btnSincroniza);
         btnPedidoFinalizado = (Button) findViewById(R.id.btnPedidoFinalizado);
         btnPedidoPendente = (Button) findViewById(R.id.btnPedidoPendente);
+        btnProspectNovo = (Button) findViewById(R.id.btnProspectNovo);
+        btnProspectLista = (Button) findViewById(R.id.btnProspectListar);
         ivInternet = (ImageView) findViewById(R.id.ivInternet);
         btnPedidos.setOnClickListener(this);
         btnProduto.setOnClickListener(this);
@@ -94,6 +98,8 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
         btnSincroniza.setOnClickListener(this);
         btnPedidoPendente.setOnClickListener(this);
         btnPedidoFinalizado.setOnClickListener(this);
+        btnProspectNovo.setOnClickListener(this);
+        btnProspectLista.setOnClickListener(this);
         tb_principal = (Toolbar) findViewById(R.id.tb_principal);
         tb_principal.setTitle(getString(R.string.app_name));
         tb_principal.setSubtitle("Usuario: " + UsuarioHelper.getUsuario().getNome_usuario());
@@ -110,9 +116,7 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
 
         if (view == btnCliente) {
             getUsuarios();
-            Prospect prospect = new Prospect();
-            ProspectHelper.setProspect(prospect);
-            Intent intent = new Intent(PrincipalActivity.this, ActivityCadastroProspect.class);
+            Intent intent = new Intent(PrincipalActivity.this, ActivityCliente.class);
             startActivity(intent);
         } else if (view == btnProduto) {
             getUsuarios();
@@ -135,6 +139,14 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
         } else if (view == btnPedidoPendente) {
             Intent telaPedidoPendentes = new Intent(PrincipalActivity.this, ListagemPedidoPendente.class);
             startActivity(telaPedidoPendentes);
+        } else if (view == btnProspectNovo) {
+            getUsuarios();
+            Prospect prospect = new Prospect();
+            ProspectHelper.setProspect(prospect);
+            Intent intent = new Intent(PrincipalActivity.this, ActivityCadastroProspect.class);
+            startActivity(intent);
+        } else if (view == btnProspectLista) {
+            System.out.println("Lista");
         }
     }
 

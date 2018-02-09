@@ -47,8 +47,8 @@
 
             <Button
                 android:id="@+id/btnPedido"
-                android:layout_width="136dp"
-                android:layout_height="136dp"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
                 android:layout_gravity="center"
                 android:background="@mipmap/ic_pedidos" />
 
@@ -63,8 +63,8 @@
 
             <Button
                 android:id="@+id/btnSincroniza"
-                android:layout_width="136dp"
-                android:layout_height="136dp"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
                 android:layout_gravity="center"
                 android:background="@mipmap/ic_sincroniza_servidor" />
 
@@ -87,8 +87,8 @@
 
             <Button
                 android:id="@+id/btnPedidoPendente"
-                android:layout_width="136dp"
-                android:layout_height="136dp"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
                 android:layout_gravity="center"
                 android:background="@mipmap/ic_pedido_pendente" />
 
@@ -103,8 +103,8 @@
 
             <Button
                 android:id="@+id/btnPedidoFinalizado"
-                android:layout_width="136dp"
-                android:layout_height="136dp"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
                 android:layout_gravity="center"
                 android:background="@mipmap/ic_pedido_finalizado"
                 android:scaleType="centerCrop" />
@@ -127,9 +127,51 @@
 
 
             <Button
+                android:id="@+id/btnProspectNovo"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_gravity="center_horizontal"
+                android:background="@mipmap/ic_prospect_lista"
+                android:scaleType="centerCrop" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+
+            <Button
+                android:id="@+id/btnProspectListar"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_gravity="center"
+                android:background="@mipmap/ic_prospect_lista"
+                android:scaleType="centerCrop" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+
+            <Button
                 android:id="@+id/btnCliente"
-                android:layout_width="136dp"
-                android:layout_height="136dp"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
                 android:layout_gravity="center_horizontal"
                 android:background="@mipmap/ic_clientes"
                 android:scaleType="centerCrop" />
@@ -145,8 +187,8 @@
 
             <Button
                 android:id="@+id/btnProduto"
-                android:layout_width="136dp"
-                android:layout_height="136dp"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
                 android:layout_gravity="center"
                 android:background="@mipmap/ic_produtos"
                 android:scaleType="centerCrop" />

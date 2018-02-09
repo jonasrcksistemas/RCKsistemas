@@ -602,8 +602,16 @@ public class DBHelper extends SQLiteOpenHelper {
 
         content.put("ID_PROSPECT_SERVIDOR", prospect.getId_prospect_servidor());
         content.put("ID_CADASTRO", prospect.getId_cadastro());
-        content.put("ID_SEGMENTO", prospect.getSegmento().getIdSetor());
-        content.put("ID_MOTIVO_NAO_CADASTRAMENTO", prospect.getMotivoNaoCadastramento().getIdItem());
+        try {
+            content.put("ID_SEGMENTO", prospect.getSegmento().getIdSetor());
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+        try {
+            content.put("ID_MOTIVO_NAO_CADASTRAMENTO", prospect.getMotivoNaoCadastramento().getIdItem());
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
         content.put("NOME_CADASTRO", prospect.getNome_cadastro());
         content.put("NOME_FANTASIA", prospect.getNome_fantasia());
         content.put("PESSOA_F_J", prospect.getPessoa_f_j());

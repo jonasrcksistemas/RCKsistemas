@@ -28,7 +28,6 @@ public class Sincronia {
         this.produto = produto;
         this.pedidosFinalizados = pedidosFinalizados;
         this.pedidosPendentes = pedidosPendentes;
-
     }
 
     public boolean isCliente() {
