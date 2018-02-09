@@ -23,29 +23,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.example.rcksuporte05.rcksistemas.Helper.ProspectHelper;
-import com.example.rcksuporte05.rcksistemas.Helper.UsuarioHelper;
 import com.example.rcksuporte05.rcksistemas.R;
-import com.example.rcksuporte05.rcksistemas.api.Api;
-import com.example.rcksuporte05.rcksistemas.api.Rotas;
-import com.example.rcksuporte05.rcksistemas.classes.Prospect;
+import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
 import com.example.rcksuporte05.rcksistemas.interfaces.FotoActivity;
 import com.example.rcksuporte05.rcksistemas.util.DatePickerUtil;
 import com.example.rcksuporte05.rcksistemas.util.FotoUtil;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.HashMap;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * Created by RCK 03 on 29/01/2018.
@@ -62,12 +53,14 @@ public class CadastroProspectFotoSalvar extends Fragment {
 
     ProgressDialog progress;
 
+    DBHelper db;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_cadastro_prospect_foto_salvar, container, false);
         ButterKnife.bind(this, view);
+        db = new DBHelper(getContext());
 
         edtDataRetorno.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -91,43 +84,14 @@ public class CadastroProspectFotoSalvar extends Fragment {
 
     @OnClick(R.id.btnSalvarParcial)
     public void salvarParcial(){
-        progress = new ProgressDialog(getContext());
-        progress.setMessage("Carregando historico financeiro!");
-        progress.setCancelable(false);
-        progress.show();
-
-        ProspectHelper.getProspect().setIdEmpresa(UsuarioHelper.getUsuario().getIdEmpresaMultiDevice());
-        ProspectHelper.getProspect().setUsuario_id(UsuarioHelper.getUsuario().getId_usuario());
-
-        Rotas apiRotas = Api.buildRetrofit();
-        Map<String, String> cabecalho = new HashMap<>();
-        cabecalho.put("AUTHORIZATION", UsuarioHelper.getUsuario().getToken());
-        Call<Prospect> call = apiRotas.salvarProspect(cabecalho, ProspectHelper.getProspect());
-
-        call.enqueue(new Callback<Prospect>() {
-            @Override
-            public void onResponse(Call<Prospect> call, Response<Prospect> response) {
-                if(response.code() == 200){
-                    Toast.makeText(getContext(), "Prospect enviado com Sucesso", Toast.LENGTH_LONG).show();
-                }else
-                    Toast.makeText(getContext(), "Falha ao enviar prospect", Toast.LENGTH_LONG).show();
-
-                progress.dismiss();
-            }
-
-            @Override
-            public void onFailure(Call<Prospect> call, Throwable t) {
-                Toast.makeText(getContext(), "Erro de conexão, verifique seu acesso a internet", Toast.LENGTH_LONG).show();
-                progress.dismiss();
-
-            }
-        });
-
+        db.atualizarTBL_PROSPECT(ProspectHelper.getProspect());
     }
 
     @OnClick(R.id.btnSalvarProspect)
     public void salvarProspect(){
-        ProspectHelper.salvarProspect();
+        if(ProspectHelper.salvarProspect()){
+           db.atualizarTBL_PROSPECT(ProspectHelper.getProspect());
+        }
     }
 
     @OnClick(R.id.btnAddFoto)

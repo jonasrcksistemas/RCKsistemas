@@ -169,7 +169,7 @@ public class ProspectHelper {
         }
     }
 
-    public static void salvarProspect() {
+    public static boolean salvarProspect() {
         /*Esta variavel é usada para validar o movimento das frags, assim que movimenta, não movimenta outra frag
          */
         boolean verificaMovimento = true;
@@ -226,16 +226,16 @@ public class ProspectHelper {
             }
         }
 
-        if(prospect.getDiaVisita() != null){
-            if(verificaMovimento){
-                verificaMovimento = false;
-                moveTela(0);
-            }
-            Toast.makeText(activityMain, "Escolha um dia da semana para a Visita", Toast.LENGTH_LONG).show();
+        if (prospect.getDiaVisita() == null || prospect.getDiaVisita().trim().equals("")) {
+                if (verificaMovimento) {
+                    verificaMovimento = false;
+                    Toast.makeText(activityMain, "Escolha um dia da semana para a Visita", Toast.LENGTH_LONG).show();
+                    moveTela(0);
+                }
         }
 
         //tela 2 Endereços
-        if (prospect.getEndereco() != null || prospect.getEndereco().trim().isEmpty()) {
+        if (prospect.getEndereco() == null || prospect.getEndereco().trim().isEmpty()) {
             if (verificaMovimento) {
                 verificaMovimento = false;
                 moveTela(1);
@@ -245,7 +245,7 @@ public class ProspectHelper {
         }
 
 
-        if (prospect.getEndereco_numero() != null || prospect.getEndereco_numero().trim().isEmpty()) {
+        if (prospect.getEndereco_numero() == null || prospect.getEndereco_numero().trim().isEmpty()) {
             if (verificaMovimento) {
                 verificaMovimento = false;
                 moveTela(1);
@@ -255,7 +255,7 @@ public class ProspectHelper {
         }
 
 
-        if (prospect.getEndereco_bairro() != null || prospect.getEndereco_bairro().trim().isEmpty()) {
+        if (prospect.getEndereco_bairro() == null || prospect.getEndereco_bairro().trim().isEmpty()) {
             if (verificaMovimento) {
                 verificaMovimento = false;
                 moveTela(1);
@@ -266,7 +266,7 @@ public class ProspectHelper {
 
 
 
-        if (prospect.getEndereco_cep() != null || prospect.getEndereco_cep().trim().isEmpty()) {
+        if (prospect.getEndereco_cep() == null || prospect.getEndereco_cep().trim().isEmpty()) {
             if (verificaMovimento) {
                 verificaMovimento = false;
                 moveTela(1);
@@ -309,7 +309,7 @@ public class ProspectHelper {
         }
 
         //tela 6 Observações Comerciais
-        if (prospect.getReferenciaComercial().size() >= 2) {
+        if (prospect.getReferenciaComercial().size() < 2) {
             if (verificaMovimento) {
                 verificaMovimento = false;
                 Toast.makeText(activityMain, "Insira Pelo Menos 2 referencias comercias ", Toast.LENGTH_LONG).show();
@@ -327,6 +327,7 @@ public class ProspectHelper {
             ProspectHelper.getProspect().setDataRetorno(cadastroProspectFotoSalvar.edtDataRetorno.getText().toString().trim());
         }
 
+        return verificaMovimento;
 
     }
 
