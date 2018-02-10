@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import com.example.rcksuporte05.rcksistemas.Helper.ProspectHelper;
 import com.example.rcksuporte05.rcksistemas.R;
@@ -51,6 +52,24 @@ public class CadastroProspectGeral extends Fragment {
     @BindView(R.id.rdJuridicaProspect)
     public RadioButton rdJuridicaProspect;
 
+    @BindView(R.id.txtIdProspect)
+    public TextView txtIdProspect;
+
+    @BindView(R.id.rdSegrospect)
+    RadioButton rdSegrospect;
+
+    @BindView(R.id.rdTercaProspect)
+    RadioButton rdTercaProspect;
+
+    @BindView(R.id.rdQuartaProspect)
+    RadioButton rdQuartaProspect;
+
+    @BindView(R.id.rdQuintaProspect)
+    RadioButton rdQuintaProspect;
+
+    @BindView(R.id.rdSextaProspect)
+    RadioButton rdSextaProspect;
+
     View view;
     RadioButton radioButtonRota;
     RadioButton radioButtonPessoa;
@@ -69,36 +88,56 @@ public class CadastroProspectGeral extends Fragment {
     }
 
     private void injetaDadosNaTela() {
-        if(ProspectHelper.getProspect().getPessoa_f_j() != null && ProspectHelper.getProspect().getPessoa_f_j().equals("")){
+        if (ProspectHelper.getProspect().getId_prospect() != null && !ProspectHelper.getProspect().getId_prospect().trim().isEmpty())
+            txtIdProspect.setText(ProspectHelper.getProspect().getId_prospect());
+
+        if (ProspectHelper.getProspect().getPessoa_f_j() != null && !ProspectHelper.getProspect().getPessoa_f_j().equals("")) {
             if(ProspectHelper.getProspect().getPessoa_f_j().equals("F")){
                 rdFisicaProspect.setChecked(true);
             }else if(ProspectHelper.getProspect().getPessoa_f_j().equals("J")){
                 rdJuridicaProspect.setChecked(true);
             }
         }
-        if(ProspectHelper.getProspect().getNome_cadastro() != null && ProspectHelper.getProspect().getNome_cadastro().equals("")){
+        if (ProspectHelper.getProspect().getNome_cadastro() != null && !ProspectHelper.getProspect().getNome_cadastro().equals("")) {
             edtNomeClienteProspect.setText(ProspectHelper.getProspect().getNome_cadastro());
         }
 
-        if(ProspectHelper.getProspect().getNome_fantasia() != null && ProspectHelper.getProspect().getNome_fantasia().equals("")){
+        if (ProspectHelper.getProspect().getNome_fantasia() != null && !ProspectHelper.getProspect().getNome_fantasia().equals("")) {
             edtNomeFantasiaProspect.setText(ProspectHelper.getProspect().getNome_fantasia());
         }
 
-        if(ProspectHelper.getProspect().getCpf_cnpj() != null && ProspectHelper.getProspect().getCpf_cnpj().equals("")){
+        if (ProspectHelper.getProspect().getCpf_cnpj() != null && !ProspectHelper.getProspect().getCpf_cnpj().equals("")) {
             edtCpfCnpjProspect.setText(ProspectHelper.getProspect().getCpf_cnpj());
         }
 
-        if(ProspectHelper.getProspect().getInscri_estadual() != null && ProspectHelper.getProspect().getInscri_estadual().equals("")){
+        if (ProspectHelper.getProspect().getInscri_estadual() != null && !ProspectHelper.getProspect().getInscri_estadual().equals("")) {
             edtInscEstadualProspect.setText(ProspectHelper.getProspect().getInscri_estadual());
         }
 
-        if(ProspectHelper.getProspect().getInscri_municipal() != null && ProspectHelper.getProspect().getInscri_municipal().equals("")){
+        if (ProspectHelper.getProspect().getInscri_municipal() != null && !ProspectHelper.getProspect().getInscri_municipal().equals("")) {
             edtInscMunicipalProspect.setText(ProspectHelper.getProspect().getInscri_municipal());
         }
 
-
+        if (ProspectHelper.getProspect().getDiaVisita() != null && !ProspectHelper.getProspect().getDiaVisita().trim().isEmpty()) {
+            switch (ProspectHelper.getProspect().getDiaVisita()) {
+                case "segunda":
+                    rdSegrospect.setChecked(true);
+                    break;
+                case "terça":
+                    rdTercaProspect.setChecked(true);
+                    break;
+                case "quarta":
+                    rdQuartaProspect.setChecked(true);
+                    break;
+                case "quinta":
+                    rdQuintaProspect.setChecked(true);
+                    break;
+                case "sexta":
+                    rdSextaProspect.setChecked(true);
+                    break;
+            }
+        }
     }
-
 
     public void inserirDadosDaFrame(){
 
@@ -140,13 +179,5 @@ public class CadastroProspectGeral extends Fragment {
             radioButtonRota = (RadioButton) view.findViewById(rgRotaProspect.getCheckedRadioButtonId());
             ProspectHelper.getProspect().setDiaVisita(radioButtonRota.getText().toString().toLowerCase());
         }
-
-
     }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-    }
-
 }

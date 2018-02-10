@@ -192,6 +192,16 @@ public class CadastroProspectEndereco extends Fragment {
             }
         }
 
+        if (ProspectHelper.getProspect().getId_pais() != null && !ProspectHelper.getProspect().getId_pais().trim().isEmpty()) {
+            for (int i = 0; ProspectHelper.getPaises().size() > i; i++) {
+                if (ProspectHelper.getPaises().get(i).getId_pais().equals(ProspectHelper.getProspect().getId_pais())) {
+                    spPaisProspect.setSelection(i);
+                    ProspectHelper.setPosicaoPais(i);
+                    break;
+                }
+            }
+        }
+
         if (ProspectHelper.getPosicaoUf() > -1) {
             try {
                 spUfProspect.setSelection(ProspectHelper.getPosicaoUf());
@@ -200,11 +210,31 @@ public class CadastroProspectEndereco extends Fragment {
             }
         }
 
+        if (ProspectHelper.getProspect().getEndereco_uf() != null && !ProspectHelper.getProspect().getEndereco_uf().trim().isEmpty()) {
+            for (int i = 0; getResources().getStringArray(R.array.uf).length > i; i++) {
+                if (ProspectHelper.getProspect().getEndereco_uf().equals(getResources().getStringArray(R.array.uf)[i])) {
+                    spUfProspect.setSelection(i);
+                    ProspectHelper.setPosicaoUf(i);
+                    break;
+                }
+            }
+        }
+
         if (ProspectHelper.getPosicaoMunicipio() > -1) {
             try {
                 spMunicipioProspect.setSelection(ProspectHelper.getPosicaoMunicipio());
             } catch (Exception e) {
                 e.printStackTrace();
+            }
+        }
+
+        if (ProspectHelper.getProspect().getNome_municipio() != null && !ProspectHelper.getProspect().getNome_municipio().trim().isEmpty()) {
+            for (int i = 0; getResources().getStringArray(listaUf[spUfProspect.getSelectedItemPosition()]).length > i; i++) {
+                if (ProspectHelper.getProspect().getNome_municipio().equals(getResources().getStringArray(listaUf[ProspectHelper.getPosicaoUf()])[i])) {
+                    spMunicipioProspect.setSelection(i);
+                    ProspectHelper.setPosicaoUf(i);
+                    break;
+                }
             }
         }
 

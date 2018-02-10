@@ -79,6 +79,7 @@ public class CadastroProspectFotoSalvar extends Fragment {
         try {
             ProspectHelper.getProspect().setDataRetorno(new SimpleDateFormat("yyyy-MM-dd").format(new SimpleDateFormat("dd/MM/yyyy").parse(edtDataRetorno.getText().toString().trim())));
         } catch (ParseException e) {
+            System.out.println(edtDataRetorno.getText().toString().trim());
             e.printStackTrace();
         }
     }
@@ -102,7 +103,9 @@ public class CadastroProspectFotoSalvar extends Fragment {
         alert.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+                insereDadosDaFrame();
                 db.atualizarTBL_PROSPECT(ProspectHelper.getProspect());
+                getActivity().finish();
             }
         });
         alert.show();
@@ -118,7 +121,9 @@ public class CadastroProspectFotoSalvar extends Fragment {
             alert.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    insereDadosDaFrame();
                     db.atualizarTBL_PROSPECT(ProspectHelper.getProspect());
+                    getActivity().finish();
                 }
             });
             alert.show();
