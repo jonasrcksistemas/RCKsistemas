@@ -31,7 +31,7 @@ public class CadastroProspectSegmentos extends Fragment implements SegmentoAdapt
     @BindView(R.id.recyclerSegmentos)
     RecyclerView recyclerSegmentos;
     @BindView(R.id.edtOutrosSegmentosProspect)
-    EditText edtOutrosSegmentosProspect;
+    public EditText edtOutrosSegmentosProspect;
 
     View view;
     SegmentoAdapter segmentoAdapter;
@@ -60,21 +60,19 @@ public class CadastroProspectSegmentos extends Fragment implements SegmentoAdapt
         }
     }
 
-
-
     public void insereDadosDaFrame(){
         List<Segmento> segmentoList;
-        segmentoList = segmentoAdapter.itensSelecionados();
+        segmentoList = segmentoAdapter.getItensSelecionados();
+        Segmento segmento = new Segmento();
+
         if(segmentoList.size() > 0){
-            ProspectHelper.getProspect().setSegmento(segmentoList.get(0));
-            if(segmentoList.get(0).getNomeSetor().toLowerCase().contains("outros")){
-                if(edtOutrosSegmentosProspect.getText() != null && !edtOutrosSegmentosProspect.getText().toString().equals("")){
-                    ProspectHelper.getProspect().getSegmento().setDescricaoOutros(edtOutrosSegmentosProspect.getText().toString());
-                }else{
-                    //TODO colocar algo para obrigar a preencher
-                }
-            }
+            segmento = segmentoList.get(0);
         }
+        if(edtOutrosSegmentosProspect.getText() != null){
+            segmento.setDescricaoOutros(edtOutrosSegmentosProspect.getText().toString());
+        }
+
+        ProspectHelper.getProspect().setSegmento(segmento);
     }
 
 
@@ -84,13 +82,10 @@ public class CadastroProspectSegmentos extends Fragment implements SegmentoAdapt
         segmentoAdapter.notifyDataSetChanged();
     }
 
-
-
     @Override
     public void onClick(int position) {
        segmentoAdapter.toggleSelection(position);
        segmentoAdapter.notifyDataSetChanged();
     }
-
 
 }

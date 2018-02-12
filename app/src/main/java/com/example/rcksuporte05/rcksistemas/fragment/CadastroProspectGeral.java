@@ -6,9 +6,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.rcksuporte05.rcksistemas.Helper.ProspectHelper;
@@ -70,15 +72,23 @@ public class CadastroProspectGeral extends Fragment {
     @BindView(R.id.rdSextaProspect)
     RadioButton rdSextaProspect;
 
+    @BindView(R.id.spIeProspect)
+    Spinner spIeProspect;
+
+
     View view;
     RadioButton radioButtonRota;
     RadioButton radioButtonPessoa;
+    private ArrayAdapter arrayIe;
+    private String[] contribuinte = {"Contribuinte", "Isento", "Não Contribuinte"};
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_cadastro_prospect_geral, container, false);
         ButterKnife.bind(this, view);
+        arrayIe = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_activated_1, contribuinte);
+        spIeProspect.setAdapter(arrayIe);
 
         injetaDadosNaTela();
 
@@ -137,6 +147,11 @@ public class CadastroProspectGeral extends Fragment {
                     break;
             }
         }
+
+        if (ProspectHelper.getProspect().getInd_da_ie_destinatario_prospect() != null && !ProspectHelper.getProspect().getInd_da_ie_destinatario_prospect().equals("")){
+            spIeProspect.setSelection(Integer.parseInt(ProspectHelper.getProspect().getInd_da_ie_destinatario_prospect()) - 1);
+        }
+
     }
 
     public void inserirDadosDaFrame(){
@@ -179,5 +194,8 @@ public class CadastroProspectGeral extends Fragment {
             radioButtonRota = (RadioButton) view.findViewById(rgRotaProspect.getCheckedRadioButtonId());
             ProspectHelper.getProspect().setDiaVisita(radioButtonRota.getText().toString().toLowerCase());
         }
+
+        ProspectHelper.getProspect().setInd_da_ie_destinatario_prospect(String.valueOf(spIeProspect.getSelectedItemPosition() +1));
+
     }
 }

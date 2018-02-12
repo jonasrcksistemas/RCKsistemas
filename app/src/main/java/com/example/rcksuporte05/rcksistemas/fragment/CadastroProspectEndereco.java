@@ -244,40 +244,28 @@ public class CadastroProspectEndereco extends Fragment {
     public void inserirDadosDaFrame(){
         if(edtEnderecoProspect.getText() != null){
             ProspectHelper.getProspect().setEndereco(edtEnderecoProspect.getText().toString());
-        }else{
-            System.out.println("Fazer algo para obrigar!");
         }
 
         if(edtNumeroProspect.getText() != null){
             ProspectHelper.getProspect().setEndereco_numero(edtNumeroProspect.getText().toString());
-        }else{
-            System.out.println("Fazer algo para obrigar!");
         }
 
         if(edtBairroProspect.getText() != null){
             ProspectHelper.getProspect().setEndereco_bairro(edtBairroProspect.getText().toString());
-        }else{
-            System.out.println("Fazer algo para obrigar!");
         }
 
 
         if(edtCep.getText() != null){
             ProspectHelper.getProspect().setEndereco_cep(edtCep.getText().toString());
-        }else{
-            System.out.println("Fazer algo para obrigar!");
         }
 
         if(rgSituacaoPredio.getCheckedRadioButtonId() > 0){
             rdSituacaoPredio = (RadioButton) view.findViewById(rgSituacaoPredio.getCheckedRadioButtonId());
             ProspectHelper.getProspect().setSituacaoPredio(rdSituacaoPredio.getText().toString());
-        } else {
-            System.out.println("Fazer algo para obrigar!");
         }
 
         if (edtComplementoProspect.getText() != null && !edtComplementoProspect.getText().toString().trim().isEmpty()) {
             ProspectHelper.getProspect().setEndereco_complemento(edtComplementoProspect.getText().toString());
-        } else {
-            System.out.println("Fazer algo para obrigar!");
         }
 
         try {
