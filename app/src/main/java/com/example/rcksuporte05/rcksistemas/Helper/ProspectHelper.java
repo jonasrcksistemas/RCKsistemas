@@ -294,8 +294,13 @@ public class ProspectHelper {
                 moveTela(3);
             }
         } else if (prospect.getSegmento().getNomeSetor().toLowerCase().contains("outros")) {
-//            cadastroProspectSegmentos.edtOutrosSegmentosProspect.setError("Campo Obrigado quando Outros Selecionado");
-//            cadastroProspectSegmentos.edtOutrosSegmentosProspect.requestFocus();
+            if(verificaMovimento){
+                verificaMovimento = false;
+                Toast.makeText(activityMain, "Observação obrigatorio quando opção Outros selecionada", Toast.LENGTH_LONG).show();
+                moveTela(3);
+            }
+            cadastroProspectSegmentos.edtOutrosSegmentosProspect.setError("Observação obrigatorio quando opção Outros selecionada");
+            cadastroProspectSegmentos.edtOutrosSegmentosProspect.requestFocus();
         }
 
 
@@ -306,7 +311,16 @@ public class ProspectHelper {
                 Toast.makeText(activityMain, "Escolha um Motivo para o Não cadastramento!", Toast.LENGTH_LONG).show();
                 moveTela(4);
             }
+        }else if(prospect.getMotivoNaoCadastramento().getMotivo().toLowerCase().contains("outros") && prospect.getMotivoNaoCadastramento().getDescricaoOutros().equals("") ){
+            if (verificaMovimento) {
+                verificaMovimento = false;
+                Toast.makeText(activityMain, "Escolha um Motivo para o Não cadastramento!", Toast.LENGTH_LONG).show();
+                moveTela(4);
+            }
+                cadastroProspectMotivos.edtOutrosMotivosProspect.setError("Observação obrigatorio quando opção Outros selecionada");
+                cadastroProspectMotivos.edtOutrosMotivosProspect.requestFocus();
         }
+
 
         //tela 6 Observações Comerciais
         if (prospect.getReferenciaComercial().size() < 2) {
@@ -321,8 +335,7 @@ public class ProspectHelper {
         //Tela 7 salvar foto
         if (prospect.getDataRetorno() == null || prospect.getDataRetorno().trim().isEmpty()) {
             cadastroProspectFotoSalvar.edtDataRetorno.setBackgroundResource(R.drawable.borda_edittext_erro);
-
-
+            verificaMovimento = false;
         } else {
             ProspectHelper.getProspect().setDataRetorno(cadastroProspectFotoSalvar.edtDataRetorno.getText().toString().trim());
         }

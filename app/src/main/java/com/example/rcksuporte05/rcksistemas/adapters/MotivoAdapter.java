@@ -85,6 +85,10 @@ public class MotivoAdapter extends RecyclerView.Adapter<MotivoViewHolder> {
         return motivos.size();
     }
 
+    public MotivoNaoCadastramento getItem(int position){
+        return motivos.get(position);
+    }
+
     public void marcarSelecionado(MotivoNaoCadastramento motivo){
         //está variavel é responsavel para armazenar o index do objeto que correponde com o id do objeto que vem do banco
         int i = 0;

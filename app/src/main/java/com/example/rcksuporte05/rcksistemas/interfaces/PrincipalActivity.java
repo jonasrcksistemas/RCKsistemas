@@ -103,7 +103,7 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
         tb_principal.setSubtitle("Usuario: " + UsuarioHelper.getUsuario().getNome_usuario());
         tb_principal.setLogo(R.mipmap.ic_launcher);
 
-        sincronia = new Sincronia(true, true, true, false);
+        sincronia = new Sincronia(true, true, true, false, false);
 
         setSupportActionBar(tb_principal);
 
@@ -433,7 +433,7 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
         System.gc();
         getUsuarios();
         if (getIntent().getIntExtra("alterado", 0) == 1) {
-            sincroniaBO.sincronizaApi(new Sincronia(true, true, true, false));
+            sincroniaBO.sincronizaApi(new Sincronia(true, true, true, false, false));
             getIntent().putExtra("alterado", 0);
         }
         super.onResume();

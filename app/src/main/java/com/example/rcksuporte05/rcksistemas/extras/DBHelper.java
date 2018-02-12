@@ -503,6 +503,7 @@ public class DBHelper extends SQLiteOpenHelper {
                     "ID_EMPRESA INTEGER," +
                     "DIA_VISITA VARCHAR(20)," +
                     "DATA_RETORNO DATE," +
+                    "IND_DA_IE_DESTINATARIO_PROSPECT" +
                     "FOTO_PRINCIPALB_ASE64 BLOB," +
                     "FOTO_SECUNDARIA_BASE64 BLOB," +
                     "OBSERVACOES_COMERCIAIS VARCHAR(300), " +
@@ -640,6 +641,7 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("FOTO_PRINCIPALB_ASE64", prospect.getFotoPrincipalBase64());
         content.put("FOTO_SECUNDARIA_BASE64", prospect.getFotoSecundariaBase64());
         content.put("PROSPECT_SALVO", prospect.getProspectSalvo());
+        content.put("IND_DA_IE_DESTINATARIO_PROSPECT", prospect.getInd_da_ie_destinatario_prospect());
 
         if (prospect.getId_prospect() != null && contagem("SELECT COUNT(ID_PROSPECT) FROM TBL_PROSPECT WHERE ID_PROSPECT = " + prospect.getId_prospect()) > 0) {
             content.put("ID_PROSPECT", prospect.getId_prospect());
@@ -732,6 +734,7 @@ public class DBHelper extends SQLiteOpenHelper {
             prospect.setFotoSecundariaBase64(cursor.getString(cursor.getColumnIndex("FOTO_SECUNDARIA_BASE64")));
             prospect.setObservacoesComerciais(cursor.getString(cursor.getColumnIndex("OBSERVACOES_COMERCIAIS")));
             prospect.setProspectSalvo(cursor.getString(cursor.getColumnIndex("PROSPECT_SALVO")));
+            prospect.setInd_da_ie_destinatario_prospect(cursor.getString(cursor.getColumnIndex("IND_DA_IE_DESTINATARIO_PROSPECT")));
 
             listaProspect.add(prospect);
         } while (cursor.moveToNext());

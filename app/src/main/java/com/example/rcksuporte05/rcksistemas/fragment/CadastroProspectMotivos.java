@@ -66,15 +66,17 @@ public class CadastroProspectMotivos extends Fragment implements MotivoAdapter.M
     public void insereDadosDaFrame(){
         List<MotivoNaoCadastramento> motivoSelecionado;
         motivoSelecionado = motivoAdapter.getItensSelecionados();
+        MotivoNaoCadastramento motivo = new MotivoNaoCadastramento();
 
         if(motivoSelecionado.size() > 0){
-            ProspectHelper.getProspect().setMotivoNaoCadastramento(motivoSelecionado.get(0));
+             motivo = motivoSelecionado.get(0);
         }
 
         if(edtOutrosMotivosProspect.getText() !=null){
-            ProspectHelper.getProspect().setObservacoesComerciais(edtOutrosMotivosProspect.getText().toString());
+            motivo.setDescricaoOutros(edtOutrosMotivosProspect.getText().toString());
         }
 
+        ProspectHelper.getProspect().setMotivoNaoCadastramento(motivo);
     }
 
     private void preencheRecycler() {

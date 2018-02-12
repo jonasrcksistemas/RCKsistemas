@@ -179,7 +179,7 @@
                    android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
                <Spinner
-                   android:id="@+id/spIe"
+                   android:id="@+id/spIeProspect"
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
                    android:layout_alignParentEnd="true"

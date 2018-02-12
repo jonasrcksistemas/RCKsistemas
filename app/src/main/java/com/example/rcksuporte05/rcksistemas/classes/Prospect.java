@@ -45,6 +45,7 @@ public class Prospect {
     private String fotoSecundariaBase64;
     private String observacoesComerciais;
     private String prospectSalvo;
+    private String ind_da_ie_destinatario_prospect;
 
     public String getId_prospect() {
         return id_prospect;
@@ -308,5 +309,13 @@ public class Prospect {
 
     public void setProspectSalvo(String prospectSalvo) {
         this.prospectSalvo = prospectSalvo;
+    }
+
+    public String getInd_da_ie_destinatario_prospect() {
+        return ind_da_ie_destinatario_prospect;
+    }
+
+    public void setInd_da_ie_destinatario_prospect(String ind_da_ie_destinatario_prospect) {
+        this.ind_da_ie_destinatario_prospect = ind_da_ie_destinatario_prospect;
     }
 }

@@ -31,13 +31,13 @@ import butterknife.OnClick;
 public class CadastroProspectObservacoesComerciais extends Fragment implements ReferenciaComercialAdapter.ReferenciaComercialListener, ReferenciaBancariaAdapter.ReferenciaBancariaListener{
 
     @BindView(R.id.edtObservacaoComercial)
-    EditText edtObservacaoComercial;
+    public EditText edtObservacaoComercial;
 
     @BindView(R.id.edtLimiteCreditoSugerido)
-    EditText edtLimiteCreditoSugerido;
+    public EditText edtLimiteCreditoSugerido;
 
     @BindView(R.id.edtLimiteDePrazoSugerido)
-    EditText edtLimiteDePrazoSugerido;
+    public EditText edtLimiteDePrazoSugerido;
 
     @BindView(R.id.recyclerReferenciaComercial)
     RecyclerView recyclerReferenciaComercial;

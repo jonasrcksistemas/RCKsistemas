@@ -114,6 +114,7 @@ public class CadastroProspectFotoSalvar extends Fragment {
 
     @OnClick(R.id.btnSalvarProspect)
     public void salvarProspect(){
+        insereDadosDaFrame();
         if(ProspectHelper.salvarProspect()){
             AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
             alert.setTitle("Atenção");
@@ -122,7 +123,6 @@ public class CadastroProspectFotoSalvar extends Fragment {
             alert.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    insereDadosDaFrame();
                     ProspectHelper.getProspect().setProspectSalvo("S");
                     db.atualizarTBL_PROSPECT(ProspectHelper.getProspect());
                     getActivity().finish();
