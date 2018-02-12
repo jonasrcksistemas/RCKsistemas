@@ -401,7 +401,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 "DATA_RETORNO DATE," +
                 "FOTO_PRINCIPALB_ASE64 BLOB," +
                 "FOTO_SECUNDARIA_BASE64 BLOB," +
-                "OBSERVACOES_COMERCIAIS VARCHAR(300));");
+                "OBSERVACOES_COMERCIAIS VARCHAR(300), " +
+                "PROSPECT_SALVO VARCHAR(1) DEFAULT 'N');");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS TBL_SEGMENTO" +
                 "(ATIVO VARCHAR(1) DEFAULT 'S' NOT NULL," +
@@ -504,7 +505,8 @@ public class DBHelper extends SQLiteOpenHelper {
                     "DATA_RETORNO DATE," +
                     "FOTO_PRINCIPALB_ASE64 BLOB," +
                     "FOTO_SECUNDARIA_BASE64 BLOB," +
-                    "OBSERVACOES_COMERCIAIS VARCHAR(300));");
+                    "OBSERVACOES_COMERCIAIS VARCHAR(300), " +
+                    "PROSPECT_SALVO VARCHAR(1) DEFAULT 'N');");
 
             db.execSQL("CREATE TABLE IF NOT EXISTS TBL_SEGMENTO" +
                     "(ATIVO VARCHAR(1) DEFAULT 'S' NOT NULL," +
@@ -637,6 +639,7 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("DATA_RETORNO", prospect.getDataRetorno());
         content.put("FOTO_PRINCIPALB_ASE64", prospect.getFotoPrincipalBase64());
         content.put("FOTO_SECUNDARIA_BASE64", prospect.getFotoSecundariaBase64());
+        content.put("PROSPECT_SALVO", prospect.getProspectSalvo());
 
         if (prospect.getId_prospect() != null && contagem("SELECT COUNT(ID_PROSPECT) FROM TBL_PROSPECT WHERE ID_PROSPECT = " + prospect.getId_prospect()) > 0) {
             content.put("ID_PROSPECT", prospect.getId_prospect());
@@ -653,12 +656,25 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
-    public List<Prospect> listaProspect() {
+    public List<Prospect> listaProspect(int parametro) {
         List<Prospect> listaProspect = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor;
 
-        cursor = db.rawQuery("SELECT * FROM TBL_PROSPECT ORDER BY ID_PROSPECT DESC", null);
+        switch (parametro) {
+            case 0:
+                cursor = db.rawQuery("SELECT * FROM TBL_PROSPECT WHERE PROSPECT_SALVO = 'N' AND ID_PROSPECT_SERVIDOR IS NULL ORDER BY ID_PROSPECT DESC", null);
+                break;
+            case 1:
+                cursor = db.rawQuery("SELECT * FROM TBL_PROSPECT WHERE PROSPECT_SALVO = 'S' AND ID_PROSPECT_SERVIDOR IS NULL ORDER BY ID_PROSPECT DESC", null);
+                break;
+            case 2:
+                cursor = db.rawQuery("SELECT * FROM TBL_PROSPECT WHERE PROSPECT_SALVO = 'S' AND ID_PROSPECT_SERVIDOR IS NOT NULL ORDER BY ID_PROSPECT DESC", null);
+                break;
+            default:
+                cursor = db.rawQuery("SELECT * FROM TBL_PROSPECT ORDER BY ID_PROSPECT DESC", null);
+        }
+
         cursor.moveToFirst();
         do {
             Prospect prospect = new Prospect();
@@ -715,6 +731,7 @@ public class DBHelper extends SQLiteOpenHelper {
             prospect.setFotoPrincipalBase64(cursor.getString(cursor.getColumnIndex("FOTO_PRINCIPALB_ASE64")));
             prospect.setFotoSecundariaBase64(cursor.getString(cursor.getColumnIndex("FOTO_SECUNDARIA_BASE64")));
             prospect.setObservacoesComerciais(cursor.getString(cursor.getColumnIndex("OBSERVACOES_COMERCIAIS")));
+            prospect.setProspectSalvo(cursor.getString(cursor.getColumnIndex("PROSPECT_SALVO")));
 
             listaProspect.add(prospect);
         } while (cursor.moveToNext());

@@ -24,6 +24,7 @@ import com.example.rcksuporte05.rcksistemas.classes.MotivoNaoCadastramento;
 import com.example.rcksuporte05.rcksistemas.classes.Operacao;
 import com.example.rcksuporte05.rcksistemas.classes.Pais;
 import com.example.rcksuporte05.rcksistemas.classes.Produto;
+import com.example.rcksuporte05.rcksistemas.classes.Prospect;
 import com.example.rcksuporte05.rcksistemas.classes.Segmento;
 import com.example.rcksuporte05.rcksistemas.classes.Sincronia;
 import com.example.rcksuporte05.rcksistemas.classes.TabelaPreco;
@@ -304,9 +305,27 @@ public class SincroniaBO {
                 for (WebPedidoItens pedidoIten : webPedido.getWebPedidoItens()) {
                     db.atualizarTBL_WEB_PEDIDO_ITENS(pedidoIten);
                 }
-            }
 
-            contadorNotificacaoEProgresso++;
+                contadorNotificacaoEProgresso++;
+                final int finalContadorNotificacaoEProgresso = contadorNotificacaoEProgresso;
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        progress.setProgress(finalContadorNotificacaoEProgresso);
+                    }
+                });
+                mNotificationManager.notify(0, notificacao.build());
+            }
+        }
+
+        if (sincronia.isProspect()) {
+            for (Prospect prospect : sincronia.getListaProspect()) {
+                notificacao.setProgress(maxProgress, contadorNotificacaoEProgresso, false);
+
+                db.atualizarTBL_PROSPECT(prospect);
+
+
+                contadorNotificacaoEProgresso++;
             final int finalContadorNotificacaoEProgresso = contadorNotificacaoEProgresso;
             activity.runOnUiThread(new Runnable() {
                 @Override
@@ -315,6 +334,7 @@ public class SincroniaBO {
                 }
             });
             mNotificationManager.notify(0, notificacao.build());
+            }
         }
 
         if (sincronia.isPedidosFinalizados()) {
@@ -411,6 +431,12 @@ public class SincroniaBO {
                     final List<WebPedido> listaPedido = db.listaWebPedido("SELECT * FROM TBL_WEB_PEDIDO WHERE PEDIDO_ENVIADO = 'N' AND USUARIO_LANCAMENTO_ID = " + UsuarioHelper.getUsuario().getId_usuario() + " ORDER BY ID_WEB_PEDIDO DESC;");
                     sincronia.setListaWebPedidosPendentes(prepararItensPedidos(listaPedido));
                 }
+
+                if (sincronia.isProspect()) {
+                    final List<Prospect> listaProspect = db.listaProspect(Prospect.PROSPECT_SALVO);
+                    sincronia.setListaProspect(listaProspect);
+                }
+
                 Call<Sincronia> call = apiRotas.sincroniaApi(Integer.parseInt(UsuarioHelper.getUsuario().getId_usuario()), cabecalho, sincronia);
 
                 try {

@@ -8,6 +8,10 @@ import java.util.List;
  */
 
 public class Prospect {
+    public static int PROSPECT_PENDENTE = 0;
+    public static int PROSPECT_SALVO = 1;
+    public static int PROSPECT_ENVIADO = 2;
+
     private String id_prospect;
     private String id_prospect_servidor;
     private String id_cadastro;
@@ -40,7 +44,7 @@ public class Prospect {
     private String fotoPrincipalBase64;
     private String fotoSecundariaBase64;
     private String observacoesComerciais;
-
+    private String prospectSalvo;
 
     public String getId_prospect() {
         return id_prospect;
@@ -296,5 +300,13 @@ public class Prospect {
 
     public void setListaContato(List<Contato> listaContato) {
         this.listaContato = listaContato;
+    }
+
+    public String getProspectSalvo() {
+        return prospectSalvo;
+    }
+
+    public void setProspectSalvo(String prospectSalvo) {
+        this.prospectSalvo = prospectSalvo;
     }
 }

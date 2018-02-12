@@ -85,7 +85,7 @@ public class ActivityListaProspect extends AppCompatActivity {
     protected void onResume() {
         try {
             DBHelper db = new DBHelper(this);
-            List<Prospect> listaProspect = db.listaProspect();
+            List<Prospect> listaProspect = db.listaProspect(Prospect.PROSPECT_PENDENTE);
             preencheLista(listaProspect);
         } catch (CursorIndexOutOfBoundsException e) {
             e.printStackTrace();

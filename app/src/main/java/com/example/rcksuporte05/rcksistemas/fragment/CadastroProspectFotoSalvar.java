@@ -104,6 +104,7 @@ public class CadastroProspectFotoSalvar extends Fragment {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 insereDadosDaFrame();
+                ProspectHelper.getProspect().setProspectSalvo("N");
                 db.atualizarTBL_PROSPECT(ProspectHelper.getProspect());
                 getActivity().finish();
             }
@@ -122,6 +123,7 @@ public class CadastroProspectFotoSalvar extends Fragment {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     insereDadosDaFrame();
+                    ProspectHelper.getProspect().setProspectSalvo("S");
                     db.atualizarTBL_PROSPECT(ProspectHelper.getProspect());
                     getActivity().finish();
                 }
