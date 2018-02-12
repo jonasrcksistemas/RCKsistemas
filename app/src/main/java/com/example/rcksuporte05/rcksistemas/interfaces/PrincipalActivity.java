@@ -28,14 +28,12 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.rcksuporte05.rcksistemas.Helper.FotoHelper;
-import com.example.rcksuporte05.rcksistemas.Helper.ProspectHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.UsuarioHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.api.Api;
 import com.example.rcksuporte05.rcksistemas.api.Rotas;
 import com.example.rcksuporte05.rcksistemas.bo.SincroniaBO;
 import com.example.rcksuporte05.rcksistemas.bo.UsuarioBO;
-import com.example.rcksuporte05.rcksistemas.classes.Prospect;
 import com.example.rcksuporte05.rcksistemas.classes.Sincronia;
 import com.example.rcksuporte05.rcksistemas.classes.Usuario;
 import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
@@ -141,12 +139,12 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
             startActivity(telaPedidoPendentes);
         } else if (view == btnProspectNovo) {
             getUsuarios();
-            Prospect prospect = new Prospect();
-            ProspectHelper.setProspect(prospect);
-            Intent intent = new Intent(PrincipalActivity.this, ActivityCadastroProspect.class);
+            Intent intent = new Intent(PrincipalActivity.this, ActivityListaProspect.class);
             startActivity(intent);
         } else if (view == btnProspectLista) {
-            System.out.println("Lista");
+            getUsuarios();
+            Intent intent = new Intent(PrincipalActivity.this, ActivityListaProspect.class);
+            startActivity(intent);
         }
     }
 

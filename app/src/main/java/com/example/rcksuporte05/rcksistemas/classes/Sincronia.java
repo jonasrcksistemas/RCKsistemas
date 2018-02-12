@@ -7,6 +7,7 @@ public class Sincronia {
     private boolean produto;
     private boolean pedidosFinalizados;
     private boolean pedidosPendentes;
+    private boolean prospect;
     private int maxProgress;
     private List<Cliente> listaCliente;
     private List<CondicoesPagamento> listaCondicoesPagamento;
@@ -22,12 +23,14 @@ public class Sincronia {
     private List<Banco> bancos;
     private List<Segmento> segmentos;
     private List<MotivoNaoCadastramento> motivos;
+    private List<Prospect> listaProspect;
 
-    public Sincronia(boolean cliente, boolean produto, boolean pedidosFinalizados, boolean pedidosPendentes) {
+    public Sincronia(boolean cliente, boolean produto, boolean pedidosFinalizados, boolean pedidosPendentes, boolean prospect) {
         this.cliente = cliente;
         this.produto = produto;
         this.pedidosFinalizados = pedidosFinalizados;
         this.pedidosPendentes = pedidosPendentes;
+        this.prospect = prospect;
     }
 
     public boolean isCliente() {
@@ -180,5 +183,21 @@ public class Sincronia {
 
     public void setMotivos(List<MotivoNaoCadastramento> motivos) {
         this.motivos = motivos;
+    }
+
+    public boolean isProspect() {
+        return prospect;
+    }
+
+    public void setProspect(boolean prospect) {
+        this.prospect = prospect;
+    }
+
+    public List<Prospect> getListaProspect() {
+        return listaProspect;
+    }
+
+    public void setListaProspect(List<Prospect> listaProspect) {
+        this.listaProspect = listaProspect;
     }
 }

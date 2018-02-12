@@ -401,7 +401,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 "DATA_RETORNO DATE," +
                 "FOTO_PRINCIPALB_ASE64 BLOB," +
                 "FOTO_SECUNDARIA_BASE64 BLOB," +
-                "OBSERVACOES_COMERCIAIS VARCHAR(300));");
+                "OBSERVACOES_COMERCIAIS VARCHAR(300), " +
+                "PROSPECT_SALVO VARCHAR(1) DEFAULT 'N');");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS TBL_SEGMENTO" +
                 "(ATIVO VARCHAR(1) DEFAULT 'S' NOT NULL," +
@@ -419,27 +420,30 @@ public class DBHelper extends SQLiteOpenHelper {
                 "NOME_PAIS VARCHAR(60) NOT NULL);");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS TBL_BANCOS_FEBRABAN " +
-                "(CODIGO_FEBRABAN VARCHAR(6) NOT NULL," +
+                "(CODIGO_FEBRABAN VARCHAR(6) PRIMARY KEY," +
                 " NOME_BANCO VARCHAR(60)," +
-                " HOME_PAGE VARCHAR(60)," +
-                " PRIMARY KEY (CODIGO_FEBRABAN));");
+                " HOME_PAGE VARCHAR(60));");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS TBL_REFERENCIA_BANCARIA" +
-                "(ID_REFERENCIA_BANCARIA INTEGER," +
+                "(ID_REFERENCIA_BANCARIA INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "CODIGO_FEBRABAN INTEGER," +
                 "NOME_BANCO VARCHAR(60)," +
                 "CONTA_CORRENTE VARCHAR(60)," +
                 "AGENCIA VARCHAR(60)," +
-                "ID_CADASTRO INTEGER);");
+                "ID_CADASTRO INTEGER," +
+                "USUARIO_ID INTEGER," +
+                "NOME_USUARIO VARCHAR(60));");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS TBL_REFERENCIA_COMERCIAL" +
-                "(ID_REFERENCIA_COMERCIAL INTEGER," +
+                "(ID_REFERENCIA_COMERCIAL INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "NOME_FORNECEDOR_REFERENCIA VARCHAR(60)," +
                 "TELEFONE VARCHAR(20)," +
-                "ID_CADASTRO INTEGER);");
+                "ID_CADASTRO INTEGER," +
+                "USUARIO_ID INTEGER," +
+                "NOME_USUARIO VARCHAR(60));");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS TBL_CADASTRO_CONTATO" +
-                "(ID_CONTATO INTEGER," +
+                "(ID_CONTATO INTEGER PRIMARY KEY AUTOINCREMENT," +
                 "ID_CONTATO_SERVIDOR INTEGER," +
                 "ID_CADASTRO INTEGER," +
                 "ATIVO VARCHAR(1)," +
@@ -501,7 +505,8 @@ public class DBHelper extends SQLiteOpenHelper {
                     "DATA_RETORNO DATE," +
                     "FOTO_PRINCIPALB_ASE64 BLOB," +
                     "FOTO_SECUNDARIA_BASE64 BLOB," +
-                    "OBSERVACOES_COMERCIAIS VARCHAR(300));");
+                    "OBSERVACOES_COMERCIAIS VARCHAR(300), " +
+                    "PROSPECT_SALVO VARCHAR(1) DEFAULT 'N');");
 
             db.execSQL("CREATE TABLE IF NOT EXISTS TBL_SEGMENTO" +
                     "(ATIVO VARCHAR(1) DEFAULT 'S' NOT NULL," +
@@ -519,13 +524,12 @@ public class DBHelper extends SQLiteOpenHelper {
                     "NOME_PAIS VARCHAR(60) NOT NULL);");
 
             db.execSQL("CREATE TABLE IF NOT EXISTS TBL_BANCOS_FEBRABAN " +
-                    "(CODIGO_FEBRABAN VARCHAR(6) NOT NULL," +
+                    "(CODIGO_FEBRABAN VARCHAR(6) PRIMARY KEY AUTOINCREMENT," +
                     " NOME_BANCO VARCHAR(60)," +
-                    " HOME_PAGE VARCHAR(60)," +
-                    " PRIMARY KEY (CODIGO_FEBRABAN));");
+                    " HOME_PAGE VARCHAR(60));");
 
             db.execSQL("CREATE TABLE IF NOT EXISTS TBL_REFERENCIA_BANCARIA" +
-                    "(ID_REFERENCIA_BANCARIA INTEGER," +
+                    "(ID_REFERENCIA_BANCARIA INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "CODIGO_FEBRABAN INTEGER," +
                     "NOME_BANCO VARCHAR(60)," +
                     "CONTA_CORRENTE VARCHAR(60)," +
@@ -535,7 +539,7 @@ public class DBHelper extends SQLiteOpenHelper {
                     "NOME_USUARIO VARCHAR(60));");
 
             db.execSQL("CREATE TABLE IF NOT EXISTS TBL_REFERENCIA_COMERCIAL" +
-                    "(ID_REFERENCIA_COMERCIAL INTEGER," +
+                    "(ID_REFERENCIA_COMERCIAL INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "NOME_FORNECEDOR_REFERENCIA VARCHAR(60)," +
                     "TELEFONE VARCHAR(20)," +
                     "ID_CADASTRO INTEGER," +
@@ -543,7 +547,7 @@ public class DBHelper extends SQLiteOpenHelper {
                     "NOME_USUARIO VARCHAR(60));");
 
             db.execSQL("CREATE TABLE IF NOT EXISTS TBL_CADASTRO_CONTATO" +
-                    "(ID_CONTATO INTEGER," +
+                    "(ID_CONTATO INTEGER PRIMARY KEY AUTOINCREMENT," +
                     "ID_CONTATO_SERVIDOR INTEGER," +
                     "ID_CADASTRO INTEGER," +
                     "ATIVO VARCHAR(1)," +
@@ -635,6 +639,7 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("DATA_RETORNO", prospect.getDataRetorno());
         content.put("FOTO_PRINCIPALB_ASE64", prospect.getFotoPrincipalBase64());
         content.put("FOTO_SECUNDARIA_BASE64", prospect.getFotoSecundariaBase64());
+        content.put("PROSPECT_SALVO", prospect.getProspectSalvo());
 
         if (prospect.getId_prospect() != null && contagem("SELECT COUNT(ID_PROSPECT) FROM TBL_PROSPECT WHERE ID_PROSPECT = " + prospect.getId_prospect()) > 0) {
             content.put("ID_PROSPECT", prospect.getId_prospect());
@@ -651,12 +656,25 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
-    public List<Prospect> listaProspect() {
+    public List<Prospect> listaProspect(int parametro) {
         List<Prospect> listaProspect = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor;
 
-        cursor = db.rawQuery("SELECT * FROM TBL_PROSPECT ORDER BY ID_PROSPECT DESC", null);
+        switch (parametro) {
+            case 0:
+                cursor = db.rawQuery("SELECT * FROM TBL_PROSPECT WHERE PROSPECT_SALVO = 'N' AND ID_PROSPECT_SERVIDOR IS NULL ORDER BY ID_PROSPECT DESC", null);
+                break;
+            case 1:
+                cursor = db.rawQuery("SELECT * FROM TBL_PROSPECT WHERE PROSPECT_SALVO = 'S' AND ID_PROSPECT_SERVIDOR IS NULL ORDER BY ID_PROSPECT DESC", null);
+                break;
+            case 2:
+                cursor = db.rawQuery("SELECT * FROM TBL_PROSPECT WHERE PROSPECT_SALVO = 'S' AND ID_PROSPECT_SERVIDOR IS NOT NULL ORDER BY ID_PROSPECT DESC", null);
+                break;
+            default:
+                cursor = db.rawQuery("SELECT * FROM TBL_PROSPECT ORDER BY ID_PROSPECT DESC", null);
+        }
+
         cursor.moveToFirst();
         do {
             Prospect prospect = new Prospect();
@@ -664,11 +682,31 @@ public class DBHelper extends SQLiteOpenHelper {
             prospect.setId_prospect(cursor.getString(cursor.getColumnIndex("ID_PROSPECT")));
             prospect.setId_prospect_servidor(cursor.getString(cursor.getColumnIndex("ID_PROSPECT_SERVIDOR")));
             prospect.setId_cadastro(cursor.getString(cursor.getColumnIndex("ID_CADASTRO")));
-            prospect.setSegmento(listaSegmento(cursor.getString(cursor.getColumnIndex("ID_SEGMENTO"))));
-            prospect.setMotivoNaoCadastramento(listaMotivoNaoCadastramento(cursor.getString(cursor.getColumnIndex("ID_MOTIVO_NAO_CADASTRAMENTO"))));
-            prospect.setReferenciaBancaria(listaReferenciaBancaria(cursor.getString(cursor.getColumnIndex("ID_PROSPECT"))));
-            prospect.setReferenciaComercial(listaReferenciacomercial(cursor.getString(cursor.getColumnIndex("ID_PROSPECT"))));
-            prospect.setListaContato(listaContato(cursor.getString(cursor.getColumnIndex("LISTA_CONTATO"))));
+            try {
+                prospect.setSegmento(listaSegmento(cursor.getString(cursor.getColumnIndex("ID_SEGMENTO"))));
+            } catch (CursorIndexOutOfBoundsException e) {
+                e.printStackTrace();
+            }
+            try {
+                prospect.setMotivoNaoCadastramento(listaMotivoNaoCadastramento(cursor.getString(cursor.getColumnIndex("ID_MOTIVO_NAO_CADASTRAMENTO"))));
+            } catch (CursorIndexOutOfBoundsException e) {
+                e.printStackTrace();
+            }
+            try {
+                prospect.setReferenciaBancaria(listaReferenciaBancaria(cursor.getString(cursor.getColumnIndex("ID_PROSPECT"))));
+            } catch (CursorIndexOutOfBoundsException e) {
+                e.printStackTrace();
+            }
+            try {
+                prospect.setReferenciaComercial(listaReferenciacomercial(cursor.getString(cursor.getColumnIndex("ID_PROSPECT"))));
+            } catch (CursorIndexOutOfBoundsException e) {
+                e.printStackTrace();
+            }
+            try {
+                prospect.setListaContato(listaContato(cursor.getString(cursor.getColumnIndex("ID_PROSPECT"))));
+            } catch (CursorIndexOutOfBoundsException e) {
+                e.printStackTrace();
+            }
             prospect.setNome_cadastro(cursor.getString(cursor.getColumnIndex("NOME_CADASTRO")));
             prospect.setNome_fantasia(cursor.getString(cursor.getColumnIndex("NOME_FANTASIA")));
             prospect.setPessoa_f_j(cursor.getString(cursor.getColumnIndex("PESSOA_F_J")));
@@ -693,6 +731,7 @@ public class DBHelper extends SQLiteOpenHelper {
             prospect.setFotoPrincipalBase64(cursor.getString(cursor.getColumnIndex("FOTO_PRINCIPALB_ASE64")));
             prospect.setFotoSecundariaBase64(cursor.getString(cursor.getColumnIndex("FOTO_SECUNDARIA_BASE64")));
             prospect.setObservacoesComerciais(cursor.getString(cursor.getColumnIndex("OBSERVACOES_COMERCIAIS")));
+            prospect.setProspectSalvo(cursor.getString(cursor.getColumnIndex("PROSPECT_SALVO")));
 
             listaProspect.add(prospect);
         } while (cursor.moveToNext());
@@ -729,7 +768,7 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor;
 
-        cursor = db.rawQuery("SELECT * FROM TBL_REFERENCIA_BANCARIA WHERE ID_CADASTRO = " + idCadastro + "ORDER BY ID_REFERENCIA_BANCARIA", null);
+        cursor = db.rawQuery("SELECT * FROM TBL_REFERENCIA_BANCARIA WHERE ID_CADASTRO = " + idCadastro + " ORDER BY ID_REFERENCIA_BANCARIA DESC", null);
         cursor.moveToFirst();
 
         do {
@@ -771,12 +810,12 @@ public class DBHelper extends SQLiteOpenHelper {
         }
     }
 
-    public List<ReferenciaComercial> listaReferenciacomercial(String idReferenciaComercial) {
+    public List<ReferenciaComercial> listaReferenciacomercial(String idCadastro) {
         List<ReferenciaComercial> listaReferenciacomercial = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor;
 
-        cursor = db.rawQuery("SELECT * FROM TBL_REFERENCIA_COMERCIAL WHERE ID_REFERENCIA_COMERCIAL = " + idReferenciaComercial + "ORDER BY ID_REFERENCIA_COMERCIAL", null);
+        cursor = db.rawQuery("SELECT * FROM TBL_REFERENCIA_COMERCIAL WHERE ID_CADASTRO = " + idCadastro + " ORDER BY ID_REFERENCIA_COMERCIAL DESC", null);
         cursor.moveToFirst();
         do {
             ReferenciaComercial referenciaComercial = new ReferenciaComercial();
@@ -833,7 +872,7 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor;
 
-        cursor = db.rawQuery("SELECT * FROM TBL_CADASTRO_CONTATO WHERE ID_CADASTRO = " + idCadastro, null);
+        cursor = db.rawQuery("SELECT * FROM TBL_CADASTRO_CONTATO WHERE ID_CADASTRO = " + idCadastro + " ORDER BY ID_CONTATO", null);
         cursor.moveToFirst();
 
         do {
@@ -841,6 +880,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
             contato.setId_contato(cursor.getString(cursor.getColumnIndex("ID_CONTATO")));
             contato.setId_contato_servidor(cursor.getString(cursor.getColumnIndex("ID_CONTATO_SERVIDOR")));
+            contato.setId_cadastro(cursor.getString(cursor.getColumnIndex("ID_CADASTRO")));
             contato.setAtivo(cursor.getString(cursor.getColumnIndex("ATIVO")));
             contato.setPessoa_contato(cursor.getString(cursor.getColumnIndex("PESSOA_CONTATO")));
             contato.setFuncao(cursor.getString(cursor.getColumnIndex("FUNCAO")));

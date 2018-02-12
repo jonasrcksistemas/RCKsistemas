@@ -19,8 +19,7 @@
         android:theme="@style/Theme.MeuTema">
         <activity
             android:name=".interfaces.MainActivity"
-
-        android:theme="@style/Theme.Main" />
+            android:theme="@style/Theme.Main" />
         <activity
             android:name=".interfaces.PrincipalActivity"
             android:screenOrientation="portrait" />
@@ -70,19 +69,17 @@
         <activity
             android:name=".interfaces.SpinnerFaixaDesconto"
             android:theme="@style/Theme.CriarDialog" />
-
         <activity
             android:name=".interfaces.FinanceiroResumoActivity"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".interfaces.ActivityCadastroProspect"
             android:screenOrientation="portrait" />
-
         <activity android:name=".interfaces.FinanceiroDetalheActivity" />
         <activity android:name=".interfaces.ActivityAdicionaContato" />
         <activity android:name=".interfaces.ActivityAdicionaBanco" />
         <activity android:name=".interfaces.ActivityAdicionaReferenciaComercial" />
+        <activity android:name=".interfaces.ActivityListaProspect"></activity>
     </application>
 
 </manifest>

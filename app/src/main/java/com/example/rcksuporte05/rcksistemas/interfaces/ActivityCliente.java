@@ -55,8 +55,6 @@ public class ActivityCliente extends AppCompatActivity {
         edtTotalClientes = (EditText) findViewById(R.id.edtTotalClientes);
         toolbar = (Toolbar) findViewById(R.id.tb_cliente);
         toolbar.setTitle("Lista de Clientes");
-        toolbar.setTitle("Lista de Clientes");
-        toolbar.setTitle("Lista de Clientes");
         try {
             lista = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE F_CLIENTE = 'S' AND F_VENDEDOR = 'N' AND ATIVO = 'S' ORDER BY ATIVO DESC, NOME_CADASTRO;");
             preencheLista(lista);
