@@ -78,18 +78,18 @@ public class ActivityListaProspect extends AppCompatActivity {
         recycleProspect.addItemDecoration(new DividerItemDecoration(this, LinearLayout.VERTICAL));
         recycleProspect.setAdapter(listaProspectAdapter);
         listaProspectAdapter.notifyDataSetChanged();
-        edtTotalProspect.setText(lista.size() + ": Prospects Pendentes");
+        edtTotalProspect.setText(lista.size() + ": Prospects Listados");
     }
 
     @Override
     protected void onResume() {
         try {
             DBHelper db = new DBHelper(this);
-            List<Prospect> listaProspect = db.listaProspect(Prospect.PROSPECT_PENDENTE);
+            List<Prospect> listaProspect = db.listaProspect(Prospect.PROSPECT_PENDENTE_SALVO);
             preencheLista(listaProspect);
         } catch (CursorIndexOutOfBoundsException e) {
             e.printStackTrace();
-            edtTotalProspect.setText("0: Prospects Pendentes");
+            edtTotalProspect.setText("0: Prospects Listados");
         }
         super.onResume();
     }

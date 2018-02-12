@@ -44,6 +44,29 @@ public class ListaProspectAdapter extends RecyclerView.Adapter<ProspectViewHolde
             e.printStackTrace();
         }
 
+        switch (listaProspect.get(position).getDiaVisita()) {
+            case "segunda":
+                holder.txtDiaSemana.setText("Segunda-Feira");
+                break;
+            case "terça":
+                holder.txtDiaSemana.setText("Terça-Feira");
+                break;
+            case "quarta":
+                holder.txtDiaSemana.setText("Quarta-Feira");
+                break;
+            case "quinta":
+                holder.txtDiaSemana.setText("Quinta-Feira");
+                break;
+            case "sexta":
+                holder.txtDiaSemana.setText("Sexta-Feira");
+                break;
+        }
+        if (listaProspect.get(position).getProspectSalvo().equals("S")) {
+            holder.prospectSalvo.setImageResource(R.mipmap.ic_prospect_salvo);
+        } else {
+            holder.prospectSalvo.setImageResource(R.mipmap.ic_prospect_pendente);
+        }
+
         ApplyClickEvents(holder, position);
     }
 
