@@ -216,7 +216,7 @@ public class ProspectHelper {
 
 
         if (prospect.getPessoa_f_j() != null && prospect.getPessoa_f_j().equals("J")) {
-            if (prospect.getInscri_estadual() == null || !prospect.getInscri_estadual().equals("")) {
+            if (prospect.getInscri_estadual() == null || prospect.getInscri_estadual().trim().isEmpty()) {
                 if (verificaMovimento) {
                     verificaMovimento = false;
                     moveTela(0);
@@ -273,6 +273,14 @@ public class ProspectHelper {
             }
             cadastroProspectEndereco.edtCep.requestFocus();
             cadastroProspectEndereco.edtCep.setError("Campo Obrigatorio");
+        }
+
+        if (prospect.getSituacaoPredio() == null || prospect.getSituacaoPredio().trim().isEmpty()) {
+            if (verificaMovimento) {
+                verificaMovimento = false;
+                Toast.makeText(activityMain, "Informe a situação do Predio", Toast.LENGTH_LONG).show();
+                moveTela(1);
+            }
         }
 
 
@@ -335,9 +343,8 @@ public class ProspectHelper {
         //Tela 7 salvar foto
         if (prospect.getDataRetorno() == null || prospect.getDataRetorno().trim().isEmpty()) {
             cadastroProspectFotoSalvar.edtDataRetorno.setBackgroundResource(R.drawable.borda_edittext_erro);
+            Toast.makeText(activityMain, "Informe a data de Retorno", Toast.LENGTH_LONG).show();
             verificaMovimento = false;
-        } else {
-            ProspectHelper.getProspect().setDataRetorno(cadastroProspectFotoSalvar.edtDataRetorno.getText().toString().trim());
         }
 
         return verificaMovimento;

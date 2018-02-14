@@ -3,6 +3,7 @@ package com.example.rcksuporte05.rcksistemas.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -30,6 +31,9 @@ public class CadastroProspectContatos extends Fragment implements ListaContatoAd
     @BindView(R.id.recyclerContatos)
     RecyclerView recyclerContatos;
 
+    @BindView(R.id.btnAddContato)
+    FloatingActionButton btnAddContato;
+
     ListaContatoAdapter listaContatoAdapter;
 
     @Nullable
@@ -42,6 +46,10 @@ public class CadastroProspectContatos extends Fragment implements ListaContatoAd
         recyclerContatos.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayout.VERTICAL));
 
         preencheListaContatos();
+
+        if (ProspectHelper.getProspect().getProspectSalvo() != null && ProspectHelper.getProspect().getProspectSalvo().equals("S")) {
+            btnAddContato.setVisibility(View.GONE);
+        }
 
         ProspectHelper.setCadastroProspectContatos(this);
         return view;

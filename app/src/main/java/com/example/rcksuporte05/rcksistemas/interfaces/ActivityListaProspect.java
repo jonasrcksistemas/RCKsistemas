@@ -50,6 +50,8 @@ public class ActivityListaProspect extends AppCompatActivity {
         setContentView(R.layout.activity_lista_prospect);
         ButterKnife.bind(this);
 
+        recycleProspect.addItemDecoration(new DividerItemDecoration(this, LinearLayout.VERTICAL));
+
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
@@ -75,7 +77,6 @@ public class ActivityListaProspect extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        recycleProspect.addItemDecoration(new DividerItemDecoration(this, LinearLayout.VERTICAL));
         recycleProspect.setAdapter(listaProspectAdapter);
         listaProspectAdapter.notifyDataSetChanged();
         edtTotalProspect.setText(lista.size() + ": Prospects Listados");

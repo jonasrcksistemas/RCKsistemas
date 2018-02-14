@@ -399,6 +399,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 "ID_EMPRESA INTEGER," +
                 "DIA_VISITA VARCHAR(20)," +
                 "DATA_RETORNO DATE," +
+                "IND_DA_IE_DESTINATARIO_PROSPECT INTEGER, " +
                 "FOTO_PRINCIPALB_ASE64 BLOB," +
                 "FOTO_SECUNDARIA_BASE64 BLOB," +
                 "OBSERVACOES_COMERCIAIS VARCHAR(300), " +
@@ -503,7 +504,7 @@ public class DBHelper extends SQLiteOpenHelper {
                     "ID_EMPRESA INTEGER," +
                     "DIA_VISITA VARCHAR(20)," +
                     "DATA_RETORNO DATE," +
-                    "IND_DA_IE_DESTINATARIO_PROSPECT" +
+                    "IND_DA_IE_DESTINATARIO_PROSPECT INTEGER, " +
                     "FOTO_PRINCIPALB_ASE64 BLOB," +
                     "FOTO_SECUNDARIA_BASE64 BLOB," +
                     "OBSERVACOES_COMERCIAIS VARCHAR(300), " +
@@ -665,7 +666,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
         switch (parametro) {
             case 0:
-                cursor = db.rawQuery("SELECT * FROM TBL_PROSPECT WHERE ID_PROSPECT_SERVIDOR IS NULL ORDER BY ID_PROSPECT DESC", null);
+                cursor = db.rawQuery("SELECT * FROM TBL_PROSPECT WHERE ID_PROSPECT_SERVIDOR IS NULL ORDER BY PROSPECT_SALVO DESC, ID_PROSPECT", null);
                 break;
             case 1:
                 cursor = db.rawQuery("SELECT * FROM TBL_PROSPECT WHERE PROSPECT_SALVO = 'N' AND ID_PROSPECT_SERVIDOR IS NULL ORDER BY ID_PROSPECT DESC", null);

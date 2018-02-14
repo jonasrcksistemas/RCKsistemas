@@ -1,5 +1,6 @@
 package com.example.rcksuporte05.rcksistemas.adapters;
 
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -63,6 +64,7 @@ public class ListaProspectAdapter extends RecyclerView.Adapter<ProspectViewHolde
         }
         if (listaProspect.get(position).getProspectSalvo().equals("S")) {
             holder.prospectSalvo.setImageResource(R.mipmap.ic_prospect_salvo);
+            holder.itemListaProspect.setBackgroundColor(Color.parseColor("#43607d8a"));
         } else {
             holder.prospectSalvo.setImageResource(R.mipmap.ic_prospect_pendente);
         }

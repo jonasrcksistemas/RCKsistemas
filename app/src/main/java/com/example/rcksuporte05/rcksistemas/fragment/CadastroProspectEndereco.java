@@ -53,6 +53,12 @@ public class CadastroProspectEndereco extends Fragment {
     @BindView(R.id.edtComplementoProspect)
     public EditText edtComplementoProspect;
 
+    @BindView(R.id.rdAlugado)
+    RadioButton rdAlugado;
+
+    @BindView(R.id.rdProprio)
+    RadioButton rdProprio;
+
     ArrayAdapter municipioAdapter;
     ArrayAdapter ufAdapter;
     ArrayAdapter<Pais> paisAdapter;
@@ -161,6 +167,21 @@ public class CadastroProspectEndereco extends Fragment {
         });
 
         injetaDadosNaTela();
+
+        if (ProspectHelper.getProspect().getProspectSalvo() != null && ProspectHelper.getProspect().getProspectSalvo().equals("S")) {
+            edtEnderecoProspect.setFocusable(false);
+            edtNumeroProspect.setFocusable(false);
+            edtBairroProspect.setFocusable(false);
+            edtCep.setFocusable(false);
+            rgSituacaoPredio.setClickable(false);
+            spMunicipioProspect.setEnabled(false);
+            spPaisProspect.setEnabled(false);
+            spUfProspect.setEnabled(false);
+            edtComplementoProspect.setFocusable(false);
+            rdAlugado.setClickable(false);
+            rdProprio.setClickable(false);
+        }
+
         ProspectHelper.setCadastroProspectEndereco(this);
         return view;
     }
@@ -238,6 +259,16 @@ public class CadastroProspectEndereco extends Fragment {
             }
         }
 
+        if (ProspectHelper.getProspect().getSituacaoPredio() != null && !ProspectHelper.getProspect().getSituacaoPredio().trim().isEmpty()) {
+            switch (ProspectHelper.getProspect().getSituacaoPredio()) {
+                case "Alugado":
+                    rdAlugado.setChecked(true);
+                    break;
+                case "Proprio":
+                    rdProprio.setChecked(true);
+                    break;
+            }
+        }
     }
 
 
