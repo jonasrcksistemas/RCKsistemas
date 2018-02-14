@@ -24,7 +24,30 @@
             android:layout_height="wrap_content"
             android:background="@color/colorPrimary"
             android:theme="@style/Base.ThemeOverlay.AppCompat.Dark.ActionBar"
-            app:title="Prospect" />
+            app:title="Prospect">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end">
+
+                <Spinner
+                    android:id="@+id/spFiltaProspect"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_below="@id/txtNomeCliente"
+                    android:layout_marginTop="15dp"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                    android:theme="@style/Theme.MeuTemaPedido" />
+
+            </LinearLayout>
+
+
+        </android.support.v7.widget.Toolbar>
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycleProspect"
