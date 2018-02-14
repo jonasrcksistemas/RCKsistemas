@@ -412,11 +412,13 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                     case 500:
                         Toast.makeText(getApplicationContext(), "Foi encontrada uma divergencia em seu cadastro!", Toast.LENGTH_SHORT).show();
                         Toast.makeText(getApplicationContext(), "Por favor, refaça o seu login!", Toast.LENGTH_LONG).show();
-                        db.alterar("UPDATE TBL_LOGIN SET LOGADO = 'N';");
-                        Intent intent = new Intent(PrincipalActivity.this, MainActivity.class);
-                        startActivity(intent);
-                        finish();
-                        System.gc();
+                        if(!UsuarioHelper.getUsuario().getLogin().equals("DC")){
+                            db.alterar("UPDATE TBL_LOGIN SET LOGADO = 'N';");
+                            Intent intent = new Intent(PrincipalActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            finish();
+                            System.gc();
+                        }
                         break;
                 }
             }

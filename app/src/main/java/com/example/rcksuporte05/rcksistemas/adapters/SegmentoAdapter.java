@@ -116,4 +116,5 @@ public class SegmentoAdapter extends RecyclerView.Adapter<SegmentoViewHolder> {
     public interface SegmentoListener {
         void onClick(int position);
     }
+
 }

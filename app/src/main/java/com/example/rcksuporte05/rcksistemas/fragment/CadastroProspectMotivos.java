@@ -42,6 +42,7 @@ public class CadastroProspectMotivos extends Fragment implements MotivoAdapter.M
         ButterKnife.bind(this,view);
         recyclerMotivos.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerMotivos.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayout.VERTICAL));
+        edtOutrosMotivosProspect.setEnabled(false);
 
         preencheRecycler();
         insereDadosNaTela();
@@ -52,11 +53,11 @@ public class CadastroProspectMotivos extends Fragment implements MotivoAdapter.M
 
     public void insereDadosNaTela(){
         if(ProspectHelper.getProspect().getMotivoNaoCadastramento() != null){
-            MotivoNaoCadastramento motivo = ProspectHelper.getProspect().getMotivoNaoCadastramento();
-            motivoAdapter.marcarSelecionado(motivo);
+            motivoAdapter.marcarSelecionado(ProspectHelper.getProspect().getMotivoNaoCadastramento());
         }
 
         if(ProspectHelper.getProspect().getObservacoesComerciais() != null){
+            edtOutrosMotivosProspect.setEnabled(true);
             edtOutrosMotivosProspect.setText(ProspectHelper.getProspect().getObservacoesComerciais());
         }
 
@@ -66,17 +67,15 @@ public class CadastroProspectMotivos extends Fragment implements MotivoAdapter.M
     public void insereDadosDaFrame(){
         List<MotivoNaoCadastramento> motivoSelecionado;
         motivoSelecionado = motivoAdapter.getItensSelecionados();
-        MotivoNaoCadastramento motivo = new MotivoNaoCadastramento();
 
         if(motivoSelecionado.size() > 0){
-             motivo = motivoSelecionado.get(0);
+             ProspectHelper.getProspect().setMotivoNaoCadastramento(motivoSelecionado.get(0));
+            if(edtOutrosMotivosProspect.getText() !=null ){
+                ProspectHelper.getProspect().getMotivoNaoCadastramento().setDescricaoOutros(edtOutrosMotivosProspect.getText().toString());
+            }
         }
 
-        if(edtOutrosMotivosProspect.getText() !=null){
-            motivo.setDescricaoOutros(edtOutrosMotivosProspect.getText().toString());
-        }
 
-        ProspectHelper.getProspect().setMotivoNaoCadastramento(motivo);
     }
 
     private void preencheRecycler() {
@@ -87,6 +86,13 @@ public class CadastroProspectMotivos extends Fragment implements MotivoAdapter.M
 
     @Override
     public void onClick(int position) {
+        if(motivoAdapter.getItem(position).getMotivo().toLowerCase().contains("outros")){
+            edtOutrosMotivosProspect.setEnabled(true);
+            edtOutrosMotivosProspect.requestFocus();
+        }else{
+            edtOutrosMotivosProspect.setText("");
+            edtOutrosMotivosProspect.setEnabled(false);
+        }
         motivoAdapter.toggleSelection(position);
         motivoAdapter.notifyDataSetChanged();
     }
