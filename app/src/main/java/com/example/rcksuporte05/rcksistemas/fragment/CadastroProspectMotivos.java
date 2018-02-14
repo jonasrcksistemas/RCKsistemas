@@ -47,6 +47,11 @@ public class CadastroProspectMotivos extends Fragment implements MotivoAdapter.M
         preencheRecycler();
         insereDadosNaTela();
 
+        if (ProspectHelper.getProspect().getProspectSalvo() != null && ProspectHelper.getProspect().getProspectSalvo().equals("S")) {
+            recyclerMotivos.setClickable(false);
+            edtOutrosMotivosProspect.setFocusable(false);
+        }
+
         ProspectHelper.setCadastroProspectMotivos(this);
         return view;
     }

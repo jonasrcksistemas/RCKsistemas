@@ -49,6 +49,11 @@ public class CadastroProspectSegmentos extends Fragment implements SegmentoAdapt
         preencheRecycler();
         insereDadosNaTela();
 
+        if (ProspectHelper.getProspect().getProspectSalvo() != null && ProspectHelper.getProspect().getProspectSalvo().equals("S")) {
+            recyclerSegmentos.setClickable(false);
+            edtOutrosSegmentosProspect.setFocusable(false);
+        }
+
         ProspectHelper.setCadastroProspectSegmentos(this);
         return view;
     }

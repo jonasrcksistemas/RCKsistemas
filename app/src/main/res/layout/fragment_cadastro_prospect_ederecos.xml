@@ -231,10 +231,10 @@
                     />
 
                 <RadioButton
-                    android:id="@+id/rdPropio"
+                    android:id="@+id/rdProprio"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Propio"
+                    android:text="Proprio"
                     android:layout_marginLeft="45dp"
                     />
 

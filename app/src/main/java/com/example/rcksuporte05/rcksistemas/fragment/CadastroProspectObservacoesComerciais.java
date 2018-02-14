@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
@@ -45,6 +46,12 @@ public class CadastroProspectObservacoesComerciais extends Fragment implements R
     @BindView(R.id.recyclerBancos)
     RecyclerView recyclerBancos;
 
+    @BindView(R.id.btnAddReferencia)
+    Button btnAddReferencia;
+
+    @BindView(R.id.btnAddBancos)
+    Button btnAddBancos;
+
     ReferenciaComercialAdapter referenciaComercialAdapter;
     ReferenciaBancariaAdapter referenciaBancariaAdapter;
 
@@ -61,8 +68,15 @@ public class CadastroProspectObservacoesComerciais extends Fragment implements R
         recyclerBancos.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerBancos.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayout.VERTICAL));
 
-
         injetaDadosNaTela();
+
+        if (ProspectHelper.getProspect().getProspectSalvo() != null && ProspectHelper.getProspect().getProspectSalvo().equals("S")) {
+            edtObservacaoComercial.setFocusable(false);
+            edtLimiteCreditoSugerido.setFocusable(false);
+            edtLimiteDePrazoSugerido.setFocusable(false);
+            btnAddReferencia.setVisibility(View.INVISIBLE);
+            btnAddBancos.setVisibility(View.INVISIBLE);
+        }
 
         ProspectHelper.setCadastroProspectObservacoesComerciais(this);
         return view;

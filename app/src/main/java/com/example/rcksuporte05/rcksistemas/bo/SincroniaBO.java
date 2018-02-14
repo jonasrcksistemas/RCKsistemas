@@ -8,6 +8,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.CursorIndexOutOfBoundsException;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
@@ -433,8 +434,12 @@ public class SincroniaBO {
                 }
 
                 if (sincronia.isProspect()) {
-                    final List<Prospect> listaProspect = db.listaProspect(Prospect.PROSPECT_SALVO);
-                    sincronia.setListaProspect(listaProspect);
+                    try {
+                        final List<Prospect> listaProspect = db.listaProspect(Prospect.PROSPECT_SALVO);
+                        sincronia.setListaProspect(listaProspect);
+                    } catch (CursorIndexOutOfBoundsException e) {
+                        e.printStackTrace();
+                    }
                 }
 
                 Call<Sincronia> call = apiRotas.sincroniaApi(Integer.parseInt(UsuarioHelper.getUsuario().getId_usuario()), cabecalho, sincronia);

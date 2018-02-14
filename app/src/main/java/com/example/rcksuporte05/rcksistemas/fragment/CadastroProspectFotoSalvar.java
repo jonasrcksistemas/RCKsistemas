@@ -20,6 +20,7 @@ import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
@@ -54,6 +55,16 @@ public class CadastroProspectFotoSalvar extends Fragment {
     @BindView(R.id.edtDataRetorno)
     public EditText edtDataRetorno;
 
+    @BindView(R.id.btnSalvarParcial)
+    Button btnSalvarParcial;
+
+    @BindView(R.id.btnSalvarProspect)
+    Button btnSalvarProspect;
+
+    @BindView(R.id.btnAddFoto)
+    Button btnAddFoto;
+
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -61,15 +72,23 @@ public class CadastroProspectFotoSalvar extends Fragment {
         ButterKnife.bind(this, view);
         db = new DBHelper(getContext());
 
-        edtDataRetorno.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DatePickerUtil.mostraDatePickerDialog(getContext(), edtDataRetorno);
-                edtDataRetorno.setBackgroundResource(R.drawable.borda_edittext);
-            }
-        });
 
         insereDadosNaTela();
+
+        if (ProspectHelper.getProspect().getProspectSalvo() != null && ProspectHelper.getProspect().getProspectSalvo().equals("S")) {
+            edtDataRetorno.setFocusable(false);
+            btnSalvarParcial.setVisibility(View.INVISIBLE);
+            btnSalvarProspect.setVisibility(View.INVISIBLE);
+            btnAddFoto.setVisibility(View.INVISIBLE);
+        } else {
+            edtDataRetorno.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    DatePickerUtil.mostraDatePickerDialog(getContext(), edtDataRetorno);
+                    edtDataRetorno.setBackgroundResource(R.drawable.borda_edittext);
+                }
+            });
+        }
 
         ProspectHelper.setCadastroProspectFotoSalvar(this);
         return view;
@@ -96,6 +115,7 @@ public class CadastroProspectFotoSalvar extends Fragment {
 
     @OnClick(R.id.btnSalvarParcial)
     public void salvarParcial(){
+        insereDadosDaFrame();
         AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
         alert.setTitle("Atenção");
         alert.setMessage("Tem certeza que deseja salvar esse prospect para continuar mais tarde?");
@@ -103,7 +123,6 @@ public class CadastroProspectFotoSalvar extends Fragment {
         alert.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                insereDadosDaFrame();
                 ProspectHelper.getProspect().setProspectSalvo("N");
                 db.atualizarTBL_PROSPECT(ProspectHelper.getProspect());
                 getActivity().finish();
@@ -118,7 +137,7 @@ public class CadastroProspectFotoSalvar extends Fragment {
         if(ProspectHelper.salvarProspect()){
             AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
             alert.setTitle("Atenção");
-            alert.setMessage("Tem certeza que deseja salvar esse prospect permanentemente?");
+            alert.setMessage("Tem certeza que deseja salvar esse prospect PERMANENTEMENTE?");
             alert.setNegativeButton("NÃO", null);
             alert.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
                 @Override

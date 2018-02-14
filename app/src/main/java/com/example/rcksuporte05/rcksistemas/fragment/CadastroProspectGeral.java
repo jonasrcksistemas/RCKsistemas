@@ -92,6 +92,25 @@ public class CadastroProspectGeral extends Fragment {
 
         injetaDadosNaTela();
 
+        if (ProspectHelper.getProspect().getProspectSalvo() != null && ProspectHelper.getProspect().getProspectSalvo().equals("S")) {
+            edtNomeClienteProspect.setFocusable(false);
+            edtNomeFantasiaProspect.setFocusable(false);
+            edtCpfCnpjProspect.setFocusable(false);
+            edtInscEstadualProspect.setFocusable(false);
+            edtInscMunicipalProspect.setFocusable(false);
+            rgPessoaFisicaJuridica.setClickable(false);
+            rgRotaProspect.setClickable(false);
+            rdFisicaProspect.setClickable(false);
+            rdJuridicaProspect.setClickable(false);
+            txtIdProspect.setClickable(false);
+            rdSegrospect.setClickable(false);
+            rdTercaProspect.setClickable(false);
+            rdQuartaProspect.setClickable(false);
+            rdQuintaProspect.setClickable(false);
+            rdSextaProspect.setClickable(false);
+            spIeProspect.setEnabled(false);
+        }
+
         ProspectHelper.setCadastroProspectGeral(this);
 
         return view;

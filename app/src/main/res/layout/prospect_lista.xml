@@ -4,52 +4,66 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <ImageView
+        android:id="@+id/prospectSalvo"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:layout_alignEnd="@+id/txtDataRetorno"
+        android:layout_alignParentTop="true"
+        android:layout_alignRight="@+id/txtDataRetorno"
+        android:layout_marginTop="8dp" />
+
     <TextView
+        android:layout_alignLeft="@+id/txtNomeFantasia"
+        android:layout_alignStart="@+id/txtNomeFantasia"
+        android:layout_below="@+id/prospectSalvo"
         android:id="@+id/nomeProspect"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textViewNomeFantasia"
+        android:layout_toLeftOf="@+id/prospectSalvo"
         android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/textViewNomeFantasia"
+        android:layout_toStartOf="@+id/prospectSalvo"
         android:layout_marginTop="12dp"
         android:ellipsize="end"
         android:maxLines="1"
         android:scrollHorizontally="true"
-        android:text="TextView"
         android:textColor="#000000" />
 
     <TextView
         android:id="@+id/txtDataRetorno"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/textViewNomeFantasia"
-        android:layout_alignBottom="@+id/textViewNomeFantasia"
+        android:layout_alignBaseline="@+id/txtNomeFantasia"
+        android:layout_alignBottom="@+id/txtNomeFantasia"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_marginBottom="10dp"
-        android:layout_marginEnd="13dp"
-        android:layout_marginRight="13dp"
-        android:maxLines="1"
-        android:text="TextView" />
+        android:layout_marginEnd="30dp"
+        android:layout_marginRight="30dp"
+        android:layout_toEndOf="@+id/txtDiaSemana"
+        android:layout_toRightOf="@+id/txtDiaSemana"
+        android:gravity="end"
+        android:maxLines="1" />
 
     <TextView
-        android:id="@+id/textViewNomeFantasia"
+        android:id="@+id/txtNomeFantasia"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/nomeProspect"
-        android:layout_marginEnd="12dp"
         android:layout_marginLeft="17dp"
-        android:layout_marginRight="12dp"
         android:layout_marginStart="17dp"
         android:layout_marginTop="5dp"
-        android:layout_toLeftOf="@+id/txtDataRetorno"
-        android:layout_toStartOf="@+id/txtDataRetorno"
         android:ellipsize="end"
-        android:gravity="start"
-        android:maxLines="1"
-        android:scrollHorizontally="true"
-        android:text="TextView" />
+        android:maxLines="1" />
+
+    <TextView
+        android:id="@+id/txtDiaSemana"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txtDataRetorno"
+        android:layout_alignBottom="@+id/txtDataRetorno"
+        android:layout_centerHorizontal="true"
+        android:gravity="center" />
 
 </RelativeLayout>

@@ -8,9 +8,10 @@ import java.util.List;
  */
 
 public class Prospect {
-    public static int PROSPECT_PENDENTE = 0;
-    public static int PROSPECT_SALVO = 1;
-    public static int PROSPECT_ENVIADO = 2;
+    public static int PROSPECT_PENDENTE_SALVO = 0;
+    public static int PROSPECT_PENDENTE = 1;
+    public static int PROSPECT_SALVO = 2;
+    public static int PROSPECT_ENVIADO = 3;
 
     private String id_prospect;
     private String id_prospect_servidor;
