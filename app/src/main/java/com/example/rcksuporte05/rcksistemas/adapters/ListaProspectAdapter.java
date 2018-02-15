@@ -2,6 +2,8 @@ package com.example.rcksuporte05.rcksistemas.adapters;
 
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.util.SparseBooleanArray;
+import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,7 @@ import com.example.rcksuporte05.rcksistemas.classes.Prospect;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,12 +22,14 @@ import java.util.List;
  */
 
 public class ListaProspectAdapter extends RecyclerView.Adapter<ProspectViewHolder> {
-    public List<Prospect> listaProspect;
-    public ProspectAdapterListener listener;
+    private List<Prospect> listaProspect;
+    private ProspectAdapterListener listener;
+    private SparseBooleanArray selectedItems;
 
     public ListaProspectAdapter(List<Prospect> listaProspect, ProspectAdapterListener listener) {
         this.listaProspect = listaProspect;
         this.listener = listener;
+        this.selectedItems = new SparseBooleanArray();
     }
 
     @Override
@@ -67,10 +72,17 @@ public class ListaProspectAdapter extends RecyclerView.Adapter<ProspectViewHolde
         }
         if (listaProspect.get(position).getProspectSalvo().equals("S")) {
             holder.prospectSalvo.setImageResource(R.mipmap.ic_prospect_salvo);
-            holder.itemListaProspect.setBackgroundColor(Color.parseColor("#43607d8a"));
         } else {
             holder.prospectSalvo.setImageResource(R.mipmap.ic_prospect_pendente);
         }
+
+        if (selectedItems.get(position))
+            if (listaProspect.get(position).getProspectSalvo().equals("S"))
+                holder.itemView.setBackgroundColor(Color.parseColor("#5800a387"));
+            else
+                holder.itemView.setBackgroundColor(Color.parseColor("#58a30054"));
+        else
+            holder.itemView.setBackgroundColor(Color.TRANSPARENT);
 
         ApplyClickEvents(holder, position);
     }
@@ -79,7 +91,6 @@ public class ListaProspectAdapter extends RecyclerView.Adapter<ProspectViewHolde
     public int getItemCount() {
         if (listaProspect != null)
             return listaProspect.size();
-
         return 0;
     }
 
@@ -90,9 +101,54 @@ public class ListaProspectAdapter extends RecyclerView.Adapter<ProspectViewHolde
                 listener.onProspectRowClicked(position);
             }
         });
+        holder.itemListaProspect.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                listener.onProspectLongClicked(position);
+                v.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS);
+                return true;
+            }
+        });
+    }
+
+    public void toggleSelection(int pos) {
+        if (selectedItems.get(pos, false)) {
+            selectedItems.delete(pos);
+        } else {
+            selectedItems.put(pos, true);
+        }
+        notifyItemChanged(pos);
+    }
+
+    public Prospect getItem(int position) {
+        return listaProspect.get(position);
+    }
+
+    public List<Prospect> getItensSelecionados() {
+        List<Prospect> prospectsSelecionados = new ArrayList<>();
+        for (int i = 0; i < selectedItems.size(); i++) {
+            prospectsSelecionados.add(listaProspect.get(selectedItems.keyAt(i)));
+        }
+        return prospectsSelecionados;
+    }
+
+    public int getItensSelecionadosCount() {
+        return selectedItems.size();
+    }
+
+    public void remove(Prospect prospect) {
+        listaProspect.remove(prospect);
+        notifyDataSetChanged();
+    }
+
+    public void clearSelections() {
+        selectedItems.clear();
+        notifyDataSetChanged();
     }
 
     public interface ProspectAdapterListener {
         void onProspectRowClicked(int position);
+
+        void onProspectLongClicked(int position);
     }
 }

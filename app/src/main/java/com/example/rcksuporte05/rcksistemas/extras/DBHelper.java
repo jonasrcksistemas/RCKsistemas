@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.CursorIndexOutOfBoundsException;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -745,6 +746,13 @@ public class DBHelper extends SQLiteOpenHelper {
         cursor.close();
 
         return listaProspect;
+    }
+
+    public void excluiProspect(Prospect prospect) throws SQLException {
+        alterar("DELETE FROM TBL_REFERENCIA_BANCARIA WHERE ID_CADASTRO = " + prospect.getId_prospect() + " ;");
+        alterar("DELETE FROM TBL_REFERENCIA_COMERCIAL WHERE ID_CADASTRO = " + prospect.getId_prospect() + " ;");
+        alterar("DELETE FROM TBL_CADASTRO_CONTATO WHERE ID_CADASTRO = " + prospect.getId_prospect() + " ;");
+        alterar("DELETE FROM TBL_PROSPECT WHERE ID_PROSPECT = " + prospect.getId_prospect() + " ;");
     }
 
     public void atualizarTBL_REFERENCIA_BANCARIA(List<ReferenciaBancaria> ListaReferenciaBancaria, String idCadastro) {

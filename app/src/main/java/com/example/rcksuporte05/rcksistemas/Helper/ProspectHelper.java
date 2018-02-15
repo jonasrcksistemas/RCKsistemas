@@ -313,20 +313,29 @@ public class ProspectHelper {
 
 
         //tela 5 motivo não cadastramento
-        if (prospect.getMotivoNaoCadastramento() == null) {
-            if (verificaMovimento) {
-                verificaMovimento = false;
-                Toast.makeText(activityMain, "Escolha um Motivo para o Não cadastramento!", Toast.LENGTH_LONG).show();
-                moveTela(4);
-            }
-        }else if(prospect.getMotivoNaoCadastramento().getMotivo().toLowerCase().contains("outros") && prospect.getMotivoNaoCadastramento().getDescricaoOutros().equals("") ){
-            if (verificaMovimento) {
-                verificaMovimento = false;
-                Toast.makeText(activityMain, "Escolha um Motivo para o Não cadastramento!", Toast.LENGTH_LONG).show();
-                moveTela(4);
-            }
+        try {
+            if (prospect.getMotivoNaoCadastramento() == null) {
+                if (verificaMovimento) {
+                    verificaMovimento = false;
+                    Toast.makeText(activityMain, "Escolha um Motivo para o Não cadastramento!", Toast.LENGTH_LONG).show();
+                    moveTela(4);
+                }
+            } else if (prospect.getMotivoNaoCadastramento().getMotivo().toLowerCase().contains("outros") && prospect.getMotivoNaoCadastramento().getDescricaoOutros().equals("")) {
+                if (verificaMovimento) {
+                    verificaMovimento = false;
+                    Toast.makeText(activityMain, "Escolha um Motivo para o Não cadastramento!", Toast.LENGTH_LONG).show();
+                    moveTela(4);
+                }
                 cadastroProspectMotivos.edtOutrosMotivosProspect.setError("Observação obrigatorio quando opção Outros selecionada");
                 cadastroProspectMotivos.edtOutrosMotivosProspect.requestFocus();
+            }
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+            if (verificaMovimento) {
+                verificaMovimento = false;
+                Toast.makeText(activityMain, "Escolha um Motivo para o Não cadastramento!", Toast.LENGTH_LONG).show();
+                moveTela(4);
+            }
         }
 
 

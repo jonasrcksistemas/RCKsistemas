@@ -84,7 +84,6 @@ public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRe
         recyclerViewPedidos.addItemDecoration(new DividerItemDecoration(this, LinearLayout.VERTICAL));
 
         actionModeCallback = new ActionModeCallback();
-
     }
 
     @Override

@@ -79,7 +79,9 @@
         <activity android:name=".interfaces.ActivityAdicionaContato" />
         <activity android:name=".interfaces.ActivityAdicionaBanco" />
         <activity android:name=".interfaces.ActivityAdicionaReferenciaComercial" />
-        <activity android:name=".interfaces.ActivityListaProspect"></activity>
+        <activity
+            android:name=".interfaces.ActivityListaProspect"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>
