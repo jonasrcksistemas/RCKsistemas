@@ -20,7 +20,7 @@ import com.example.rcksuporte05.rcksistemas.adapters.ListaAdapterHistoricoFinanc
 import com.example.rcksuporte05.rcksistemas.api.Api;
 import com.example.rcksuporte05.rcksistemas.api.Rotas;
 import com.example.rcksuporte05.rcksistemas.classes.HistoricoFinanceiro;
-import com.example.rcksuporte05.rcksistemas.util.MascaraMonetaria;
+import com.example.rcksuporte05.rcksistemas.util.MascaraUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -95,7 +95,7 @@ public class FinanceiroDetalheActivity extends AppCompatActivity {
                 ListaAdapterHistoricoFinanceiroPendentes listaAdapterHistoricoFinanceiroVencido = new ListaAdapterHistoricoFinanceiroPendentes(this, HistoricoFinanceiroHelper.getHistoricoFinanceiro().getListaVencida());
                 lstHistoricoFinanceiro.setAdapter(listaAdapterHistoricoFinanceiroVencido);
 
-                edtTotalTitulos.setText(MascaraMonetaria.mascaraReal(HistoricoFinanceiroHelper.getHistoricoFinanceiro().getTotalVencida()));
+                edtTotalTitulos.setText(MascaraUtil.mascaraReal(HistoricoFinanceiroHelper.getHistoricoFinanceiro().getTotalVencida()));
                 break;
             case 2:
                 toolbar.setTitle("Historico Financeiro - A vencer");
@@ -106,7 +106,7 @@ public class FinanceiroDetalheActivity extends AppCompatActivity {
                 ListaAdapterHistoricoFinanceiroPendentes listaAdapterHistoricoFinanceiroAvencer = new ListaAdapterHistoricoFinanceiroPendentes(this, HistoricoFinanceiroHelper.getHistoricoFinanceiro().getListaAvencer());
                 lstHistoricoFinanceiro.setAdapter(listaAdapterHistoricoFinanceiroAvencer);
 
-                edtTotalTitulos.setText(MascaraMonetaria.mascaraReal(HistoricoFinanceiroHelper.getHistoricoFinanceiro().getTotalAvencer()));
+                edtTotalTitulos.setText(MascaraUtil.mascaraReal(HistoricoFinanceiroHelper.getHistoricoFinanceiro().getTotalAvencer()));
                 break;
             case 3:
                 toolbar.setTitle("Historico Financeiro - Quitados");
@@ -117,7 +117,7 @@ public class FinanceiroDetalheActivity extends AppCompatActivity {
                 ListaAdapterHistoricoFinanceiroQuitado listaAdapterHistoricoFinanceiroQuitado = new ListaAdapterHistoricoFinanceiroQuitado(this, HistoricoFinanceiroHelper.getHistoricoFinanceiro().getListaQuitado());
                 lstHistoricoFinanceiro.setAdapter(listaAdapterHistoricoFinanceiroQuitado);
 
-                edtTotalTitulos.setText(MascaraMonetaria.mascaraReal(HistoricoFinanceiroHelper.getHistoricoFinanceiro().getTotalQuitado()));
+                edtTotalTitulos.setText(MascaraUtil.mascaraReal(HistoricoFinanceiroHelper.getHistoricoFinanceiro().getTotalQuitado()));
                 break;
         }
     }

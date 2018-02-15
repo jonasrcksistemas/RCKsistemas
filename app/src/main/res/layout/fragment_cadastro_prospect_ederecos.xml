@@ -52,6 +52,7 @@
                 android:layout_marginTop="12dp"
                 android:text="NUMERO"
                 android:textColor="@color/colorAccent"
+                android:inputType="number"
                 android:textStyle="bold"
                 android:layout_alignParentLeft="true" />
 
@@ -196,7 +197,7 @@
                 android:id="@+id/edtComplementoProspect"
                 android:layout_width="match_parent"
                 android:layout_height="90dp"
-                android:inputType="textCapSentences|textMultiLine"
+                android:inputType="textCapCharacters|textMultiLine"
                 android:maxLength="300"
                 android:gravity="top"
                 android:background="@drawable/borda_edittext"

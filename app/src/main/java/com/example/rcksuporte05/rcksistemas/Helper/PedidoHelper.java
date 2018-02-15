@@ -15,7 +15,7 @@ import com.example.rcksuporte05.rcksistemas.fragment.Pedido1;
 import com.example.rcksuporte05.rcksistemas.fragment.Pedido2;
 import com.example.rcksuporte05.rcksistemas.interfaces.ActivityPedidoMain;
 import com.example.rcksuporte05.rcksistemas.interfaces.ProdutoPedidoActivity;
-import com.example.rcksuporte05.rcksistemas.util.MascaraMonetaria;
+import com.example.rcksuporte05.rcksistemas.util.MascaraUtil;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -121,7 +121,7 @@ public class PedidoHelper {
             resultado += Float.valueOf(produtoPedido.get(i).getValor_total());
         }
         valorVenda = resultado;
-        edtTotalVenda.setText(MascaraMonetaria.mascaraReal(resultado));
+        edtTotalVenda.setText(MascaraUtil.mascaraReal(resultado));
     }
 
     public void inserirProduto(WebPedidoItens webPedidoItem) {

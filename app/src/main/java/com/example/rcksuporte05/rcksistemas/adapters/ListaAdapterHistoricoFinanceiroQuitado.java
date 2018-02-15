@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.classes.HistoricoFinanceiroQuitado;
-import com.example.rcksuporte05.rcksistemas.util.MascaraMonetaria;
+import com.example.rcksuporte05.rcksistemas.util.MascaraUtil;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -54,7 +54,7 @@ public class ListaAdapterHistoricoFinanceiroQuitado extends ArrayAdapter<Histori
         txtDocumento.setText(itemPosicao.getDocumento());
         txtParcela.setText(itemPosicao.getParcela());
 
-        txtValor.setText(MascaraMonetaria.mascaraReal(itemPosicao.getValor_total()));
+        txtValor.setText(MascaraUtil.mascaraReal(itemPosicao.getValor_total()));
         if (itemPosicao.getPontualidade_status().trim().equals("A")) {
             txtValor.setTextColor(Color.RED);
         } else {

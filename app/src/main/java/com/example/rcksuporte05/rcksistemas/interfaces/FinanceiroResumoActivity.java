@@ -19,7 +19,7 @@ import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.api.Api;
 import com.example.rcksuporte05.rcksistemas.api.Rotas;
 import com.example.rcksuporte05.rcksistemas.classes.HistoricoFinanceiro;
-import com.example.rcksuporte05.rcksistemas.util.MascaraMonetaria;
+import com.example.rcksuporte05.rcksistemas.util.MascaraUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -129,11 +129,11 @@ public class FinanceiroResumoActivity extends AppCompatActivity {
 
                 HistoricoFinanceiroHelper.setHistoricoFinanceiro(response.body());
 
-                txtVencida.setText(MascaraMonetaria.mascaraReal(response.body().getTotalVencida()));
+                txtVencida.setText(MascaraUtil.mascaraReal(response.body().getTotalVencida()));
 
-                txtAvencer.setText(MascaraMonetaria.mascaraReal(response.body().getTotalAvencer()));
+                txtAvencer.setText(MascaraUtil.mascaraReal(response.body().getTotalAvencer()));
 
-                txtQuitada.setText(MascaraMonetaria.mascaraReal(response.body().getTotalQuitado()));
+                txtQuitada.setText(MascaraUtil.mascaraReal(response.body().getTotalQuitado()));
 
                 progress.dismiss();
             }
@@ -158,11 +158,11 @@ public class FinanceiroResumoActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         try {
-            txtVencida.setText(MascaraMonetaria.mascaraReal(HistoricoFinanceiroHelper.getHistoricoFinanceiro().getTotalVencida()));
+            txtVencida.setText(MascaraUtil.mascaraReal(HistoricoFinanceiroHelper.getHistoricoFinanceiro().getTotalVencida()));
 
-            txtAvencer.setText(MascaraMonetaria.mascaraReal(HistoricoFinanceiroHelper.getHistoricoFinanceiro().getTotalAvencer()));
+            txtAvencer.setText(MascaraUtil.mascaraReal(HistoricoFinanceiroHelper.getHistoricoFinanceiro().getTotalAvencer()));
 
-            txtQuitada.setText(MascaraMonetaria.mascaraReal(HistoricoFinanceiroHelper.getHistoricoFinanceiro().getTotalQuitado()));
+            txtQuitada.setText(MascaraUtil.mascaraReal(HistoricoFinanceiroHelper.getHistoricoFinanceiro().getTotalQuitado()));
         } catch (NullPointerException e) {
             carregarHistoricoFinanceiro(Integer.parseInt(HistoricoFinanceiroHelper.getCliente().getId_cadastro()));
         }

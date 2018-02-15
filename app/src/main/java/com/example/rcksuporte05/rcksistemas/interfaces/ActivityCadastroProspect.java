@@ -98,7 +98,40 @@ public class ActivityCadastroProspect extends AppCompatActivity {
 
                                                @Override
                                                public void onPageSelected(int position) {
-
+                                                   switch (position) {
+                                                       case 0:
+                                                           if(ProspectHelper.getCadastroProspectGeral() != null) {
+                                                               ProspectHelper.getCadastroProspectGeral().inserirDadosDaFrame();
+                                                           }
+                                                           break;
+                                                       case 1:
+                                                           if(ProspectHelper.getCadastroProspectEndereco() != null){
+                                                               ProspectHelper.getCadastroProspectEndereco().inserirDadosDaFrame();
+                                                           }
+                                                           break;
+                                                       case 2:
+                                                           break;
+                                                       case 3:
+                                                           if(ProspectHelper.getCadastroProspectSegmentos() != null){
+                                                               ProspectHelper.getCadastroProspectSegmentos().insereDadosDaFrame();
+                                                           }
+                                                           break;
+                                                       case 4:
+                                                           if(ProspectHelper.getCadastroProspectMotivos() != null){
+                                                               ProspectHelper.getCadastroProspectMotivos().insereDadosDaFrame();
+                                                           }
+                                                           break;
+                                                       case 5:
+                                                           if(ProspectHelper.getCadastroProspectObservacoesComerciais() != null){
+                                                               ProspectHelper.getCadastroProspectObservacoesComerciais().insereDadosDaFrame();
+                                                           }
+                                                           break;
+                                                       case 6:
+                                                           if (ProspectHelper.getCadastroProspectFotoSalvar() != null) {
+                                                               ProspectHelper.getCadastroProspectFotoSalvar().insereDadosDaFrame();
+                                                           }
+                                                           break;
+                                                   }
                                                }
 
                                                @Override
@@ -173,6 +206,7 @@ public class ActivityCadastroProspect extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         ProspectHelper.clear();
+        System.gc();
         super.onDestroy();
     }
 }

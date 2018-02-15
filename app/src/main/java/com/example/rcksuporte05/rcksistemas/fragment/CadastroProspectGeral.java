@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 
 import com.example.rcksuporte05.rcksistemas.Helper.ProspectHelper;
 import com.example.rcksuporte05.rcksistemas.R;
+import com.example.rcksuporte05.rcksistemas.util.MascaraUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -42,17 +44,11 @@ public class CadastroProspectGeral extends Fragment {
     @BindView(R.id.edtInscMunicipalProspect)
     public EditText edtInscMunicipalProspect;
 
-    @BindView(R.id.rgPessoaProspect)
-    public RadioGroup rgPessoaFisicaJuridica;
+    @BindView(R.id.spPessoaProspect)
+    public Spinner spPessoaProspect;
 
     @BindView(R.id.rgRotaProspect)
     public RadioGroup rgRotaProspect;
-
-    @BindView(R.id.rdFisicaProspect)
-    public RadioButton  rdFisicaProspect;
-
-    @BindView(R.id.rdJuridicaProspect)
-    public RadioButton rdJuridicaProspect;
 
     @BindView(R.id.txtIdProspect)
     public TextView txtIdProspect;
@@ -78,9 +74,10 @@ public class CadastroProspectGeral extends Fragment {
 
     View view;
     RadioButton radioButtonRota;
-    RadioButton radioButtonPessoa;
     private ArrayAdapter arrayIe;
+    private ArrayAdapter arrayPessoaProspect;
     private String[] contribuinte = {"Contribuinte", "Isento", "Não Contribuinte"};
+    private String[] pessoaJuridica = {"Fisica", "Jurídica"};
 
     @Nullable
     @Override
@@ -88,9 +85,51 @@ public class CadastroProspectGeral extends Fragment {
         view = inflater.inflate(R.layout.fragment_cadastro_prospect_geral, container, false);
         ButterKnife.bind(this, view);
         arrayIe = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_activated_1, contribuinte);
+        arrayPessoaProspect = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_activated_1, pessoaJuridica);
         spIeProspect.setAdapter(arrayIe);
-
+        spPessoaProspect.setAdapter(arrayPessoaProspect);
         injetaDadosNaTela();
+
+
+
+        spIeProspect.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+               if(arrayIe.getItem(position).equals("Não Contribuinte")){
+                   edtInscEstadualProspect.setEnabled(false);
+               }else
+                   edtInscEstadualProspect.setEnabled(true);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        edtCpfCnpjProspect.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(!hasFocus){
+                    if(spPessoaProspect.getSelectedItemPosition() == 0){
+                       if(MascaraUtil.isValidCPF(edtCpfCnpjProspect.getText().toString().trim().replaceAll("[^0-9]", ""))){
+                           edtCpfCnpjProspect.setText(MascaraUtil.mascaraCPF(edtCpfCnpjProspect.getText().toString()));
+                       }else{
+                           edtCpfCnpjProspect.requestFocus();
+                           edtCpfCnpjProspect.setError("CPF invalido");
+                       }
+                    }else
+                        if (MascaraUtil.isValidCNPJ(edtCpfCnpjProspect.getText().toString().trim().replaceAll("[^0-9]", ""))){
+                            edtCpfCnpjProspect.setText(MascaraUtil.mascaraCNPJ(edtCpfCnpjProspect.getText().toString()));
+                        }else {
+                            edtCpfCnpjProspect.requestFocus();
+                            edtCpfCnpjProspect.setError("CNPJ invalido");
+                        }
+                }else {
+                    edtCpfCnpjProspect.setText(edtCpfCnpjProspect.getText().toString().trim().replaceAll("[^0-9]", ""));
+                }
+            }
+        });
 
         if (ProspectHelper.getProspect().getProspectSalvo() != null && ProspectHelper.getProspect().getProspectSalvo().equals("S")) {
             edtNomeClienteProspect.setFocusable(false);
@@ -98,10 +137,8 @@ public class CadastroProspectGeral extends Fragment {
             edtCpfCnpjProspect.setFocusable(false);
             edtInscEstadualProspect.setFocusable(false);
             edtInscMunicipalProspect.setFocusable(false);
-            rgPessoaFisicaJuridica.setClickable(false);
+            spPessoaProspect.setEnabled(false);
             rgRotaProspect.setClickable(false);
-            rdFisicaProspect.setClickable(false);
-            rdJuridicaProspect.setClickable(false);
             txtIdProspect.setClickable(false);
             rdSegrospect.setClickable(false);
             rdTercaProspect.setClickable(false);
@@ -122,9 +159,9 @@ public class CadastroProspectGeral extends Fragment {
 
         if (ProspectHelper.getProspect().getPessoa_f_j() != null && !ProspectHelper.getProspect().getPessoa_f_j().equals("")) {
             if(ProspectHelper.getProspect().getPessoa_f_j().equals("F")){
-                rdFisicaProspect.setChecked(true);
+                spPessoaProspect.setSelection(0);
             }else if(ProspectHelper.getProspect().getPessoa_f_j().equals("J")){
-                rdJuridicaProspect.setChecked(true);
+                spPessoaProspect.setSelection(1);
             }
         }
         if (ProspectHelper.getProspect().getNome_cadastro() != null && !ProspectHelper.getProspect().getNome_cadastro().equals("")) {
@@ -174,14 +211,10 @@ public class CadastroProspectGeral extends Fragment {
     }
 
     public void inserirDadosDaFrame(){
-
-        if(rgPessoaFisicaJuridica.getCheckedRadioButtonId()>0){
-            radioButtonPessoa = (RadioButton) view.findViewById(rgPessoaFisicaJuridica.getCheckedRadioButtonId());
-            if(radioButtonPessoa.getText().toString().toLowerCase().equals("física")){
-                ProspectHelper.getProspect().setPessoa_f_j("F");
-            }else if(radioButtonPessoa.getText().toString().toLowerCase().equals("jurídica")){
-                ProspectHelper.getProspect().setPessoa_f_j("J");
-            }
+        if(spPessoaProspect.getSelectedItemPosition() == 0){
+            ProspectHelper.getProspect().setPessoa_f_j("F");
+        }else {
+            ProspectHelper.getProspect().setPessoa_f_j("J");
         }
 
         if(edtNomeClienteProspect.getText() != null && !edtNomeClienteProspect.getText().toString().trim().equals("")){
@@ -214,7 +247,7 @@ public class CadastroProspectGeral extends Fragment {
             ProspectHelper.getProspect().setDiaVisita(radioButtonRota.getText().toString().toLowerCase());
         }
 
-        ProspectHelper.getProspect().setInd_da_ie_destinatario_prospect(String.valueOf(spIeProspect.getSelectedItemPosition() +1));
+        ProspectHelper.getProspect().setInd_da_ie_destinatario_prospect(String.valueOf(spIeProspect.getSelectedItemPosition()));
 
     }
 }
