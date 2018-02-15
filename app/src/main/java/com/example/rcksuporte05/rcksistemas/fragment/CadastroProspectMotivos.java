@@ -17,8 +17,6 @@ import com.example.rcksuporte05.rcksistemas.adapters.MotivoAdapter;
 import com.example.rcksuporte05.rcksistemas.classes.MotivoNaoCadastramento;
 import com.example.rcksuporte05.rcksistemas.util.DividerItemDecoration;
 
-import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -70,12 +68,12 @@ public class CadastroProspectMotivos extends Fragment implements MotivoAdapter.M
 
 
     public void insereDadosDaFrame(){
-        List<MotivoNaoCadastramento> motivoSelecionado;
-        motivoSelecionado = motivoAdapter.getItensSelecionados();
+        MotivoNaoCadastramento motivoSelecionado;
+        motivoSelecionado = motivoAdapter.getItemSelecionado();
 
-        if(motivoSelecionado.size() > 0){
-             ProspectHelper.getProspect().setMotivoNaoCadastramento(motivoSelecionado.get(0));
-            if(edtOutrosMotivosProspect.getText() !=null ){
+        if(motivoSelecionado != null){
+             ProspectHelper.getProspect().setMotivoNaoCadastramento(motivoSelecionado);
+            if(edtOutrosMotivosProspect.getText() !=null){
                 ProspectHelper.getProspect().getMotivoNaoCadastramento().setDescricaoOutros(edtOutrosMotivosProspect.getText().toString());
             }
         }
@@ -102,5 +100,15 @@ public class CadastroProspectMotivos extends Fragment implements MotivoAdapter.M
         motivoAdapter.notifyDataSetChanged();
     }
 
+    @Override
+    public void onResume() {
+        ProspectHelper.setCadastroProspectMotivos(this);
+        super.onResume();
+    }
 
+    @Override
+    public void onDestroyView() {
+        insereDadosDaFrame();
+        super.onDestroyView();
+    }
 }

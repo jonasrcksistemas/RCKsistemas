@@ -10,7 +10,6 @@ import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.viewHolder.MotivoViewHolder;
 import com.example.rcksuporte05.rcksistemas.classes.MotivoNaoCadastramento;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,6 +22,7 @@ public class MotivoAdapter extends RecyclerView.Adapter<MotivoViewHolder> {
     private List<MotivoNaoCadastramento> motivos;
     private SparseBooleanArray selectedItems;
     private int posAnterior;
+    private MotivoNaoCadastramento motivoSelecionado;
 
     public MotivoAdapter(List<MotivoNaoCadastramento> motivos, MotivoListener listener) {
         this.listener = listener;
@@ -68,16 +68,12 @@ public class MotivoAdapter extends RecyclerView.Adapter<MotivoViewHolder> {
             selectedItems.delete(posAnterior);
         }
         posAnterior = pos;
+        motivoSelecionado = motivos.get(pos);
     }
 
 
-    public List<MotivoNaoCadastramento> getItensSelecionados(){
-        List<MotivoNaoCadastramento> motivosSelecionados = new ArrayList<>();
-        for (int i = 0; i < selectedItems.size(); i++) {
-            motivosSelecionados.add(motivos.get(selectedItems.keyAt(i)));
-        }
-
-        return motivosSelecionados;
+    public MotivoNaoCadastramento getItemSelecionado(){
+      return motivoSelecionado;
     }
 
     @Override

@@ -37,12 +37,12 @@
                 android:textStyle="bold" />
 
             <EditText
-                android:inputType="text"
                 android:id="@+id/edtResponsavelProspect"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/txtResponsalveProspect"
                 android:background="@drawable/borda_edittext"
+                android:inputType="textCapSentences"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
             <TextView

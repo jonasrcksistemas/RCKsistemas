@@ -10,7 +10,6 @@ import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.viewHolder.SegmentoViewHolder;
 import com.example.rcksuporte05.rcksistemas.classes.Segmento;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -18,11 +17,11 @@ import java.util.List;
  */
 
 public class SegmentoAdapter extends RecyclerView.Adapter<SegmentoViewHolder> {
-
     private List<Segmento> segmentos;
     private SegmentoListener listener;
     private SparseBooleanArray selectedItems;
     private int posAnterior;
+    private Segmento selecionado;
 
     public SegmentoAdapter(List<Segmento> segmentos, SegmentoListener listener) {
         this.segmentos = segmentos;
@@ -33,7 +32,8 @@ public class SegmentoAdapter extends RecyclerView.Adapter<SegmentoViewHolder> {
 
     @Override
     public SegmentoViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_segmento, parent, false);
+        View itemView = LayoutInflater.from(parent.getContext())
+                                      .inflate(R.layout.item_segmento, parent, false);
 
         return new SegmentoViewHolder(itemView, listener);
     }
@@ -68,23 +68,11 @@ public class SegmentoAdapter extends RecyclerView.Adapter<SegmentoViewHolder> {
             selectedItems.delete(posAnterior);
         }
         posAnterior = pos;
+        selecionado = segmentos.get(pos);
     }
 
-    public List<Segmento> getItensSelecionados() {
-        List<Segmento> segmentosSelecionados = new ArrayList<>();
-        for (int i = 0; i < selectedItems.size(); i++) {
-            segmentosSelecionados.add(segmentos.get(selectedItems.keyAt(i)));
-        }
-
-        return segmentosSelecionados;
-    }
-
-    public void limpaSelected(){
-        selectedItems.clear();
-    }
-
-    public Segmento getItem(int position) {
-        return segmentos.get(position);
+    public Segmento getItemSelecionado(){
+        return selecionado;
     }
 
     @Override
@@ -92,6 +80,10 @@ public class SegmentoAdapter extends RecyclerView.Adapter<SegmentoViewHolder> {
         return segmentos.size();
     }
 
+
+    public Segmento getItem(int position){
+        return segmentos.get(position);
+    }
 
     public void marcarSelecionado(Segmento segmento){
         //está variavel é responsavel para armazenar o index do objeto que correponde com o id do objeto que vem do banco
@@ -112,9 +104,7 @@ public class SegmentoAdapter extends RecyclerView.Adapter<SegmentoViewHolder> {
         }
     }
 
-
-    public interface SegmentoListener {
+    public interface SegmentoListener{
         void onClick(int position);
     }
-
 }

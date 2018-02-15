@@ -17,8 +17,6 @@ import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.SegmentoAdapter;
 import com.example.rcksuporte05.rcksistemas.classes.Segmento;
 
-import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -72,12 +70,10 @@ public class CadastroProspectSegmentos extends Fragment implements SegmentoAdapt
     }
 
     public void insereDadosDaFrame(){
-        List<Segmento> segmentoList;
-        segmentoList = segmentoAdapter.getItensSelecionados();
+        Segmento segmento = segmentoAdapter.getItemSelecionado();
 
-
-        if(segmentoList.size() > 0){
-            ProspectHelper.getProspect().setSegmento(segmentoList.get(segmentoList.size() -1));
+        if(segmento != null){
+            ProspectHelper.getProspect().setSegmento(segmento);
             if(edtOutrosSegmentosProspect.getText() != null){
                 ProspectHelper.getProspect().getSegmento().setDescricaoOutros(edtOutrosSegmentosProspect.getText().toString());
             }
@@ -105,4 +101,15 @@ public class CadastroProspectSegmentos extends Fragment implements SegmentoAdapt
        segmentoAdapter.notifyDataSetChanged();
     }
 
+    @Override
+    public void onResume() {
+        ProspectHelper.setCadastroProspectSegmentos(this);
+        super.onResume();
+    }
+
+    @Override
+    public void onDestroyView() {
+        insereDadosDaFrame();
+        super.onDestroyView();
+    }
 }

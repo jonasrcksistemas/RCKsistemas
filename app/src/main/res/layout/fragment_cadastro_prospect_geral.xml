@@ -87,7 +87,7 @@
                    android:textStyle="bold" />
 
                <EditText
-                   android:inputType="text"
+                   android:inputType="textCapSentences"
                    android:id="@+id/edtNomeClienteProspect"
                    android:layout_width="match_parent"
                    android:layout_height="wrap_content"
@@ -122,7 +122,7 @@
                    android:layout_below="@+id/txtRazaoSocialProspect"
                    android:background="@drawable/borda_edittext"
                    android:hint="Nome Fantasia"
-                   android:inputType="textCapCharacters|text"
+                   android:inputType="textCapSentences"
                    android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
                <TextView
@@ -148,7 +148,7 @@
                    android:layout_toRightOf="@+id/txtCpfCnpjProspect"
                    android:background="@drawable/borda_edittext"
                    android:hint="CPF"
-                   android:inputType="textFilter|number|text"
+                   android:inputType="textFilter|number"
                    android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
                <TextView
@@ -175,7 +175,7 @@
                    android:layout_toStartOf="@+id/spIe"
                    android:background="@drawable/borda_edittext"
                    android:hint="Inscrição Estadual"
-                   android:inputType="textFilter|numberSigned|text"
+                   android:inputType="textFilter|numberSigned"
                    android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
                <Spinner
@@ -204,7 +204,7 @@
                    android:layout_below="@+id/txtInscMunicipalProspect"
                    android:background="@drawable/borda_edittext"
                    android:hint="Inscrição Municipal"
-                   android:inputType="textFilter|numberSigned|text"
+                   android:inputType="textFilter|numberSigned"
                    android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
                <TextView
