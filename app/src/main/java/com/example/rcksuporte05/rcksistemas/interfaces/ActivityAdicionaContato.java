@@ -59,15 +59,41 @@ public class ActivityAdicionaContato extends AppCompatActivity{
         tiposTelefone = new ArrayList<>();
         tiposTelefone.add("Celular");
         tiposTelefone.add("Telefone Fixo");
-        tipoArray = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, tiposTelefone);
+        tipoArray = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, tiposTelefone);
         spTipoTelefone.setAdapter(tipoArray);
 
-
+        if (getIntent().getIntExtra("visualizacao", 0) != 1) {
+            if (getIntent().getIntExtra("contato", -1) > -1) {
+                injetaDadosNaTela(getIntent().getIntExtra("contato", 0));
+            }
+            edtResponsavelProspect.setFocusable(false);
+            edtFuncaoResponsavelProspect.setFocusable(false);
+            edtTelefoneProspect.setFocusable(false);
+            edtEmailProspect.setFocusable(false);
+            spTipoTelefone.setEnabled(false);
+        }
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
+
+    public void injetaDadosNaTela(int position) {
+        Contato contato = ProspectHelper.getProspect().getListaContato().get(position);
+
+        edtResponsavelProspect.setText(contato.getPessoa_contato());
+        edtFuncaoResponsavelProspect.setText(contato.getFuncao());
+        edtTelefoneProspect.setText(contato.getNumero_telefone());
+        edtEmailProspect.setText(contato.getEmail());
+        switch (contato.getTipo_telefone()) {
+            case "Celular":
+                spTipoTelefone.setSelection(0);
+                break;
+            case "Telefone Fixo":
+                spTipoTelefone.setSelection(1);
+                break;
+        }
+    }
 
     public boolean insereDadosdaFrame(){
         Contato contato = new Contato();
@@ -112,7 +138,7 @@ public class ActivityAdicionaContato extends AppCompatActivity{
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        if (getIntent().getIntExtra("vizualizacao", 0) != 1) {
+        if (getIntent().getIntExtra("visualizacao", 0) == 1) {
             getMenuInflater().inflate(R.menu.menu_salvar, menu);
             menuItem = menu.findItem(R.id.menu_salvar);
         }

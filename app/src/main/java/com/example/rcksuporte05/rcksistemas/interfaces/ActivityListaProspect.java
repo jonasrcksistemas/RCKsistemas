@@ -8,7 +8,6 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -68,9 +67,15 @@ public class ActivityListaProspect extends AppCompatActivity {
         spFiltaProspect.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                DBHelper db = new DBHelper(ActivityListaProspect.this);
-                List<Prospect> listaProspect = db.listaProspect(spFiltaProspect.getSelectedItemPosition());
-                preencheLista(listaProspect);
+                try {
+                    DBHelper db = new DBHelper(ActivityListaProspect.this);
+                    List<Prospect> listaProspect = db.listaProspect(spFiltaProspect.getSelectedItemPosition());
+                    preencheLista(listaProspect);
+                } catch (CursorIndexOutOfBoundsException e) {
+                    e.printStackTrace();
+                    recycleProspect.setVisibility(View.INVISIBLE);
+                    edtTotalProspect.setText("0: Prospects Listados");
+                }
             }
 
             @Override
@@ -107,7 +112,7 @@ public class ActivityListaProspect extends AppCompatActivity {
             }
         });
         recycleProspect.setAdapter(listaProspectAdapter);
-        listaProspectAdapter.notifyDataSetChanged();
+        recycleProspect.setVisibility(View.VISIBLE);
         edtTotalProspect.setText(lista.size() + ": Prospects Listados");
     }
 

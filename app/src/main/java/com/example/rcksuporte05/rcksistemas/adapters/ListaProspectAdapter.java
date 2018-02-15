@@ -37,6 +37,7 @@ public class ListaProspectAdapter extends RecyclerView.Adapter<ProspectViewHolde
 
     @Override
     public void onBindViewHolder(ProspectViewHolder holder, int position) {
+        holder.txtIdProspect.setText(listaProspect.get(position).getId_prospect());
         holder.nomeProspect.setText(listaProspect.get(position).getNome_cadastro());
         holder.textViewNomeFantasia.setText(listaProspect.get(position).getNome_fantasia());
         try {
@@ -45,22 +46,24 @@ public class ListaProspectAdapter extends RecyclerView.Adapter<ProspectViewHolde
             e.printStackTrace();
         }
 
-        switch (listaProspect.get(position).getDiaVisita()) {
-            case "segunda":
-                holder.txtDiaSemana.setText("Segunda-Feira");
-                break;
-            case "terça":
-                holder.txtDiaSemana.setText("Terça-Feira");
-                break;
-            case "quarta":
-                holder.txtDiaSemana.setText("Quarta-Feira");
-                break;
-            case "quinta":
-                holder.txtDiaSemana.setText("Quinta-Feira");
-                break;
-            case "sexta":
-                holder.txtDiaSemana.setText("Sexta-Feira");
-                break;
+        if (listaProspect.get(position).getDiaVisita() != null && !listaProspect.get(position).getDiaVisita().trim().isEmpty()) {
+            switch (listaProspect.get(position).getDiaVisita()) {
+                case "segunda":
+                    holder.txtDiaSemana.setText("Segunda-Feira");
+                    break;
+                case "terça":
+                    holder.txtDiaSemana.setText("Terça-Feira");
+                    break;
+                case "quarta":
+                    holder.txtDiaSemana.setText("Quarta-Feira");
+                    break;
+                case "quinta":
+                    holder.txtDiaSemana.setText("Quinta-Feira");
+                    break;
+                case "sexta":
+                    holder.txtDiaSemana.setText("Sexta-Feira");
+                    break;
+            }
         }
         if (listaProspect.get(position).getProspectSalvo().equals("S")) {
             holder.prospectSalvo.setImageResource(R.mipmap.ic_prospect_salvo);

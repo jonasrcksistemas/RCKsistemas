@@ -32,6 +32,9 @@ public class ProspectViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.prospectSalvo)
     public ImageView prospectSalvo;
 
+    @BindView(R.id.txtIdProspect)
+    public TextView txtIdProspect;
+
     @BindView(R.id.itemListaProspect)
     public RelativeLayout itemListaProspect;
 

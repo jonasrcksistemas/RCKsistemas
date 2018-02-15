@@ -156,7 +156,11 @@ public class ActivityCadastroProspect extends AppCompatActivity {
         super.onOptionsItemSelected(item);
         switch (item.getItemId()) {
             case android.R.id.home:
-                finish();
+                if (mViewPager.getCurrentItem() != 0) {
+                    mViewPager.setCurrentItem(0);
+                } else {
+                    finish();
+                }
                 break;
         }
         return true;
