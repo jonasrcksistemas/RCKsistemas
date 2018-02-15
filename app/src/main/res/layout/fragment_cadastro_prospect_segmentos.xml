@@ -44,7 +44,7 @@
                 android:layout_height="96dp"
                 android:layout_below="@+id/txtOutrosProspect"
                 android:background="@drawable/borda_edittext"
-                android:inputType="textCapSentences|textMultiLine"
+                android:inputType="textCapCharacters|textMultiLine"
                 android:maxLength="300"
                 android:gravity="top"
             />

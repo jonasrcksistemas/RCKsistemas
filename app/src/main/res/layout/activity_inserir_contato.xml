@@ -42,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/txtResponsalveProspect"
                 android:background="@drawable/borda_edittext"
-                android:inputType="textCapSentences"
+                android:inputType="textCapCharacters"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
             <TextView

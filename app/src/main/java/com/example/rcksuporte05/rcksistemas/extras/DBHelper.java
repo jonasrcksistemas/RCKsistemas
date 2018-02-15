@@ -684,11 +684,10 @@ public class DBHelper extends SQLiteOpenHelper {
         cursor.moveToFirst();
         do {
             Prospect prospect = new Prospect();
-
-            prospect.setId_prospect(cursor.getString(cursor.getColumnIndex("ID_PROSPECT")));
-            prospect.setId_prospect_servidor(cursor.getString(cursor.getColumnIndex("ID_PROSPECT_SERVIDOR")));
-            prospect.setId_cadastro(cursor.getString(cursor.getColumnIndex("ID_CADASTRO")));
             try {
+                prospect.setId_prospect(cursor.getString(cursor.getColumnIndex("ID_PROSPECT")));
+                prospect.setId_prospect_servidor(cursor.getString(cursor.getColumnIndex("ID_PROSPECT_SERVIDOR")));
+                prospect.setId_cadastro(cursor.getString(cursor.getColumnIndex("ID_CADASTRO")));
                 prospect.setSegmento(listaSegmento(cursor.getString(cursor.getColumnIndex("ID_SEGMENTO"))));
             } catch (CursorIndexOutOfBoundsException e) {
                 e.printStackTrace();

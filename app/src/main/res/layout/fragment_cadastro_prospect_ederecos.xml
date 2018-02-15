@@ -39,7 +39,7 @@
                 android:layout_marginTop="21dp"
                 android:background="@drawable/borda_edittext"
                 android:hint="Endereço"
-                android:inputType="textCapSentences"
+                android:inputType="textCapCharacters"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:layout_alignParentLeft="true" />
 
@@ -92,7 +92,7 @@
                 android:layout_toEndOf="@+id/txtMunicipio"
                 android:background="@drawable/borda_edittext"
                 android:hint="Bairro"
-                android:inputType="textCapSentences"
+                android:inputType="textCapCharacters"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:layout_alignParentLeft="true"
                 android:layout_toRightOf="@+id/txtMunicipio" />
@@ -197,7 +197,7 @@
                 android:id="@+id/edtComplementoProspect"
                 android:layout_width="match_parent"
                 android:layout_height="90dp"
-                android:inputType="textCapSentences|textMultiLine"
+                android:inputType="textCapCharacters|textMultiLine"
                 android:maxLength="300"
                 android:gravity="top"
                 android:background="@drawable/borda_edittext"

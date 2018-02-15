@@ -216,13 +216,15 @@ public class ProspectHelper {
 
 
         if (prospect.getPessoa_f_j() != null && prospect.getPessoa_f_j().equals("J")) {
-            if (prospect.getInscri_estadual() == null || prospect.getInscri_estadual().trim().isEmpty()) {
-                if (verificaMovimento) {
-                    verificaMovimento = false;
-                    moveTela(0);
+            if(Integer.parseInt(prospect.getInd_da_ie_destinatario_prospect()) == 0){
+                if (prospect.getInscri_estadual() == null || prospect.getInscri_estadual().trim().isEmpty()) {
+                    if (verificaMovimento) {
+                        verificaMovimento = false;
+                        moveTela(0);
+                    }
+                    cadastroProspectGeral.edtInscEstadualProspect.setError("Campo Obrigatorio");
+                    cadastroProspectGeral.edtInscEstadualProspect.requestFocus();
                 }
-                cadastroProspectGeral.edtInscEstadualProspect.setError("Campo Obrigatorio");
-                cadastroProspectGeral.edtInscEstadualProspect.requestFocus();
             }
         }
 

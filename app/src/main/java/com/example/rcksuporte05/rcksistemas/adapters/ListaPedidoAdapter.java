@@ -11,7 +11,7 @@ import android.view.ViewGroup;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.viewHolder.PedidoViewHolder;
 import com.example.rcksuporte05.rcksistemas.classes.WebPedido;
-import com.example.rcksuporte05.rcksistemas.util.MascaraMonetaria;
+import com.example.rcksuporte05.rcksistemas.util.MascaraUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -53,7 +53,7 @@ public class ListaPedidoAdapter extends RecyclerView.Adapter<PedidoViewHolder> {
             holder.txtIdPedido.setText(pedidos.get(position).getId_web_pedido());
 
         holder.txtNomeCliente.setText(pedidos.get(position).getCadastro().getNome_cadastro());
-        holder.txtPrecoPedido.setText(MascaraMonetaria.mascaraReal(pedidos.get(position).getValor_total()));
+        holder.txtPrecoPedido.setText(MascaraUtil.mascaraReal(pedidos.get(position).getValor_total()));
 
         try {
 
