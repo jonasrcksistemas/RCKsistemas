@@ -353,12 +353,14 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                     if (aparelhoId.equals(usuarioLogin.getAparelho_id())) {
                         loginNaApi(usuarioLogin);
                     } else {
-                        Toast.makeText(getApplicationContext(), "Este usuario está logado em outro aparelho!", Toast.LENGTH_SHORT).show();
-                        Toast.makeText(getApplicationContext(), "Por favor, refaça o seu login!", Toast.LENGTH_LONG).show();
-                        db.alterar("UPDATE TBL_LOGIN SET LOGADO = 'N';");
-                        Intent intent = new Intent(PrincipalActivity.this, MainActivity.class);
-                        startActivity(intent);
-                        finish();
+                        if (!UsuarioHelper.getUsuario().getLogin().equals("DC")) {
+                            Toast.makeText(getApplicationContext(), "Este usuario está logado em outro aparelho!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "Por favor, refaça o seu login!", Toast.LENGTH_LONG).show();
+                            db.alterar("UPDATE TBL_LOGIN SET LOGADO = 'N';");
+                            Intent intent = new Intent(PrincipalActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
                         System.gc();
                     }
                 }
@@ -410,12 +412,14 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                         }
                         break;
                     case 500:
-                        Toast.makeText(getApplicationContext(), "Foi encontrada uma divergencia em seu cadastro!", Toast.LENGTH_SHORT).show();
-                        Toast.makeText(getApplicationContext(), "Por favor, refaça o seu login!", Toast.LENGTH_LONG).show();
-                        db.alterar("UPDATE TBL_LOGIN SET LOGADO = 'N';");
-                        Intent intent = new Intent(PrincipalActivity.this, MainActivity.class);
-                        startActivity(intent);
-                        finish();
+                        if (!UsuarioHelper.getUsuario().getLogin().equals("DC")) {
+                            Toast.makeText(getApplicationContext(), "Foi encontrada uma divergencia em seu cadastro!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getApplicationContext(), "Por favor, refaça o seu login!", Toast.LENGTH_LONG).show();
+                            db.alterar("UPDATE TBL_LOGIN SET LOGADO = 'N';");
+                            Intent intent = new Intent(PrincipalActivity.this, MainActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
                         System.gc();
                         break;
                 }

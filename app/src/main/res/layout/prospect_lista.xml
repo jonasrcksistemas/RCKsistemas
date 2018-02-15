@@ -4,6 +4,16 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <TextView
+        android:id="@+id/txtIdProspect"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginLeft="12dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginTop="2dp"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
+
     <ImageView
         android:id="@+id/prospectSalvo"
         android:layout_width="25dp"
@@ -14,16 +24,14 @@
         android:layout_marginTop="8dp" />
 
     <TextView
+        android:layout_below="@+id/txtIdProspect"
         android:layout_alignLeft="@+id/txtNomeFantasia"
         android:layout_alignStart="@+id/txtNomeFantasia"
-        android:layout_below="@+id/prospectSalvo"
         android:id="@+id/nomeProspect"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toLeftOf="@+id/prospectSalvo"
-        android:layout_alignParentTop="true"
         android:layout_toStartOf="@+id/prospectSalvo"
-        android:layout_marginTop="12dp"
         android:ellipsize="end"
         android:maxLines="1"
         android:scrollHorizontally="true"

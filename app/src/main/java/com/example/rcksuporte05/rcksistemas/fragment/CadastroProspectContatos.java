@@ -70,8 +70,14 @@ public class CadastroProspectContatos extends Fragment implements ListaContatoAd
 
     @Override
     public void onClick(int position) {
-
+        Intent intent = new Intent(getContext(), ActivityAdicionaContato.class);
+        intent.putExtra("contato", position);
+        startActivity(intent);
     }
 
-
+    @Override
+    public void onResume() {
+        preencheListaContatos();
+        super.onResume();
+    }
 }
