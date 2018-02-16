@@ -28,7 +28,6 @@ import butterknife.ButterKnife;
 
 public class CadastroProspectGeral extends Fragment {
 
-
     @BindView(R.id.edtNomeClienteProspect)
     public EditText edtNomeClienteProspect;
 
@@ -115,14 +114,12 @@ public class CadastroProspectGeral extends Fragment {
                        if(MascaraUtil.isValidCPF(edtCpfCnpjProspect.getText().toString().trim().replaceAll("[^0-9]", ""))){
                            edtCpfCnpjProspect.setText(MascaraUtil.mascaraCPF(edtCpfCnpjProspect.getText().toString()));
                        }else{
-                           edtCpfCnpjProspect.requestFocus();
                            edtCpfCnpjProspect.setError("CPF invalido");
                        }
                     }else
                         if (MascaraUtil.isValidCNPJ(edtCpfCnpjProspect.getText().toString().trim().replaceAll("[^0-9]", ""))){
                             edtCpfCnpjProspect.setText(MascaraUtil.mascaraCNPJ(edtCpfCnpjProspect.getText().toString()));
                         }else {
-                            edtCpfCnpjProspect.requestFocus();
                             edtCpfCnpjProspect.setError("CNPJ invalido");
                         }
                 }else {

@@ -16,7 +16,13 @@ import com.example.rcksuporte05.rcksistemas.fragment.CadastroProspectMotivos;
 import com.example.rcksuporte05.rcksistemas.fragment.CadastroProspectObservacoesComerciais;
 import com.example.rcksuporte05.rcksistemas.fragment.CadastroProspectSegmentos;
 import com.example.rcksuporte05.rcksistemas.interfaces.ActivityCadastroProspect;
+import com.example.rcksuporte05.rcksistemas.util.MascaraUtil;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 /**
@@ -212,6 +218,24 @@ public class ProspectHelper {
             }
             cadastroProspectGeral.edtCpfCnpjProspect.setError("Campo Obrigatorio");
             cadastroProspectGeral.edtCpfCnpjProspect.requestFocus();
+        }else if(prospect.getPessoa_f_j().equals("F")){
+              if(!MascaraUtil.isValidCPF(prospect.getCpf_cnpj())){
+                  if (verificaMovimento) {
+                      verificaMovimento = false;
+                      moveTela(0);
+                  }
+                  cadastroProspectGeral.edtCpfCnpjProspect.setError("CPF invalido");
+                  cadastroProspectGeral.edtCpfCnpjProspect.requestFocus();
+              }
+        }else if(prospect.getPessoa_f_j().equals("J")){
+                if (!MascaraUtil.isValidCNPJ(prospect.getCpf_cnpj())){
+                    if (verificaMovimento) {
+                        verificaMovimento = false;
+                        moveTela(0);
+                    }
+                    cadastroProspectGeral.edtCpfCnpjProspect.setError("CNPJ invalido");
+                    cadastroProspectGeral.edtCpfCnpjProspect.requestFocus();
+                }
         }
 
 
@@ -352,10 +376,29 @@ public class ProspectHelper {
 
 
         //Tela 7 salvar foto
-        if (prospect.getDataRetorno() == null || prospect.getDataRetorno().trim().isEmpty()) {
-            cadastroProspectFotoSalvar.edtDataRetorno.setBackgroundResource(R.drawable.borda_edittext_erro);
-            Toast.makeText(activityMain, "Informe a data de Retorno", Toast.LENGTH_LONG).show();
-            verificaMovimento = false;
+        if (verificaMovimento) {
+            if (prospect.getDataRetorno() == null || prospect.getDataRetorno().trim().isEmpty()) {
+                cadastroProspectFotoSalvar.edtDataRetorno.setBackgroundResource(R.drawable.borda_edittext_erro);
+                Toast.makeText(activityMain, "Informe a data de Retorno", Toast.LENGTH_LONG).show();
+                verificaMovimento = false;
+            } else {
+                Calendar dataAtual = new GregorianCalendar();
+                Calendar dataRetorno = new GregorianCalendar();
+                Date date = new Date();
+                dataAtual.setTime(date);
+                try {
+                    dataRetorno.setTime(new SimpleDateFormat("yyyy-MM-dd").parse(prospect.getDataRetorno()));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                String atual = new SimpleDateFormat("dd/MM/yyyy").format(dataAtual.getTime());
+                String retorno = new SimpleDateFormat("dd/MM/yyyy").format(dataRetorno.getTime());
+                if (dataAtual.getTime().after(dataRetorno.getTime())) {
+                    cadastroProspectFotoSalvar.edtDataRetorno.setBackgroundResource(R.drawable.borda_edittext_erro);
+                    Toast.makeText(activityMain, "A data deve ser posterior ao dia de hoje!", Toast.LENGTH_LONG).show();
+                    verificaMovimento = false;
+                }
+            }
         }
 
         return verificaMovimento;

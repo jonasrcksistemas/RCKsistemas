@@ -150,6 +150,10 @@ public class CadastroProspectObservacoesComerciais extends Fragment implements R
 
     @Override
     public void onClickReferencia(int position) {
-
+//        insereDadosDaFrame();
+//        Intent intent = new Intent(getContext(), ActivityAdicionaReferenciaComercial.class);
+//        intent.putExtra("edicao", 1);
+//        intent.putExtra("position", position);
+//        startActivity(intent);
     }
 }

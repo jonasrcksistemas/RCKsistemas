@@ -253,7 +253,7 @@ public class CadastroProspectEndereco extends Fragment {
             for (int i = 0; getResources().getStringArray(listaUf[spUfProspect.getSelectedItemPosition()]).length > i; i++) {
                 if (ProspectHelper.getProspect().getNome_municipio().equals(getResources().getStringArray(listaUf[ProspectHelper.getPosicaoUf()])[i])) {
                     spMunicipioProspect.setSelection(i);
-                    ProspectHelper.setPosicaoUf(i);
+                    ProspectHelper.setPosicaoMunicipio(i);
                     break;
                 }
             }
@@ -313,5 +313,11 @@ public class CadastroProspectEndereco extends Fragment {
         ProspectHelper.setPosicaoPais(spPaisProspect.getSelectedItemPosition());
         ProspectHelper.setPosicaoUf(spUfProspect.getSelectedItemPosition());
         ProspectHelper.setPosicaoMunicipio(spMunicipioProspect.getSelectedItemPosition());
+    }
+
+    @Override
+    public void onResume() {
+        injetaDadosNaTela();
+        super.onResume();
     }
 }
