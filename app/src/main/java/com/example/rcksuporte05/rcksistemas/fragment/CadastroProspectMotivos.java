@@ -82,7 +82,16 @@ public class CadastroProspectMotivos extends Fragment implements MotivoAdapter.M
     }
 
     private void preencheRecycler() {
-        motivoAdapter = new MotivoAdapter(ProspectHelper.getMotivos(), this);
+        if (ProspectHelper.getProspect().getProspectSalvo() != null && ProspectHelper.getProspect().getProspectSalvo().equals("S")) {
+            motivoAdapter = new MotivoAdapter(ProspectHelper.getMotivos(), new MotivoAdapter.MotivoListener() {
+                @Override
+                public void onClick(int position) {
+
+                }
+            });
+        }else {
+            motivoAdapter = new MotivoAdapter(ProspectHelper.getMotivos(), this);
+        }
         recyclerMotivos.setAdapter(motivoAdapter);
         motivoAdapter.notifyDataSetChanged();
     }

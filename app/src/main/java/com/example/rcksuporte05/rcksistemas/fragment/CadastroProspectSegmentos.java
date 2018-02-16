@@ -50,7 +50,9 @@ public class CadastroProspectSegmentos extends Fragment implements SegmentoAdapt
         if (ProspectHelper.getProspect().getProspectSalvo() != null && ProspectHelper.getProspect().getProspectSalvo().equals("S")) {
             recyclerSegmentos.setClickable(false);
             edtOutrosSegmentosProspect.setFocusable(false);
+
         }
+
 
         ProspectHelper.setCadastroProspectSegmentos(this);
         return view;
@@ -82,8 +84,17 @@ public class CadastroProspectSegmentos extends Fragment implements SegmentoAdapt
     }
 
 
-    public void preencheRecycler(){
-        segmentoAdapter = new SegmentoAdapter(ProspectHelper.getSegmentos(), this);
+    public void preencheRecycler() {
+        if (ProspectHelper.getProspect().getProspectSalvo() != null && ProspectHelper.getProspect().getProspectSalvo().equals("S")) {
+            segmentoAdapter = new SegmentoAdapter(ProspectHelper.getSegmentos(), new SegmentoAdapter.SegmentoListener() {
+                @Override
+                public void onClick(int position) {
+
+                }
+            });
+        } else {
+            segmentoAdapter = new SegmentoAdapter(ProspectHelper.getSegmentos(), this);
+        }
         recyclerSegmentos.setAdapter(segmentoAdapter);
         segmentoAdapter.notifyDataSetChanged();
     }

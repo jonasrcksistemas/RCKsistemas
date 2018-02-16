@@ -45,6 +45,11 @@ public class ActivityAdicionaReferenciaComercial extends AppCompatActivity{
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        if(getIntent().getIntExtra("edicao", 0) == 1){
+
+        }
+
     }
 
 
@@ -100,5 +105,17 @@ public class ActivityAdicionaReferenciaComercial extends AppCompatActivity{
         ProspectHelper.getProspect().getReferenciaComercial().add(referenciaComercial);
         return true;
     }
+//
+//    private void injetaDadosNaTela(){
+//        if(ProspectHelper.getProspect() != null && ProspectHelper.getProspect().getReferenciaComercial().size() > 0){
+//            int posicao = getIntent().getIntExtra("position", 0);
+//
+//            if(ProspectHelper.getProspect().getReferenciaComercial().get(posicao) != null &&){
+//
+//            }
+//
+//        }
+//    }
+
 
 }
