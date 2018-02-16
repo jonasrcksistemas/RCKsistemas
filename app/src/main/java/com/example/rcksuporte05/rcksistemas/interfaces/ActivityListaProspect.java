@@ -3,12 +3,15 @@ package com.example.rcksuporte05.rcksistemas.interfaces;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.CursorIndexOutOfBoundsException;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.ActionMode;
 import android.view.Menu;
@@ -27,6 +30,7 @@ import com.example.rcksuporte05.rcksistemas.adapters.ListaProspectAdapter;
 import com.example.rcksuporte05.rcksistemas.classes.Prospect;
 import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -50,6 +54,7 @@ public class ActivityListaProspect extends AppCompatActivity {
     private String[] prospectLista = {"Ambos", "Pendentes", "Salvos"};
     private ListaProspectAdapter listaProspectAdapter;
     private ActionMode actionMode;
+    private List<Prospect> listaProspect;
 
     @OnClick(R.id.btnAddProspect)
     public void novoProspect() {
@@ -74,7 +79,7 @@ public class ActivityListaProspect extends AppCompatActivity {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 try {
                     DBHelper db = new DBHelper(ActivityListaProspect.this);
-                    List<Prospect> listaProspect = db.listaProspect(spFiltraProspect.getSelectedItemPosition());
+                    listaProspect = db.listaProspect(spFiltraProspect.getSelectedItemPosition());
                     preencheLista(listaProspect);
                 } catch (CursorIndexOutOfBoundsException e) {
                     e.printStackTrace();
@@ -93,6 +98,39 @@ public class ActivityListaProspect extends AppCompatActivity {
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.menu_cliente, menu);
+
+        SearchView searchView;
+
+        final MenuItem item = menu.findItem(R.id.buscaCliente);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            searchView = (SearchView) item.getActionView();
+        } else {
+            searchView = (SearchView) MenuItemCompat.getActionView(item);
+        }
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String query) {
+                if (query.trim().equals("")) {
+                    preencheLista(listaProspect);
+                } else {
+                    preencheLista(buscaProspect(listaProspect, query));
+                }
+                return false;
+            }
+        });
+        return true;
     }
 
     @Override
@@ -130,11 +168,57 @@ public class ActivityListaProspect extends AppCompatActivity {
         edtTotalProspect.setText(lista.size() + ": Prospects Listados");
     }
 
+    public List<Prospect> buscaProspect(List<Prospect> listaProspect, String query) {
+        final String upperCaseQuery = query.toUpperCase();
+        final List<Prospect> lista = new ArrayList<>();
+        for (Prospect prospect : listaProspect) {
+            boolean entrou = false;
+
+            try {
+                final String idProspect = prospect.getId_prospect().toUpperCase();
+                if (idProspect.equals(upperCaseQuery) && !entrou) {
+                    lista.add(prospect);
+                    entrou = true;
+                }
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
+            try {
+                final String nomeCadastro = prospect.getNome_cadastro().toUpperCase();
+                if (nomeCadastro.contains(upperCaseQuery) && !entrou) {
+                    lista.add(prospect);
+                    entrou = true;
+                }
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
+            try {
+                final String nomeFantasia = prospect.getNome_fantasia().toUpperCase();
+                if (nomeFantasia.contains(upperCaseQuery) && !entrou) {
+                    lista.add(prospect);
+                    entrou = true;
+                }
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
+            try {
+                final String cpfCnpj = prospect.getCpf_cnpj().toUpperCase();
+                if (cpfCnpj.contains(upperCaseQuery) && !entrou) {
+                    lista.add(prospect);
+                    entrou = true;
+                }
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
+        }
+        return lista;
+    }
+
     @Override
     protected void onResume() {
         try {
             DBHelper db = new DBHelper(this);
-            List<Prospect> listaProspect = db.listaProspect(spFiltraProspect.getSelectedItemPosition());
+            listaProspect = db.listaProspect(spFiltraProspect.getSelectedItemPosition());
             preencheLista(listaProspect);
         } catch (CursorIndexOutOfBoundsException e) {
             e.printStackTrace();
