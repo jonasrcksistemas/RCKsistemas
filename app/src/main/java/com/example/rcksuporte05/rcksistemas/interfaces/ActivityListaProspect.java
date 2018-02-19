@@ -123,13 +123,15 @@ public class ActivityListaProspect extends AppCompatActivity {
             @Override
             public boolean onQueryTextChange(String query) {
                 if (query.trim().equals("")) {
-                    preencheLista(listaProspect);
+                    if (listaProspect.size() > 0)
+                        preencheLista(listaProspect);
                 } else {
                     preencheLista(buscaProspect(listaProspect, query));
                 }
                 return false;
             }
         });
+        searchView.setQueryHint("Nome cadastro/nome fantasia/CPF-CNPJ/codigo prospect");
         return true;
     }
 
