@@ -221,7 +221,7 @@ public class CadastroProspectGeral extends Fragment {
         }
 
         if(edtCpfCnpjProspect.getText() != null && !edtCpfCnpjProspect.getText().toString().equals("")){
-            ProspectHelper.getProspect().setCpf_cnpj(edtCpfCnpjProspect.getText().toString());
+            ProspectHelper.getProspect().setCpf_cnpj(edtCpfCnpjProspect.getText().toString().trim().replaceAll("[^0-9]", ""));
         }else{
             System.out.println("mensagem por obrigatoriedade");
         }

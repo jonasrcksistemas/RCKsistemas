@@ -24,10 +24,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
 import com.example.rcksuporte05.rcksistemas.Helper.ProspectHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
-import com.example.rcksuporte05.rcksistemas.interfaces.FotoActivity;
 import com.example.rcksuporte05.rcksistemas.util.DatePickerUtil;
 import com.example.rcksuporte05.rcksistemas.util.FotoUtil;
 
@@ -46,24 +46,18 @@ import butterknife.OnClick;
 
 public class CadastroProspectFotoSalvar extends Fragment {
 
-    private Uri uri;
-    private DBHelper db;
-
-    @BindView(R.id.imagemProspect)
-    ImageView imagemProspect;
-
     @BindView(R.id.edtDataRetorno)
     public EditText edtDataRetorno;
-
+    @BindView(R.id.imagemProspect)
+    ImageView imagemProspect;
     @BindView(R.id.btnSalvarParcial)
     Button btnSalvarParcial;
-
     @BindView(R.id.btnSalvarProspect)
     Button btnSalvarProspect;
-
     @BindView(R.id.btnAddFoto)
     Button btnAddFoto;
-
+    private Uri uri;
+    private DBHelper db;
 
     @Nullable
     @Override
@@ -94,7 +88,7 @@ public class CadastroProspectFotoSalvar extends Fragment {
         return view;
     }
 
-    public void insereDadosDaFrame(){
+    public void insereDadosDaFrame() {
         try {
             ProspectHelper.getProspect().setDataRetorno(new SimpleDateFormat("yyyy-MM-dd").format(new SimpleDateFormat("dd/MM/yyyy").parse(edtDataRetorno.getText().toString().trim())));
         } catch (ParseException e) {
@@ -112,9 +106,13 @@ public class CadastroProspectFotoSalvar extends Fragment {
         }
     }
 
+    @OnClick(R.id.btnTesteFoto)
+    public void teste(){
+        Glide.with(getContext()).load(uri).into(imagemProspect);
+    }
 
     @OnClick(R.id.btnSalvarParcial)
-    public void salvarParcial(){
+    public void salvarParcial() {
         insereDadosDaFrame();
         AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
         alert.setTitle("Atenção");
@@ -132,9 +130,9 @@ public class CadastroProspectFotoSalvar extends Fragment {
     }
 
     @OnClick(R.id.btnSalvarProspect)
-    public void salvarProspect(){
+    public void salvarProspect() {
         insereDadosDaFrame();
-        if(ProspectHelper.salvarProspect()){
+        if (ProspectHelper.salvarProspect()) {
             AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
             alert.setTitle("Atenção");
             alert.setMessage("Tem certeza que deseja salvar esse prospect PERMANENTEMENTE?");
@@ -164,6 +162,7 @@ public class CadastroProspectFotoSalvar extends Fragment {
                         File diretorio = Environment.getExternalStoragePublicDirectory(getString(R.string.app_name) + " visitas");
                         File imagem = new File(diretorio.getPath() + "/" + System.currentTimeMillis() + ".jpg");
                         uri = Uri.fromFile(imagem);
+
 
                         if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                             ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
@@ -207,14 +206,11 @@ public class CadastroProspectFotoSalvar extends Fragment {
                 Intent novaIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri);
                 getActivity().sendBroadcast(novaIntent);
 
-                Intent intent = new Intent(getActivity(), FotoActivity.class);
-
                 try {
                     imagemProspect.setImageBitmap(FotoUtil.rotateBitmap(BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(uri)), uri));
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
-                startActivity(intent);
             }
         } else if (requestCode == 456) {
             if (resultCode == Activity.RESULT_OK) {
