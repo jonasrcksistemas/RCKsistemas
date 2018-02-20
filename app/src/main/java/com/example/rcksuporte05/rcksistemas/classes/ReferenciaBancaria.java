@@ -6,11 +6,14 @@ package com.example.rcksuporte05.rcksistemas.classes;
 
 public class ReferenciaBancaria {
     private String id_referencia_bancaria;
+    private String id_referencia_bancaria_servidor;
     private String codigo_febraban;
     private String nome_banco;
     private String conta_corrente;
     private String agencia;
     private String id_cadastro;
+    private String id_cadastro_servidor;
+
 
     public String getId_referencia_bancaria() {
         return id_referencia_bancaria;
@@ -58,5 +61,21 @@ public class ReferenciaBancaria {
 
     public void setId_cadastro(String id_cadastro) {
         this.id_cadastro = id_cadastro;
+    }
+
+    public String getId_referencia_bancaria_servidor() {
+        return id_referencia_bancaria_servidor;
+    }
+
+    public void setId_referencia_bancaria_servidor(String id_referencia_bancaria_servidor) {
+        this.id_referencia_bancaria_servidor = id_referencia_bancaria_servidor;
+    }
+
+    public String getId_cadastro_servidor() {
+        return id_cadastro_servidor;
+    }
+
+    public void setId_cadastro_servidor(String id_cadastro_servidor) {
+        this.id_cadastro_servidor = id_cadastro_servidor;
     }
 }

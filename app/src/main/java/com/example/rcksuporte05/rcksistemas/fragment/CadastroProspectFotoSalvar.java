@@ -26,6 +26,7 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.example.rcksuporte05.rcksistemas.Helper.ProspectHelper;
+import com.example.rcksuporte05.rcksistemas.Helper.UsuarioHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
 import com.example.rcksuporte05.rcksistemas.util.DatePickerUtil;
@@ -141,6 +142,8 @@ public class CadastroProspectFotoSalvar extends Fragment {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     ProspectHelper.getProspect().setProspectSalvo("S");
+                    ProspectHelper.getProspect().setIdEmpresa(UsuarioHelper.getUsuario().getIdEmpresaMultiDevice());
+                    ProspectHelper.getProspect().setUsuario_id(UsuarioHelper.getUsuario().getId_usuario());
                     db.atualizarTBL_PROSPECT(ProspectHelper.getProspect());
                     getActivity().finish();
                 }

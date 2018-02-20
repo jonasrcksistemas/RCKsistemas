@@ -178,6 +178,7 @@
                 android:layout_below="@+id/txtCepProspect"
                 android:background="@drawable/borda_edittext"
                 android:hint="CEP"
+                android:maxLength="8"
                 android:inputType="textFilter|number"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 

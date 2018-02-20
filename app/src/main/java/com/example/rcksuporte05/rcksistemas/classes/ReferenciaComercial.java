@@ -6,9 +6,11 @@ package com.example.rcksuporte05.rcksistemas.classes;
 
 public class ReferenciaComercial {
     private String id_referencia_comercial;
+    private String id_referencia_comercial_servidor;
     private String nome_fornecedor_referencia;
     private String telefone;
     private String id_cadastro;
+    private String id_cadastro_servidor;
 
     public String getId_referencia_comercial() {
         return id_referencia_comercial;
@@ -40,5 +42,21 @@ public class ReferenciaComercial {
 
     public void setId_cadastro(String id_cadastro) {
         this.id_cadastro = id_cadastro;
+    }
+
+    public String getId_referencia_comercial_servidor() {
+        return id_referencia_comercial_servidor;
+    }
+
+    public void setId_referencia_comercial_servidor(String id_referencia_comercial_servidor) {
+        this.id_referencia_comercial_servidor = id_referencia_comercial_servidor;
+    }
+
+    public String getId_cadastro_servidor() {
+        return id_cadastro_servidor;
+    }
+
+    public void setId_cadastro_servidor(String id_cadastro_servidor) {
+        this.id_cadastro_servidor = id_cadastro_servidor;
     }
 }

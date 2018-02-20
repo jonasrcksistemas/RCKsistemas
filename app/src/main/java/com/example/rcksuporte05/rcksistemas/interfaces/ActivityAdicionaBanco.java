@@ -106,7 +106,7 @@ public class ActivityAdicionaBanco extends AppCompatActivity {
             return false;
         }
 
-        ProspectHelper.getProspect().getReferenciaBancaria().add(bancos);
+        ProspectHelper.getProspect().getReferenciasBancarias().add(bancos);
         return true;
     }
 

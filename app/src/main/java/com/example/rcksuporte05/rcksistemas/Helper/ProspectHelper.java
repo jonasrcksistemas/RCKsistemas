@@ -366,7 +366,7 @@ public class ProspectHelper {
 
 
         //tela 6 Observações Comerciais
-        if (prospect.getReferenciaComercial().size() < 2) {
+        if (prospect.getReferenciasComerciais().size() < 2) {
             if (verificaMovimento) {
                 verificaMovimento = false;
                 Toast.makeText(activityMain, "Insira Pelo Menos 2 referencias comercias ", Toast.LENGTH_LONG).show();

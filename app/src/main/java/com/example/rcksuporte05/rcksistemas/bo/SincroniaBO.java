@@ -66,6 +66,7 @@ public class SincroniaBO {
     public void sincronizaBanco(Sincronia sincronia, final NotificationCompat.Builder notificacao, final NotificationManager mNotificationManager, final ProgressDialog progress) {
         //controla o progresso da notificação e do progressDialog
         int contadorNotificacaoEProgresso = 0;
+        String relatorio = "";
 
         final int maxProgress = sincronia.getMaxProgress();
 
@@ -319,22 +320,24 @@ public class SincroniaBO {
             }
         }
 
-        if (sincronia.isProspect()) {
-            for (Prospect prospect : sincronia.getListaProspect()) {
-                notificacao.setProgress(maxProgress, contadorNotificacaoEProgresso, false);
+        if (sincronia.isProspectPendentes()) {
+            if(sincronia.getListaProspectPendentes() != null){
+                for (Prospect prospect : sincronia.getListaProspectPendentes()) {
+                    notificacao.setProgress(maxProgress, contadorNotificacaoEProgresso, false);
 
-                db.atualizarTBL_PROSPECT(prospect);
+                    db.atualizarTBL_PROSPECT(prospect);
 
 
-                contadorNotificacaoEProgresso++;
-            final int finalContadorNotificacaoEProgresso = contadorNotificacaoEProgresso;
-            activity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    progress.setProgress(finalContadorNotificacaoEProgresso);
+                    contadorNotificacaoEProgresso++;
+                    final int finalContadorNotificacaoEProgresso = contadorNotificacaoEProgresso;
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            progress.setProgress(finalContadorNotificacaoEProgresso);
+                        }
+                    });
+                    mNotificationManager.notify(0, notificacao.build());
                 }
-            });
-            mNotificationManager.notify(0, notificacao.build());
             }
         }
 
@@ -397,8 +400,8 @@ public class SincroniaBO {
             }
         });
 
-    }
 
+    }
     public void sincronizaApi(final Sincronia sincronia) {
         final ImageView ivInternet = (ImageView) activity.findViewById(R.id.ivInternet);
 
@@ -433,10 +436,10 @@ public class SincroniaBO {
                     sincronia.setListaWebPedidosPendentes(prepararItensPedidos(listaPedido));
                 }
 
-                if (sincronia.isProspect()) {
+                if (sincronia.isProspectPendentes()) {
                     try {
                         final List<Prospect> listaProspect = db.listaProspect(Prospect.PROSPECT_SALVO);
-                        sincronia.setListaProspect(listaProspect);
+                        sincronia.setListaProspectPendentes(listaProspect);
                     } catch (CursorIndexOutOfBoundsException e) {
                         e.printStackTrace();
                     }

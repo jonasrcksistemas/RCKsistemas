@@ -102,15 +102,15 @@ public class ActivityAdicionaReferenciaComercial extends AppCompatActivity{
             return false;
         }
 
-        ProspectHelper.getProspect().getReferenciaComercial().add(referenciaComercial);
+        ProspectHelper.getProspect().getReferenciasComerciais().add(referenciaComercial);
         return true;
     }
 //
 //    private void injetaDadosNaTela(){
-//        if(ProspectHelper.getProspect() != null && ProspectHelper.getProspect().getReferenciaComercial().size() > 0){
+//        if(ProspectHelper.getProspect() != null && ProspectHelper.getProspect().getReferenciasComerciais().size() > 0){
 //            int posicao = getIntent().getIntExtra("position", 0);
 //
-//            if(ProspectHelper.getProspect().getReferenciaComercial().get(posicao) != null &&){
+//            if(ProspectHelper.getProspect().getReferenciasComerciais().get(posicao) != null &&){
 //
 //            }
 //

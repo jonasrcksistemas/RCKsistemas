@@ -35,7 +35,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private final static String NomeBanco = "Banco.db";
 
     public DBHelper(Context context) {
-        super(context, NomeBanco, null, 4);
+        super(context, NomeBanco, null, 5);
     }
 
     @Override
@@ -428,6 +428,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
         db.execSQL("CREATE TABLE IF NOT EXISTS TBL_REFERENCIA_BANCARIA" +
                 "(ID_REFERENCIA_BANCARIA INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "ID_REFERENCIA_BANCARIA_SERVIDOR INTEGER, " +
+                "ID_CADASTRO_SERVIDOR INTEGER, " +
                 "CODIGO_FEBRABAN INTEGER," +
                 "NOME_BANCO VARCHAR(60)," +
                 "CONTA_CORRENTE VARCHAR(60)," +
@@ -438,6 +440,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
         db.execSQL("CREATE TABLE IF NOT EXISTS TBL_REFERENCIA_COMERCIAL" +
                 "(ID_REFERENCIA_COMERCIAL INTEGER PRIMARY KEY AUTOINCREMENT," +
+                "ID_REFERENCIA_COMERCIAL_SERVIDOR INTEGER," +
+                "ID_CADASTRO_SERVIDOR INTEGER," +
                 "NOME_FORNECEDOR_REFERENCIA VARCHAR(60)," +
                 "TELEFONE VARCHAR(20)," +
                 "ID_CADASTRO INTEGER," +
@@ -446,8 +450,9 @@ public class DBHelper extends SQLiteOpenHelper {
 
         db.execSQL("CREATE TABLE IF NOT EXISTS TBL_CADASTRO_CONTATO" +
                 "(ID_CONTATO INTEGER PRIMARY KEY AUTOINCREMENT," +
-                "ID_CONTATO_SERVIDOR INTEGER," +
                 "ID_CADASTRO INTEGER," +
+                "ID_CADASTRO_SERVIDOR INTEGER," +
+                "ID_CONTATO_SERVIDOR INTEGER," +
                 "ATIVO VARCHAR(1)," +
                 "PESSOA_CONTATO VARCHAR(60)," +
                 "FUNCAO VARCHAR(60)," +
@@ -533,6 +538,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
             db.execSQL("CREATE TABLE IF NOT EXISTS TBL_REFERENCIA_BANCARIA" +
                     "(ID_REFERENCIA_BANCARIA INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "ID_REFERENCIA_BANCARIA_SERVIDOR INTEGER, " +
+                    "ID_CADASTRO_SERVIDOR INTEGER, " +
                     "CODIGO_FEBRABAN INTEGER," +
                     "NOME_BANCO VARCHAR(60)," +
                     "CONTA_CORRENTE VARCHAR(60)," +
@@ -543,6 +550,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
             db.execSQL("CREATE TABLE IF NOT EXISTS TBL_REFERENCIA_COMERCIAL" +
                     "(ID_REFERENCIA_COMERCIAL INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    "ID_REFERENCIA_COMERCIAL_SERVIDOR INTEGER, "+
+                    "ID_CADASTRO_SERVIDOR INTEGER, " +
                     "NOME_FORNECEDOR_REFERENCIA VARCHAR(60)," +
                     "TELEFONE VARCHAR(20)," +
                     "ID_CADASTRO INTEGER," +
@@ -551,8 +560,9 @@ public class DBHelper extends SQLiteOpenHelper {
 
             db.execSQL("CREATE TABLE IF NOT EXISTS TBL_CADASTRO_CONTATO" +
                     "(ID_CONTATO INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    "ID_CONTATO_SERVIDOR INTEGER," +
                     "ID_CADASTRO INTEGER," +
+                    "ID_CONTATO_SERVIDOR INTEGER," +
+                    "ID_CADASTRO_SERVIDOR INTEGER," +
                     "ATIVO VARCHAR(1)," +
                     "PESSOA_CONTATO VARCHAR(60)," +
                     "FUNCAO VARCHAR(60)," +
@@ -647,14 +657,14 @@ public class DBHelper extends SQLiteOpenHelper {
 
         if (prospect.getId_prospect() != null && contagem("SELECT COUNT(ID_PROSPECT) FROM TBL_PROSPECT WHERE ID_PROSPECT = " + prospect.getId_prospect()) > 0) {
             content.put("ID_PROSPECT", prospect.getId_prospect());
-            atualizarTBL_REFERENCIA_BANCARIA(prospect.getReferenciaBancaria(), prospect.getId_prospect());
-            atualizarTBL_REFERENCIA_COMERCIAL(prospect.getReferenciaComercial(), prospect.getId_prospect());
+            atualizarTBL_REFERENCIA_BANCARIA(prospect.getReferenciasBancarias(), prospect.getId_prospect());
+            atualizarTBL_REFERENCIA_COMERCIAL(prospect.getReferenciasComerciais(), prospect.getId_prospect());
             atualizarTBL_CADASTRO_CONTATO(prospect.getListaContato(), prospect.getId_prospect());
             db.update("TBL_PROSPECT", content, "ID_PROSPECT = " + prospect.getId_prospect(), null);
         } else {
             content.put("ID_PROSPECT", idCadastro);
-            atualizarTBL_REFERENCIA_BANCARIA(prospect.getReferenciaBancaria(), idCadastro);
-            atualizarTBL_REFERENCIA_COMERCIAL(prospect.getReferenciaComercial(), idCadastro);
+            atualizarTBL_REFERENCIA_BANCARIA(prospect.getReferenciasBancarias(), idCadastro);
+            atualizarTBL_REFERENCIA_COMERCIAL(prospect.getReferenciasComerciais(), idCadastro);
             atualizarTBL_CADASTRO_CONTATO(prospect.getListaContato(), idCadastro);
             db.insert("TBL_PROSPECT", null, content);
         }
@@ -699,12 +709,12 @@ public class DBHelper extends SQLiteOpenHelper {
                 e.printStackTrace();
             }
             try {
-                prospect.setReferenciaBancaria(listaReferenciaBancaria(cursor.getString(cursor.getColumnIndex("ID_PROSPECT"))));
+                prospect.setReferenciasBancarias(listaReferenciaBancaria(cursor.getString(cursor.getColumnIndex("ID_PROSPECT"))));
             } catch (CursorIndexOutOfBoundsException e) {
                 e.printStackTrace();
             }
             try {
-                prospect.setReferenciaComercial(listaReferenciacomercial(cursor.getString(cursor.getColumnIndex("ID_PROSPECT"))));
+                prospect.setReferenciasComerciais(listaReferenciacomercial(cursor.getString(cursor.getColumnIndex("ID_PROSPECT"))));
             } catch (CursorIndexOutOfBoundsException e) {
                 e.printStackTrace();
             }
@@ -766,6 +776,8 @@ public class DBHelper extends SQLiteOpenHelper {
             content.put("AGENCIA", referenciaBancaria.getAgencia());
             content.put("USUARIO_ID", UsuarioHelper.getUsuario().getId_usuario());
             content.put("NOME_USUARIO", UsuarioHelper.getUsuario().getNome_usuario());
+            content.put("ID_CADASTRO_SERVIDOR", referenciaBancaria.getId_cadastro_servidor());
+            content.put("ID_REFERENCIA_BANCARIA_SERVIDOR", referenciaBancaria.getId_referencia_bancaria_servidor());
 
             if (referenciaBancaria.getId_referencia_bancaria() != null && contagem("SELECT COUNT(ID_REFERENCIA_BANCARIA) FROM TBL_REFERENCIA_BANCARIA WHERE ID_REFERENCIA_BANCARIA = " + referenciaBancaria.getId_referencia_bancaria()) > 0) {
                 content.put("ID_CADASTRO", referenciaBancaria.getId_cadastro());
@@ -794,6 +806,8 @@ public class DBHelper extends SQLiteOpenHelper {
             referenciaBancaria.setConta_corrente(cursor.getString(cursor.getColumnIndex("CONTA_CORRENTE")));
             referenciaBancaria.setAgencia(cursor.getString(cursor.getColumnIndex("AGENCIA")));
             referenciaBancaria.setId_cadastro(cursor.getString(cursor.getColumnIndex("ID_CADASTRO")));
+            referenciaBancaria.setId_cadastro_servidor(cursor.getString(cursor.getColumnIndex("ID_CADASTRO_SERVIDOR")));
+            referenciaBancaria.setId_referencia_bancaria_servidor(cursor.getString(cursor.getColumnIndex("ID_REFERENCIA_BANCARIA_SERVIDOR")));
 
             listaReferenciaBancaria.add(referenciaBancaria);
         } while (cursor.moveToNext());
@@ -813,6 +827,8 @@ public class DBHelper extends SQLiteOpenHelper {
             content.put("TELEFONE", referenciaComercial.getTelefone());
             content.put("USUARIO_ID", UsuarioHelper.getUsuario().getId_usuario());
             content.put("NOME_USUARIO", UsuarioHelper.getUsuario().getNome_usuario());
+            content.put("ID_REFERENCIA_COMERCIAL_SERVIDOR", referenciaComercial.getId_referencia_comercial_servidor());
+            content.put("ID_CADASTRO_SERVIDOR", referenciaComercial.getId_cadastro_servidor());
 
             if (referenciaComercial.getId_referencia_comercial() != null && contagem("SELECT COUNT(ID_REFERENCIA_COMERCIAL) FROM TBL_REFERENCIA_COMERCIAL WHERE ID_REFERENCIA_COMERCIAL = " + referenciaComercial.getId_referencia_comercial()) > 0) {
                 content.put("ID_CADASTRO", referenciaComercial.getId_cadastro());
@@ -838,6 +854,8 @@ public class DBHelper extends SQLiteOpenHelper {
             referenciaComercial.setNome_fornecedor_referencia(cursor.getString(cursor.getColumnIndex("NOME_FORNECEDOR_REFERENCIA")));
             referenciaComercial.setTelefone(cursor.getString(cursor.getColumnIndex("TELEFONE")));
             referenciaComercial.setId_cadastro(cursor.getString(cursor.getColumnIndex("ID_CADASTRO")));
+            referenciaComercial.setId_cadastro_servidor(cursor.getString(cursor.getColumnIndex("ID_CADASTRO_SERVIDOR")));
+            referenciaComercial.setId_referencia_comercial_servidor(cursor.getString(cursor.getColumnIndex("ID_REFERENCIA_COMERCIAL_SERVIDOR")));
 
             listaReferenciacomercial.add(referenciaComercial);
         } while (cursor.moveToNext());
@@ -870,6 +888,8 @@ public class DBHelper extends SQLiteOpenHelper {
             content.put("FORNECEDOR2", contato.getFornecedor2());
             content.put("TEL_FORNEC1", contato.getTel_fornec1());
             content.put("TEL_FORNEC2", contato.getTel_fornec2());
+            content.put("ID_CADASTRO_SERVIDOR", contato.getId_cadastro_servidor());
+            content.put("ID_CONTATO_SERVIDOR", contato.getId_contato_servidor());
 
             if (contato.getId_contato() != null && contagem("SELECT COUNT(ID_CONTATO) FROM TBL_CADASTRO_CONTATO WHERE ID_CONTATO = " + contato.getId_contato()) > 0) {
                 content.put("ID_CADASTRO", contato.getId_cadastro());
@@ -914,6 +934,8 @@ public class DBHelper extends SQLiteOpenHelper {
             contato.setFornecedor2(cursor.getString(cursor.getColumnIndex("FORNECEDOR2")));
             contato.setTel_fornec1(cursor.getString(cursor.getColumnIndex("TEL_FORNEC1")));
             contato.setTel_fornec2(cursor.getString(cursor.getColumnIndex("TEL_FORNEC2")));
+            contato.setId_cadastro_servidor(cursor.getString(cursor.getColumnIndex("ID_CADASTRO_SERVIDOR")));
+            contato.setId_contato_servidor(cursor.getString(cursor.getColumnIndex("ID_CONTATO_SERVIDOR")));
 
             listaContato.add(contato);
         } while (cursor.moveToNext());

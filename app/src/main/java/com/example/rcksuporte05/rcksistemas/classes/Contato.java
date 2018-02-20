@@ -4,6 +4,7 @@ public class Contato {
     private String id_contato;
     private String id_contato_servidor;
     private String id_cadastro;
+    private String id_cadastro_servidor;
     private String ativo;
     private String pessoa_contato;
     private String funcao;
@@ -198,5 +199,13 @@ public class Contato {
 
     public void setId_contato_servidor(String id_contato_servidor) {
         this.id_contato_servidor = id_contato_servidor;
+    }
+
+    public String getId_cadastro_servidor() {
+        return id_cadastro_servidor;
+    }
+
+    public void setId_cadastro_servidor(String id_cadastro_servidor) {
+        this.id_cadastro_servidor = id_cadastro_servidor;
     }
 }

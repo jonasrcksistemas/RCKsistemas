@@ -12,14 +12,13 @@ public class Prospect {
     public static int PROSPECT_PENDENTE = 1;
     public static int PROSPECT_SALVO = 2;
     public static int PROSPECT_ENVIADO = 3;
-
     private String id_prospect;
     private String id_prospect_servidor;
     private String id_cadastro;
     private Segmento segmento;
     private MotivoNaoCadastramento motivoNaoCadastramento;
-    private List<ReferenciaBancaria> referenciaBancaria = new ArrayList<>();
-    private List<ReferenciaComercial> referenciaComercial = new ArrayList<>();
+    private List<ReferenciaBancaria> referenciasBancarias = new ArrayList<>();
+    private List<ReferenciaComercial> referenciasComerciais = new ArrayList<>();
     private List<Contato> listaContato = new ArrayList<>();
     private String nome_cadastro;
     private String nome_fantasia;
@@ -244,12 +243,12 @@ public class Prospect {
         this.fotoSecundariaBase64 = fotoSecundariaBase64;
     }
 
-    public List<ReferenciaBancaria> getReferenciaBancaria() {
-        return referenciaBancaria;
+    public List<ReferenciaBancaria> getReferenciasBancarias() {
+        return referenciasBancarias;
     }
 
-    public List<ReferenciaComercial> getReferenciaComercial() {
-        return referenciaComercial;
+    public List<ReferenciaComercial> getReferenciasComerciais() {
+        return referenciasComerciais;
     }
 
     public String getObservacoesComerciais() {
@@ -292,12 +291,12 @@ public class Prospect {
         this.id_prospect_servidor = id_prospect_servidor;
     }
 
-    public void setReferenciaBancaria(List<ReferenciaBancaria> referenciaBancaria) {
-        this.referenciaBancaria = referenciaBancaria;
+    public void setReferenciasBancarias(List<ReferenciaBancaria> referenciasBancarias) {
+        this.referenciasBancarias = referenciasBancarias;
     }
 
-    public void setReferenciaComercial(List<ReferenciaComercial> referenciaComercial) {
-        this.referenciaComercial = referenciaComercial;
+    public void setReferenciasComerciais(List<ReferenciaComercial> referenciasComerciais) {
+        this.referenciasComerciais = referenciasComerciais;
     }
 
     public void setListaContato(List<Contato> listaContato) {

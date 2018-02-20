@@ -7,7 +7,7 @@ public class Sincronia {
     private boolean produto;
     private boolean pedidosFinalizados;
     private boolean pedidosPendentes;
-    private boolean prospect;
+    private boolean prospectPendentes;
     private int maxProgress;
     private List<Cliente> listaCliente;
     private List<CondicoesPagamento> listaCondicoesPagamento;
@@ -23,14 +23,15 @@ public class Sincronia {
     private List<Banco> bancos;
     private List<Segmento> segmentos;
     private List<MotivoNaoCadastramento> motivos;
-    private List<Prospect> listaProspect;
+    private List<Prospect> listaProspectPendentes;
+    private List<Prospect> listaProspectSincronizados;
 
     public Sincronia(boolean cliente, boolean produto, boolean pedidosFinalizados, boolean pedidosPendentes, boolean prospect) {
         this.cliente = cliente;
         this.produto = produto;
         this.pedidosFinalizados = pedidosFinalizados;
         this.pedidosPendentes = pedidosPendentes;
-        this.prospect = prospect;
+        this.prospectPendentes = prospect;
     }
 
     public boolean isCliente() {
@@ -185,19 +186,27 @@ public class Sincronia {
         this.motivos = motivos;
     }
 
-    public boolean isProspect() {
-        return prospect;
+    public boolean isProspectPendentes() {
+        return prospectPendentes;
     }
 
-    public void setProspect(boolean prospect) {
-        this.prospect = prospect;
+    public void setProspectPendentes(boolean prospectPendentes) {
+        this.prospectPendentes = prospectPendentes;
     }
 
-    public List<Prospect> getListaProspect() {
-        return listaProspect;
+    public List<Prospect> getListaProspectPendentes() {
+        return listaProspectPendentes;
     }
 
-    public void setListaProspect(List<Prospect> listaProspect) {
-        this.listaProspect = listaProspect;
+    public void setListaProspectPendentes(List<Prospect> listaProspectPendentes) {
+        this.listaProspectPendentes = listaProspectPendentes;
+    }
+
+    public List<Prospect> getListaProspectSincronizados() {
+        return listaProspectSincronizados;
+    }
+
+    public void setListaProspectSincronizados(List<Prospect> listaProspectSincronizados) {
+        this.listaProspectSincronizados = listaProspectSincronizados;
     }
 }

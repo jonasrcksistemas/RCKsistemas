@@ -110,14 +110,14 @@ public class CadastroProspectObservacoesComerciais extends Fragment implements R
             edtLimiteDePrazoSugerido.setText(ProspectHelper.getProspect().getLimiteDePrazoSugerido());
         }
 
-        if(ProspectHelper.getProspect().getReferenciaComercial().size() >0){
-            referenciaComercialAdapter = new ReferenciaComercialAdapter(ProspectHelper.getProspect().getReferenciaComercial(),this);
+        if(ProspectHelper.getProspect().getReferenciasComerciais().size() >0){
+            referenciaComercialAdapter = new ReferenciaComercialAdapter(ProspectHelper.getProspect().getReferenciasComerciais(),this);
             recyclerReferenciaComercial.setAdapter(referenciaComercialAdapter);
             referenciaComercialAdapter.notifyDataSetChanged();
         }
 
-        if(ProspectHelper.getProspect().getReferenciaBancaria().size()> 0){
-            referenciaBancariaAdapter = new ReferenciaBancariaAdapter(ProspectHelper.getProspect().getReferenciaBancaria(),this);
+        if(ProspectHelper.getProspect().getReferenciasBancarias().size()> 0){
+            referenciaBancariaAdapter = new ReferenciaBancariaAdapter(ProspectHelper.getProspect().getReferenciasBancarias(),this);
             recyclerBancos.setAdapter(referenciaBancariaAdapter);
             referenciaBancariaAdapter.notifyDataSetChanged();
         }
@@ -127,13 +127,24 @@ public class CadastroProspectObservacoesComerciais extends Fragment implements R
 
     public void insereDadosDaFrame() {
         if (edtObservacaoComercial.getText() != null) {
-            ProspectHelper.getProspect().setObservacoesComerciais(edtObservacaoComercial.getText().toString());
+            if(!edtObservacaoComercial.getText().toString().trim().equals("")){
+                ProspectHelper.getProspect().setObservacoesComerciais(edtObservacaoComercial.getText().toString());
+            }else{
+                ProspectHelper.getProspect().setObservacoesComerciais(null);
+            }
         }
         if (edtLimiteCreditoSugerido.getText() != null) {
-            ProspectHelper.getProspect().setLimiteDeCreditoSugerido(edtLimiteCreditoSugerido.getText().toString());
+            if(!edtLimiteCreditoSugerido.getText().toString().trim().equals("")){
+                ProspectHelper.getProspect().setLimiteDeCreditoSugerido(edtLimiteCreditoSugerido.getText().toString());
+            }
+            ProspectHelper.getProspect().setLimiteDeCreditoSugerido(null);
         }
         if (edtLimiteDePrazoSugerido.getText() != null) {
-            ProspectHelper.getProspect().setLimiteDePrazoSugerido(edtLimiteDePrazoSugerido.getText().toString());
+            if (!edtLimiteDePrazoSugerido.getText().toString().trim().equals("")) {
+                ProspectHelper.getProspect().setLimiteDePrazoSugerido(edtLimiteDePrazoSugerido.getText().toString());
+            }else {
+                ProspectHelper.getProspect().setLimiteDePrazoSugerido(null);
+            }
         }
     }
 
