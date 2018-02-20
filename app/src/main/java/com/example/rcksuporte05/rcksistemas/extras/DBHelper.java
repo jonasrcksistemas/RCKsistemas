@@ -686,7 +686,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 cursor = db.rawQuery("SELECT * FROM TBL_PROSPECT WHERE PROSPECT_SALVO = 'S' AND ID_PROSPECT_SERVIDOR IS NULL ORDER BY ID_PROSPECT DESC", null);
                 break;
             case 3:
-                cursor = db.rawQuery("SELECT * FROM TBL_PROSPECT WHERE PROSPECT_SALVO = 'S' AND ID_PROSPECT_SERVIDOR IS NOT NULL ORDER BY ID_PROSPECT DESC", null);
+                cursor = db.rawQuery("SELECT * FROM TBL_PROSPECT WHERE PROSPECT_SALVO = 'S' AND ID_PROSPECT_SERVIDOR IS NOT NULL ORDER BY DIA_VISITA DESC", null);
                 break;
             default:
                 cursor = db.rawQuery("SELECT * FROM TBL_PROSPECT ORDER BY ID_PROSPECT DESC", null);

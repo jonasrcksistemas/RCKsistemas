@@ -143,7 +143,7 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
             startActivity(intent);
         } else if (view == btnProspectLista) {
             getUsuarios();
-            Intent intent = new Intent(PrincipalActivity.this, ActivityListaProspect.class);
+            Intent intent = new Intent(PrincipalActivity.this, ActivityListaProspectEnviado.class);
             startActivity(intent);
         }
     }

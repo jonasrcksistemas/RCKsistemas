@@ -32,6 +32,7 @@ public class ListaProspectAdapter extends RecyclerView.Adapter<ProspectViewHolde
         this.selectedItems = new SparseBooleanArray();
     }
 
+
     @Override
     public ProspectViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
