@@ -1,14 +1,18 @@
 package com.example.rcksuporte05.rcksistemas.interfaces;
 
+import android.content.Intent;
 import android.database.CursorIndexOutOfBoundsException;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.example.rcksuporte05.rcksistemas.Helper.VisitaHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.ListaProspectEnviadoAdapter;
 import com.example.rcksuporte05.rcksistemas.classes.Prospect;
@@ -28,6 +32,9 @@ public class ActivityListaProspectEnviado extends AppCompatActivity implements L
 
     @BindView(R.id.recyclerProspectsEnviado)
     RecyclerView recyclerProspectsEnviado;
+
+    @BindView(R.id.toolbarProspectEnviado)
+    Toolbar toolbarProspectEnviado;
 
     ListaProspectEnviadoAdapter listaProspectEnviadoAdapter;
     private List<Prospect> listaProspect;
@@ -49,6 +56,19 @@ public class ActivityListaProspectEnviado extends AppCompatActivity implements L
             recyclerProspectsEnviado.setVisibility(View.INVISIBLE);
         }
 
+        setSupportActionBar(toolbarProspectEnviado);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+        }
+        return true;
     }
 
     @Override
@@ -73,6 +93,8 @@ public class ActivityListaProspectEnviado extends AppCompatActivity implements L
 
     @Override
     public void onClick(int position) {
-
+        Intent intent = new Intent(this,ActivityHistoricoVisitaProspect.class);
+        VisitaHelper.setProspect(listaProspectEnviadoAdapter.getItem(position));
+        startActivity(intent);
     }
 }

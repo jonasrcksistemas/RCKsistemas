@@ -80,6 +80,7 @@
         <activity android:name=".interfaces.ActivityAdicionaBanco" />
         <activity android:name=".interfaces.ActivityListaProspectEnviado" />
         <activity android:name=".interfaces.ActivityAdicionaReferenciaComercial" />
+        <activity android:name=".interfaces.ActivityHistoricoVisitaProspect" />
         <activity
             android:name=".interfaces.ActivityListaProspect"
             android:theme="@style/AppTheme.NoActionBar" />

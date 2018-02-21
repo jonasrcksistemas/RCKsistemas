@@ -6,6 +6,7 @@ package com.example.rcksuporte05.rcksistemas.classes;
 
 public class VisitaProspect {
     private int idVisita;
+    private Prospect prospect;
     private String DescricaoVisita;
     private MotivoNaoCadastramento motivoNaoCadastramento;
     private String dataVisita;
@@ -21,6 +22,14 @@ public class VisitaProspect {
 
     public void setIdVisita(int idVisita) {
         this.idVisita = idVisita;
+    }
+
+    public Prospect getProspect() {
+        return prospect;
+    }
+
+    public void setProspect(Prospect prospect) {
+        this.prospect = prospect;
     }
 
     public String getDescricaoVisita() {

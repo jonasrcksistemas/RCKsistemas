@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:id="@+id/rlItemVisita"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/txtNomeProspectVisita"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="texto"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:textStyle="bold"
+        android:textColor="@color/colorAccent"
+        />
+
+    <TextView
+        android:id="@+id/txtMotivoNaoCadVisita"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtNomeProspectVisita"
+        android:layout_alignStart="@+id/txtNomeProspectVisita"
+        android:text="texto"
+        android:layout_alignLeft="@+id/txtNomeProspectVisita"
+        android:layout_marginTop="5dp"/>
+
+    <TextView
+        android:id="@+id/txtDataVisita"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txtNomeProspectVisita"
+        android:text="Texto"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignBaseline="@+id/txtMotivoNaoCadVisita"
+        android:layout_marginBottom="8dp"
+        android:layout_marginRight="30dp"
+        android:maxLines="1"
+        />
+
+</RelativeLayout>

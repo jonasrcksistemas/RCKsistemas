@@ -22,8 +22,8 @@ public class ProspectEnviadoViewHolder extends RecyclerView.ViewHolder {
     public TextView txtIdProspectEnviado;
     @BindView(R.id.txtDataRetornoEnviado)
     public TextView txtDataRetornoEnviado;
-    @BindView(R.id.itemListaProspectEnviado)
-    public RelativeLayout itemListaProspectEnviado;
+    @BindView(R.id.rlItemListaProspectEnviado)
+    public RelativeLayout rlItemListaProspectEnviado;
 
 
     public ProspectEnviadoViewHolder(View itemView, final ListaProspectEnviadoAdapter.ProspectEnviadoListener listener) {

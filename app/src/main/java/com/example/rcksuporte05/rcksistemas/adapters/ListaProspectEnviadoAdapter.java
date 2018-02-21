@@ -46,6 +46,21 @@ public class ListaProspectEnviadoAdapter extends RecyclerView.Adapter<ProspectEn
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
+        ApplyClickEvents(holder, position);
+    }
+
+    private void ApplyClickEvents(ProspectEnviadoViewHolder holder, final int position) {
+        holder.rlItemListaProspectEnviado.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onClick(position);
+            }
+        });
+    }
+
+    public Prospect getItem(int position){
+        return prospects.get(position);
     }
 
     @Override
