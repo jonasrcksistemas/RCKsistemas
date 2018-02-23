@@ -53,8 +53,6 @@
     </style>
 
 
-
-
     <!-- Base application theme. -->
     <style name="Theme.Dialogs" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- colorPrimary is used for the default action bar background -->
@@ -149,6 +147,11 @@
         <item name="colorButtonNormal">@color/corBotao</item>
         <item name="android:textColor">@color/branco</item>
         <item name="android:checkableBehavior">all</item>
+    </style>
+
+    <style name="txtStyle">
+        <item name="android:textColor">@color/colorAccent</item>
+        <item name="android:textStyle">bold</item>
     </style>
 
 </resources>

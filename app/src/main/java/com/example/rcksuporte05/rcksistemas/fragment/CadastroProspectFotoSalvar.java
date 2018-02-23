@@ -67,7 +67,6 @@ public class CadastroProspectFotoSalvar extends Fragment {
         ButterKnife.bind(this, view);
         db = new DBHelper(getContext());
 
-
         insereDadosNaTela();
 
         if (ProspectHelper.getProspect().getProspectSalvo() != null && ProspectHelper.getProspect().getProspectSalvo().equals("S")) {

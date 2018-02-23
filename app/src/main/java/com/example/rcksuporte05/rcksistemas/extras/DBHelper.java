@@ -854,9 +854,16 @@ public class DBHelper extends SQLiteOpenHelper {
             referenciaComercial.setNome_fornecedor_referencia(cursor.getString(cursor.getColumnIndex("NOME_FORNECEDOR_REFERENCIA")));
             referenciaComercial.setTelefone(cursor.getString(cursor.getColumnIndex("TELEFONE")));
             referenciaComercial.setId_cadastro(cursor.getString(cursor.getColumnIndex("ID_CADASTRO")));
-            referenciaComercial.setId_cadastro_servidor(cursor.getString(cursor.getColumnIndex("ID_CADASTRO_SERVIDOR")));
-            referenciaComercial.setId_referencia_comercial_servidor(cursor.getString(cursor.getColumnIndex("ID_REFERENCIA_COMERCIAL_SERVIDOR")));
-
+            try {
+                referenciaComercial.setId_cadastro_servidor(cursor.getString(cursor.getColumnIndex("ID_CADASTRO_SERVIDOR")));
+            }catch (CursorIndexOutOfBoundsException e){
+                e.printStackTrace();
+            }
+            try {
+                referenciaComercial.setId_referencia_comercial_servidor(cursor.getString(cursor.getColumnIndex("ID_REFERENCIA_COMERCIAL_SERVIDOR")));
+            }catch (CursorIndexOutOfBoundsException e){
+                e.printStackTrace();
+            }
             listaReferenciacomercial.add(referenciaComercial);
         } while (cursor.moveToNext());
         return listaReferenciacomercial;

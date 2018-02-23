@@ -1,5 +1,7 @@
 package com.example.rcksuporte05.rcksistemas.Helper;
 
+import android.location.Location;
+
 import com.example.rcksuporte05.rcksistemas.classes.Prospect;
 import com.example.rcksuporte05.rcksistemas.classes.VisitaProspect;
 
@@ -10,6 +12,7 @@ import com.example.rcksuporte05.rcksistemas.classes.VisitaProspect;
 public class VisitaHelper {
     private static Prospect prospect;
     private static VisitaProspect visitaProspect;
+    private static Location mLocation;
 
     public static Prospect getProspect() {
         return prospect;
@@ -27,8 +30,17 @@ public class VisitaHelper {
         VisitaHelper.visitaProspect = visitaProspect;
     }
 
-    public void limpaVisitaHelper(){
+    public static Location getmLocation() {
+        return mLocation;
+    }
+
+    public static void setmLocation(Location mLocation) {
+        VisitaHelper.mLocation = mLocation;
+    }
+
+    public static void limpaVisitaHelper(){
         prospect = null;
         visitaProspect = null;
+        mLocation = null;
     }
 }

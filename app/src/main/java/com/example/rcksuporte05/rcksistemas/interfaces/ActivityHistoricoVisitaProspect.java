@@ -1,5 +1,6 @@
 package com.example.rcksuporte05.rcksistemas.interfaces;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -14,6 +15,7 @@ import com.example.rcksuporte05.rcksistemas.util.DividerItemDecoration;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by RCK 03 on 20/02/2018.
@@ -38,6 +40,14 @@ public class ActivityHistoricoVisitaProspect extends AppCompatActivity {
 
         setSupportActionBar(toolbarVisita);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+
+    @OnClick(R.id.btnAddVisita)
+    public void abrirTela(){
+        Intent intent = new Intent(this, ActivityVisita.class);
+        startActivity(intent);
+
     }
 
     @Override
