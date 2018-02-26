@@ -93,8 +93,8 @@ public class ActivityListaProspectEnviado extends AppCompatActivity implements L
 
     @Override
     public void onClick(int position) {
-        Intent intent = new Intent(this,ActivityHistoricoVisitaProspect.class);
         VisitaHelper.setProspect(listaProspectEnviadoAdapter.getItem(position));
+        Intent intent = new Intent(this,ActivityHistoricoVisitaProspect.class);
         startActivity(intent);
     }
 }

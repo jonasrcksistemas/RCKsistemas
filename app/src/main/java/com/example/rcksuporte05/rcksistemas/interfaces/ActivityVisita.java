@@ -17,10 +17,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.rcksuporte05.rcksistemas.Helper.UsuarioHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.VisitaHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.api.ApiGeocoder;
 import com.example.rcksuporte05.rcksistemas.api.Rotas;
+import com.example.rcksuporte05.rcksistemas.classes.VisitaProspect;
+import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
 import com.example.rcksuporte05.rcksistemas.util.DatePickerUtil;
 import com.example.rcksuporte05.rcksistemas.util.classesGeocoderUtil.RespostaGeocoder;
 import com.google.android.gms.common.ConnectionResult;
@@ -36,6 +39,12 @@ import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStates;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.tasks.OnSuccessListener;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -60,6 +69,9 @@ public class ActivityVisita extends AppCompatActivity implements GoogleApiClient
     EditText edtDataRetornoVisita;
     @BindView(R.id.spTipoVisita)
     Spinner spTipoVisita;
+    @BindView(R.id.edtDescricaoVisita)
+    EditText edtDescricaoVisita;
+
 
     ProgressDialog progress;
 
@@ -67,12 +79,15 @@ public class ActivityVisita extends AppCompatActivity implements GoogleApiClient
     private FusedLocationProviderClient mFusedLocationClient;
     Location mLocation;
     private String[] tipoVisita = {"Presencial","Telefone"};
+    DBHelper db;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_visita);
         ButterKnife.bind(this);
+
+        db = new DBHelper(this);
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         txtLongitude.setVisibility(View.GONE);
@@ -99,6 +114,82 @@ public class ActivityVisita extends AppCompatActivity implements GoogleApiClient
 
     @OnClick(R.id.btnSalvarVisita)
     public void salvar(){
+        VisitaProspect visita = new VisitaProspect();
+        boolean verificaObrigatorios = true;
+
+        visita.setProspect(VisitaHelper.getProspect());
+        visita.setDataVisita(db.pegaDataAtual());
+        visita.setUsuario_id(UsuarioHelper.getUsuario().getId_usuario());
+        visita.setTipoContato(tipoVisita[spTipoVisita.getSelectedItemPosition()]);
+
+       if(spTipoVisita.getSelectedItemPosition() == 0) {
+        if(edtDescricaoVisita.getText() != null && !edtDescricaoVisita.getText().toString().trim().equals("")){
+            visita.setDescricaoVisita(edtDescricaoVisita.getText().toString());
+        }else{
+            edtDescricaoVisita.setError("Campo Obrigatorio");
+            edtDescricaoVisita.requestFocus();
+            verificaObrigatorios = false;
+        }
+
+        if (edtDataRetornoVisita.getText() != null && !edtDataRetornoVisita.getText().toString().trim().isEmpty()) {
+            String dataCapturada = "";
+            Calendar dataAtual = new GregorianCalendar();
+            Calendar dataRetorno = new GregorianCalendar();
+            Date date = new Date();
+            dataAtual.setTime(date);
+
+            //pegar data da tela
+            try{
+                 dataCapturada = new SimpleDateFormat("yyyy-MM-dd").format(new SimpleDateFormat("dd/MM/yyyy").parse(edtDataRetornoVisita.getText().toString().trim()));
+            }catch (ParseException e){
+                e.printStackTrace();
+            }
+
+            //converte no mesmo padrão da capitura da atual
+            try {
+                dataRetorno.setTime(new SimpleDateFormat("yyyy-MM-dd").parse(dataCapturada));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+             
+            if (dataAtual.after(dataRetorno)){
+                edtDataRetornoVisita.setBackgroundResource(R.drawable.borda_edittext_erro);
+                Toast.makeText(this, "Data deve ser posterior a atual",Toast.LENGTH_SHORT).show();
+                verificaObrigatorios = false;
+            }else {
+                visita.setDataVisita(dataCapturada);
+            }
+
+        }else {
+            edtDataRetornoVisita.setBackgroundResource(R.drawable.borda_edittext_erro);
+            Toast.makeText(this, "A Data é Obrigatoria",Toast.LENGTH_SHORT).show();
+        }
+
+            if (mLocation == null) {
+                Toast.makeText(this, "Fazer Check-in é obrigatorio", Toast.LENGTH_SHORT).show();
+                verificaObrigatorios = false;
+            }
+
+        } else {
+
+            if (edtDescricaoVisita.getText() != null && !edtDescricaoVisita.getText().toString().trim().equals("")) {
+                visita.setDescricaoVisita(edtDescricaoVisita.getText().toString());
+            } else {
+                edtDescricaoVisita.setError("Campo Obrigatorio");
+                edtDescricaoVisita.requestFocus();
+                verificaObrigatorios = false;
+            }
+        }
+
+
+        if (verificaObrigatorios){
+            if(db.atualizaTBL_VISITA_PROSPECT(visita)){
+                Toast.makeText(this, "Visita salva", Toast.LENGTH_LONG).show();
+                finish();
+            }else {
+                Toast.makeText(this, "Falha ao salvar", Toast.LENGTH_LONG).show();
+            }
+        }
 
     }
 
@@ -110,13 +201,6 @@ public class ActivityVisita extends AppCompatActivity implements GoogleApiClient
         progress.show();
 
         EnableGPSAutoMatically();
-    }
-
-    @Override
-    protected void onDestroy() {
-        VisitaHelper.limpaVisitaHelper();
-        System.gc();
-        super.onDestroy();
     }
 
     public void getGeocoder(){
@@ -177,12 +261,10 @@ public class ActivityVisita extends AppCompatActivity implements GoogleApiClient
                     grantResults[0] == PackageManager.PERMISSION_GRANTED){
                 pegarUltimaLocalizacao();
             } else {
-                finish();
                 Toast.makeText(this, "Sem a permissão função indisponivel",Toast.LENGTH_LONG).show();
             }
         }
     }
-
 
     private void EnableGPSAutoMatically() {
         GoogleApiClient googleApiClient = null;

@@ -31,7 +31,7 @@
             />
 
         <EditText
-            android:id="@+id/edtDecicaoVisita"
+            android:id="@+id/edtDescricaoVisita"
             android:layout_width="match_parent"
             android:layout_height="96dp"
             android:background="@drawable/borda_edittext"
@@ -46,7 +46,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:theme="@style/txtStyle"
-            android:layout_below="@+id/edtDecicaoVisita"
+            android:layout_below="@+id/edtDescricaoVisita"
             android:text="DATA PRÓXIMO RETORNO "
             android:layout_marginTop="15dp"
             />

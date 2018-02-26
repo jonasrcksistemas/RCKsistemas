@@ -1,6 +1,7 @@
 package com.example.rcksuporte05.rcksistemas.interfaces;
 
 import android.content.Intent;
+import android.database.CursorIndexOutOfBoundsException;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
@@ -10,8 +11,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
 
+import com.example.rcksuporte05.rcksistemas.Helper.VisitaHelper;
 import com.example.rcksuporte05.rcksistemas.R;
+import com.example.rcksuporte05.rcksistemas.adapters.VisitaAdapter;
+import com.example.rcksuporte05.rcksistemas.classes.VisitaProspect;
+import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
 import com.example.rcksuporte05.rcksistemas.util.DividerItemDecoration;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -21,12 +28,17 @@ import butterknife.OnClick;
  * Created by RCK 03 on 20/02/2018.
  */
 
-public class ActivityHistoricoVisitaProspect extends AppCompatActivity {
+public class ActivityHistoricoVisitaProspect extends AppCompatActivity implements VisitaAdapter.VisitaListener{
     @BindView(R.id.recycleHistoricoVisita)
     RecyclerView recycleHistoricoVisita;
 
     @BindView(R.id.toolbarVisita)
     Toolbar toolbarVisita;
+
+
+    DBHelper db;
+    List<VisitaProspect> visitas;
+    VisitaAdapter visitaAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -34,9 +46,10 @@ public class ActivityHistoricoVisitaProspect extends AppCompatActivity {
         setContentView(R.layout.activity_historico_visita);
         ButterKnife.bind(this);
 
+        db = new DBHelper(this);
+
         recycleHistoricoVisita.setLayoutManager(new LinearLayoutManager(this));
         recycleHistoricoVisita.addItemDecoration(new DividerItemDecoration(this, LinearLayout.VERTICAL));
-
 
         setSupportActionBar(toolbarVisita);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -60,4 +73,34 @@ public class ActivityHistoricoVisitaProspect extends AppCompatActivity {
         return true;
     }
 
+    @Override
+    protected void onResume() {
+
+        try {
+            visitas = db.listaVisitaPorProspect(VisitaHelper.getProspect());
+            preencheLista();
+        }catch (CursorIndexOutOfBoundsException e){
+            e.printStackTrace();
+        }
+
+        super.onResume();
+    }
+
+    public void preencheLista(){
+        visitaAdapter = new VisitaAdapter(visitas,this);
+        recycleHistoricoVisita.setAdapter(visitaAdapter);
+        visitaAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    protected void onDestroy() {
+        VisitaHelper.limpaVisitaHelper();
+        System.gc();
+        super.onDestroy();
+    }
+
+    @Override
+    public void onClick(int position) {
+
+    }
 }

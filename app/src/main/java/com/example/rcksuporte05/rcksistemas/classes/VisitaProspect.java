@@ -5,7 +5,7 @@ package com.example.rcksuporte05.rcksistemas.classes;
  */
 
 public class VisitaProspect {
-    private int idVisita;
+    private String idVisita;
     private Prospect prospect;
     private String DescricaoVisita;
     private MotivoNaoCadastramento motivoNaoCadastramento;
@@ -15,12 +15,14 @@ public class VisitaProspect {
     private String usuario_id;
     private String latitude;
     private String longitude;
+    private String idVisitaServidor;
 
-    public int getIdVisita() {
+
+    public String getIdVisita() {
         return idVisita;
     }
 
-    public void setIdVisita(int idVisita) {
+    public void setIdVisita(String idVisita) {
         this.idVisita = idVisita;
     }
 
@@ -94,5 +96,13 @@ public class VisitaProspect {
 
     public void setLongitude(String longitude) {
         this.longitude = longitude;
+    }
+
+    public String getIdVisitaServidor() {
+        return idVisitaServidor;
+    }
+
+    public void setIdVisitaServidor(String idVisitaServidor) {
+        this.idVisitaServidor = idVisitaServidor;
     }
 }

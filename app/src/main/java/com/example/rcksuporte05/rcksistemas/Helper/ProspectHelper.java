@@ -176,7 +176,8 @@ public class ProspectHelper {
     }
 
     public static boolean salvarProspect() {
-        /*Esta variavel é usada para validar o movimento das frags, assim que movimenta, não movimenta outra frag
+        /*
+        Esta variavel é usada para validar o movimento das frags, assim que movimenta, não movimenta outra frag
          */
         boolean verificaMovimento = true;
 

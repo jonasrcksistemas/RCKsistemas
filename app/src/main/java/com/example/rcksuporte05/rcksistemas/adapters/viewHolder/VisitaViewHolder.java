@@ -2,6 +2,7 @@ package com.example.rcksuporte05.rcksistemas.adapters.viewHolder;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.rcksuporte05.rcksistemas.R;
@@ -16,11 +17,11 @@ import butterknife.ButterKnife;
 
 public class VisitaViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.rlItemVisita)
-    public TextView rlItemVisita;
+    public RelativeLayout rlItemVisita;
+
     @BindView(R.id.txtNomeProspectVisita)
     public TextView txtNomeProspectVisita;
-    @BindView(R.id.txtMotivoNaoCadVisita)
-    public TextView txtMotivoNaoCadVisita;
+
     @BindView(R.id.txtDataVisita)
     public TextView txtDataVisita;
 

@@ -44,7 +44,7 @@ public class VisitaAdapter extends RecyclerView.Adapter<VisitaViewHolder> {
         } catch (ParseException | NullPointerException e) {
             e.printStackTrace();
         }
-        holder.txtMotivoNaoCadVisita.setText(visitas.get(position).getMotivoNaoCadastramento().getMotivo());
+
     }
 
     @Override

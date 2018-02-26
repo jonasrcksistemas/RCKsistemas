@@ -17,14 +17,15 @@
         />
 
     <TextView
-        android:id="@+id/txtMotivoNaoCadVisita"
+        android:id="@+id/Visita"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/txtNomeProspectVisita"
-        android:layout_alignStart="@+id/txtNomeProspectVisita"
-        android:text="texto"
-        android:layout_alignLeft="@+id/txtNomeProspectVisita"
-        android:layout_marginTop="5dp"/>
+        android:layout_alignBaseline="@+id/txtDataVisita"
+        android:layout_alignBottom="@+id/txtDataVisita"
+        android:layout_toLeftOf="@+id/txtDataVisita"
+        android:layout_toStartOf="@+id/txtDataVisita"
+        android:layout_marginRight="25dp"
+        android:text="Dia da Visita: " />
 
     <TextView
         android:id="@+id/txtDataVisita"
@@ -34,7 +35,6 @@
         android:text="Texto"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_alignBaseline="@+id/txtMotivoNaoCadVisita"
         android:layout_marginBottom="8dp"
         android:layout_marginRight="30dp"
         android:maxLines="1"

@@ -25,6 +25,7 @@ import com.example.rcksuporte05.rcksistemas.classes.TabelaPreco;
 import com.example.rcksuporte05.rcksistemas.classes.TabelaPrecoItem;
 import com.example.rcksuporte05.rcksistemas.classes.Usuario;
 import com.example.rcksuporte05.rcksistemas.classes.VendedorBonusResumo;
+import com.example.rcksuporte05.rcksistemas.classes.VisitaProspect;
 import com.example.rcksuporte05.rcksistemas.classes.WebPedido;
 import com.example.rcksuporte05.rcksistemas.classes.WebPedidoItens;
 
@@ -473,6 +474,19 @@ public class DBHelper extends SQLiteOpenHelper {
                 "TEL_FORNEC1 VARCHAR(20)," +
                 "TEL_FORNEC2 VARCHAR(20));");
 
+        db.execSQL("CREATE TABLE IF NOT EXISTS TBL_VISITA_PROSPECT ("+
+                "ID_VISITA INTEGER PRIMARY KEY AUTOINCREMENT, "+
+                "DESCRICAO_VISTA VARCHAR(300), "+
+                "DATA_VISITA DATE, "+
+                "USUARIO_ID INTEGER, "+
+                "DATA_PROXIMA_VISITA DATE, "+
+                "TIPO_CONTATO VARCHAR(20), "+
+                "LATITUDE VARCHAR(200), "+
+                "LONGITUDE VARCHAR(200)," +
+                "ID_CADASTRO_SERVIDOR INTEGER," +
+                "ID_VISITA_SERVIDOR INTEGER, " +
+                "ID_CADASTRO INTEGER);");
+
         System.gc();
     }
 
@@ -582,6 +596,20 @@ public class DBHelper extends SQLiteOpenHelper {
                     "FORNECEDOR2 VARCHAR(60)," +
                     "TEL_FORNEC1 VARCHAR(20)," +
                     "TEL_FORNEC2 VARCHAR(20));");
+
+            db.execSQL("CREATE TABLE IF NOT EXISTS TBL_VISITA_PROSPECT ("+
+                       "ID_VISITA INTEGER PRIMARY KEY AUTOINCREMENT, "+
+                       "DESCRICAO_VISTA VARCHAR(300), "+
+                       "DATA_VISITA DATE, "+
+                       "USUARIO_ID INTEGER, "+
+                       "DATA_PROXIMA_VISITA DATE, "+
+                       "TIPO_CONTATO VARCHAR(20), "+
+                       "LATITUDE VARCHAR(200), "+
+                       "LONGITUDE VARCHAR(200)," +
+                       "ID_CADASTRO_SERVIDOR INTEGER," +
+                       "ID_VISITA_SERVIDOR INTEGER, " +
+                       "ID_CADASTRO INTEGER);");
+
         }
     }
 
@@ -755,6 +783,15 @@ public class DBHelper extends SQLiteOpenHelper {
         cursor.close();
 
         return listaProspect;
+    }
+
+    public void atualizarDataVisitaProspect(String novaData, String idProspect){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues content = new ContentValues();
+
+        content.put("DIA_VISITA", novaData);
+
+        db.update("TBL_PROSPECT", content, "ID_PROSPECT = "+idProspect, null);
     }
 
     public void excluiProspect(Prospect prospect) throws SQLException {
@@ -1644,7 +1681,6 @@ public class DBHelper extends SQLiteOpenHelper {
         System.gc();
     }
 
-
     public void atualizarTBL_VENDEDOR_BONUS_RESUMO(String ID_VENDEDOR, String ID_EMPRESA, String VALOR_CREDITO, String VALOR_DEBITO, String VALOR_BONUS_CANCELADOS, String VALOR_SALDO, String DATA_ULTIMA_ATUALIZACAO) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content = new ContentValues();
@@ -1861,7 +1897,6 @@ public class DBHelper extends SQLiteOpenHelper {
 
         System.gc();
     }
-
 
     public String consulta(String SQL, String campo) throws android.database.CursorIndexOutOfBoundsException {
         String resultado = "";
@@ -2391,7 +2426,6 @@ public class DBHelper extends SQLiteOpenHelper {
     public List<Banco> listaBancos(){
         List<Banco> bancos = new ArrayList<>();
         try {
-
             SQLiteDatabase db = this.getReadableDatabase();
             Cursor cursor;
 
@@ -2411,7 +2445,108 @@ public class DBHelper extends SQLiteOpenHelper {
             e.printStackTrace();
         }
 
-
         return bancos;
+    }
+
+    public Boolean atualizaTBL_VISITA_PROSPECT(VisitaProspect visita){
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues content = new ContentValues();
+        boolean retorno = false;
+
+        try{
+            content.put("DESCRICAO_VISTA", visita.getDescricaoVisita());
+            content.put("DATA_VISITA", visita.getDataVisita());
+            content.put("USUARIO_ID", visita.getUsuario_id());
+            content.put("DATA_PROXIMA_VISITA", visita.getDataRetorno());
+            content.put("TIPO_CONTATO", visita.getTipoContato());
+            content.put("LATITUDE", visita.getLatitude());
+            content.put("LONGITUDE", visita.getLongitude());
+            content.put("ID_CADASTRO", visita.getProspect().getId_prospect());
+            content.put("ID_CADASTRO_SERVIDOR", visita.getProspect().getId_cadastro());
+            content.put("ID_VISITA_SERVIDOR", visita.getIdVisitaServidor());
+
+            atualizarDataVisitaProspect(visita.getDataRetorno(),visita.getProspect().getId_prospect());
+
+            if (visita.getIdVisita() != null && contagem("SELECT COUNT(ID_VISITA) FROM TBL_VISITA_PROSPECT WHERE ID_VISITA = " + visita.getIdVisita()) > 0){
+                content.put("ID_VISITA",visita.getIdVisita());
+                db.update("TBL_VISITA_PROSPECT",content, "ID_VISITA_PROSPECT ="+visita.getIdVisita(), null);
+            }else {
+                db.insert("TBL_VISITA_PROSPECT", null, content);
+            }
+            retorno = true;
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        return retorno;
+    }
+
+    public List<VisitaProspect> listaVisitaPorProspect(Prospect prospect){
+        List<VisitaProspect> visitas = new ArrayList<>();
+        try {
+            SQLiteDatabase db = this.getReadableDatabase();
+            Cursor cursor;
+
+            cursor = db.rawQuery("SELECT * FROM TBL_VISITA_PROSPECT WHERE ID_CADASTRO = "+prospect.getId_prospect(), null);
+            cursor.moveToFirst();
+
+            do{
+                VisitaProspect visita = new VisitaProspect();
+
+                visita.setIdVisita(cursor.getString(cursor.getColumnIndex("ID_VISITA")));
+
+                try {
+                    visita.setDataVisita(cursor.getString(cursor.getColumnIndex("DATA_VISITA")));
+                }catch (CursorIndexOutOfBoundsException e){
+                    e.printStackTrace();
+                }
+
+                try{
+                    visita.setDataRetorno(cursor.getString(cursor.getColumnIndex("DATA_PROXIMA_VISITA")));
+                }catch (CursorIndexOutOfBoundsException e){
+                    e.printStackTrace();
+                }
+
+                try{
+                    visita.setTipoContato(cursor.getString(cursor.getColumnIndex("TIPO_CONTATO")));
+                }catch (CursorIndexOutOfBoundsException e){
+                    e.printStackTrace();
+                }
+
+
+                try {
+                    visita.setUsuario_id(cursor.getString(cursor.getColumnIndex("USUARIO_ID")));
+                }catch (CursorIndexOutOfBoundsException e){
+                    e.printStackTrace();
+                }
+
+                try{
+                    visita.setLatitude(cursor.getString(cursor.getColumnIndex("LATITUDE")));
+                }catch (CursorIndexOutOfBoundsException e){
+                    e.printStackTrace();
+                }
+
+                try {
+                    visita.setLongitude(cursor.getString(cursor.getColumnIndex("LONGITUDE")));
+                }catch (CursorIndexOutOfBoundsException e){
+                    e.printStackTrace();
+                }
+
+                try {
+                    visita.setDescricaoVisita(cursor.getString(cursor.getColumnIndex("DESCRICAO_VISTA")));
+                }catch (CursorIndexOutOfBoundsException e){
+                    e.printStackTrace();
+                }
+
+                visita.setProspect(prospect);
+                visitas.add(visita);
+            }while (cursor.moveToNext());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+
+
+        return visitas;
     }
 }
