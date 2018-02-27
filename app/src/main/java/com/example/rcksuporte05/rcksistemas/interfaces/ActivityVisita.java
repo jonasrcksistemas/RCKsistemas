@@ -2,6 +2,7 @@ package com.example.rcksuporte05.rcksistemas.interfaces;
 
 import android.Manifest;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -260,14 +261,45 @@ public class ActivityVisita extends AppCompatActivity implements GoogleApiClient
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if (requestCode == 0) {
-            if (permissions.length == 1 &&
-                    permissions[0] == Manifest.permission.ACCESS_FINE_LOCATION &&
-                    grantResults[0] == PackageManager.PERMISSION_GRANTED){
+            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                progress = new ProgressDialog(ActivityVisita.this);
+                progress.setMessage("Fazendo Check-in");
+                progress.setTitle("Aguarde");
+                progress.show();
                 pegarUltimaLocalizacao();
             } else {
                 Toast.makeText(this, "Sem a permissão função indisponivel",Toast.LENGTH_LONG).show();
             }
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == 1){
+            if(resultCode != 0){
+                Toast.makeText(ActivityVisita.this, "Tente Novamente", Toast.LENGTH_LONG).show();
+            }else {
+                Toast.makeText(ActivityVisita.this, "Sem Localização ativa, recurso indisponível", Toast.LENGTH_LONG).show();
+            }
+
+        }
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
     }
 
     private void EnableGPSAutoMatically() {
@@ -331,21 +363,6 @@ public class ActivityVisita extends AppCompatActivity implements GoogleApiClient
                 }
             });
         }
-    }
-
-    @Override
-    public void onConnected(@Nullable Bundle bundle) {
-
-    }
-
-    @Override
-    public void onConnectionSuspended(int i) {
-
-    }
-
-    @Override
-    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-
     }
 
 }

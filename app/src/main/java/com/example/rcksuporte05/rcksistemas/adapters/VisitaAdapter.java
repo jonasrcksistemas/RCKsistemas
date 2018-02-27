@@ -53,6 +53,15 @@ public class VisitaAdapter extends RecyclerView.Adapter<VisitaViewHolder> {
 
     }
 
+    public int contaPendentes(){
+        int pendentes = 0;
+        for(VisitaProspect visita: visitas){
+            if(visita.getIdVisitaServidor() == null)
+                pendentes++;
+        }
+        return pendentes;
+    }
+
     @Override
     public int getItemCount() {
         if (visitas.size() > 0)

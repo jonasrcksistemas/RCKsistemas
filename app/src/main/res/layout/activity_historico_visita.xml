@@ -58,7 +58,7 @@
             android:background="#dddfdd"
             android:focusable="false"
             android:gravity="end"
-            android:text="total" />
+            android:text="total: " />
 
     </RelativeLayout>
 </LinearLayout>

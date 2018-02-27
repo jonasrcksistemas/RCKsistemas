@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.example.rcksuporte05.rcksistemas.Helper.VisitaHelper;
 import com.example.rcksuporte05.rcksistemas.R;
@@ -34,6 +35,9 @@ public class ActivityHistoricoVisitaProspect extends AppCompatActivity implement
 
     @BindView(R.id.toolbarVisita)
     Toolbar toolbarVisita;
+
+    @BindView(R.id.edtTotalVisita)
+    TextView edtTotalVisita;
 
 
     DBHelper db;
@@ -90,6 +94,10 @@ public class ActivityHistoricoVisitaProspect extends AppCompatActivity implement
         visitaAdapter = new VisitaAdapter(visitas,this);
         recycleHistoricoVisita.setAdapter(visitaAdapter);
         visitaAdapter.notifyDataSetChanged();
+        if(visitaAdapter.contaPendentes() > 0){
+            edtTotalVisita.setText("Visitas: "+visitaAdapter.getItemCount()+" Pendentes: "+visitaAdapter.contaPendentes());
+        }else
+            edtTotalVisita.setText("Visitas: "+visitaAdapter.getItemCount());
     }
 
     @Override

@@ -714,7 +714,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 cursor = db.rawQuery("SELECT * FROM TBL_PROSPECT WHERE PROSPECT_SALVO = 'S' AND ID_PROSPECT_SERVIDOR IS NULL ORDER BY ID_PROSPECT DESC", null);
                 break;
             case 3:
-                cursor = db.rawQuery("SELECT * FROM TBL_PROSPECT WHERE PROSPECT_SALVO = 'S' AND ID_PROSPECT_SERVIDOR IS NOT NULL ORDER BY DIA_VISITA DESC", null);
+                cursor = db.rawQuery("SELECT * FROM TBL_PROSPECT WHERE PROSPECT_SALVO = 'S' AND ID_PROSPECT_SERVIDOR IS NOT NULL ORDER BY DATA_RETORNO", null);
                 break;
             default:
                 cursor = db.rawQuery("SELECT * FROM TBL_PROSPECT ORDER BY ID_PROSPECT DESC", null);
@@ -859,7 +859,7 @@ public class DBHelper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content = new ContentValues();
 
-        content.put("DIA_VISITA", novaData);
+        content.put("DATA_RETORNO", novaData);
 
         db.update("TBL_PROSPECT", content, "ID_PROSPECT = "+idProspect, null);
     }

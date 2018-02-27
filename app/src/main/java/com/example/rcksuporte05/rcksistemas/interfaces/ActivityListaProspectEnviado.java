@@ -2,12 +2,16 @@ package com.example.rcksuporte05.rcksistemas.interfaces;
 
 import android.content.Intent;
 import android.database.CursorIndexOutOfBoundsException;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -19,6 +23,7 @@ import com.example.rcksuporte05.rcksistemas.classes.Prospect;
 import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
 import com.example.rcksuporte05.rcksistemas.util.DividerItemDecoration;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -71,6 +76,43 @@ public class ActivityListaProspectEnviado extends AppCompatActivity implements L
         return true;
     }
 
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.menu_cliente, menu);
+
+        SearchView searchView;
+
+        final MenuItem item = menu.findItem(R.id.buscaCliente);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            searchView = (SearchView) item.getActionView();
+        } else {
+            searchView = (SearchView) MenuItemCompat.getActionView(item);
+        }
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String query) {
+                if (query.trim().equals("")) {
+                    if (listaProspect.size() > 0)
+                        preencheLista(listaProspect);
+                } else {
+                    preencheLista(buscaProspect(listaProspect, query));
+                }
+                return false;
+            }
+        });
+        searchView.setQueryHint("Nome cadastro/nome fantasia/CPF-CNPJ/codigo prospect");
+        return true;
+    }
+
+
     @Override
     protected void onResume() {
         try {
@@ -79,7 +121,6 @@ public class ActivityListaProspectEnviado extends AppCompatActivity implements L
             preencheLista(listaProspect);
         } catch (CursorIndexOutOfBoundsException e) {
             e.printStackTrace();
-//            edtTotalProspect.setText("0: Prospects Listados");
         }
         super.onResume();
     }
@@ -96,5 +137,52 @@ public class ActivityListaProspectEnviado extends AppCompatActivity implements L
         VisitaHelper.setProspect(listaProspectEnviadoAdapter.getItem(position));
         Intent intent = new Intent(this,ActivityHistoricoVisitaProspect.class);
         startActivity(intent);
+    }
+
+
+    public List<Prospect> buscaProspect(List<Prospect> listaProspect, String query) {
+        final String upperCaseQuery = query.toUpperCase();
+        final List<Prospect> lista = new ArrayList<>();
+        for (Prospect prospect : listaProspect) {
+            boolean entrou = false;
+
+            try {
+                final String idProspect = prospect.getId_prospect().toUpperCase();
+                if (idProspect.equals(upperCaseQuery) && !entrou) {
+                    lista.add(prospect);
+                    entrou = true;
+                }
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
+            try {
+                final String nomeCadastro = prospect.getNome_cadastro().toUpperCase();
+                if (nomeCadastro.contains(upperCaseQuery) && !entrou) {
+                    lista.add(prospect);
+                    entrou = true;
+                }
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
+            try {
+                final String nomeFantasia = prospect.getNome_fantasia().toUpperCase();
+                if (nomeFantasia.contains(upperCaseQuery) && !entrou) {
+                    lista.add(prospect);
+                    entrou = true;
+                }
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
+            try {
+                final String cpfCnpj = prospect.getCpf_cnpj().toUpperCase();
+                if (cpfCnpj.contains(upperCaseQuery) && !entrou) {
+                    lista.add(prospect);
+                    entrou = true;
+                }
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
+        }
+        return lista;
     }
 }
