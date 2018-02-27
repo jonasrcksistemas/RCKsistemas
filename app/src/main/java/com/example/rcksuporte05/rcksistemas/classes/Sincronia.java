@@ -8,6 +8,8 @@ public class Sincronia {
     private boolean pedidosFinalizados;
     private boolean pedidosPendentes;
     private boolean prospectPendentes;
+    private boolean prospectEnviados;
+    private boolean visitasPendentes;
     private int maxProgress;
     private List<Cliente> listaCliente;
     private List<CondicoesPagamento> listaCondicoesPagamento;
@@ -24,14 +26,23 @@ public class Sincronia {
     private List<Segmento> segmentos;
     private List<MotivoNaoCadastramento> motivos;
     private List<Prospect> listaProspectPendentes;
-    private List<Prospect> listaProspectSincronizados;
+    private List<Prospect> listaProspectEnviados;
+    private List<VisitaProspect> visitas;
 
-    public Sincronia(boolean cliente, boolean produto, boolean pedidosFinalizados, boolean pedidosPendentes, boolean prospect) {
+    public Sincronia(boolean cliente,
+                     boolean produto,
+                     boolean pedidosFinalizados,
+                     boolean pedidosPendentes,
+                     boolean prospect,
+                     boolean prospectEnviados,
+                     boolean visitasPendentes) {
         this.cliente = cliente;
         this.produto = produto;
         this.pedidosFinalizados = pedidosFinalizados;
         this.pedidosPendentes = pedidosPendentes;
         this.prospectPendentes = prospect;
+        this.prospectEnviados = prospectEnviados;
+        this.visitasPendentes = visitasPendentes;
     }
 
     public boolean isCliente() {
@@ -202,11 +213,35 @@ public class Sincronia {
         this.listaProspectPendentes = listaProspectPendentes;
     }
 
-    public List<Prospect> getListaProspectSincronizados() {
-        return listaProspectSincronizados;
+    public List<Prospect> getListaProspectEnviados() {
+        return listaProspectEnviados;
     }
 
-    public void setListaProspectSincronizados(List<Prospect> listaProspectSincronizados) {
-        this.listaProspectSincronizados = listaProspectSincronizados;
+    public void setListaProspectEnviados(List<Prospect> listaProspectEnviados) {
+        this.listaProspectEnviados = listaProspectEnviados;
+    }
+
+    public boolean isProspectEnviados() {
+        return prospectEnviados;
+    }
+
+    public void setProspectEnviados(boolean prospectEnviados) {
+        this.prospectEnviados = prospectEnviados;
+    }
+
+    public boolean isVisitasPendentes() {
+        return visitasPendentes;
+    }
+
+    public void setVisitasPendentes(boolean visitasPendentes) {
+        this.visitasPendentes = visitasPendentes;
+    }
+
+    public List<VisitaProspect> getVisitas() {
+        return visitas;
+    }
+
+    public void setVisitas(List<VisitaProspect> visitas) {
+        this.visitas = visitas;
     }
 }

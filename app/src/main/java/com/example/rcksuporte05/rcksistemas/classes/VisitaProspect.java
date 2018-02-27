@@ -7,8 +7,7 @@ package com.example.rcksuporte05.rcksistemas.classes;
 public class VisitaProspect {
     private String idVisita;
     private Prospect prospect;
-    private String DescricaoVisita;
-    private MotivoNaoCadastramento motivoNaoCadastramento;
+    private String descricaoVisita;
     private String dataVisita;
     private String dataRetorno;
     private String tipoContato;
@@ -35,19 +34,11 @@ public class VisitaProspect {
     }
 
     public String getDescricaoVisita() {
-        return DescricaoVisita;
+        return descricaoVisita;
     }
 
     public void setDescricaoVisita(String descricaoVisita) {
-        DescricaoVisita = descricaoVisita;
-    }
-
-    public MotivoNaoCadastramento getMotivoNaoCadastramento() {
-        return motivoNaoCadastramento;
-    }
-
-    public void setMotivoNaoCadastramento(MotivoNaoCadastramento motivoNaoCadastramento) {
-        this.motivoNaoCadastramento = motivoNaoCadastramento;
+        this.descricaoVisita = descricaoVisita;
     }
 
     public String getDataVisita() {

@@ -140,7 +140,8 @@ public class ActivityVisita extends AppCompatActivity implements GoogleApiClient
 
             //pegar data da tela
             try{
-                 dataCapturada = new SimpleDateFormat("yyyy-MM-dd").format(new SimpleDateFormat("dd/MM/yyyy").parse(edtDataRetornoVisita.getText().toString().trim()));
+                 dataCapturada = new SimpleDateFormat("yyyy-MM-dd").format(new SimpleDateFormat("dd/MM/yyyy")
+                          .parse(edtDataRetornoVisita.getText().toString().trim()));
             }catch (ParseException e){
                 e.printStackTrace();
             }
@@ -157,7 +158,7 @@ public class ActivityVisita extends AppCompatActivity implements GoogleApiClient
                 Toast.makeText(this, "Data deve ser posterior a atual",Toast.LENGTH_SHORT).show();
                 verificaObrigatorios = false;
             }else {
-                visita.setDataVisita(dataCapturada);
+                visita.setDataRetorno(dataCapturada);
             }
 
         }else {
@@ -168,6 +169,9 @@ public class ActivityVisita extends AppCompatActivity implements GoogleApiClient
             if (mLocation == null) {
                 Toast.makeText(this, "Fazer Check-in é obrigatorio", Toast.LENGTH_SHORT).show();
                 verificaObrigatorios = false;
+            }else {
+                visita.setLongitude(String.valueOf(mLocation.getLongitude()));
+                visita.setLatitude(String.valueOf(mLocation.getLatitude()));
             }
 
         } else {

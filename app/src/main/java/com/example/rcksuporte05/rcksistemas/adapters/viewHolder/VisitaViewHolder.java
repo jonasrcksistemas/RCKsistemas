@@ -2,6 +2,7 @@ package com.example.rcksuporte05.rcksistemas.adapters.viewHolder;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -24,6 +25,9 @@ public class VisitaViewHolder extends RecyclerView.ViewHolder {
 
     @BindView(R.id.txtDataVisita)
     public TextView txtDataVisita;
+
+    @BindView(R.id.visitaSalvo)
+    public ImageView visitaSalvo;
 
     public VisitaViewHolder(View itemView, final VisitaAdapter.VisitaListener listener) {
         super(itemView);

@@ -47,6 +47,8 @@ public class ListaProspectEnviadoAdapter extends RecyclerView.Adapter<ProspectEn
             e.printStackTrace();
         }
 
+
+
         ApplyClickEvents(holder, position);
     }
 

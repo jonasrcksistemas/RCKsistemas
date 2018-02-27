@@ -111,7 +111,41 @@
                 android:layout_width="245dp"
                 android:layout_height="wrap_content"
                 android:checked="false"
-                android:text="Prospects"
+                android:text="Prospects Pendentes"
+                android:textColor="@color/colorAccent"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <Switch
+                android:id="@+id/id_opcao_prospect_enviados"
+                android:layout_width="245dp"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="Prospects Enviados"
+                android:textColor="@color/colorAccent"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center">
+
+            <Switch
+                android:id="@+id/id_opcao_visiatas_pendentes"
+                android:layout_width="245dp"
+                android:layout_height="wrap_content"
+                android:checked="false"
+                android:text="Visitas Pendentes"
                 android:textColor="@color/colorAccent"
                 android:textSize="16sp" />
 

@@ -9,6 +9,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.CursorIndexOutOfBoundsException;
+import android.database.SQLException;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AlertDialog;
 import android.view.View;
@@ -32,6 +33,7 @@ import com.example.rcksuporte05.rcksistemas.classes.TabelaPreco;
 import com.example.rcksuporte05.rcksistemas.classes.TabelaPrecoItem;
 import com.example.rcksuporte05.rcksistemas.classes.Usuario;
 import com.example.rcksuporte05.rcksistemas.classes.VendedorBonusResumo;
+import com.example.rcksuporte05.rcksistemas.classes.VisitaProspect;
 import com.example.rcksuporte05.rcksistemas.classes.WebPedido;
 import com.example.rcksuporte05.rcksistemas.classes.WebPedidoItens;
 import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
@@ -341,6 +343,54 @@ public class SincroniaBO {
             }
         }
 
+        if(sincronia.isProspectEnviados()){
+            if(sincronia.getListaProspectEnviados() != null){
+                for(Prospect prospect : sincronia.getListaProspectEnviados()){
+                    if(db.contagem("SELECT COUNT(*) FROM TBL_PROSPECT WHERE ID_CADASTRO = "+prospect.getId_cadastro()) > 0 ){
+                        try{
+                            db.excluiProspectPorIdServidor(prospect);
+                        }catch (SQLException e){
+                            e.printStackTrace();
+                        }
+                    }
+
+                    prospect.setProspectSalvo("S");
+                    db.atualizarTBL_PROSPECT(prospect);
+
+                    contadorNotificacaoEProgresso++;
+                    final int finalContadorNotificacaoEProgresso = contadorNotificacaoEProgresso;
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            progress.setProgress(finalContadorNotificacaoEProgresso);
+                        }
+                    });
+                    mNotificationManager.notify(0, notificacao.build());
+
+                }
+            }
+        }
+
+        if(sincronia.isVisitasPendentes()){
+            if(sincronia.getVisitas() != null && sincronia.getVisitas().size() > 0){
+                for(VisitaProspect visita : sincronia.getVisitas()){
+                    db.atualizaTBL_VISITA_PROSPECT(visita);
+
+                    contadorNotificacaoEProgresso++;
+                    final int finalContadorNotificacaoEProgresso = contadorNotificacaoEProgresso;
+                    activity.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            progress.setProgress(finalContadorNotificacaoEProgresso);
+                        }
+                    });
+                    mNotificationManager.notify(0, notificacao.build());
+
+                }
+            }
+
+        }
+
         if (sincronia.isPedidosFinalizados()) {
             for (WebPedido webPedido : sincronia.getListaWebPedidosFinalizados()) {
                 notificacao.setProgress(maxProgress, contadorNotificacaoEProgresso, false);
@@ -443,6 +493,10 @@ public class SincroniaBO {
                     } catch (CursorIndexOutOfBoundsException e) {
                         e.printStackTrace();
                     }
+                }
+
+                if(sincronia.isVisitasPendentes()){
+                    sincronia.setVisitas(db.listaProspectsPendentes());
                 }
 
                 Call<Sincronia> call = apiRotas.sincroniaApi(Integer.parseInt(UsuarioHelper.getUsuario().getId_usuario()), cabecalho, sincronia);

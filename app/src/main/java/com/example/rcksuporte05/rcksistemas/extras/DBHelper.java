@@ -785,6 +785,76 @@ public class DBHelper extends SQLiteOpenHelper {
         return listaProspect;
     }
 
+    public Prospect buscaProspectPorId(String idProspect) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor;
+
+        cursor = db.rawQuery("SELECT * FROM TBL_PROSPECT WHERE ID_PROSPECT = " +idProspect , null);
+        cursor.moveToFirst();
+
+        do {
+            Prospect prospect = new Prospect();
+            try {
+                prospect.setId_prospect(cursor.getString(cursor.getColumnIndex("ID_PROSPECT")));
+                prospect.setId_prospect_servidor(cursor.getString(cursor.getColumnIndex("ID_PROSPECT_SERVIDOR")));
+                prospect.setId_cadastro(cursor.getString(cursor.getColumnIndex("ID_CADASTRO")));
+                prospect.setSegmento(listaSegmento(cursor.getString(cursor.getColumnIndex("ID_SEGMENTO"))));
+            } catch (CursorIndexOutOfBoundsException e) {
+                e.printStackTrace();
+            }
+            try {
+                prospect.setMotivoNaoCadastramento(listaMotivoNaoCadastramento(cursor.getString(cursor.getColumnIndex("ID_MOTIVO_NAO_CADASTRAMENTO"))));
+            } catch (CursorIndexOutOfBoundsException e) {
+                e.printStackTrace();
+            }
+            try {
+                prospect.setReferenciasBancarias(listaReferenciaBancaria(cursor.getString(cursor.getColumnIndex("ID_PROSPECT"))));
+            } catch (CursorIndexOutOfBoundsException e) {
+                e.printStackTrace();
+            }
+            try {
+                prospect.setReferenciasComerciais(listaReferenciacomercial(cursor.getString(cursor.getColumnIndex("ID_PROSPECT"))));
+            } catch (CursorIndexOutOfBoundsException e) {
+                e.printStackTrace();
+            }
+            try {
+                prospect.setListaContato(listaContato(cursor.getString(cursor.getColumnIndex("ID_PROSPECT"))));
+            } catch (CursorIndexOutOfBoundsException e) {
+                e.printStackTrace();
+            }
+            prospect.setNome_cadastro(cursor.getString(cursor.getColumnIndex("NOME_CADASTRO")));
+            prospect.setNome_fantasia(cursor.getString(cursor.getColumnIndex("NOME_FANTASIA")));
+            prospect.setPessoa_f_j(cursor.getString(cursor.getColumnIndex("PESSOA_F_J")));
+            prospect.setCpf_cnpj(cursor.getString(cursor.getColumnIndex("CPF_CNPJ")));
+            prospect.setInscri_estadual(cursor.getString(cursor.getColumnIndex("INSCRI_ESTADUAL")));
+            prospect.setInscri_municipal(cursor.getString(cursor.getColumnIndex("INSCRI_MUNICIPAL")));
+            prospect.setEndereco(cursor.getString(cursor.getColumnIndex("ENDERECO")));
+            prospect.setEndereco_bairro(cursor.getString(cursor.getColumnIndex("ENDERECO_BAIRRO")));
+            prospect.setEndereco_numero(cursor.getString(cursor.getColumnIndex("ENDERECO_NUMERO")));
+            prospect.setEndereco_complemento(cursor.getString(cursor.getColumnIndex("ENDERECO_COMPLEMENTO")));
+            prospect.setEndereco_uf(cursor.getString(cursor.getColumnIndex("ENDERECO_UF")));
+            prospect.setNome_municipio(cursor.getString(cursor.getColumnIndex("NOME_MUNICIPIO")));
+            prospect.setEndereco_cep(cursor.getString(cursor.getColumnIndex("ENDERECO_CEP")));
+            prospect.setId_pais(cursor.getString(cursor.getColumnIndex("ID_PAIS")));
+            prospect.setUsuario_id(cursor.getString(cursor.getColumnIndex("USUARIO_ID")));
+            prospect.setSituacaoPredio(cursor.getString(cursor.getColumnIndex("SITUACAO_PREDIO")));
+            prospect.setLimiteDeCreditoSugerido(cursor.getString(cursor.getColumnIndex("LIMITE_CREDITO_SUGERIDO")));
+            prospect.setLimiteDePrazoSugerido(cursor.getString(cursor.getColumnIndex("LIMITE_PRAZO_SUGERIDO")));
+            prospect.setIdEmpresa(cursor.getString(cursor.getColumnIndex("ID_EMPRESA")));
+            prospect.setDiaVisita(cursor.getString(cursor.getColumnIndex("DIA_VISITA")));
+            prospect.setDataRetorno(cursor.getString(cursor.getColumnIndex("DATA_RETORNO")));
+            prospect.setFotoPrincipalBase64(cursor.getString(cursor.getColumnIndex("FOTO_PRINCIPALB_ASE64")));
+            prospect.setFotoSecundariaBase64(cursor.getString(cursor.getColumnIndex("FOTO_SECUNDARIA_BASE64")));
+            prospect.setObservacoesComerciais(cursor.getString(cursor.getColumnIndex("OBSERVACOES_COMERCIAIS")));
+            prospect.setProspectSalvo(cursor.getString(cursor.getColumnIndex("PROSPECT_SALVO")));
+            prospect.setInd_da_ie_destinatario_prospect(cursor.getString(cursor.getColumnIndex("IND_DA_IE_DESTINATARIO_PROSPECT")));
+
+            return prospect;
+        } while (cursor.moveToNext());
+
+
+    }
+
     public void atualizarDataVisitaProspect(String novaData, String idProspect){
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content = new ContentValues();
@@ -799,6 +869,13 @@ public class DBHelper extends SQLiteOpenHelper {
         alterar("DELETE FROM TBL_REFERENCIA_COMERCIAL WHERE ID_CADASTRO = " + prospect.getId_prospect() + " ;");
         alterar("DELETE FROM TBL_CADASTRO_CONTATO WHERE ID_CADASTRO = " + prospect.getId_prospect() + " ;");
         alterar("DELETE FROM TBL_PROSPECT WHERE ID_PROSPECT = " + prospect.getId_prospect() + " ;");
+    }
+
+    public void excluiProspectPorIdServidor(Prospect prospect) throws SQLException {
+        alterar("DELETE FROM TBL_REFERENCIA_BANCARIA WHERE ID_CADASTRO_SERVIDOR = " + prospect.getId_cadastro() + " ;");
+        alterar("DELETE FROM TBL_REFERENCIA_COMERCIAL WHERE ID_CADASTRO_SERVIDOR= " + prospect.getId_cadastro() + " ;");
+        alterar("DELETE FROM TBL_CADASTRO_CONTATO WHERE ID_CADASTRO_SERVIDOR = " + prospect.getId_cadastro() + " ;");
+        alterar("DELETE FROM TBL_PROSPECT WHERE ID_CADASTRO = " + prospect.getId_cadastro() + " ;");
     }
 
     public void atualizarTBL_REFERENCIA_BANCARIA(List<ReferenciaBancaria> ListaReferenciaBancaria, String idCadastro) {
@@ -2469,7 +2546,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
             if (visita.getIdVisita() != null && contagem("SELECT COUNT(ID_VISITA) FROM TBL_VISITA_PROSPECT WHERE ID_VISITA = " + visita.getIdVisita()) > 0){
                 content.put("ID_VISITA",visita.getIdVisita());
-                db.update("TBL_VISITA_PROSPECT",content, "ID_VISITA_PROSPECT ="+visita.getIdVisita(), null);
+                db.update("TBL_VISITA_PROSPECT",content, "ID_VISITA ="+visita.getIdVisita(), null);
             }else {
                 db.insert("TBL_VISITA_PROSPECT", null, content);
             }
@@ -2538,6 +2615,12 @@ public class DBHelper extends SQLiteOpenHelper {
                     e.printStackTrace();
                 }
 
+                try {
+                    visita.setIdVisitaServidor(cursor.getString(cursor.getColumnIndex("ID_VISITA_SERVIDOR")));
+                }catch (CursorIndexOutOfBoundsException e){
+                    e.printStackTrace();
+                }
+
                 visita.setProspect(prospect);
                 visitas.add(visita);
             }while (cursor.moveToNext());
@@ -2545,8 +2628,87 @@ public class DBHelper extends SQLiteOpenHelper {
             e.printStackTrace();
         }
 
-
-
         return visitas;
+    }
+
+    public List<VisitaProspect> listaProspectsPendentes(){
+        List<VisitaProspect> visitasPendendentes = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor;
+        try {
+        cursor = db.rawQuery("SELECT * FROM TBL_VISITA_PROSPECT WHERE ID_VISITA_SERVIDOR IS NULL", null);
+        cursor.moveToFirst();
+
+            do{
+                VisitaProspect visita = new VisitaProspect();
+
+                visita.setIdVisita(cursor.getString(cursor.getColumnIndex("ID_VISITA")));
+
+                try {
+                    visita.setDataVisita(cursor.getString(cursor.getColumnIndex("DATA_VISITA")));
+                }catch (CursorIndexOutOfBoundsException e){
+                    e.printStackTrace();
+                }
+
+                try{
+                    visita.setDataRetorno(cursor.getString(cursor.getColumnIndex("DATA_PROXIMA_VISITA")));
+                }catch (CursorIndexOutOfBoundsException e){
+                    e.printStackTrace();
+                }
+
+                try{
+                    visita.setTipoContato(cursor.getString(cursor.getColumnIndex("TIPO_CONTATO")));
+                }catch (CursorIndexOutOfBoundsException e){
+                    e.printStackTrace();
+                }
+
+
+                try {
+                    visita.setUsuario_id(cursor.getString(cursor.getColumnIndex("USUARIO_ID")));
+                }catch (CursorIndexOutOfBoundsException e){
+                    e.printStackTrace();
+                }
+
+                try{
+                    visita.setLatitude(cursor.getString(cursor.getColumnIndex("LATITUDE")));
+                }catch (CursorIndexOutOfBoundsException e){
+                    e.printStackTrace();
+                }
+
+                try {
+                    visita.setLongitude(cursor.getString(cursor.getColumnIndex("LONGITUDE")));
+                }catch (CursorIndexOutOfBoundsException e){
+                    e.printStackTrace();
+                }
+
+                try {
+                    visita.setDescricaoVisita(cursor.getString(cursor.getColumnIndex("DESCRICAO_VISTA")));
+                }catch (CursorIndexOutOfBoundsException e){
+                    e.printStackTrace();
+                }
+
+                try {
+                    Prospect prospect = buscaProspectPorId(cursor.getString(cursor.getColumnIndex("ID_CADASTRO")));
+                    visita.setProspect(prospect);
+                }catch (CursorIndexOutOfBoundsException e){
+                    e.printStackTrace();
+                }
+
+                try {
+                    visita.setIdVisitaServidor(cursor.getString(cursor.getColumnIndex("ID_VISITA_SERVIDOR")));
+                }catch (CursorIndexOutOfBoundsException e){
+                    e.printStackTrace();
+                }
+
+
+                visitasPendendentes.add(visita);
+            }while (cursor.moveToNext());
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+
+        return visitasPendendentes;
     }
 }

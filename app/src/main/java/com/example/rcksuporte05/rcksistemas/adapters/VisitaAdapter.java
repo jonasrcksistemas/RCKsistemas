@@ -45,6 +45,12 @@ public class VisitaAdapter extends RecyclerView.Adapter<VisitaViewHolder> {
             e.printStackTrace();
         }
 
+        if(visitas.get(position).getIdVisitaServidor() != null){
+            holder.visitaSalvo.setImageResource(R.mipmap.ic_prospect_salvo);
+        }else
+            holder.visitaSalvo.setImageResource(R.mipmap.ic_prospect_pendente);
+
+
     }
 
     @Override
