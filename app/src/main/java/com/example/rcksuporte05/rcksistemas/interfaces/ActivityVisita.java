@@ -11,8 +11,11 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -72,6 +75,13 @@ public class ActivityVisita extends AppCompatActivity implements GoogleApiClient
     Spinner spTipoVisita;
     @BindView(R.id.edtDescricaoVisita)
     EditText edtDescricaoVisita;
+    @BindView(R.id.tb_visita)
+    Toolbar tb_visita;
+
+    @BindView(R.id.btnCheckinVisita)
+    Button btnCheckinVisita;
+    @BindView(R.id.btnSalvarVisita)
+    Button btnSalvarVisita;
 
 
     ProgressDialog progress;
@@ -90,6 +100,8 @@ public class ActivityVisita extends AppCompatActivity implements GoogleApiClient
 
         db = new DBHelper(this);
 
+        tb_visita.setTitle("Registro de Visita");
+
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
         txtLongitude.setVisibility(View.GONE);
         txtLongitude.setVisibility(View.GONE);
@@ -106,6 +118,31 @@ public class ActivityVisita extends AppCompatActivity implements GoogleApiClient
             }
         });
 
+        setSupportActionBar(tb_visita);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        switch (getIntent().getIntExtra("edicao", 0)){
+            case 1:
+                edtDescricaoVisita.setFocusable(false);
+                edtDataRetornoVisita.setFocusable(false);
+                btnCheckinVisita.setEnabled(false);
+                btnSalvarVisita.setEnabled(false);
+                break;
+            case 2:
+                injetaDadosNaTela();
+                break;
+        }
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -168,8 +205,11 @@ public class ActivityVisita extends AppCompatActivity implements GoogleApiClient
         }
 
             if (mLocation == null) {
-                Toast.makeText(this, "Fazer Check-in é obrigatorio", Toast.LENGTH_SHORT).show();
-                verificaObrigatorios = false;
+                if(txtLatitude.getText() != null && txtLatitude.getText().toString().trim().equals("")
+                   && txtLongitude.getText() != null && txtLongitude.getText().toString().trim().equals("") ){
+                    Toast.makeText(this, "Fazer Check-in é obrigatorio", Toast.LENGTH_SHORT).show();
+                    verificaObrigatorios = false;
+                }
             }else {
                 visita.setLongitude(String.valueOf(mLocation.getLongitude()));
                 visita.setLatitude(String.valueOf(mLocation.getLatitude()));
@@ -206,6 +246,35 @@ public class ActivityVisita extends AppCompatActivity implements GoogleApiClient
         progress.show();
 
         EnableGPSAutoMatically();
+    }
+
+    public void injetaDadosNaTela(){
+        try{
+            edtDescricaoVisita.setText(VisitaHelper.getVisitaProspect().getDescricaoVisita());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        try{
+            edtDataRetornoVisita.setText(new SimpleDateFormat("dd/MM/yyyy")
+                    .format(new SimpleDateFormat("yyyy-MM-dd")
+                            .parse(VisitaHelper.getVisitaProspect().getDataRetorno())));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        if(VisitaHelper.getVisitaProspect().getLatitude() != null && VisitaHelper.getVisitaProspect().getLongitude() != null){
+            txtLongitude.setText(VisitaHelper.getVisitaProspect().getLongitude());
+            txtLatitude.setText(VisitaHelper.getVisitaProspect().getLatitude());
+            txtLatitude.setVisibility(View.VISIBLE);
+            txtLongitude.setVisibility(View.VISIBLE);
+        }
+
+        if(VisitaHelper.getVisitaProspect().getTipoContato() != null && VisitaHelper.getVisitaProspect().getTipoContato().equals(tipoVisita[0])){
+            spTipoVisita.setSelection(0);
+        }else {
+            spTipoVisita.setSelection(1);
+        }
+
     }
 
     public void getGeocoder(){

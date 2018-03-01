@@ -64,7 +64,6 @@ public class ActivityHistoricoVisitaProspect extends AppCompatActivity implement
     public void abrirTela(){
         Intent intent = new Intent(this, ActivityVisita.class);
         startActivity(intent);
-
     }
 
     @Override
@@ -109,6 +108,16 @@ public class ActivityHistoricoVisitaProspect extends AppCompatActivity implement
 
     @Override
     public void onClick(int position) {
-
+        if(visitaAdapter.getItem(position).getIdVisitaServidor() != null){
+            Intent intent = new Intent(this, ActivityVisita.class);
+            VisitaHelper.setVisitaProspect(visitaAdapter.getItem(position));
+            intent.putExtra("visualizacao", 1);
+            startActivity(intent);
+        }else {
+            Intent intent = new Intent(this, ActivityVisita.class);
+            VisitaHelper.setVisitaProspect(visitaAdapter.getItem(position));
+            intent.putExtra("edicao", 2);
+            startActivity(intent);
+        }
     }
 }

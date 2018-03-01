@@ -9,7 +9,6 @@ import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.viewHolder.ProspectEnviadoViewHolder;
 import com.example.rcksuporte05.rcksistemas.classes.Prospect;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
@@ -37,17 +36,16 @@ public class ListaProspectEnviadoAdapter extends RecyclerView.Adapter<ProspectEn
 
     @Override
     public void onBindViewHolder(ProspectEnviadoViewHolder holder, int position) {
-        holder.nomeProspectEnviado.setText(prospects.get(position).getNome_cadastro());
+        holder.nomeProspectEnviado.setText(prospects.get(position).getNome_fantasia());
         holder.txtIdProspectEnviado.setText(prospects.get(position).getId_prospect_servidor());
         try {
             holder.txtDataRetornoEnviado.setText(new SimpleDateFormat("dd/MM/yyyy")
                                                      .format(new SimpleDateFormat("yyyy-MM-dd")
                                                      .parse(prospects.get(position).getDataRetorno())));
-        } catch (ParseException e) {
+        } catch (Exception e) {
+            holder.txtDataRetornoEnviado.setText("N/D");
             e.printStackTrace();
         }
-
-
 
         ApplyClickEvents(holder, position);
     }

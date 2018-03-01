@@ -20,6 +20,7 @@ public class Prospect {
     private List<ReferenciaBancaria> referenciasBancarias = new ArrayList<>();
     private List<ReferenciaComercial> referenciasComerciais = new ArrayList<>();
     private List<Contato> listaContato = new ArrayList<>();
+    private List<VisitaProspect> visitas = new ArrayList<>();
     private String nome_cadastro;
     private String nome_fantasia;
     private String pessoa_f_j;
@@ -317,5 +318,13 @@ public class Prospect {
 
     public void setInd_da_ie_destinatario_prospect(String ind_da_ie_destinatario_prospect) {
         this.ind_da_ie_destinatario_prospect = ind_da_ie_destinatario_prospect;
+    }
+
+    public List<VisitaProspect> getVisitas() {
+        return visitas;
+    }
+
+    public void setVisitas(List<VisitaProspect> visitas) {
+        this.visitas = visitas;
     }
 }

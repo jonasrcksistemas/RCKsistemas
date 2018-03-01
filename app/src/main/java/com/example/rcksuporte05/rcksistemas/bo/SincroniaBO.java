@@ -357,6 +357,13 @@ public class SincroniaBO {
                     prospect.setProspectSalvo("S");
                     db.atualizarTBL_PROSPECT(prospect);
 
+                    if(prospect.getVisitas() != null && prospect.getVisitas().size() > 0){
+                        for(VisitaProspect visita : prospect.getVisitas()){
+                            visita.setProspect(prospect);
+                            db.atualizaTBL_VISITA_PROSPECT(visita);
+                        }
+                    }
+
                     contadorNotificacaoEProgresso++;
                     final int finalContadorNotificacaoEProgresso = contadorNotificacaoEProgresso;
                     activity.runOnUiThread(new Runnable() {

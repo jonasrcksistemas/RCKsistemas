@@ -36,7 +36,7 @@ public class VisitaAdapter extends RecyclerView.Adapter<VisitaViewHolder> {
 
     @Override
     public void onBindViewHolder(VisitaViewHolder holder, int position) {
-        holder.txtNomeProspectVisita.setText(visitas.get(position).getProspect().getNome_cadastro());
+        holder.txtNomeProspectVisita.setText(visitas.get(position).getProspect().getNome_fantasia());
         try {
             holder.txtDataVisita.setText(new SimpleDateFormat("dd/MM/yyyy")
                                 .format(new SimpleDateFormat("yyyy-MM-dd")
@@ -60,6 +60,10 @@ public class VisitaAdapter extends RecyclerView.Adapter<VisitaViewHolder> {
                 pendentes++;
         }
         return pendentes;
+    }
+
+    public VisitaProspect getItem(int position){
+        return visitas.get(position);
     }
 
     @Override

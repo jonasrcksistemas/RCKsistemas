@@ -640,7 +640,7 @@ public class DBHelper extends SQLiteOpenHelper {
         return resultado;
     }
 
-    public void atualizarTBL_PROSPECT(Prospect prospect) {
+    public Prospect atualizarTBL_PROSPECT(Prospect prospect) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content = new ContentValues();
         String idCadastro = String.valueOf(contagem("SELECT MAX(ID_PROSPECT) FROM TBL_PROSPECT") + 1);
@@ -691,11 +691,14 @@ public class DBHelper extends SQLiteOpenHelper {
             db.update("TBL_PROSPECT", content, "ID_PROSPECT = " + prospect.getId_prospect(), null);
         } else {
             content.put("ID_PROSPECT", idCadastro);
+            prospect.setId_prospect(idCadastro);
             atualizarTBL_REFERENCIA_BANCARIA(prospect.getReferenciasBancarias(), idCadastro);
             atualizarTBL_REFERENCIA_COMERCIAL(prospect.getReferenciasComerciais(), idCadastro);
             atualizarTBL_CADASTRO_CONTATO(prospect.getListaContato(), idCadastro);
             db.insert("TBL_PROSPECT", null, content);
         }
+
+        return prospect;
     }
 
     public List<Prospect> listaProspect(int parametro) {
@@ -2542,7 +2545,9 @@ public class DBHelper extends SQLiteOpenHelper {
             content.put("ID_CADASTRO_SERVIDOR", visita.getProspect().getId_cadastro());
             content.put("ID_VISITA_SERVIDOR", visita.getIdVisitaServidor());
 
-            atualizarDataVisitaProspect(visita.getDataRetorno(),visita.getProspect().getId_prospect());
+            if(visita.getDataRetorno() != null && !visita.getDataRetorno().trim().equals("")){
+                atualizarDataVisitaProspect(visita.getDataRetorno(),visita.getProspect().getId_prospect());
+            }
 
             if (visita.getIdVisita() != null && contagem("SELECT COUNT(ID_VISITA) FROM TBL_VISITA_PROSPECT WHERE ID_VISITA = " + visita.getIdVisita()) > 0){
                 content.put("ID_VISITA",visita.getIdVisita());
