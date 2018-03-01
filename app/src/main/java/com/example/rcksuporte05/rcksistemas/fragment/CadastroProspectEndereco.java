@@ -109,12 +109,17 @@ public class CadastroProspectEndereco extends Fragment {
                     municipioAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_activated_1, getResources().getStringArray(listaUf[position]));
                     spMunicipioProspect.setAdapter(municipioAdapter);
                 }
-                try {
-                    spMunicipioProspect.setSelection(ProspectHelper.getPosicaoMunicipio());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
                 ProspectHelper.setPosicaoUf(position);
+                if (ProspectHelper.getProspect().getNome_municipio() != null && !ProspectHelper.getProspect().getNome_municipio().trim().isEmpty()) {
+                    for (int i = 0; getResources().getStringArray(listaUf[spUfProspect.getSelectedItemPosition()]).length > i; i++) {
+                        if (ProspectHelper.getProspect().getNome_municipio().equals(getResources().getStringArray(listaUf[ProspectHelper.getPosicaoUf()])[i])) {
+                            spMunicipioProspect.setSelection(i);
+                            ProspectHelper.setPosicaoMunicipio(i);
+                            break;
+                        }
+                    }
+                }
+
             }
 
             @Override
@@ -241,13 +246,7 @@ public class CadastroProspectEndereco extends Fragment {
             }
         }
 
-        if (ProspectHelper.getPosicaoMunicipio() > -1) {
-            try {
-                spMunicipioProspect.setSelection(ProspectHelper.getPosicaoMunicipio());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
+
 
         if (ProspectHelper.getProspect().getNome_municipio() != null && !ProspectHelper.getProspect().getNome_municipio().trim().isEmpty()) {
             for (int i = 0; getResources().getStringArray(listaUf[spUfProspect.getSelectedItemPosition()]).length > i; i++) {

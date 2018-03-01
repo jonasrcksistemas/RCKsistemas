@@ -150,7 +150,6 @@ public class CadastroProspectObservacoesComerciais extends Fragment implements R
 
     @Override
     public void onResume() {
-        injetaDadosNaTela();
         super.onResume();
     }
 

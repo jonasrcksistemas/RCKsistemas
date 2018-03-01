@@ -1,38 +1,33 @@
 package com.example.rcksuporte05.rcksistemas.fragment;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.FileUriExposedException;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
+import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.ImageButton;
 
-import com.bumptech.glide.Glide;
 import com.example.rcksuporte05.rcksistemas.Helper.ProspectHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.UsuarioHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
+import com.example.rcksuporte05.rcksistemas.interfaces.FotoActivity;
 import com.example.rcksuporte05.rcksistemas.util.DatePickerUtil;
 import com.example.rcksuporte05.rcksistemas.util.FotoUtil;
 
-import java.io.File;
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -49,16 +44,25 @@ public class CadastroProspectFotoSalvar extends Fragment {
 
     @BindView(R.id.edtDataRetorno)
     public EditText edtDataRetorno;
-    @BindView(R.id.imagemProspect)
-    ImageView imagemProspect;
+
+    @BindView(R.id.imagemProspect1)
+    ImageButton imagemProspect1;
+
+    @BindView(R.id.imagemProspect2)
+    ImageButton imagemProspect2;
+
     @BindView(R.id.btnSalvarParcial)
     Button btnSalvarParcial;
+
     @BindView(R.id.btnSalvarProspect)
     Button btnSalvarProspect;
-    @BindView(R.id.btnAddFoto)
-    Button btnAddFoto;
+
     private Uri uri;
     private DBHelper db;
+    String encodedImage;
+
+    static int REQUEST_CODE_IMAGEM_1 = 798;
+    static int REQUEST_CODE_IMAGEM_2 = 987;
 
     @Nullable
     @Override
@@ -73,7 +77,7 @@ public class CadastroProspectFotoSalvar extends Fragment {
             edtDataRetorno.setFocusable(false);
             btnSalvarParcial.setVisibility(View.INVISIBLE);
             btnSalvarProspect.setVisibility(View.INVISIBLE);
-            btnAddFoto.setVisibility(View.INVISIBLE);
+//            btnAddFoto.setVisibility(View.INVISIBLE);
         } else {
             edtDataRetorno.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -83,6 +87,7 @@ public class CadastroProspectFotoSalvar extends Fragment {
                 }
             });
         }
+
 
         ProspectHelper.setCadastroProspectFotoSalvar(this);
         return view;
@@ -106,10 +111,6 @@ public class CadastroProspectFotoSalvar extends Fragment {
         }
     }
 
-    @OnClick(R.id.btnTesteFoto)
-    public void teste(){
-        Glide.with(getContext()).load(uri).into(imagemProspect);
-    }
 
     @OnClick(R.id.btnSalvarParcial)
     public void salvarParcial() {
@@ -151,56 +152,21 @@ public class CadastroProspectFotoSalvar extends Fragment {
         }
     }
 
-    @OnClick(R.id.btnAddFoto)
-    public void foto() {
-        AlertDialog.Builder fotoAcao = new AlertDialog.Builder(getActivity());
-        fotoAcao.setTitle("Escolha a forma de capturar a imagem");
-        String[] array = {"Camera", "Galeria"};
-        fotoAcao.setItems(array, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                switch (which) {
-                    case 0:
-                        File diretorio = Environment.getExternalStoragePublicDirectory(getString(R.string.app_name) + " visitas");
-                        File imagem = new File(diretorio.getPath() + "/" + System.currentTimeMillis() + ".jpg");
-                        uri = Uri.fromFile(imagem);
+    @OnClick(R.id.imagemProspect1)
+    public void chamarGaleria(){
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+        startActivityForResult(Intent.createChooser(intent, "Selecione uma imagem"), REQUEST_CODE_IMAGEM_1);
+    }
 
-
-                        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
-                        }
-
-                        if (ContextCompat.checkSelfPermission(getActivity(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                            ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.CAMERA}, 0);
-                        }
-
-                        Intent intentCamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        intentCamera.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-                        try {
-                            startActivityForResult(intentCamera, 123);
-                        } catch (FileUriExposedException e) {
-                            Intent captura = new Intent("android.media.action.IMAGE_CAPTURE");
-                            try {
-                                startActivityForResult(captura, 456);
-                            } catch (Exception ex) {
-                                e.printStackTrace();
-                            }
-                        }
-                        break;
-                    case 1:
-                        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
-                        startActivityForResult(Intent.createChooser(intent, "Selecione uma imagem"), 789);
-                        break;
-                }
-            }
-        });
-        fotoAcao.show();
+    @OnClick(R.id.imagemProspect2)
+    public void chamarGaleria2(){
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+        startActivityForResult(Intent.createChooser(intent, "Selecione uma imagem"), REQUEST_CODE_IMAGEM_2);
     }
 
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
         Bitmap bitmap = null;
         if (requestCode == 123) {
             if (resultCode == Activity.RESULT_OK) {
@@ -208,19 +174,22 @@ public class CadastroProspectFotoSalvar extends Fragment {
                 Intent novaIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri);
                 getActivity().sendBroadcast(novaIntent);
 
+                Intent intent = new Intent(getActivity(), FotoActivity.class);
+
                 try {
-                    imagemProspect.setImageBitmap(FotoUtil.rotateBitmap(BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(uri)), uri));
+                    imagemProspect1.setImageBitmap(FotoUtil.rotateBitmap(BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(uri)), uri));
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
+                startActivity(intent);
             }
         } else if (requestCode == 456) {
             if (resultCode == Activity.RESULT_OK) {
                 Bundle bundle = data.getExtras();
                 bitmap = (Bitmap) bundle.get("data");
-                imagemProspect.setImageBitmap(bitmap);
+                imagemProspect1.setImageBitmap(bitmap);
             }
-        } else if (requestCode == 789) {
+        } else if (requestCode == REQUEST_CODE_IMAGEM_1) {
             if (resultCode == Activity.RESULT_OK) {
                 if (data != null) {
                     try {
@@ -228,9 +197,31 @@ public class CadastroProspectFotoSalvar extends Fragment {
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
-                    imagemProspect.setImageBitmap(bitmap);
+                    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                    boolean validaCompressao = bitmap.compress(Bitmap.CompressFormat.JPEG, 75, outputStream);
+                    byte[] fotoBinario = outputStream.toByteArray();
+
+
+                    ProspectHelper.getProspect().setFotoPrincipalBase64(Base64.encodeToString(fotoBinario, Base64.DEFAULT));
+                    imagemProspect1.setImageBitmap(bitmap);
                 }
             }
+        }else if(requestCode == REQUEST_CODE_IMAGEM_2){
+            if (data != null) {
+                try {
+                    bitmap = FotoUtil.rotateBitmap(BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(data.getData())), data.getData());
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                boolean validaCompressao = bitmap.compress(Bitmap.CompressFormat.JPEG, 75, outputStream);
+                byte[] fotoBinario = outputStream.toByteArray();
+
+
+                ProspectHelper.getProspect().setFotoSecundariaBase64(Base64.encodeToString(fotoBinario, Base64.DEFAULT));
+                imagemProspect2.setImageBitmap(bitmap);
+            }
         }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

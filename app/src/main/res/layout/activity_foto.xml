@@ -15,10 +15,20 @@
         android:theme="@style/Base.ThemeOverlay.AppCompat.Dark.ActionBar"
         app:title="Foto" />
 
-    <ImageView
-        android:id="@+id/foto"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+
+    <Button
+        android:id="@+id/btnAddFoto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Adicionar Foto"
+        android:theme="@style/Button"
+        android:layout_marginLeft="12dp"/>
+
+    <ImageButton
+        android:id="@+id/fotoTirada1"
+        android:layout_width="130dp"
+        android:layout_height="120dp"
+        android:layout_marginLeft="12dp"/>
 
 
 </LinearLayout>

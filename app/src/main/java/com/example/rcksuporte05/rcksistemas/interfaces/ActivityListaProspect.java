@@ -59,6 +59,7 @@ public class ActivityListaProspect extends AppCompatActivity {
     @OnClick(R.id.btnAddProspect)
     public void novoProspect() {
         Prospect prospect = new Prospect();
+        prospect.setProspectSalvo("N");
         ProspectHelper.setProspect(prospect);
         Intent intent = new Intent(ActivityListaProspect.this, ActivityCadastroProspect.class);
         startActivity(intent);
