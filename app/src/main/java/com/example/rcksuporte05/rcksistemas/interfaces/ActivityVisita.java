@@ -120,13 +120,15 @@ public class ActivityVisita extends AppCompatActivity implements GoogleApiClient
 
         setSupportActionBar(tb_visita);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        switch (getIntent().getIntExtra("edicao", 0)){
+        int acao = getIntent().getIntExtra("acao", 0);
+        switch (acao){
             case 1:
-                edtDescricaoVisita.setFocusable(false);
-                edtDataRetornoVisita.setFocusable(false);
+                injetaDadosNaTela();
+                edtDescricaoVisita.setEnabled(false);
+                edtDataRetornoVisita.setEnabled(false);
                 btnCheckinVisita.setEnabled(false);
                 btnSalvarVisita.setEnabled(false);
+                spTipoVisita.setEnabled(false);
                 break;
             case 2:
                 injetaDadosNaTela();
@@ -313,7 +315,7 @@ public class ActivityVisita extends AppCompatActivity implements GoogleApiClient
                     .addOnSuccessListener(this, new OnSuccessListener<Location>() {
                         @Override
                         public void onSuccess(Location location) {
-                            // Got last known location. In some rare situations this can be null.
+                            //Tenho a última localização conhecida. Em algumas situações raras, isso pode ser nulo.
                             if (location != null) {
                                 mLocation = location;
                                 VisitaHelper.setmLocation(mLocation);

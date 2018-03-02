@@ -91,7 +91,7 @@ public class ActivityHistoricoVisitaProspect extends AppCompatActivity implement
 
     public void preencheLista(){
         visitaAdapter = new VisitaAdapter(visitas,this);
-        recycleHistoricoVisita.setAdapter(visitaAdapter);
+         recycleHistoricoVisita.setAdapter(visitaAdapter);
         visitaAdapter.notifyDataSetChanged();
         if(visitaAdapter.contaPendentes() > 0){
             edtTotalVisita.setText("Visitas: "+visitaAdapter.getItemCount()+" Pendentes: "+visitaAdapter.contaPendentes());
@@ -111,12 +111,12 @@ public class ActivityHistoricoVisitaProspect extends AppCompatActivity implement
         if(visitaAdapter.getItem(position).getIdVisitaServidor() != null){
             Intent intent = new Intent(this, ActivityVisita.class);
             VisitaHelper.setVisitaProspect(visitaAdapter.getItem(position));
-            intent.putExtra("visualizacao", 1);
+            intent.putExtra("acao", 1);
             startActivity(intent);
         }else {
             Intent intent = new Intent(this, ActivityVisita.class);
             VisitaHelper.setVisitaProspect(visitaAdapter.getItem(position));
-            intent.putExtra("edicao", 2);
+            intent.putExtra("acao", 2);
             startActivity(intent);
         }
     }
