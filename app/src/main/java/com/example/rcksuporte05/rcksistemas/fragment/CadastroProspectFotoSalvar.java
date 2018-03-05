@@ -63,6 +63,8 @@ public class CadastroProspectFotoSalvar extends Fragment {
 
     static int REQUEST_CODE_IMAGEM_1 = 798;
     static int REQUEST_CODE_IMAGEM_2 = 987;
+    Bitmap mImagem1;
+    Bitmap mImagem2;
 
     @Nullable
     @Override
@@ -77,7 +79,7 @@ public class CadastroProspectFotoSalvar extends Fragment {
             edtDataRetorno.setFocusable(false);
             btnSalvarParcial.setVisibility(View.INVISIBLE);
             btnSalvarProspect.setVisibility(View.INVISIBLE);
-//            btnAddFoto.setVisibility(View.INVISIBLE);
+
         } else {
             edtDataRetorno.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -100,6 +102,20 @@ public class CadastroProspectFotoSalvar extends Fragment {
             System.out.println(edtDataRetorno.getText().toString().trim());
             e.printStackTrace();
         }
+
+        try {
+            ProspectHelper.setImagem1(mImagem1);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        try {
+            ProspectHelper.setImagem2(mImagem2);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+
     }
 
     public void insereDadosNaTela() {
@@ -109,6 +125,22 @@ public class CadastroProspectFotoSalvar extends Fragment {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
+
+        try {
+            mImagem1 = ProspectHelper.getImagem1();
+            imagemProspect1.setImageBitmap(ProspectHelper.getImagem1());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
+        try {
+            mImagem2 = ProspectHelper.getImagem2();
+            imagemProspect2.setImageBitmap(ProspectHelper.getImagem2());
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
 
@@ -144,6 +176,7 @@ public class CadastroProspectFotoSalvar extends Fragment {
                     ProspectHelper.getProspect().setProspectSalvo("S");
                     ProspectHelper.getProspect().setIdEmpresa(UsuarioHelper.getUsuario().getIdEmpresaMultiDevice());
                     ProspectHelper.getProspect().setUsuario_id(UsuarioHelper.getUsuario().getId_usuario());
+                    ProspectHelper.getProspect().setUsuario_nome(UsuarioHelper.getUsuario().getNome_usuario());
                     db.atualizarTBL_PROSPECT(ProspectHelper.getProspect());
                     getActivity().finish();
                 }
@@ -201,15 +234,17 @@ public class CadastroProspectFotoSalvar extends Fragment {
                     boolean validaCompressao = bitmap.compress(Bitmap.CompressFormat.JPEG, 75, outputStream);
                     byte[] fotoBinario = outputStream.toByteArray();
 
-
-                    ProspectHelper.getProspect().setFotoPrincipalBase64(Base64.encodeToString(fotoBinario, Base64.DEFAULT));
+                    mImagem1 = bitmap;
+                    ProspectHelper.getProspect().setFotoPrincipalBase64(Base64.encodeToString(fotoBinario, Base64.NO_WRAP));
+                    ProspectHelper.setImagem1(bitmap);
                     imagemProspect1.setImageBitmap(bitmap);
                 }
             }
         }else if(requestCode == REQUEST_CODE_IMAGEM_2){
             if (data != null) {
                 try {
-                    bitmap = FotoUtil.rotateBitmap(BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(data.getData())), data.getData());
+                  bitmap = FotoUtil.rotateBitmap(BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(data.getData())), data.getData());
+
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -218,7 +253,9 @@ public class CadastroProspectFotoSalvar extends Fragment {
                 byte[] fotoBinario = outputStream.toByteArray();
 
 
-                ProspectHelper.getProspect().setFotoSecundariaBase64(Base64.encodeToString(fotoBinario, Base64.DEFAULT));
+                ProspectHelper.getProspect().setFotoSecundariaBase64(Base64.encodeToString(fotoBinario, Base64.NO_WRAP));
+                ProspectHelper.setImagem2(bitmap);
+                mImagem2 = bitmap;
                 imagemProspect2.setImageBitmap(bitmap);
             }
         }

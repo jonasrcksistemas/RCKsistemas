@@ -47,6 +47,7 @@ public class Prospect {
     private String observacoesComerciais;
     private String prospectSalvo;
     private String ind_da_ie_destinatario_prospect;
+    private String usuario_nome;
 
     public String getId_prospect() {
         return id_prospect;
@@ -326,5 +327,13 @@ public class Prospect {
 
     public void setVisitas(List<VisitaProspect> visitas) {
         this.visitas = visitas;
+    }
+
+    public String getUsuario_nome() {
+        return usuario_nome;
+    }
+
+    public void setUsuario_nome(String usuario_nome) {
+        this.usuario_nome = usuario_nome;
     }
 }

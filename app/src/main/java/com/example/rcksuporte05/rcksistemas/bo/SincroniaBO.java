@@ -524,7 +524,10 @@ public class SincroniaBO {
                             @Override
                             public void run() {
                                 ivInternet.setVisibility(View.VISIBLE);
-                                System.out.println("Houve um problema na requisição, entre em contato no suporte para esclarecer a situação");
+                                System.out.println("Houve um problema na re" +
+                                        "" +
+                                        "" +
+                                        "quisição, entre em contato no suporte para esclarecer a situação");
                                 progress.dismiss();
                             }
                         });

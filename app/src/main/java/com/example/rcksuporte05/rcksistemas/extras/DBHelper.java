@@ -395,6 +395,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 "ENDERECO_CEP VARCHAR(20)," +
                 "ID_PAIS INTEGER," +
                 "USUARIO_ID INTEGER," +
+                "USUARIO_NOME VARCHAR(60),"+
                 "SITUACAO_PREDIO VARCHAR(1)," +
                 "LIMITE_CREDITO_SUGERIDO DECIMAL(12,2)," +
                 "LIMITE_PRAZO_SUGERIDO DECIMAL(12,2)," +
@@ -402,7 +403,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 "DIA_VISITA VARCHAR(20)," +
                 "DATA_RETORNO DATE," +
                 "IND_DA_IE_DESTINATARIO_PROSPECT INTEGER, " +
-                "FOTO_PRINCIPALB_ASE64 BLOB," +
+                "FOTO_PRINCIPAL_BASE64 BLOB," +
                 "FOTO_SECUNDARIA_BASE64 BLOB," +
                 "OBSERVACOES_COMERCIAIS VARCHAR(300), " +
                 "PROSPECT_SALVO VARCHAR(1) DEFAULT 'N');");
@@ -518,6 +519,7 @@ public class DBHelper extends SQLiteOpenHelper {
                     "ENDERECO_CEP VARCHAR(20)," +
                     "ID_PAIS INTEGER," +
                     "USUARIO_ID INTEGER," +
+                    "USUARIO_NOME VARCHAR(60)," +
                     "SITUACAO_PREDIO VARCHAR(1)," +
                     "LIMITE_CREDITO_SUGERIDO DECIMAL(12,2)," +
                     "LIMITE_PRAZO_SUGERIDO DECIMAL(12,2)," +
@@ -525,7 +527,7 @@ public class DBHelper extends SQLiteOpenHelper {
                     "DIA_VISITA VARCHAR(20)," +
                     "DATA_RETORNO DATE," +
                     "IND_DA_IE_DESTINATARIO_PROSPECT INTEGER, " +
-                    "FOTO_PRINCIPALB_ASE64 BLOB," +
+                    "FOTO_PRINCIPAL_BASE64 BLOB," +
                     "FOTO_SECUNDARIA_BASE64 BLOB," +
                     "OBSERVACOES_COMERCIAIS VARCHAR(300), " +
                     "PROSPECT_SALVO VARCHAR(1) DEFAULT 'N');");
@@ -657,6 +659,7 @@ public class DBHelper extends SQLiteOpenHelper {
         } catch (NullPointerException e) {
             e.printStackTrace();
         }
+
         content.put("NOME_CADASTRO", prospect.getNome_cadastro());
         content.put("NOME_FANTASIA", prospect.getNome_fantasia());
         content.put("PESSOA_F_J", prospect.getPessoa_f_j());
@@ -672,13 +675,14 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("ENDERECO_CEP", prospect.getEndereco_cep());
         content.put("ID_PAIS", prospect.getId_pais());
         content.put("USUARIO_ID", prospect.getUsuario_id());
+        content.put("USUARIO_NOME", prospect.getUsuario_nome());
         content.put("SITUACAO_PREDIO", prospect.getSituacaoPredio());
         content.put("LIMITE_CREDITO_SUGERIDO", prospect.getLimiteDeCreditoSugerido());
         content.put("LIMITE_PRAZO_SUGERIDO", prospect.getLimiteDePrazoSugerido());
         content.put("ID_EMPRESA", prospect.getIdEmpresa());
         content.put("DIA_VISITA", prospect.getDiaVisita());
         content.put("DATA_RETORNO", prospect.getDataRetorno());
-        content.put("FOTO_PRINCIPALB_ASE64", prospect.getFotoPrincipalBase64());
+        content.put("FOTO_PRINCIPAL_BASE64", prospect.getFotoPrincipalBase64());
         content.put("FOTO_SECUNDARIA_BASE64", prospect.getFotoSecundariaBase64());
         content.put("PROSPECT_SALVO", prospect.getProspectSalvo());
         content.put("IND_DA_IE_DESTINATARIO_PROSPECT", prospect.getInd_da_ie_destinatario_prospect());
@@ -769,13 +773,14 @@ public class DBHelper extends SQLiteOpenHelper {
             prospect.setEndereco_cep(cursor.getString(cursor.getColumnIndex("ENDERECO_CEP")));
             prospect.setId_pais(cursor.getString(cursor.getColumnIndex("ID_PAIS")));
             prospect.setUsuario_id(cursor.getString(cursor.getColumnIndex("USUARIO_ID")));
+            prospect.setUsuario_nome(cursor.getString(cursor.getColumnIndex("USUARIO_NOME")));
             prospect.setSituacaoPredio(cursor.getString(cursor.getColumnIndex("SITUACAO_PREDIO")));
             prospect.setLimiteDeCreditoSugerido(cursor.getString(cursor.getColumnIndex("LIMITE_CREDITO_SUGERIDO")));
             prospect.setLimiteDePrazoSugerido(cursor.getString(cursor.getColumnIndex("LIMITE_PRAZO_SUGERIDO")));
             prospect.setIdEmpresa(cursor.getString(cursor.getColumnIndex("ID_EMPRESA")));
             prospect.setDiaVisita(cursor.getString(cursor.getColumnIndex("DIA_VISITA")));
             prospect.setDataRetorno(cursor.getString(cursor.getColumnIndex("DATA_RETORNO")));
-            prospect.setFotoPrincipalBase64(cursor.getString(cursor.getColumnIndex("FOTO_PRINCIPALB_ASE64")));
+            prospect.setFotoPrincipalBase64(cursor.getString(cursor.getColumnIndex("FOTO_PRINCIPAL_BASE64")));
             prospect.setFotoSecundariaBase64(cursor.getString(cursor.getColumnIndex("FOTO_SECUNDARIA_BASE64")));
             prospect.setObservacoesComerciais(cursor.getString(cursor.getColumnIndex("OBSERVACOES_COMERCIAIS")));
             prospect.setProspectSalvo(cursor.getString(cursor.getColumnIndex("PROSPECT_SALVO")));
@@ -846,7 +851,7 @@ public class DBHelper extends SQLiteOpenHelper {
             prospect.setIdEmpresa(cursor.getString(cursor.getColumnIndex("ID_EMPRESA")));
             prospect.setDiaVisita(cursor.getString(cursor.getColumnIndex("DIA_VISITA")));
             prospect.setDataRetorno(cursor.getString(cursor.getColumnIndex("DATA_RETORNO")));
-            prospect.setFotoPrincipalBase64(cursor.getString(cursor.getColumnIndex("FOTO_PRINCIPALB_ASE64")));
+            prospect.setFotoPrincipalBase64(cursor.getString(cursor.getColumnIndex("FOTO_PRINCIPAL_BASE64")));
             prospect.setFotoSecundariaBase64(cursor.getString(cursor.getColumnIndex("FOTO_SECUNDARIA_BASE64")));
             prospect.setObservacoesComerciais(cursor.getString(cursor.getColumnIndex("OBSERVACOES_COMERCIAIS")));
             prospect.setProspectSalvo(cursor.getString(cursor.getColumnIndex("PROSPECT_SALVO")));

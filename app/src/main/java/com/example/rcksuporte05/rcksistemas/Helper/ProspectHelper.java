@@ -1,5 +1,6 @@
 package com.example.rcksuporte05.rcksistemas.Helper;
 
+import android.graphics.Bitmap;
 import android.support.v4.view.ViewPager;
 import android.widget.Toast;
 
@@ -46,6 +47,8 @@ public class ProspectHelper {
     private static int posicaoPais = -1;
     private static int posicaoUf = -1;
     private static int posicaoMunicipio = -1;
+    public static Bitmap imagem1;
+    public static Bitmap imagem2;
 
 
     public static Prospect getProspect() {
@@ -162,6 +165,22 @@ public class ProspectHelper {
 
     public static int getPosicaoMunicipio() {
         return posicaoMunicipio;
+    }
+
+    public static Bitmap getImagem1() {
+        return imagem1;
+    }
+
+    public static void setImagem1(Bitmap imagem1) {
+        ProspectHelper.imagem1 = imagem1;
+    }
+
+    public static Bitmap getImagem2() {
+        return imagem2;
+    }
+
+    public static void setImagem2(Bitmap imagem2) {
+        ProspectHelper.imagem2 = imagem2;
     }
 
     public static void setPosicaoMunicipio(int posicaoMunicipio) {
@@ -402,6 +421,20 @@ public class ProspectHelper {
             }
         }
 
+        if(verificaMovimento){
+            if(prospect.getFotoPrincipalBase64() == null || prospect.getFotoSecundariaBase64().trim().isEmpty()){
+                Toast.makeText(activityMain, "Foto 1 obrigatoria",Toast.LENGTH_LONG).show();
+                verificaMovimento = false;
+            }
+        }
+
+        if(verificaMovimento){
+            if(prospect.getFotoSecundariaBase64() == null || prospect.getFotoSecundariaBase64().trim().isEmpty()){
+                Toast.makeText(activityMain, "Foto 2 obrigatoria",Toast.LENGTH_LONG).show();
+                verificaMovimento = false;
+            }
+        }
+
         return verificaMovimento;
 
     }
@@ -421,6 +454,8 @@ public class ProspectHelper {
         posicaoPais = -1;
         posicaoUf = -1;
         posicaoMunicipio = -1;
+        imagem1 = null;
+        imagem2 = null;
         System.gc();
     }
 }
