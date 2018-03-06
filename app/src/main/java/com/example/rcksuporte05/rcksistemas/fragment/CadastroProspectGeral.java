@@ -1,8 +1,10 @@
 package com.example.rcksuporte05.rcksistemas.fragment;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +18,7 @@ import android.widget.TextView;
 
 import com.example.rcksuporte05.rcksistemas.Helper.ProspectHelper;
 import com.example.rcksuporte05.rcksistemas.R;
+import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
 import com.example.rcksuporte05.rcksistemas.util.MascaraUtil;
 
 import butterknife.BindView;
@@ -77,6 +80,7 @@ public class CadastroProspectGeral extends Fragment {
     private ArrayAdapter arrayPessoaProspect;
     private String[] contribuinte = {"Contribuinte", "Isento", "Não Contribuinte"};
     private String[] pessoaJuridica = {"Fisica", "Jurídica"};
+    private DBHelper db;
 
     @Nullable
     @Override
@@ -87,6 +91,7 @@ public class CadastroProspectGeral extends Fragment {
         arrayPessoaProspect = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_activated_1, pessoaJuridica);
         spIeProspect.setAdapter(arrayIe);
         spPessoaProspect.setAdapter(arrayPessoaProspect);
+        db = new DBHelper(getContext());
         injetaDadosNaTela();
 
 
@@ -109,20 +114,9 @@ public class CadastroProspectGeral extends Fragment {
         edtCpfCnpjProspect.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                if(!hasFocus){
-                    if(spPessoaProspect.getSelectedItemPosition() == 0){
-                       if(MascaraUtil.isValidCPF(edtCpfCnpjProspect.getText().toString().trim().replaceAll("[^0-9]", ""))){
-                           edtCpfCnpjProspect.setText(MascaraUtil.mascaraCPF(edtCpfCnpjProspect.getText().toString()));
-                       }else{
-                           edtCpfCnpjProspect.setError("CPF invalido");
-                       }
-                    }else
-                        if (MascaraUtil.isValidCNPJ(edtCpfCnpjProspect.getText().toString().trim().replaceAll("[^0-9]", ""))){
-                            edtCpfCnpjProspect.setText(MascaraUtil.mascaraCNPJ(edtCpfCnpjProspect.getText().toString()));
-                        }else {
-                            edtCpfCnpjProspect.setError("CNPJ invalido");
-                        }
-                }else {
+                if (!hasFocus) {
+                    verificaCnpjCpf();
+                } else {
                     edtCpfCnpjProspect.setText(edtCpfCnpjProspect.getText().toString().trim().replaceAll("[^0-9]", ""));
                 }
             }
@@ -246,5 +240,44 @@ public class CadastroProspectGeral extends Fragment {
 
         ProspectHelper.getProspect().setInd_da_ie_destinatario_prospect(String.valueOf(spIeProspect.getSelectedItemPosition()));
 
+    }
+
+    public void verificaCnpjCpf(){
+        if (spPessoaProspect.getSelectedItemPosition() == 0) {
+            if (MascaraUtil.isValidCPF(edtCpfCnpjProspect.getText().toString().trim().replaceAll("[^0-9]", ""))) {
+                if(db.verificaCnpjCpf(edtCpfCnpjProspect.getText().toString())){
+                    edtCpfCnpjProspect.setText(MascaraUtil.mascaraCPF(edtCpfCnpjProspect.getText().toString()));
+                }else {
+                    chamaDialog();
+                }
+            } else {
+                edtCpfCnpjProspect.setError("CPF invalido");
+            }
+        } else{
+            if (MascaraUtil.isValidCNPJ(edtCpfCnpjProspect.getText().toString().trim().replaceAll("[^0-9]", ""))) {
+                if(db.verificaCnpjCpf(edtCpfCnpjProspect.getText().toString())){
+                    edtCpfCnpjProspect.setText(MascaraUtil.mascaraCNPJ(edtCpfCnpjProspect.getText().toString()));
+                }else {
+                    chamaDialog();
+                }
+            } else {
+                edtCpfCnpjProspect.setError("CNPJ invalido");
+            }
+        }
+    }
+
+    private void chamaDialog() {
+        AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+        alert.setMessage(" Tem certeza que digitou o Cpf/Cnpj correto? \n Se deseja conferir ou redigitar basta clicar em não");
+        alert.setTitle("Atenção ele já foi prospectado!");
+        alert.setCancelable(false);
+        alert.setNegativeButton("Não", null);
+        alert.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                getActivity().finish();
+            }
+        });
+        alert.show();
     }
 }

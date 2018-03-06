@@ -2721,4 +2721,14 @@ public class DBHelper extends SQLiteOpenHelper {
 
         return visitasPendendentes;
     }
+
+    public boolean verificaCnpjCpf(String cpfCnpj) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor;
+
+        cursor = db.rawQuery("SELECT COUNT(ID_PROSPECT) AS QUANTIDADE FROM TBL_PROSPECT WHERE CPF_CNPJ = "+cpfCnpj, null);
+        cursor.moveToFirst();
+
+        return cursor.getInt(cursor.getColumnIndex("QUANTIDADE")) <= 0;
+    }
 }
