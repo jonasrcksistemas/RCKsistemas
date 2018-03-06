@@ -73,6 +73,9 @@ public class CadastroProspectFotoSalvar extends Fragment {
         ButterKnife.bind(this, view);
         db = new DBHelper(getContext());
 
+        imagemProspect1.setImageResource(R.mipmap.ic_add_imagem);
+        imagemProspect2.setImageResource(R.mipmap.ic_add_imagem);
+
         insereDadosNaTela();
 
         if (ProspectHelper.getProspect().getProspectSalvo() != null && ProspectHelper.getProspect().getProspectSalvo().equals("S")) {
@@ -127,20 +130,34 @@ public class CadastroProspectFotoSalvar extends Fragment {
         }
 
 
-        try {
+        if (ProspectHelper.getImagem1() != null) {
             mImagem1 = ProspectHelper.getImagem1();
             imagemProspect1.setImageBitmap(ProspectHelper.getImagem1());
-        }catch (Exception e){
-            e.printStackTrace();
+        } else {
+            try {
+                byte[] data = Base64.decode(ProspectHelper.getProspect().getFotoPrincipalBase64(), Base64.NO_WRAP);
+                mImagem1 = BitmapFactory.decodeByteArray(data, 0, data.length);
+                ProspectHelper.setImagem1(mImagem1);
+                imagemProspect1.setImageBitmap(mImagem1);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
         }
 
-        try {
+        if (ProspectHelper.getImagem2() != null) {
             mImagem2 = ProspectHelper.getImagem2();
             imagemProspect2.setImageBitmap(ProspectHelper.getImagem2());
-        }catch (Exception e){
-            e.printStackTrace();
+        } else {
+            try {
+                byte[] data2 = Base64.decode(ProspectHelper.getProspect().getFotoSecundariaBase64(), Base64.NO_WRAP);
+                mImagem2 = BitmapFactory.decodeByteArray(data2, 0, data2.length);
+                ProspectHelper.setImagem2(mImagem2);
+                imagemProspect2.setImageBitmap(mImagem2);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
-
     }
 
 

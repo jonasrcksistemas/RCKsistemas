@@ -15,6 +15,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.example.rcksuporte05.rcksistemas.Helper.VisitaHelper;
 import com.example.rcksuporte05.rcksistemas.R;
@@ -99,12 +100,17 @@ public class ActivityListaProspectEnviado extends AppCompatActivity implements L
 
             @Override
             public boolean onQueryTextChange(String query) {
-                if (query.trim().equals("")) {
-                    if (listaProspect.size() > 0)
-                        preencheLista(listaProspect);
-                } else {
-                    preencheLista(buscaProspect(listaProspect, query));
+                try {
+                    if (query.trim().equals("")) {
+                        if (listaProspect.size() > 0)
+                            preencheLista(listaProspect);
+                    } else {
+                        preencheLista(buscaProspect(listaProspect, query));
+                    }
+                }catch (NullPointerException e){
+                    Toast.makeText(ActivityListaProspectEnviado.this, "Nem um Prospect vinculado ao vendedor. Sincronizar pode resolver", Toast.LENGTH_SHORT).show();
                 }
+
                 return false;
             }
         });

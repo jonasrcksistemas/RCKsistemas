@@ -712,19 +712,19 @@ public class DBHelper extends SQLiteOpenHelper {
 
         switch (parametro) {
             case 0:
-                cursor = db.rawQuery("SELECT * FROM TBL_PROSPECT WHERE ID_PROSPECT_SERVIDOR IS NULL ORDER BY ID_PROSPECT DESC", null);
+                cursor = db.rawQuery("SELECT * FROM TBL_PROSPECT WHERE USUARIO_ID = "+UsuarioHelper.getUsuario().getId_usuario()+" AND ID_PROSPECT_SERVIDOR IS NULL ORDER BY ID_PROSPECT DESC", null);
                 break;
             case 1:
-                cursor = db.rawQuery("SELECT * FROM TBL_PROSPECT WHERE PROSPECT_SALVO = 'N' AND ID_PROSPECT_SERVIDOR IS NULL ORDER BY ID_PROSPECT DESC", null);
+                cursor = db.rawQuery("SELECT * FROM TBL_PROSPECT WHERE USUARIO_ID = "+UsuarioHelper.getUsuario().getId_usuario()+" AND PROSPECT_SALVO = 'N' AND ID_PROSPECT_SERVIDOR IS NULL ORDER BY ID_PROSPECT DESC", null);
                 break;
             case 2:
-                cursor = db.rawQuery("SELECT * FROM TBL_PROSPECT WHERE PROSPECT_SALVO = 'S' AND ID_PROSPECT_SERVIDOR IS NULL ORDER BY ID_PROSPECT DESC", null);
+                cursor = db.rawQuery("SELECT * FROM TBL_PROSPECT WHERE USUARIO_ID = "+UsuarioHelper.getUsuario().getId_usuario()+" AND PROSPECT_SALVO = 'S' AND ID_PROSPECT_SERVIDOR IS NULL ORDER BY ID_PROSPECT DESC", null);
                 break;
             case 3:
-                cursor = db.rawQuery("SELECT * FROM TBL_PROSPECT WHERE PROSPECT_SALVO = 'S' AND ID_PROSPECT_SERVIDOR IS NOT NULL ORDER BY DATA_RETORNO", null);
+                cursor = db.rawQuery("SELECT * FROM TBL_PROSPECT WHERE USUARIO_ID = "+UsuarioHelper.getUsuario().getId_usuario()+" AND PROSPECT_SALVO = 'S' AND ID_PROSPECT_SERVIDOR IS NOT NULL ORDER BY DATA_RETORNO", null);
                 break;
             default:
-                cursor = db.rawQuery("SELECT * FROM TBL_PROSPECT ORDER BY ID_PROSPECT DESC", null);
+                cursor = db.rawQuery("SELECT * FROM TBL_PROSPECT WHERE USUARIO_ID = "+UsuarioHelper.getUsuario().getId_usuario()+" ORDER BY ID_PROSPECT DESC", null);
         }
 
         cursor.moveToFirst();
