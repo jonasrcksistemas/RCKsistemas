@@ -41,6 +41,48 @@
             android:layout_toRightOf="@+id/imagemProspect1"
              />
 
+        <Button
+            android:id="@+id/btnCheckinVisitaProspect"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_above="@+id/dataDeRetorno"
+            android:layout_marginBottom="22dp"
+            android:background="@mipmap/ic_localizacao"
+            android:theme="@style/Button" />
+
+
+        <TextView
+            android:id="@+id/txtLatitudeProspect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/btnCheckinVisitaProspect"
+            android:layout_toRightOf="@+id/btnCheckinVisitaProspect"
+            android:layout_marginLeft="8dp"
+            android:textStyle="bold"
+            android:textSize="12sp"
+            android:layout_toEndOf="@+id/btnCheckinVisitaProspect" />
+
+        <TextView
+            android:id="@+id/txtLongitudeProspect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/btnCheckinVisitaProspect"
+            android:layout_toRightOf="@+id/txtLatitudeProspect"
+            android:layout_marginLeft="8dp"
+            android:textStyle="bold"
+            android:textSize="12dp"/>
+
+        <TextView
+            android:id="@+id/txtChekinEnderecoProspect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/btnCheckinVisitaProspect"
+            android:layout_toRightOf="@+id/btnCheckinVisitaProspect"
+            android:layout_marginLeft="8dp"
+            android:textStyle="bold"
+            android:textSize="12sp"/>
 
         <TextView
             android:id="@+id/dataDeRetorno"
@@ -83,6 +125,8 @@
             android:layout_marginStart="8dp"
             android:text="Salvar"
             android:theme="@style/Button" />
+
+
 
 
         <Button

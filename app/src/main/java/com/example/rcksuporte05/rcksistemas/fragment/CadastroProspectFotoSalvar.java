@@ -1,16 +1,23 @@
 package com.example.rcksuporte05.rcksistemas.fragment;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentSender;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,14 +25,32 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.rcksuporte05.rcksistemas.Helper.ProspectHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.UsuarioHelper;
 import com.example.rcksuporte05.rcksistemas.R;
+import com.example.rcksuporte05.rcksistemas.api.ApiGeocoder;
+import com.example.rcksuporte05.rcksistemas.api.Rotas;
 import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
 import com.example.rcksuporte05.rcksistemas.interfaces.FotoActivity;
 import com.example.rcksuporte05.rcksistemas.util.DatePickerUtil;
 import com.example.rcksuporte05.rcksistemas.util.FotoUtil;
+import com.example.rcksuporte05.rcksistemas.util.classesGeocoderUtil.RespostaGeocoder;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResult;
+import com.google.android.gms.location.LocationSettingsStates;
+import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
@@ -35,12 +60,15 @@ import java.text.SimpleDateFormat;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Created by RCK 03 on 29/01/2018.
  */
 
-public class CadastroProspectFotoSalvar extends Fragment {
+public class CadastroProspectFotoSalvar extends Fragment implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
 
     @BindView(R.id.edtDataRetorno)
     public EditText edtDataRetorno;
@@ -57,6 +85,13 @@ public class CadastroProspectFotoSalvar extends Fragment {
     @BindView(R.id.btnSalvarProspect)
     Button btnSalvarProspect;
 
+    @BindView(R.id.txtLatitudeProspect)
+    TextView txtLatitudeProspect;
+    @BindView(R.id.txtLongitudeProspect)
+    TextView txtLongitudeProspect;
+    @BindView(R.id.txtChekinEnderecoProspect)
+    TextView txtChekinEnderecoProspect;
+
     private Uri uri;
     private DBHelper db;
     String encodedImage;
@@ -66,15 +101,25 @@ public class CadastroProspectFotoSalvar extends Fragment {
     Bitmap mImagem1;
     Bitmap mImagem2;
 
+    RespostaGeocoder respostaGeocoder;
+    private FusedLocationProviderClient mFusedLocationClient;
+    Location mLocation;
+    ProgressDialog progress;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_cadastro_prospect_foto_salvar, container, false);
         ButterKnife.bind(this, view);
         db = new DBHelper(getContext());
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
 
         imagemProspect1.setImageResource(R.mipmap.ic_add_imagem);
         imagemProspect2.setImageResource(R.mipmap.ic_add_imagem);
+        txtLatitudeProspect.setVisibility(View.GONE);
+        txtLongitudeProspect.setVisibility(View.GONE);
+        txtChekinEnderecoProspect.setVisibility(View.GONE);
+
 
         insereDadosNaTela();
 
@@ -213,6 +258,15 @@ public class CadastroProspectFotoSalvar extends Fragment {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
         startActivityForResult(Intent.createChooser(intent, "Selecione uma imagem"), REQUEST_CODE_IMAGEM_2);
     }
+    @OnClick(R.id.btnCheckinVisitaProspect)
+    public void checkin(){
+        progress = new ProgressDialog(getContext());
+        progress.setMessage("Fazendo Check-in");
+        progress.setTitle("Aguarde");
+        progress.show();
+
+        EnableGPSAutoMatically();
+    }
 
 
     @Override
@@ -275,7 +329,158 @@ public class CadastroProspectFotoSalvar extends Fragment {
                 mImagem2 = bitmap;
                 imagemProspect2.setImageBitmap(bitmap);
             }
+        }else    if(requestCode == 1){
+            if(resultCode != 0){
+                Toast.makeText(getContext(), "Tente Novamente", Toast.LENGTH_LONG).show();
+            }else {
+                Toast.makeText(getContext(), "Sem Localização ativa, recurso indisponível", Toast.LENGTH_LONG).show();
+            }
+
         }
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    public void pegarUltimaLocalizacao(){
+        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            mFusedLocationClient.getLastLocation()
+                    .addOnSuccessListener(getActivity(), new OnSuccessListener<Location>() {
+                        @Override
+                        public void onSuccess(Location location) {
+                            //Tenho a última localização conhecida. Em algumas situações raras, isso pode ser nulo.
+                            if (location != null) {
+                                mLocation = location;
+                                getGeocoder();
+                            }
+                        }
+                    });
+        } else {
+            progress.dismiss();
+            this.requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 0);
+        }
+    }
+
+    public void getGeocoder(){
+        Rotas rotas = ApiGeocoder.buildRetrofit();
+        Call<RespostaGeocoder> call = rotas.getGeocoder(String.valueOf(mLocation.getLatitude())+","+String.valueOf(mLocation.getLongitude()), true, "pt-BR");
+
+        call.enqueue(new Callback<RespostaGeocoder>() {
+            @Override
+            public void onResponse(Call<RespostaGeocoder> call, Response<RespostaGeocoder> response) {
+                respostaGeocoder = response.body();
+                if(response.body().getResult().size() > 0) {
+                    txtChekinEnderecoProspect.setVisibility(View.VISIBLE);
+                    txtChekinEnderecoProspect.setText(respostaGeocoder.getResult().get(1).getFormattedAddress());
+                }else {
+                    txtLatitudeProspect.setVisibility(View.VISIBLE);
+                    txtLongitudeProspect.setVisibility(View.VISIBLE);
+                    txtLatitudeProspect.setText(String.valueOf(mLocation.getLatitude()));
+                    txtLongitudeProspect.setText(String.valueOf(mLocation.getLongitude()));
+                    Toast.makeText(getContext(),"Endereço não encontrado! somente latitude e longitude", Toast.LENGTH_LONG).show();
+                }
+                progress.dismiss();
+            }
+
+            @Override
+            public void onFailure(Call<RespostaGeocoder> call, Throwable t) {
+                progress.dismiss();
+                Toast.makeText(getContext(),"Falha ao requisitar", Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void EnableGPSAutoMatically() {
+        GoogleApiClient googleApiClient = null;
+        if (googleApiClient == null) {
+            googleApiClient = new GoogleApiClient.Builder(getContext())
+                    .addApi(LocationServices.API)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this).build();
+
+            googleApiClient.connect();
+
+            LocationRequest locationRequest = LocationRequest.create();
+
+            locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+            locationRequest.setInterval(30 * 1000);
+            locationRequest.setFastestInterval(5 * 1000);
+
+            LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
+                    .addLocationRequest(locationRequest);
+
+            // **************************
+            builder.setAlwaysShow(true); // this is the key ingredient
+            // **************************
+
+            PendingResult<LocationSettingsResult> result = LocationServices.SettingsApi
+                    .checkLocationSettings(googleApiClient, builder.build());
+            result.setResultCallback(new ResultCallback<LocationSettingsResult>() {
+                @Override
+                public void onResult(LocationSettingsResult result) {
+                    final Status status = result.getStatus();
+                    final LocationSettingsStates state = result
+                            .getLocationSettingsStates();
+                    switch (status.getStatusCode()) {
+                        case LocationSettingsStatusCodes.SUCCESS:
+                            pegarUltimaLocalizacao();
+                            // All location settings are satisfied. The client can
+                            // initialize location
+                            // requests here.
+                            break;
+                        case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+                            // Location settings are not satisfied. But could be
+                            // fixed by showing the user
+                            // a dialog.
+                            try {
+                                // Show the dialog by calling
+                                // startResolutionForResult(),
+                                // and check the result in onActivityResult().
+                                progress.dismiss();
+                                status.startResolutionForResult(getActivity(), 1);
+                            } catch (IntentSender.SendIntentException e) {
+                                // Ignore the error.
+                            }
+                            break;
+                        case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                            // Location settings are not satisfied. However, we have
+                            // no way to fix the
+                            // settings so we won't show the dialog.
+                            break;
+                    }
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        if (requestCode == 0) {
+            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                progress = new ProgressDialog(getContext());
+                progress.setMessage("Fazendo Check-in");
+                progress.setTitle("Aguarde");
+                progress.show();
+                pegarUltimaLocalizacao();
+            } else {
+                Toast.makeText(getContext(), "Sem a permissão função indisponivel",Toast.LENGTH_LONG).show();
+            }
+        }
     }
 }

@@ -123,12 +123,17 @@ public class ActivityListaProspect extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String query) {
-                if (query.trim().equals("")) {
-                    if (listaProspect.size() > 0)
-                        preencheLista(listaProspect);
-                } else {
-                    preencheLista(buscaProspect(listaProspect, query));
+                try{
+                    if (query.trim().equals("")) {
+                        if (listaProspect.size() > 0)
+                            preencheLista(listaProspect);
+                    } else {
+                        preencheLista(buscaProspect(listaProspect, query));
+                    }
+                }catch (NullPointerException e){
+                    Toast.makeText(ActivityListaProspect.this, "Não existem Prospects para consulta", Toast.LENGTH_SHORT).show();
                 }
+
                 return false;
             }
         });
