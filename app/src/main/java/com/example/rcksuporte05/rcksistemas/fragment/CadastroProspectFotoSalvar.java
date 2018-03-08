@@ -261,7 +261,7 @@ public class CadastroProspectFotoSalvar extends Fragment implements GoogleApiCli
                         ProspectHelper.getProspect().setUsuario_data(new SimpleDateFormat("dd/MM/yyyy")
                                                                     .format(new SimpleDateFormat("yyyy-MM-dd")
                                                                     .parse(db.pegaDataAtual())));
-                    } catch (ParseException e) {
+                    }catch (ParseException e) {
                         e.printStackTrace();
                     }
                     db.atualizarTBL_PROSPECT(ProspectHelper.getProspect());

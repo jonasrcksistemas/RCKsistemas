@@ -49,7 +49,6 @@
             android:id="@+id/recycleProspect"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@+id/edtTotalProspect"
             android:clipToPadding="false"
             android:paddingBottom="65dp" />
 
@@ -57,8 +56,8 @@
             android:id="@+id/btnAddProspect"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_above="@+id/edtTotalProspect"
             android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
             android:layout_gravity="end"
             android:layout_marginBottom="12dp"
             android:layout_marginEnd="12dp"
@@ -68,19 +67,23 @@
             android:gravity="center_horizontal|center_vertical"
             android:text="+"
             android:textColor="@color/colorPrimaryDark"
-            android:textSize="25sp" />
-
+            android:textSize="25sp"
+            android:layout_alignParentEnd="true" />
+    </RelativeLayout>
+    <LinearLayout
+        android:layout_weight="0"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
         <EditText
             android:id="@+id/edtTotalProspect"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
             android:layout_gravity="center"
             android:background="#dddfdd"
             android:focusable="false"
             android:gravity="end"
             android:text="total" />
+    </LinearLayout>
 
-    </RelativeLayout>
 </LinearLayout>
 

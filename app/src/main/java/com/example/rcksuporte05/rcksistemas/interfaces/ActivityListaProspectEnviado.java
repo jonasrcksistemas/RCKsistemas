@@ -14,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -42,6 +43,9 @@ public class ActivityListaProspectEnviado extends AppCompatActivity implements L
     @BindView(R.id.toolbarProspectEnviado)
     Toolbar toolbarProspectEnviado;
 
+    @BindView(R.id.edtTotalProspectEnviado)
+    EditText edtTotalProspectEnviado;
+
     ListaProspectEnviadoAdapter listaProspectEnviadoAdapter;
     private List<Prospect> listaProspect;
     @Override
@@ -64,7 +68,6 @@ public class ActivityListaProspectEnviado extends AppCompatActivity implements L
 
         setSupportActionBar(toolbarProspectEnviado);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
     }
 
     @Override
@@ -76,7 +79,6 @@ public class ActivityListaProspectEnviado extends AppCompatActivity implements L
         }
         return true;
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -118,7 +120,6 @@ public class ActivityListaProspectEnviado extends AppCompatActivity implements L
         return true;
     }
 
-
     @Override
     protected void onResume() {
         try {
@@ -136,6 +137,11 @@ public class ActivityListaProspectEnviado extends AppCompatActivity implements L
         recyclerProspectsEnviado.setAdapter(listaProspectEnviadoAdapter);
         recyclerProspectsEnviado.setVisibility(View.VISIBLE);
         listaProspectEnviadoAdapter.notifyDataSetChanged();
+        if(listaProspectEnviadoAdapter.getItemCount() > 0){
+            edtTotalProspectEnviado.setText(listaProspectEnviadoAdapter.getItemCount()+" : Prospects Enviados");
+        }else
+            edtTotalProspectEnviado.setText("Nem um Prospect Sincronizado");
+
     }
 
     @Override
@@ -144,7 +150,6 @@ public class ActivityListaProspectEnviado extends AppCompatActivity implements L
         Intent intent = new Intent(this,ActivityHistoricoVisitaProspect.class);
         startActivity(intent);
     }
-
 
     public List<Prospect> buscaProspect(List<Prospect> listaProspect, String query) {
         final String upperCaseQuery = query.toUpperCase();
