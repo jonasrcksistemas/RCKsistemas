@@ -479,6 +479,73 @@ public class ProspectHelper {
 
     }
 
+    public static boolean salvarParcial(){
+         /*
+        Esta variavel é usada para validar o movimento das frags, assim que movimenta, não movimenta outra frag
+         */
+        boolean verificaMovimento = true;
+
+        //Tela geral
+        if (prospect.getPessoa_f_j() == null || prospect.getPessoa_f_j().equals("")) {
+            if (verificaMovimento) {
+                verificaMovimento = false;
+                Toast.makeText(cadastroProspectGeral.getContext(), "Escolher Pessoa Fisica ou Juridica é obrigatorio", Toast.LENGTH_LONG).show();
+                moveTela(0);
+            }
+            cadastroProspectGeral.edtNomeClienteProspect.requestFocus();
+        }
+
+
+        if (prospect.getNome_cadastro() == null || prospect.getNome_cadastro().trim().equals("")) {
+            if (verificaMovimento) {
+                verificaMovimento = false;
+                moveTela(0);
+            }
+            cadastroProspectGeral.edtNomeClienteProspect.setError("Campo Obrigatorio");
+            cadastroProspectGeral.edtNomeClienteProspect.requestFocus();
+        }
+
+
+        if (prospect.getNome_fantasia() == null || prospect.getNome_fantasia().equals("")) {
+            if (verificaMovimento) {
+                verificaMovimento = false;
+                moveTela(0);
+            }
+            cadastroProspectGeral.edtNomeFantasiaProspect.setError("Campo Obrigatorio");
+            cadastroProspectGeral.edtNomeFantasiaProspect.requestFocus();
+        }
+
+
+        if (prospect.getCpf_cnpj() == null || prospect.getCpf_cnpj().equals("")) {
+            if (verificaMovimento) {
+                verificaMovimento = false;
+                moveTela(0);
+            }
+            cadastroProspectGeral.edtCpfCnpjProspect.setError("Campo Obrigatorio");
+            cadastroProspectGeral.edtCpfCnpjProspect.requestFocus();
+        }else if(prospect.getPessoa_f_j().equals("F")){
+            if(!MascaraUtil.isValidCPF(prospect.getCpf_cnpj())){
+                if (verificaMovimento) {
+                    verificaMovimento = false;
+                    moveTela(0);
+                }
+                cadastroProspectGeral.edtCpfCnpjProspect.setError("CPF invalido");
+                cadastroProspectGeral.edtCpfCnpjProspect.requestFocus();
+            }
+        }else if(prospect.getPessoa_f_j().equals("J")){
+            if (!MascaraUtil.isValidCNPJ(prospect.getCpf_cnpj())){
+                if (verificaMovimento) {
+                    verificaMovimento = false;
+                    moveTela(0);
+                }
+                cadastroProspectGeral.edtCpfCnpjProspect.setError("CNPJ invalido");
+                cadastroProspectGeral.edtCpfCnpjProspect.requestFocus();
+            }
+        }
+
+        return verificaMovimento;
+    }
+
     public static void clear() {
         prospect = null;
         segmentos = null;

@@ -227,19 +227,31 @@ public class CadastroProspectFotoSalvar extends Fragment implements GoogleApiCli
     @OnClick(R.id.btnSalvarParcial)
     public void salvarParcial() {
         insereDadosDaFrame();
-        AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
-        alert.setTitle("Atenção");
-        alert.setMessage("Tem certeza que deseja salvar esse prospect para continuar mais tarde?");
-        alert.setNegativeButton("NÃO", null);
-        alert.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                ProspectHelper.getProspect().setProspectSalvo("N");
-                db.atualizarTBL_PROSPECT(ProspectHelper.getProspect());
-                getActivity().finish();
-            }
-        });
-        alert.show();
+        if(ProspectHelper.salvarParcial()) {
+            AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+            alert.setTitle("Atenção");
+            alert.setMessage("Tem certeza que deseja salvar esse prospect para continuar mais tarde?");
+            alert.setNegativeButton("NÃO", null);
+            alert.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    ProspectHelper.getProspect().setProspectSalvo("N");
+                    ProspectHelper.getProspect().setIdEmpresa(UsuarioHelper.getUsuario().getIdEmpresaMultiDevice());
+                    ProspectHelper.getProspect().setUsuario_id(UsuarioHelper.getUsuario().getId_usuario());
+                    ProspectHelper.getProspect().setUsuario_nome(UsuarioHelper.getUsuario().getNome_usuario());
+                    try {
+                        ProspectHelper.getProspect().setUsuario_data(new SimpleDateFormat("dd/MM/yyyy")
+                                .format(new SimpleDateFormat("yyyy-MM-dd")
+                                        .parse(db.pegaDataAtual())));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    db.atualizarTBL_PROSPECT(ProspectHelper.getProspect());
+                    getActivity().finish();
+                }
+            });
+            alert.show();
+        }
     }
 
     @OnClick(R.id.btnSalvarProspect)
