@@ -55,12 +55,12 @@
                 android:textStyle="bold" />
 
             <EditText
-                android:inputType="text"
                 android:id="@+id/edtFuncaoResponsavelProspect"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/txtFuncaoResponsalveProspect"
                 android:background="@drawable/borda_edittext"
+                android:inputType="textCapCharacters"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
             <TextView

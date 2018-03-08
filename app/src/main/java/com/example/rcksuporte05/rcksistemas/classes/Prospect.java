@@ -36,6 +36,7 @@ public class Prospect {
     private String endereco_cep;
     private String id_pais;
     private String usuario_id;
+    private String usuario_data;
     private String situacaoPredio;
     private String limiteDeCreditoSugerido;
     private String limiteDePrazoSugerido;
@@ -48,6 +49,8 @@ public class Prospect {
     private String prospectSalvo;
     private String ind_da_ie_destinatario_prospect;
     private String usuario_nome;
+    public String latitude;
+    public String longitude;
 
     public String getId_prospect() {
         return id_prospect;
@@ -335,5 +338,29 @@ public class Prospect {
 
     public void setUsuario_nome(String usuario_nome) {
         this.usuario_nome = usuario_nome;
+    }
+
+    public String getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(String latitude) {
+        this.latitude = latitude;
+    }
+
+    public String getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(String longitude) {
+        this.longitude = longitude;
+    }
+
+    public String getUsuario_data() {
+        return usuario_data;
+    }
+
+    public void setUsuario_data(String usuario_data) {
+        this.usuario_data = usuario_data;
     }
 }

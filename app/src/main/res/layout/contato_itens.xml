@@ -10,7 +10,6 @@
        android:id="@+id/txtNomeResponsavelProspectlist"
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
-       android:text="Lucas"
        android:textSize="16sp"
        android:textStyle="bold"
        android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
@@ -22,7 +21,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/txtNomeResponsavelProspectlist"
-        android:text="Desenvolvedor "
         android:layout_alignStart="@+id/txtNomeResponsavelProspectlist"
         android:layout_alignLeft="@+id/txtNomeResponsavelProspectlist" />
 
@@ -36,7 +34,7 @@
         android:layout_alignParentRight="true"
         android:layout_marginEnd="10dp"
         android:layout_marginRight="10dp"
-        android:text="(67) 99944-3334" />
+         />
 
     <TextView
         android:id="@+id/txtEmailProspectLista"
@@ -48,7 +46,6 @@
         android:layout_alignParentRight="true"
         android:layout_marginEnd="10dp"
         android:layout_marginRight="10dp"
-        android:text="teste@gmail.com"
         />
 
 

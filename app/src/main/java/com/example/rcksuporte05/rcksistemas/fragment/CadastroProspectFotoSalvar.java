@@ -104,6 +104,7 @@ public class CadastroProspectFotoSalvar extends Fragment implements GoogleApiCli
     RespostaGeocoder respostaGeocoder;
     private FusedLocationProviderClient mFusedLocationClient;
     Location mLocation;
+    String checkin;
     ProgressDialog progress;
 
     @Nullable
@@ -127,6 +128,8 @@ public class CadastroProspectFotoSalvar extends Fragment implements GoogleApiCli
             edtDataRetorno.setFocusable(false);
             btnSalvarParcial.setVisibility(View.INVISIBLE);
             btnSalvarProspect.setVisibility(View.INVISIBLE);
+            imagemProspect1.setEnabled(false);
+            imagemProspect2.setEnabled(false);
 
         } else {
             edtDataRetorno.setOnClickListener(new View.OnClickListener() {
@@ -183,7 +186,7 @@ public class CadastroProspectFotoSalvar extends Fragment implements GoogleApiCli
                 byte[] data = Base64.decode(ProspectHelper.getProspect().getFotoPrincipalBase64(), Base64.NO_WRAP);
                 mImagem1 = BitmapFactory.decodeByteArray(data, 0, data.length);
                 ProspectHelper.setImagem1(mImagem1);
-                imagemProspect1.setImageBitmap(mImagem1);
+                imagemProspect1.setImageBitmap(Bitmap.createScaledBitmap(mImagem1, 220, 230, false));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -198,10 +201,25 @@ public class CadastroProspectFotoSalvar extends Fragment implements GoogleApiCli
                 byte[] data2 = Base64.decode(ProspectHelper.getProspect().getFotoSecundariaBase64(), Base64.NO_WRAP);
                 mImagem2 = BitmapFactory.decodeByteArray(data2, 0, data2.length);
                 ProspectHelper.setImagem2(mImagem2);
-                imagemProspect2.setImageBitmap(mImagem2);
+                imagemProspect2.setImageBitmap(Bitmap.createScaledBitmap(mImagem2, 220, 230, false));
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }
+
+        if(ProspectHelper.getCheckin() != null){
+            txtChekinEnderecoProspect.setVisibility(View.VISIBLE);
+            txtChekinEnderecoProspect.setText(ProspectHelper.getCheckin());
+        }else if(ProspectHelper.getLocalizacao() != null){
+            txtLatitudeProspect.setVisibility(View.VISIBLE);
+            txtLongitudeProspect.setVisibility(View.VISIBLE);
+            txtLatitudeProspect.setText(String.valueOf(ProspectHelper.getLocalizacao().getLatitude()));
+            txtLongitudeProspect.setText(String.valueOf(ProspectHelper.getLocalizacao().getLongitude()));
+        }else if(ProspectHelper.getProspect().getLatitude() != null && ProspectHelper.getProspect().getLongitude() != null){
+            txtLatitudeProspect.setVisibility(View.VISIBLE);
+            txtLongitudeProspect.setVisibility(View.VISIBLE);
+            txtLatitudeProspect.setText(ProspectHelper.getProspect().getLatitude());
+            txtLongitudeProspect.setText(ProspectHelper.getProspect().getLongitude());
         }
     }
 
@@ -239,6 +257,13 @@ public class CadastroProspectFotoSalvar extends Fragment implements GoogleApiCli
                     ProspectHelper.getProspect().setIdEmpresa(UsuarioHelper.getUsuario().getIdEmpresaMultiDevice());
                     ProspectHelper.getProspect().setUsuario_id(UsuarioHelper.getUsuario().getId_usuario());
                     ProspectHelper.getProspect().setUsuario_nome(UsuarioHelper.getUsuario().getNome_usuario());
+                    try {
+                        ProspectHelper.getProspect().setUsuario_data(new SimpleDateFormat("dd/MM/yyyy")
+                                                                    .format(new SimpleDateFormat("yyyy-MM-dd")
+                                                                    .parse(db.pegaDataAtual())));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
                     db.atualizarTBL_PROSPECT(ProspectHelper.getProspect());
                     getActivity().finish();
                 }
@@ -301,14 +326,16 @@ public class CadastroProspectFotoSalvar extends Fragment implements GoogleApiCli
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
+
                     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                    Bitmap testeDeDimuir = Bitmap.createScaledBitmap(bitmap, 220, 230, false);
                     boolean validaCompressao = bitmap.compress(Bitmap.CompressFormat.JPEG, 75, outputStream);
                     byte[] fotoBinario = outputStream.toByteArray();
 
                     mImagem1 = bitmap;
                     ProspectHelper.getProspect().setFotoPrincipalBase64(Base64.encodeToString(fotoBinario, Base64.NO_WRAP));
-                    ProspectHelper.setImagem1(bitmap);
-                    imagemProspect1.setImageBitmap(bitmap);
+                    ProspectHelper.setImagem1(testeDeDimuir);
+                    imagemProspect1.setImageBitmap(testeDeDimuir);
                 }
             }
         }else if(requestCode == REQUEST_CODE_IMAGEM_2){
@@ -319,24 +346,26 @@ public class CadastroProspectFotoSalvar extends Fragment implements GoogleApiCli
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
+
                 ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                Bitmap testeDeDimuir = Bitmap.createScaledBitmap(bitmap, 220, 230, false);
                 boolean validaCompressao = bitmap.compress(Bitmap.CompressFormat.JPEG, 75, outputStream);
                 byte[] fotoBinario = outputStream.toByteArray();
 
 
                 ProspectHelper.getProspect().setFotoSecundariaBase64(Base64.encodeToString(fotoBinario, Base64.NO_WRAP));
-                ProspectHelper.setImagem2(bitmap);
+                ProspectHelper.setImagem2(testeDeDimuir);
                 mImagem2 = bitmap;
-                imagemProspect2.setImageBitmap(bitmap);
+                imagemProspect2.setImageBitmap(testeDeDimuir);
             }
-        }else    if(requestCode == 1){
+        }else if(requestCode == 1){
             if(resultCode != 0){
                 Toast.makeText(getContext(), "Tente Novamente", Toast.LENGTH_LONG).show();
             }else {
                 Toast.makeText(getContext(), "Sem Localização ativa, recurso indisponível", Toast.LENGTH_LONG).show();
             }
-
         }
+
         super.onActivityResult(requestCode, resultCode, data);
     }
 
@@ -350,6 +379,7 @@ public class CadastroProspectFotoSalvar extends Fragment implements GoogleApiCli
                             //Tenho a última localização conhecida. Em algumas situações raras, isso pode ser nulo.
                             if (location != null) {
                                 mLocation = location;
+                                ProspectHelper.setLocalizacao(mLocation);
                                 getGeocoder();
                             }
                         }
@@ -369,6 +399,7 @@ public class CadastroProspectFotoSalvar extends Fragment implements GoogleApiCli
             public void onResponse(Call<RespostaGeocoder> call, Response<RespostaGeocoder> response) {
                 respostaGeocoder = response.body();
                 if(response.body().getResult().size() > 0) {
+                    ProspectHelper.setCheckin(respostaGeocoder.getResult().get(1).getFormattedAddress());
                     txtChekinEnderecoProspect.setVisibility(View.VISIBLE);
                     txtChekinEnderecoProspect.setText(respostaGeocoder.getResult().get(1).getFormattedAddress());
                 }else {

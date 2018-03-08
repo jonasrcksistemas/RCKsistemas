@@ -396,6 +396,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 "ID_PAIS INTEGER," +
                 "USUARIO_ID INTEGER," +
                 "USUARIO_NOME VARCHAR(60),"+
+                "USUARIO_DATA DATE," +
                 "SITUACAO_PREDIO VARCHAR(1)," +
                 "LIMITE_CREDITO_SUGERIDO DECIMAL(12,2)," +
                 "LIMITE_PRAZO_SUGERIDO DECIMAL(12,2)," +
@@ -405,7 +406,9 @@ public class DBHelper extends SQLiteOpenHelper {
                 "IND_DA_IE_DESTINATARIO_PROSPECT INTEGER, " +
                 "FOTO_PRINCIPAL_BASE64 BLOB," +
                 "FOTO_SECUNDARIA_BASE64 BLOB," +
-                "OBSERVACOES_COMERCIAIS VARCHAR(300), " +
+                "OBSERVACOES_COMERCIAIS VARCHAR(300)," +
+                "LATITUDE VARCHAR (60)," +
+                "LONGITUDE VARCHAR (60), " +
                 "PROSPECT_SALVO VARCHAR(1) DEFAULT 'N');");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS TBL_SEGMENTO" +
@@ -520,6 +523,7 @@ public class DBHelper extends SQLiteOpenHelper {
                     "ID_PAIS INTEGER," +
                     "USUARIO_ID INTEGER," +
                     "USUARIO_NOME VARCHAR(60)," +
+                    "USUARIO_DATA DATE," +
                     "SITUACAO_PREDIO VARCHAR(1)," +
                     "LIMITE_CREDITO_SUGERIDO DECIMAL(12,2)," +
                     "LIMITE_PRAZO_SUGERIDO DECIMAL(12,2)," +
@@ -529,7 +533,9 @@ public class DBHelper extends SQLiteOpenHelper {
                     "IND_DA_IE_DESTINATARIO_PROSPECT INTEGER, " +
                     "FOTO_PRINCIPAL_BASE64 BLOB," +
                     "FOTO_SECUNDARIA_BASE64 BLOB," +
-                    "OBSERVACOES_COMERCIAIS VARCHAR(300), " +
+                    "OBSERVACOES_COMERCIAIS VARCHAR(300)," +
+                    "LATITUDE VARCHAR (60), " +
+                    "LONGITUDE VARCHAR (60), " +
                     "PROSPECT_SALVO VARCHAR(1) DEFAULT 'N');");
 
             db.execSQL("CREATE TABLE IF NOT EXISTS TBL_SEGMENTO" +
@@ -686,6 +692,9 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("FOTO_SECUNDARIA_BASE64", prospect.getFotoSecundariaBase64());
         content.put("PROSPECT_SALVO", prospect.getProspectSalvo());
         content.put("IND_DA_IE_DESTINATARIO_PROSPECT", prospect.getInd_da_ie_destinatario_prospect());
+        content.put("LATITUDE", prospect.getLatitude());
+        content.put("LONGITUDE", prospect.getLongitude());
+        content.put("USUARIO_DATA", prospect.getUsuario_data());
 
         if (prospect.getId_prospect() != null && contagem("SELECT COUNT(ID_PROSPECT) FROM TBL_PROSPECT WHERE ID_PROSPECT = " + prospect.getId_prospect()) > 0) {
             content.put("ID_PROSPECT", prospect.getId_prospect());
@@ -785,6 +794,9 @@ public class DBHelper extends SQLiteOpenHelper {
             prospect.setObservacoesComerciais(cursor.getString(cursor.getColumnIndex("OBSERVACOES_COMERCIAIS")));
             prospect.setProspectSalvo(cursor.getString(cursor.getColumnIndex("PROSPECT_SALVO")));
             prospect.setInd_da_ie_destinatario_prospect(cursor.getString(cursor.getColumnIndex("IND_DA_IE_DESTINATARIO_PROSPECT")));
+            prospect.setLongitude(cursor.getString(cursor.getColumnIndex("LONGITUDE")));
+            prospect.setLatitude(cursor.getString(cursor.getColumnIndex("LATITUDE")));
+            prospect.setUsuario_data(cursor.getString(cursor.getColumnIndex("USUARIO_DATA")));
 
             listaProspect.add(prospect);
         } while (cursor.moveToNext());
@@ -856,6 +868,7 @@ public class DBHelper extends SQLiteOpenHelper {
             prospect.setObservacoesComerciais(cursor.getString(cursor.getColumnIndex("OBSERVACOES_COMERCIAIS")));
             prospect.setProspectSalvo(cursor.getString(cursor.getColumnIndex("PROSPECT_SALVO")));
             prospect.setInd_da_ie_destinatario_prospect(cursor.getString(cursor.getColumnIndex("IND_DA_IE_DESTINATARIO_PROSPECT")));
+            prospect.setUsuario_data(cursor.getString(cursor.getColumnIndex("USUARIO_DATA")));
 
             return prospect;
         } while (cursor.moveToNext());

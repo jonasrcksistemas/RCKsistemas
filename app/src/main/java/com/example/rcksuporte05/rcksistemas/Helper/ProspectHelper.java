@@ -1,6 +1,7 @@
 package com.example.rcksuporte05.rcksistemas.Helper;
 
 import android.graphics.Bitmap;
+import android.location.Location;
 import android.support.v4.view.ViewPager;
 import android.widget.Toast;
 
@@ -49,6 +50,8 @@ public class ProspectHelper {
     private static int posicaoMunicipio = -1;
     public static Bitmap imagem1;
     public static Bitmap imagem2;
+    public static String checkin;
+    public static Location localizacao;
 
 
     public static Prospect getProspect() {
@@ -185,6 +188,22 @@ public class ProspectHelper {
 
     public static void setPosicaoMunicipio(int posicaoMunicipio) {
         ProspectHelper.posicaoMunicipio = posicaoMunicipio;
+    }
+
+    public static String getCheckin() {
+        return checkin;
+    }
+
+    public static void setCheckin(String checkin) {
+        ProspectHelper.checkin = checkin;
+    }
+
+    public static Location getLocalizacao() {
+        return localizacao;
+    }
+
+    public static void setLocalizacao(Location localizacao) {
+        ProspectHelper.localizacao = localizacao;
     }
 
     public static void moveTela(int position) {
@@ -422,16 +441,37 @@ public class ProspectHelper {
         }
 
         if(verificaMovimento){
-            if(prospect.getFotoPrincipalBase64() == null || prospect.getFotoSecundariaBase64().trim().isEmpty()){
+            try {
+                if(prospect.getFotoPrincipalBase64().trim().isEmpty()){
+                    Toast.makeText(activityMain, "Foto 1 obrigatoria",Toast.LENGTH_LONG).show();
+                    verificaMovimento = false;
+                }
+            }catch (Exception e){
                 Toast.makeText(activityMain, "Foto 1 obrigatoria",Toast.LENGTH_LONG).show();
+                verificaMovimento = false;
+            }
+
+        }
+
+        if(verificaMovimento){
+            try {
+                if(prospect.getFotoSecundariaBase64().trim().isEmpty()){
+                    Toast.makeText(activityMain, "Foto 2 obrigatoria",Toast.LENGTH_LONG).show();
+                    verificaMovimento = false;
+                }
+            }catch (Exception e){
+                Toast.makeText(activityMain, "Foto 2 obrigatoria",Toast.LENGTH_LONG).show();
                 verificaMovimento = false;
             }
         }
 
         if(verificaMovimento){
-            if(prospect.getFotoSecundariaBase64() == null || prospect.getFotoSecundariaBase64().trim().isEmpty()){
-                Toast.makeText(activityMain, "Foto 2 obrigatoria",Toast.LENGTH_LONG).show();
+            if(localizacao == null){
+                Toast.makeText(activityMain, "Fazer Check-in é obrigatório",Toast.LENGTH_LONG).show();
                 verificaMovimento = false;
+            }else {
+                prospect.setLatitude(String.valueOf(localizacao.getLatitude()));
+                prospect.setLongitude(String.valueOf(localizacao.getLongitude()));
             }
         }
 
@@ -456,6 +496,8 @@ public class ProspectHelper {
         posicaoMunicipio = -1;
         imagem1 = null;
         imagem2 = null;
+        localizacao = null;
+        checkin = null;
         System.gc();
     }
 }
