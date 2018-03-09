@@ -63,6 +63,7 @@ public class ActivityListaProspectEnviado extends AppCompatActivity implements L
             preencheLista(listaProspect);
         } catch (CursorIndexOutOfBoundsException e) {
             e.printStackTrace();
+            edtTotalProspectEnviado.setText(0+" : Prospects Enviados");
             recyclerProspectsEnviado.setVisibility(View.INVISIBLE);
         }
 
