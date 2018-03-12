@@ -100,6 +100,8 @@ public class CadastroProspectFotoSalvar extends Fragment implements GoogleApiCli
     static int REQUEST_CODE_IMAGEM_2 = 987;
     Bitmap mImagem1;
     Bitmap mImagem2;
+    String latitude;
+    String longitude;
 
     RespostaGeocoder respostaGeocoder;
     private FusedLocationProviderClient mFusedLocationClient;
@@ -213,13 +215,18 @@ public class CadastroProspectFotoSalvar extends Fragment implements GoogleApiCli
         }else if(ProspectHelper.getLocalizacao() != null){
             txtLatitudeProspect.setVisibility(View.VISIBLE);
             txtLongitudeProspect.setVisibility(View.VISIBLE);
-            txtLatitudeProspect.setText(String.valueOf(ProspectHelper.getLocalizacao().getLatitude()));
-            txtLongitudeProspect.setText(String.valueOf(ProspectHelper.getLocalizacao().getLongitude()));
+            mLocation = ProspectHelper.getLocalizacao();
+            progress = new ProgressDialog(getContext());
+            progress.setMessage("Requisitando Endereço");
+            progress.setTitle("Aguarde");
+            progress.show();
+            getGeocoder();
         }else if(ProspectHelper.getProspect().getLatitude() != null && ProspectHelper.getProspect().getLongitude() != null){
-            txtLatitudeProspect.setVisibility(View.VISIBLE);
-            txtLongitudeProspect.setVisibility(View.VISIBLE);
-            txtLatitudeProspect.setText(ProspectHelper.getProspect().getLatitude());
-            txtLongitudeProspect.setText(ProspectHelper.getProspect().getLongitude());
+            progress = new ProgressDialog(getContext());
+            progress.setMessage("Requisitando Endereço");
+            progress.setTitle("Aguarde");
+            progress.show();
+            getGeocoder();
         }
     }
 
@@ -404,7 +411,13 @@ public class CadastroProspectFotoSalvar extends Fragment implements GoogleApiCli
 
     public void getGeocoder(){
         Rotas rotas = ApiGeocoder.buildRetrofit();
-        Call<RespostaGeocoder> call = rotas.getGeocoder(String.valueOf(mLocation.getLatitude())+","+String.valueOf(mLocation.getLongitude()), true, "pt-BR");
+        Call<RespostaGeocoder> call;
+
+        if(mLocation != null){
+             call = rotas.getGeocoder(String.valueOf(mLocation.getLatitude())+","+String.valueOf(mLocation.getLongitude()), true, "pt-BR");
+        }else{
+             call = rotas.getGeocoder(ProspectHelper.getProspect().getLatitude()+","+ProspectHelper.getProspect().getLongitude(), true, "pt-BR");
+        }
 
         call.enqueue(new Callback<RespostaGeocoder>() {
             @Override
@@ -417,8 +430,13 @@ public class CadastroProspectFotoSalvar extends Fragment implements GoogleApiCli
                 }else {
                     txtLatitudeProspect.setVisibility(View.VISIBLE);
                     txtLongitudeProspect.setVisibility(View.VISIBLE);
-                    txtLatitudeProspect.setText(String.valueOf(mLocation.getLatitude()));
-                    txtLongitudeProspect.setText(String.valueOf(mLocation.getLongitude()));
+                    if(mLocation != null){
+                        txtLatitudeProspect.setText(String.valueOf(mLocation.getLatitude()));
+                        txtLongitudeProspect.setText(String.valueOf(mLocation.getLongitude()));
+                    }else {
+                        txtLatitudeProspect.setText(ProspectHelper.getProspect().getLatitude());
+                        txtLongitudeProspect.setText(ProspectHelper.getProspect().getLongitude());
+                    }
                     Toast.makeText(getContext(),"Endereço não encontrado! somente latitude e longitude", Toast.LENGTH_LONG).show();
                 }
                 progress.dismiss();
@@ -428,6 +446,8 @@ public class CadastroProspectFotoSalvar extends Fragment implements GoogleApiCli
             public void onFailure(Call<RespostaGeocoder> call, Throwable t) {
                 progress.dismiss();
                 Toast.makeText(getContext(),"Falha ao requisitar", Toast.LENGTH_LONG).show();
+                txtLatitudeProspect.setText(ProspectHelper.getProspect().getLatitude());
+                txtLongitudeProspect.setText(ProspectHelper.getProspect().getLongitude());
             }
         });
     }

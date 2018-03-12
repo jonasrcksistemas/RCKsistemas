@@ -265,10 +265,11 @@ public class ActivityVisita extends AppCompatActivity implements GoogleApiClient
         }
 
         if(VisitaHelper.getVisitaProspect().getLatitude() != null && VisitaHelper.getVisitaProspect().getLongitude() != null){
-            txtLongitude.setText(VisitaHelper.getVisitaProspect().getLongitude());
-            txtLatitude.setText(VisitaHelper.getVisitaProspect().getLatitude());
-            txtLatitude.setVisibility(View.VISIBLE);
-            txtLongitude.setVisibility(View.VISIBLE);
+            progress = new ProgressDialog(ActivityVisita.this);
+            progress.setMessage("Requisitando Endereço");
+            progress.setTitle("Aguarde");
+            progress.show();
+            getGeocoder();
         }
 
         if(VisitaHelper.getVisitaProspect().getTipoContato() != null && VisitaHelper.getVisitaProspect().getTipoContato().equals(tipoVisita[0])){
@@ -281,7 +282,13 @@ public class ActivityVisita extends AppCompatActivity implements GoogleApiClient
 
     public void getGeocoder(){
         Rotas rotas = ApiGeocoder.buildRetrofit();
-        Call<RespostaGeocoder> call = rotas.getGeocoder(String.valueOf(mLocation.getLatitude())+","+String.valueOf(mLocation.getLongitude()), true, "pt-BR");
+        Call<RespostaGeocoder> call;
+        if(mLocation != null){
+            call = rotas.getGeocoder(String.valueOf(mLocation.getLatitude())+","+String.valueOf(mLocation.getLongitude()), true, "pt-BR");
+        }else {
+            call = rotas.getGeocoder(VisitaHelper.getVisitaProspect().getLatitude()+","+VisitaHelper.getVisitaProspect().getLongitude(), true, "pt-BR");
+        }
+
 
         call.enqueue(new Callback<RespostaGeocoder>() {
             @Override
