@@ -16,6 +16,7 @@
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
         android:minHeight="?attr/actionBarSize"
+        app:subtitleTextAppearance="@style/subtitlePrincipal"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         tools:context=".interfaces.PrincipalActivity" />
 
@@ -131,7 +132,7 @@
                 android:layout_width="112dp"
                 android:layout_height="112dp"
                 android:layout_gravity="center_horizontal"
-                android:background="@mipmap/ic_prospect_lista"
+                android:background="@mipmap/ic_add_prospect"
                 android:scaleType="centerCrop" />
 
         </LinearLayout>
@@ -148,7 +149,7 @@
                 android:layout_width="112dp"
                 android:layout_height="112dp"
                 android:layout_gravity="center"
-                android:background="@mipmap/ic_prospect_lista"
+                android:background="@mipmap/ic_acompanhaneto_propect"
                 android:scaleType="centerCrop" />
 
         </LinearLayout>

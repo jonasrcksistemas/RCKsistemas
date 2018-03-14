@@ -154,4 +154,9 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="subtitlePrincipal">
+        <item name="android:textColor">@color/branco</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
 </resources>
