@@ -302,6 +302,7 @@ public class CadastroProspectFotoSalvar extends Fragment implements GoogleApiCli
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
         startActivityForResult(Intent.createChooser(intent, "Selecione uma imagem"), REQUEST_CODE_IMAGEM_2);
     }
+
     @OnClick(R.id.btnCheckinVisitaProspect)
     public void checkin(){
         progress = new ProgressDialog(getContext());
