@@ -123,20 +123,22 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
             startActivity(intent);
         } else if (view == btnPedidos) {
             getUsuarios();
-            Intent intent = new Intent(PrincipalActivity.this, ActivityPedidoMain.class);
-
-            startActivity(intent);
+//            Intent intent = new Intent(PrincipalActivity.this, ActivityPedidoMain.class);
+//            startActivity(intent);
+            Toast.makeText(this, "Novas Politicas de Vendas, função temporariamente inativa", Toast.LENGTH_SHORT).show();
         } else if (view == btnSincroniza) {
             getUsuarios();
             Intent intent = new Intent(PrincipalActivity.this, ActivityDialogSincronia.class);
             SincroniaBO.setActivity(PrincipalActivity.this);
             startActivity(intent);
         } else if (view == btnPedidoFinalizado) {
-            Intent telaPedidoEnviado = new Intent(PrincipalActivity.this, ListagemPedidoEnviado.class);
-            startActivity(telaPedidoEnviado);
+//            Intent telaPedidoEnviado = new Intent(PrincipalActivity.this, ListagemPedidoEnviado.class);
+//            startActivity(telaPedidoEnviado);
+            Toast.makeText(this, "Novas Politicas de Vendas, função temporariamente inativa", Toast.LENGTH_SHORT).show();
         } else if (view == btnPedidoPendente) {
-            Intent telaPedidoPendentes = new Intent(PrincipalActivity.this, ListagemPedidoPendente.class);
-            startActivity(telaPedidoPendentes);
+//            Intent telaPedidoPendentes = new Intent(PrincipalActivity.this, ListagemPedidoPendente.class);
+//            startActivity(telaPedidoPendentes);
+            Toast.makeText(this, "Novas Politicas de Vendas, função temporariamente inativa", Toast.LENGTH_SHORT).show();
         } else if (view == btnProspectNovo) {
             getUsuarios();
             Intent intent = new Intent(PrincipalActivity.this, ActivityListaProspect.class);

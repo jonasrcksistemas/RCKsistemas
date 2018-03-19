@@ -367,13 +367,15 @@ public class ProspectHelper {
                 moveTela(3);
             }
         } else if (prospect.getSegmento().getNomeSetor().toLowerCase().contains("outros")) {
-            if(verificaMovimento){
-                verificaMovimento = false;
-                Toast.makeText(activityMain, "Observação obrigatorio quando opção Outros selecionada", Toast.LENGTH_LONG).show();
-                moveTela(3);
+            if (prospect.getSegmento().getDescricaoOutros() == null || prospect.getSegmento().getDescricaoOutros().equals("")) {
+                if (verificaMovimento) {
+                    verificaMovimento = false;
+                    Toast.makeText(activityMain, "Observação obrigatorio quando opção Outros selecionada", Toast.LENGTH_LONG).show();
+                    moveTela(3);
+                }
+                cadastroProspectSegmentos.edtOutrosSegmentosProspect.setError("Observação obrigatorio quando opção Outros selecionada");
+                cadastroProspectSegmentos.edtOutrosSegmentosProspect.requestFocus();
             }
-            cadastroProspectSegmentos.edtOutrosSegmentosProspect.setError("Observação obrigatorio quando opção Outros selecionada");
-            cadastroProspectSegmentos.edtOutrosSegmentosProspect.requestFocus();
         }
 
 

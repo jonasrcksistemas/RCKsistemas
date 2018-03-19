@@ -409,6 +409,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 "OBSERVACOES_COMERCIAIS VARCHAR(300)," +
                 "LATITUDE VARCHAR (60)," +
                 "LONGITUDE VARCHAR (60), " +
+                "DESCRICAO_SEGMENTO VARCHAR(300)," +
+                "DESCRICAO_MOTIVO_NAO_CAD VARCHAR(300)," +
                 "PROSPECT_SALVO VARCHAR(1) DEFAULT 'N');");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS TBL_SEGMENTO" +
@@ -536,6 +538,8 @@ public class DBHelper extends SQLiteOpenHelper {
                     "OBSERVACOES_COMERCIAIS VARCHAR(300)," +
                     "LATITUDE VARCHAR (60), " +
                     "LONGITUDE VARCHAR (60), " +
+                    "DESCRICAO_SEGMENTO VARCHAR(300)," +
+                    "DESCRICAO_MOTIVO_NAO_CAD VARCHAR(300)," +
                     "PROSPECT_SALVO VARCHAR(1) DEFAULT 'N');");
 
             db.execSQL("CREATE TABLE IF NOT EXISTS TBL_SEGMENTO" +
@@ -695,6 +699,9 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("LATITUDE", prospect.getLatitude());
         content.put("LONGITUDE", prospect.getLongitude());
         content.put("USUARIO_DATA", prospect.getUsuario_data());
+        content.put("DESCRICAO_SEGMENTO", prospect.getSegmento().getDescricaoOutros());
+        content.put("DESCRICAO_MOTIVO_NAO_CAD", prospect.getMotivoNaoCadastramento().getDescricaoOutros());
+
 
         if (prospect.getId_prospect() != null && contagem("SELECT COUNT(ID_PROSPECT) FROM TBL_PROSPECT WHERE ID_PROSPECT = " + prospect.getId_prospect()) > 0) {
             content.put("ID_PROSPECT", prospect.getId_prospect());
@@ -743,12 +750,21 @@ public class DBHelper extends SQLiteOpenHelper {
                 prospect.setId_prospect(cursor.getString(cursor.getColumnIndex("ID_PROSPECT")));
                 prospect.setId_prospect_servidor(cursor.getString(cursor.getColumnIndex("ID_PROSPECT_SERVIDOR")));
                 prospect.setId_cadastro(cursor.getString(cursor.getColumnIndex("ID_CADASTRO")));
-                prospect.setSegmento(listaSegmento(cursor.getString(cursor.getColumnIndex("ID_SEGMENTO"))));
+
             } catch (CursorIndexOutOfBoundsException e) {
                 e.printStackTrace();
             }
             try {
+                prospect.setSegmento(listaSegmento(cursor.getString(cursor.getColumnIndex("ID_SEGMENTO"))));
+                prospect.getSegmento().setDescricaoOutros(cursor.getString(cursor.getColumnIndex("DESCRICAO_SEGMENTO")));
+            } catch (CursorIndexOutOfBoundsException e) {
+                e.printStackTrace();
+            }
+
+
+            try {
                 prospect.setMotivoNaoCadastramento(listaMotivoNaoCadastramento(cursor.getString(cursor.getColumnIndex("ID_MOTIVO_NAO_CADASTRAMENTO"))));
+                prospect.getMotivoNaoCadastramento().setDescricaoOutros(cursor.getString(cursor.getColumnIndex("DESCRICAO_MOTIVO_NAO_CAD")));
             } catch (CursorIndexOutOfBoundsException e) {
                 e.printStackTrace();
             }
@@ -818,12 +834,22 @@ public class DBHelper extends SQLiteOpenHelper {
                 prospect.setId_prospect(cursor.getString(cursor.getColumnIndex("ID_PROSPECT")));
                 prospect.setId_prospect_servidor(cursor.getString(cursor.getColumnIndex("ID_PROSPECT_SERVIDOR")));
                 prospect.setId_cadastro(cursor.getString(cursor.getColumnIndex("ID_CADASTRO")));
-                prospect.setSegmento(listaSegmento(cursor.getString(cursor.getColumnIndex("ID_SEGMENTO"))));
+
+
             } catch (CursorIndexOutOfBoundsException e) {
                 e.printStackTrace();
             }
+
+            try {
+                prospect.setSegmento(listaSegmento(cursor.getString(cursor.getColumnIndex("ID_SEGMENTO"))));
+                prospect.getSegmento().setDescricaoOutros(cursor.getString(cursor.getColumnIndex("DESCRICAO_SEGMENTO")));
+            } catch (CursorIndexOutOfBoundsException e) {
+                e.printStackTrace();
+            }
+
             try {
                 prospect.setMotivoNaoCadastramento(listaMotivoNaoCadastramento(cursor.getString(cursor.getColumnIndex("ID_MOTIVO_NAO_CADASTRAMENTO"))));
+                prospect.getMotivoNaoCadastramento().setDescricaoOutros(cursor.getString(cursor.getColumnIndex("DESCRICAO_MOTIVO_NAO_CAD")));
             } catch (CursorIndexOutOfBoundsException e) {
                 e.printStackTrace();
             }

@@ -42,7 +42,7 @@ public class CadastroProspectSegmentos extends Fragment implements SegmentoAdapt
 
         recyclerSegmentos.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerSegmentos.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayout.VERTICAL));
-        edtOutrosSegmentosProspect.setEnabled(false);
+
 
         preencheRecycler();
         insereDadosNaTela();
@@ -63,8 +63,7 @@ public class CadastroProspectSegmentos extends Fragment implements SegmentoAdapt
 
         if(ProspectHelper.getProspect().getSegmento() != null){
             segmentoAdapter.marcarSelecionado(ProspectHelper.getProspect().getSegmento());
-            if(ProspectHelper.getProspect().getSegmento().getDescricaoOutros() != null && ProspectHelper.getProspect().getSegmento().getDescricaoOutros().equals("")){
-                edtOutrosSegmentosProspect.setEnabled(true);
+            if(ProspectHelper.getProspect().getSegmento().getDescricaoOutros() != null && !ProspectHelper.getProspect().getSegmento().getDescricaoOutros().equals("")){
                 edtOutrosSegmentosProspect.setText(ProspectHelper.getProspect().getSegmento().getDescricaoOutros());
             }
         }

@@ -40,7 +40,6 @@ public class CadastroProspectMotivos extends Fragment implements MotivoAdapter.M
         ButterKnife.bind(this,view);
         recyclerMotivos.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerMotivos.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayout.VERTICAL));
-        edtOutrosMotivosProspect.setEnabled(false);
 
         preencheRecycler();
         insereDadosNaTela();
@@ -57,12 +56,11 @@ public class CadastroProspectMotivos extends Fragment implements MotivoAdapter.M
     public void insereDadosNaTela(){
         if(ProspectHelper.getProspect().getMotivoNaoCadastramento() != null){
             motivoAdapter.marcarSelecionado(ProspectHelper.getProspect().getMotivoNaoCadastramento());
+            if(ProspectHelper.getProspect().getMotivoNaoCadastramento().getDescricaoOutros() != null){
+                edtOutrosMotivosProspect.setText(ProspectHelper.getProspect().getMotivoNaoCadastramento().getDescricaoOutros());
+            }
         }
 
-        if(ProspectHelper.getProspect().getObservacoesComerciais() != null){
-            edtOutrosMotivosProspect.setEnabled(true);
-            edtOutrosMotivosProspect.setText(ProspectHelper.getProspect().getObservacoesComerciais());
-        }
 
     }
 
