@@ -48,6 +48,7 @@ public class ActivityListaProspectEnviado extends AppCompatActivity implements L
 
     ListaProspectEnviadoAdapter listaProspectEnviadoAdapter;
     private List<Prospect> listaProspect;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -276,13 +276,8 @@ public class CadastroProspectFotoSalvar extends Fragment implements GoogleApiCli
                     ProspectHelper.getProspect().setIdEmpresa(UsuarioHelper.getUsuario().getIdEmpresaMultiDevice());
                     ProspectHelper.getProspect().setUsuario_id(UsuarioHelper.getUsuario().getId_usuario());
                     ProspectHelper.getProspect().setUsuario_nome(UsuarioHelper.getUsuario().getNome_usuario());
-                    try {
-                        ProspectHelper.getProspect().setUsuario_data(new SimpleDateFormat("dd/MM/yyyy")
-                                                                    .format(new SimpleDateFormat("yyyy-MM-dd")
-                                                                    .parse(db.pegaDataAtual())));
-                    }catch (ParseException e) {
-                        e.printStackTrace();
-                    }
+                    ProspectHelper.getProspect().setUsuario_data(db.pegaDataAtual());
+
                     db.atualizarTBL_PROSPECT(ProspectHelper.getProspect());
                     getActivity().finish();
                 }

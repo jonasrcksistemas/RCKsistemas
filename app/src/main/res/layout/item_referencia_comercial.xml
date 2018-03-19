@@ -3,14 +3,13 @@
     android:id="@+id/rlItemReferenciaComercial"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="45dp">
+    android:layout_height="65dp">
 
     <TextView
         android:id="@+id/txtNomeFornecedorProspectlist"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="16sp"
-        android:text="Coca Cola FEMSA"
         android:textStyle="bold"
         android:textColor="@color/colorAccent"
         android:layout_margin="8dp"
@@ -21,9 +20,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_alignBaseline="@+id/txtNomeFornecedorProspectlist"
-        android:layout_marginRight="23dp"
-        android:text="3733-4516"
+        android:layout_marginRight="5dp"
+        android:layout_below="@+id/txtNomeFornecedorProspectlist"
         />
 
 </RelativeLayout>

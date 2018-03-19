@@ -1,5 +1,6 @@
 package com.example.rcksuporte05.rcksistemas.interfaces;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.CursorIndexOutOfBoundsException;
@@ -25,17 +26,26 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.rcksuporte05.rcksistemas.Helper.ProspectHelper;
+import com.example.rcksuporte05.rcksistemas.Helper.UsuarioHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.ListaProspectAdapter;
+import com.example.rcksuporte05.rcksistemas.api.Api;
+import com.example.rcksuporte05.rcksistemas.api.Rotas;
 import com.example.rcksuporte05.rcksistemas.classes.Prospect;
 import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 
 public class ActivityListaProspect extends AppCompatActivity {
 
@@ -55,6 +65,8 @@ public class ActivityListaProspect extends AppCompatActivity {
     private ListaProspectAdapter listaProspectAdapter;
     private ActionMode actionMode;
     private List<Prospect> listaProspect;
+    private DBHelper db;
+    private ProgressDialog progress;
 
     @OnClick(R.id.btnAddProspect)
     public void novoProspect() {
@@ -70,6 +82,7 @@ public class ActivityListaProspect extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista_prospect);
         ButterKnife.bind(this);
+        db = new DBHelper(this);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.spinner, prospectLista);
         adapter.setDropDownViewResource(R.layout.drop_down_spinner);
@@ -84,7 +97,6 @@ public class ActivityListaProspect extends AppCompatActivity {
                     preencheLista(listaProspect);
                 } catch (CursorIndexOutOfBoundsException e) {
                     e.printStackTrace();
-                    recycleProspect.setVisibility(View.INVISIBLE);
                     edtTotalProspect.setText("0: Prospects Listados");
                 }
             }
@@ -96,6 +108,8 @@ public class ActivityListaProspect extends AppCompatActivity {
         });
 
         recycleProspect.addItemDecoration(new DividerItemDecoration(this, LinearLayout.VERTICAL));
+        recycleProspect.setLayoutManager(new LinearLayoutManager(this));
+
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -152,8 +166,6 @@ public class ActivityListaProspect extends AppCompatActivity {
     }
 
     public void preencheLista(final List<Prospect> lista) {
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        recycleProspect.setLayoutManager(layoutManager);
         listaProspectAdapter = new ListaProspectAdapter(lista, new ListaProspectAdapter.ProspectAdapterListener() {
             @Override
             public void onProspectRowClicked(int position) {
@@ -172,7 +184,6 @@ public class ActivityListaProspect extends AppCompatActivity {
             }
         });
         recycleProspect.setAdapter(listaProspectAdapter);
-        recycleProspect.setVisibility(View.VISIBLE);
         edtTotalProspect.setText(lista.size() + ": Prospects Listados");
     }
 
@@ -223,15 +234,8 @@ public class ActivityListaProspect extends AppCompatActivity {
     }
 
     @Override
-    protected void onResume() {
-        try {
-            DBHelper db = new DBHelper(this);
-            listaProspect = db.listaProspect(spFiltraProspect.getSelectedItemPosition());
-            preencheLista(listaProspect);
-        } catch (CursorIndexOutOfBoundsException e) {
-            e.printStackTrace();
-            edtTotalProspect.setText("0: Prospects Listados");
-        }
+    public void onResume() {
+        atualizaTela();
         super.onResume();
     }
 
@@ -279,10 +283,12 @@ public class ActivityListaProspect extends AppCompatActivity {
                                 alert.show();
                                 break;
                             case R.id.uploadFoto:
-                                Toast.makeText(ActivityListaProspect.this, "Enviando prospects ao servidor", Toast.LENGTH_SHORT).show();
-                                actionMode.finish();
-                                listaProspectAdapter.clearSelections();
-                                actionMode = null;
+                                progress = new ProgressDialog(ActivityListaProspect.this);
+                                progress.setMessage("Enviando Prospects");
+                                progress.setTitle("Aguarde");
+                                progress.show();
+                                List<Prospect> listaEnvio = listaProspectAdapter.getItensSelecionados();
+                                enviarProspects(listaEnvio);
                                 break;
                         }
                         return true;
@@ -310,6 +316,53 @@ public class ActivityListaProspect extends AppCompatActivity {
         } else {
             actionMode.setTitle(String.valueOf(listaProspectAdapter.getItensSelecionadosCount()));
             actionMode.invalidate();
+        }
+    }
+
+    public void enviarProspects(List<Prospect> prospectsEnvio){
+        Rotas apiRetrofit = Api.buildRetrofit();
+
+        Map<String, String> cabecalho = new HashMap<>();
+        cabecalho.put("AUTHORIZATION", UsuarioHelper.getUsuario().getToken());
+
+        Call<List<Prospect>> call = apiRetrofit.salvarProspect(cabecalho,prospectsEnvio);
+
+        call.enqueue(new Callback<List<Prospect>>() {
+            @Override
+            public void onResponse(Call<List<Prospect>> call, Response<List<Prospect>> response) {
+                List<Prospect> prospectsRetorno = response.body();
+                if(prospectsRetorno != null && prospectsRetorno.size() > 0){
+                    for (Prospect prospect : prospectsRetorno) {
+                        db.atualizarTBL_PROSPECT(prospect);
+                    }
+                    listaProspectAdapter.clearSelections();
+                    actionMode.finish();
+                    actionMode = null;
+                    progress.dismiss();
+                    Toast.makeText(ActivityListaProspect.this, "Enviado com sucesso", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Prospect>> call, Throwable t) {
+                Toast.makeText(ActivityListaProspect.this, "Falhou tente novamente, ou entre em contato com o suporte", Toast.LENGTH_SHORT).show();
+                listaProspectAdapter.clearSelections();
+                progress.dismiss();
+            }
+        });
+
+    }
+
+
+    public void atualizaTela(){
+        try {
+            DBHelper db = new DBHelper(this);
+            listaProspect = db.listaProspect(spFiltraProspect.getSelectedItemPosition());
+            preencheLista(listaProspect);
+        } catch (CursorIndexOutOfBoundsException e) {
+            e.printStackTrace();
+            edtTotalProspect.setText("0: Prospects Listados");
         }
     }
 }

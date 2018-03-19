@@ -51,6 +51,7 @@
                 android:layout_width="112dp"
                 android:layout_height="112dp"
                 android:layout_gravity="center"
+                android:enabled="false"
                 android:background="@mipmap/ic_pedidos" />
 
         </LinearLayout>
@@ -91,6 +92,7 @@
                 android:layout_width="112dp"
                 android:layout_height="112dp"
                 android:layout_gravity="center"
+                android:enabled="false"
                 android:background="@mipmap/ic_pedido_pendente" />
 
         </LinearLayout>
@@ -107,6 +109,7 @@
                 android:layout_width="112dp"
                 android:layout_height="112dp"
                 android:layout_gravity="center"
+                android:enabled="false"
                 android:background="@mipmap/ic_pedido_finalizado"
                 android:scaleType="centerCrop" />
 

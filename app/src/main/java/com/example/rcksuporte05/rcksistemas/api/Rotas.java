@@ -52,7 +52,7 @@ public interface Rotas {
     Call<List<MotivoNaoCadastramento>> buscarTodosMotivos(@HeaderMap Map<String, String> chaveDeAcesso);
 
     @POST("prospect/salvar")
-    Call<Prospect> salvarProspect(@HeaderMap Map<String, String> chaveDeAcesso, @Body Prospect prospect);
+    Call<List<Prospect>> salvarProspect(@HeaderMap Map<String, String> chaveDeAcesso, @Body List<Prospect> prospect);
 
     @GET("maps/api/geocode/json?key=AIzaSyATLB7h2anOZofvV4KCfrhqMuZ9-1hr4HM")
     Call<RespostaGeocoder> getGeocoder(@Query("latlng") String latlng, @Query("sensor") Boolean sensor, @Query("language")String language);

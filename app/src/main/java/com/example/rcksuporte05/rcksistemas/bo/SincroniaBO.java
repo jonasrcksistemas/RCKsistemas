@@ -323,7 +323,7 @@ public class SincroniaBO {
         }
 
         if (sincronia.isProspectPendentes()) {
-            if(sincronia.getListaProspectPendentes() != null){
+            if(sincronia.getListaProspectPendentes() != null && sincronia.getListaProspectPendentes().size() > 0){
                 for (Prospect prospect : sincronia.getListaProspectPendentes()) {
                     notificacao.setProgress(maxProgress, contadorNotificacaoEProgresso, false);
 
