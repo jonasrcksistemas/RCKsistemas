@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:weightSum="1"
-    tools:context="com.example.rcksuporte05.rcksistemas.interfaces.FinanceiroDetalheActivity">
+    tools:context="com.example.rcksuporte05.rcksistemas.activity.FinanceiroDetalheActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/tbFinanceiro"

@@ -5,7 +5,7 @@
     android:id="@+id/activity_produto_pedido"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.rcksuporte05.rcksistemas.interfaces.ProdutoPedidoActivity">
+    tools:context="com.example.rcksuporte05.rcksistemas.activity.ProdutoPedidoActivity">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/tb_produto_pedido"
@@ -15,7 +15,7 @@
         android:minHeight="?attr/actionBarSize"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
         app:theme="@style/Theme.Toolbar"
-        tools:context=".interfaces.ActivityCliente" />
+        tools:context=".activity.ActivityCliente" />
 
     <ScrollView
         android:id="@+id/scrollView"

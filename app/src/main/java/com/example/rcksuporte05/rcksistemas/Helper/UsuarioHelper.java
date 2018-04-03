@@ -1,6 +1,6 @@
 package com.example.rcksuporte05.rcksistemas.Helper;
 
-import com.example.rcksuporte05.rcksistemas.classes.Usuario;
+import com.example.rcksuporte05.rcksistemas.model.Usuario;
 
 /**
  * Created by RCK 03 on 06/10/2017.

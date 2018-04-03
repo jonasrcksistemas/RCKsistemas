@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.viewHolder.SegmentoViewHolder;
-import com.example.rcksuporte05.rcksistemas.classes.Segmento;
+import com.example.rcksuporte05.rcksistemas.model.Segmento;
 
 import java.util.List;
 

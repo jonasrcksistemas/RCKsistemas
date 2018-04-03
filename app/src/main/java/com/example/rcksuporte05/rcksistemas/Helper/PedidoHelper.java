@@ -8,13 +8,13 @@ import android.widget.Toast;
 
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.bo.PedidoBO;
-import com.example.rcksuporte05.rcksistemas.classes.WebPedido;
-import com.example.rcksuporte05.rcksistemas.classes.WebPedidoItens;
-import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
+import com.example.rcksuporte05.rcksistemas.model.WebPedido;
+import com.example.rcksuporte05.rcksistemas.model.WebPedidoItens;
+import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.fragment.Pedido1;
 import com.example.rcksuporte05.rcksistemas.fragment.Pedido2;
-import com.example.rcksuporte05.rcksistemas.interfaces.ActivityPedidoMain;
-import com.example.rcksuporte05.rcksistemas.interfaces.ProdutoPedidoActivity;
+import com.example.rcksuporte05.rcksistemas.activity.ActivityPedidoMain;
+import com.example.rcksuporte05.rcksistemas.activity.ProdutoPedidoActivity;
 import com.example.rcksuporte05.rcksistemas.util.MascaraUtil;
 
 import java.text.ParseException;

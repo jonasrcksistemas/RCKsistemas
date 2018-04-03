@@ -12,7 +12,6 @@
     <uses-permission-sdk-23 android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission-sdk-23 android:name="android.permission.CAMERA" />
 
-
     <meta-data
 
         android:name="com.google.android.geo.API_KEY"
@@ -28,13 +27,13 @@
         android:largeHeap="true"
         android:theme="@style/Theme.MeuTema">
         <activity
-            android:name=".interfaces.MainActivity"
+            android:name=".activity.MainActivity"
             android:theme="@style/Theme.Main" />
         <activity
-            android:name=".interfaces.PrincipalActivity"
+            android:name=".activity.PrincipalActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".interfaces.ActivityCliente"
+            android:name=".activity.ActivityCliente"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
@@ -44,58 +43,58 @@
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
-        <activity android:name=".interfaces.ActivityProduto" />
-        <activity android:name=".interfaces.SplashActivity">
+        <activity android:name=".activity.ActivityProduto" />
+        <activity android:name=".activity.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".interfaces.CadastroClienteMain" />
+        <activity android:name=".activity.CadastroClienteMain" />
         <activity
-            android:name=".interfaces.ActivityPedidoMain"
+            android:name=".activity.ActivityPedidoMain"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".interfaces.ProdutoPedidoActivity"
+            android:name=".activity.ProdutoPedidoActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".interfaces.ListagemPedidoPendente"
+            android:name=".activity.ListagemPedidoPendente"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".interfaces.ListagemPedidoEnviado"
+            android:name=".activity.ListagemPedidoEnviado"
             android:theme="@style/Theme.MeuTemaPedido" />
         <activity
-            android:name=".interfaces.ContatoActivity"
+            android:name=".activity.ContatoActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".interfaces.ActivityDialogSincronia"
+            android:name=".activity.ActivityDialogSincronia"
             android:theme="@style/Theme.CriarDialog" />
-        <activity android:name=".interfaces.ActivityDialogProdutoDetalhe" />
+        <activity android:name=".activity.ActivityDialogProdutoDetalhe" />
         <activity
-            android:name=".interfaces.infoDialog"
-            android:theme="@style/Theme.CriarDialog" />
-        <activity
-            android:name=".interfaces.SpinnerFaixaDesconto"
+            android:name=".activity.infoDialog"
             android:theme="@style/Theme.CriarDialog" />
         <activity
-            android:name=".interfaces.FinanceiroResumoActivity"
+            android:name=".activity.SpinnerFaixaDesconto"
+            android:theme="@style/Theme.CriarDialog" />
+        <activity
+            android:name=".activity.FinanceiroResumoActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".interfaces.ActivityCadastroProspect"
+            android:name=".activity.ActivityCadastroProspect"
             android:screenOrientation="portrait" />
-        <activity android:name=".interfaces.FinanceiroDetalheActivity" />
-        <activity android:name=".interfaces.ActivityAdicionaContato" />
-        <activity android:name=".interfaces.ActivityAdicionaBanco" />
-        <activity android:name=".interfaces.ActivityListaProspectEnviado" />
-        <activity android:name=".interfaces.ActivityAdicionaReferenciaComercial" />
-        <activity android:name=".interfaces.ActivityHistoricoVisitaProspect" />
-        <activity android:name=".interfaces.ActivityVisita" />
-        <activity android:name=".interfaces.LocationActivity" />
-        <activity android:name=".interfaces.FotoActivity" />
+        <activity android:name=".activity.FinanceiroDetalheActivity" />
+        <activity android:name=".activity.ActivityAdicionaContato" />
+        <activity android:name=".activity.ActivityAdicionaBanco" />
+        <activity android:name=".activity.ActivityListaProspectEnviado" />
+        <activity android:name=".activity.ActivityAdicionaReferenciaComercial" />
+        <activity android:name=".activity.ActivityHistoricoVisitaProspect" />
+        <activity android:name=".activity.ActivityVisita" />
+        <activity android:name=".activity.LocationActivity" />
+        <activity android:name=".activity.FotoActivity" />
         <activity
-            android:name=".interfaces.ActivityListaProspect"
+            android:name=".activity.ActivityListaProspect"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>
 

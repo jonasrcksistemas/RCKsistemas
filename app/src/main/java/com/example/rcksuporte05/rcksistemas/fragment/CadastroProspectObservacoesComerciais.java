@@ -17,8 +17,8 @@ import com.example.rcksuporte05.rcksistemas.Helper.ProspectHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.ReferenciaBancariaAdapter;
 import com.example.rcksuporte05.rcksistemas.adapters.ReferenciaComercialAdapter;
-import com.example.rcksuporte05.rcksistemas.interfaces.ActivityAdicionaBanco;
-import com.example.rcksuporte05.rcksistemas.interfaces.ActivityAdicionaReferenciaComercial;
+import com.example.rcksuporte05.rcksistemas.activity.ActivityAdicionaBanco;
+import com.example.rcksuporte05.rcksistemas.activity.ActivityAdicionaReferenciaComercial;
 import com.example.rcksuporte05.rcksistemas.util.DividerItemDecoration;
 
 import butterknife.BindView;

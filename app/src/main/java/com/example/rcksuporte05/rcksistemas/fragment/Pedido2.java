@@ -19,14 +19,14 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.PedidoHelper;
 import com.example.rcksuporte05.rcksistemas.R;
-import com.example.rcksuporte05.rcksistemas.classes.Cliente;
-import com.example.rcksuporte05.rcksistemas.classes.CondicoesPagamento;
-import com.example.rcksuporte05.rcksistemas.classes.TabelaPreco;
-import com.example.rcksuporte05.rcksistemas.classes.TabelaPrecoItem;
-import com.example.rcksuporte05.rcksistemas.classes.WebPedido;
-import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
+import com.example.rcksuporte05.rcksistemas.model.Cliente;
+import com.example.rcksuporte05.rcksistemas.model.CondicoesPagamento;
+import com.example.rcksuporte05.rcksistemas.model.TabelaPreco;
+import com.example.rcksuporte05.rcksistemas.model.TabelaPrecoItem;
+import com.example.rcksuporte05.rcksistemas.model.WebPedido;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -38,6 +38,8 @@ import butterknife.ButterKnife;
 public class Pedido2 extends Fragment {
 
     private static Cliente objetoCliente = null;
+    @BindView(R.id.txtDataEmissao)
+    TextView txtDataEmissao;
     private Spinner spPagamento;
     private Spinner spTabelaPreco;
     private Spinner spFaixaPadrao;
@@ -52,8 +54,6 @@ public class Pedido2 extends Fragment {
     private PedidoHelper pedidoHelper;
     private EditText edtDataEntrega;
     private Button btnDataEntrega;
-    @BindView(R.id.txtDataEmissao)
-    TextView txtDataEmissao;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -82,7 +82,7 @@ public class Pedido2 extends Fragment {
             spTabelaPreco.setAdapter(adapterPreco);
 
             spFaixaPadrao = (Spinner) view.findViewById(R.id.spFaixaPadrao);
-            adapterFaixaPadrao = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_activated_1, db.listaTabelaPrecoItem("SELECT * FROM TBL_TABELA_PRECO_ITENS WHERE PONTOS_PREMIACAO > 0;"));
+            adapterFaixaPadrao = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_activated_1, db.listaTabelaPrecoItem("SELECT * FROM TBL_TABELA_PRECO_ITENS;"));
             spFaixaPadrao.setAdapter(adapterFaixaPadrao);
             spFaixaPadrao.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
@@ -109,6 +109,7 @@ public class Pedido2 extends Fragment {
                 }
             });
             alert.show();
+            e.printStackTrace();
         }
 
         if (PedidoHelper.getIdPedido() > 0) {
@@ -158,13 +159,13 @@ public class Pedido2 extends Fragment {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-        }else {
+        } else {
             try {
 
                 txtDataEmissao.setText(new SimpleDateFormat("dd/MM/yyyy")
                         .format(new SimpleDateFormat("yyyy-MM-dd")
                                 .parse(db.pegaDataAtual())));
-            }catch (ParseException e){
+            } catch (ParseException e) {
                 e.printStackTrace();
             }
         }

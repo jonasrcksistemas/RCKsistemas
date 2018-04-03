@@ -9,7 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.rcksuporte05.rcksistemas.R;
-import com.example.rcksuporte05.rcksistemas.classes.HistoricoFinanceiroQuitado;
+import com.example.rcksuporte05.rcksistemas.model.HistoricoFinanceiroQuitado;
 import com.example.rcksuporte05.rcksistemas.util.MascaraUtil;
 
 import java.text.ParseException;

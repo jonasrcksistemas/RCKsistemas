@@ -14,8 +14,8 @@ import android.widget.Toast;
 import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.HistoricoFinanceiroHelper;
 import com.example.rcksuporte05.rcksistemas.R;
-import com.example.rcksuporte05.rcksistemas.interfaces.CadastroClienteMain;
-import com.example.rcksuporte05.rcksistemas.interfaces.FinanceiroResumoActivity;
+import com.example.rcksuporte05.rcksistemas.activity.CadastroClienteMain;
+import com.example.rcksuporte05.rcksistemas.activity.FinanceiroResumoActivity;
 
 public class CadastroCliente3 extends Fragment implements View.OnClickListener {
     private EditText edtPaisCobranca;

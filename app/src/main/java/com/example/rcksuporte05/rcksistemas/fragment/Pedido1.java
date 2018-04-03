@@ -20,11 +20,11 @@ import com.example.rcksuporte05.rcksistemas.Helper.PedidoHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.UsuarioHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.ListaAdapterProdutoPedido;
-import com.example.rcksuporte05.rcksistemas.classes.WebPedidoItens;
-import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
-import com.example.rcksuporte05.rcksistemas.interfaces.ActivityProduto;
-import com.example.rcksuporte05.rcksistemas.interfaces.ProdutoPedidoActivity;
-import com.example.rcksuporte05.rcksistemas.interfaces.SpinnerFaixaDesconto;
+import com.example.rcksuporte05.rcksistemas.model.WebPedidoItens;
+import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
+import com.example.rcksuporte05.rcksistemas.activity.ActivityProduto;
+import com.example.rcksuporte05.rcksistemas.activity.ProdutoPedidoActivity;
+import com.example.rcksuporte05.rcksistemas.activity.SpinnerFaixaDesconto;
 import com.example.rcksuporte05.rcksistemas.util.DividerItemDecoration;
 
 import java.util.ArrayList;

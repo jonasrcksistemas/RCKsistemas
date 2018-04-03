@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:weightSum="1"
-    tools:context="com.example.rcksuporte05.rcksistemas.interfaces.HistoricoFinanceiroMain">
+    tools:context="com.example.rcksuporte05.rcksistemas.activity.HistoricoFinanceiroMain">
 
     <TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/tabela"

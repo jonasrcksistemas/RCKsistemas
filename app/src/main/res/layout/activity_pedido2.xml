@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.rcksuporte05.rcksistemas.interfaces.ActivityPedidoMain">
+    tools:context="com.example.rcksuporte05.rcksistemas.activity.ActivityPedidoMain">
 
     <ScrollView
         android:layout_width="wrap_content"

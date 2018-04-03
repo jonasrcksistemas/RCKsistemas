@@ -9,7 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.rcksuporte05.rcksistemas.R;
-import com.example.rcksuporte05.rcksistemas.classes.WebPedido;
+import com.example.rcksuporte05.rcksistemas.model.WebPedido;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

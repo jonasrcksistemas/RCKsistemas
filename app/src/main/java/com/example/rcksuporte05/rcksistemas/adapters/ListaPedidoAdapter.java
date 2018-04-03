@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.viewHolder.PedidoViewHolder;
-import com.example.rcksuporte05.rcksistemas.classes.WebPedido;
+import com.example.rcksuporte05.rcksistemas.model.WebPedido;
 import com.example.rcksuporte05.rcksistemas.util.MascaraUtil;
 
 import java.text.SimpleDateFormat;

@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.viewHolder.ContatoViewHolder;
-import com.example.rcksuporte05.rcksistemas.classes.Contato;
+import com.example.rcksuporte05.rcksistemas.model.Contato;
 import com.example.rcksuporte05.rcksistemas.util.MascaraUtil;
 
 import java.util.List;

@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:layout_weight="1"
     android:orientation="vertical"
-    tools:context="com.example.rcksuporte05.rcksistemas.interfaces.ListagemPedidoEnviado">
+    tools:context="com.example.rcksuporte05.rcksistemas.activity.ListagemPedidoEnviado">
 
 
     <android.support.v7.widget.Toolbar

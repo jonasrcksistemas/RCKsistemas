@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.rcksuporte05.rcksistemas.interfaces.ActivityPedidoMain">
+    tools:context="com.example.rcksuporte05.rcksistemas.activity.ActivityPedidoMain">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbarFragsHistoricoFinanceiro"
@@ -17,7 +17,7 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-    <com.example.rcksuporte05.rcksistemas.extras.SlidingTabLayout
+    <com.example.rcksuporte05.rcksistemas.util.SlidingTabLayout
         android:id="@+id/stl_tabsHistoricoFinanceiro"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

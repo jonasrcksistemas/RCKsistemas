@@ -5,7 +5,7 @@
     android:id="@+id/activity_cadastro_cliente_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.rcksuporte05.rcksistemas.interfaces.ActivityCadastroProspect"
+    tools:context="com.example.rcksuporte05.rcksistemas.activity.ActivityCadastroProspect"
     android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
@@ -18,7 +18,7 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
-    <com.example.rcksuporte05.rcksistemas.extras.SlidingTabLayout
+    <com.example.rcksuporte05.rcksistemas.util.SlidingTabLayout
         android:id="@+id/stl_tabs_Prospect"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

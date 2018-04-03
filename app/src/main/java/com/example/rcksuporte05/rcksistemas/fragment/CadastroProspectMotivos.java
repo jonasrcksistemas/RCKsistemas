@@ -14,7 +14,7 @@ import android.widget.LinearLayout;
 import com.example.rcksuporte05.rcksistemas.Helper.ProspectHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.MotivoAdapter;
-import com.example.rcksuporte05.rcksistemas.classes.MotivoNaoCadastramento;
+import com.example.rcksuporte05.rcksistemas.model.MotivoNaoCadastramento;
 import com.example.rcksuporte05.rcksistemas.util.DividerItemDecoration;
 
 import butterknife.BindView;

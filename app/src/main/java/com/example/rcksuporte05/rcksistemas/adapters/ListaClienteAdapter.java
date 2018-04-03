@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.viewHolder.ClientesViewHolder;
-import com.example.rcksuporte05.rcksistemas.classes.Cliente;
+import com.example.rcksuporte05.rcksistemas.model.Cliente;
 
 import java.util.List;
 

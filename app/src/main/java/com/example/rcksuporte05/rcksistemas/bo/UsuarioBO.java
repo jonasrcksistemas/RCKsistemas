@@ -4,8 +4,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.example.rcksuporte05.rcksistemas.classes.Usuario;
-import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
+import com.example.rcksuporte05.rcksistemas.model.Usuario;
+import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 
 import java.util.List;
 

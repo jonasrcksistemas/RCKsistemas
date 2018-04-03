@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.viewHolder.ProdutoPedidoViewHolder;
-import com.example.rcksuporte05.rcksistemas.classes.WebPedidoItens;
+import com.example.rcksuporte05.rcksistemas.model.WebPedidoItens;
 
 import java.util.ArrayList;
 import java.util.List;
