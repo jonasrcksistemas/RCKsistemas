@@ -1,5 +1,6 @@
 package com.example.rcksuporte05.rcksistemas.adapters;
 
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
@@ -43,6 +44,10 @@ public class MotivoAdapter extends RecyclerView.Adapter<MotivoViewHolder> {
         holder.txtMotivo.setText(motivos.get(position).getMotivo());
 
         holder.rlItemMotivo.setActivated(selectedItems.get(position, false));
+
+        if(selectedItems.get(position)){
+            holder.txtMotivo.setTextColor(Color.parseColor("#ffffff"));
+        }
 
         applyClickEvents(holder, position);
     }

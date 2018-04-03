@@ -46,7 +46,7 @@ public class MascaraUtil {
 
         String valorLimpo = valor.trim().replaceAll("[^0-9]", "");
         if(!valorLimpo.equals("") && valorLimpo.length() == 14){
-           cnpj = valorLimpo.substring(0, 3) + "." + valorLimpo.substring(3, 6) + "." + valorLimpo.substring(6, 9) + "-" + valorLimpo.substring(9, 11);
+           cnpj = valorLimpo.substring(0, 2) + "." + valorLimpo.substring(2, 5) + "." + valorLimpo.substring(5, 8) + "/" + valorLimpo.substring(8, 12) + "-" + valorLimpo.substring(12, 14);
         }
 
         return cnpj;

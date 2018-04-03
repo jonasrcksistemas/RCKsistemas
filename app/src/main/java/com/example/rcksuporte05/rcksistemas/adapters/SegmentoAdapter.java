@@ -1,5 +1,6 @@
 package com.example.rcksuporte05.rcksistemas.adapters;
 
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
@@ -43,6 +44,10 @@ public class SegmentoAdapter extends RecyclerView.Adapter<SegmentoViewHolder> {
         holder.txtNomeSegmento.setText(segmentos.get(position).getNomeSetor());
 
         holder.rlItemSegmentos.setActivated(selectedItems.get(position, false));
+
+        if(selectedItems.get(position)){
+            holder.txtNomeSegmento.setTextColor(Color.parseColor("#ffffff"));
+        }
 
         applyClickEvents(holder, position);
     }
