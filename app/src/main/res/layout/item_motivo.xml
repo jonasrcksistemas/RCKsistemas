@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="35dp"
     android:id="@+id/rlItemMotivos"
-    android:background="@drawable/bg_list_row"
+    android:background="@drawable/bg_list_row_chamar_atencao"
     >
 
     <TextView

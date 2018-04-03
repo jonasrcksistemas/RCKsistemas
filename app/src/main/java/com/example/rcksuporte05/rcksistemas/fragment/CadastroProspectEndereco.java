@@ -1,5 +1,6 @@
 package com.example.rcksuporte05.rcksistemas.fragment;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -171,6 +172,14 @@ public class CadastroProspectEndereco extends Fragment {
             }
         });
 
+        for (int i = 0; ProspectHelper.getPaises().size() > i; i++) {
+            if (paisAdapter.getItem(i).getId_pais().equals("1058")) {
+                spPaisProspect.setSelection(i);
+                ProspectHelper.setPosicaoPais(i);
+                break;
+            }
+        }
+
         injetaDadosNaTela();
 
         if (ProspectHelper.getProspect().getProspectSalvo() != null && ProspectHelper.getProspect().getProspectSalvo().equals("S")) {
@@ -271,6 +280,7 @@ public class CadastroProspectEndereco extends Fragment {
     }
 
 
+    @SuppressLint("ResourceType")
     public void inserirDadosDaFrame(){
         if(edtEnderecoProspect.getText() != null){
             ProspectHelper.getProspect().setEndereco(edtEnderecoProspect.getText().toString());

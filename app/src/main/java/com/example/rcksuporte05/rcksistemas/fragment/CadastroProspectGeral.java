@@ -1,5 +1,6 @@
 package com.example.rcksuporte05.rcksistemas.fragment;
 
+import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -73,6 +74,9 @@ public class CadastroProspectGeral extends Fragment {
     @BindView(R.id.spIeProspect)
     Spinner spIeProspect;
 
+    @BindView(R.id.txtCpfCnpjProspect)
+    TextView txtCpfCnpjProspect;
+
 
     View view;
     RadioButton radioButtonRota;
@@ -94,7 +98,26 @@ public class CadastroProspectGeral extends Fragment {
         db = new DBHelper(getContext());
         injetaDadosNaTela();
 
+        spPessoaProspect.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if(arrayPessoaProspect.getItem(position).equals("Fisica")){
+                    txtCpfCnpjProspect.setText("CPF");
+                    edtCpfCnpjProspect.setHint("CPF");
+                }else {
+                    txtCpfCnpjProspect.setText("CNPJ");
+                    edtCpfCnpjProspect.setHint("CNPJ");
+                }
+            }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+
+        spPessoaProspect.setSelection(1);
 
         spIeProspect.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -201,6 +224,7 @@ public class CadastroProspectGeral extends Fragment {
 
     }
 
+    @SuppressLint("ResourceType")
     public void inserirDadosDaFrame(){
         if(spPessoaProspect.getSelectedItemPosition() == 0){
             ProspectHelper.getProspect().setPessoa_f_j("F");
