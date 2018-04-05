@@ -167,7 +167,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 " HABILITACAO_VENCIMENTO DATE," +
                 " MOT_ID_TRANSPORTADORA INTEGER," +
                 " LOCAL_CADASTRO VARCHAR(20)," +
-                " ID_EMPRESA_MULTIDEVICE INTEGER);");
+                " ID_EMPRESA_MULTIDEVICE INTEGER," +
+                " ID_CATEGORIA INTEGER);");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS TBL_PRODUTO (ATIVO VARCHAR(1) DEFAULT 'S'  NOT NULL," +
                 " ID_PRODUTO VARCHAR(20) PRIMARY KEY," +
@@ -675,6 +676,8 @@ public class DBHelper extends SQLiteOpenHelper {
                     "ID_CADASTRO INTEGER);");
 
             db.execSQL("ALTER TABLE TBL_TABELA_PRECO_ITENS ADD COLUMN ID_CATEGORIA INTEGER;");
+
+            db.execSQL("ALTER TABLE TBL_CADASTRO ADD COLUMN ID_CATEGORIA INTEGER;");
 
             db.execSQL("CREATE TABLE TBL_CADASTRO_CATEGORIA(ID_CATEGORIA INTEGER NOT NULL PRIMARY KEY," +
                     "  ID_EMPRESA     INTEGER    NOT NULL," +
@@ -1512,6 +1515,7 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("HABILITACAO_VENCIMENTO", cliente.getHabilitacao_vencimento());
         content.put("MOT_ID_TRANSPORTADORA", cliente.getMot_id_transportadora());
         content.put("LOCAL_CADASTRO", cliente.getLocal_cadastro());
+        content.put("ID_CATEGORIA", cliente.getIdCategoria());
 
         db.insert("TBL_CADASTRO", null, content);
         System.gc();
@@ -1602,6 +1606,8 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("HABILITACAO_CATEGORIA", cliente.getHabilitacao_categoria());
         content.put("HABILITACAO_VENCIMENTO", cliente.getHabilitacao_vencimento());
         content.put("MOT_ID_TRANSPORTADORA", cliente.getMot_id_transportadora());
+        content.put("ID_CATEGORIA", cliente.getIdCategoria());
+
         db.update("TBL_CADASTRO", content, "ID_CADASTRO = " + cliente.getId_cadastro(), null);
         System.gc();
     }
@@ -2248,6 +2254,7 @@ public class DBHelper extends SQLiteOpenHelper {
             cliente.setHabilitacao_vencimento(cursor.getString(cursor.getColumnIndex("HABILITACAO_VENCIMENTO")));
             cliente.setMot_id_transportadora(cursor.getString(cursor.getColumnIndex("MOT_ID_TRANSPORTADORA")));
             cliente.setLocal_cadastro(cursor.getString(cursor.getColumnIndex("LOCAL_CADASTRO")));
+            cliente.setIdCategoria(cursor.getInt(cursor.getColumnIndex("ID_CATEGORIA")));
 
             lista.add(cliente);
             System.gc();

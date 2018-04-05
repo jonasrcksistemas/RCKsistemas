@@ -18,17 +18,21 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.rcksuporte05.rcksistemas.DAO.CategoriaDAO;
+import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.HistoricoFinanceiroHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.PedidoHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.UsuarioHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.TabsAdapterPedido;
+import com.example.rcksuporte05.rcksistemas.fragment.Pedido1;
+import com.example.rcksuporte05.rcksistemas.model.Categoria;
 import com.example.rcksuporte05.rcksistemas.model.Cliente;
 import com.example.rcksuporte05.rcksistemas.model.Operacao;
 import com.example.rcksuporte05.rcksistemas.model.WebPedido;
-import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.util.SlidingTabLayout;
-import com.example.rcksuporte05.rcksistemas.fragment.Pedido1;
+
+import java.util.HashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -50,6 +54,8 @@ public class ActivityPedidoMain extends AppCompatActivity {
     Button BtnFinanceiro;
     @BindView(R.id.toolbar2)
     Toolbar toolbar2;
+    @BindView((R.id.txtCategoria))
+    TextView txtCategoria;
     ActionModeCallback actionModeCallback;
     private ArrayAdapter<Operacao> adapterOperacao;
     private PedidoHelper pedidoHelper;
@@ -59,6 +65,8 @@ public class ActivityPedidoMain extends AppCompatActivity {
     private Bundle bundle = new Bundle();
     private WebPedido webPedido;
     private Pedido1 pedido1 = new Pedido1();
+    private HashMap<Integer, Categoria> listaCategoria;
+    private CategoriaDAO categoriaDAO;
 
     @OnClick(R.id.BtnFinanceiro)
     public void financeiro() {
@@ -94,7 +102,6 @@ public class ActivityPedidoMain extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarFragsPedido);
 
 
-
         vizualizacao = getIntent().getIntExtra("vizualizacao", 0);
 
         tabsAdapterPedido = new TabsAdapterPedido(getSupportFragmentManager(), ActivityPedidoMain.this, UsuarioHelper.getUsuario(), vizualizacao);
@@ -119,11 +126,24 @@ public class ActivityPedidoMain extends AppCompatActivity {
             toolbar.setTitle("Lançamento de Pedido");
         }
         db = new DBHelper(this);
+        categoriaDAO = new CategoriaDAO(db);
         try {
+            listaCategoria = categoriaDAO.listaHashCategoria();
             adapterOperacao = new ArrayAdapter<>(this, R.layout.spinner, db.listaOperacao("SELECT * FROM TBL_OPERACAO_ESTOQUE;"));
             adapterOperacao.setDropDownViewResource(R.layout.drop_down_spinner);
             spOperacao.setAdapter(adapterOperacao);
         } catch (CursorIndexOutOfBoundsException e) {
+            AlertDialog.Builder alert = new AlertDialog.Builder(PedidoHelper.getActivityPedidoMain());
+            alert.setMessage("É necessário executar a sincronização pelo menos uma vez antes de efetuar um pedido");
+            alert.setTitle("Atenção!");
+            alert.setCancelable(false);
+            alert.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    PedidoHelper.getActivityPedidoMain().finish();
+                }
+            });
+            alert.show();
             e.printStackTrace();
         }
 
@@ -257,8 +277,9 @@ public class ActivityPedidoMain extends AppCompatActivity {
         try {
             txtNomeCliente.setTextColor(Color.WHITE);
             txtNomeCliente.setText(objetoCliente.getNome_cadastro());
+            txtCategoria.setText(listaCategoria.get(objetoCliente.getIdCategoria()).getNomeCategoria());
         } catch (NullPointerException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
         super.onResume();
     }

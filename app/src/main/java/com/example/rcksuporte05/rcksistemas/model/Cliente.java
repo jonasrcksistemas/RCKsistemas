@@ -85,6 +85,7 @@ public class Cliente {
     private String habilitacao_vencimento;
     private String mot_id_transportadora;
     private String local_cadastro;
+    private int idCategoria;
 
     public String getAtivo() {
         return ativo;
@@ -748,6 +749,14 @@ public class Cliente {
 
     public void setNome_pais(String nome_pais) {
         this.nome_pais = nome_pais;
+    }
+
+    public int getIdCategoria() {
+        return idCategoria;
+    }
+
+    public void setIdCategoria(int idCategoria) {
+        this.idCategoria = idCategoria;
     }
 }
 

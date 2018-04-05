@@ -16,15 +16,14 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.PedidoHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.UsuarioHelper;
 import com.example.rcksuporte05.rcksistemas.R;
-import com.example.rcksuporte05.rcksistemas.adapters.ListaAdapterProdutoPedido;
-import com.example.rcksuporte05.rcksistemas.model.WebPedidoItens;
-import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.activity.ActivityProduto;
 import com.example.rcksuporte05.rcksistemas.activity.ProdutoPedidoActivity;
-import com.example.rcksuporte05.rcksistemas.activity.SpinnerFaixaDesconto;
+import com.example.rcksuporte05.rcksistemas.adapters.ListaAdapterProdutoPedido;
+import com.example.rcksuporte05.rcksistemas.model.WebPedidoItens;
 import com.example.rcksuporte05.rcksistemas.util.DividerItemDecoration;
 
 import java.util.ArrayList;
@@ -78,14 +77,9 @@ public class Pedido1 extends Fragment implements ListaAdapterProdutoPedido.Produ
             @Override
             public void onClick(View v) {
                 if (pedidoHelper.verificaCliente()) {
-                    if (PedidoHelper.getPositionFaixPadrao() < 0) {
-                        Intent intent = new Intent(getContext(), SpinnerFaixaDesconto.class);
-                        startActivity(intent);
-                    } else {
-                        Intent intent = new Intent(getContext(), ActivityProduto.class);
-                        intent.putExtra("acao", 1);
-                        startActivity(intent);
-                    }
+                    Intent intent = new Intent(getContext(), ActivityProduto.class);
+                    intent.putExtra("acao", 1);
+                    startActivity(intent);
                 } else {
                     Toast.makeText(getContext(), "Selecione um cliente antes de prosseguir!", Toast.LENGTH_SHORT).show();
                     PedidoHelper.pintaTxtNomeCliente();

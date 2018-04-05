@@ -44,7 +44,7 @@ public class WebPedidoItens extends Produto {
     private String valor_preco_pago;
     private String id_web_item_servidor;
 
-    public WebPedidoItens(Produto produto, TabelaPrecoItem tabela_preco_faixa) {
+    public WebPedidoItens(Produto produto) {
         this.setAtivo(produto.getAtivo());
         this.setId_produto(produto.getId_produto());
         this.setNome_produto(produto.getNome_produto());
@@ -95,7 +95,6 @@ public class WebPedidoItens extends Produto {
         this.setVenda_preco(produto.getVenda_preco());
         this.setVenda_perc_comissao_dois(produto.getVenda_perc_comissao_dois());
         this.setDescricao(produto.getDescricao());
-        this.tabela_preco_faixa = tabela_preco_faixa;
     }
 
 

@@ -6,6 +6,7 @@ import android.database.Cursor;
 import com.example.rcksuporte05.rcksistemas.model.Categoria;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class CategoriaDAO {
@@ -50,5 +51,25 @@ public class CategoriaDAO {
             listaCategoria.add(categoria);
         } while (cursor.moveToNext());
         return listaCategoria;
+    }
+
+    public HashMap<Integer, Categoria> listaHashCategoria() {
+        HashMap<Integer, Categoria> listaHashCategoria = new HashMap<>();
+        Cursor cursor;
+
+        cursor = db.listaDados("SELECT * FROM TBL_CADASTRO_CATEGORIA ORDER BY ID_CATEGORIA;");
+        cursor.moveToFirst();
+        do {
+            Categoria categoria = new Categoria();
+
+            categoria.setIdCategoria(cursor.getInt(cursor.getColumnIndex("ID_CATEGORIA")));
+            categoria.setIdEmpresa(cursor.getInt(cursor.getColumnIndex("ID_EMPRESA")));
+            categoria.setAtivo(cursor.getString(cursor.getColumnIndex("ATIVO")));
+            categoria.setNomeCategoria(cursor.getString(cursor.getColumnIndex("NOME_CATEGORIA")));
+            categoria.setUsuarioId(cursor.getString(cursor.getColumnIndex("USUARIO_ID")));
+
+            listaHashCategoria.put(categoria.getIdCategoria(), categoria);
+        } while (cursor.moveToNext());
+        return listaHashCategoria;
     }
 }

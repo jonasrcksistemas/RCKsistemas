@@ -11,7 +11,6 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -25,7 +24,6 @@ import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.model.Cliente;
 import com.example.rcksuporte05.rcksistemas.model.CondicoesPagamento;
 import com.example.rcksuporte05.rcksistemas.model.TabelaPreco;
-import com.example.rcksuporte05.rcksistemas.model.TabelaPrecoItem;
 import com.example.rcksuporte05.rcksistemas.model.WebPedido;
 
 import java.text.ParseException;
@@ -42,9 +40,7 @@ public class Pedido2 extends Fragment {
     TextView txtDataEmissao;
     private Spinner spPagamento;
     private Spinner spTabelaPreco;
-    private Spinner spFaixaPadrao;
     private ArrayAdapter<TabelaPreco> adapterPreco;
-    private ArrayAdapter<TabelaPrecoItem> adapterFaixaPadrao;
     private ArrayAdapter<CondicoesPagamento> adapterPagamento;
     private DBHelper db;
     private EditText edtObservacao;
@@ -81,34 +77,7 @@ public class Pedido2 extends Fragment {
             adapterPreco = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_activated_1, db.listaTabelaPreco("SELECT * FROM TBL_TABELA_PRECO_CAB;"));
             spTabelaPreco.setAdapter(adapterPreco);
 
-            spFaixaPadrao = (Spinner) view.findViewById(R.id.spFaixaPadrao);
-            adapterFaixaPadrao = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_activated_1, db.listaTabelaPrecoItem("SELECT * FROM TBL_TABELA_PRECO_ITENS;"));
-            spFaixaPadrao.setAdapter(adapterFaixaPadrao);
-            spFaixaPadrao.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    if (position > 0)
-                        PedidoHelper.setPositionFaixPadrao(position);
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-
-                }
-            });
-
         } catch (CursorIndexOutOfBoundsException e) {
-            AlertDialog.Builder alert = new AlertDialog.Builder(PedidoHelper.getActivityPedidoMain());
-            alert.setMessage("É necessário executar a sincronização pelo menos uma vez antes de efetuar um pedido");
-            alert.setTitle("Atenção!");
-            alert.setCancelable(false);
-            alert.setNeutralButton("OK", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    PedidoHelper.getActivityPedidoMain().finish();
-                }
-            });
-            alert.show();
             e.printStackTrace();
         }
 
@@ -128,17 +97,6 @@ public class Pedido2 extends Fragment {
                 System.out.println(e.getMessage());
             }
 
-            //Seleciona a Faixa padrão no Spinner Faixa Padrão
-            try {
-                int i = -1;
-                do {
-                    i++;
-                }
-                while (!webPedido.getId_tabela_preco_faixa().trim().equals(adapterFaixaPadrao.getItem(i).getId_item()));
-                spFaixaPadrao.setSelection(i);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
 
             //Seleciona Tabela de Preco correta dentro do Spinner spTabelaPreco
             try {
@@ -207,7 +165,6 @@ public class Pedido2 extends Fragment {
             btnSalvarPedido.setVisibility(View.INVISIBLE);
             edtObservacao.setFocusable(false);
             spPagamento.setEnabled(false);
-            spFaixaPadrao.setEnabled(false);
             spTabelaPreco.setEnabled(false);
             edtDataEntrega.setFocusable(false);
         } else {
@@ -261,17 +218,6 @@ public class Pedido2 extends Fragment {
         webPedido.setPedido_enviado("N");
 
         return webPedido;
-    }
-
-    @Override
-    public void onResume() {
-        try {
-            if (PedidoHelper.getPositionFaixPadrao() > 0)
-                spFaixaPadrao.setSelection(PedidoHelper.getPositionFaixPadrao());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        super.onResume();
     }
 
     @Override

@@ -641,7 +641,7 @@ public class SincroniaBO {
         a.start();
     }
 
-    public List<WebPedido> prepararItensPedidos(List<WebPedido> listaPedido) {
+    private List<WebPedido> prepararItensPedidos(List<WebPedido> listaPedido) {
         for (WebPedido pedido : listaPedido) {
             List<WebPedidoItens> webPedidoItenses;
 

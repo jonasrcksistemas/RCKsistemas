@@ -38,6 +38,7 @@
                 android:id="@+id/txtNomeCliente"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:layout_marginEnd="12dp"
@@ -46,8 +47,14 @@
                 android:layout_toLeftOf="@+id/BtnFinanceiro"
                 android:layout_toStartOf="@+id/BtnFinanceiro"
                 android:text="Toque aqui para selecionar seu cliente"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-                android:layout_alignParentLeft="true" />
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
+
+            <TextView
+                android:id="@+id/txtCategoria"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txtNomeCliente"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
 
             <Spinner
                 android:id="@+id/spOperacao"
@@ -57,8 +64,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentStart="true"
-                android:layout_below="@id/txtNomeCliente"
-                android:layout_marginTop="15dp"
+                android:layout_below="@id/txtCategoria"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
                 android:theme="@style/Theme.MeuTemaPedido" />
 
