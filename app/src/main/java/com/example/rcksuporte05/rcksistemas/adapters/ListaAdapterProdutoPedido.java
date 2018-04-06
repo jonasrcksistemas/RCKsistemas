@@ -38,11 +38,16 @@ public class ListaAdapterProdutoPedido extends RecyclerView.Adapter<ProdutoPedid
     @Override
     public void onBindViewHolder(ProdutoPedidoViewHolder holder, int position) {
         holder.nomeListaProduto.setText(lista.get(position).getNome_produto());
-        holder.precoProduto.setText(String.format("%.2f", Float.parseFloat(lista.get(position).getQuantidade())) + " x " + String.format("R$%.2f", Float.parseFloat(lista.get(position).getValor_unitario())) + " = " + String.format("R$%.2f", Float.parseFloat(lista.get(position).getValor_total())));
+        Float valorProduto;
+        if (lista.get(position).getValor_desconto_per() != null && !lista.get(position).getValor_desconto_per().trim().isEmpty() && Float.parseFloat(lista.get(position).getValor_desconto_per()) > 0)
+            valorProduto = Float.parseFloat(lista.get(position).getValor_total()) / Float.parseFloat(lista.get(0).getQuantidade());
+        else
+            valorProduto = lista.get(position).getValor_unitario();
+
+        holder.precoProduto.setText(String.format("%.2f", Float.parseFloat(lista.get(position).getQuantidade())) + " x " + String.format("R$%.2f", valorProduto) + " = " + String.format("R$%.2f", Float.parseFloat(lista.get(position).getValor_total())));
+
         holder.textViewUnidadeMedida.setText(lista.get(position).getDescricao());
         holder.idPosition.setText(String.valueOf(position + 1));
-
-        holder.viewCor.setBackgroundColor(Color.parseColor(lista.get(position).getTabela_preco_faixa().getCor_web()));
 
         holder.itemView
                 .setBackgroundColor(selectedItems.get(position) ? Color.parseColor("#dfdfdf")

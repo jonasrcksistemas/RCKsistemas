@@ -12,9 +12,7 @@ import android.support.v7.view.ActionMode;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,7 +26,6 @@ import com.example.rcksuporte05.rcksistemas.adapters.TabsAdapterPedido;
 import com.example.rcksuporte05.rcksistemas.fragment.Pedido1;
 import com.example.rcksuporte05.rcksistemas.model.Categoria;
 import com.example.rcksuporte05.rcksistemas.model.Cliente;
-import com.example.rcksuporte05.rcksistemas.model.Operacao;
 import com.example.rcksuporte05.rcksistemas.model.WebPedido;
 import com.example.rcksuporte05.rcksistemas.util.SlidingTabLayout;
 
@@ -48,8 +45,6 @@ public class ActivityPedidoMain extends AppCompatActivity {
     ViewPager mViewPager;
     @BindView(R.id.txtNomeCliente)
     TextView txtNomeCliente;
-    @BindView(R.id.spOperacao)
-    Spinner spOperacao;
     @BindView(R.id.BtnFinanceiro)
     Button BtnFinanceiro;
     @BindView(R.id.toolbar2)
@@ -57,7 +52,6 @@ public class ActivityPedidoMain extends AppCompatActivity {
     @BindView((R.id.txtCategoria))
     TextView txtCategoria;
     ActionModeCallback actionModeCallback;
-    private ArrayAdapter<Operacao> adapterOperacao;
     private PedidoHelper pedidoHelper;
     private TabsAdapterPedido tabsAdapterPedido;
     private int vizualizacao;
@@ -116,7 +110,6 @@ public class ActivityPedidoMain extends AppCompatActivity {
             toolbar2.setBackgroundColor(getResources().getColor(R.color.colorPrimaryCinza));
             toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimaryCinza));
             stl_tabsPedido.setBackgroundColor(getResources().getColor(R.color.colorPrimaryCinza));
-            spOperacao.setEnabled(false);
             txtNomeCliente.setFocusable(false);
 
             this.setTheme(R.style.Theme_MeuTemaPedido);
@@ -129,9 +122,7 @@ public class ActivityPedidoMain extends AppCompatActivity {
         categoriaDAO = new CategoriaDAO(db);
         try {
             listaCategoria = categoriaDAO.listaHashCategoria();
-            adapterOperacao = new ArrayAdapter<>(this, R.layout.spinner, db.listaOperacao("SELECT * FROM TBL_OPERACAO_ESTOQUE;"));
-            adapterOperacao.setDropDownViewResource(R.layout.drop_down_spinner);
-            spOperacao.setAdapter(adapterOperacao);
+
         } catch (CursorIndexOutOfBoundsException e) {
             AlertDialog.Builder alert = new AlertDialog.Builder(PedidoHelper.getActivityPedidoMain());
             alert.setMessage("É necessário executar a sincronização pelo menos uma vez antes de efetuar um pedido");
@@ -155,24 +146,9 @@ public class ActivityPedidoMain extends AppCompatActivity {
             else
                 toolbar.setSubtitle("Pedido: " + webPedido.getId_web_pedido());
 
-            //Seleciona operação correta dentro do Spinner spOperacao
-            try {
-                int i = -1;
-                do {
-                    i++;
-                }
-                while (!webPedido.getId_operacao().equals(adapterOperacao.getItem(i).getId_operacao()));
-                spOperacao.setSelection(i);
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
+
         } else {
             webPedido = new WebPedido();
-        }
-
-        if (bundle.getInt("vizualizacao") == 1) {
-
-            spOperacao.setEnabled(false);
         }
 
         actionModeCallback = new ActionModeCallback();
@@ -186,7 +162,7 @@ public class ActivityPedidoMain extends AppCompatActivity {
         webPedido.setCadastro(objetoCliente);
         webPedido.setId_empresa(UsuarioHelper.getUsuario().getIdEmpresaMultiDevice());
         webPedido.setId_vendedor(UsuarioHelper.getUsuario().getId_quando_vendedor());
-        webPedido.setId_operacao(adapterOperacao.getItem(spOperacao.getSelectedItemPosition()).getId_operacao());
+
         webPedido.setExcluido("N");
         webPedido.setUsuario_lancamento_id(UsuarioHelper.getUsuario().getId_usuario());
         webPedido.setUsuario_lancamento_nome(UsuarioHelper.getUsuario().getNome_usuario());
@@ -250,10 +226,6 @@ public class ActivityPedidoMain extends AppCompatActivity {
 
     public void pegaCliente(Cliente cliente) {
         objetoCliente = cliente;
-        if (PedidoHelper.getIdPedido() > 0) {
-            db = new DBHelper(PedidoHelper.getActivityPedidoMain());
-            db.alterar("UPDATE TBL_WEB_PEDIDO SET ID_CADASTRO = " + objetoCliente.getId_cadastro() + " WHERE ID_WEB_PEDIDO = " + PedidoHelper.getIdPedido());
-        }
     }
 
     @Override

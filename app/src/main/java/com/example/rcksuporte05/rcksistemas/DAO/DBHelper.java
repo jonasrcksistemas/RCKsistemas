@@ -421,7 +421,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 "PONTOS_COR_ORIG VARCHAR(15)," +
                 "VALOR_PRECO_PAGO DECIMAL(12, 8)," +
                 "ITEM_ENVIADO VARCHAR(1) DEFAULT 'N'," +
-                "ID_WEB_ITEM_SERVIDOR INTEGER);");
+                "ID_WEB_ITEM_SERVIDOR INTEGER," +
+                "TIPO_DESCONTO VARCHAR(1) DEFAULT 'P');");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS TBL_PROSPECT " +
                 "(ATIVO VARCHAR(1) DEFAULT 'S' NOT NULL," +
@@ -679,7 +680,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
             db.execSQL("ALTER TABLE TBL_CADASTRO ADD COLUMN ID_CATEGORIA INTEGER;");
 
-            db.execSQL("CREATE TABLE TBL_CADASTRO_CATEGORIA(ID_CATEGORIA INTEGER NOT NULL PRIMARY KEY," +
+            db.execSQL("CREATE TABLE IF NOT EXISTS TBL_CADASTRO_CATEGORIA(ID_CATEGORIA INTEGER NOT NULL PRIMARY KEY," +
                     "  ID_EMPRESA     INTEGER    NOT NULL," +
                     "  ATIVO          VARCHAR(1) NOT NULL," +
                     "  NOME_CATEGORIA VARCHAR(60)," +
@@ -687,7 +688,7 @@ public class DBHelper extends SQLiteOpenHelper {
                     "  USUARIO_NOME   VARCHAR(60)," +
                     "  USUARIO_DATA   TIMESTAMP(19));");
 
-            db.execSQL("CREATE TABLE TBL_PROMOCAO_CAB(ID_PROMOCAO INTEGER NOT NULL" +
+            db.execSQL("CREATE TABLE IF NOT EXISTS TBL_PROMOCAO_CAB(ID_PROMOCAO INTEGER NOT NULL" +
                     "    CONSTRAINT PK_TBL_PROMOCAO_CAB" +
                     "    PRIMARY KEY," +
                     "  ID_EMPRESA           INTEGER    NOT NULL," +
@@ -704,7 +705,7 @@ public class DBHelper extends SQLiteOpenHelper {
                     "  USUARIO_NOME         VARCHAR(60)," +
                     "  USUARIO_DATA         TIMESTAMP(19));");
 
-            db.execSQL("CREATE TABLE TBL_PROMOCAO_CLIENTE(ID_PROMOCAO  INTEGER NOT NULL," +
+            db.execSQL("CREATE TABLE IF NOT EXISTS TBL_PROMOCAO_CLIENTE(ID_PROMOCAO  INTEGER NOT NULL," +
                     "  ID_CADASTRO  INTEGER NOT NULL," +
                     "  ID_EMPRESA   INTEGER NOT NULL," +
                     "  ATIVO        VARCHAR(1)," +
@@ -714,7 +715,7 @@ public class DBHelper extends SQLiteOpenHelper {
                     "  CONSTRAINT PK_TBL_PROMOCAO_CLIENTE" +
                     "  PRIMARY KEY (ID_PROMOCAO, ID_CADASTRO));");
 
-            db.execSQL("CREATE TABLE TBL_PROMOCAO_PRODUTO(ID_PROMOCAO INTEGER NOT NULL," +
+            db.execSQL("CREATE TABLE IF NOT EXISTS TBL_PROMOCAO_PRODUTO(ID_PROMOCAO INTEGER NOT NULL," +
                     "  ID_PRODUTO          VARCHAR(20) NOT NULL," +
                     "  ID_EMPRESA          INTEGER     NOT NULL," +
                     "  ATIVO               VARCHAR(1)," +
@@ -729,6 +730,8 @@ public class DBHelper extends SQLiteOpenHelper {
                     "  USUARIO_DATA        TIMESTAMP(19)," +
                     "  CONSTRAINT PK_TBL_PROMOCAO_PRODUTO" +
                     "  PRIMARY KEY (ID_PROMOCAO, ID_PRODUTO));");
+
+            db.execSQL("ALTER TABLE TBL_WEB_PEDIDO_ITENS ADD COLUMN TIPO_DESCONTO VARCHAR(1) DEFAULT 'P';");
         }
     }
 
@@ -2031,7 +2034,6 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("QUANTIDADE", webPedidoItem.getQuantidade());
         content.put("VALOR_UNITARIO", webPedidoItem.getVenda_preco());
         content.put("VALOR_BRUTO", webPedidoItem.getValor_bruto());
-        content.put("VALOR_DESCONTO_PER", webPedidoItem.getTabela_preco_faixa().getPerc_desc_inicial());
         content.put("VALOR_DESCONTO_REAL", webPedidoItem.getValor_desconto_real());
         content.put("VALOR_DESCONTO_PER_ADD", webPedidoItem.getValor_desconto_per_add());
         content.put("VALOR_DESCONTO_REAL_ADD", webPedidoItem.getValor_desconto_real_add());
@@ -2039,17 +2041,14 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("DATA_MOVIMENTACAO", this.pegaDataAtual());
         content.put("USUARIO_LANCAMENTO_ID", webPedidoItem.getUsuario_lancamento_id());
         content.put("USUARIO_LANCAMENTO_DATA", this.pegaDataHoraAtual());
-        content.put("ID_TABELA_PRECO_FAIXA", webPedidoItem.getTabela_preco_faixa().getId_item());
         content.put("ID_ITEM_DESCONTO", webPedidoItem.getId_item_desconto());
         content.put("PONTOS_UNITARIO", webPedidoItem.getPontos_unitario());
         content.put("PONTOS_TOTAL", webPedidoItem.getPontos_total());
         content.put("PONTOS_COEFICIENTE", webPedidoItem.getPontos_coeficiente());
-        content.put("PONTOS_COR", webPedidoItem.getTabela_preco_faixa().getCor_painel());
         content.put("COMISSAO_PERCENTUAL", webPedidoItem.getComissao_percentual());
         content.put("COMISSAO_VALOR", webPedidoItem.getComissao_valor());
         content.put("VALOR_BONUS_CREDOR", webPedidoItem.getValor_bonus_credor());
         content.put("PERC_BONUS_CREDOR", webPedidoItem.getPerc_bonus_credor());
-        content.put("ID_TABELA_PRECO", webPedidoItem.getTabela_preco_faixa().getId_item());
         content.put("VALOR_DESCONTO_PER_ORIG", webPedidoItem.getValor_desconto_per_orig());
         content.put("VALOR_DESCONTO_REAL_ORIG", webPedidoItem.getValor_desconto_real_orig());
         content.put("VALOR_DESCONTO_PER_ADD_ORIG", webPedidoItem.getValor_desconto_per_add_orig());
@@ -2065,6 +2064,8 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("PONTOS_TOTAL_ORIG", webPedidoItem.getPontos_total_orig());
         content.put("PONTOS_COR_ORIG", webPedidoItem.getPontos_cor_orig());
         content.put("VALOR_PRECO_PAGO", webPedidoItem.getValor_preco_pago());
+        content.put("TIPO_DESCONTO", webPedidoItem.getTipoDesconto());
+        content.put("VALOR_DESCONTO_PER", webPedidoItem.getValor_desconto_per());
 
         db.insert("TBL_WEB_PEDIDO_ITENS", null, content);
         System.gc();
@@ -2082,7 +2083,6 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("QUANTIDADE", webPedidoItem.getQuantidade());
         content.put("VALOR_UNITARIO", webPedidoItem.getValor_unitario());
         content.put("VALOR_BRUTO", webPedidoItem.getValor_bruto());
-        content.put("VALOR_DESCONTO_PER", webPedidoItem.getTabela_preco_faixa().getPerc_desc_inicial());
         content.put("VALOR_DESCONTO_REAL", webPedidoItem.getValor_desconto_real());
         content.put("VALOR_DESCONTO_PER_ADD", webPedidoItem.getValor_desconto_per_add());
         content.put("VALOR_DESCONTO_REAL_ADD", webPedidoItem.getValor_desconto_real_add());
@@ -2090,7 +2090,6 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("DATA_MOVIMENTACAO", webPedidoItem.getData_movimentacao());
         content.put("USUARIO_LANCAMENTO_ID", webPedidoItem.getUsuario_lancamento_id());
         content.put("USUARIO_LANCAMENTO_DATA", webPedidoItem.getUsuario_lancamento_data());
-        content.put("ID_TABELA_PRECO_FAIXA", webPedidoItem.getTabela_preco_faixa().getId_item());
         content.put("ID_ITEM_DESCONTO", webPedidoItem.getId_item_desconto());
         content.put("PONTOS_UNITARIO", webPedidoItem.getPontos_unitario());
         content.put("PONTOS_TOTAL", webPedidoItem.getPontos_total());
@@ -2116,6 +2115,8 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("PONTOS_TOTAL_ORIG", webPedidoItem.getPontos_total_orig());
         content.put("PONTOS_COR_ORIG", webPedidoItem.getPontos_cor_orig());
         content.put("VALOR_PRECO_PAGO", webPedidoItem.getValor_preco_pago());
+        content.put("TIPO_DESCONTO", webPedidoItem.getTipoDesconto());
+        content.put("VALOR_DESCONTO_PER", webPedidoItem.getValor_desconto_per());
 
         if (contagem("SELECT COUNT(*) FROM TBL_WEB_PEDIDO_ITENS WHERE ID_WEB_ITEM = " + webPedidoItem.getId_web_item()) <= 0) {
             db.insert("TBL_WEB_PEDIDO_ITENS", null, content);
@@ -2506,7 +2507,7 @@ public class DBHelper extends SQLiteOpenHelper {
             webPedidoItens.setId_produto(cursor.getString(cursor.getColumnIndex("ID_PRODUTO")));
             webPedidoItens.setId_empresa(cursor.getString(cursor.getColumnIndex("ID_EMPRESA")));
             webPedidoItens.setQuantidade(cursor.getString(cursor.getColumnIndex("QUANTIDADE")));
-            webPedidoItens.setValor_unitario(cursor.getString(cursor.getColumnIndex("VALOR_UNITARIO")));
+            webPedidoItens.setValor_unitario(cursor.getFloat(cursor.getColumnIndex("VALOR_UNITARIO")));
             webPedidoItens.setValor_bruto(cursor.getString(cursor.getColumnIndex("VALOR_BRUTO")));
             webPedidoItens.setValor_desconto_per(cursor.getString(cursor.getColumnIndex("VALOR_DESCONTO_PER")));
             webPedidoItens.setValor_desconto_real(cursor.getString(cursor.getColumnIndex("VALOR_DESCONTO_REAL")));
@@ -2516,7 +2517,6 @@ public class DBHelper extends SQLiteOpenHelper {
             webPedidoItens.setData_movimentacao(cursor.getString(cursor.getColumnIndex("DATA_MOVIMENTACAO")));
             webPedidoItens.setUsuario_lancamento_id(cursor.getString(cursor.getColumnIndex("USUARIO_LANCAMENTO_ID")));
             webPedidoItens.setUsuario_lancamento_data(cursor.getString(cursor.getColumnIndex("USUARIO_LANCAMENTO_DATA")));
-            webPedidoItens.setTabela_preco_faixa(this.listaTabelaPrecoItem("SELECT * FROM TBL_TABELA_PRECO_ITENS WHERE ID_ITEM = " + cursor.getString(cursor.getColumnIndex("ID_TABELA_PRECO_FAIXA"))).get(0));
             webPedidoItens.setId_item_desconto(cursor.getString(cursor.getColumnIndex("ID_ITEM_DESCONTO")));
             webPedidoItens.setPontos_unitario(cursor.getString(cursor.getColumnIndex("PONTOS_UNITARIO")));
             webPedidoItens.setPontos_total(cursor.getString(cursor.getColumnIndex("PONTOS_TOTAL")));
@@ -2541,6 +2541,7 @@ public class DBHelper extends SQLiteOpenHelper {
             webPedidoItens.setComissao_valor_orig(cursor.getString(cursor.getColumnIndex("COMISSAO_VALOR_ORIG")));
             webPedidoItens.setPontos_total_orig(cursor.getString(cursor.getColumnIndex("PONTOS_TOTAL_ORIG")));
             webPedidoItens.setPontos_cor_orig(cursor.getString(cursor.getColumnIndex("PONTOS_COR_ORIG")));
+            webPedidoItens.setTipoDesconto(cursor.getString(cursor.getColumnIndex("TIPO_DESCONTO")));
             webPedidoItens.setProduto(this.listaProduto("SELECT * FROM TBL_PRODUTO WHERE ID_PRODUTO = '" + webPedidoItens.getId_produto() + "'").get(0));
 
             lista.add(webPedidoItens);

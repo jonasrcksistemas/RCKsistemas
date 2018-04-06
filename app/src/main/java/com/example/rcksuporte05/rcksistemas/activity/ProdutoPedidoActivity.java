@@ -15,10 +15,10 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
+import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.PedidoHelper;
 import com.example.rcksuporte05.rcksistemas.R;
-import com.example.rcksuporte05.rcksistemas.model.Produto;
+import com.example.rcksuporte05.rcksistemas.model.Cliente;
 import com.example.rcksuporte05.rcksistemas.model.WebPedidoItens;
 import com.example.rcksuporte05.rcksistemas.util.MascaraUtil;
 
@@ -27,14 +27,13 @@ import butterknife.ButterKnife;
 
 public class ProdutoPedidoActivity extends AppCompatActivity {
 
-    private static Produto objetoProduto;
-    private static WebPedidoItens webPedidoItem;
     @BindView(R.id.rgRealPorc)
     RadioGroup rgRealPorc;
     @BindView(R.id.porcentagem)
     RadioButton rbPorcentagem;
     @BindView(R.id.real)
     RadioButton rbReal;
+    private WebPedidoItens webPedidoItem;
     private Toolbar toolbar;
     private Button btnBuscarProduto;
     private EditText edtNomeProduto;
@@ -45,14 +44,6 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
     private EditText edtDescontoReais;
     private EditText edtTotal;
     private MenuItem salvar_produto;
-    private Float precoVenda;
-    private Float precoUnitario;
-    private Float quantidade;
-    private Float descontoReais;
-    private Float precoPago;
-    private Float total;
-    private Float valorBruto;
-    private DBHelper db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,12 +53,11 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
 
         PedidoHelper pedidoHelper = new PedidoHelper(this);
 
-        db = new DBHelper(ProdutoPedidoActivity.this);
-
         try {
             webPedidoItem = pedidoHelper.getWebPedidoItem();
+
         } catch (Exception e) {
-            Toast.makeText(this, e.getMessage(), Toast.LENGTH_LONG).show();
+            e.printStackTrace();
         }
 
         toolbar = (Toolbar) findViewById(R.id.tb_produto_pedido);
@@ -82,23 +72,6 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
         edtDescontoReais = (EditText) findViewById(R.id.edtDescontoReais);
         edtTotal = (EditText) findViewById(R.id.edtTotal);
         edtQuantidade.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                calculaDesconto();
-            }
-        });
-
-        edtTabelaPreco.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -168,10 +141,12 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
                     case R.id.porcentagem:
                         edtDesconto.setEnabled(true);
                         edtDescontoReais.setEnabled(false);
+                        webPedidoItem.setTipoDesconto("P");
                         break;
                     case R.id.real:
                         edtDesconto.setEnabled(false);
                         edtDescontoReais.setEnabled(true);
+                        webPedidoItem.setTipoDesconto("R");
                         break;
                 }
             }
@@ -190,66 +165,40 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
             edtTotal.setFocusable(false);
             edtQuantidade.setFocusable(false);
             btnBuscarProduto.setEnabled(false);
+            rbReal.setClickable(false);
+            rbPorcentagem.setClickable(false);
             toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimaryCinza));
             this.setTheme(R.style.Theme_MeuTemaPedido);
         }
     }
 
-    public void pegaProduto(Produto produto) {
-        objetoProduto = produto;
-    }
-
     @Override
     protected void onResume() {
-        if (objetoProduto != null) {
+        try {
             try {
-                edtNomeProduto.setText(objetoProduto.getNome_produto());
-                edtTabelaPreco.setText(MascaraUtil.mascaraReal(objetoProduto.getVenda_preco()));
-                precoVenda = Float.parseFloat(objetoProduto.getVenda_preco());
-                try {
-                    quantidade = Float.parseFloat(String.valueOf(edtQuantidade.getText()));
-                } catch (NumberFormatException e) {
-                    quantidade = Float.parseFloat("1");
+                if (PedidoHelper.getProduto() != null && getIntent().getIntExtra("pedido", 0) != 1 || PedidoHelper.getProduto().getId_produto() != PedidoHelper.getWebPedidoItem().getId_produto())
+                    webPedidoItem = new WebPedidoItens(PedidoHelper.getProduto());
+                else {
+                    webPedidoItem = PedidoHelper.getWebPedidoItem();
+                    if (webPedidoItem.getTipoDesconto().equals("R"))
+                        rbReal.setChecked(true);
                 }
-                descontoReais = (Float.parseFloat(edtDesconto.getText().toString()) / 100 * (precoVenda * quantidade));
-                valorBruto = Float.parseFloat(objetoProduto.getVenda_preco()) * quantidade;
-                precoPago = ((precoVenda * quantidade) - descontoReais) / quantidade;
-                total = ((precoVenda * quantidade) /*- descontoReais*/);
-
-                edtDescontoReais.setText(String.valueOf(descontoReais));
-                edtTotal.setText(String.format("R$%.2f", 0));
-                edtValorProdutos.setText(MascaraUtil.mascaraReal(valorBruto));
-
-            } catch (Exception e) {
-                edtValorProdutos.setText(MascaraUtil.mascaraReal(Float.parseFloat(objetoProduto.getVenda_preco())));
+            } catch (NullPointerException e) {
                 e.printStackTrace();
+                webPedidoItem = PedidoHelper.getWebPedidoItem();
+                if (webPedidoItem.getTipoDesconto().equals("R"))
+                    rbReal.setChecked(true);
             }
-        } else if (webPedidoItem != null) {
-            try {
-                edtNomeProduto.setText(webPedidoItem.getNome_produto());
-                edtTabelaPreco.setText(MascaraUtil.mascaraReal(webPedidoItem.getVenda_preco()));
-                precoVenda = Float.parseFloat(webPedidoItem.getVenda_preco());
-                try {
-                    quantidade = Float.parseFloat(edtQuantidade.getText().toString());
-                } catch (NumberFormatException e) {
-                    quantidade = Float.parseFloat(webPedidoItem.getQuantidade());
-                }
-                descontoReais = (Float.parseFloat(edtDesconto.getText().toString()) / 100 * (precoVenda * quantidade));
-                valorBruto = Float.parseFloat(webPedidoItem.getVenda_preco()) * quantidade;
-                precoPago = ((precoVenda * quantidade) - descontoReais) / quantidade;
-                total = (precoVenda * quantidade);
 
-                edtQuantidade.setText(quantidade.toString());
-                edtDescontoReais.setText(String.valueOf(descontoReais));
-                edtTotal.setText(String.format("R$%.2f", 0.f));
-                edtValorProdutos.setText(MascaraUtil.mascaraReal(valorBruto));
-
-            } catch (Exception e) {
-                edtValorProdutos.setText(MascaraUtil.mascaraReal(Float.parseFloat(objetoProduto.getVenda_preco())));
-                e.printStackTrace();
-            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-
+        edtNomeProduto.setText(webPedidoItem.getNome_produto());
+        edtTabelaPreco.setText(MascaraUtil.mascaraReal(webPedidoItem.getVenda_preco()));
+        edtDesconto.setText(webPedidoItem.getValor_desconto_per());
+        edtDescontoReais.setText(webPedidoItem.getValor_desconto_real());
+        edtQuantidade.setText(webPedidoItem.getQuantidade());
+        calculaDesconto();
         super.onResume();
     }
 
@@ -270,204 +219,89 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.menu_salvar_produto:
-                if (getIntent().getIntExtra("pedido", 0) != 1) {
-                    if (objetoProduto != null) {
-                        if (!edtQuantidade.getText().toString().isEmpty()) {
-                            if (Float.parseFloat(edtQuantidade.getText().toString()) > 0) {
-                                if (!edtTabelaPreco.getText().toString().trim().isEmpty()) {
-                                    if (Float.parseFloat(objetoProduto.getVenda_preco()) > 0) {
+                if (webPedidoItem != null) {
+                    if (!edtQuantidade.getText().toString().trim().isEmpty()) {
+                        if (Float.parseFloat(edtQuantidade.getText().toString()) > 0) {
+                            if (!edtTabelaPreco.getText().toString().isEmpty()) {
+                                if (Float.parseFloat(webPedidoItem.getVenda_preco()) > 0) {
 
-                                        WebPedidoItens webPedidoItem = new WebPedidoItens(objetoProduto);
-                                        webPedidoItem.setQuantidade(quantidade.toString());
-                                        webPedidoItem.setValor_total(total.toString());
-                                        webPedidoItem.setValor_unitario(edtTabelaPreco.getText().toString());
-                                        webPedidoItem.setValor_bruto(valorBruto.toString());
-                                        webPedidoItem.setValor_unitario(objetoProduto.getVenda_preco());
-                                        webPedidoItem.setValor_preco_pago(precoPago.toString());
-                                        webPedidoItem.setValor_desconto_real(descontoReais.toString());
-                                        if (Float.parseFloat(webPedidoItem.getPontos_total()) > 0) {
-                                            webPedidoItem.setPontos_coeficiente(String.valueOf(total / Float.parseFloat(webPedidoItem.getPontos_total())));
-                                        } else {
-                                            webPedidoItem.setPontos_coeficiente("0");
-                                        }
+                                    webPedidoItem.setValor_unitario(Float.parseFloat(webPedidoItem.getVenda_preco()));
 
+                                    if (getIntent().getIntExtra("pedido", 0) != 1) {
                                         PedidoHelper pedidoHelper = new PedidoHelper();
                                         pedidoHelper.inserirProduto(webPedidoItem);
-                                        finish();
                                     } else {
-                                        Toast.makeText(this, "O preço não pode ser zero!", Toast.LENGTH_SHORT).show();
-                                    }
-                                } else {
-                                    Toast.makeText(this, "Informe o preço do produto!", Toast.LENGTH_SHORT).show();
-                                }
-                            } else {
-                                Toast.makeText(this, "A quantidade não pode ser zero!", Toast.LENGTH_SHORT).show();
-                                edtQuantidade.setError("A quantidade não pode ser zero!");
-                            }
-                        } else {
-                            Toast.makeText(this, "Informe a quantidade", Toast.LENGTH_SHORT).show();
-                            edtQuantidade.setError("Informe a quantidade");
-                        }
-                    } else {
-                        Toast.makeText(this, "Informe um produto", Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    if (webPedidoItem != null) {
-                        if (!edtQuantidade.getText().toString().isEmpty()) {
-                            if (Float.parseFloat(edtQuantidade.getText().toString()) > 0) {
-                                if (!edtTabelaPreco.getText().toString().isEmpty()) {
-                                    if (Float.parseFloat(webPedidoItem.getValor_unitario()) > 0) {
-
-                                        if (objetoProduto != null) {
-                                            webPedidoItem.setProduto(objetoProduto);
-                                        }
-                                        webPedidoItem.setValor_unitario(edtTabelaPreco.getText().toString());
-                                        webPedidoItem.setQuantidade(quantidade.toString());
-                                        webPedidoItem.setValor_total(total.toString());
-                                        webPedidoItem.setValor_bruto(valorBruto.toString());
-                                        webPedidoItem.setValor_preco_pago(precoPago.toString());
-
                                         PedidoHelper pedidoHelper = new PedidoHelper();
                                         pedidoHelper.alterarProduto(webPedidoItem, getIntent().getIntExtra("position", 0));
-                                        finish();
-                                    } else {
-                                        Toast.makeText(this, "O preço não pode ser zero!", Toast.LENGTH_SHORT).show();
                                     }
+                                    finish();
                                 } else {
-                                    Toast.makeText(this, "Informe o preço do produto!", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(this, "O preço não pode ser zero!", Toast.LENGTH_SHORT).show();
                                 }
                             } else {
-                                Toast.makeText(this, "A quantidade não pode ser zero!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(this, "Informe o preço do produto!", Toast.LENGTH_SHORT).show();
                             }
                         } else {
-                            Toast.makeText(this, "Informe a quantidade", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, "A quantidade não pode ser zero!", Toast.LENGTH_SHORT).show();
                         }
                     } else {
-                        Toast.makeText(this, "Informe um produto", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, "Informe a quantidade", Toast.LENGTH_SHORT).show();
                     }
-                    break;
+                } else {
+                    Toast.makeText(this, "Informe um produto", Toast.LENGTH_SHORT).show();
                 }
+                break;
+
         }
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     protected void onDestroy() {
-        objetoProduto = null;
-        webPedidoItem = null;
         PedidoHelper.setWebPedidoItem(null);
+        PedidoHelper.setProduto(null);
         System.gc();
         super.onDestroy();
     }
 
-    public void calculaDesconto() {
-        if (rbPorcentagem.isChecked()) {
-            if (objetoProduto != null) {
-                try {
-                    precoVenda = Float.parseFloat(objetoProduto.getVenda_preco());
-                    quantidade = Float.parseFloat(edtQuantidade.getText().toString());
-                    try {
-                        descontoReais = (Float.parseFloat(edtDesconto.getText().toString()) / 100 * (precoVenda * quantidade));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        descontoReais = 0.00f;
+    private void calculaDesconto() {
+        try {
+            if (webPedidoItem != null) {
+                if (!edtQuantidade.getText().toString().trim().isEmpty()) {
+                    Float quantidade = Float.parseFloat(edtQuantidade.getText().toString());
+                    Float totalProdutoBruto = quantidade * Float.parseFloat(webPedidoItem.getVenda_preco());
+                    Float desconto = 0.00f;
+                    edtValorProdutos.setText(MascaraUtil.mascaraReal(totalProdutoBruto));
+                    if (rbPorcentagem.isChecked()) {
+                        if (!edtDesconto.getText().toString().trim().isEmpty()) {
+                            desconto = (Float.parseFloat(edtDesconto.getText().toString()) * (totalProdutoBruto)) / 100;
+                            edtDescontoReais.setText(MascaraUtil.duasCasaDecimal(desconto));
+                            edtTotal.setText(MascaraUtil.mascaraReal(totalProdutoBruto - desconto));
+                        } else {
+                            edtDescontoReais.setText("0.00");
+                            edtTotal.setText(MascaraUtil.mascaraReal(totalProdutoBruto));
+                        }
+                        webPedidoItem.setTipoDesconto("P");
+                    } else if (rbReal.isChecked()) {
+                        if (!edtDescontoReais.getText().toString().trim().isEmpty()) {
+                            desconto = (Float.parseFloat(edtDescontoReais.getText().toString()) * 100) / totalProdutoBruto;
+                            edtDesconto.setText(MascaraUtil.duasCasaDecimal(desconto));
+                            edtTotal.setText(MascaraUtil.mascaraReal(totalProdutoBruto - Float.parseFloat(edtDescontoReais.getText().toString())));
+                        } else {
+                            edtDesconto.setText("0.00");
+                            edtTotal.setText(MascaraUtil.mascaraReal(totalProdutoBruto));
+                        }
+                        webPedidoItem.setTipoDesconto("R");
                     }
-                    valorBruto = Float.parseFloat(objetoProduto.getVenda_preco()) * Float.parseFloat(edtQuantidade.getText().toString());
-                    precoPago = ((precoVenda * quantidade) - descontoReais) / quantidade;
-                    total = ((precoVenda * quantidade) - descontoReais);
-
-                    edtDescontoReais.setText(String.valueOf(descontoReais));
-                    edtTotal.setText(MascaraUtil.mascaraReal(total));
-                    edtValorProdutos.setText(MascaraUtil.mascaraReal(valorBruto));
-                } catch (NumberFormatException | NullPointerException e) {
-                    e.printStackTrace();
-                    try {
-                        edtTotal.setText("R$00.00");
-                        edtValorProdutos.setText(String.format("R$%.2f", Float.parseFloat(objetoProduto.getVenda_preco())));
-                    } catch (NullPointerException e2) {
-                        e.printStackTrace();
-                        edtValorProdutos.setText("R$00.00");
-                    }
-                }
-            } else if (webPedidoItem != null) {
-                try {
-                    precoVenda = Float.parseFloat(webPedidoItem.getVenda_preco());
-                    quantidade = Float.parseFloat(edtQuantidade.getText().toString());
-                    try {
-                        descontoReais = (Float.parseFloat(edtDesconto.getText().toString()) / 100 * (precoVenda * quantidade));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        descontoReais = 0.00f;
-                    }
-                    valorBruto = Float.parseFloat(webPedidoItem.getVenda_preco()) * Float.parseFloat(edtQuantidade.getText().toString());
-                    precoPago = ((precoVenda * quantidade) - descontoReais) / quantidade;
-                    total = ((precoVenda * quantidade) - descontoReais);
-
-                    edtDescontoReais.setText(String.valueOf(descontoReais));
-                    edtTotal.setText(MascaraUtil.mascaraReal(total));
-                    edtValorProdutos.setText(MascaraUtil.mascaraReal(valorBruto));
-                } catch (NumberFormatException | NullPointerException e) {
-                    try {
-                        edtTotal.setText("R$00.00");
-                        edtValorProdutos.setText(String.format("R$%.2f", Float.parseFloat(webPedidoItem.getVenda_preco())));
-                    } catch (NullPointerException e2) {
-                        edtValorProdutos.setText("R$00.00");
-                    }
+                    webPedidoItem.setQuantidade(quantidade.toString());
+                    webPedidoItem.setValor_total(String.valueOf(totalProdutoBruto - Float.parseFloat(edtDescontoReais.getText().toString())));
+                    webPedidoItem.setValor_bruto(String.valueOf(totalProdutoBruto));
+                    webPedidoItem.setValor_desconto_per(edtDesconto.getText().toString());
+                    webPedidoItem.setValor_desconto_real(edtDescontoReais.getText().toString());
                 }
             }
-        } else if (rbReal.isChecked()) {
-            if (objetoProduto != null) {
-                try {
-                    precoVenda = Float.parseFloat(objetoProduto.getVenda_preco());
-                    quantidade = Float.parseFloat(edtQuantidade.getText().toString());
-                    try {
-                        descontoReais = (Float.parseFloat(edtDescontoReais.getText().toString()) * 100) / (precoVenda * quantidade);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        descontoReais = 0.00f;
-                    }
-                    valorBruto = Float.parseFloat(objetoProduto.getVenda_preco()) * Float.parseFloat(edtQuantidade.getText().toString());
-                    total = ((precoVenda * quantidade) - Float.parseFloat(edtDescontoReais.getText().toString()));
-
-                    edtDesconto.setText(String.valueOf(descontoReais));
-                    edtTotal.setText(MascaraUtil.mascaraReal(total));
-                    edtValorProdutos.setText(MascaraUtil.mascaraReal(valorBruto));
-                } catch (NumberFormatException | NullPointerException e) {
-                    e.printStackTrace();
-                    try {
-                        edtTotal.setText("R$00.00");
-                        edtValorProdutos.setText(String.format("R$%.2f", Float.parseFloat(objetoProduto.getVenda_preco())));
-                    } catch (NullPointerException e2) {
-                        e.printStackTrace();
-                        edtValorProdutos.setText("R$00.00");
-                    }
-                }
-            } else if (webPedidoItem != null) {
-                try {
-                    precoVenda = Float.parseFloat(webPedidoItem.getVenda_preco());
-                    quantidade = Float.parseFloat(edtQuantidade.getText().toString());
-                    try {
-                        descontoReais = (Float.parseFloat(edtDescontoReais.getText().toString()) * 100 / (precoVenda * quantidade));
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                        descontoReais = 0.00f;
-                    }
-                    valorBruto = Float.parseFloat(webPedidoItem.getVenda_preco()) * Float.parseFloat(edtQuantidade.getText().toString());
-                    precoPago = ((precoVenda * quantidade) - descontoReais) / quantidade;
-                    total = ((precoVenda * quantidade) - Float.parseFloat(edtDescontoReais.getText().toString()));
-
-                    edtDesconto.setText(String.valueOf(descontoReais));
-                    edtTotal.setText(MascaraUtil.mascaraReal(total));
-                    edtValorProdutos.setText(MascaraUtil.mascaraReal(valorBruto));
-                } catch (NumberFormatException | NullPointerException e) {
-                    try {
-                        edtTotal.setText("R$00.00");
-                        edtValorProdutos.setText(String.format("R$%.2f", Float.parseFloat(webPedidoItem.getVenda_preco())));
-                    } catch (NullPointerException e2) {
-                        edtValorProdutos.setText("R$00.00");
-                    }
-                }
-            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

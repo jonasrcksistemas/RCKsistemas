@@ -156,7 +156,6 @@ public class Pedido1 extends Fragment implements ListaAdapterProdutoPedido.Produ
     @Override
     public void onDestroy() {
         try {
-            PedidoHelper.setPositionFaixPadrao(-1);
             listaProdutoRemovido.clear();
             listaAdapterProdutoPedido = null;
             listaProdutoPedido.clear();

@@ -19,11 +19,12 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
+import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
+import com.example.rcksuporte05.rcksistemas.Helper.PedidoHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.ListaProdutoAdpter;
 import com.example.rcksuporte05.rcksistemas.adapters.RecyclerTouchListener;
 import com.example.rcksuporte05.rcksistemas.model.Produto;
-import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.util.DividerItemDecoration;
 
 import java.util.ArrayList;
@@ -66,41 +67,39 @@ public class ActivityProduto extends AppCompatActivity {
             e.printStackTrace();
         }
 
-            if (getIntent().getIntExtra("acao", 0) == 1) {
+        if (getIntent().getIntExtra("acao", 0) == 1) {
 
-                listaProdutoRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(this, listaProdutoRecyclerView, new RecyclerTouchListener.ClickListener() {
-                    @Override
-                    public void onClick(View view, int position) {
-                        ProdutoPedidoActivity produtoPedidoActivity = new ProdutoPedidoActivity();
-                        Intent intent = new Intent(ActivityProduto.this, ProdutoPedidoActivity.class);
-                        produtoPedidoActivity.pegaProduto(listaProdutoAdpter.getItem(position));
-                        startActivity(intent);
-                        finish();
-                    }
+            listaProdutoRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(this, listaProdutoRecyclerView, new RecyclerTouchListener.ClickListener() {
+                @Override
+                public void onClick(View view, int position) {
+                    Intent intent = new Intent(ActivityProduto.this, ProdutoPedidoActivity.class);
+                    PedidoHelper.setProduto(listaProdutoAdpter.getItem(position));
+                    startActivity(intent);
+                    finish();
+                }
 
-                    @Override
-                    public void onLongClick(View view, int position) {
+                @Override
+                public void onLongClick(View view, int position) {
 
-                    }
-                }));
+                }
+            }));
 
-            } else if(getIntent().getIntExtra("acao", 0) == 2){
-                listaProdutoRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(this, listaProdutoRecyclerView, new RecyclerTouchListener.ClickListener() {
-                    @Override
-                    public void onClick(View view, int position) {
-                        ProdutoPedidoActivity produtoPedidoActivity = new ProdutoPedidoActivity();
-                        produtoPedidoActivity.pegaProduto(listaProdutoAdpter.getItem(position));
-                        finish();
-                    }
+        } else if (getIntent().getIntExtra("acao", 0) == 2) {
+            listaProdutoRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(this, listaProdutoRecyclerView, new RecyclerTouchListener.ClickListener() {
+                @Override
+                public void onClick(View view, int position) {
+                    PedidoHelper.setProduto(listaProdutoAdpter.getItem(position));
+                    finish();
+                }
 
-                    @Override
-                    public void onLongClick(View view, int position) {
+                @Override
+                public void onLongClick(View view, int position) {
 
-                    }
-                }));
+                }
+            }));
 
 
-            }
+        }
 
 
         setSupportActionBar(toolbar);

@@ -6,15 +6,16 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.rcksuporte05.rcksistemas.R;
-import com.example.rcksuporte05.rcksistemas.bo.PedidoBO;
-import com.example.rcksuporte05.rcksistemas.model.WebPedido;
-import com.example.rcksuporte05.rcksistemas.model.WebPedidoItens;
 import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
-import com.example.rcksuporte05.rcksistemas.fragment.Pedido1;
-import com.example.rcksuporte05.rcksistemas.fragment.Pedido2;
+import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.activity.ActivityPedidoMain;
 import com.example.rcksuporte05.rcksistemas.activity.ProdutoPedidoActivity;
+import com.example.rcksuporte05.rcksistemas.bo.PedidoBO;
+import com.example.rcksuporte05.rcksistemas.fragment.Pedido1;
+import com.example.rcksuporte05.rcksistemas.fragment.Pedido2;
+import com.example.rcksuporte05.rcksistemas.model.Produto;
+import com.example.rcksuporte05.rcksistemas.model.WebPedido;
+import com.example.rcksuporte05.rcksistemas.model.WebPedidoItens;
 import com.example.rcksuporte05.rcksistemas.util.MascaraUtil;
 
 import java.text.ParseException;
@@ -34,12 +35,11 @@ public class PedidoHelper {
     private static WebPedido webPedido;
     private static WebPedidoItens webPedidoItem;
     private static List<WebPedidoItens> listaWebPedidoItens;
+    private static Produto produto;
     private static int idPedido;
-    private static int positionFaixPadrao = -1;
     private Float valorProdutos = 0.0f;
     private Float descontoReal = 0.0f;
     private Float mediaDesconto = 0.0f;
-    private Float totalPontos = 0.0f;
     private EditText edtTotalVenda;
     private ViewPager mViewPager;
     private DBHelper db;
@@ -97,12 +97,12 @@ public class PedidoHelper {
         System.gc();
     }
 
-    public static int getPositionFaixPadrao() {
-        return positionFaixPadrao;
+    public static Produto getProduto() {
+        return produto;
     }
 
-    public static void setPositionFaixPadrao(int positionFaixPadrao) {
-        PedidoHelper.positionFaixPadrao = positionFaixPadrao;
+    public static void setProduto(Produto produto) {
+        PedidoHelper.produto = produto;
     }
 
     public static void pintaTxtNomeCliente() {
@@ -150,6 +150,7 @@ public class PedidoHelper {
             webPedido.setObservacoes(pedido2.salvaPedido().getObservacoes());
             webPedido.setData_prev_entrega(pedido2.salvaPedido().getData_prev_entrega());
             webPedido.setPedido_enviado(pedido2.salvaPedido().getPedido_enviado());
+            webPedido.setId_operacao(pedido2.salvaPedido().getId_operacao());
             try {
                 webPedido.setData_prev_entrega(new SimpleDateFormat("yyyy-MM-dd").format(new SimpleDateFormat("dd/MM/yyyy").parse(pedido2.salvaPedido().getData_prev_entrega())));
             } catch (ParseException e) {
@@ -176,16 +177,9 @@ public class PedidoHelper {
                                 for (int i = 0; listaWebPedidoItens.size() > i; i++) {
                                     valorProdutos += Float.parseFloat(listaWebPedidoItens.get(i).getValor_bruto());
                                     descontoReal += Float.parseFloat(listaWebPedidoItens.get(i).getValor_desconto_real());
-                                    mediaDesconto += Float.parseFloat(listaWebPedidoItens.get(i).getTabela_preco_faixa().getPerc_desc_inicial());
-                                    totalPontos += Float.parseFloat(listaWebPedidoItens.get(i).getPontos_total());
                                 }
                                 mediaDesconto = (mediaDesconto / listaWebPedidoItens.size());
-                                webPedido.setPontos_total(totalPontos.toString());
-                                if (totalPontos > 0) {
-                                    webPedido.setPontos_coeficiente(String.valueOf(Float.parseFloat(webPedido.getValor_total()) / totalPontos));
-                                } else {
-                                    webPedido.setPontos_coeficiente("0");
-                                }
+
                                 webPedido.setDesconto_per(String.valueOf(mediaDesconto));
                                 webPedido.setValor_produtos(String.valueOf(valorProdutos));
                                 webPedido.setValor_desconto(String.valueOf(descontoReal));
@@ -265,7 +259,6 @@ public class PedidoHelper {
         pedido1 = null;
         webPedido = null;
         idPedido = 0;
-        positionFaixPadrao = 0;
         System.gc();
     }
 }

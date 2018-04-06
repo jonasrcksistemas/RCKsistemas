@@ -4,9 +4,8 @@ public class WebPedidoItens extends Produto {
 
     private String id_web_item;
     private String id_pedido;
-    private Produto produto;
     private String quantidade;
-    private String valor_unitario;
+    private Float valor_unitario;
     private String valor_bruto;
     private String valor_desconto_per;
     private String valor_desconto_real;
@@ -16,7 +15,6 @@ public class WebPedidoItens extends Produto {
     private String data_movimentacao;
     private String usuario_lancamento_id;
     private String usuario_lancamento_data;
-    private TabelaPrecoItem tabela_preco_faixa;
     private String id_item_desconto;
     private String pontos_unitario;
     private String pontos_total;
@@ -43,6 +41,7 @@ public class WebPedidoItens extends Produto {
     private String pontos_cor_orig;
     private String valor_preco_pago;
     private String id_web_item_servidor;
+    private String tipoDesconto;
 
     public WebPedidoItens(Produto produto) {
         this.setAtivo(produto.getAtivo());
@@ -101,10 +100,6 @@ public class WebPedidoItens extends Produto {
     public WebPedidoItens() {
     }
 
-    public Produto getProduto() {
-        return produto;
-    }
-
     public void setProduto(Produto produto) {
         this.setAtivo(produto.getAtivo());
         this.setId_produto(produto.getId_produto());
@@ -157,14 +152,6 @@ public class WebPedidoItens extends Produto {
         this.setDescricao(produto.getDescricao());
     }
 
-    public TabelaPrecoItem getTabela_preco_faixa() {
-        return tabela_preco_faixa;
-    }
-
-    public void setTabela_preco_faixa(TabelaPrecoItem tabela_preco_faixa) {
-        this.tabela_preco_faixa = tabela_preco_faixa;
-    }
-
     public String getId_web_item() {
         return id_web_item;
     }
@@ -189,11 +176,11 @@ public class WebPedidoItens extends Produto {
         this.quantidade = quantidade;
     }
 
-    public String getValor_unitario() {
+    public Float getValor_unitario() {
         return valor_unitario;
     }
 
-    public void setValor_unitario(String valor_unitario) {
+    public void setValor_unitario(Float valor_unitario) {
         this.valor_unitario = valor_unitario;
     }
 
@@ -475,5 +462,13 @@ public class WebPedidoItens extends Produto {
 
     public void setId_web_item_servidor(String id_web_item_servidor) {
         this.id_web_item_servidor = id_web_item_servidor;
+    }
+
+    public String getTipoDesconto() {
+        return tipoDesconto;
+    }
+
+    public void setTipoDesconto(String tipoDesconto) {
+        this.tipoDesconto = tipoDesconto;
     }
 }

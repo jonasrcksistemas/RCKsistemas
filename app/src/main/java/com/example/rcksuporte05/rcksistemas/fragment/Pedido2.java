@@ -23,7 +23,7 @@ import com.example.rcksuporte05.rcksistemas.Helper.PedidoHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.model.Cliente;
 import com.example.rcksuporte05.rcksistemas.model.CondicoesPagamento;
-import com.example.rcksuporte05.rcksistemas.model.TabelaPreco;
+import com.example.rcksuporte05.rcksistemas.model.Operacao;
 import com.example.rcksuporte05.rcksistemas.model.WebPedido;
 
 import java.text.ParseException;
@@ -38,9 +38,10 @@ public class Pedido2 extends Fragment {
     private static Cliente objetoCliente = null;
     @BindView(R.id.txtDataEmissao)
     TextView txtDataEmissao;
+    @BindView(R.id.spOperacao)
+    Spinner spOperacao;
+    private ArrayAdapter<Operacao> adapterOperacao;
     private Spinner spPagamento;
-    private Spinner spTabelaPreco;
-    private ArrayAdapter<TabelaPreco> adapterPreco;
     private ArrayAdapter<CondicoesPagamento> adapterPagamento;
     private DBHelper db;
     private EditText edtObservacao;
@@ -73,9 +74,8 @@ public class Pedido2 extends Fragment {
             adapterPagamento = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_activated_1, db.listaCondicoesPagamento("SELECT * FROM TBL_CONDICOES_PAG_CAB;"));
             spPagamento.setAdapter(adapterPagamento);
 
-            spTabelaPreco = (Spinner) view.findViewById(R.id.spTabelaPreco);
-            adapterPreco = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_activated_1, db.listaTabelaPreco("SELECT * FROM TBL_TABELA_PRECO_CAB;"));
-            spTabelaPreco.setAdapter(adapterPreco);
+            adapterOperacao = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_activated_1, db.listaOperacao("SELECT * FROM TBL_OPERACAO_ESTOQUE;"));
+            spOperacao.setAdapter(adapterOperacao);
 
         } catch (CursorIndexOutOfBoundsException e) {
             e.printStackTrace();
@@ -97,15 +97,14 @@ public class Pedido2 extends Fragment {
                 System.out.println(e.getMessage());
             }
 
-
-            //Seleciona Tabela de Preco correta dentro do Spinner spTabelaPreco
+            //Seleciona operação correta dentro do Spinner spOperacao
             try {
                 int i = -1;
                 do {
                     i++;
                 }
-                while (!webPedido.getId_tabela().equals(adapterPreco.getItem(i).getId_tabela()));
-                spTabelaPreco.setSelection(i);
+                while (!webPedido.getId_operacao().equals(adapterOperacao.getItem(i).getId_operacao()));
+                spOperacao.setSelection(i);
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
@@ -165,8 +164,8 @@ public class Pedido2 extends Fragment {
             btnSalvarPedido.setVisibility(View.INVISIBLE);
             edtObservacao.setFocusable(false);
             spPagamento.setEnabled(false);
-            spTabelaPreco.setEnabled(false);
             edtDataEntrega.setFocusable(false);
+            spOperacao.setEnabled(false);
         } else {
             btnDataEntrega.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -203,19 +202,15 @@ public class Pedido2 extends Fragment {
 
     public void pegaCliente(Cliente cliente) {
         objetoCliente = cliente;
-        if (PedidoHelper.getIdPedido() > 0) {
-            db = new DBHelper(PedidoHelper.getActivityPedidoMain());
-            db.alterar("UPDATE TBL_WEB_PEDIDO SET ID_CADASTRO = " + objetoCliente.getId_cadastro() + " WHERE ID_WEB_PEDIDO = " + PedidoHelper.getIdPedido());
-        }
     }
 
     public WebPedido salvaPedido() {
         webPedido.setId_condicao_pagamento(adapterPagamento.getItem(spPagamento.getSelectedItemPosition()).getId_condicao());
-        webPedido.setId_tabela(adapterPreco.getItem(spTabelaPreco.getSelectedItemPosition()).getId_tabela());
         webPedido.setCadastro(objetoCliente);
         webPedido.setObservacoes(edtObservacao.getText().toString());
         webPedido.setData_prev_entrega(edtDataEntrega.getText().toString().trim());
         webPedido.setPedido_enviado("N");
+        webPedido.setId_operacao(adapterOperacao.getItem(spOperacao.getSelectedItemPosition()).getId_operacao());
 
         return webPedido;
     }

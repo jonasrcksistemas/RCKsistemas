@@ -19,13 +19,13 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
+import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.ListaClienteAdapter;
 import com.example.rcksuporte05.rcksistemas.adapters.RecyclerTouchListener;
-import com.example.rcksuporte05.rcksistemas.model.Cliente;
-import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.fragment.Pedido2;
+import com.example.rcksuporte05.rcksistemas.model.Cliente;
 import com.example.rcksuporte05.rcksistemas.util.DividerItemDecoration;
 
 import java.util.ArrayList;
@@ -65,7 +65,6 @@ public class ActivityCliente extends AppCompatActivity {
 
         if (getIntent().getIntExtra("acao", 0) == 1) {
             toolbar.setTitle("Pesquisa de Clientes");
-
 
             listaDeClientes.addOnItemTouchListener(new RecyclerTouchListener(this, listaDeClientes, new RecyclerTouchListener.ClickListener() {
 
@@ -183,7 +182,7 @@ public class ActivityCliente extends AppCompatActivity {
 
         if (!query.trim().equals("")) {
             try {
-                lista = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE ATIVO = 'S' AND (NOME_CADASTRO LIKE '%" + query + "%' OR NOME_FANTASIA LIKE '%" + query + "%' OR CPF_CNPJ LIKE '" + query + "%' OR TELEFONE_PRINCIPAL LIKE '%" + query + "%') ORDER BY ATIVO DESC, NOME_CADASTRO");
+                lista = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE ATIVO = 'S' AND (NOME_CADASTRO LIKE '%" + query + "%' OR NOME_FANTASIA LIKE '%" + query + "%' OR CPF_CNPJ LIKE '" + query + "%' OR TELEFONE_PRINCIPAL LIKE '%" + query + "%' OR ID_CADASTRO LIKE '%" + query + "%') ORDER BY ATIVO DESC, NOME_CADASTRO");
                 edtTotalClientes.setText("Clientes encontrados: " + lista.size() + "   ");
                 edtTotalClientes.setTextColor(Color.BLACK);
                 return lista;
