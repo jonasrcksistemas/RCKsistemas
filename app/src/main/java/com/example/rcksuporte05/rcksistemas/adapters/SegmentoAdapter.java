@@ -47,7 +47,8 @@ public class SegmentoAdapter extends RecyclerView.Adapter<SegmentoViewHolder> {
 
         if(selectedItems.get(position)){
             holder.txtNomeSegmento.setTextColor(Color.parseColor("#ffffff"));
-        }
+        }else
+            holder.txtNomeSegmento.setTextColor(Color.parseColor("#607D8B"));
 
         applyClickEvents(holder, position);
     }

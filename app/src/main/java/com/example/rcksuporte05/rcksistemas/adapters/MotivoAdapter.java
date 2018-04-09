@@ -47,7 +47,8 @@ public class MotivoAdapter extends RecyclerView.Adapter<MotivoViewHolder> {
 
         if(selectedItems.get(position)){
             holder.txtMotivo.setTextColor(Color.parseColor("#ffffff"));
-        }
+        }else
+            holder.txtMotivo.setTextColor(Color.parseColor("#607D8B"));
 
         applyClickEvents(holder, position);
     }

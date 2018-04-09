@@ -699,9 +699,16 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("LATITUDE", prospect.getLatitude());
         content.put("LONGITUDE", prospect.getLongitude());
         content.put("USUARIO_DATA", prospect.getUsuario_data());
-        content.put("DESCRICAO_SEGMENTO", prospect.getSegmento().getDescricaoOutros());
-        content.put("DESCRICAO_MOTIVO_NAO_CAD", prospect.getMotivoNaoCadastramento().getDescricaoOutros());
-
+        try{
+            content.put("DESCRICAO_SEGMENTO", prospect.getSegmento().getDescricaoOutros());
+        }catch (NullPointerException e){
+            e.printStackTrace();
+        }
+        try {
+            content.put("DESCRICAO_MOTIVO_NAO_CAD", prospect.getMotivoNaoCadastramento().getDescricaoOutros());
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
 
         if (prospect.getId_prospect() != null && contagem("SELECT COUNT(ID_PROSPECT) FROM TBL_PROSPECT WHERE ID_PROSPECT = " + prospect.getId_prospect()) > 0) {
             content.put("ID_PROSPECT", prospect.getId_prospect());

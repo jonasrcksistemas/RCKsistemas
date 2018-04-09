@@ -17,6 +17,7 @@ public class Api {
 //    private static final String url = "http://rcksistemassuporte.ddns.com.br:1020/WhalleAPI/ws/";
     private static final String url = "http://portalmixnutri.ddns.com.br:725/WhalleAPI/ws/";
 
+
     public static Rotas apiRotas;
 
     public static Rotas buildRetrofit() {
