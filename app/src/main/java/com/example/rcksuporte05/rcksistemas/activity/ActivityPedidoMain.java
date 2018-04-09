@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.example.rcksuporte05.rcksistemas.DAO.CategoriaDAO;
 import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
+import com.example.rcksuporte05.rcksistemas.DAO.WebPedidoDAO;
 import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.HistoricoFinanceiroHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.PedidoHelper;
@@ -62,6 +63,7 @@ public class ActivityPedidoMain extends AppCompatActivity {
     private Pedido1 pedido1 = new Pedido1();
     private HashMap<Integer, Categoria> listaCategoria;
     private CategoriaDAO categoriaDAO;
+    private WebPedidoDAO webPedidoDAO;
 
     @OnClick(R.id.BtnFinanceiro)
     public void financeiro() {
@@ -120,6 +122,7 @@ public class ActivityPedidoMain extends AppCompatActivity {
         }
         db = new DBHelper(this);
         categoriaDAO = new CategoriaDAO(db);
+        webPedidoDAO = new WebPedidoDAO(db);
         try {
             listaCategoria = categoriaDAO.listaHashCategoria();
 
@@ -139,7 +142,7 @@ public class ActivityPedidoMain extends AppCompatActivity {
         }
 
         if (PedidoHelper.getIdPedido() > 0) {
-            webPedido = db.listaWebPedido("SELECT * FROM TBL_WEB_PEDIDO WHERE ID_WEB_PEDIDO = " + PedidoHelper.getIdPedido()).get(0);
+            webPedido = webPedidoDAO.listaWebPedido("SELECT * FROM TBL_WEB_PEDIDO WHERE ID_WEB_PEDIDO = " + PedidoHelper.getIdPedido()).get(0);
             objetoCliente = webPedido.getCadastro();
             ClienteHelper.setCliente(objetoCliente);
             if (webPedido.getId_web_pedido_servidor() != null)

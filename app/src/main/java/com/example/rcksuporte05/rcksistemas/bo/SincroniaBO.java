@@ -20,6 +20,8 @@ import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.DAO.PromocaoClienteDAO;
 import com.example.rcksuporte05.rcksistemas.DAO.PromocaoDAO;
 import com.example.rcksuporte05.rcksistemas.DAO.PromocaoProdutoDAO;
+import com.example.rcksuporte05.rcksistemas.DAO.WebPedidoDAO;
+import com.example.rcksuporte05.rcksistemas.DAO.WebPedidoItensDAO;
 import com.example.rcksuporte05.rcksistemas.Helper.UsuarioHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.activity.MainActivity;
@@ -64,6 +66,12 @@ public class SincroniaBO {
 
     private static Activity activity;
     private DBHelper db = new DBHelper(activity);
+    private CategoriaDAO categoriaDAO;
+    private PromocaoDAO promocaoDAO;
+    private PromocaoClienteDAO promocaoClienteDAO;
+    private PromocaoProdutoDAO promocaoProdutoDAO;
+    private WebPedidoDAO webPedidoDAO;
+    private WebPedidoItensDAO webPedidoItensDAO;
 
     public static Activity getActivity() {
         return activity;
@@ -78,10 +86,12 @@ public class SincroniaBO {
         int contadorNotificacaoEProgresso = 0;
         String relatorio = "";
 
-        CategoriaDAO categoriaDAO = new CategoriaDAO(db);
-        PromocaoDAO promocaoDAO = new PromocaoDAO(db);
-        PromocaoClienteDAO promocaoClienteDAO = new PromocaoClienteDAO(db);
-        PromocaoProdutoDAO promocaoProdutoDAO = new PromocaoProdutoDAO(db);
+        categoriaDAO = new CategoriaDAO(db);
+        promocaoDAO = new PromocaoDAO(db);
+        promocaoClienteDAO = new PromocaoClienteDAO(db);
+        promocaoProdutoDAO = new PromocaoProdutoDAO(db);
+        webPedidoDAO = new WebPedidoDAO(db);
+        webPedidoItensDAO = new WebPedidoItensDAO(db);
 
         final int maxProgress = sincronia.getMaxProgress();
 
@@ -318,9 +328,9 @@ public class SincroniaBO {
             for (WebPedido webPedido : sincronia.getListaWebPedidosPendentes()) {
                 notificacao.setProgress(maxProgress, contadorNotificacaoEProgresso, false);
 
-                db.atualizarTBL_WEB_PEDIDO(webPedido);
+                webPedidoDAO.atualizarTBL_WEB_PEDIDO(webPedido);
                 for (WebPedidoItens pedidoIten : webPedido.getWebPedidoItens()) {
-                    db.atualizarTBL_WEB_PEDIDO_ITENS(pedidoIten);
+                    webPedidoItensDAO.atualizarTBL_WEB_PEDIDO_ITENS(pedidoIten);
                 }
 
                 contadorNotificacaoEProgresso++;
@@ -419,11 +429,11 @@ public class SincroniaBO {
                 if (db.contagem("SELECT COUNT(*) FROM TBL_WEB_PEDIDO WHERE ID_WEB_PEDIDO_SERVIDOR = " + webPedido.getId_web_pedido_servidor()) > 0) {
                     db.alterar("DELETE FROM TBL_WEB_PEDIDO WHERE ID_WEB_PEDIDO_SERVIDOR = " + webPedido.getId_web_pedido_servidor());
                 }
-                db.inserirTBL_WEB_PEDIDO(webPedido);
+                webPedidoDAO.inserirTBL_WEB_PEDIDO(webPedido);
                 for (WebPedidoItens webPedidoItens : webPedido.getWebPedidoItens()) {
                     String idPedido = db.consulta("SELECT * FROM TBL_WEB_PEDIDO WHERE ID_WEB_PEDIDO_SERVIDOR = " + webPedido.getId_web_pedido_servidor(), "ID_WEB_PEDIDO");
                     webPedidoItens.setId_pedido(idPedido);
-                    db.atualizarTBL_WEB_PEDIDO_ITENS(webPedidoItens);
+                    webPedidoItensDAO.atualizarTBL_WEB_PEDIDO_ITENS(webPedidoItens);
                 }
 
                 contadorNotificacaoEProgresso++;
@@ -569,7 +579,7 @@ public class SincroniaBO {
                 cabecalho.put("AUTHORIZATION", UsuarioHelper.getUsuario().getToken());
 
                 if (sincronia.isPedidosPendentes()) {
-                    final List<WebPedido> listaPedido = db.listaWebPedido("SELECT * FROM TBL_WEB_PEDIDO WHERE PEDIDO_ENVIADO = 'N' AND USUARIO_LANCAMENTO_ID = " + UsuarioHelper.getUsuario().getId_usuario() + " ORDER BY ID_WEB_PEDIDO DESC;");
+                    final List<WebPedido> listaPedido = webPedidoDAO.listaWebPedido("SELECT * FROM TBL_WEB_PEDIDO WHERE PEDIDO_ENVIADO = 'N' AND USUARIO_LANCAMENTO_ID = " + UsuarioHelper.getUsuario().getId_usuario() + " ORDER BY ID_WEB_PEDIDO DESC;");
                     sincronia.setListaWebPedidosPendentes(prepararItensPedidos(listaPedido));
                 }
 
@@ -645,7 +655,7 @@ public class SincroniaBO {
         for (WebPedido pedido : listaPedido) {
             List<WebPedidoItens> webPedidoItenses;
 
-            webPedidoItenses = db.listaWebPedidoItens("SELECT * FROM TBL_WEB_PEDIDO_ITENS WHERE ID_PEDIDO = " + pedido.getId_web_pedido());
+            webPedidoItenses = webPedidoItensDAO.listaWebPedidoItens("SELECT * FROM TBL_WEB_PEDIDO_ITENS WHERE ID_PEDIDO = " + pedido.getId_web_pedido());
             pedido.setWebPedidoItens(webPedidoItenses);
         }
         return listaPedido;

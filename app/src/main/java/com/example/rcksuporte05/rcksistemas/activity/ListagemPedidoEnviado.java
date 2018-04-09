@@ -21,12 +21,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
+import com.example.rcksuporte05.rcksistemas.DAO.WebPedidoDAO;
 import com.example.rcksuporte05.rcksistemas.Helper.PedidoHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.ListaPedidoAdapter;
 import com.example.rcksuporte05.rcksistemas.model.Usuario;
 import com.example.rcksuporte05.rcksistemas.model.WebPedido;
-import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +44,7 @@ public class ListagemPedidoEnviado extends AppCompatActivity implements ListaPed
 
     private List<WebPedido> listaPedido;
     private DBHelper db = new DBHelper(this);
+    private WebPedidoDAO webPedidoDAO;
     private Usuario usuario;
     private ListaPedidoAdapter listaPedidoAdapter;
 
@@ -51,6 +53,8 @@ public class ListagemPedidoEnviado extends AppCompatActivity implements ListaPed
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listagem_pedido_enviado);
         ButterKnife.bind(this);
+
+        webPedidoDAO = new WebPedidoDAO(db);
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         notificationManager.cancel(0);
@@ -62,7 +66,7 @@ public class ListagemPedidoEnviado extends AppCompatActivity implements ListaPed
         usuario = db.listaUsuario("SELECT * FROM TBL_WEB_USUARIO WHERE LOGIN = '" + db.consulta("SELECT * FROM TBL_LOGIN;", "LOGIN") + "';").get(0);
 
         try {
-            listaPedido = db.listaWebPedido("SELECT * FROM TBL_WEB_PEDIDO WHERE PEDIDO_ENVIADO = 'S' AND USUARIO_LANCAMENTO_ID = " + usuario.getId_usuario() + " ORDER BY ID_WEB_PEDIDO_SERVIDOR DESC;");
+            listaPedido = webPedidoDAO.listaWebPedido("SELECT * FROM TBL_WEB_PEDIDO WHERE PEDIDO_ENVIADO = 'S' AND USUARIO_LANCAMENTO_ID = " + usuario.getId_usuario() + " ORDER BY ID_WEB_PEDIDO_SERVIDOR DESC;");
 
             preencheListaRecycler(listaPedido);
 
@@ -167,7 +171,7 @@ public class ListagemPedidoEnviado extends AppCompatActivity implements ListaPed
     @Override
     protected void onResume() {
         try {
-            listaPedido = db.listaWebPedido("SELECT * FROM TBL_WEB_PEDIDO WHERE PEDIDO_ENVIADO = 'S' AND USUARIO_LANCAMENTO_ID = " + usuario.getId_usuario() + " ORDER BY ID_WEB_PEDIDO_SERVIDOR DESC;");
+            listaPedido = webPedidoDAO.listaWebPedido("SELECT * FROM TBL_WEB_PEDIDO WHERE PEDIDO_ENVIADO = 'S' AND USUARIO_LANCAMENTO_ID = " + usuario.getId_usuario() + " ORDER BY ID_WEB_PEDIDO_SERVIDOR DESC;");
 
             preencheListaRecycler(listaPedido);
 
@@ -177,7 +181,6 @@ public class ListagemPedidoEnviado extends AppCompatActivity implements ListaPed
         edtNumerPedidoEnviados.setText(listaPedido.size() + ": Pedidos Enviados");
         super.onResume();
     }
-
 
 
     @Override

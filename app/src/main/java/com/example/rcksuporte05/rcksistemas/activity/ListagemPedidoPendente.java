@@ -27,6 +27,9 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
+import com.example.rcksuporte05.rcksistemas.DAO.WebPedidoDAO;
+import com.example.rcksuporte05.rcksistemas.DAO.WebPedidoItensDAO;
 import com.example.rcksuporte05.rcksistemas.Helper.PedidoHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.UsuarioHelper;
 import com.example.rcksuporte05.rcksistemas.R;
@@ -37,7 +40,6 @@ import com.example.rcksuporte05.rcksistemas.bo.PedidoBO;
 import com.example.rcksuporte05.rcksistemas.model.Usuario;
 import com.example.rcksuporte05.rcksistemas.model.WebPedido;
 import com.example.rcksuporte05.rcksistemas.model.WebPedidoItens;
-import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.util.DividerItemDecoration;
 
 import java.util.ArrayList;
@@ -59,6 +61,8 @@ public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRe
     private List<WebPedido> listaPedido = new ArrayList();
     private EditText edtNumerPedidoPendentes;
     private DBHelper db = new DBHelper(this);
+    private WebPedidoDAO webPedidoDAO;
+    private WebPedidoItensDAO webPedidoItensDAO;
     private Usuario usuario;
     private ProgressDialog progress;
     private ActionMode actionMode;
@@ -71,6 +75,9 @@ public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listagem_pedido_pendente);
         ButterKnife.bind(this);
+
+        webPedidoDAO = new WebPedidoDAO(db);
+        webPedidoItensDAO = new WebPedidoItensDAO(db);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarPedidoPendente);
         toolbar.setTitle("Pedidos Pendentes");
@@ -151,9 +158,9 @@ public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRe
                     List<WebPedido> webPedidosEnviados = response.body();
 
                     for (WebPedido pedido : webPedidosEnviados) {
-                        db.atualizarTBL_WEB_PEDIDO(pedido);
+                        webPedidoDAO.atualizarTBL_WEB_PEDIDO(pedido);
                         for (WebPedidoItens pedidoIten : pedido.getWebPedidoItens()) {
-                            db.atualizarTBL_WEB_PEDIDO_ITENS(pedidoIten);
+                            webPedidoItensDAO.atualizarTBL_WEB_PEDIDO_ITENS(pedidoIten);
                         }
                     }
 
@@ -228,9 +235,9 @@ public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRe
                 if (response.code() == 200) {
                     final List<WebPedido> webPedidosEnviados = response.body();
 
-                    db.atualizarTBL_WEB_PEDIDO(webPedidosEnviados.get(0));
+                    webPedidoDAO.atualizarTBL_WEB_PEDIDO(webPedidosEnviados.get(0));
                     for (WebPedidoItens pedidoIten : webPedidosEnviados.get(0).getWebPedidoItens()) {
-                        db.atualizarTBL_WEB_PEDIDO_ITENS(pedidoIten);
+                        webPedidoItensDAO.atualizarTBL_WEB_PEDIDO_ITENS(pedidoIten);
                     }
 
                     PendingIntent pendingIntent = PendingIntent.getActivity(ListagemPedidoPendente.this, 0, new Intent(ListagemPedidoPendente.this, ListagemPedidoEnviado.class), 0);
@@ -279,7 +286,7 @@ public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRe
         for (WebPedido pedido : listaPedido) {
             List<WebPedidoItens> webPedidoItenses;
 
-            webPedidoItenses = db.listaWebPedidoItens("SELECT * FROM TBL_WEB_PEDIDO_ITENS WHERE ID_PEDIDO = " + pedido.getId_web_pedido());
+            webPedidoItenses = webPedidoItensDAO.listaWebPedidoItens("SELECT * FROM TBL_WEB_PEDIDO_ITENS WHERE ID_PEDIDO = " + pedido.getId_web_pedido());
             pedido.setWebPedidoItens(webPedidoItenses);
         }
 
@@ -289,7 +296,7 @@ public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRe
 
         List<WebPedidoItens> webPedidoItenses;
 
-        webPedidoItenses = db.listaWebPedidoItens("SELECT * FROM TBL_WEB_PEDIDO_ITENS WHERE ID_PEDIDO = " + webPedido.getId_web_pedido());
+        webPedidoItenses = webPedidoItensDAO.listaWebPedidoItens("SELECT * FROM TBL_WEB_PEDIDO_ITENS WHERE ID_PEDIDO = " + webPedido.getId_web_pedido());
         webPedido.setWebPedidoItens(webPedidoItenses);
 
         return webPedido;
@@ -377,7 +384,7 @@ public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRe
     @Override
     protected void onResume() {
         try {
-            listaPedido = db.listaWebPedido("SELECT * FROM TBL_WEB_PEDIDO WHERE PEDIDO_ENVIADO = 'N' AND USUARIO_LANCAMENTO_ID = " + usuario.getId_usuario() + " ORDER BY ID_WEB_PEDIDO DESC;");
+            listaPedido = webPedidoDAO.listaWebPedido("SELECT * FROM TBL_WEB_PEDIDO WHERE PEDIDO_ENVIADO = 'N' AND USUARIO_LANCAMENTO_ID = " + usuario.getId_usuario() + " ORDER BY ID_WEB_PEDIDO DESC;");
 
             preechePedidosRecycler(listaPedido);
 
@@ -432,7 +439,7 @@ public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRe
 
     @Override
     public void onRefresh() {
-        listaPedido = db.listaWebPedido("SELECT * FROM TBL_WEB_PEDIDO WHERE PEDIDO_ENVIADO = 'N' AND USUARIO_LANCAMENTO_ID = " + usuario.getId_usuario() + " ORDER BY ID_WEB_PEDIDO DESC;");
+        listaPedido = webPedidoDAO.listaWebPedido("SELECT * FROM TBL_WEB_PEDIDO WHERE PEDIDO_ENVIADO = 'N' AND USUARIO_LANCAMENTO_ID = " + usuario.getId_usuario() + " ORDER BY ID_WEB_PEDIDO DESC;");
 
         preechePedidosRecycler(listaPedido);
 

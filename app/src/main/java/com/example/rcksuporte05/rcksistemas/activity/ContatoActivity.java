@@ -15,13 +15,20 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.rcksuporte05.rcksistemas.DAO.CategoriaDAO;
+import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.HistoricoFinanceiroHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.model.Cliente;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class ContatoActivity extends AppCompatActivity {
 
+    @BindView(R.id.txtCategoria)
+    TextView txtCategoria;
     private Toolbar toolbar;
     private ImageView imageView;
     private TextView txtRazaoSocial;
@@ -40,9 +47,15 @@ public class ContatoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contato);
+        ButterKnife.bind(this);
+
+        DBHelper db = new DBHelper(this);
+        CategoriaDAO categoriaDAO = new CategoriaDAO(db);
 
         try {
             cliente = ClienteHelper.getCliente();
+
+            txtCategoria.setText(categoriaDAO.listaHashCategoria().get(cliente.getIdCategoria()).getNomeCategoria());
 
             toolbar = (Toolbar) findViewById(R.id.toolbar);
             imageView = (ImageView) findViewById(R.id.imFisicaJuridica);
@@ -61,16 +74,19 @@ public class ContatoActivity extends AppCompatActivity {
             txtRazaoSocial.setText(cliente.getNome_cadastro());
 
             if (cliente.getPessoa_f_j() != null) {
-                if (cliente.getPessoa_f_j().equals("F")) {
-                    imageView.setImageResource(R.mipmap.ic_pessoa_fisica);
-                } else if (cliente.getPessoa_f_j().equals("J")) {
-                    imageView.setImageResource(R.mipmap.ic_pessoa_juridica);
-                } else {
-                    imageView.setImageResource(R.mipmap.ic_pessoa_duvida);
+                switch (cliente.getPessoa_f_j()) {
+                    case "F":
+                        imageView.setImageResource(R.mipmap.ic_pessoa_fisica);
+                        break;
+                    case "J":
+                        imageView.setImageResource(R.mipmap.ic_pessoa_juridica);
+                        break;
+                    default:
+                        imageView.setImageResource(R.mipmap.ic_pessoa_duvida);
+                        break;
                 }
-            } else {
+            } else
                 imageView.setImageResource(R.mipmap.ic_pessoa_duvida);
-            }
 
             if (cliente.getTelefone_principal() != null && !cliente.getTelefone_principal().replaceAll("[^0-9]", "").trim().isEmpty() && cliente.getTelefone_principal().replaceAll("[^0-9]", "").length() >= 8 && cliente.getTelefone_principal().replaceAll("[^0-9]", "").length() <= 11) {
                 txtTelefone.setText(formataTelefone(cliente.getTelefone_principal()));
@@ -196,6 +212,10 @@ public class ContatoActivity extends AppCompatActivity {
             e.printStackTrace();
             Toast.makeText(ContatoActivity.this, "Erro ao carregar Cliente", Toast.LENGTH_LONG).show();
             finish();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+            Toast.makeText(ContatoActivity.this, "Cadastro sem categoria especificada", Toast.LENGTH_LONG).show();
+            finish();
         }
     }
 
@@ -212,21 +232,19 @@ public class ContatoActivity extends AppCompatActivity {
     }
 
     public String formataTelefone(String telefone) {
-        String telefoneRetorno;
         telefone = telefone.trim().replaceAll("[^0-9]", "");
-        if (telefone.length() == 10) {
-            telefoneRetorno = "(" + telefone.substring(0, 2) + ")" + telefone.substring(2, 6) + "-" + telefone.substring(6, 10);
-        } else if (telefone.length() == 11) {
-            telefoneRetorno = "(" + telefone.substring(0, 2) + ")" + telefone.substring(2, 7) + "-" + telefone.substring(7, 11);
-        } else if (telefone.length() == 9 && !telefone.contains("-")) {
-            telefoneRetorno = telefone.substring(0, 5) + "-" + telefone.substring(5, 9);
-        } else if (telefone.length() == 8) {
-            telefoneRetorno = telefone.substring(0, 4) + "-" + telefone.substring(4, 8);
-        } else {
-            telefoneRetorno = telefone;
+        switch (telefone.length()) {
+            case 10:
+                return "(" + telefone.substring(0, 2) + ")" + telefone.substring(2, 6) + "-" + telefone.substring(6, 10);
+            case 11:
+                return "(" + telefone.substring(0, 2) + ")" + telefone.substring(2, 7) + "-" + telefone.substring(7, 11);
+            case 9:
+                return telefone.substring(0, 5) + "-" + telefone.substring(5, 9);
+            case 8:
+                return telefone.substring(0, 4) + "-" + telefone.substring(4, 8);
+            default:
+                return telefone;
         }
-
-        return telefoneRetorno;
     }
 
     public void fazerChamada(final String telefone, final String nome) {

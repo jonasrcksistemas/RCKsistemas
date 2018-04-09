@@ -19,6 +19,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
+import com.example.rcksuporte05.rcksistemas.DAO.WebPedidoDAO;
 import com.example.rcksuporte05.rcksistemas.Helper.PedidoHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.model.Cliente;
@@ -44,6 +45,7 @@ public class Pedido2 extends Fragment {
     private Spinner spPagamento;
     private ArrayAdapter<CondicoesPagamento> adapterPagamento;
     private DBHelper db;
+    private WebPedidoDAO webPedidoDAO;
     private EditText edtObservacao;
     private Button btnSalvarPedido;
     private WebPedido webPedido = new WebPedido();
@@ -59,6 +61,7 @@ public class Pedido2 extends Fragment {
 
 
         db = new DBHelper(PedidoHelper.getActivityPedidoMain());
+        webPedidoDAO = new WebPedidoDAO(db);
         txtDataEmissao.setText(db.pegaDataAtual());
         pedidoHelper = new PedidoHelper(this);
 
@@ -82,7 +85,7 @@ public class Pedido2 extends Fragment {
         }
 
         if (PedidoHelper.getIdPedido() > 0) {
-            webPedido = db.listaWebPedido("SELECT * FROM TBL_WEB_PEDIDO WHERE ID_WEB_PEDIDO = " + PedidoHelper.getIdPedido()).get(0);
+            webPedido = webPedidoDAO.listaWebPedido("SELECT * FROM TBL_WEB_PEDIDO WHERE ID_WEB_PEDIDO = " + PedidoHelper.getIdPedido()).get(0);
             objetoCliente = webPedido.getCadastro();
 
             //Seleciona Condição de pagamento correta dentro do Spinner spPagamento

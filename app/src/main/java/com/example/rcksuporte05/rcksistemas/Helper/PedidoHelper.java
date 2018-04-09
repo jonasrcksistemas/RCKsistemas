@@ -7,6 +7,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
+import com.example.rcksuporte05.rcksistemas.DAO.WebPedidoDAO;
+import com.example.rcksuporte05.rcksistemas.DAO.WebPedidoItensDAO;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.activity.ActivityPedidoMain;
 import com.example.rcksuporte05.rcksistemas.activity.ProdutoPedidoActivity;
@@ -43,6 +45,8 @@ public class PedidoHelper {
     private EditText edtTotalVenda;
     private ViewPager mViewPager;
     private DBHelper db;
+    private WebPedidoDAO webPedidoDAO;
+    private WebPedidoItensDAO webPedidoItensDAO;
 
     public PedidoHelper() {
     }
@@ -143,6 +147,9 @@ public class PedidoHelper {
 
     public boolean salvaPedido() {
         try {
+            webPedidoDAO = new WebPedidoDAO(db);
+            webPedidoItensDAO = new WebPedidoItensDAO(db);
+
             webPedido = activityPedidoMain.salvaPedido();
             webPedido.setId_condicao_pagamento(pedido2.salvaPedido().getId_condicao_pagamento());
             webPedido.setId_tabela(pedido2.salvaPedido().getId_tabela());
@@ -199,25 +206,25 @@ public class PedidoHelper {
 
                                     if (PedidoHelper.getIdPedido() > 0) {
                                         webPedido.setId_web_pedido(String.valueOf(PedidoHelper.getIdPedido()));
-                                        db.atualizarTBL_WEB_PEDIDO(webPedido);
+                                        webPedidoDAO.atualizarTBL_WEB_PEDIDO(webPedido);
                                         for (int i = 0; listaWebPedidoItens.size() > i; i++) {
                                             if (listaWebPedidoItens.get(i).getId_web_item() == null) {
                                                 listaWebPedidoItens.get(i).setId_pedido(webPedido.getId_web_pedido());
-                                                db.inserirTBL_WEB_PEDIDO_ITENS(listaWebPedidoItens.get(i));
+                                                webPedidoItensDAO.inserirTBL_WEB_PEDIDO_ITENS(listaWebPedidoItens.get(i));
                                             } else {
-                                                db.atualizarTBL_WEB_PEDIDO_ITENS(listaWebPedidoItens.get(i));
+                                                webPedidoItensDAO.atualizarTBL_WEB_PEDIDO_ITENS(listaWebPedidoItens.get(i));
                                             }
                                         }
                                     } else {
                                         webPedido.setPedido_enviado("N");
                                         webPedido.setUsuario_lancamento_data(db.pegaDataHoraAtual());
                                         webPedido.setData_emissao(db.pegaDataAtual());
-                                        db.inserirTBL_WEB_PEDIDO(webPedido);
+                                        webPedidoDAO.inserirTBL_WEB_PEDIDO(webPedido);
                                         int idPedido = db.contagem("SELECT MAX(ID_WEB_PEDIDO) FROM TBL_WEB_PEDIDO");
                                         for (int i = 0; listaWebPedidoItens.size() > i; i++) {
                                             listaWebPedidoItens.get(i).setId_pedido(String.valueOf(idPedido));
                                             listaWebPedidoItens.get(i).setId_empresa(UsuarioHelper.getUsuario().getIdEmpresaMultiDevice());
-                                            db.inserirTBL_WEB_PEDIDO_ITENS(listaWebPedidoItens.get(i));
+                                            webPedidoItensDAO.inserirTBL_WEB_PEDIDO_ITENS(listaWebPedidoItens.get(i));
                                         }
                                     }
                                     return true;
