@@ -1,5 +1,6 @@
 package com.example.rcksuporte05.rcksistemas.activity;
 
+import android.app.AlertDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -70,12 +71,20 @@ public class ActivityCliente extends AppCompatActivity {
 
                 @Override
                 public void onClick(View view, int position) {
-                    ActivityPedidoMain activityPedidoMain = new ActivityPedidoMain();
-                    Pedido2 pedido2 = new Pedido2();
-                    activityPedidoMain.pegaCliente(listaClienteAdapter.getItem(position));
-                    pedido2.pegaCliente(listaClienteAdapter.getItem(position));
-                    System.gc();
-                    finish();
+                    if (listaClienteAdapter.getItem(position).getIdCategoria() <= 0) {
+                        AlertDialog.Builder alert = new AlertDialog.Builder(ActivityCliente.this);
+                        alert.setTitle("Atenção");
+                        alert.setMessage("Este cliente está sem categoria definida!");
+                        alert.setNeutralButton("OK", null);
+                        alert.show();
+                    } else {
+                        ActivityPedidoMain activityPedidoMain = new ActivityPedidoMain();
+                        Pedido2 pedido2 = new Pedido2();
+                        activityPedidoMain.pegaCliente(listaClienteAdapter.getItem(position));
+                        pedido2.pegaCliente(listaClienteAdapter.getItem(position));
+                        System.gc();
+                        finish();
+                    }
                 }
 
                 @Override

@@ -17,12 +17,14 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
+import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.PedidoHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.UsuarioHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.activity.ActivityProduto;
 import com.example.rcksuporte05.rcksistemas.activity.ProdutoPedidoActivity;
 import com.example.rcksuporte05.rcksistemas.adapters.ListaAdapterProdutoPedido;
+import com.example.rcksuporte05.rcksistemas.model.TabelaPrecoItem;
 import com.example.rcksuporte05.rcksistemas.model.WebPedidoItens;
 import com.example.rcksuporte05.rcksistemas.util.DividerItemDecoration;
 
@@ -36,6 +38,7 @@ public class Pedido1 extends Fragment implements ListaAdapterProdutoPedido.Produ
     private static List<WebPedidoItens> listaProdutoPedido = new ArrayList<>();
     private static RecyclerView lstProdutoPedido;
     private DBHelper db = new DBHelper(PedidoHelper.getActivityPedidoMain());
+    private TabelaPrecoItem tabelaPrecoItem;
     private Button btnInserirProduto;
     private Bundle bundle;
 
@@ -149,6 +152,16 @@ public class Pedido1 extends Fragment implements ListaAdapterProdutoPedido.Produ
     public void onResume() {
         PedidoHelper pedidoHelper = new PedidoHelper(PedidoHelper.getActivityPedidoMain());
         pedidoHelper.calculaValorPedido(listaProdutoPedido);
+        if (listaProdutoPedido.size() > 0) {
+            tabelaPrecoItem = db.listaTabelaPrecoItem("SELECT * FROM TBL_TABELA_PRECO_ITENS WHERE ID_CATEGORIA = " + ClienteHelper.getCliente().getIdCategoria()).get(0);
+            for (WebPedidoItens webPedidoItens : listaProdutoPedido) {
+                if (Float.parseFloat(webPedidoItens.getValor_desconto_per()) > Float.parseFloat(tabelaPrecoItem.getPerc_desc_final()))
+                    webPedidoItens.setDescontoIndevido(true);
+                else
+                    webPedidoItens.setDescontoIndevido(false);
+            }
+            listaAdapterProdutoPedido.notifyDataSetChanged();
+        }
         System.gc();
         super.onResume();
     }

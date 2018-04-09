@@ -15,10 +15,11 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.PedidoHelper;
 import com.example.rcksuporte05.rcksistemas.R;
-import com.example.rcksuporte05.rcksistemas.model.Cliente;
+import com.example.rcksuporte05.rcksistemas.model.TabelaPrecoItem;
 import com.example.rcksuporte05.rcksistemas.model.WebPedidoItens;
 import com.example.rcksuporte05.rcksistemas.util.MascaraUtil;
 
@@ -44,6 +45,8 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
     private EditText edtDescontoReais;
     private EditText edtTotal;
     private MenuItem salvar_produto;
+    private DBHelper db;
+    private TabelaPrecoItem tabelaPrecoItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,9 +56,13 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
 
         PedidoHelper pedidoHelper = new PedidoHelper(this);
 
+        db = new DBHelper(this);
         try {
             webPedidoItem = pedidoHelper.getWebPedidoItem();
 
+            tabelaPrecoItem = db.listaTabelaPrecoItem("SELECT * FROM TBL_TABELA_PRECO_ITENS WHERE ID_CATEGORIA = " + ClienteHelper.getCliente().getIdCategoria()).get(0);
+
+            rbPorcentagem.setText("Desconto %(max " + tabelaPrecoItem.getPerc_desc_final() + "%)");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -63,6 +70,7 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
         toolbar = (Toolbar) findViewById(R.id.tb_produto_pedido);
 
         toolbar.setTitle("Item de venda");
+
 
         edtNomeProduto = (EditText) findViewById(R.id.edtNomeProduto);
         edtTabelaPreco = (EditText) findViewById(R.id.edtTabelaPreco);
@@ -224,17 +232,21 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
                         if (Float.parseFloat(edtQuantidade.getText().toString()) > 0) {
                             if (!edtTabelaPreco.getText().toString().isEmpty()) {
                                 if (Float.parseFloat(webPedidoItem.getVenda_preco()) > 0) {
+                                    if (Float.parseFloat(edtDesconto.getText().toString()) <= Float.parseFloat(tabelaPrecoItem.getPerc_desc_final())) {
 
-                                    webPedidoItem.setValor_unitario(Float.parseFloat(webPedidoItem.getVenda_preco()));
+                                        webPedidoItem.setValor_unitario(Float.parseFloat(webPedidoItem.getVenda_preco()));
 
-                                    if (getIntent().getIntExtra("pedido", 0) != 1) {
-                                        PedidoHelper pedidoHelper = new PedidoHelper();
-                                        pedidoHelper.inserirProduto(webPedidoItem);
+                                        if (getIntent().getIntExtra("pedido", 0) != 1) {
+                                            PedidoHelper pedidoHelper = new PedidoHelper();
+                                            pedidoHelper.inserirProduto(webPedidoItem);
+                                        } else {
+                                            PedidoHelper pedidoHelper = new PedidoHelper();
+                                            pedidoHelper.alterarProduto(webPedidoItem, getIntent().getIntExtra("position", 0));
+                                        }
+                                        finish();
                                     } else {
-                                        PedidoHelper pedidoHelper = new PedidoHelper();
-                                        pedidoHelper.alterarProduto(webPedidoItem, getIntent().getIntExtra("position", 0));
+                                        Toast.makeText(this, "Desconto ultrapassou o limite da categoria!", Toast.LENGTH_SHORT).show();
                                     }
-                                    finish();
                                 } else {
                                     Toast.makeText(this, "O preço não pode ser zero!", Toast.LENGTH_SHORT).show();
                                 }
@@ -270,7 +282,7 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
                 if (!edtQuantidade.getText().toString().trim().isEmpty()) {
                     Float quantidade = Float.parseFloat(edtQuantidade.getText().toString());
                     Float totalProdutoBruto = quantidade * Float.parseFloat(webPedidoItem.getVenda_preco());
-                    Float desconto = 0.00f;
+                    Float desconto;
                     edtValorProdutos.setText(MascaraUtil.mascaraReal(totalProdutoBruto));
                     if (rbPorcentagem.isChecked()) {
                         if (!edtDesconto.getText().toString().trim().isEmpty()) {
@@ -293,6 +305,11 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
                         }
                         webPedidoItem.setTipoDesconto("R");
                     }
+                    if (Float.parseFloat(edtDesconto.getText().toString()) > Float.parseFloat(tabelaPrecoItem.getPerc_desc_final()))
+                        edtDesconto.setBackgroundResource(R.drawable.borda_edittext_erro);
+                    else
+                        edtDesconto.setBackgroundResource(R.drawable.borda_edittext);
+
                     webPedidoItem.setQuantidade(quantidade.toString());
                     webPedidoItem.setValor_total(String.valueOf(totalProdutoBruto - Float.parseFloat(edtDescontoReais.getText().toString())));
                     webPedidoItem.setValor_bruto(String.valueOf(totalProdutoBruto));

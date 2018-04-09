@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.example.rcksuporte05.rcksistemas.DAO.CategoriaDAO;
 import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
+import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.HistoricoFinanceiroHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.PedidoHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.UsuarioHelper;
@@ -95,7 +96,6 @@ public class ActivityPedidoMain extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarFragsPedido);
 
-
         vizualizacao = getIntent().getIntExtra("vizualizacao", 0);
 
         tabsAdapterPedido = new TabsAdapterPedido(getSupportFragmentManager(), ActivityPedidoMain.this, UsuarioHelper.getUsuario(), vizualizacao);
@@ -141,6 +141,7 @@ public class ActivityPedidoMain extends AppCompatActivity {
         if (PedidoHelper.getIdPedido() > 0) {
             webPedido = db.listaWebPedido("SELECT * FROM TBL_WEB_PEDIDO WHERE ID_WEB_PEDIDO = " + PedidoHelper.getIdPedido()).get(0);
             objetoCliente = webPedido.getCadastro();
+            ClienteHelper.setCliente(objetoCliente);
             if (webPedido.getId_web_pedido_servidor() != null)
                 toolbar.setSubtitle("Pedido: " + webPedido.getId_web_pedido_servidor());
             else
@@ -226,6 +227,7 @@ public class ActivityPedidoMain extends AppCompatActivity {
 
     public void pegaCliente(Cliente cliente) {
         objetoCliente = cliente;
+        ClienteHelper.setCliente(cliente);
     }
 
     @Override
@@ -300,6 +302,7 @@ public class ActivityPedidoMain extends AppCompatActivity {
         public void onDestroyActionMode(ActionMode mode) {
             Pedido1.getListaAdapterProdutoPedido().clearSelections();
             actionMode = null;
+            ClienteHelper.setCliente(null);
         }
     }
 }
