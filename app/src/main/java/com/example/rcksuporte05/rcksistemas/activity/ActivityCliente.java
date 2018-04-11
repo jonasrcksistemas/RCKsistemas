@@ -38,8 +38,6 @@ import butterknife.ButterKnife;
 public class ActivityCliente extends AppCompatActivity {
     @BindView(R.id.listaRecycler)
     RecyclerView listaDeClientes;
-    //    private MenuItem novo_cliente;
-    // private ListView lstClientes;
     private Toolbar toolbar;
     private List<Cliente> lista;
     private EditText edtTotalClientes;
@@ -74,7 +72,7 @@ public class ActivityCliente extends AppCompatActivity {
                     if (listaClienteAdapter.getItem(position).getIdCategoria() <= 0) {
                         AlertDialog.Builder alert = new AlertDialog.Builder(ActivityCliente.this);
                         alert.setTitle("Atenção");
-                        alert.setMessage("Este cliente está sem categoria definida!");
+                        alert.setMessage("Este cliente não tem categoria definida!");
                         alert.setNeutralButton("OK", null);
                         alert.show();
                     } else {
@@ -100,7 +98,7 @@ public class ActivityCliente extends AppCompatActivity {
                 public void onClick(View view, int position) {
                     Intent intent = new Intent(ActivityCliente.this, ContatoActivity.class);
                     ClienteHelper.setCliente(listaClienteAdapter.getItem(position));
-                    intent.putExtra("id_cliente", Integer.parseInt(listaClienteAdapter.getItem(position).getId_cadastro()));
+                    intent.putExtra("id_cliente", listaClienteAdapter.getItem(position).getId_cadastro());
                     System.gc();
                     startActivity(intent);
                 }

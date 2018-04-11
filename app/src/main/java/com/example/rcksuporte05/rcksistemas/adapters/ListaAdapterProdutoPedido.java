@@ -50,16 +50,11 @@ public class ListaAdapterProdutoPedido extends RecyclerView.Adapter<ProdutoPedid
         holder.textViewUnidadeMedida.setText(lista.get(position).getDescricao());
         holder.idPosition.setText(String.valueOf(position + 1));
 
-        if (selectedItems.get(position)) {
-            if (lista.get(position).getDescontoIndevido())
-                holder.itemView.setBackgroundColor(Color.parseColor("#58a30054"));
-            else
-                holder.itemView.setBackgroundColor(Color.parseColor("#dfdfdf"));
-        } else
-            holder.itemView.setBackgroundColor(Color.TRANSPARENT);
+        holder.itemView
+                .setBackgroundColor(selectedItems.get(position) ? Color.parseColor("#dfdfdf")
+                        : Color.TRANSPARENT);
 
         if (lista.get(position).getDescontoIndevido()) {
-
             holder.idPosition.setTextColor(Color.parseColor("#FF0000"));
             holder.nomeListaProduto.setTextColor(Color.parseColor("#FF0000"));
             holder.precoProduto.setTextColor(Color.parseColor("#FF0000"));

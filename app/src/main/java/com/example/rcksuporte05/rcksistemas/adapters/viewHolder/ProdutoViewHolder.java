@@ -13,15 +13,15 @@ import butterknife.ButterKnife;
  * Created by RCK 03 on 30/11/2017.
  */
 
-public class ProdutoViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+public class ProdutoViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
     @BindView(R.id.nomeListaProduto)
     public TextView nomeListaProduto;
     @BindView(R.id.precoProduto)
     public TextView precoProduto;
     @BindView(R.id.txtUnidadeListaProduto)
     public TextView textUN;
-
-
+    @BindView(R.id.idProduto)
+    public TextView idProduto;
 
     public ProdutoViewHolder(View itemView) {
         super(itemView);

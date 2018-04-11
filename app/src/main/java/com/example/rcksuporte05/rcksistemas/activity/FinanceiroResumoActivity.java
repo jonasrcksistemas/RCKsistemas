@@ -106,7 +106,7 @@ public class FinanceiroResumoActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.menu_sincroniza:
-                carregarHistoricoFinanceiro(Integer.parseInt(HistoricoFinanceiroHelper.getCliente().getId_cadastro()));
+                carregarHistoricoFinanceiro(HistoricoFinanceiroHelper.getCliente().getId_cadastro());
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -164,7 +164,7 @@ public class FinanceiroResumoActivity extends AppCompatActivity {
 
             txtQuitada.setText(MascaraUtil.mascaraReal(HistoricoFinanceiroHelper.getHistoricoFinanceiro().getTotalQuitado()));
         } catch (NullPointerException e) {
-            carregarHistoricoFinanceiro(Integer.parseInt(HistoricoFinanceiroHelper.getCliente().getId_cadastro()));
+            carregarHistoricoFinanceiro(HistoricoFinanceiroHelper.getCliente().getId_cadastro());
         }
         super.onResume();
     }

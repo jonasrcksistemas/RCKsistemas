@@ -86,13 +86,6 @@ public class SincroniaBO {
         int contadorNotificacaoEProgresso = 0;
         String relatorio = "";
 
-        categoriaDAO = new CategoriaDAO(db);
-        promocaoDAO = new PromocaoDAO(db);
-        promocaoClienteDAO = new PromocaoClienteDAO(db);
-        promocaoProdutoDAO = new PromocaoProdutoDAO(db);
-        webPedidoDAO = new WebPedidoDAO(db);
-        webPedidoItensDAO = new WebPedidoItensDAO(db);
-
         final int maxProgress = sincronia.getMaxProgress();
 
         activity.runOnUiThread(new Runnable() {
@@ -551,6 +544,13 @@ public class SincroniaBO {
 
     public void sincronizaApi(final Sincronia sincronia) {
         final ImageView ivInternet = (ImageView) activity.findViewById(R.id.ivInternet);
+
+        categoriaDAO = new CategoriaDAO(db);
+        promocaoDAO = new PromocaoDAO(db);
+        promocaoClienteDAO = new PromocaoClienteDAO(db);
+        promocaoProdutoDAO = new PromocaoProdutoDAO(db);
+        webPedidoDAO = new WebPedidoDAO(db);
+        webPedidoItensDAO = new WebPedidoItensDAO(db);
 
         final NotificationCompat.Builder notificacao = new NotificationCompat.Builder(activity)
                 .setSmallIcon(R.mipmap.ic_sincroniza_main)

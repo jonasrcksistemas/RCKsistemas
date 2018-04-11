@@ -25,6 +25,7 @@ import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.activity.ActivityProduto;
 import com.example.rcksuporte05.rcksistemas.activity.ProdutoPedidoActivity;
 import com.example.rcksuporte05.rcksistemas.adapters.ListaAdapterProdutoPedido;
+import com.example.rcksuporte05.rcksistemas.bo.PedidoBO;
 import com.example.rcksuporte05.rcksistemas.model.TabelaPrecoItem;
 import com.example.rcksuporte05.rcksistemas.model.WebPedidoItens;
 import com.example.rcksuporte05.rcksistemas.util.DividerItemDecoration;
@@ -136,8 +137,8 @@ public class Pedido1 extends Fragment implements ListaAdapterProdutoPedido.Produ
     }
 
     public void alterarProduto(WebPedidoItens webPedidoItem, int position) {
-        webPedidoItem.setId_empresa("1");
-        webPedidoItem.setUsuario_lancamento_id(String.valueOf(bundle.getInt("idUsuario")));
+        webPedidoItem.setId_empresa(UsuarioHelper.getUsuario().getIdEmpresaMultiDevice());
+        webPedidoItem.setUsuario_lancamento_id(UsuarioHelper.getUsuario().getIdEmpresaMultiDevice());
         listaProdutoPedido.set(position, webPedidoItem);
         preencheLista(listaProdutoPedido);
     }
@@ -158,8 +159,12 @@ public class Pedido1 extends Fragment implements ListaAdapterProdutoPedido.Produ
         pedidoHelper.calculaValorPedido(listaProdutoPedido);
         if (listaProdutoPedido.size() > 0) {
             tabelaPrecoItem = db.listaTabelaPrecoItem("SELECT * FROM TBL_TABELA_PRECO_ITENS WHERE ID_CATEGORIA = " + ClienteHelper.getCliente().getIdCategoria()).get(0);
+            PedidoBO pedidoBO = new PedidoBO();
             for (WebPedidoItens webPedidoItens : listaProdutoPedido) {
-                if (Float.parseFloat(webPedidoItens.getValor_desconto_per()) > Float.parseFloat(tabelaPrecoItem.getPerc_desc_final()))
+                Float descontoPedido = pedidoBO.calculaDesconto(ClienteHelper.getCliente().getId_cadastro(), webPedidoItens.getId_produto(), getActivity()).getValorDesconto();
+                if (descontoPedido <= 0)
+                    descontoPedido = Float.parseFloat(tabelaPrecoItem.getPerc_desc_final());
+                if (Float.parseFloat(webPedidoItens.getValor_desconto_per()) > descontoPedido)
                     webPedidoItens.setDescontoIndevido(true);
                 else
                     webPedidoItens.setDescontoIndevido(false);

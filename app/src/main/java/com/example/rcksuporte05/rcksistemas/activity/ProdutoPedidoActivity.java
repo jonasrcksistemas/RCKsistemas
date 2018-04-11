@@ -3,6 +3,7 @@ package com.example.rcksuporte05.rcksistemas.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -13,12 +14,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.PedidoHelper;
 import com.example.rcksuporte05.rcksistemas.R;
+import com.example.rcksuporte05.rcksistemas.bo.PedidoBO;
+import com.example.rcksuporte05.rcksistemas.model.PromocaoRetorno;
 import com.example.rcksuporte05.rcksistemas.model.TabelaPrecoItem;
 import com.example.rcksuporte05.rcksistemas.model.WebPedidoItens;
 import com.example.rcksuporte05.rcksistemas.util.MascaraUtil;
@@ -34,19 +38,34 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
     RadioButton rbPorcentagem;
     @BindView(R.id.real)
     RadioButton rbReal;
+    @BindView(R.id.edtNomeProduto)
+    EditText edtNomeProduto;
+    @BindView(R.id.edtTabelaPreco)
+    EditText edtTabelaPreco;
+    @BindView(R.id.edtQuantidade)
+    EditText edtQuantidade;
+    @BindView(R.id.edtValorProdutos)
+    EditText edtValorProdutos;
+    @BindView(R.id.edtDesconto)
+    EditText edtDesconto;
+    @BindView(R.id.edtDescontoReais)
+    EditText edtDescontoReais;
+    @BindView(R.id.edtTotal)
+    EditText edtTotal;
+    @BindView(R.id.tb_produto_pedido)
+    Toolbar toolbar;
+    @BindView(R.id.btnBuscaProduto)
+    Button btnBuscaProduto;
+    @BindView(R.id.cdPromocao)
+    CardView cdPromocao;
+    @BindView(R.id.txtPromocao)
+    TextView txtPromocao;
     private WebPedidoItens webPedidoItem;
-    private Toolbar toolbar;
-    private Button btnBuscarProduto;
-    private EditText edtNomeProduto;
-    private EditText edtTabelaPreco;
-    private EditText edtQuantidade;
-    private EditText edtValorProdutos;
-    private EditText edtDesconto;
-    private EditText edtDescontoReais;
-    private EditText edtTotal;
     private MenuItem salvar_produto;
     private DBHelper db;
     private TabelaPrecoItem tabelaPrecoItem;
+    private PedidoBO pedidoBO = new PedidoBO();
+    private PromocaoRetorno promocaoRetorno;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,18 +86,8 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        toolbar = (Toolbar) findViewById(R.id.tb_produto_pedido);
-
         toolbar.setTitle("Item de venda");
 
-
-        edtNomeProduto = (EditText) findViewById(R.id.edtNomeProduto);
-        edtTabelaPreco = (EditText) findViewById(R.id.edtTabelaPreco);
-        edtValorProdutos = (EditText) findViewById(R.id.edtValorProdutos);
-        edtQuantidade = (EditText) findViewById(R.id.edtQuantidade);
-        edtDesconto = (EditText) findViewById(R.id.edtDesconto);
-        edtDescontoReais = (EditText) findViewById(R.id.edtDescontoReais);
-        edtTotal = (EditText) findViewById(R.id.edtTotal);
         edtQuantidade.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -132,8 +141,7 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
             }
         });
 
-        btnBuscarProduto = (Button) findViewById(R.id.btnBuscaProduto);
-        btnBuscarProduto.setOnClickListener(new View.OnClickListener() {
+        btnBuscaProduto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ProdutoPedidoActivity.this, ActivityProduto.class);
@@ -172,7 +180,7 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
             edtDescontoReais.setFocusable(false);
             edtTotal.setFocusable(false);
             edtQuantidade.setFocusable(false);
-            btnBuscarProduto.setEnabled(false);
+            btnBuscaProduto.setEnabled(false);
             rbReal.setClickable(false);
             rbPorcentagem.setClickable(false);
             toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimaryCinza));
@@ -188,24 +196,37 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
                     webPedidoItem = new WebPedidoItens(PedidoHelper.getProduto());
                 else {
                     webPedidoItem = PedidoHelper.getWebPedidoItem();
+                    edtQuantidade.setText(webPedidoItem.getQuantidade());
+                    edtDesconto.setText(webPedidoItem.getValor_desconto_per());
+                    edtDescontoReais.setText(webPedidoItem.getValor_desconto_real());
                     if (webPedidoItem.getTipoDesconto().equals("R"))
                         rbReal.setChecked(true);
                 }
             } catch (NullPointerException e) {
                 e.printStackTrace();
                 webPedidoItem = PedidoHelper.getWebPedidoItem();
-                if (webPedidoItem.getTipoDesconto().equals("R"))
+                edtDesconto.setText(webPedidoItem.getValor_desconto_per());
+                edtDescontoReais.setText(webPedidoItem.getValor_desconto_real());
+                edtQuantidade.setText(webPedidoItem.getQuantidade());
+                if (webPedidoItem.getTipoDesconto().equals("R")) {
                     rbReal.setChecked(true);
+                }
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
+        promocaoRetorno = pedidoBO.calculaDesconto(ClienteHelper.getCliente().getId_cadastro(), webPedidoItem.getId_produto(), ProdutoPedidoActivity.this);
+        if (promocaoRetorno != null && promocaoRetorno.getValorDesconto() > 0) {
+            rbPorcentagem.setText("Desconto %(max " + promocaoRetorno.getValorDesconto().toString().replace(".0", "") + "%)");
+            cdPromocao.setVisibility(View.VISIBLE);
+            txtPromocao.setText(promocaoRetorno.getNomePromocao());
+        } else {
+            cdPromocao.setVisibility(View.INVISIBLE);
+            rbPorcentagem.setText("Desconto %(max " + tabelaPrecoItem.getPerc_desc_final() + "%)");
+        }
+
         edtNomeProduto.setText(webPedidoItem.getNome_produto());
         edtTabelaPreco.setText(MascaraUtil.mascaraReal(webPedidoItem.getVenda_preco()));
-        edtDesconto.setText(webPedidoItem.getValor_desconto_per());
-        edtDescontoReais.setText(webPedidoItem.getValor_desconto_real());
-        edtQuantidade.setText(webPedidoItem.getQuantidade());
         calculaDesconto();
         super.onResume();
     }
@@ -227,12 +248,23 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.menu_salvar_produto:
+                Float descontoPedido;
+                if (promocaoRetorno != null && promocaoRetorno.getValorDesconto() > 0)
+                    descontoPedido = promocaoRetorno.getValorDesconto();
+                else
+                    descontoPedido = Float.parseFloat(tabelaPrecoItem.getPerc_desc_final());
+
+                if (edtDesconto.getText().toString().trim().isEmpty())
+                    edtDesconto.setText("0.00");
+                if (edtDescontoReais.getText().toString().trim().isEmpty())
+                    edtDescontoReais.setText("0.00");
+
                 if (webPedidoItem != null) {
                     if (!edtQuantidade.getText().toString().trim().isEmpty()) {
                         if (Float.parseFloat(edtQuantidade.getText().toString()) > 0) {
                             if (!edtTabelaPreco.getText().toString().isEmpty()) {
                                 if (Float.parseFloat(webPedidoItem.getVenda_preco()) > 0) {
-                                    if (Float.parseFloat(edtDesconto.getText().toString()) <= Float.parseFloat(tabelaPrecoItem.getPerc_desc_final())) {
+                                    if (Float.parseFloat(edtDesconto.getText().toString()) <= descontoPedido) {
 
                                         webPedidoItem.setValor_unitario(Float.parseFloat(webPedidoItem.getVenda_preco()));
 
@@ -305,10 +337,16 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
                         }
                         webPedidoItem.setTipoDesconto("R");
                     }
-                    if (Float.parseFloat(edtDesconto.getText().toString()) > Float.parseFloat(tabelaPrecoItem.getPerc_desc_final()))
+                    if (promocaoRetorno != null && promocaoRetorno.getValorDesconto() > 0) {
+                        if (Float.parseFloat(edtDesconto.getText().toString()) > promocaoRetorno.getValorDesconto())
+                            edtDesconto.setBackgroundResource(R.drawable.borda_edittext_erro);
+                        else
+                            edtDesconto.setBackgroundResource(R.drawable.borda_edittext);
+                    } else if (Float.parseFloat(edtDesconto.getText().toString()) > Float.parseFloat(tabelaPrecoItem.getPerc_desc_final())) {
                         edtDesconto.setBackgroundResource(R.drawable.borda_edittext_erro);
-                    else
+                    } else {
                         edtDesconto.setBackgroundResource(R.drawable.borda_edittext);
+                    }
 
                     webPedidoItem.setQuantidade(quantidade.toString());
                     webPedidoItem.setValor_total(String.valueOf(totalProdutoBruto - Float.parseFloat(edtDescontoReais.getText().toString())));

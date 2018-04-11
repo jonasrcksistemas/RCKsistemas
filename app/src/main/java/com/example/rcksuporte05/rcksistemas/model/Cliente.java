@@ -4,7 +4,7 @@ public class Cliente {
 
     private String ativo;
     private String id_empresa;
-    private String id_cadastro;
+    private int id_cadastro;
     private String pessoa_f_j;
     private String data_aniversario;
     private String nome_cadastro;
@@ -103,11 +103,11 @@ public class Cliente {
         this.id_empresa = id_empresa;
     }
 
-    public String getId_cadastro() {
+    public int getId_cadastro() {
         return id_cadastro;
     }
 
-    public void setId_cadastro(String id_cadastro) {
+    public void setId_cadastro(int id_cadastro) {
         this.id_cadastro = id_cadastro;
     }
 

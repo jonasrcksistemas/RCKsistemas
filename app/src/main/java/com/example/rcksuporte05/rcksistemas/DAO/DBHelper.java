@@ -1974,7 +1974,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
             cliente.setAtivo(cursor.getString(cursor.getColumnIndex("ATIVO")));
             cliente.setId_empresa(cursor.getString(cursor.getColumnIndex("ID_EMPRESA")));
-            cliente.setId_cadastro(cursor.getString(cursor.getColumnIndex("ID_CADASTRO")));
+            cliente.setId_cadastro(cursor.getInt(cursor.getColumnIndex("ID_CADASTRO")));
             cliente.setPessoa_f_j(cursor.getString(cursor.getColumnIndex("PESSOA_F_J")));
             cliente.setData_aniversario(cursor.getString(cursor.getColumnIndex("DATA_ANIVERSARIO")));
             cliente.setNome_cadastro(cursor.getString(cursor.getColumnIndex("NOME_CADASTRO")));
@@ -2076,7 +2076,7 @@ public class DBHelper extends SQLiteOpenHelper {
         do {
             Produto produto = new Produto();
 
-            produto.setId_produto(cursor.getString(cursor.getColumnIndex("ID_PRODUTO")));
+            produto.setId_produto(cursor.getInt(cursor.getColumnIndex("ID_PRODUTO")));
             produto.setNome_produto(cursor.getString(cursor.getColumnIndex("NOME_PRODUTO")));
             produto.setDescricao(cursor.getString(cursor.getColumnIndex("DESCRICAO")));
             produto.setUnidade(cursor.getString(cursor.getColumnIndex("UNIDADE")));
@@ -2225,6 +2225,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
         return lista;
     }
+
+
 
     public List<Usuario> listaUsuario(String SQL) {
         SQLiteDatabase banco = this.getReadableDatabase();

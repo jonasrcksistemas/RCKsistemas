@@ -15,7 +15,7 @@ import java.util.List;
  * Created by RCK 03 on 30/11/2017.
  */
 
-public class ListaProdutoAdpter  extends RecyclerView.Adapter<ProdutoViewHolder> {
+public class ListaProdutoAdpter extends RecyclerView.Adapter<ProdutoViewHolder> {
 
     private List<Produto> produtos;
 
@@ -33,6 +33,8 @@ public class ListaProdutoAdpter  extends RecyclerView.Adapter<ProdutoViewHolder>
 
     @Override
     public void onBindViewHolder(ProdutoViewHolder holder, int position) {
+
+        holder.idProduto.setText(String.valueOf(produtos.get(position).getId_produto()));
 
         holder.nomeListaProduto.setText(produtos.get(position).getNome_produto());
 
@@ -54,14 +56,14 @@ public class ListaProdutoAdpter  extends RecyclerView.Adapter<ProdutoViewHolder>
         System.gc();
     }
 
-    public Produto getItem(int position){
+    public Produto getItem(int position) {
         return produtos.get(position);
     }
 
     @Override
     public int getItemCount() {
         if (produtos != null)
-        return produtos.size();
+            return produtos.size();
 
         return 0;
     }

@@ -55,7 +55,11 @@ public class ContatoActivity extends AppCompatActivity {
         try {
             cliente = ClienteHelper.getCliente();
 
-            txtCategoria.setText(categoriaDAO.listaHashCategoria().get(cliente.getIdCategoria()).getNomeCategoria());
+            try {
+                txtCategoria.setText(categoriaDAO.listaHashCategoria().get(cliente.getIdCategoria()).getNomeCategoria());
+            } catch (NullPointerException e) {
+                txtCategoria.setText("Este cliente não tem categoria definida!");
+            }
 
             toolbar = (Toolbar) findViewById(R.id.toolbar);
             imageView = (ImageView) findViewById(R.id.imFisicaJuridica);
@@ -211,10 +215,6 @@ public class ContatoActivity extends AppCompatActivity {
         } catch (CursorIndexOutOfBoundsException e) {
             e.printStackTrace();
             Toast.makeText(ContatoActivity.this, "Erro ao carregar Cliente", Toast.LENGTH_LONG).show();
-            finish();
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-            Toast.makeText(ContatoActivity.this, "Cadastro sem categoria especificada", Toast.LENGTH_LONG).show();
             finish();
         }
     }

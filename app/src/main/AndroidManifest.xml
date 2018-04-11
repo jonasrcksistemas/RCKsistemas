@@ -76,9 +76,6 @@
             android:name=".activity.infoDialog"
             android:theme="@style/Theme.CriarDialog" />
         <activity
-            android:name=".activity.SpinnerFaixaDesconto"
-            android:theme="@style/Theme.CriarDialog" />
-        <activity
             android:name=".activity.FinanceiroResumoActivity"
             android:screenOrientation="portrait" />
         <activity

@@ -60,7 +60,7 @@ public class FinanceiroDetalheActivity extends AppCompatActivity {
         swipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                carregarHistoricoFinanceiro(Integer.parseInt(HistoricoFinanceiroHelper.getCliente().getId_cadastro()));
+                carregarHistoricoFinanceiro(HistoricoFinanceiroHelper.getCliente().getId_cadastro());
             }
         });
 

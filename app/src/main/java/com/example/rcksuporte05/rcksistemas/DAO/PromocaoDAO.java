@@ -42,15 +42,44 @@ public class PromocaoDAO {
         }
     }
 
-    public List<Promocao> listaPromocao() {
-        List<Promocao> listaPromocao = new ArrayList<>();
-        Cursor cursor;
+    public List<Promocao> listaPromocaoTodosClientes() {
+        PromocaoProdutoDAO promocaoProdutoDAO = new PromocaoProdutoDAO(db);
+        Cursor cursor = db.listaDados("SELECT * FROM TBL_PROMOCAO_CAB WHERE APLICACAO_CLIENTE = 0 AND ID_EMPRESA = " + UsuarioHelper.getUsuario().getIdEmpresaMultiDevice() + " ORDER BY APLICACAO_PRODUTO DESC, DESCONTO_PERC DESC;");
 
-        cursor = db.listaDados("SELECT * FROM TBL_PROMOCAO_CAB WHERE ID_EMPRESA = " + UsuarioHelper.getUsuario().getIdEmpresaMultiDevice() + " ORDER BY ID_PROMOCAO;");
+        List<Promocao> listaPromocao = listaPromocao(cursor);
+
+        for (Promocao promocao : listaPromocao) {
+            if (promocao.getAplicacaoProduto() > 0)
+                promocao.setListaPromoProduto(promocaoProdutoDAO.listaPromocaoProduto(promocao.getIdPromocao()));
+        }
+        return listaPromocao;
+    }
+
+    public List<Promocao> listaPromocaoClienteEspecifico() {
+        PromocaoClienteDAO promocaoClienteDAO = new PromocaoClienteDAO(db);
+        PromocaoProdutoDAO promocaoProdutoDAO = new PromocaoProdutoDAO(db);
+        Cursor cursor = db.listaDados("SELECT * FROM TBL_PROMOCAO_CAB WHERE APLICACAO_CLIENTE = 1 AND ID_EMPRESA = " + UsuarioHelper.getUsuario().getIdEmpresaMultiDevice() + " ORDER BY APLICACAO_PRODUTO DESC, DESCONTO_PERC DESC;");
+
+        List<Promocao> listaPromocao = listaPromocao(cursor);
+
+        for (Promocao promocao : listaPromocao) {
+            if (promocao.getAplicacaoCliente() > 0)
+                promocao.setListaPromoCliente(promocaoClienteDAO.listaPromocaoCliente(promocao.getIdPromocao()));
+            if (promocao.getAplicacaoProduto() > 0)
+                promocao.setListaPromoProduto(promocaoProdutoDAO.listaPromocaoProduto(promocao.getIdPromocao()));
+        }
+
+        return listaPromocao;
+    }
+
+    public List<Promocao> listaPromocao(Cursor cursor) {
+        List<Promocao> listaPromocao = new ArrayList<>();
+
         cursor.moveToFirst();
         do {
             Promocao promocao = new Promocao();
 
+            promocao.setIdPromocao(cursor.getInt(cursor.getColumnIndex("ID_PROMOCAO")));
             promocao.setIdEmpresa(cursor.getInt(cursor.getColumnIndex("ID_EMPRESA")));
             promocao.setNumeroClientes(cursor.getInt(cursor.getColumnIndex("NUMERO_CLIENTES")));
             promocao.setNumeroProdutos(cursor.getInt(cursor.getColumnIndex("NUMERO_PRODUTOS")));
