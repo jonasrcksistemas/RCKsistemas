@@ -1,6 +1,6 @@
 package com.example.rcksuporte05.rcksistemas.Helper;
 
-import com.example.rcksuporte05.rcksistemas.classes.Cliente;
+import com.example.rcksuporte05.rcksistemas.model.Cliente;
 
 /**
  * Created by RCKSUPORTE05 on 10/10/2017.

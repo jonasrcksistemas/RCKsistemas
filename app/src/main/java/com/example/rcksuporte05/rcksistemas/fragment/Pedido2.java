@@ -11,7 +11,6 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -19,14 +18,14 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
+import com.example.rcksuporte05.rcksistemas.DAO.WebPedidoDAO;
 import com.example.rcksuporte05.rcksistemas.Helper.PedidoHelper;
 import com.example.rcksuporte05.rcksistemas.R;
-import com.example.rcksuporte05.rcksistemas.classes.Cliente;
-import com.example.rcksuporte05.rcksistemas.classes.CondicoesPagamento;
-import com.example.rcksuporte05.rcksistemas.classes.TabelaPreco;
-import com.example.rcksuporte05.rcksistemas.classes.TabelaPrecoItem;
-import com.example.rcksuporte05.rcksistemas.classes.WebPedido;
-import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
+import com.example.rcksuporte05.rcksistemas.model.Cliente;
+import com.example.rcksuporte05.rcksistemas.model.CondicoesPagamento;
+import com.example.rcksuporte05.rcksistemas.model.Operacao;
+import com.example.rcksuporte05.rcksistemas.model.WebPedido;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -38,13 +37,15 @@ import butterknife.ButterKnife;
 public class Pedido2 extends Fragment {
 
     private static Cliente objetoCliente = null;
+    @BindView(R.id.txtDataEmissao)
+    TextView txtDataEmissao;
+    @BindView(R.id.spOperacao)
+    Spinner spOperacao;
+    private ArrayAdapter<Operacao> adapterOperacao;
     private Spinner spPagamento;
-    private Spinner spTabelaPreco;
-    private Spinner spFaixaPadrao;
-    private ArrayAdapter<TabelaPreco> adapterPreco;
-    private ArrayAdapter<TabelaPrecoItem> adapterFaixaPadrao;
     private ArrayAdapter<CondicoesPagamento> adapterPagamento;
     private DBHelper db;
+    private WebPedidoDAO webPedidoDAO;
     private EditText edtObservacao;
     private Button btnSalvarPedido;
     private WebPedido webPedido = new WebPedido();
@@ -52,8 +53,6 @@ public class Pedido2 extends Fragment {
     private PedidoHelper pedidoHelper;
     private EditText edtDataEntrega;
     private Button btnDataEntrega;
-    @BindView(R.id.txtDataEmissao)
-    TextView txtDataEmissao;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -62,6 +61,7 @@ public class Pedido2 extends Fragment {
 
 
         db = new DBHelper(PedidoHelper.getActivityPedidoMain());
+        webPedidoDAO = new WebPedidoDAO(db);
         txtDataEmissao.setText(db.pegaDataAtual());
         pedidoHelper = new PedidoHelper(this);
 
@@ -77,42 +77,15 @@ public class Pedido2 extends Fragment {
             adapterPagamento = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_activated_1, db.listaCondicoesPagamento("SELECT * FROM TBL_CONDICOES_PAG_CAB;"));
             spPagamento.setAdapter(adapterPagamento);
 
-            spTabelaPreco = (Spinner) view.findViewById(R.id.spTabelaPreco);
-            adapterPreco = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_activated_1, db.listaTabelaPreco("SELECT * FROM TBL_TABELA_PRECO_CAB;"));
-            spTabelaPreco.setAdapter(adapterPreco);
-
-            spFaixaPadrao = (Spinner) view.findViewById(R.id.spFaixaPadrao);
-            adapterFaixaPadrao = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_activated_1, db.listaTabelaPrecoItem("SELECT * FROM TBL_TABELA_PRECO_ITENS WHERE PONTOS_PREMIACAO > 0;"));
-            spFaixaPadrao.setAdapter(adapterFaixaPadrao);
-            spFaixaPadrao.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-                @Override
-                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                    if (position > 0)
-                        PedidoHelper.setPositionFaixPadrao(position);
-                }
-
-                @Override
-                public void onNothingSelected(AdapterView<?> parent) {
-
-                }
-            });
+            adapterOperacao = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_activated_1, db.listaOperacao("SELECT * FROM TBL_OPERACAO_ESTOQUE;"));
+            spOperacao.setAdapter(adapterOperacao);
 
         } catch (CursorIndexOutOfBoundsException e) {
-            AlertDialog.Builder alert = new AlertDialog.Builder(PedidoHelper.getActivityPedidoMain());
-            alert.setMessage("É necessário executar a sincronização pelo menos uma vez antes de efetuar um pedido");
-            alert.setTitle("Atenção!");
-            alert.setCancelable(false);
-            alert.setNeutralButton("OK", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    PedidoHelper.getActivityPedidoMain().finish();
-                }
-            });
-            alert.show();
+            e.printStackTrace();
         }
 
         if (PedidoHelper.getIdPedido() > 0) {
-            webPedido = db.listaWebPedido("SELECT * FROM TBL_WEB_PEDIDO WHERE ID_WEB_PEDIDO = " + PedidoHelper.getIdPedido()).get(0);
+            webPedido = webPedidoDAO.listaWebPedido("SELECT * FROM TBL_WEB_PEDIDO WHERE ID_WEB_PEDIDO = " + PedidoHelper.getIdPedido()).get(0);
             objetoCliente = webPedido.getCadastro();
 
             //Seleciona Condição de pagamento correta dentro do Spinner spPagamento
@@ -127,26 +100,14 @@ public class Pedido2 extends Fragment {
                 System.out.println(e.getMessage());
             }
 
-            //Seleciona a Faixa padrão no Spinner Faixa Padrão
+            //Seleciona operação correta dentro do Spinner spOperacao
             try {
                 int i = -1;
                 do {
                     i++;
                 }
-                while (!webPedido.getId_tabela_preco_faixa().trim().equals(adapterFaixaPadrao.getItem(i).getId_item()));
-                spFaixaPadrao.setSelection(i);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            //Seleciona Tabela de Preco correta dentro do Spinner spTabelaPreco
-            try {
-                int i = -1;
-                do {
-                    i++;
-                }
-                while (!webPedido.getId_tabela().equals(adapterPreco.getItem(i).getId_tabela()));
-                spTabelaPreco.setSelection(i);
+                while (!webPedido.getId_operacao().equals(adapterOperacao.getItem(i).getId_operacao()));
+                spOperacao.setSelection(i);
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
@@ -158,13 +119,13 @@ public class Pedido2 extends Fragment {
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-        }else {
+        } else {
             try {
 
                 txtDataEmissao.setText(new SimpleDateFormat("dd/MM/yyyy")
                         .format(new SimpleDateFormat("yyyy-MM-dd")
                                 .parse(db.pegaDataAtual())));
-            }catch (ParseException e){
+            } catch (ParseException e) {
                 e.printStackTrace();
             }
         }
@@ -206,9 +167,8 @@ public class Pedido2 extends Fragment {
             btnSalvarPedido.setVisibility(View.INVISIBLE);
             edtObservacao.setFocusable(false);
             spPagamento.setEnabled(false);
-            spFaixaPadrao.setEnabled(false);
-            spTabelaPreco.setEnabled(false);
             edtDataEntrega.setFocusable(false);
+            spOperacao.setEnabled(false);
         } else {
             btnDataEntrega.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -245,32 +205,17 @@ public class Pedido2 extends Fragment {
 
     public void pegaCliente(Cliente cliente) {
         objetoCliente = cliente;
-        if (PedidoHelper.getIdPedido() > 0) {
-            db = new DBHelper(PedidoHelper.getActivityPedidoMain());
-            db.alterar("UPDATE TBL_WEB_PEDIDO SET ID_CADASTRO = " + objetoCliente.getId_cadastro() + " WHERE ID_WEB_PEDIDO = " + PedidoHelper.getIdPedido());
-        }
     }
 
     public WebPedido salvaPedido() {
         webPedido.setId_condicao_pagamento(adapterPagamento.getItem(spPagamento.getSelectedItemPosition()).getId_condicao());
-        webPedido.setId_tabela(adapterPreco.getItem(spTabelaPreco.getSelectedItemPosition()).getId_tabela());
         webPedido.setCadastro(objetoCliente);
         webPedido.setObservacoes(edtObservacao.getText().toString());
         webPedido.setData_prev_entrega(edtDataEntrega.getText().toString().trim());
         webPedido.setPedido_enviado("N");
+        webPedido.setId_operacao(adapterOperacao.getItem(spOperacao.getSelectedItemPosition()).getId_operacao());
 
         return webPedido;
-    }
-
-    @Override
-    public void onResume() {
-        try {
-            if (PedidoHelper.getPositionFaixPadrao() > 0)
-                spFaixaPadrao.setSelection(PedidoHelper.getPositionFaixPadrao());
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        super.onResume();
     }
 
     @Override

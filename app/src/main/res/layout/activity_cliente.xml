@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:layout_weight="1"
     android:orientation="vertical"
-    tools:context="com.example.rcksuporte05.rcksistemas.interfaces.ActivityCliente">
+    tools:context="com.example.rcksuporte05.rcksistemas.activity.ActivityCliente">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/tb_cliente"
@@ -16,7 +16,7 @@
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
         app:theme="@style/Theme.Toolbar"
-        tools:context=".interfaces.ActivityCliente" />
+        tools:context=".activity.ActivityCliente" />
 
      <android.support.v7.widget.RecyclerView
          android:id="@+id/listaRecycler"

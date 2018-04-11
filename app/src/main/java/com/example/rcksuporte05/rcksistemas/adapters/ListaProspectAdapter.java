@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.viewHolder.ProspectViewHolder;
-import com.example.rcksuporte05.rcksistemas.classes.Prospect;
+import com.example.rcksuporte05.rcksistemas.model.Prospect;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

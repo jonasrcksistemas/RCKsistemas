@@ -1,6 +1,6 @@
 package com.example.rcksuporte05.rcksistemas.Helper;
 
-import com.example.rcksuporte05.rcksistemas.classes.Produto;
+import com.example.rcksuporte05.rcksistemas.model.Produto;
 
 /**
  * Created by RCK 03 on 10/11/2017.

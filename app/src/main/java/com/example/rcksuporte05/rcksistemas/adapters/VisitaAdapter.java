@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.viewHolder.VisitaViewHolder;
-import com.example.rcksuporte05.rcksistemas.classes.VisitaProspect;
+import com.example.rcksuporte05.rcksistemas.model.VisitaProspect;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

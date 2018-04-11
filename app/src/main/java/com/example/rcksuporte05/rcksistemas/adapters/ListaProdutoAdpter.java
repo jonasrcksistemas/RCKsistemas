@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.viewHolder.ProdutoViewHolder;
-import com.example.rcksuporte05.rcksistemas.classes.Produto;
+import com.example.rcksuporte05.rcksistemas.model.Produto;
 
 import java.util.List;
 

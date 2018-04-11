@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    tools:context="com.example.rcksuporte05.rcksistemas.interfaces.CadastroClienteMain">
+    tools:context="com.example.rcksuporte05.rcksistemas.activity.CadastroClienteMain">
 
     <ScrollView
         android:layout_width="wrap_content"

@@ -54,14 +54,4 @@
         android:text="textViewUnidadeMedida"
         android:textAlignment="center" />
 
-    <View
-        android:id="@+id/viewCor"
-        android:layout_width="7.5dp"
-        android:layout_height="45dp"
-        android:layout_alignBottom="@+id/precoProduto"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:background="#000000" />
-
 </RelativeLayout>

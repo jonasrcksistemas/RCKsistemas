@@ -16,7 +16,7 @@ import butterknife.ButterKnife;
  * Created by RCK 03 on 01/12/2017.
  */
 
-public class PedidoViewHolder extends RecyclerView.ViewHolder  implements View.OnLongClickListener{
+public class PedidoViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
 
     @BindView(R.id.txtIdPedido)
     public TextView txtIdPedido;
@@ -28,8 +28,6 @@ public class PedidoViewHolder extends RecyclerView.ViewHolder  implements View.O
     public TextView txtDataEntrega;
     @BindView(R.id.txtDataEmissaoPedido)
     public TextView txtDataEmissaoPedido;
-    @BindView(R.id.viewCor)
-    public View viewCor;
     @BindView(R.id.item_lista_pedido)
     public RelativeLayout itemListaPedido;
 

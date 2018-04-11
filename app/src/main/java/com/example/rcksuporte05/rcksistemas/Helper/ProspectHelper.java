@@ -6,10 +6,10 @@ import android.support.v4.view.ViewPager;
 import android.widget.Toast;
 
 import com.example.rcksuporte05.rcksistemas.R;
-import com.example.rcksuporte05.rcksistemas.classes.MotivoNaoCadastramento;
-import com.example.rcksuporte05.rcksistemas.classes.Pais;
-import com.example.rcksuporte05.rcksistemas.classes.Prospect;
-import com.example.rcksuporte05.rcksistemas.classes.Segmento;
+import com.example.rcksuporte05.rcksistemas.model.MotivoNaoCadastramento;
+import com.example.rcksuporte05.rcksistemas.model.Pais;
+import com.example.rcksuporte05.rcksistemas.model.Prospect;
+import com.example.rcksuporte05.rcksistemas.model.Segmento;
 import com.example.rcksuporte05.rcksistemas.fragment.CadastroProspectContatos;
 import com.example.rcksuporte05.rcksistemas.fragment.CadastroProspectEndereco;
 import com.example.rcksuporte05.rcksistemas.fragment.CadastroProspectFotoSalvar;
@@ -17,7 +17,7 @@ import com.example.rcksuporte05.rcksistemas.fragment.CadastroProspectGeral;
 import com.example.rcksuporte05.rcksistemas.fragment.CadastroProspectMotivos;
 import com.example.rcksuporte05.rcksistemas.fragment.CadastroProspectObservacoesComerciais;
 import com.example.rcksuporte05.rcksistemas.fragment.CadastroProspectSegmentos;
-import com.example.rcksuporte05.rcksistemas.interfaces.ActivityCadastroProspect;
+import com.example.rcksuporte05.rcksistemas.activity.ActivityCadastroProspect;
 import com.example.rcksuporte05.rcksistemas.util.MascaraUtil;
 
 import java.text.ParseException;

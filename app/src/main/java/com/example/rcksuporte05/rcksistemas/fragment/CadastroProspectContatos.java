@@ -15,7 +15,7 @@ import android.widget.LinearLayout;
 import com.example.rcksuporte05.rcksistemas.Helper.ProspectHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.ListaContatoAdapter;
-import com.example.rcksuporte05.rcksistemas.interfaces.ActivityAdicionaContato;
+import com.example.rcksuporte05.rcksistemas.activity.ActivityAdicionaContato;
 import com.example.rcksuporte05.rcksistemas.util.DividerItemDecoration;
 
 import butterknife.BindView;

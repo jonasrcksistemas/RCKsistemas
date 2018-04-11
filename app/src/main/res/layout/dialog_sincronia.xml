@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:theme="@style/Theme.Dialogs"
-    tools:context="com.example.rcksuporte05.rcksistemas.interfaces.ActivityDialogSincronia">
+    tools:context="com.example.rcksuporte05.rcksistemas.activity.ActivityDialogSincronia">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/id_toolbarSincronia"

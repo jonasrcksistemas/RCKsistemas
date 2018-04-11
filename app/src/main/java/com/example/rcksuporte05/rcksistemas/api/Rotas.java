@@ -1,13 +1,13 @@
 package com.example.rcksuporte05.rcksistemas.api;
 
-import com.example.rcksuporte05.rcksistemas.classes.Foto;
-import com.example.rcksuporte05.rcksistemas.classes.HistoricoFinanceiro;
-import com.example.rcksuporte05.rcksistemas.classes.MotivoNaoCadastramento;
-import com.example.rcksuporte05.rcksistemas.classes.Prospect;
-import com.example.rcksuporte05.rcksistemas.classes.Segmento;
-import com.example.rcksuporte05.rcksistemas.classes.Sincronia;
-import com.example.rcksuporte05.rcksistemas.classes.Usuario;
-import com.example.rcksuporte05.rcksistemas.classes.WebPedido;
+import com.example.rcksuporte05.rcksistemas.model.Foto;
+import com.example.rcksuporte05.rcksistemas.model.HistoricoFinanceiro;
+import com.example.rcksuporte05.rcksistemas.model.MotivoNaoCadastramento;
+import com.example.rcksuporte05.rcksistemas.model.Prospect;
+import com.example.rcksuporte05.rcksistemas.model.Segmento;
+import com.example.rcksuporte05.rcksistemas.model.Sincronia;
+import com.example.rcksuporte05.rcksistemas.model.Usuario;
+import com.example.rcksuporte05.rcksistemas.model.WebPedido;
 import com.example.rcksuporte05.rcksistemas.util.classesGeocoderUtil.RespostaGeocoder;
 
 import java.util.List;

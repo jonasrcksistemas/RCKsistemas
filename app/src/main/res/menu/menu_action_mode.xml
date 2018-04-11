@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:mContext="com.example.rcksuporte05.rcksistemas.interfaces.ListagemPedidoEnviado">
+    tools:mContext="com.example.rcksuporte05.rcksistemas.activity.ListagemPedidoEnviado">
     <item
         android:id="@+id/action_mode_menu_pedido_pendente"
         android:icon="@mipmap/ic_enviar_pedidos_selecionados"

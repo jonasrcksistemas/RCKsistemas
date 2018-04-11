@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:theme="@style/Theme.MeuTema"
-    tools:context="com.example.rcksuporte05.rcksistemas.interfaces.infoDialog">
+    tools:context="com.example.rcksuporte05.rcksistemas.activity.infoDialog">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/id_toolbarSincronia"

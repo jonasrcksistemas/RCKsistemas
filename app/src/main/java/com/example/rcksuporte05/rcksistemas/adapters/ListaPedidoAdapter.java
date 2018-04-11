@@ -1,6 +1,5 @@
 package com.example.rcksuporte05.rcksistemas.adapters;
 
-import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseBooleanArray;
 import android.view.HapticFeedbackConstants;
@@ -10,7 +9,7 @@ import android.view.ViewGroup;
 
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.viewHolder.PedidoViewHolder;
-import com.example.rcksuporte05.rcksistemas.classes.WebPedido;
+import com.example.rcksuporte05.rcksistemas.model.WebPedido;
 import com.example.rcksuporte05.rcksistemas.util.MascaraUtil;
 
 import java.text.SimpleDateFormat;
@@ -22,12 +21,10 @@ import java.util.List;
  */
 
 public class ListaPedidoAdapter extends RecyclerView.Adapter<PedidoViewHolder> {
+    private static int currentSelectedIndex = -1;
     private List<WebPedido> pedidos = new ArrayList<>();
     private PedidoAdapterListener listener;
     private SparseBooleanArray selectedItems;
-
-
-    private static int currentSelectedIndex = -1;
 
     public ListaPedidoAdapter(List<WebPedido> pedidos, PedidoAdapterListener listener) {
         this.pedidos = pedidos;
@@ -40,7 +37,7 @@ public class ListaPedidoAdapter extends RecyclerView.Adapter<PedidoViewHolder> {
     @Override
     public PedidoViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                                      .inflate(R.layout.pedido_lista, parent, false);
+                .inflate(R.layout.pedido_lista, parent, false);
 
         return new PedidoViewHolder(itemView);
     }
@@ -63,9 +60,6 @@ public class ListaPedidoAdapter extends RecyclerView.Adapter<PedidoViewHolder> {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
-        holder.viewCor.setBackgroundColor(Color.parseColor(pedidos.get(position).getPontos_cor()));
 
         holder.itemView.setActivated(selectedItems.get(position, false));
 
@@ -109,11 +103,11 @@ public class ListaPedidoAdapter extends RecyclerView.Adapter<PedidoViewHolder> {
         return selectedItems.size();
     }
 
-    public WebPedido getItem(int position){
+    public WebPedido getItem(int position) {
         return pedidos.get(position);
     }
 
-    public List<WebPedido> getItensSelecionados(){
+    public List<WebPedido> getItensSelecionados() {
         List<WebPedido> pedidosSelecionados = new ArrayList<>();
         for (int i = 0; i < selectedItems.size(); i++) {
             pedidosSelecionados.add(pedidos.get(selectedItems.keyAt(i)));
@@ -122,7 +116,7 @@ public class ListaPedidoAdapter extends RecyclerView.Adapter<PedidoViewHolder> {
         return pedidosSelecionados;
     }
 
-    public void remove(WebPedido pedido){
+    public void remove(WebPedido pedido) {
         pedidos.remove(pedido);
         notifyDataSetChanged();
     }

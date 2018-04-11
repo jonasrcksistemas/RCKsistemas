@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import com.example.rcksuporte05.rcksistemas.Helper.ProspectHelper;
 import com.example.rcksuporte05.rcksistemas.R;
-import com.example.rcksuporte05.rcksistemas.classes.Pais;
+import com.example.rcksuporte05.rcksistemas.model.Pais;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

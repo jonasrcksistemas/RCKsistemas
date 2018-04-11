@@ -2,9 +2,9 @@ package com.example.rcksuporte05.rcksistemas.bo;
 
 import android.content.Context;
 
-import com.example.rcksuporte05.rcksistemas.classes.WebPedido;
-import com.example.rcksuporte05.rcksistemas.classes.WebPedidoItens;
-import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
+import com.example.rcksuporte05.rcksistemas.model.WebPedido;
+import com.example.rcksuporte05.rcksistemas.model.WebPedidoItens;
+import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 
 import java.util.List;
 

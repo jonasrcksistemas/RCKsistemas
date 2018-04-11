@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.viewHolder.MotivoViewHolder;
-import com.example.rcksuporte05.rcksistemas.classes.MotivoNaoCadastramento;
+import com.example.rcksuporte05.rcksistemas.model.MotivoNaoCadastramento;
 
 import java.util.List;
 

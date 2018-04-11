@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/splash"
     android:orientation="vertical"
-    tools:context="com.example.rcksuporte05.rcksistemas.interfaces.MainActivity">
+    tools:context="com.example.rcksuporte05.rcksistemas.activity.MainActivity">
 
     <LinearLayout
         android:id="@+id/linearLayout"

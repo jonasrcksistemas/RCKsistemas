@@ -2,8 +2,8 @@ package com.example.rcksuporte05.rcksistemas.Helper;
 
 import android.location.Location;
 
-import com.example.rcksuporte05.rcksistemas.classes.Prospect;
-import com.example.rcksuporte05.rcksistemas.classes.VisitaProspect;
+import com.example.rcksuporte05.rcksistemas.model.Prospect;
+import com.example.rcksuporte05.rcksistemas.model.VisitaProspect;
 
 /**
  * Created by RCK 03 on 20/02/2018.

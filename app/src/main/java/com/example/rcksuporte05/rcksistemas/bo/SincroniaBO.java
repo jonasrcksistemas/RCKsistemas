@@ -15,29 +15,39 @@ import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.example.rcksuporte05.rcksistemas.DAO.CategoriaDAO;
+import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
+import com.example.rcksuporte05.rcksistemas.DAO.PromocaoClienteDAO;
+import com.example.rcksuporte05.rcksistemas.DAO.PromocaoDAO;
+import com.example.rcksuporte05.rcksistemas.DAO.PromocaoProdutoDAO;
+import com.example.rcksuporte05.rcksistemas.DAO.WebPedidoDAO;
+import com.example.rcksuporte05.rcksistemas.DAO.WebPedidoItensDAO;
 import com.example.rcksuporte05.rcksistemas.Helper.UsuarioHelper;
 import com.example.rcksuporte05.rcksistemas.R;
+import com.example.rcksuporte05.rcksistemas.activity.MainActivity;
 import com.example.rcksuporte05.rcksistemas.api.Api;
 import com.example.rcksuporte05.rcksistemas.api.Rotas;
-import com.example.rcksuporte05.rcksistemas.classes.Banco;
-import com.example.rcksuporte05.rcksistemas.classes.Cliente;
-import com.example.rcksuporte05.rcksistemas.classes.CondicoesPagamento;
-import com.example.rcksuporte05.rcksistemas.classes.MotivoNaoCadastramento;
-import com.example.rcksuporte05.rcksistemas.classes.Operacao;
-import com.example.rcksuporte05.rcksistemas.classes.Pais;
-import com.example.rcksuporte05.rcksistemas.classes.Produto;
-import com.example.rcksuporte05.rcksistemas.classes.Prospect;
-import com.example.rcksuporte05.rcksistemas.classes.Segmento;
-import com.example.rcksuporte05.rcksistemas.classes.Sincronia;
-import com.example.rcksuporte05.rcksistemas.classes.TabelaPreco;
-import com.example.rcksuporte05.rcksistemas.classes.TabelaPrecoItem;
-import com.example.rcksuporte05.rcksistemas.classes.Usuario;
-import com.example.rcksuporte05.rcksistemas.classes.VendedorBonusResumo;
-import com.example.rcksuporte05.rcksistemas.classes.VisitaProspect;
-import com.example.rcksuporte05.rcksistemas.classes.WebPedido;
-import com.example.rcksuporte05.rcksistemas.classes.WebPedidoItens;
-import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
-import com.example.rcksuporte05.rcksistemas.interfaces.MainActivity;
+import com.example.rcksuporte05.rcksistemas.model.Banco;
+import com.example.rcksuporte05.rcksistemas.model.Categoria;
+import com.example.rcksuporte05.rcksistemas.model.Cliente;
+import com.example.rcksuporte05.rcksistemas.model.CondicoesPagamento;
+import com.example.rcksuporte05.rcksistemas.model.MotivoNaoCadastramento;
+import com.example.rcksuporte05.rcksistemas.model.Operacao;
+import com.example.rcksuporte05.rcksistemas.model.Pais;
+import com.example.rcksuporte05.rcksistemas.model.Produto;
+import com.example.rcksuporte05.rcksistemas.model.Promocao;
+import com.example.rcksuporte05.rcksistemas.model.PromocaoCliente;
+import com.example.rcksuporte05.rcksistemas.model.PromocaoProduto;
+import com.example.rcksuporte05.rcksistemas.model.Prospect;
+import com.example.rcksuporte05.rcksistemas.model.Segmento;
+import com.example.rcksuporte05.rcksistemas.model.Sincronia;
+import com.example.rcksuporte05.rcksistemas.model.TabelaPreco;
+import com.example.rcksuporte05.rcksistemas.model.TabelaPrecoItem;
+import com.example.rcksuporte05.rcksistemas.model.Usuario;
+import com.example.rcksuporte05.rcksistemas.model.VendedorBonusResumo;
+import com.example.rcksuporte05.rcksistemas.model.VisitaProspect;
+import com.example.rcksuporte05.rcksistemas.model.WebPedido;
+import com.example.rcksuporte05.rcksistemas.model.WebPedidoItens;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -56,6 +66,12 @@ public class SincroniaBO {
 
     private static Activity activity;
     private DBHelper db = new DBHelper(activity);
+    private CategoriaDAO categoriaDAO;
+    private PromocaoDAO promocaoDAO;
+    private PromocaoClienteDAO promocaoClienteDAO;
+    private PromocaoProdutoDAO promocaoProdutoDAO;
+    private WebPedidoDAO webPedidoDAO;
+    private WebPedidoItensDAO webPedidoItensDAO;
 
     public static Activity getActivity() {
         return activity;
@@ -69,6 +85,13 @@ public class SincroniaBO {
         //controla o progresso da notificação e do progressDialog
         int contadorNotificacaoEProgresso = 0;
         String relatorio = "";
+
+        categoriaDAO = new CategoriaDAO(db);
+        promocaoDAO = new PromocaoDAO(db);
+        promocaoClienteDAO = new PromocaoClienteDAO(db);
+        promocaoProdutoDAO = new PromocaoProdutoDAO(db);
+        webPedidoDAO = new WebPedidoDAO(db);
+        webPedidoItensDAO = new WebPedidoItensDAO(db);
 
         final int maxProgress = sincronia.getMaxProgress();
 
@@ -253,7 +276,7 @@ public class SincroniaBO {
 
         db.alterar("DELETE FROM TBL_BANCOS_FEBRABAN");
 
-        for(Banco banco: sincronia.getBancos()){
+        for (Banco banco : sincronia.getBancos()) {
             notificacao.setProgress(maxProgress, contadorNotificacaoEProgresso, false);
 
             db.insertBanco(banco);
@@ -270,7 +293,7 @@ public class SincroniaBO {
             mNotificationManager.notify(0, notificacao.build());
         }
 
-        for(Segmento segmento : sincronia.getSegmentos()){
+        for (Segmento segmento : sincronia.getSegmentos()) {
             db.atualizarTBL_SEGMENTO(segmento);
 
             contadorNotificacaoEProgresso++;
@@ -285,7 +308,7 @@ public class SincroniaBO {
             mNotificationManager.notify(0, notificacao.build());
         }
 
-        for(MotivoNaoCadastramento motivo: sincronia.getMotivos()){
+        for (MotivoNaoCadastramento motivo : sincronia.getMotivos()) {
             db.atualizarTBL_CADASTRO_MOTIVO_NAO_CAD(motivo);
 
             contadorNotificacaoEProgresso++;
@@ -305,9 +328,9 @@ public class SincroniaBO {
             for (WebPedido webPedido : sincronia.getListaWebPedidosPendentes()) {
                 notificacao.setProgress(maxProgress, contadorNotificacaoEProgresso, false);
 
-                db.atualizarTBL_WEB_PEDIDO(webPedido);
+                webPedidoDAO.atualizarTBL_WEB_PEDIDO(webPedido);
                 for (WebPedidoItens pedidoIten : webPedido.getWebPedidoItens()) {
-                    db.atualizarTBL_WEB_PEDIDO_ITENS(pedidoIten);
+                    webPedidoItensDAO.atualizarTBL_WEB_PEDIDO_ITENS(pedidoIten);
                 }
 
                 contadorNotificacaoEProgresso++;
@@ -323,7 +346,7 @@ public class SincroniaBO {
         }
 
         if (sincronia.isProspectPendentes()) {
-            if(sincronia.getListaProspectPendentes() != null && sincronia.getListaProspectPendentes().size() > 0){
+            if (sincronia.getListaProspectPendentes() != null && sincronia.getListaProspectPendentes().size() > 0) {
                 for (Prospect prospect : sincronia.getListaProspectPendentes()) {
                     notificacao.setProgress(maxProgress, contadorNotificacaoEProgresso, false);
 
@@ -343,13 +366,13 @@ public class SincroniaBO {
             }
         }
 
-        if(sincronia.isProspectEnviados()){
-            if(sincronia.getListaProspectEnviados() != null){
-                for(Prospect prospect : sincronia.getListaProspectEnviados()){
-                    if(db.contagem("SELECT COUNT(*) FROM TBL_PROSPECT WHERE ID_CADASTRO = "+prospect.getId_cadastro()) > 0 ){
-                        try{
+        if (sincronia.isProspectEnviados()) {
+            if (sincronia.getListaProspectEnviados() != null) {
+                for (Prospect prospect : sincronia.getListaProspectEnviados()) {
+                    if (db.contagem("SELECT COUNT(*) FROM TBL_PROSPECT WHERE ID_CADASTRO = " + prospect.getId_cadastro()) > 0) {
+                        try {
                             db.excluiProspectPorIdServidor(prospect);
-                        }catch (SQLException e){
+                        } catch (SQLException e) {
                             e.printStackTrace();
                         }
                     }
@@ -357,8 +380,8 @@ public class SincroniaBO {
                     prospect.setProspectSalvo("S");
                     db.atualizarTBL_PROSPECT(prospect);
 
-                    if(prospect.getVisitas() != null && prospect.getVisitas().size() > 0){
-                        for(VisitaProspect visita : prospect.getVisitas()){
+                    if (prospect.getVisitas() != null && prospect.getVisitas().size() > 0) {
+                        for (VisitaProspect visita : prospect.getVisitas()) {
                             visita.setProspect(prospect);
                             db.atualizaTBL_VISITA_PROSPECT(visita);
                         }
@@ -378,9 +401,9 @@ public class SincroniaBO {
             }
         }
 
-        if(sincronia.isVisitasPendentes()){
-            if(sincronia.getVisitas() != null && sincronia.getVisitas().size() > 0){
-                for(VisitaProspect visita : sincronia.getVisitas()){
+        if (sincronia.isVisitasPendentes()) {
+            if (sincronia.getVisitas() != null && sincronia.getVisitas().size() > 0) {
+                for (VisitaProspect visita : sincronia.getVisitas()) {
                     db.atualizaTBL_VISITA_PROSPECT(visita);
 
                     contadorNotificacaoEProgresso++;
@@ -406,11 +429,11 @@ public class SincroniaBO {
                 if (db.contagem("SELECT COUNT(*) FROM TBL_WEB_PEDIDO WHERE ID_WEB_PEDIDO_SERVIDOR = " + webPedido.getId_web_pedido_servidor()) > 0) {
                     db.alterar("DELETE FROM TBL_WEB_PEDIDO WHERE ID_WEB_PEDIDO_SERVIDOR = " + webPedido.getId_web_pedido_servidor());
                 }
-                db.inserirTBL_WEB_PEDIDO(webPedido);
+                webPedidoDAO.inserirTBL_WEB_PEDIDO(webPedido);
                 for (WebPedidoItens webPedidoItens : webPedido.getWebPedidoItens()) {
                     String idPedido = db.consulta("SELECT * FROM TBL_WEB_PEDIDO WHERE ID_WEB_PEDIDO_SERVIDOR = " + webPedido.getId_web_pedido_servidor(), "ID_WEB_PEDIDO");
                     webPedidoItens.setId_pedido(idPedido);
-                    db.atualizarTBL_WEB_PEDIDO_ITENS(webPedidoItens);
+                    webPedidoItensDAO.atualizarTBL_WEB_PEDIDO_ITENS(webPedidoItens);
                 }
 
                 contadorNotificacaoEProgresso++;
@@ -423,6 +446,72 @@ public class SincroniaBO {
                 });
                 mNotificationManager.notify(0, notificacao.build());
             }
+        }
+
+        db.alterar("DELETE FROM TBL_CADASTRO_CATEGORIA;");
+
+        for (Categoria categoria : sincronia.getListaCategoria()) {
+            notificacao.setProgress(maxProgress, contadorNotificacaoEProgresso, false);
+
+            categoriaDAO.atualizaCategoria(categoria);
+
+            contadorNotificacaoEProgresso++;
+            final int finalContadorNotificacaoEProgresso = contadorNotificacaoEProgresso;
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    progress.setProgress(finalContadorNotificacaoEProgresso);
+                }
+            });
+            mNotificationManager.notify(0, notificacao.build());
+        }
+
+        db.alterar("DELETE FROM TBL_PROMOCAO_CAB");
+
+        for (Promocao promocao : sincronia.getListaPromocao()) {
+            notificacao.setProgress(maxProgress, contadorNotificacaoEProgresso, false);
+
+            promocaoDAO.atualizaPromocao(promocao);
+
+            db.alterar("DELETE FROM TBL_PROMOCAO_CLIENTE WHERE ID_PROMOCAO = " + promocao.getIdPromocao());
+            for (PromocaoCliente promocaoCliente : promocao.getListaPromoCliente()) {
+                promocaoClienteDAO.atualizaPromocaoCliente(promocaoCliente);
+
+                contadorNotificacaoEProgresso++;
+                final int finalContadorNotificacaoEProgresso = contadorNotificacaoEProgresso;
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        progress.setProgress(finalContadorNotificacaoEProgresso);
+                    }
+                });
+                mNotificationManager.notify(0, notificacao.build());
+            }
+
+            db.alterar("DELETE FROM TBL_PROMOCAO_PRODUTO WHERE ID_PROMOCAO = " + promocao.getIdPromocao());
+            for (PromocaoProduto promocaoProduto : promocao.getListaPromoProduto()) {
+                promocaoProdutoDAO.atualizaPromocaoProduto(promocaoProduto);
+
+                contadorNotificacaoEProgresso++;
+                final int finalContadorNotificacaoEProgresso = contadorNotificacaoEProgresso;
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        progress.setProgress(finalContadorNotificacaoEProgresso);
+                    }
+                });
+                mNotificationManager.notify(0, notificacao.build());
+            }
+
+            contadorNotificacaoEProgresso++;
+            final int finalContadorNotificacaoEProgresso = contadorNotificacaoEProgresso;
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    progress.setProgress(finalContadorNotificacaoEProgresso);
+                }
+            });
+            mNotificationManager.notify(0, notificacao.build());
         }
 
         Intent intent = new Intent(activity, MainActivity.class);
@@ -459,6 +548,7 @@ public class SincroniaBO {
 
 
     }
+
     public void sincronizaApi(final Sincronia sincronia) {
         final ImageView ivInternet = (ImageView) activity.findViewById(R.id.ivInternet);
 
@@ -489,7 +579,7 @@ public class SincroniaBO {
                 cabecalho.put("AUTHORIZATION", UsuarioHelper.getUsuario().getToken());
 
                 if (sincronia.isPedidosPendentes()) {
-                    final List<WebPedido> listaPedido = db.listaWebPedido("SELECT * FROM TBL_WEB_PEDIDO WHERE PEDIDO_ENVIADO = 'N' AND USUARIO_LANCAMENTO_ID = " + UsuarioHelper.getUsuario().getId_usuario() + " ORDER BY ID_WEB_PEDIDO DESC;");
+                    final List<WebPedido> listaPedido = webPedidoDAO.listaWebPedido("SELECT * FROM TBL_WEB_PEDIDO WHERE PEDIDO_ENVIADO = 'N' AND USUARIO_LANCAMENTO_ID = " + UsuarioHelper.getUsuario().getId_usuario() + " ORDER BY ID_WEB_PEDIDO DESC;");
                     sincronia.setListaWebPedidosPendentes(prepararItensPedidos(listaPedido));
                 }
 
@@ -502,7 +592,7 @@ public class SincroniaBO {
                     }
                 }
 
-                if(sincronia.isVisitasPendentes()){
+                if (sincronia.isVisitasPendentes()) {
                     sincronia.setVisitas(db.listaProspectsPendentes());
                 }
 
@@ -524,10 +614,7 @@ public class SincroniaBO {
                             @Override
                             public void run() {
                                 ivInternet.setVisibility(View.VISIBLE);
-                                System.out.println("Houve um problema na re" +
-                                        "" +
-                                        "" +
-                                        "quisição, entre em contato no suporte para esclarecer a situação");
+                                System.out.println("Houve um problema na requisição, entre em contato no suporte para esclarecer a situação");
                                 progress.dismiss();
                             }
                         });
@@ -564,11 +651,11 @@ public class SincroniaBO {
         a.start();
     }
 
-    public List<WebPedido> prepararItensPedidos(List<WebPedido> listaPedido) {
+    private List<WebPedido> prepararItensPedidos(List<WebPedido> listaPedido) {
         for (WebPedido pedido : listaPedido) {
             List<WebPedidoItens> webPedidoItenses;
 
-            webPedidoItenses = db.listaWebPedidoItens("SELECT * FROM TBL_WEB_PEDIDO_ITENS WHERE ID_PEDIDO = " + pedido.getId_web_pedido());
+            webPedidoItenses = webPedidoItensDAO.listaWebPedidoItens("SELECT * FROM TBL_WEB_PEDIDO_ITENS WHERE ID_PEDIDO = " + pedido.getId_web_pedido());
             pedido.setWebPedidoItens(webPedidoItenses);
         }
         return listaPedido;

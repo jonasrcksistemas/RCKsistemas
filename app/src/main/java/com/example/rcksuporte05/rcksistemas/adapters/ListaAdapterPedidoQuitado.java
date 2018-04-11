@@ -9,7 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.rcksuporte05.rcksistemas.R;
-import com.example.rcksuporte05.rcksistemas.classes.WebPedido;
+import com.example.rcksuporte05.rcksistemas.model.WebPedido;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -42,8 +42,6 @@ public class ListaAdapterPedidoQuitado extends ArrayAdapter<WebPedido> {
         //TextView txtHoraPedido = (TextView) convertView.findViewById(R.id.txtHoraPedido);
         TextView txtPontoCoeficiente = (TextView) convertView.findViewById(R.id.txtPontoCoeficiente);
 
-        View viewCor = convertView.findViewById(R.id.viewCor);
-
         txtIdPedido.setText(itemPosicao.getId_web_pedido());
 
         txtNomeCliente.setText(itemPosicao.getCadastro().getNome_cadastro());
@@ -58,7 +56,6 @@ public class ListaAdapterPedidoQuitado extends ArrayAdapter<WebPedido> {
             System.out.println(e.getMessage());
         }
         txtPontoCoeficiente.setText("COEF: " + itemPosicao.getPontos_coeficiente());
-        viewCor.setBackgroundColor(Color.parseColor(itemPosicao.getPontos_cor()));
 
         if (position % 2 == 0) {
             convertView.setBackgroundColor(Color.parseColor("#eeeeee"));

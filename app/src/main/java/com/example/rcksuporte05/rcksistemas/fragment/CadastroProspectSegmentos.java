@@ -15,7 +15,7 @@ import android.widget.LinearLayout;
 import com.example.rcksuporte05.rcksistemas.Helper.ProspectHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.SegmentoAdapter;
-import com.example.rcksuporte05.rcksistemas.classes.Segmento;
+import com.example.rcksuporte05.rcksistemas.model.Segmento;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

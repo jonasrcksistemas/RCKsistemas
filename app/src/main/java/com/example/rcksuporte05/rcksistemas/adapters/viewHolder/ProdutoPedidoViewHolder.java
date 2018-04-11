@@ -25,8 +25,6 @@ public class ProdutoPedidoViewHolder extends RecyclerView.ViewHolder implements 
     public TextView precoProduto;
     @BindView(R.id.textViewUnidadeMedida)
     public TextView textViewUnidadeMedida;
-    @BindView(R.id.viewCor)
-    public View viewCor;
     @BindView(R.id.rlProdutoPedido)
     RelativeLayout rlProdutoPedido;
 

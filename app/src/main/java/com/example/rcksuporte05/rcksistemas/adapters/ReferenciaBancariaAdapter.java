@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.viewHolder.ReferenciaBancariaViewHolder;
-import com.example.rcksuporte05.rcksistemas.classes.ReferenciaBancaria;
+import com.example.rcksuporte05.rcksistemas.model.ReferenciaBancaria;
 
 import java.util.List;
 

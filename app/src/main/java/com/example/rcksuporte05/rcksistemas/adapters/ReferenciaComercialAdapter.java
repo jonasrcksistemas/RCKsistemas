@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.viewHolder.ReferenciaComercialViewHolder;
-import com.example.rcksuporte05.rcksistemas.classes.ReferenciaComercial;
+import com.example.rcksuporte05.rcksistemas.model.ReferenciaComercial;
 import com.example.rcksuporte05.rcksistemas.util.MascaraUtil;
 
 import java.util.List;

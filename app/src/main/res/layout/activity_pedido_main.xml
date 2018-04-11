@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.example.rcksuporte05.rcksistemas.interfaces.ActivityPedidoMain">
+    tools:context="com.example.rcksuporte05.rcksistemas.activity.ActivityPedidoMain">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbarFragsPedido"
@@ -38,29 +38,23 @@
                 android:id="@+id/txtNomeCliente"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginEnd="12dp"
                 android:layout_marginRight="12dp"
                 android:layout_marginTop="15dp"
                 android:layout_toLeftOf="@+id/BtnFinanceiro"
                 android:layout_toStartOf="@+id/BtnFinanceiro"
                 android:text="Toque aqui para selecionar seu cliente"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-                android:layout_alignParentLeft="true" />
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
 
-            <Spinner
-                android:id="@+id/spOperacao"
+            <TextView
+                android:id="@+id/txtCategoria"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@id/txtNomeCliente"
-                android:layout_marginTop="15dp"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-                android:theme="@style/Theme.MeuTemaPedido" />
+                android:layout_below="@+id/txtNomeCliente"
+                android:layout_marginTop="12dp"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
 
             <Button
                 android:id="@+id/BtnFinanceiro"
@@ -77,7 +71,7 @@
 
     </android.support.v7.widget.Toolbar>
 
-    <com.example.rcksuporte05.rcksistemas.extras.SlidingTabLayout
+    <com.example.rcksuporte05.rcksistemas.util.SlidingTabLayout
         android:id="@+id/stl_tabsPedido"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

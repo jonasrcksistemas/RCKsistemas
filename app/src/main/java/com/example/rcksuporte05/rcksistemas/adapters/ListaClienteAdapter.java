@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.viewHolder.ClientesViewHolder;
-import com.example.rcksuporte05.rcksistemas.classes.Cliente;
+import com.example.rcksuporte05.rcksistemas.model.Cliente;
 
 import java.util.List;
 
@@ -33,6 +33,7 @@ public class ListaClienteAdapter extends RecyclerView.Adapter<ClientesViewHolder
 
     @Override
     public void onBindViewHolder(ClientesViewHolder holder, int position) {
+        holder.idCliente.setText(clientes.get(position).getId_cadastro());
         holder.textViewNome.setText(clientes.get(position).getNome_cadastro());
         holder.textViewNomeFantasia.setText(clientes.get(position).getNome_fantasia());
 
@@ -53,13 +54,13 @@ public class ListaClienteAdapter extends RecyclerView.Adapter<ClientesViewHolder
     }
 
 
-    public Cliente getItem(int position){
+    public Cliente getItem(int position) {
         return clientes.get(position);
     }
 
     @Override
     public int getItemCount() {
-        if(clientes != null)
+        if (clientes != null)
             return clientes.size();
 
         return 0;

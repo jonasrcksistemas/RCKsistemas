@@ -16,15 +16,17 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
+import com.example.rcksuporte05.rcksistemas.DAO.WebPedidoItensDAO;
+import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.PedidoHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.UsuarioHelper;
 import com.example.rcksuporte05.rcksistemas.R;
+import com.example.rcksuporte05.rcksistemas.activity.ActivityProduto;
+import com.example.rcksuporte05.rcksistemas.activity.ProdutoPedidoActivity;
 import com.example.rcksuporte05.rcksistemas.adapters.ListaAdapterProdutoPedido;
-import com.example.rcksuporte05.rcksistemas.classes.WebPedidoItens;
-import com.example.rcksuporte05.rcksistemas.extras.DBHelper;
-import com.example.rcksuporte05.rcksistemas.interfaces.ActivityProduto;
-import com.example.rcksuporte05.rcksistemas.interfaces.ProdutoPedidoActivity;
-import com.example.rcksuporte05.rcksistemas.interfaces.SpinnerFaixaDesconto;
+import com.example.rcksuporte05.rcksistemas.model.TabelaPrecoItem;
+import com.example.rcksuporte05.rcksistemas.model.WebPedidoItens;
 import com.example.rcksuporte05.rcksistemas.util.DividerItemDecoration;
 
 import java.util.ArrayList;
@@ -37,6 +39,8 @@ public class Pedido1 extends Fragment implements ListaAdapterProdutoPedido.Produ
     private static List<WebPedidoItens> listaProdutoPedido = new ArrayList<>();
     private static RecyclerView lstProdutoPedido;
     private DBHelper db = new DBHelper(PedidoHelper.getActivityPedidoMain());
+    private WebPedidoItensDAO webPedidoItensDAO;
+    private TabelaPrecoItem tabelaPrecoItem;
     private Button btnInserirProduto;
     private Bundle bundle;
 
@@ -65,6 +69,8 @@ public class Pedido1 extends Fragment implements ListaAdapterProdutoPedido.Produ
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_pedido1, container, false);
 
+        webPedidoItensDAO = new WebPedidoItensDAO(db);
+
         final PedidoHelper pedidoHelper = new PedidoHelper(this);
         bundle = getArguments();
         lstProdutoPedido = (RecyclerView) view.findViewById(R.id.lstProdutosPedido);
@@ -78,14 +84,9 @@ public class Pedido1 extends Fragment implements ListaAdapterProdutoPedido.Produ
             @Override
             public void onClick(View v) {
                 if (pedidoHelper.verificaCliente()) {
-                    if (PedidoHelper.getPositionFaixPadrao() < 0) {
-                        Intent intent = new Intent(getContext(), SpinnerFaixaDesconto.class);
-                        startActivity(intent);
-                    } else {
-                        Intent intent = new Intent(getContext(), ActivityProduto.class);
-                        intent.putExtra("acao", 1);
-                        startActivity(intent);
-                    }
+                    Intent intent = new Intent(getContext(), ActivityProduto.class);
+                    intent.putExtra("acao", 1);
+                    startActivity(intent);
                 } else {
                     Toast.makeText(getContext(), "Selecione um cliente antes de prosseguir!", Toast.LENGTH_SHORT).show();
                     PedidoHelper.pintaTxtNomeCliente();
@@ -97,7 +98,7 @@ public class Pedido1 extends Fragment implements ListaAdapterProdutoPedido.Produ
         if (PedidoHelper.getIdPedido() > 0) {
             final int pedido = PedidoHelper.getIdPedido();
             try {
-                listaProdutoPedido = db.listaWebPedidoItens("SELECT * FROM TBL_WEB_PEDIDO_ITENS WHERE ID_PEDIDO = " + pedido);
+                listaProdutoPedido = webPedidoItensDAO.listaWebPedidoItens("SELECT * FROM TBL_WEB_PEDIDO_ITENS WHERE ID_PEDIDO = " + pedido);
                 preencheLista(listaProdutoPedido);
             } catch (CursorIndexOutOfBoundsException e) {
                 AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
@@ -155,6 +156,16 @@ public class Pedido1 extends Fragment implements ListaAdapterProdutoPedido.Produ
     public void onResume() {
         PedidoHelper pedidoHelper = new PedidoHelper(PedidoHelper.getActivityPedidoMain());
         pedidoHelper.calculaValorPedido(listaProdutoPedido);
+        if (listaProdutoPedido.size() > 0) {
+            tabelaPrecoItem = db.listaTabelaPrecoItem("SELECT * FROM TBL_TABELA_PRECO_ITENS WHERE ID_CATEGORIA = " + ClienteHelper.getCliente().getIdCategoria()).get(0);
+            for (WebPedidoItens webPedidoItens : listaProdutoPedido) {
+                if (Float.parseFloat(webPedidoItens.getValor_desconto_per()) > Float.parseFloat(tabelaPrecoItem.getPerc_desc_final()))
+                    webPedidoItens.setDescontoIndevido(true);
+                else
+                    webPedidoItens.setDescontoIndevido(false);
+            }
+            listaAdapterProdutoPedido.notifyDataSetChanged();
+        }
         System.gc();
         super.onResume();
     }
@@ -162,7 +173,6 @@ public class Pedido1 extends Fragment implements ListaAdapterProdutoPedido.Produ
     @Override
     public void onDestroy() {
         try {
-            PedidoHelper.setPositionFaixPadrao(-1);
             listaProdutoRemovido.clear();
             listaAdapterProdutoPedido = null;
             listaProdutoPedido.clear();

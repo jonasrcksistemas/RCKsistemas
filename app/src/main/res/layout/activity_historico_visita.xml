@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:layout_weight="1"
     android:orientation="vertical"
-    tools:context="com.example.rcksuporte05.rcksistemas.interfaces.ActivityListaProspect">
+    tools:context="com.example.rcksuporte05.rcksistemas.activity.ActivityListaProspect">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbarVisita"
