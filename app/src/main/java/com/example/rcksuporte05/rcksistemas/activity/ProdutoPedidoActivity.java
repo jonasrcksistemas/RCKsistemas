@@ -17,11 +17,11 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.rcksuporte05.rcksistemas.BO.PedidoBO;
 import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.PedidoHelper;
 import com.example.rcksuporte05.rcksistemas.R;
-import com.example.rcksuporte05.rcksistemas.bo.PedidoBO;
 import com.example.rcksuporte05.rcksistemas.model.PromocaoRetorno;
 import com.example.rcksuporte05.rcksistemas.model.TabelaPrecoItem;
 import com.example.rcksuporte05.rcksistemas.model.WebPedidoItens;
@@ -196,7 +196,7 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
                     webPedidoItem = new WebPedidoItens(PedidoHelper.getProduto());
                 else {
                     webPedidoItem = PedidoHelper.getWebPedidoItem();
-                    edtQuantidade.setText(webPedidoItem.getQuantidade());
+                    edtQuantidade.setText(webPedidoItem.getQuantidade().toString().replace(".0", ""));
                     edtDesconto.setText(webPedidoItem.getValor_desconto_per());
                     edtDescontoReais.setText(webPedidoItem.getValor_desconto_real());
                     if (webPedidoItem.getTipoDesconto().equals("R"))
@@ -207,7 +207,7 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
                 webPedidoItem = PedidoHelper.getWebPedidoItem();
                 edtDesconto.setText(webPedidoItem.getValor_desconto_per());
                 edtDescontoReais.setText(webPedidoItem.getValor_desconto_real());
-                edtQuantidade.setText(webPedidoItem.getQuantidade());
+                edtQuantidade.setText(webPedidoItem.getQuantidade().toString().replace(".0", ""));
                 if (webPedidoItem.getTipoDesconto().equals("R")) {
                     rbReal.setChecked(true);
                 }

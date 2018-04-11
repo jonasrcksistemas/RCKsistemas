@@ -40,9 +40,10 @@ public class ListaAdapterProdutoPedido extends RecyclerView.Adapter<ProdutoPedid
     public void onBindViewHolder(ProdutoPedidoViewHolder holder, int position) {
         holder.nomeListaProduto.setText(lista.get(position).getNome_produto());
         Float valorProduto;
-        if (lista.get(position).getValor_desconto_per() != null && !lista.get(position).getValor_desconto_per().trim().isEmpty() && Float.parseFloat(lista.get(position).getValor_desconto_per()) > 0)
+        if (lista.get(position).getValor_desconto_per() != null && !lista.get(position).getValor_desconto_per().trim().isEmpty() && Float.parseFloat(lista.get(position).getValor_desconto_per()) > 0) {
             valorProduto = Float.parseFloat(lista.get(position).getValor_total()) / Float.parseFloat(lista.get(0).getQuantidade());
-        else
+            holder.txtDesconto.setText("Desconto: " + lista.get(position).getValor_desconto_per() + "%");
+        } else
             valorProduto = lista.get(position).getValor_unitario();
 
         holder.precoProduto.setText(String.format("%.2f", Float.parseFloat(lista.get(position).getQuantidade())) + " x " + String.format("R$%.2f", valorProduto) + " = " + String.format("R$%.2f", Float.parseFloat(lista.get(position).getValor_total())));

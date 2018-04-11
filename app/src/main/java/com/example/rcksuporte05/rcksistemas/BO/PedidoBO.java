@@ -1,4 +1,4 @@
-package com.example.rcksuporte05.rcksistemas.bo;
+package com.example.rcksuporte05.rcksistemas.BO;
 
 import android.content.Context;
 
@@ -55,8 +55,10 @@ public class PedidoBO {
                             return promocaoRetorno;
                         }
                     }
-                } else
+                } else {
+                    promocaoRetorno.setNomePromocao(promocao.getNomePromocao());
                     promocaoRetorno.setValorDesconto(promocao.getDescontoPerc());
+                }
             }
         }
         List<Promocao> listaPromocaoCliente = promocaoDAO.listaPromocaoClienteEspecifico();
@@ -64,13 +66,13 @@ public class PedidoBO {
             for (Promocao promocao : listaPromocaoCliente) {
                 for (PromocaoCliente promocaoCliente : promocao.getListaPromoCliente()) {
                     if (promocaoCliente.getIdCadastro() == idCliente) {
-                        promocaoRetorno.setNomePromocao(promocao.getNomePromocao());
                         if (promocao.getAplicacaoProduto() > 0) {
                             for (PromocaoProduto promocaoProduto : promocao.getListaPromoProduto()) {
                                 if (promocaoProduto.getIdProduto() == idProduto) {
-                                    if (promocaoRetorno.getValorDesconto() > promocaoProduto.getDescontoPerc())
+                                    if (promocaoRetorno.getValorDesconto() > promocaoProduto.getDescontoPerc()) {
                                         return promocaoRetorno;
-                                    else {
+                                    } else {
+                                        promocaoRetorno.setNomePromocao(promocao.getNomePromocao());
                                         promocaoRetorno.setValorDesconto(promocaoProduto.getDescontoPerc());
                                         return promocaoRetorno;
                                     }

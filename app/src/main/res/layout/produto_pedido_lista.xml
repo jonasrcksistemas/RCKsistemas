@@ -54,4 +54,12 @@
         android:text="textViewUnidadeMedida"
         android:textAlignment="center" />
 
+    <TextView
+        android:id="@+id/txtDesconto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignTop="@id/idPosition"
+        android:layout_marginEnd="10dp" />
+
 </RelativeLayout>

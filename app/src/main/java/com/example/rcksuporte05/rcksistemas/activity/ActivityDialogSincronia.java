@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.widget.Switch;
 
 import com.example.rcksuporte05.rcksistemas.R;
-import com.example.rcksuporte05.rcksistemas.bo.SincroniaBO;
+import com.example.rcksuporte05.rcksistemas.BO.SincroniaBO;
 import com.example.rcksuporte05.rcksistemas.model.Sincronia;
 
 import butterknife.BindView;

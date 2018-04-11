@@ -1,4 +1,4 @@
-package com.example.rcksuporte05.rcksistemas.bo;
+package com.example.rcksuporte05.rcksistemas.BO;
 
 
 import android.app.Activity;

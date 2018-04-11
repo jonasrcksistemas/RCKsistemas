@@ -12,7 +12,7 @@ import com.example.rcksuporte05.rcksistemas.DAO.WebPedidoItensDAO;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.activity.ActivityPedidoMain;
 import com.example.rcksuporte05.rcksistemas.activity.ProdutoPedidoActivity;
-import com.example.rcksuporte05.rcksistemas.bo.PedidoBO;
+import com.example.rcksuporte05.rcksistemas.BO.PedidoBO;
 import com.example.rcksuporte05.rcksistemas.fragment.Pedido1;
 import com.example.rcksuporte05.rcksistemas.fragment.Pedido2;
 import com.example.rcksuporte05.rcksistemas.model.Produto;
