@@ -6,13 +6,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.rcksuporte05.rcksistemas.BO.PedidoBO;
 import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.DAO.WebPedidoDAO;
 import com.example.rcksuporte05.rcksistemas.DAO.WebPedidoItensDAO;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.activity.ActivityPedidoMain;
 import com.example.rcksuporte05.rcksistemas.activity.ProdutoPedidoActivity;
-import com.example.rcksuporte05.rcksistemas.BO.PedidoBO;
 import com.example.rcksuporte05.rcksistemas.fragment.Pedido1;
 import com.example.rcksuporte05.rcksistemas.fragment.Pedido2;
 import com.example.rcksuporte05.rcksistemas.model.Produto;
@@ -118,13 +118,14 @@ public class PedidoHelper {
         return (EditText) activityPedidoMain.findViewById(R.id.edtDataEntrega);
     }
 
-    public void calculaValorPedido(List<WebPedidoItens> produtoPedido) {
+    public static void calculaValorPedido(List<WebPedidoItens> produtoPedido, ActivityPedidoMain activityPedidoMain) {
 
         Float resultado = Float.valueOf("0");
         for (int i = 0; produtoPedido.size() > i; i++) {
             resultado += Float.valueOf(produtoPedido.get(i).getValor_total());
         }
         valorVenda = resultado;
+        EditText edtTotalVenda = (EditText) activityPedidoMain.findViewById(R.id.edtTotalVenda);
         edtTotalVenda.setText(MascaraUtil.mascaraReal(resultado));
     }
 
@@ -199,6 +200,7 @@ public class PedidoHelper {
                                     webPedido.setValor_desconto(String.valueOf(descontoReal));
                                     webPedido.setPontos_cor(db.consulta("SELECT I.COR_WEB, I.ID_ITEM FROM TBL_TABELA_PRECO_ITENS I JOIN TBL_TABELA_PRECO_CAB T ON T.ID_TABELA=I.ID_TABELA WHERE PERC_DESC_INICIAL<= " + mediaDesconto + " AND PERC_DESC_FINAL>= " + mediaDesconto + ";", "COR_WEB"));
                                     webPedido.setId_tabela_preco_faixa(db.consulta("SELECT I.COR_WEB, I.ID_ITEM FROM TBL_TABELA_PRECO_ITENS I JOIN TBL_TABELA_PRECO_CAB T ON T.ID_TABELA=I.ID_TABELA WHERE PERC_DESC_INICIAL<= " + mediaDesconto + " AND PERC_DESC_FINAL>= " + mediaDesconto + ";", "ID_ITEM"));
+                                    //TODO Verificar rotina de exclusão dos produtos excluidos
                                     if (Pedido1.listaProdutoRemovido.size() > 0 && PedidoHelper.getIdPedido() > 0) {
                                         PedidoBO pedidoBO = new PedidoBO();
                                         pedidoBO.excluiItenPedido(PedidoHelper.getActivityPedidoMain(), Pedido1.listaProdutoRemovido);

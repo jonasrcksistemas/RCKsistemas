@@ -36,11 +36,11 @@ public class ListaAdapterPedidoQuitado extends ArrayAdapter<WebPedido> {
 
         convertView = LayoutInflater.from(this.context).inflate(R.layout.pedido_lista, null);
 
-        TextView txtIdPedido = (TextView) convertView.findViewById(R.id.txtIdPedido);
+        TextView txtIdPedido = (TextView) convertView.findViewById(R.id.edtNomeProduto);
         TextView txtNomeCliente = (TextView) convertView.findViewById(R.id.txtNomeCliente);
         TextView txtPrecoPedido = (TextView) convertView.findViewById(R.id.txtPrecoPedido);
         //TextView txtHoraPedido = (TextView) convertView.findViewById(R.id.txtHoraPedido);
-        TextView txtPontoCoeficiente = (TextView) convertView.findViewById(R.id.txtPontoCoeficiente);
+        TextView txtPontoCoeficiente = (TextView) convertView.findViewById(R.id.txtValorUnitario);
 
         txtIdPedido.setText(itemPosicao.getId_web_pedido());
 

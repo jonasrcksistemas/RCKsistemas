@@ -1,5 +1,6 @@
 package com.example.rcksuporte05.rcksistemas.util;
 
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Locale;
 
@@ -98,11 +99,21 @@ public class MascaraUtil {
     }
 
     public static String duasCasaDecimal(Float valor) {
-        return mascaraReal(valor).replace("R$", "").replace(",", ".");
+        DecimalFormat df = new DecimalFormat("0.00");
+        return df.format(valor).replace(",", ".");
     }
 
     public static String duasCasaDecimal(String valor) {
-        return mascaraReal(valor).replace("R$", "").replace(",", ".");
+        DecimalFormat df = new DecimalFormat("0.00");
+        return df.format(Float.parseFloat(valor));
+    }
+
+    public static String mascaraVirgula(Float valor) {
+        return mascaraReal(valor).replace("R$", "");
+    }
+
+    public static String mascaraVirgula(String valor) {
+        return mascaraReal(valor).replace("R$", "");
     }
 
 }

@@ -27,14 +27,14 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.rcksuporte05.rcksistemas.BO.SincroniaBO;
+import com.example.rcksuporte05.rcksistemas.BO.UsuarioBO;
 import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.FotoHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.UsuarioHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.api.Api;
 import com.example.rcksuporte05.rcksistemas.api.Rotas;
-import com.example.rcksuporte05.rcksistemas.BO.SincroniaBO;
-import com.example.rcksuporte05.rcksistemas.BO.UsuarioBO;
 import com.example.rcksuporte05.rcksistemas.model.Sincronia;
 import com.example.rcksuporte05.rcksistemas.model.Usuario;
 
@@ -104,6 +104,10 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
         tb_principal.setLogo(R.mipmap.ic_launcher);
 
         sincronia = new Sincronia(true, true, true, false, false, false, false);
+
+        if (ContextCompat.checkSelfPermission(PrincipalActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(PrincipalActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(PrincipalActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA}, 0);
+        }
 
         setSupportActionBar(tb_principal);
 
@@ -227,10 +231,6 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                                 File imagem = new File(diretorio.getPath() + "/" + System.currentTimeMillis() + ".jpg");
                                 uri = Uri.fromFile(imagem);
 
-                                if (ContextCompat.checkSelfPermission(PrincipalActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                                    ActivityCompat.requestPermissions(PrincipalActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 0);
-                                }
-
                                 Intent intentCamera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                                 intentCamera.putExtra(MediaStore.EXTRA_OUTPUT, uri);
                                 try {
@@ -239,6 +239,7 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                                     Intent captura = new Intent("android.media.action.IMAGE_CAPTURE");
                                     startActivityForResult(captura, 456);
                                 }
+
                                 break;
                             case 1:
                                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);

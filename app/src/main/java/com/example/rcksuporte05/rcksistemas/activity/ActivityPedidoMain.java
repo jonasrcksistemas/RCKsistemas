@@ -237,6 +237,7 @@ public class ActivityPedidoMain extends AppCompatActivity {
     protected void onDestroy() {
         pedidoHelper.limparDados();
         objetoCliente = null;
+        ClienteHelper.setCliente(null);
         System.gc();
         super.onDestroy();
     }
@@ -305,7 +306,6 @@ public class ActivityPedidoMain extends AppCompatActivity {
         public void onDestroyActionMode(ActionMode mode) {
             Pedido1.getListaAdapterProdutoPedido().clearSelections();
             actionMode = null;
-            ClienteHelper.setCliente(null);
         }
     }
 }

@@ -18,7 +18,7 @@ import butterknife.ButterKnife;
 
 public class PedidoViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
 
-    @BindView(R.id.txtIdPedido)
+    @BindView(R.id.edtNomeProduto)
     public TextView txtIdPedido;
     @BindView(R.id.txtNomeCliente)
     public TextView txtNomeCliente;

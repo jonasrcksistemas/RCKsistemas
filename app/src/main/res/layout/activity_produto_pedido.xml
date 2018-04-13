@@ -21,7 +21,7 @@
     <android.support.v7.widget.CardView
         android:id="@+id/cdPromocao"
         android:layout_width="match_parent"
-        android:layout_height="20dp"
+        android:layout_height="wrap_content"
         android:visibility="gone"
         app:cardBackgroundColor="#ff0000"
         tools:context=".activity.ProdutoPedidoActivity">
@@ -54,31 +54,23 @@
             android:paddingRight="@dimen/activity_horizontal_margin"
             android:paddingTop="@dimen/activity_vertical_margin">
 
-            <TextView
-                android:id="@+id/txtIdPedido"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:text="NOME DO PRODUTO"
-                android:textColor="@color/colorAccent" />
-
             <EditText
                 android:id="@+id/edtNomeProduto"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/txtIdPedido"
+                android:layout_alignBaseline="@+id/btnBuscaProduto"
                 android:layout_toStartOf="@+id/btnBuscaProduto"
                 android:background="@drawable/borda_edittext"
                 android:focusable="false"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                android:textStyle="bold" />
 
             <Button
                 android:id="@+id/btnBuscaProduto"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_alignParentEnd="true"
-                android:layout_alignTop="@+id/edtNomeProduto"
+                android:layout_marginBottom="12dp"
                 android:background="@mipmap/ic_search_dark"
                 android:scaleType="centerCrop" />
 
@@ -86,9 +78,10 @@
                 android:id="@+id/txtQuantidade"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/txtPontoCoeficiente"
-                android:layout_alignBottom="@+id/txtPontoCoeficiente"
-                android:layout_alignParentStart="true"
+                android:layout_above="@+id/edtQuantidade"
+                android:layout_alignEnd="@+id/edtQuantidade"
+                android:layout_alignStart="@+id/edtQuantidade"
+                android:gravity="center"
                 android:text="QUANTIDADE"
                 android:textColor="@color/colorAccent" />
 
@@ -96,41 +89,43 @@
                 android:id="@+id/edtQuantidade"
                 android:layout_width="170dp"
                 android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/edtTabelaPreco"
                 android:layout_alignEnd="@+id/edtDesconto"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/txtQuantidade"
-                android:layout_toStartOf="@+id/edtDescontoReais"
                 android:background="@drawable/borda_edittext"
+                android:gravity="center"
                 android:inputType="numberDecimal"
-                android:nextFocusDown="@+id/edtTabelaPreco" />
+                android:paddingEnd="12dp" />
 
             <TextView
-                android:id="@+id/txtPontoCoeficiente"
+                android:id="@+id/txtValorUnitario"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignStart="@+id/edtTabelaPreco"
+                android:layout_alignEnd="@+id/edtTabelaPreco"
                 android:layout_below="@+id/btnBuscaProduto"
-                android:text="VALOR UNITARIO"
+                android:text="VALOR UNITARIO R$"
                 android:textColor="@color/colorAccent" />
 
             <EditText
                 android:id="@+id/edtTabelaPreco"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/txtPontoCoeficiente"
+                android:layout_below="@+id/txtValorUnitario"
                 android:layout_marginStart="12dp"
                 android:layout_toEndOf="@+id/edtQuantidade"
                 android:background="@drawable/borda_edittext"
                 android:focusable="false"
-                android:inputType="numberDecimal" />
+                android:gravity="end|center"
+                android:inputType="numberDecimal"
+                android:paddingEnd="12dp" />
 
             <TextView
                 android:id="@+id/txtValorProdutos"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
                 android:layout_below="@+id/edtTabelaPreco"
                 android:layout_marginTop="12dp"
-                android:text="VALOR PRODUTOS"
+                android:text="VALOR PRODUTOS R$"
                 android:textColor="@color/colorAccent" />
 
             <EditText
@@ -139,7 +134,9 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/txtValorProdutos"
                 android:background="@drawable/borda_edittext"
-                android:focusable="false" />
+                android:focusable="false"
+                android:gravity="end|center"
+                android:paddingEnd="12dp" />
 
             <RadioGroup
                 android:id="@+id/rgRealPorc"
@@ -188,6 +185,7 @@
                 android:background="@drawable/borda_edittext"
                 android:gravity="center"
                 android:inputType="numberDecimal"
+                android:paddingEnd="12dp"
                 android:text="00.00" />
 
             <TextView
@@ -220,16 +218,19 @@
                 android:layout_toEndOf="@+id/txtDescontoReais"
                 android:background="@drawable/borda_edittext"
                 android:enabled="false"
+                android:gravity="end|center"
                 android:inputType="numberDecimal"
+                android:paddingEnd="12dp"
                 android:text="0.00" />
 
             <TextView
                 android:id="@+id/txtTotal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
                 android:layout_below="@+id/txtDesconto"
                 android:layout_marginTop="12dp"
-                android:text="TOTAL"
+                android:text="TOTAL R$"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
 
@@ -240,6 +241,8 @@
                 android:layout_below="@+id/txtTotal"
                 android:background="@drawable/borda_edittext"
                 android:focusable="false"
+                android:gravity="end|center"
+                android:paddingEnd="12dp"
                 android:textStyle="bold" />
 
         </RelativeLayout>

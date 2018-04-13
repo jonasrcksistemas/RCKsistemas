@@ -26,7 +26,6 @@ import com.example.rcksuporte05.rcksistemas.model.TabelaPrecoItem;
 import com.example.rcksuporte05.rcksistemas.model.Usuario;
 import com.example.rcksuporte05.rcksistemas.model.VendedorBonusResumo;
 import com.example.rcksuporte05.rcksistemas.model.VisitaProspect;
-import com.example.rcksuporte05.rcksistemas.model.WebPedidoItens;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -349,7 +348,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 " VALOR_DESCONTO_ADD DECIMAL(12, 2)," +
                 " DESCONTO_PER DECIMAL(12, 2)," +
                 " DESCONTO_PER_ADD DECIMAL(12, 2)," +
-                " VALOR_TOTAL DECIMAL(12, 2)," +
+                " VALOR_TOTAL DECIMAL(12, 3)," +
                 " EXCLUIDO VARCHAR(1) NOT NULL," +
                 " EXCLUIDO_USUARIO_ID INTEGER," +
                 " EXCLUIDO_USUARIO_NOME VARCHAR(40)," +
@@ -731,6 +730,49 @@ public class DBHelper extends SQLiteOpenHelper {
                     "  PRIMARY KEY (ID_PROMOCAO, ID_PRODUTO));");
 
             db.execSQL("ALTER TABLE TBL_WEB_PEDIDO_ITENS ADD COLUMN TIPO_DESCONTO VARCHAR(1) DEFAULT 'P';");
+
+            db.execSQL("DROP TABLE TBL_WEB_PEDIDO");
+
+            db.execSQL("CREATE TABLE IF NOT EXISTS TBL_WEB_PEDIDO (ID_WEB_PEDIDO INTEGER PRIMARY KEY AUTOINCREMENT," +
+                    " ID_EMPRESA INTEGER NOT NULL," +
+                    " ID_CADASTRO INTEGER NOT NULL," +
+                    " ID_VENDEDOR INTEGER NOT NULL," +
+                    " ID_CONDICAO_PAGAMENTO INTEGER NOT NULL," +
+                    " ID_OPERACAO INTEGER NOT NULL," +
+                    " ID_TABELA INTEGER," +
+                    " NOME_EXTENSO VARCHAR(150)," +
+                    " DATA_EMISSAO DATE," +
+                    " VALOR_PRODUTOS DECIMAL(12, 2)," +
+                    " VALOR_DESCONTO DECIMAL(12, 2)," +
+                    " VALOR_DESCONTO_ADD DECIMAL(12, 2)," +
+                    " DESCONTO_PER DECIMAL(12, 2)," +
+                    " DESCONTO_PER_ADD DECIMAL(12, 2)," +
+                    " VALOR_TOTAL DECIMAL(12, 3)," +
+                    " EXCLUIDO VARCHAR(1) NOT NULL," +
+                    " EXCLUIDO_USUARIO_ID INTEGER," +
+                    " EXCLUIDO_USUARIO_NOME VARCHAR(40)," +
+                    " EXCLUIDO_USUARIO_DATA TIMESTAMP," +
+                    " JUSTIFICATIVA_EXCLUSAO VARCHAR(250)," +
+                    " USUARIO_LANCAMENTO_ID INTEGER NOT NULL," +
+                    " USUARIO_LANCAMENTO_NOME VARCHAR(40)," +
+                    " USUARIO_LANCAMENTO_DATA TIMESTAMP," +
+                    " OBSERVACOES VARCHAR(300)," +
+                    " STATUS VARCHAR(1) NOT NULL," +
+                    " ID_PEDIDO_VENDA INTEGER," +
+                    " ID_NOTA_FISCAL INTEGER," +
+                    " ID_TABELA_PRECO_FAIXA INTEGER," +
+                    " PONTOS_TOTAL DECIMAL(12, 4)," +
+                    " PONTOS_COEFICIENTE DECIMAL(12, 4)," +
+                    " PONTOS_COR VARCHAR(15)," +
+                    " COMISSAO_PERCENTUAL DECIMAL(12, 4)," +
+                    " COMISSAO_VALOR DECIMAL(12, 2)," +
+                    " ID_FAIXA_FINAL INTEGER," +
+                    " VALOR_BONUS_CREDOR DECIMAL(12, 2)," +
+                    " PERC_BONUS_CREDOR DECIMAL(12, 4), " +
+                    " FATURADO VARCHAR(1)," +
+                    " PEDIDO_ENVIADO VARCHAR(1) DEFAULT 'N', " +
+                    " ID_WEB_PEDIDO_SERVIDOR INTEGER," +
+                    " DATA_PREV_ENTREGA DATE);");
         }
     }
 
@@ -2225,7 +2267,6 @@ public class DBHelper extends SQLiteOpenHelper {
 
         return lista;
     }
-
 
 
     public List<Usuario> listaUsuario(String SQL) {

@@ -162,6 +162,7 @@ public class WebPedidoDAO {
                 lista.add(webPedido);
             } catch (CursorIndexOutOfBoundsException e) {
                 System.out.println("Cliente não encontrado na base de dados!");
+                e.printStackTrace();
             }
 
             System.gc();

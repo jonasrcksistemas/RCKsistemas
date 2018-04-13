@@ -597,7 +597,6 @@ public class SincroniaBO {
                 }
 
                 Call<Sincronia> call = apiRotas.sincroniaApi(Integer.parseInt(UsuarioHelper.getUsuario().getId_usuario()), cabecalho, sincronia);
-
                 try {
                     Response<Sincronia> response = call.execute();
                     if (response.code() == 200) {

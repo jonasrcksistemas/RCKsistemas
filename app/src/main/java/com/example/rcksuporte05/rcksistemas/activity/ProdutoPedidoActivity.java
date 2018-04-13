@@ -150,6 +150,15 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
             }
         });
 
+        edtNomeProduto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ProdutoPedidoActivity.this, ActivityProduto.class);
+                intent.putExtra("acao", 2);
+                startActivity(intent);
+            }
+        });
+
         rgRealPorc.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -219,14 +228,14 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
         if (promocaoRetorno != null && promocaoRetorno.getValorDesconto() > 0) {
             rbPorcentagem.setText("Desconto %(max " + promocaoRetorno.getValorDesconto().toString().replace(".0", "") + "%)");
             cdPromocao.setVisibility(View.VISIBLE);
-            txtPromocao.setText(promocaoRetorno.getNomePromocao());
+            txtPromocao.setText("**PRODUTO EM PROMOÇÃO**\n" + promocaoRetorno.getNomePromocao());
         } else {
-            cdPromocao.setVisibility(View.INVISIBLE);
+            cdPromocao.setVisibility(View.GONE);
             rbPorcentagem.setText("Desconto %(max " + tabelaPrecoItem.getPerc_desc_final() + "%)");
         }
 
         edtNomeProduto.setText(webPedidoItem.getNome_produto());
-        edtTabelaPreco.setText(MascaraUtil.mascaraReal(webPedidoItem.getVenda_preco()));
+        edtTabelaPreco.setText(MascaraUtil.mascaraVirgula(webPedidoItem.getVenda_preco()));
         calculaDesconto();
         super.onResume();
     }
@@ -315,25 +324,25 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
                     Float quantidade = Float.parseFloat(edtQuantidade.getText().toString());
                     Float totalProdutoBruto = quantidade * Float.parseFloat(webPedidoItem.getVenda_preco());
                     Float desconto;
-                    edtValorProdutos.setText(MascaraUtil.mascaraReal(totalProdutoBruto));
+                    edtValorProdutos.setText(MascaraUtil.mascaraVirgula(totalProdutoBruto));
                     if (rbPorcentagem.isChecked()) {
                         if (!edtDesconto.getText().toString().trim().isEmpty()) {
                             desconto = (Float.parseFloat(edtDesconto.getText().toString()) * (totalProdutoBruto)) / 100;
                             edtDescontoReais.setText(MascaraUtil.duasCasaDecimal(desconto));
-                            edtTotal.setText(MascaraUtil.mascaraReal(totalProdutoBruto - desconto));
+                            edtTotal.setText(MascaraUtil.mascaraVirgula(totalProdutoBruto - desconto));
                         } else {
                             edtDescontoReais.setText("0.00");
-                            edtTotal.setText(MascaraUtil.mascaraReal(totalProdutoBruto));
+                            edtTotal.setText(MascaraUtil.mascaraVirgula(totalProdutoBruto));
                         }
                         webPedidoItem.setTipoDesconto("P");
                     } else if (rbReal.isChecked()) {
                         if (!edtDescontoReais.getText().toString().trim().isEmpty()) {
                             desconto = (Float.parseFloat(edtDescontoReais.getText().toString()) * 100) / totalProdutoBruto;
                             edtDesconto.setText(MascaraUtil.duasCasaDecimal(desconto));
-                            edtTotal.setText(MascaraUtil.mascaraReal(totalProdutoBruto - Float.parseFloat(edtDescontoReais.getText().toString())));
+                            edtTotal.setText(MascaraUtil.mascaraVirgula(totalProdutoBruto - Float.parseFloat(edtDescontoReais.getText().toString())));
                         } else {
                             edtDesconto.setText("0.00");
-                            edtTotal.setText(MascaraUtil.mascaraReal(totalProdutoBruto));
+                            edtTotal.setText(MascaraUtil.mascaraVirgula(totalProdutoBruto));
                         }
                         webPedidoItem.setTipoDesconto("R");
                     }

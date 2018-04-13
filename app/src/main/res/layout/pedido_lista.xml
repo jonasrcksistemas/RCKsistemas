@@ -7,7 +7,7 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/txtIdPedido"
+        android:id="@+id/edtNomeProduto"
         android:layout_width="40dp"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
@@ -29,8 +29,8 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="5dp"
         android:layout_marginStart="8dp"
-        android:layout_toEndOf="@+id/txtIdPedido"
-        android:layout_toRightOf="@+id/txtIdPedido"
+        android:layout_toEndOf="@+id/edtNomeProduto"
+        android:layout_toRightOf="@+id/edtNomeProduto"
         android:ellipsize="end"
         android:maxLines="1"
         android:text="nomeCliente"
@@ -38,13 +38,12 @@
 
     <TextView
         android:id="@+id/txtPrecoPedido"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/txtDataEntrega"
-        android:layout_marginEnd="5dp"
-        android:layout_marginRight="5dp"
         android:layout_toEndOf="@+id/txtDataEntrega"
-        android:layout_toRightOf="@+id/txtDataEntrega"
+        android:ellipsize="end"
+        android:gravity="center"
         android:maxLines="1"
         android:text="precoPedido"
         android:textColor="#000000"
@@ -60,8 +59,8 @@
         android:layout_alignParentStart="true"
         android:layout_alignTop="@+id/txtDataEmissaoPedido"
         android:layout_marginBottom="11dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginStart="15dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
         android:src="@mipmap/ic_clip_board" />
 
     <TextView
@@ -70,8 +69,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="11dp"
-        android:layout_marginEnd="15dp"
-        android:layout_marginRight="15dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
         android:layout_toEndOf="@+id/img_data_emissao"
         android:layout_toRightOf="@+id/img_data_emissao"
         android:text="data missao"
@@ -94,7 +93,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/img_data_entrega"
-        android:layout_marginEnd="15dp"
         android:layout_toEndOf="@+id/img_data_entrega"
         android:layout_toRightOf="@+id/img_data_entrega"
         android:gravity="center_horizontal"

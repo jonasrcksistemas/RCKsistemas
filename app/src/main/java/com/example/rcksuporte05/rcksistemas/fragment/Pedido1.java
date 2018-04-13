@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.example.rcksuporte05.rcksistemas.BO.PedidoBO;
 import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.DAO.WebPedidoItensDAO;
 import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
@@ -25,7 +26,6 @@ import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.activity.ActivityProduto;
 import com.example.rcksuporte05.rcksistemas.activity.ProdutoPedidoActivity;
 import com.example.rcksuporte05.rcksistemas.adapters.ListaAdapterProdutoPedido;
-import com.example.rcksuporte05.rcksistemas.BO.PedidoBO;
 import com.example.rcksuporte05.rcksistemas.model.TabelaPrecoItem;
 import com.example.rcksuporte05.rcksistemas.model.WebPedidoItens;
 import com.example.rcksuporte05.rcksistemas.util.DividerItemDecoration;
@@ -62,6 +62,7 @@ public class Pedido1 extends Fragment implements ListaAdapterProdutoPedido.Produ
         }
         listaAdapterProdutoPedido.getList(listaProdutoPedido);
         lstProdutoPedido.setAdapter(listaAdapterProdutoPedido);
+        PedidoHelper.calculaValorPedido(listaProdutoPedido, PedidoHelper.getActivityPedidoMain());
         listaAdapterProdutoPedido.notifyDataSetChanged();
     }
 
@@ -155,8 +156,7 @@ public class Pedido1 extends Fragment implements ListaAdapterProdutoPedido.Produ
 
     @Override
     public void onResume() {
-        PedidoHelper pedidoHelper = new PedidoHelper(PedidoHelper.getActivityPedidoMain());
-        pedidoHelper.calculaValorPedido(listaProdutoPedido);
+        PedidoHelper.calculaValorPedido(listaProdutoPedido, PedidoHelper.getActivityPedidoMain());
         if (listaProdutoPedido.size() > 0) {
             tabelaPrecoItem = db.listaTabelaPrecoItem("SELECT * FROM TBL_TABELA_PRECO_ITENS WHERE ID_CATEGORIA = " + ClienteHelper.getCliente().getIdCategoria()).get(0);
             PedidoBO pedidoBO = new PedidoBO();

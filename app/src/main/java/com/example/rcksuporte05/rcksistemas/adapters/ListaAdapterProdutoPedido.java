@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.viewHolder.ProdutoPedidoViewHolder;
 import com.example.rcksuporte05.rcksistemas.model.WebPedidoItens;
+import com.example.rcksuporte05.rcksistemas.util.MascaraUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,12 +42,12 @@ public class ListaAdapterProdutoPedido extends RecyclerView.Adapter<ProdutoPedid
         holder.nomeListaProduto.setText(lista.get(position).getNome_produto());
         Float valorProduto;
         if (lista.get(position).getValor_desconto_per() != null && !lista.get(position).getValor_desconto_per().trim().isEmpty() && Float.parseFloat(lista.get(position).getValor_desconto_per()) > 0) {
-            valorProduto = Float.parseFloat(lista.get(position).getValor_total()) / Float.parseFloat(lista.get(0).getQuantidade());
+            valorProduto = lista.get(position).getValor_unitario() - (Float.parseFloat(lista.get(position).getValor_desconto_real()) / Float.parseFloat(lista.get(position).getQuantidade()));
             holder.txtDesconto.setText("Desconto: " + lista.get(position).getValor_desconto_per() + "%");
         } else
             valorProduto = lista.get(position).getValor_unitario();
 
-        holder.precoProduto.setText(String.format("%.2f", Float.parseFloat(lista.get(position).getQuantidade())) + " x " + String.format("R$%.2f", valorProduto) + " = " + String.format("R$%.2f", Float.parseFloat(lista.get(position).getValor_total())));
+        holder.precoProduto.setText(MascaraUtil.duasCasaDecimal(lista.get(position).getQuantidade()) + " x " + MascaraUtil.mascaraReal(valorProduto) + " = " + MascaraUtil.mascaraReal(lista.get(position).getValor_total()));
 
         holder.textViewUnidadeMedida.setText(lista.get(position).getDescricao());
         holder.idPosition.setText(String.valueOf(position + 1));

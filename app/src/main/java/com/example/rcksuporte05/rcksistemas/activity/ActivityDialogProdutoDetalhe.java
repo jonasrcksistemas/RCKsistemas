@@ -24,7 +24,7 @@ public class ActivityDialogProdutoDetalhe extends AppCompatActivity {
     @Nullable
     Toolbar toolbarProduto;
 
-    @BindView(R.id.txtNomeProduto)
+    @BindView(R.id.edtNomeProduto)
     @Nullable
     TextView txtProduto;
 
