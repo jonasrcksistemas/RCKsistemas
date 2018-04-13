@@ -29,18 +29,30 @@ public class ContatoActivity extends AppCompatActivity {
 
     @BindView(R.id.txtCategoria)
     TextView txtCategoria;
-    private Toolbar toolbar;
-    private ImageView imageView;
-    private TextView txtRazaoSocial;
-    private TextView txtTelefone;
-    private TextView txtEmail;
-    private TextView txtEndereco;
-    private LinearLayout lyDetalhes;
-    private LinearLayout lyChamada;
-    private LinearLayout lyEmail;
-    private LinearLayout lyGps;
-    private LinearLayout lyNomeCliente;
-    private LinearLayout lyFinanceiro;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
+    @BindView(R.id.imFisicaJuridica)
+    ImageView imFisicaJuridica;
+    @BindView(R.id.txtRazaoSocial)
+    TextView txtRazaoSocial;
+    @BindView(R.id.txtTelefone)
+    TextView txtTelefone;
+    @BindView(R.id.txtEmail)
+    TextView txtEmail;
+    @BindView(R.id.txtEndereco)
+    TextView txtEndereco;
+    @BindView(R.id.lyDetalhes)
+    LinearLayout lyDetalhes;
+    @BindView(R.id.lyChamada)
+    LinearLayout lyChamada;
+    @BindView(R.id.lyEmail)
+    LinearLayout lyEmail;
+    @BindView(R.id.lyGps)
+    LinearLayout lyGps;
+    @BindView(R.id.lyNomeCliente)
+    LinearLayout lyNomeCliente;
+    @BindView(R.id.lyFinanceiro)
+    LinearLayout lyFinanceiro;
     private Cliente cliente;
 
     @Override
@@ -61,36 +73,23 @@ public class ContatoActivity extends AppCompatActivity {
                 txtCategoria.setText("Este cliente não tem categoria definida!");
             }
 
-            toolbar = (Toolbar) findViewById(R.id.toolbar);
-            imageView = (ImageView) findViewById(R.id.imFisicaJuridica);
-            txtRazaoSocial = (TextView) findViewById(R.id.txtRazaoSocial);
-            txtTelefone = (TextView) findViewById(R.id.txtTelefone);
-            txtEmail = (TextView) findViewById(R.id.txtEmail);
-            txtEndereco = (TextView) findViewById(R.id.txtEndereco);
-            lyDetalhes = (LinearLayout) findViewById(R.id.lyDetalhes);
-            lyChamada = (LinearLayout) findViewById(R.id.lyChamada);
-            lyEmail = (LinearLayout) findViewById(R.id.lyEmail);
-            lyGps = (LinearLayout) findViewById(R.id.lyGps);
-            lyNomeCliente = (LinearLayout) findViewById(R.id.lyNomeCliente);
-            lyFinanceiro = (LinearLayout) findViewById(R.id.lyFinanceiro);
-
             toolbar.setTitle("Contato");
             txtRazaoSocial.setText(cliente.getNome_cadastro());
 
             if (cliente.getPessoa_f_j() != null) {
                 switch (cliente.getPessoa_f_j()) {
                     case "F":
-                        imageView.setImageResource(R.mipmap.ic_pessoa_fisica);
+                        imFisicaJuridica.setImageResource(R.mipmap.ic_pessoa_fisica);
                         break;
                     case "J":
-                        imageView.setImageResource(R.mipmap.ic_pessoa_juridica);
+                        imFisicaJuridica.setImageResource(R.mipmap.ic_pessoa_juridica);
                         break;
                     default:
-                        imageView.setImageResource(R.mipmap.ic_pessoa_duvida);
+                        imFisicaJuridica.setImageResource(R.mipmap.ic_pessoa_duvida);
                         break;
                 }
             } else
-                imageView.setImageResource(R.mipmap.ic_pessoa_duvida);
+                imFisicaJuridica.setImageResource(R.mipmap.ic_pessoa_duvida);
 
             if (cliente.getTelefone_principal() != null && !cliente.getTelefone_principal().replaceAll("[^0-9]", "").trim().isEmpty() && cliente.getTelefone_principal().replaceAll("[^0-9]", "").length() >= 8 && cliente.getTelefone_principal().replaceAll("[^0-9]", "").length() <= 11) {
                 txtTelefone.setText(formataTelefone(cliente.getTelefone_principal()));
@@ -110,13 +109,15 @@ public class ContatoActivity extends AppCompatActivity {
                 txtEmail.setText("Nenhum email informado!");
             }
 
+            String endereco;
             if (cliente.getEndereco() != null && !cliente.getEndereco().trim().equals("")) {
-                txtEndereco.setText(cliente.getEndereco().replace(",", "") + ", " + cliente.getEndereco_numero() + " - " + cliente.getEndereco_cep());
+                endereco = cliente.getEndereco().replace(",", "") + ", " + cliente.getEndereco_numero() + " - " + cliente.getEndereco_cep();
             } else if (cliente.getCob_endereco() != null && !cliente.getCob_endereco().trim().equals("")) {
-                txtEndereco.setText(cliente.getCob_endereco().replace(",", "") + ", " + cliente.getCob_endereco_numero() + " - " + cliente.getCob_endereco_cep());
+                endereco = cliente.getCob_endereco().replace(",", "") + ", " + cliente.getCob_endereco_numero() + " - " + cliente.getCob_endereco_cep();
             } else {
-                txtEndereco.setText("Nenhum endereço informado!");
+                endereco = "Nenhum endereço informado!";
             }
+            txtEndereco.setText(endereco.replace(", null", ""));
 
             lyDetalhes.setOnClickListener(new View.OnClickListener() {
                 @Override
