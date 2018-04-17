@@ -4,8 +4,8 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.widget.Switch;
 
-import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.BO.SincroniaBO;
+import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.model.Sincronia;
 
 import butterknife.BindView;
@@ -51,12 +51,12 @@ public class ActivityDialogSincronia extends Activity {
     @OnClick(R.id.btnConfirmar)
     public void btnConfirmar() {
         Sincronia sincronia = new Sincronia(id_opcao_cliente.isChecked(),
-                                             id_opcao_produto.isChecked(),
-                                             id_opcao_pedidos.isChecked(),
-                                             id_opcao_pedidos_pendentes.isChecked(),
-                                             id_opcao_prospect.isChecked(),
-                                             id_opcao_prospect_enviados.isChecked(),
-                                             id_opcao_visiatas_pendentes.isChecked());
+                id_opcao_produto.isChecked(),
+                id_opcao_pedidos.isChecked(),
+                id_opcao_pedidos_pendentes.isChecked(),
+                id_opcao_prospect.isChecked(),
+                id_opcao_prospect_enviados.isChecked(),
+                id_opcao_visiatas_pendentes.isChecked());
         sincroniaBO.sincronizaApi(sincronia);
         finish();
     }

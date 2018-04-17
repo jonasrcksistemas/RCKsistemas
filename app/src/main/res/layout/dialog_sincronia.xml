@@ -13,8 +13,11 @@
         android:id="@+id/id_toolbarSincronia"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        android:minHeight="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        android:paddingBottom="12dp"
+        android:paddingLeft="12dp"
+        android:paddingStart="12dp"
+        android:paddingTop="12dp"
         app:title="Sincronia"
         app:titleTextColor="@color/branco" />
 
