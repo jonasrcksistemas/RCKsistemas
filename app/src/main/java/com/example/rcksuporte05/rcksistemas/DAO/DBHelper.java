@@ -865,7 +865,12 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("LATITUDE", prospect.getLatitude());
         content.put("LONGITUDE", prospect.getLongitude());
         content.put("USUARIO_DATA", prospect.getUsuario_data());
-        content.put("DESCRICAO_SEGMENTO", prospect.getSegmento().getDescricaoOutros());
+        try {
+            content.put("DESCRICAO_SEGMENTO", prospect.getSegmento().getDescricaoOutros());
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+
         try {
             content.put("DESCRICAO_MOTIVO_NAO_CAD", prospect.getMotivoNaoCadastramento().getDescricaoOutros());
         } catch (NullPointerException e) {
