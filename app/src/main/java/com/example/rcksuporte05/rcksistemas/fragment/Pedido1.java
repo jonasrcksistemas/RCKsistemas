@@ -44,6 +44,7 @@ public class Pedido1 extends Fragment implements ListaAdapterProdutoPedido.Produ
     private TabelaPrecoItem tabelaPrecoItem;
     private Button btnInserirProduto;
     private Bundle bundle;
+    private int idCliente;
 
     public static ListaAdapterProdutoPedido getListaAdapterProdutoPedido() {
         return listaAdapterProdutoPedido;
@@ -158,6 +159,29 @@ public class Pedido1 extends Fragment implements ListaAdapterProdutoPedido.Produ
     public void onResume() {
         PedidoHelper.calculaValorPedido(listaProdutoPedido, PedidoHelper.getActivityPedidoMain());
         if (listaProdutoPedido.size() > 0) {
+            if (ClienteHelper.getCliente().getId_cadastro() != idCliente && idCliente > 0) {
+                AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+                alert.setTitle("Atenção");
+                alert.setMessage("Você alterou o cliente. Deseja alterar o desconto de todos os produtos para a categoria deste cliente?");
+                alert.setNegativeButton("NÃO", null);
+                alert.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String descontoCategoria = db.listaTabelaPrecoItem("SELECT * FROM TBL_TABELA_PRECO_ITENS WHERE ID_CATEGORIA = " + ClienteHelper.getCliente().getIdCategoria()).get(0).getPerc_desc_final();
+                        for (WebPedidoItens webPedidoItem : listaProdutoPedido) {
+                            webPedidoItem.setValor_desconto_per(descontoCategoria);
+                            webPedidoItem.setDescontoIndevido(false);
+                            Float descontoReais = (Float.parseFloat(descontoCategoria) * Float.parseFloat(webPedidoItem.getValor_bruto())) / 100;
+                            webPedidoItem.setValor_desconto_real(String.valueOf(descontoReais));
+                            webPedidoItem.setValor_total(String.valueOf(Float.parseFloat(webPedidoItem.getValor_bruto()) - descontoReais));
+                        }
+                        listaAdapterProdutoPedido.notifyDataSetChanged();
+                        PedidoHelper.calculaValorPedido(listaProdutoPedido, PedidoHelper.getActivityPedidoMain());
+                    }
+                });
+                alert.show();
+            }
+            idCliente = ClienteHelper.getCliente().getId_cadastro();
             tabelaPrecoItem = db.listaTabelaPrecoItem("SELECT * FROM TBL_TABELA_PRECO_ITENS WHERE ID_CATEGORIA = " + ClienteHelper.getCliente().getIdCategoria()).get(0);
             PedidoBO pedidoBO = new PedidoBO();
             for (WebPedidoItens webPedidoItens : listaProdutoPedido) {
