@@ -22,92 +22,91 @@
                 android:id="@+id/txtEnderecoProspect"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:text="ENDEREÇO"
                 android:textColor="@color/colorAccent"
-                android:textStyle="bold"
-                android:layout_alignParentLeft="true" />
+                android:textStyle="bold" />
 
 
             <EditText
                 android:id="@+id/edtEnderecoProspect"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:layout_marginTop="21dp"
                 android:background="@drawable/borda_edittext"
                 android:hint="Endereço"
                 android:inputType="textCapCharacters"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:layout_alignParentLeft="true" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
             <TextView
                 android:id="@+id/txtNumeroProspect"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/edtEnderecoProspect"
                 android:layout_marginTop="12dp"
                 android:text="NUMERO"
                 android:textColor="@color/colorAccent"
-                android:inputType="number"
-                android:textStyle="bold"
-                android:layout_alignParentLeft="true" />
+                android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/edtNumeroProspect"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/txtNumeroProspect"
                 android:layout_toEndOf="@+id/txtNumeroProspect"
+                android:layout_toRightOf="@+id/txtNumero"
                 android:background="@drawable/borda_edittext"
                 android:hint="Numero"
                 android:inputType="number"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:layout_alignParentLeft="true"
-                android:layout_toRightOf="@+id/txtNumero" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
 
             <TextView
                 android:id="@+id/txtBairoProspect"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/edtNumeroProspect"
                 android:layout_marginTop="12dp"
                 android:text="BAIRRO"
                 android:textColor="@color/colorAccent"
-                android:textStyle="bold"
-                android:layout_alignParentLeft="true" />
+                android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/edtBairroProspect"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/txtBairoProspect"
                 android:layout_toEndOf="@+id/txtMunicipio"
+                android:layout_toRightOf="@+id/txtMunicipio"
                 android:background="@drawable/borda_edittext"
                 android:hint="Bairro"
                 android:inputType="textCapCharacters"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:layout_alignParentLeft="true"
-                android:layout_toRightOf="@+id/txtMunicipio" />
+                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
             <TextView
                 android:id="@+id/txtPaisProspect"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/edtBairroProspect"
                 android:layout_marginTop="12dp"
                 android:text="PAÍS"
                 android:textColor="@color/colorAccent"
-                android:textStyle="bold"
-                android:layout_alignParentLeft="true" />
+                android:textStyle="bold" />
 
             <Spinner
                 android:id="@+id/spPaisProspect"
@@ -134,10 +133,9 @@
                 android:id="@+id/spUfProspect"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignStart="@id/txtUfProspect"
-                android:layout_below="@id/txtUfProspect"
                 android:layout_alignLeft="@id/txtUfProspect"
-                />
+                android:layout_alignStart="@id/txtUfProspect"
+                android:layout_below="@id/txtUfProspect" />
 
             <TextView
                 android:id="@+id/txtMunicipioProspect"
@@ -159,13 +157,13 @@
                 android:id="@+id/txtCepProspect"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/spMunicipioProspect"
                 android:layout_marginTop="12dp"
                 android:text="CEP"
                 android:textColor="@color/colorAccent"
-                android:textStyle="bold"
-                android:layout_alignParentLeft="true" />
+                android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/edtCep"
@@ -178,43 +176,41 @@
                 android:layout_below="@+id/txtCepProspect"
                 android:background="@drawable/borda_edittext"
                 android:hint="CEP"
-                android:maxLength="8"
                 android:inputType="number"
+                android:maxLength="8"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
             <TextView
                 android:id="@+id/txtComplementoProspect"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Complemento: "
                 android:layout_below="@+id/edtCep"
-                android:textColor="@color/colorAccent"
-                android:textStyle="bold"
                 android:layout_marginTop="12dp"
+                android:text="COMPLEMENTO"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                />
+                android:textColor="@color/colorAccent"
+                android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/edtComplementoProspect"
                 android:layout_width="match_parent"
                 android:layout_height="90dp"
-                android:inputType="textCapCharacters|textMultiLine"
-                android:maxLength="300"
-                android:gravity="top"
+                android:layout_below="@+id/txtComplementoProspect"
                 android:background="@drawable/borda_edittext"
-                android:layout_below="@+id/txtComplementoProspect"/>
+                android:gravity="top"
+                android:inputType="textCapCharacters|textMultiLine"
+                android:maxLength="300" />
 
             <TextView
                 android:id="@+id/txtRdSituacaoPredio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/edtComplementoProspect"
-                android:text="Predio: "
-                android:textColor="@color/colorAccent"
-                android:textStyle="bold"
                 android:layout_marginTop="12dp"
+                android:text="PREDIO"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                />
+                android:textColor="@color/colorAccent"
+                android:textStyle="bold" />
 
 
             <RadioGroup
@@ -222,23 +218,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/txtRdSituacaoPredio"
-                android:orientation="horizontal"
-                >
+                android:orientation="horizontal">
 
                 <RadioButton
                     android:id="@+id/rdAlugado"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Alugado"
-                    />
+                    android:text="ALUGADO" />
 
                 <RadioButton
                     android:id="@+id/rdProprio"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Proprio"
                     android:layout_marginLeft="45dp"
-                    />
+                    android:text="PROPRIO" />
 
             </RadioGroup>
 

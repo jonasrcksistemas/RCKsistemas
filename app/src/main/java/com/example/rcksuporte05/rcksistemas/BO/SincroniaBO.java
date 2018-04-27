@@ -394,6 +394,22 @@ public class SincroniaBO {
             }
         }
 
+        if (sincronia.getListaProspectPositivados().size() > 0) {
+            for (Prospect prospectPositivado : sincronia.getListaProspectPositivados()) {
+                db.excluiProspectPorIdServidor(prospectPositivado);
+
+                contadorNotificacaoEProgresso++;
+                final int finalContadorNotificacaoEProgresso = contadorNotificacaoEProgresso;
+                activity.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        progress.setProgress(finalContadorNotificacaoEProgresso);
+                    }
+                });
+                mNotificationManager.notify(0, notificacao.build());
+            }
+        }
+
         if (sincronia.isVisitasPendentes()) {
             if (sincronia.getVisitas() != null && sincronia.getVisitas().size() > 0) {
                 for (VisitaProspect visita : sincronia.getVisitas()) {
@@ -408,10 +424,8 @@ public class SincroniaBO {
                         }
                     });
                     mNotificationManager.notify(0, notificacao.build());
-
                 }
             }
-
         }
 
         if (sincronia.isPedidosFinalizados()) {
@@ -419,9 +433,8 @@ public class SincroniaBO {
                 notificacao.setProgress(maxProgress, contadorNotificacaoEProgresso, false);
 
                 webPedido.setPedido_enviado("S");
-                if (db.contagem("SELECT COUNT(*) FROM TBL_WEB_PEDIDO WHERE ID_WEB_PEDIDO_SERVIDOR = " + webPedido.getId_web_pedido_servidor()) > 0) {
+                if (db.contagem("SELECT COUNT(*) FROM TBL_WEB_PEDIDO WHERE ID_WEB_PEDIDO_SERVIDOR = " + webPedido.getId_web_pedido_servidor()) > 0)
                     db.alterar("DELETE FROM TBL_WEB_PEDIDO WHERE ID_WEB_PEDIDO_SERVIDOR = " + webPedido.getId_web_pedido_servidor());
-                }
                 webPedidoDAO.inserirTBL_WEB_PEDIDO(webPedido);
                 for (WebPedidoItens webPedidoItens : webPedido.getWebPedidoItens()) {
                     String idPedido = db.consulta("SELECT * FROM TBL_WEB_PEDIDO WHERE ID_WEB_PEDIDO_SERVIDOR = " + webPedido.getId_web_pedido_servidor(), "ID_WEB_PEDIDO");

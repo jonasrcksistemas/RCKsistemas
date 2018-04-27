@@ -84,14 +84,15 @@
         <activity android:name=".activity.ActivityAdicionaBanco" />
         <activity android:name=".activity.ActivityListaProspectEnviado" />
         <activity android:name=".activity.ActivityAdicionaReferenciaComercial" />
-        <activity android:name=".activity.ActivityHistoricoVisitaProspect" />
+        <activity
+            android:name=".activity.ActivityHistoricoVisitaProspect"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activity.ActivityVisita" />
         <activity android:name=".activity.LocationActivity" />
         <activity android:name=".activity.FotoActivity" />
         <activity
             android:name=".activity.ActivityListaProspect"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".activity.ActivityDialogSincroniaAPI19"></activity>
     </application>
 
 </manifest>

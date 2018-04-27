@@ -1,32 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/rlItemVisita"
-    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <TextView
-        android:id="@+id/txtNomeProspectVisita"
+        android:id="@+id/idVisitaProspect"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="texto"
         android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:textStyle="bold"
+        android:text="00"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        android:textSize="10dp" />
+
+    <TextView
+        android:id="@+id/txtDescricaoVisita"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/idVisitaProspect"
+        android:layout_alignStart="@+id/idVisitaProspect"
+        android:layout_below="@+id/idVisitaProspect"
+        android:layout_marginEnd="10dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="8dp"
+        android:layout_toLeftOf="@+id/visitaSalvo"
+        android:layout_toStartOf="@+id/visitaSalvo"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:text="texto"
         android:textColor="@color/colorAccent"
-        />
+        android:textStyle="bold" />
 
     <ImageView
         android:id="@+id/visitaSalvo"
         android:layout_width="25dp"
         android:layout_height="25dp"
-        android:layout_alignEnd="@+id/txtNomeProspectVisita"
-        android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
-        android:layout_alignRight="@+id/txtNomeProspectVisita"
-        android:layout_marginTop="8dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
         android:layout_marginRight="30dp"
-        android:layout_alignParentRight="true" />
+        android:layout_marginTop="8dp" />
 
     <TextView
         android:id="@+id/Visita"
@@ -34,23 +50,22 @@
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/txtDataVisita"
         android:layout_alignBottom="@+id/txtDataVisita"
+        android:layout_marginRight="25dp"
         android:layout_toLeftOf="@+id/txtDataVisita"
         android:layout_toStartOf="@+id/txtDataVisita"
-        android:layout_marginRight="25dp"
         android:text="Dia da Visita: " />
 
     <TextView
         android:id="@+id/txtDataVisita"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/txtNomeProspectVisita"
-        android:text="Texto"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
+        android:layout_below="@+id/txtDescricaoVisita"
         android:layout_marginBottom="8dp"
-        android:layout_marginTop="8dp"
         android:layout_marginRight="30dp"
+        android:layout_marginTop="8dp"
         android:maxLines="1"
-        />
+        android:text="Texto" />
 
 </RelativeLayout>

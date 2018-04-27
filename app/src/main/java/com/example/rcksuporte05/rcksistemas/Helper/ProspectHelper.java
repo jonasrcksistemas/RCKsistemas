@@ -278,7 +278,7 @@ public class ProspectHelper {
         }
 
 
-        if (prospect.getPessoa_f_j() != null && prospect.getPessoa_f_j().equals("J")) {
+        /*if (prospect.getPessoa_f_j() != null && prospect.getPessoa_f_j().equals("J")) {
             if(Integer.parseInt(prospect.getInd_da_ie_destinatario_prospect()) == 0){
                 if (prospect.getInscri_estadual() == null || prospect.getInscri_estadual().trim().isEmpty()) {
                     if (verificaMovimento) {
@@ -289,7 +289,7 @@ public class ProspectHelper {
                     cadastroProspectGeral.edtInscEstadualProspect.requestFocus();
                 }
             }
-        }
+        }*/
 
         if (prospect.getDiaVisita() == null || prospect.getDiaVisita().trim().equals("")) {
                 if (verificaMovimento) {
@@ -380,7 +380,7 @@ public class ProspectHelper {
 
 
         //tela 5 motivo não cadastramento
-        try {
+        /*try {
             if (prospect.getMotivoNaoCadastramento() == null) {
                 if (verificaMovimento) {
                     verificaMovimento = false;
@@ -403,7 +403,7 @@ public class ProspectHelper {
                 Toast.makeText(activityMain, "Escolha um Motivo para o Não cadastramento!", Toast.LENGTH_LONG).show();
                 moveTela(4);
             }
-        }
+        }*/
 
 
         //tela 6 Observações Comerciais
@@ -467,7 +467,7 @@ public class ProspectHelper {
             }
         }
 
-        if(verificaMovimento){
+        /*if(verificaMovimento){
             if(localizacao == null){
                 Toast.makeText(activityMain, "Fazer Check-in é obrigatório",Toast.LENGTH_LONG).show();
                 verificaMovimento = false;
@@ -475,7 +475,7 @@ public class ProspectHelper {
                 prospect.setLatitude(String.valueOf(localizacao.getLatitude()));
                 prospect.setLongitude(String.valueOf(localizacao.getLongitude()));
             }
-        }
+        }*/
 
         return verificaMovimento;
 

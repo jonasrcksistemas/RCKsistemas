@@ -450,7 +450,6 @@ public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRe
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             mode.getMenuInflater().inflate(R.menu.menu_action_mode, menu);
-
             return true;
         }
 
@@ -560,8 +559,5 @@ public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRe
             actionMode = null;
             onRefresh();
         }
-
-
     }
-
 }

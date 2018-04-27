@@ -59,6 +59,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@+id/btnBuscaProduto"
+                android:layout_toLeftOf="@+id/btnBuscaProduto"
                 android:layout_toStartOf="@+id/btnBuscaProduto"
                 android:background="@drawable/borda_edittext"
                 android:focusable="false"
@@ -70,6 +71,7 @@
                 android:layout_width="40dp"
                 android:layout_height="40dp"
                 android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
                 android:layout_marginBottom="12dp"
                 android:background="@mipmap/ic_search_dark"
                 android:scaleType="centerCrop" />
@@ -80,6 +82,8 @@
                 android:layout_height="wrap_content"
                 android:layout_above="@+id/edtQuantidade"
                 android:layout_alignEnd="@+id/edtQuantidade"
+                android:layout_alignLeft="@+id/edtQuantidade"
+                android:layout_alignRight="@+id/edtQuantidade"
                 android:layout_alignStart="@+id/edtQuantidade"
                 android:gravity="center"
                 android:text="QUANTIDADE"
@@ -91,16 +95,20 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/edtTabelaPreco"
                 android:layout_alignEnd="@+id/edtDesconto"
+                android:layout_alignRight="@+id/edtDesconto"
                 android:background="@drawable/borda_edittext"
                 android:gravity="center"
                 android:inputType="numberDecimal"
-                android:paddingEnd="12dp" />
+                android:paddingEnd="12dp"
+                android:paddingRight="12dp" />
+            android:paddingRight="12dp"
 
             <TextView
                 android:id="@+id/txtValorUnitario"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignEnd="@+id/edtTabelaPreco"
+                android:layout_alignRight="@+id/edtTabelaPreco"
                 android:layout_below="@+id/btnBuscaProduto"
                 android:text="VALOR UNITARIO R$"
                 android:textColor="@color/colorAccent" />
@@ -110,19 +118,23 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/txtValorUnitario"
+                android:layout_marginLeft="12dp"
                 android:layout_marginStart="12dp"
                 android:layout_toEndOf="@+id/edtQuantidade"
+                android:layout_toRightOf="@+id/edtQuantidade"
                 android:background="@drawable/borda_edittext"
                 android:focusable="false"
                 android:gravity="end|center"
                 android:inputType="numberDecimal"
-                android:paddingEnd="12dp" />
+                android:paddingEnd="12dp"
+                android:paddingRight="12dp" />
 
             <TextView
                 android:id="@+id/txtValorProdutos"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
                 android:layout_below="@+id/edtTabelaPreco"
                 android:layout_marginTop="12dp"
                 android:text="VALOR PRODUTOS R$"
@@ -136,7 +148,8 @@
                 android:background="@drawable/borda_edittext"
                 android:focusable="false"
                 android:gravity="end|center"
-                android:paddingEnd="12dp" />
+                android:paddingEnd="12dp"
+                android:paddingRight="12dp" />
 
             <RadioGroup
                 android:id="@+id/rgRealPorc"
@@ -161,10 +174,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="Desconto R$" />
-
-
             </RadioGroup>
-
 
             <TextView
                 android:id="@+id/txtDesconto"
@@ -172,6 +182,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@+id/edtDesconto"
                 android:layout_alignBottom="@+id/edtDesconto"
+                android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:text="DESCONTO"
                 android:textColor="@color/colorAccent" />
@@ -182,10 +193,13 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/rgRealPorc"
                 android:layout_toEndOf="@+id/txtDesconto"
+                android:layout_toRightOf="@+id/txtDesconto"
                 android:background="@drawable/borda_edittext"
                 android:gravity="center"
                 android:inputType="numberDecimal"
                 android:paddingEnd="12dp"
+                android:paddingRight="12dp"
+                android:selectAllOnFocus="true"
                 android:text="00.00" />
 
             <TextView
@@ -194,6 +208,7 @@
                 android:layout_alignBaseline="@+id/edtDesconto"
                 android:layout_alignBottom="@+id/edtDesconto"
                 android:layout_toEndOf="@+id/edtDesconto"
+                android:layout_toRightOf="@+id/edtDesconto"
                 android:text="%"
                 android:textColor="@color/colorAccent" />
 
@@ -207,6 +222,7 @@
                 android:layout_marginLeft="12dp"
                 android:layout_marginTop="12dp"
                 android:layout_toEndOf="@+id/edtDesconto"
+                android:layout_toRightOf="@+id/edtDesconto"
                 android:text="R$ "
                 android:textColor="@color/colorAccent" />
 
@@ -216,11 +232,14 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/rgRealPorc"
                 android:layout_toEndOf="@+id/txtDescontoReais"
+                android:layout_toRightOf="@+id/txtDescontoReais"
                 android:background="@drawable/borda_edittext"
                 android:enabled="false"
                 android:gravity="end|center"
                 android:inputType="numberDecimal"
                 android:paddingEnd="12dp"
+                android:paddingRight="12dp"
+                android:selectAllOnFocus="true"
                 android:text="0.00" />
 
             <TextView
@@ -228,6 +247,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
                 android:layout_below="@+id/txtDesconto"
                 android:layout_marginTop="12dp"
                 android:text="TOTAL R$"
@@ -243,6 +263,7 @@
                 android:focusable="false"
                 android:gravity="end|center"
                 android:paddingEnd="12dp"
+                android:paddingRight="12dp"
                 android:textStyle="bold" />
 
         </RelativeLayout>

@@ -2,6 +2,7 @@ package com.example.rcksuporte05.rcksistemas.adapters.viewHolder;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -24,6 +25,8 @@ public class ProspectEnviadoViewHolder extends RecyclerView.ViewHolder {
     public TextView txtDataRetornoEnviado;
     @BindView(R.id.rlItemListaProspectEnviado)
     public RelativeLayout rlItemListaProspectEnviado;
+    @BindView(R.id.imFisicaJuridica)
+    public ImageView imFisicaJuridica;
 
 
     public ProspectEnviadoViewHolder(View itemView, final ListaProspectEnviadoAdapter.ProspectEnviadoListener listener) {

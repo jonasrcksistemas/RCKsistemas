@@ -243,11 +243,10 @@ public class ActivityPedidoMain extends AppCompatActivity {
     }
 
     public boolean verificaCliente() {
-        if (objetoCliente != null) {
+        if (objetoCliente != null)
             return true;
-        } else {
+        else
             return false;
-        }
     }
 
     @Override
@@ -267,14 +266,6 @@ public class ActivityPedidoMain extends AppCompatActivity {
             actionMode = startSupportActionMode(actionModeCallback);
         }
         pedido1.toggleSelection(position);
-    }
-
-    public ActionMode getActionMode() {
-        return actionMode;
-    }
-
-    public void setActionMode(ActionMode actionMode) {
-        this.actionMode = actionMode;
     }
 
     private class ActionModeCallback implements ActionMode.Callback {

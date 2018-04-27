@@ -17,10 +17,14 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.example.rcksuporte05.rcksistemas.DAO.CategoriaDAO;
+import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.ProspectHelper;
 import com.example.rcksuporte05.rcksistemas.R;
-import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
+import com.example.rcksuporte05.rcksistemas.model.Categoria;
 import com.example.rcksuporte05.rcksistemas.util.MascaraUtil;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -74,6 +78,9 @@ public class CadastroProspectGeral extends Fragment {
     @BindView(R.id.spIeProspect)
     Spinner spIeProspect;
 
+    @BindView(R.id.spCategoriaProspect)
+    Spinner spCategoriaProspect;
+
     @BindView(R.id.txtCpfCnpjProspect)
     TextView txtCpfCnpjProspect;
 
@@ -82,6 +89,8 @@ public class CadastroProspectGeral extends Fragment {
     RadioButton radioButtonRota;
     private ArrayAdapter arrayIe;
     private ArrayAdapter arrayPessoaProspect;
+    private ArrayAdapter<Categoria> arrayCategoriaProspect;
+    private List<Categoria> listaCategoria;
     private String[] contribuinte = {"Contribuinte", "Isento", "Não Contribuinte"};
     private String[] pessoaJuridica = {"Fisica", "Jurídica"};
     private DBHelper db;
@@ -91,20 +100,31 @@ public class CadastroProspectGeral extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_cadastro_prospect_geral, container, false);
         ButterKnife.bind(this, view);
+
+        db = new DBHelper(getContext());
+
+        CategoriaDAO categoriaDAO = new CategoriaDAO(db);
+
+        listaCategoria = categoriaDAO.listaCategoria();
+        arrayCategoriaProspect = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_activated_1, listaCategoria);
+        spCategoriaProspect.setAdapter(arrayCategoriaProspect);
+
         arrayIe = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_activated_1, contribuinte);
         arrayPessoaProspect = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_activated_1, pessoaJuridica);
         spIeProspect.setAdapter(arrayIe);
         spPessoaProspect.setAdapter(arrayPessoaProspect);
-        db = new DBHelper(getContext());
+
+        spPessoaProspect.setSelection(1);
+
         injetaDadosNaTela();
 
         spPessoaProspect.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if(arrayPessoaProspect.getItem(position).equals("Fisica")){
+                if (arrayPessoaProspect.getItem(position).equals("Fisica")) {
                     txtCpfCnpjProspect.setText("CPF");
                     edtCpfCnpjProspect.setHint("CPF");
-                }else {
+                } else {
                     txtCpfCnpjProspect.setText("CNPJ");
                     edtCpfCnpjProspect.setHint("CNPJ");
                 }
@@ -116,16 +136,13 @@ public class CadastroProspectGeral extends Fragment {
             }
         });
 
-
-        spPessoaProspect.setSelection(1);
-
         spIeProspect.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-               if(arrayIe.getItem(position).equals("Não Contribuinte")){
-                   edtInscEstadualProspect.setEnabled(false);
-               }else
-                   edtInscEstadualProspect.setEnabled(true);
+                if (arrayIe.getItem(position).equals("Não Contribuinte")) {
+                    edtInscEstadualProspect.setEnabled(false);
+                } else
+                    edtInscEstadualProspect.setEnabled(true);
             }
 
             @Override
@@ -160,6 +177,7 @@ public class CadastroProspectGeral extends Fragment {
             rdQuintaProspect.setClickable(false);
             rdSextaProspect.setClickable(false);
             spIeProspect.setEnabled(false);
+            spCategoriaProspect.setEnabled(false);
         }
 
         ProspectHelper.setCadastroProspectGeral(this);
@@ -172,9 +190,9 @@ public class CadastroProspectGeral extends Fragment {
             txtIdProspect.setText(ProspectHelper.getProspect().getId_prospect());
 
         if (ProspectHelper.getProspect().getPessoa_f_j() != null && !ProspectHelper.getProspect().getPessoa_f_j().equals("")) {
-            if(ProspectHelper.getProspect().getPessoa_f_j().equals("F")){
+            if (ProspectHelper.getProspect().getPessoa_f_j().equals("F")) {
                 spPessoaProspect.setSelection(0);
-            }else if(ProspectHelper.getProspect().getPessoa_f_j().equals("J")){
+            } else if (ProspectHelper.getProspect().getPessoa_f_j().equals("J")) {
                 spPessoaProspect.setSelection(1);
             }
         }
@@ -218,70 +236,77 @@ public class CadastroProspectGeral extends Fragment {
             }
         }
 
-        if (ProspectHelper.getProspect().getInd_da_ie_destinatario_prospect() != null && !ProspectHelper.getProspect().getInd_da_ie_destinatario_prospect().equals("")){
+        if (ProspectHelper.getProspect().getInd_da_ie_destinatario_prospect() != null && !ProspectHelper.getProspect().getInd_da_ie_destinatario_prospect().equals("")) {
             spIeProspect.setSelection(Integer.parseInt(ProspectHelper.getProspect().getInd_da_ie_destinatario_prospect()) - 1);
+        }
+
+        if (ProspectHelper.getProspect().getIdCategoria() > 0) {
+            spCategoriaProspect.setSelection(arrayCategoriaProspect.getPosition(listaCategoria.get(ProspectHelper.getProspect().getIdCategoria() - 1)));
         }
 
     }
 
     @SuppressLint("ResourceType")
-    public void inserirDadosDaFrame(){
-        if(spPessoaProspect.getSelectedItemPosition() == 0){
+    public void inserirDadosDaFrame() {
+        if (spPessoaProspect.getSelectedItemPosition() == 0) {
             ProspectHelper.getProspect().setPessoa_f_j("F");
-        }else {
+        } else {
             ProspectHelper.getProspect().setPessoa_f_j("J");
         }
 
-        if(edtNomeClienteProspect.getText() != null && !edtNomeClienteProspect.getText().toString().trim().equals("")){
+        if (edtNomeClienteProspect.getText() != null && !edtNomeClienteProspect.getText().toString().trim().equals("")) {
             ProspectHelper.getProspect().setNome_cadastro(edtNomeClienteProspect.getText().toString());
-        }else{
+        } else {
             System.out.println("mensagem por obrigatoriedade");
         }
 
-        if(edtCpfCnpjProspect.getText() != null && !edtCpfCnpjProspect.getText().toString().equals("")){
+        if (edtCpfCnpjProspect.getText() != null && !edtCpfCnpjProspect.getText().toString().equals("")) {
             ProspectHelper.getProspect().setCpf_cnpj(edtCpfCnpjProspect.getText().toString().trim().replaceAll("[^0-9]", ""));
-        }else{
+        } else {
             System.out.println("mensagem por obrigatoriedade");
         }
 
-        if(edtNomeFantasiaProspect.getText() != null && !edtNomeFantasiaProspect.getText().toString().equals("")){
+        if (edtNomeFantasiaProspect.getText() != null && !edtNomeFantasiaProspect.getText().toString().equals("")) {
             ProspectHelper.getProspect().setNome_fantasia(edtNomeFantasiaProspect.getText().toString());
-        }else {
+        } else {
             System.out.println("mensagem por obrigatoriedade");
         }
-        if(edtInscEstadualProspect.getText() != null && !edtInscEstadualProspect.getText().toString().equals("")){
+        if (edtInscEstadualProspect.getText() != null && !edtInscEstadualProspect.getText().toString().equals("")) {
             ProspectHelper.getProspect().setInscri_estadual(edtInscEstadualProspect.getText().toString());
         }
 
-        if(edtInscMunicipalProspect.getText() != null && !edtInscMunicipalProspect.getText().toString().equals("")){
+        if (edtInscMunicipalProspect.getText() != null && !edtInscMunicipalProspect.getText().toString().equals("")) {
             ProspectHelper.getProspect().setInscri_municipal(edtInscMunicipalProspect.getText().toString());
         }
 
-        if(rgRotaProspect.getCheckedRadioButtonId() > 0){
+        if (rgRotaProspect.getCheckedRadioButtonId() > 0) {
             radioButtonRota = (RadioButton) view.findViewById(rgRotaProspect.getCheckedRadioButtonId());
             ProspectHelper.getProspect().setDiaVisita(radioButtonRota.getText().toString().toLowerCase());
         }
 
-        ProspectHelper.getProspect().setInd_da_ie_destinatario_prospect(String.valueOf(spIeProspect.getSelectedItemPosition()));
+        ProspectHelper.getProspect().setInd_da_ie_destinatario_prospect(String.valueOf(spIeProspect.getSelectedItemPosition() + 1));
+
+
+        ProspectHelper.getProspect().setIdCategoria(listaCategoria.get(spCategoriaProspect.getSelectedItemPosition()).getIdCategoria());
 
     }
 
-    public void verificaCnpjCpf(){
+    public void verificaCnpjCpf() {
         if (spPessoaProspect.getSelectedItemPosition() == 0) {
             if (MascaraUtil.isValidCPF(edtCpfCnpjProspect.getText().toString().trim().replaceAll("[^0-9]", ""))) {
-                if(db.verificaCnpjCpf(edtCpfCnpjProspect.getText().toString())){
+                if (db.verificaCnpjCpf(edtCpfCnpjProspect.getText().toString())) {
                     edtCpfCnpjProspect.setText(MascaraUtil.mascaraCPF(edtCpfCnpjProspect.getText().toString()));
-                }else {
+                } else {
                     chamaDialog();
                 }
             } else {
                 edtCpfCnpjProspect.setError("CPF invalido");
             }
-        } else{
+        } else {
             if (MascaraUtil.isValidCNPJ(edtCpfCnpjProspect.getText().toString().trim().replaceAll("[^0-9]", ""))) {
-                if(db.verificaCnpjCpf(edtCpfCnpjProspect.getText().toString())){
+                if (db.verificaCnpjCpf(edtCpfCnpjProspect.getText().toString())) {
                     edtCpfCnpjProspect.setText(MascaraUtil.mascaraCNPJ(edtCpfCnpjProspect.getText().toString()));
-                }else {
+                } else {
                     chamaDialog();
                 }
             } else {
@@ -292,8 +317,8 @@ public class CadastroProspectGeral extends Fragment {
 
     private void chamaDialog() {
         AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
-        alert.setMessage(" Tem certeza que digitou o Cpf/Cnpj correto? \n Se deseja conferir ou redigitar basta clicar em não");
         alert.setTitle("Atenção ele já foi prospectado!");
+        alert.setMessage(" Tem certeza que digitou o Cpf/Cnpj correto? \n Se deseja conferir ou redigitar basta clicar em não");
         alert.setCancelable(false);
         alert.setNegativeButton("Não", null);
         alert.setPositiveButton("Sim", new DialogInterface.OnClickListener() {

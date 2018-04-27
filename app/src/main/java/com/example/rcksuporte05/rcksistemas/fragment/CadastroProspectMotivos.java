@@ -24,20 +24,18 @@ import butterknife.ButterKnife;
  * Created by RCK 03 on 29/01/2018.
  */
 
-public class CadastroProspectMotivos extends Fragment implements MotivoAdapter.MotivoListener{
-    @BindView(R.id.recyclerMotivos)
-    RecyclerView recyclerMotivos;
-
+public class CadastroProspectMotivos extends Fragment implements MotivoAdapter.MotivoListener {
     @BindView(R.id.edtOutrosMotivosProspect)
     public EditText edtOutrosMotivosProspect;
-
+    @BindView(R.id.recyclerMotivos)
+    RecyclerView recyclerMotivos;
     MotivoAdapter motivoAdapter;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_cadastro_prospect_motivo, container, false);
-        ButterKnife.bind(this,view);
+        ButterKnife.bind(this, view);
         recyclerMotivos.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerMotivos.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayout.VERTICAL));
 
@@ -53,10 +51,10 @@ public class CadastroProspectMotivos extends Fragment implements MotivoAdapter.M
         return view;
     }
 
-    public void insereDadosNaTela(){
-        if(ProspectHelper.getProspect().getMotivoNaoCadastramento() != null){
+    public void insereDadosNaTela() {
+        if (ProspectHelper.getProspect().getMotivoNaoCadastramento() != null) {
             motivoAdapter.marcarSelecionado(ProspectHelper.getProspect().getMotivoNaoCadastramento());
-            if(ProspectHelper.getProspect().getMotivoNaoCadastramento().getDescricaoOutros() != null){
+            if (ProspectHelper.getProspect().getMotivoNaoCadastramento().getDescricaoOutros() != null) {
                 edtOutrosMotivosProspect.setText(ProspectHelper.getProspect().getMotivoNaoCadastramento().getDescricaoOutros());
             }
         }
@@ -65,18 +63,19 @@ public class CadastroProspectMotivos extends Fragment implements MotivoAdapter.M
     }
 
 
-    public void insereDadosDaFrame(){
-        MotivoNaoCadastramento motivoSelecionado;
-        motivoSelecionado = motivoAdapter.getItemSelecionado();
+    public void insereDadosDaFrame() {
+        if (motivoAdapter.getSelectedItemCount() > 0) {
+            MotivoNaoCadastramento motivoSelecionado;
+            motivoSelecionado = motivoAdapter.getItemSelecionado();
 
-        if(motivoSelecionado != null){
-             ProspectHelper.getProspect().setMotivoNaoCadastramento(motivoSelecionado);
-            if(edtOutrosMotivosProspect.getText() !=null){
-                ProspectHelper.getProspect().getMotivoNaoCadastramento().setDescricaoOutros(edtOutrosMotivosProspect.getText().toString());
+            if (motivoSelecionado != null) {
+                ProspectHelper.getProspect().setMotivoNaoCadastramento(motivoSelecionado);
+                if (edtOutrosMotivosProspect.getText() != null) {
+                    ProspectHelper.getProspect().getMotivoNaoCadastramento().setDescricaoOutros(edtOutrosMotivosProspect.getText().toString());
+                }
             }
-        }
-
-
+        } else
+            ProspectHelper.getProspect().setMotivoNaoCadastramento(null);
     }
 
     private void preencheRecycler() {
@@ -87,7 +86,7 @@ public class CadastroProspectMotivos extends Fragment implements MotivoAdapter.M
 
                 }
             });
-        }else {
+        } else {
             motivoAdapter = new MotivoAdapter(ProspectHelper.getMotivos(), this);
         }
         recyclerMotivos.setAdapter(motivoAdapter);
@@ -96,10 +95,10 @@ public class CadastroProspectMotivos extends Fragment implements MotivoAdapter.M
 
     @Override
     public void onClick(int position) {
-        if(motivoAdapter.getItem(position).getMotivo().toLowerCase().contains("outros")){
+        if (motivoAdapter.getItem(position).getMotivo().toLowerCase().contains("outros")) {
             edtOutrosMotivosProspect.setEnabled(true);
             edtOutrosMotivosProspect.requestFocus();
-        }else{
+        } else {
             edtOutrosMotivosProspect.setText("");
             edtOutrosMotivosProspect.setEnabled(false);
         }

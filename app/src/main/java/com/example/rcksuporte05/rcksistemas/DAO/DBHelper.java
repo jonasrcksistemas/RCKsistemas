@@ -34,7 +34,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private static String NomeBanco = "Banco.db";
 
     public DBHelper(Context context) {
-        super(context, NomeBanco, null, 2);
+        super(context, NomeBanco, null, 3);
     }
 
     @Override
@@ -463,7 +463,9 @@ public class DBHelper extends SQLiteOpenHelper {
                 "LONGITUDE VARCHAR (60), " +
                 "DESCRICAO_SEGMENTO VARCHAR(300)," +
                 "DESCRICAO_MOTIVO_NAO_CAD VARCHAR(300)," +
-                "PROSPECT_SALVO VARCHAR(1) DEFAULT 'N');");
+                "PROSPECT_SALVO VARCHAR(1) DEFAULT 'N', " +
+                "ID_VENDEDOR INTEGER, " +
+                "ID_CATEGORIA INTEGER);");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS TBL_SEGMENTO" +
                 "(ATIVO VARCHAR(1) DEFAULT 'S' NOT NULL," +
@@ -674,9 +676,9 @@ public class DBHelper extends SQLiteOpenHelper {
                     "ID_VISITA_SERVIDOR INTEGER, " +
                     "ID_CADASTRO INTEGER);");
 
-            db.execSQL("ALTER TABLE TBL_TABELA_PRECO_ITENS ADD COLUMN ID_CATEGORIA INTEGER;");
+//            db.execSQL("ALTER TABLE TBL_TABELA_PRECO_ITENS ADD COLUMN ID_CATEGORIA INTEGER;");
 
-            db.execSQL("ALTER TABLE TBL_CADASTRO ADD COLUMN ID_CATEGORIA INTEGER;");
+//            db.execSQL("ALTER TABLE TBL_CADASTRO ADD COLUMN ID_CATEGORIA INTEGER;");
 
             db.execSQL("CREATE TABLE IF NOT EXISTS TBL_CADASTRO_CATEGORIA(ID_CATEGORIA INTEGER NOT NULL PRIMARY KEY," +
                     "  ID_EMPRESA     INTEGER    NOT NULL," +
@@ -729,7 +731,7 @@ public class DBHelper extends SQLiteOpenHelper {
                     "  CONSTRAINT PK_TBL_PROMOCAO_PRODUTO" +
                     "  PRIMARY KEY (ID_PROMOCAO, ID_PRODUTO));");
 
-            db.execSQL("ALTER TABLE TBL_WEB_PEDIDO_ITENS ADD COLUMN TIPO_DESCONTO VARCHAR(1) DEFAULT 'P';");
+//            db.execSQL("ALTER TABLE TBL_WEB_PEDIDO_ITENS ADD COLUMN TIPO_DESCONTO VARCHAR(1) DEFAULT 'P';");
 
             db.execSQL("DROP TABLE TBL_WEB_PEDIDO");
 
@@ -773,6 +775,10 @@ public class DBHelper extends SQLiteOpenHelper {
                     " PEDIDO_ENVIADO VARCHAR(1) DEFAULT 'N', " +
                     " ID_WEB_PEDIDO_SERVIDOR INTEGER," +
                     " DATA_PREV_ENTREGA DATE);");
+
+            db.execSQL("ALTER TABLE TBL_PROSPECT ADD COLUMN ID_VENDEDOR INTEGER;");
+
+            db.execSQL("ALTER TABLE TBL_PROSPECT ADD COLUMN ID_CATEGORIA INTEGER;");
         }
     }
 
@@ -828,11 +834,12 @@ public class DBHelper extends SQLiteOpenHelper {
         try {
             content.put("ID_SEGMENTO", prospect.getSegmento().getIdSetor());
         } catch (NullPointerException e) {
-            e.printStackTrace();
+            content.put("ID_SEGMENTO", 0);
         }
         try {
             content.put("ID_MOTIVO_NAO_CADASTRAMENTO", prospect.getMotivoNaoCadastramento().getIdItem());
         } catch (NullPointerException e) {
+            content.put("ID_MOTIVO_NAO_CADASTRAMENTO", 0);
             e.printStackTrace();
         }
 
@@ -865,15 +872,19 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("LATITUDE", prospect.getLatitude());
         content.put("LONGITUDE", prospect.getLongitude());
         content.put("USUARIO_DATA", prospect.getUsuario_data());
+        content.put("ID_VENDEDOR", prospect.getIdVendedor());
+        content.put("ID_CATEGORIA", prospect.getIdCategoria());
         try {
             content.put("DESCRICAO_SEGMENTO", prospect.getSegmento().getDescricaoOutros());
         } catch (NullPointerException e) {
+            content.put("DESCRICAO_SEGMENTO", 0);
             e.printStackTrace();
         }
 
         try {
             content.put("DESCRICAO_MOTIVO_NAO_CAD", prospect.getMotivoNaoCadastramento().getDescricaoOutros());
         } catch (NullPointerException e) {
+            content.put("DESCRICAO_MOTIVO_NAO_CAD", 0);
             e.printStackTrace();
         }
 
@@ -987,6 +998,8 @@ public class DBHelper extends SQLiteOpenHelper {
             prospect.setLongitude(cursor.getString(cursor.getColumnIndex("LONGITUDE")));
             prospect.setLatitude(cursor.getString(cursor.getColumnIndex("LATITUDE")));
             prospect.setUsuario_data(cursor.getString(cursor.getColumnIndex("USUARIO_DATA")));
+            prospect.setIdVendedor(cursor.getInt(cursor.getColumnIndex("ID_VENDEDOR")));
+            prospect.setIdCategoria(cursor.getInt(cursor.getColumnIndex("ID_CATEGORIA")));
 
             listaProspect.add(prospect);
         } while (cursor.moveToNext());
@@ -2441,62 +2454,21 @@ public class DBHelper extends SQLiteOpenHelper {
             SQLiteDatabase db = this.getReadableDatabase();
             Cursor cursor;
 
-            cursor = db.rawQuery("SELECT * FROM TBL_VISITA_PROSPECT WHERE ID_CADASTRO = " + prospect.getId_prospect(), null);
+            cursor = db.rawQuery("SELECT * FROM TBL_VISITA_PROSPECT WHERE ID_CADASTRO = " + prospect.getId_prospect() + " ORDER BY ID_CADASTRO DESC;", null);
             cursor.moveToFirst();
 
             do {
                 VisitaProspect visita = new VisitaProspect();
 
                 visita.setIdVisita(cursor.getString(cursor.getColumnIndex("ID_VISITA")));
-
-                try {
-                    visita.setDataVisita(cursor.getString(cursor.getColumnIndex("DATA_VISITA")));
-                } catch (CursorIndexOutOfBoundsException e) {
-                    e.printStackTrace();
-                }
-
-                try {
-                    visita.setDataRetorno(cursor.getString(cursor.getColumnIndex("DATA_PROXIMA_VISITA")));
-                } catch (CursorIndexOutOfBoundsException e) {
-                    e.printStackTrace();
-                }
-
-                try {
-                    visita.setTipoContato(cursor.getString(cursor.getColumnIndex("TIPO_CONTATO")));
-                } catch (CursorIndexOutOfBoundsException e) {
-                    e.printStackTrace();
-                }
-
-
-                try {
-                    visita.setUsuario_id(cursor.getString(cursor.getColumnIndex("USUARIO_ID")));
-                } catch (CursorIndexOutOfBoundsException e) {
-                    e.printStackTrace();
-                }
-
-                try {
-                    visita.setLatitude(cursor.getString(cursor.getColumnIndex("LATITUDE")));
-                } catch (CursorIndexOutOfBoundsException e) {
-                    e.printStackTrace();
-                }
-
-                try {
-                    visita.setLongitude(cursor.getString(cursor.getColumnIndex("LONGITUDE")));
-                } catch (CursorIndexOutOfBoundsException e) {
-                    e.printStackTrace();
-                }
-
-                try {
-                    visita.setDescricaoVisita(cursor.getString(cursor.getColumnIndex("DESCRICAO_VISTA")));
-                } catch (CursorIndexOutOfBoundsException e) {
-                    e.printStackTrace();
-                }
-
-                try {
-                    visita.setIdVisitaServidor(cursor.getString(cursor.getColumnIndex("ID_VISITA_SERVIDOR")));
-                } catch (CursorIndexOutOfBoundsException e) {
-                    e.printStackTrace();
-                }
+                visita.setDataVisita(cursor.getString(cursor.getColumnIndex("DATA_VISITA")));
+                visita.setDataRetorno(cursor.getString(cursor.getColumnIndex("DATA_PROXIMA_VISITA")));
+                visita.setTipoContato(cursor.getString(cursor.getColumnIndex("TIPO_CONTATO")));
+                visita.setUsuario_id(cursor.getString(cursor.getColumnIndex("USUARIO_ID")));
+                visita.setLatitude(cursor.getString(cursor.getColumnIndex("LATITUDE")));
+                visita.setLongitude(cursor.getString(cursor.getColumnIndex("LONGITUDE")));
+                visita.setDescricaoVisita(cursor.getString(cursor.getColumnIndex("DESCRICAO_VISTA")));
+                visita.setIdVisitaServidor(cursor.getString(cursor.getColumnIndex("ID_VISITA_SERVIDOR")));
 
                 visita.setProspect(prospect);
                 visitas.add(visita);

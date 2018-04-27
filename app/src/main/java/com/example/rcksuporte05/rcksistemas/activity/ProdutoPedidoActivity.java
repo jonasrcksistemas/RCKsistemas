@@ -201,30 +201,24 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         try {
-            try {
-                if (PedidoHelper.getProduto() != null && getIntent().getIntExtra("pedido", 0) != 1 || PedidoHelper.getProduto().getId_produto() != PedidoHelper.getWebPedidoItem().getId_produto())
-                    webPedidoItem = new WebPedidoItens(PedidoHelper.getProduto());
-                else {
-                    webPedidoItem = PedidoHelper.getWebPedidoItem();
-                    edtQuantidade.setText(webPedidoItem.getQuantidade().toString().replace(".0", ""));
-                    edtDesconto.setText(webPedidoItem.getValor_desconto_per());
-                    edtDescontoReais.setText(webPedidoItem.getValor_desconto_real());
-                    if (webPedidoItem.getTipoDesconto().equals("R"))
-                        rbReal.setChecked(true);
-                }
-            } catch (NullPointerException e) {
-                e.printStackTrace();
+            if (PedidoHelper.getProduto() != null && getIntent().getIntExtra("pedido", 0) != 1 && PedidoHelper.getProduto().getId_produto() != PedidoHelper.getWebPedidoItem().getId_produto())
+                webPedidoItem = new WebPedidoItens(PedidoHelper.getProduto());
+            else {
                 webPedidoItem = PedidoHelper.getWebPedidoItem();
+                edtQuantidade.setText(webPedidoItem.getQuantidade().toString().replace(".0", ""));
                 edtDesconto.setText(webPedidoItem.getValor_desconto_per());
                 edtDescontoReais.setText(webPedidoItem.getValor_desconto_real());
-                edtQuantidade.setText(webPedidoItem.getQuantidade().toString().replace(".0", ""));
-                if (webPedidoItem.getTipoDesconto().equals("R")) {
+                if (webPedidoItem.getTipoDesconto().equals("R"))
                     rbReal.setChecked(true);
-                }
             }
         } catch (Exception e) {
             e.printStackTrace();
+            webPedidoItem = new WebPedidoItens(PedidoHelper.getProduto());
         }
+
+        if (Float.parseFloat(edtDesconto.getText().toString()) <= 0)
+            edtDesconto.setText(tabelaPrecoItem.getPerc_desc_final());
+
         promocaoRetorno = pedidoBO.calculaDesconto(ClienteHelper.getCliente().getId_cadastro(), webPedidoItem.getId_produto(), ProdutoPedidoActivity.this);
         if (promocaoRetorno != null && promocaoRetorno.getValorDesconto() > 0 && promocaoRetorno.getValorDesconto() > Float.parseFloat(tabelaPrecoItem.getPerc_desc_final())) {
             rbPorcentagem.setText("Desconto %(max " + promocaoRetorno.getValorDesconto().toString().replace(".0", "") + "%)");

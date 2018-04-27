@@ -18,11 +18,11 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.VisitaHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.ListaProspectEnviadoAdapter;
 import com.example.rcksuporte05.rcksistemas.model.Prospect;
-import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.util.DividerItemDecoration;
 
 import java.util.ArrayList;
@@ -35,7 +35,7 @@ import butterknife.ButterKnife;
  * Created by RCK 03 on 20/02/2018.
  */
 
-public class ActivityListaProspectEnviado extends AppCompatActivity implements ListaProspectEnviadoAdapter.ProspectEnviadoListener{
+public class ActivityListaProspectEnviado extends AppCompatActivity implements ListaProspectEnviadoAdapter.ProspectEnviadoListener {
 
     @BindView(R.id.recyclerProspectsEnviado)
     RecyclerView recyclerProspectsEnviado;
@@ -62,9 +62,13 @@ public class ActivityListaProspectEnviado extends AppCompatActivity implements L
             DBHelper db = new DBHelper(this);
             listaProspect = db.listaProspect(Prospect.PROSPECT_ENVIADO);
             preencheLista(listaProspect);
+            if (listaProspectEnviadoAdapter.getItemCount() > 0)
+                edtTotalProspectEnviado.setText(listaProspectEnviadoAdapter.getItemCount() + " : Prospects Enviados");
+            else
+                edtTotalProspectEnviado.setText("Nenhum Prospect Sincronizado");
         } catch (CursorIndexOutOfBoundsException e) {
             e.printStackTrace();
-            edtTotalProspectEnviado.setText(0+" : Prospects Enviados");
+            edtTotalProspectEnviado.setText("Nenhum Prospect Sincronizado");
             recyclerProspectsEnviado.setVisibility(View.INVISIBLE);
         }
 
@@ -106,13 +110,19 @@ public class ActivityListaProspectEnviado extends AppCompatActivity implements L
             public boolean onQueryTextChange(String query) {
                 try {
                     if (query.trim().equals("")) {
-                        if (listaProspect.size() > 0)
+                        if (listaProspect.size() > 0) {
                             preencheLista(listaProspect);
+                            edtTotalProspectEnviado.setText(listaProspect.size() + " : Prospects Enviados");
+                        }
                     } else {
                         preencheLista(buscaProspect(listaProspect, query));
+                        if (listaProspectEnviadoAdapter.getItemCount() > 0)
+                            edtTotalProspectEnviado.setText(listaProspectEnviadoAdapter.getItemCount() + " : Prospects Encontrados");
+                        else
+                            edtTotalProspectEnviado.setText("Nenhum Prospect Encontrado");
                     }
-                }catch (NullPointerException e){
-                    Toast.makeText(ActivityListaProspectEnviado.this, "Nem um Prospect vinculado ao vendedor. Sincronizar pode resolver", Toast.LENGTH_SHORT).show();
+                } catch (NullPointerException e) {
+                    Toast.makeText(ActivityListaProspectEnviado.this, "Nenhum Prospect vinculado ao vendedor. Sincronizar pode resolver", Toast.LENGTH_LONG).show();
                 }
 
                 return false;
@@ -135,21 +145,16 @@ public class ActivityListaProspectEnviado extends AppCompatActivity implements L
     }
 
     private void preencheLista(List<Prospect> listaProspect) {
-        listaProspectEnviadoAdapter = new ListaProspectEnviadoAdapter(listaProspect,this);
+        listaProspectEnviadoAdapter = new ListaProspectEnviadoAdapter(listaProspect, this);
         recyclerProspectsEnviado.setAdapter(listaProspectEnviadoAdapter);
         recyclerProspectsEnviado.setVisibility(View.VISIBLE);
         listaProspectEnviadoAdapter.notifyDataSetChanged();
-        if(listaProspectEnviadoAdapter.getItemCount() > 0){
-            edtTotalProspectEnviado.setText(listaProspectEnviadoAdapter.getItemCount()+" : Prospects Enviados");
-        }else
-            edtTotalProspectEnviado.setText("Nem um Prospect Sincronizado");
-
     }
 
     @Override
     public void onClick(int position) {
         VisitaHelper.setProspect(listaProspectEnviadoAdapter.getItem(position));
-        Intent intent = new Intent(this,ActivityHistoricoVisitaProspect.class);
+        Intent intent = new Intent(this, ActivityHistoricoVisitaProspect.class);
         startActivity(intent);
     }
 
@@ -162,6 +167,15 @@ public class ActivityListaProspectEnviado extends AppCompatActivity implements L
             try {
                 final String idProspect = prospect.getId_prospect().toUpperCase();
                 if (idProspect.equals(upperCaseQuery) && !entrou) {
+                    lista.add(prospect);
+                    entrou = true;
+                }
+            } catch (NullPointerException e) {
+                e.printStackTrace();
+            }
+            try {
+                final String idProspectServidor = prospect.getId_prospect_servidor().toUpperCase();
+                if (idProspectServidor.equals(upperCaseQuery) && !entrou) {
                     lista.add(prospect);
                     entrou = true;
                 }
@@ -190,7 +204,6 @@ public class ActivityListaProspectEnviado extends AppCompatActivity implements L
                 final String cpfCnpj = prospect.getCpf_cnpj().toUpperCase();
                 if (cpfCnpj.contains(upperCaseQuery) && !entrou) {
                     lista.add(prospect);
-                    entrou = true;
                 }
             } catch (NullPointerException e) {
                 e.printStackTrace();

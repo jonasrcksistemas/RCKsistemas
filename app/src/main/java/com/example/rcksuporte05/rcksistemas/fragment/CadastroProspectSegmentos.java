@@ -24,13 +24,12 @@ import butterknife.ButterKnife;
  * Created by RCK 03 on 26/01/2018.
  */
 
-public class CadastroProspectSegmentos extends Fragment implements SegmentoAdapter.SegmentoListener{
+public class CadastroProspectSegmentos extends Fragment implements SegmentoAdapter.SegmentoListener {
 
-    @BindView(R.id.recyclerSegmentos)
-    RecyclerView recyclerSegmentos;
     @BindView(R.id.edtOutrosSegmentosProspect)
     public EditText edtOutrosSegmentosProspect;
-
+    @BindView(R.id.recyclerSegmentos)
+    RecyclerView recyclerSegmentos;
     View view;
     SegmentoAdapter segmentoAdapter;
 
@@ -59,27 +58,29 @@ public class CadastroProspectSegmentos extends Fragment implements SegmentoAdapt
     }
 
 
-    public void insereDadosNaTela(){
+    public void insereDadosNaTela() {
 
-        if(ProspectHelper.getProspect().getSegmento() != null){
+        if (ProspectHelper.getProspect().getSegmento() != null) {
             segmentoAdapter.marcarSelecionado(ProspectHelper.getProspect().getSegmento());
-            if(ProspectHelper.getProspect().getSegmento().getDescricaoOutros() != null && !ProspectHelper.getProspect().getSegmento().getDescricaoOutros().equals("")){
+            if (ProspectHelper.getProspect().getSegmento().getDescricaoOutros() != null && !ProspectHelper.getProspect().getSegmento().getDescricaoOutros().equals("")) {
                 edtOutrosSegmentosProspect.setText(ProspectHelper.getProspect().getSegmento().getDescricaoOutros());
             }
         }
 
     }
 
-    public void insereDadosDaFrame(){
-        Segmento segmento = segmentoAdapter.getItemSelecionado();
+    public void insereDadosDaFrame() {
+        if (segmentoAdapter.getSelectedItemCount() > 0) {
+            Segmento segmento = segmentoAdapter.getItemSelecionado();
 
-        if(segmento != null){
-            ProspectHelper.getProspect().setSegmento(segmento);
-            if(edtOutrosSegmentosProspect.getText() != null){
-                ProspectHelper.getProspect().getSegmento().setDescricaoOutros(edtOutrosSegmentosProspect.getText().toString());
+            if (segmento != null) {
+                ProspectHelper.getProspect().setSegmento(segmento);
+                if (edtOutrosSegmentosProspect.getText() != null) {
+                    ProspectHelper.getProspect().getSegmento().setDescricaoOutros(edtOutrosSegmentosProspect.getText().toString());
+                }
             }
-        }
-
+        } else
+            ProspectHelper.getProspect().setSegmento(null);
     }
 
 
@@ -100,15 +101,15 @@ public class CadastroProspectSegmentos extends Fragment implements SegmentoAdapt
 
     @Override
     public void onClick(int position) {
-       if(segmentoAdapter.getItem(position).getNomeSetor().toLowerCase().contains("outros")){
-          edtOutrosSegmentosProspect.setEnabled(true);
-          edtOutrosSegmentosProspect.requestFocus();
-       }else {
-           edtOutrosSegmentosProspect.setText("");
-           edtOutrosSegmentosProspect.setEnabled(false);
-       }
-       segmentoAdapter.toggleSelection(position);
-       segmentoAdapter.notifyDataSetChanged();
+        if (segmentoAdapter.getItem(position).getNomeSetor().toLowerCase().contains("outros")) {
+            edtOutrosSegmentosProspect.setEnabled(true);
+            edtOutrosSegmentosProspect.requestFocus();
+        } else {
+            edtOutrosSegmentosProspect.setText("");
+            edtOutrosSegmentosProspect.setEnabled(false);
+        }
+        segmentoAdapter.toggleSelection(position);
+        segmentoAdapter.notifyDataSetChanged();
     }
 
     @Override

@@ -28,10 +28,9 @@ public class ListaProspectEnviadoAdapter extends RecyclerView.Adapter<ProspectEn
     @Override
     public ProspectEnviadoViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                                       .inflate(R.layout.prospect_lista_enviado, parent, false);
+                .inflate(R.layout.prospect_lista_enviado, parent, false);
 
-
-        return new ProspectEnviadoViewHolder(itemView,listener);
+        return new ProspectEnviadoViewHolder(itemView, listener);
     }
 
     @Override
@@ -40,12 +39,27 @@ public class ListaProspectEnviadoAdapter extends RecyclerView.Adapter<ProspectEn
         holder.txtIdProspectEnviado.setText(prospects.get(position).getId_prospect_servidor());
         try {
             holder.txtDataRetornoEnviado.setText(new SimpleDateFormat("dd/MM/yyyy")
-                                                     .format(new SimpleDateFormat("yyyy-MM-dd")
-                                                     .parse(prospects.get(position).getDataRetorno())));
+                    .format(new SimpleDateFormat("yyyy-MM-dd")
+                            .parse(prospects.get(position).getDataRetorno())));
         } catch (Exception e) {
             holder.txtDataRetornoEnviado.setText("N/D");
             e.printStackTrace();
         }
+
+        if (prospects.get(position).getPessoa_f_j() != null) {
+            switch (prospects.get(position).getPessoa_f_j()) {
+                case "F":
+                    holder.imFisicaJuridica.setImageResource(R.mipmap.ic_pessoa_fisica);
+                    break;
+                case "J":
+                    holder.imFisicaJuridica.setImageResource(R.mipmap.ic_pessoa_juridica);
+                    break;
+                default:
+                    holder.imFisicaJuridica.setImageResource(R.mipmap.ic_pessoa_duvida);
+                    break;
+            }
+        } else
+            holder.imFisicaJuridica.setImageResource(R.mipmap.ic_pessoa_duvida);
 
         ApplyClickEvents(holder, position);
     }
@@ -59,19 +73,19 @@ public class ListaProspectEnviadoAdapter extends RecyclerView.Adapter<ProspectEn
         });
     }
 
-    public Prospect getItem(int position){
+    public Prospect getItem(int position) {
         return prospects.get(position);
     }
 
     @Override
     public int getItemCount() {
-        if(prospects.size() > 0)
+        if (prospects.size() > 0)
             return prospects.size();
         else
             return 0;
     }
 
-    public interface ProspectEnviadoListener{
+    public interface ProspectEnviadoListener {
         void onClick(int position);
     }
 }

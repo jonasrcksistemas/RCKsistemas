@@ -12,6 +12,10 @@ public class Prospect {
     public static int PROSPECT_PENDENTE = 1;
     public static int PROSPECT_SALVO = 2;
     public static int PROSPECT_ENVIADO = 3;
+    public String latitude;
+    public String longitude;
+    public int idVendedor;
+    public int idCategoria;
     private String id_prospect;
     private String id_prospect_servidor;
     private String id_cadastro;
@@ -49,8 +53,6 @@ public class Prospect {
     private String prospectSalvo;
     private String ind_da_ie_destinatario_prospect;
     private String usuario_nome;
-    public String latitude;
-    public String longitude;
 
     public String getId_prospect() {
         return id_prospect;
@@ -86,6 +88,10 @@ public class Prospect {
 
     public List<Contato> getListaContato() {
         return listaContato;
+    }
+
+    public void setListaContato(List<Contato> listaContato) {
+        this.listaContato = listaContato;
     }
 
     public String getNome_cadastro() {
@@ -252,8 +258,16 @@ public class Prospect {
         return referenciasBancarias;
     }
 
+    public void setReferenciasBancarias(List<ReferenciaBancaria> referenciasBancarias) {
+        this.referenciasBancarias = referenciasBancarias;
+    }
+
     public List<ReferenciaComercial> getReferenciasComerciais() {
         return referenciasComerciais;
+    }
+
+    public void setReferenciasComerciais(List<ReferenciaComercial> referenciasComerciais) {
+        this.referenciasComerciais = referenciasComerciais;
     }
 
     public String getObservacoesComerciais() {
@@ -294,18 +308,6 @@ public class Prospect {
 
     public void setId_prospect_servidor(String id_prospect_servidor) {
         this.id_prospect_servidor = id_prospect_servidor;
-    }
-
-    public void setReferenciasBancarias(List<ReferenciaBancaria> referenciasBancarias) {
-        this.referenciasBancarias = referenciasBancarias;
-    }
-
-    public void setReferenciasComerciais(List<ReferenciaComercial> referenciasComerciais) {
-        this.referenciasComerciais = referenciasComerciais;
-    }
-
-    public void setListaContato(List<Contato> listaContato) {
-        this.listaContato = listaContato;
     }
 
     public String getProspectSalvo() {
@@ -362,5 +364,21 @@ public class Prospect {
 
     public void setUsuario_data(String usuario_data) {
         this.usuario_data = usuario_data;
+    }
+
+    public int getIdVendedor() {
+        return idVendedor;
+    }
+
+    public void setIdVendedor(int idVendedor) {
+        this.idVendedor = idVendedor;
+    }
+
+    public int getIdCategoria() {
+        return idCategoria;
+    }
+
+    public void setIdCategoria(int idCategoria) {
+        this.idCategoria = idCategoria;
     }
 }

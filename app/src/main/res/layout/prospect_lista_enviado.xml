@@ -5,38 +5,49 @@
     android:layout_height="wrap_content">
 
     <TextView
-        android:text="Texto"
         android:id="@+id/txtIdProspectEnviado"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginStart="12dp"
         android:layout_marginTop="2dp"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
+        android:text="00"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        android:textSize="10dp" />
+
+    <ImageView
+        android:id="@+id/imFisicaJuridica"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_below="@id/txtIdProspectEnviado"
+        android:layout_toEndOf="@id/txtIdProspectEnviado"
+        android:layout_toRightOf="@id/txtIdProspectEnviado"
+        android:background="@mipmap/ic_pessoa_duvida" />
 
     <TextView
-        android:text="Texto"
-        android:layout_below="@+id/txtIdProspectEnviado"
         android:id="@+id/nomeProspectEnviado"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="17dp"
+        android:layout_below="@+id/imFisicaJuridica"
+        android:layout_marginBottom="12dp"
         android:layout_marginTop="5dp"
+        android:layout_toEndOf="@+id/txtIdProspectEnviado"
+        android:layout_toRightOf="@+id/txtIdProspectEnviado"
         android:ellipsize="end"
         android:maxLines="1"
         android:scrollHorizontally="true"
-        android:textColor="#000000"
-        android:layout_marginStart="17dp" />
+        android:text="Texto"
+        android:textColor="#000000" />
 
     <TextView
         android:id="@+id/txtVisitarEm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/nomeProspectEnviado"
+        android:layout_alignTop="@+id/imFisicaJuridica"
         android:layout_marginEnd="10dp"
         android:layout_marginRight="10dp"
-        android:layout_toLeftOf="@+id/txtDataRetornoEnviado"
-        android:layout_toStartOf="@+id/txtDataRetornoEnviado"
+        android:layout_toLeftOf="@id/txtDataRetornoEnviado"
+        android:layout_toStartOf="@id/txtDataRetornoEnviado"
         android:text="Visitar em: "
         android:theme="@style/txtStyle" />
 
@@ -44,9 +55,9 @@
         android:id="@+id/txtDataRetornoEnviado"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/txtVisitarEm"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_alignBaseline="@+id/txtVisitarEm"
         android:layout_marginEnd="25dp"
         android:layout_marginRight="25dp"
         android:gravity="end"

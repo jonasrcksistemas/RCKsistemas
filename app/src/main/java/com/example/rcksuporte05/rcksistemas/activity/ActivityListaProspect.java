@@ -25,6 +25,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.ProspectHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.UsuarioHelper;
 import com.example.rcksuporte05.rcksistemas.R;
@@ -32,7 +33,6 @@ import com.example.rcksuporte05.rcksistemas.adapters.ListaProspectAdapter;
 import com.example.rcksuporte05.rcksistemas.api.Api;
 import com.example.rcksuporte05.rcksistemas.api.Rotas;
 import com.example.rcksuporte05.rcksistemas.model.Prospect;
-import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -96,6 +96,7 @@ public class ActivityListaProspect extends AppCompatActivity {
                     listaProspect = db.listaProspect(spFiltraProspect.getSelectedItemPosition());
                     preencheLista(listaProspect);
                 } catch (CursorIndexOutOfBoundsException e) {
+                    recycleProspect.setVisibility(View.INVISIBLE);
                     e.printStackTrace();
                     edtTotalProspect.setText("0: Prospects Listados");
                 }
@@ -137,14 +138,14 @@ public class ActivityListaProspect extends AppCompatActivity {
 
             @Override
             public boolean onQueryTextChange(String query) {
-                try{
+                try {
                     if (query.trim().equals("")) {
                         if (listaProspect.size() > 0)
                             preencheLista(listaProspect);
                     } else {
                         preencheLista(buscaProspect(listaProspect, query));
                     }
-                }catch (NullPointerException e){
+                } catch (NullPointerException e) {
                     Toast.makeText(ActivityListaProspect.this, "Não existem Prospects para consulta", Toast.LENGTH_SHORT).show();
                 }
 
@@ -183,8 +184,8 @@ public class ActivityListaProspect extends AppCompatActivity {
                 enableActionMode(position);
             }
         });
+        recycleProspect.setVisibility(View.VISIBLE);
         recycleProspect.setAdapter(listaProspectAdapter);
-        edtTotalProspect.setText(lista.size() + ": Prospects Listados");
     }
 
     public List<Prospect> buscaProspect(List<Prospect> listaProspect, String query) {
@@ -319,43 +320,52 @@ public class ActivityListaProspect extends AppCompatActivity {
         }
     }
 
-    public void enviarProspects(List<Prospect> prospectsEnvio){
+    public void enviarProspects(List<Prospect> prospectsEnvio) {
         Rotas apiRetrofit = Api.buildRetrofit();
 
         Map<String, String> cabecalho = new HashMap<>();
         cabecalho.put("AUTHORIZATION", UsuarioHelper.getUsuario().getToken());
 
-        Call<List<Prospect>> call = apiRetrofit.salvarProspect(cabecalho,prospectsEnvio);
+        Call<List<Prospect>> call = apiRetrofit.salvarProspect(cabecalho, prospectsEnvio);
 
         call.enqueue(new Callback<List<Prospect>>() {
             @Override
             public void onResponse(Call<List<Prospect>> call, Response<List<Prospect>> response) {
-                List<Prospect> prospectsRetorno = response.body();
-                if(prospectsRetorno != null && prospectsRetorno.size() > 0){
-                    for (Prospect prospect : prospectsRetorno) {
-                        db.atualizarTBL_PROSPECT(prospect);
-                    }
-                    listaProspectAdapter.clearSelections();
-                    actionMode.finish();
-                    actionMode = null;
-                    progress.dismiss();
-                    Toast.makeText(ActivityListaProspect.this, "Enviado com sucesso", Toast.LENGTH_SHORT).show();
-                    finish();
+                switch (response.code()) {
+                    case 200:
+                        List<Prospect> prospectsRetorno = response.body();
+                        if (prospectsRetorno != null && prospectsRetorno.size() > 0) {
+                            for (Prospect prospect : prospectsRetorno) {
+                                db.atualizarTBL_PROSPECT(prospect);
+                            }
+                            listaProspectAdapter.clearSelections();
+                            actionMode.finish();
+                            actionMode = null;
+                            progress.dismiss();
+                            Toast.makeText(ActivityListaProspect.this, "Enviado com sucesso", Toast.LENGTH_SHORT).show();
+                            finish();
+                        }
+                        break;
+                    default:
+                        progress.dismiss();
+                        Toast.makeText(ActivityListaProspect.this, "Erro, não foi possivel enviar o prospect", Toast.LENGTH_SHORT).show();
+                        listaProspectAdapter.clearSelections();
+                        break;
                 }
             }
 
             @Override
             public void onFailure(Call<List<Prospect>> call, Throwable t) {
+                progress.dismiss();
                 Toast.makeText(ActivityListaProspect.this, "Falhou tente novamente, ou entre em contato com o suporte", Toast.LENGTH_SHORT).show();
                 listaProspectAdapter.clearSelections();
-                progress.dismiss();
             }
         });
 
     }
 
 
-    public void atualizaTela(){
+    public void atualizaTela() {
         try {
             DBHelper db = new DBHelper(this);
             listaProspect = db.listaProspect(spFiltraProspect.getSelectedItemPosition());

@@ -28,13 +28,13 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.ProspectHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.UsuarioHelper;
 import com.example.rcksuporte05.rcksistemas.R;
+import com.example.rcksuporte05.rcksistemas.activity.FotoActivity;
 import com.example.rcksuporte05.rcksistemas.api.ApiGeocoder;
 import com.example.rcksuporte05.rcksistemas.api.Rotas;
-import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
-import com.example.rcksuporte05.rcksistemas.activity.FotoActivity;
 import com.example.rcksuporte05.rcksistemas.util.DatePickerUtil;
 import com.example.rcksuporte05.rcksistemas.util.FotoUtil;
 import com.example.rcksuporte05.rcksistemas.util.classesGeocoderUtil.RespostaGeocoder;
@@ -68,46 +68,38 @@ import retrofit2.Response;
  * Created by RCK 03 on 29/01/2018.
  */
 
-public class CadastroProspectFotoSalvar extends Fragment implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
+public class CadastroProspectFotoSalvar extends Fragment implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
+    static int REQUEST_CODE_IMAGEM_1 = 798;
+    static int REQUEST_CODE_IMAGEM_2 = 987;
     @BindView(R.id.edtDataRetorno)
     public EditText edtDataRetorno;
-
     @BindView(R.id.imagemProspect1)
     ImageButton imagemProspect1;
-
     @BindView(R.id.imagemProspect2)
     ImageButton imagemProspect2;
-
     @BindView(R.id.btnSalvarParcial)
     Button btnSalvarParcial;
-
     @BindView(R.id.btnSalvarProspect)
     Button btnSalvarProspect;
-
     @BindView(R.id.txtLatitudeProspect)
     TextView txtLatitudeProspect;
     @BindView(R.id.txtLongitudeProspect)
     TextView txtLongitudeProspect;
     @BindView(R.id.txtChekinEnderecoProspect)
     TextView txtChekinEnderecoProspect;
-
-    private Uri uri;
-    private DBHelper db;
     String encodedImage;
-
-    static int REQUEST_CODE_IMAGEM_1 = 798;
-    static int REQUEST_CODE_IMAGEM_2 = 987;
     Bitmap mImagem1;
     Bitmap mImagem2;
     String latitude;
     String longitude;
-
     RespostaGeocoder respostaGeocoder;
-    private FusedLocationProviderClient mFusedLocationClient;
     Location mLocation;
     String checkin;
     ProgressDialog progress;
+    private Uri uri;
+    private DBHelper db;
+    private FusedLocationProviderClient mFusedLocationClient;
 
     @Nullable
     @Override
@@ -158,13 +150,13 @@ public class CadastroProspectFotoSalvar extends Fragment implements GoogleApiCli
 
         try {
             ProspectHelper.setImagem1(mImagem1);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         try {
             ProspectHelper.setImagem2(mImagem2);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -209,10 +201,10 @@ public class CadastroProspectFotoSalvar extends Fragment implements GoogleApiCli
             }
         }
 
-        if(ProspectHelper.getCheckin() != null){
+        if (ProspectHelper.getCheckin() != null) {
             txtChekinEnderecoProspect.setVisibility(View.VISIBLE);
             txtChekinEnderecoProspect.setText(ProspectHelper.getCheckin());
-        }else if(ProspectHelper.getLocalizacao() != null){
+        } else if (ProspectHelper.getLocalizacao() != null) {
             txtLatitudeProspect.setVisibility(View.VISIBLE);
             txtLongitudeProspect.setVisibility(View.VISIBLE);
             mLocation = ProspectHelper.getLocalizacao();
@@ -221,7 +213,7 @@ public class CadastroProspectFotoSalvar extends Fragment implements GoogleApiCli
             progress.setTitle("Aguarde");
             progress.show();
             getGeocoder();
-        }else if(ProspectHelper.getProspect().getLatitude() != null && ProspectHelper.getProspect().getLongitude() != null){
+        } else if (ProspectHelper.getProspect().getLatitude() != null && ProspectHelper.getProspect().getLongitude() != null) {
             progress = new ProgressDialog(getContext());
             progress.setMessage("Requisitando Endereço");
             progress.setTitle("Aguarde");
@@ -234,7 +226,7 @@ public class CadastroProspectFotoSalvar extends Fragment implements GoogleApiCli
     @OnClick(R.id.btnSalvarParcial)
     public void salvarParcial() {
         insereDadosDaFrame();
-        if(ProspectHelper.salvarParcial()) {
+        if (ProspectHelper.salvarParcial()) {
             AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
             alert.setTitle("Atenção");
             alert.setMessage("Tem certeza que deseja salvar esse prospect para continuar mais tarde?");
@@ -277,6 +269,7 @@ public class CadastroProspectFotoSalvar extends Fragment implements GoogleApiCli
                     ProspectHelper.getProspect().setUsuario_id(UsuarioHelper.getUsuario().getId_usuario());
                     ProspectHelper.getProspect().setUsuario_nome(UsuarioHelper.getUsuario().getNome_usuario());
                     ProspectHelper.getProspect().setUsuario_data(db.pegaDataAtual());
+                    ProspectHelper.getProspect().setIdVendedor(Integer.parseInt(UsuarioHelper.getUsuario().getId_quando_vendedor()));
 
                     db.atualizarTBL_PROSPECT(ProspectHelper.getProspect());
                     getActivity().finish();
@@ -287,19 +280,19 @@ public class CadastroProspectFotoSalvar extends Fragment implements GoogleApiCli
     }
 
     @OnClick(R.id.imagemProspect1)
-    public void chamarGaleria(){
+    public void chamarGaleria() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
         startActivityForResult(Intent.createChooser(intent, "Selecione uma imagem"), REQUEST_CODE_IMAGEM_1);
     }
 
     @OnClick(R.id.imagemProspect2)
-    public void chamarGaleria2(){
+    public void chamarGaleria2() {
         Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
         startActivityForResult(Intent.createChooser(intent, "Selecione uma imagem"), REQUEST_CODE_IMAGEM_2);
     }
 
     @OnClick(R.id.btnCheckinVisitaProspect)
-    public void checkin(){
+    public void checkin() {
         progress = new ProgressDialog(getContext());
         progress.setMessage("Fazendo Check-in");
         progress.setTitle("Aguarde");
@@ -353,10 +346,10 @@ public class CadastroProspectFotoSalvar extends Fragment implements GoogleApiCli
                     imagemProspect1.setImageBitmap(testeDeDimuir);
                 }
             }
-        }else if(requestCode == REQUEST_CODE_IMAGEM_2){
+        } else if (requestCode == REQUEST_CODE_IMAGEM_2) {
             if (data != null) {
                 try {
-                  bitmap = FotoUtil.rotateBitmap(BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(data.getData())), data.getData());
+                    bitmap = FotoUtil.rotateBitmap(BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(data.getData())), data.getData());
 
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
@@ -373,10 +366,10 @@ public class CadastroProspectFotoSalvar extends Fragment implements GoogleApiCli
                 mImagem2 = bitmap;
                 imagemProspect2.setImageBitmap(testeDeDimuir);
             }
-        }else if(requestCode == 1){
-            if(resultCode != 0){
+        } else if (requestCode == 1) {
+            if (resultCode != 0) {
                 Toast.makeText(getContext(), "Tente Novamente", Toast.LENGTH_LONG).show();
-            }else {
+            } else {
                 Toast.makeText(getContext(), "Sem Localização ativa, recurso indisponível", Toast.LENGTH_LONG).show();
             }
         }
@@ -384,7 +377,7 @@ public class CadastroProspectFotoSalvar extends Fragment implements GoogleApiCli
         super.onActivityResult(requestCode, resultCode, data);
     }
 
-    public void pegarUltimaLocalizacao(){
+    public void pegarUltimaLocalizacao() {
         if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             mFusedLocationClient.getLastLocation()
@@ -405,35 +398,35 @@ public class CadastroProspectFotoSalvar extends Fragment implements GoogleApiCli
         }
     }
 
-    public void getGeocoder(){
+    public void getGeocoder() {
         Rotas rotas = ApiGeocoder.buildRetrofit();
         Call<RespostaGeocoder> call;
 
-        if(mLocation != null){
-             call = rotas.getGeocoder(String.valueOf(mLocation.getLatitude())+","+String.valueOf(mLocation.getLongitude()), true, "pt-BR");
-        }else{
-             call = rotas.getGeocoder(ProspectHelper.getProspect().getLatitude()+","+ProspectHelper.getProspect().getLongitude(), true, "pt-BR");
+        if (mLocation != null) {
+            call = rotas.getGeocoder(String.valueOf(mLocation.getLatitude()) + "," + String.valueOf(mLocation.getLongitude()), true, "pt-BR");
+        } else {
+            call = rotas.getGeocoder(ProspectHelper.getProspect().getLatitude() + "," + ProspectHelper.getProspect().getLongitude(), true, "pt-BR");
         }
 
         call.enqueue(new Callback<RespostaGeocoder>() {
             @Override
             public void onResponse(Call<RespostaGeocoder> call, Response<RespostaGeocoder> response) {
                 respostaGeocoder = response.body();
-                if(response.body().getResult().size() > 0) {
+                if (response.body().getResult().size() > 0) {
                     ProspectHelper.setCheckin(respostaGeocoder.getResult().get(1).getFormattedAddress());
                     txtChekinEnderecoProspect.setVisibility(View.VISIBLE);
                     txtChekinEnderecoProspect.setText(respostaGeocoder.getResult().get(1).getFormattedAddress());
-                }else {
+                } else {
                     txtLatitudeProspect.setVisibility(View.VISIBLE);
                     txtLongitudeProspect.setVisibility(View.VISIBLE);
-                    if(mLocation != null){
+                    if (mLocation != null) {
                         txtLatitudeProspect.setText(String.valueOf(mLocation.getLatitude()));
                         txtLongitudeProspect.setText(String.valueOf(mLocation.getLongitude()));
-                    }else {
+                    } else {
                         txtLatitudeProspect.setText(ProspectHelper.getProspect().getLatitude());
                         txtLongitudeProspect.setText(ProspectHelper.getProspect().getLongitude());
                     }
-                    Toast.makeText(getContext(),"Endereço não encontrado! somente latitude e longitude", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "Endereço não encontrado! somente latitude e longitude", Toast.LENGTH_LONG).show();
                 }
                 progress.dismiss();
             }
@@ -441,7 +434,7 @@ public class CadastroProspectFotoSalvar extends Fragment implements GoogleApiCli
             @Override
             public void onFailure(Call<RespostaGeocoder> call, Throwable t) {
                 progress.dismiss();
-                Toast.makeText(getContext(),"Falha ao requisitar", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "Falha ao requisitar", Toast.LENGTH_LONG).show();
                 txtLatitudeProspect.setText(ProspectHelper.getProspect().getLatitude());
                 txtLongitudeProspect.setText(ProspectHelper.getProspect().getLongitude());
             }
@@ -527,18 +520,17 @@ public class CadastroProspectFotoSalvar extends Fragment implements GoogleApiCli
     }
 
 
-
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if (requestCode == 0) {
-            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 progress = new ProgressDialog(getContext());
                 progress.setMessage("Fazendo Check-in");
                 progress.setTitle("Aguarde");
                 progress.show();
                 pegarUltimaLocalizacao();
             } else {
-                Toast.makeText(getContext(), "Sem a permissão função indisponivel",Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "Sem a permissão função indisponivel", Toast.LENGTH_LONG).show();
             }
         }
     }

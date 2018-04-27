@@ -27,6 +27,7 @@ public class Sincronia {
     private List<MotivoNaoCadastramento> motivos;
     private List<Prospect> listaProspectPendentes;
     private List<Prospect> listaProspectEnviados;
+    private List<Prospect> listaProspectPositivados;
     private List<VisitaProspect> visitas;
     private List<Categoria> listaCategoria;
     private List<Promocao> listaPromocao;
@@ -261,5 +262,13 @@ public class Sincronia {
 
     public void setListaPromocao(List<Promocao> listaPromocao) {
         this.listaPromocao = listaPromocao;
+    }
+
+    public List<Prospect> getListaProspectPositivados() {
+        return listaProspectPositivados;
+    }
+
+    public void setListaProspectPositivados(List<Prospect> listaProspectPositivados) {
+        this.listaProspectPositivados = listaProspectPositivados;
     }
 }

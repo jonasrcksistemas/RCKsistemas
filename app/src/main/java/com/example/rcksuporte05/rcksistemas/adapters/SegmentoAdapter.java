@@ -22,7 +22,7 @@ public class SegmentoAdapter extends RecyclerView.Adapter<SegmentoViewHolder> {
     private SegmentoListener listener;
     private SparseBooleanArray selectedItems;
     private int posAnterior;
-    private Segmento selecionado;
+    private Segmento segmentoSelecionado;
 
     public SegmentoAdapter(List<Segmento> segmentos, SegmentoListener listener) {
         this.segmentos = segmentos;
@@ -34,7 +34,7 @@ public class SegmentoAdapter extends RecyclerView.Adapter<SegmentoViewHolder> {
     @Override
     public SegmentoViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext())
-                                      .inflate(R.layout.item_segmento, parent, false);
+                .inflate(R.layout.item_segmento, parent, false);
 
         return new SegmentoViewHolder(itemView, listener);
     }
@@ -45,15 +45,15 @@ public class SegmentoAdapter extends RecyclerView.Adapter<SegmentoViewHolder> {
 
         holder.rlItemSegmentos.setActivated(selectedItems.get(position, false));
 
-        if(selectedItems.get(position)){
+        if (selectedItems.get(position)) {
             holder.txtNomeSegmento.setTextColor(Color.parseColor("#ffffff"));
-        }else
+        } else
             holder.txtNomeSegmento.setTextColor(Color.parseColor("#607D8B"));
 
         applyClickEvents(holder, position);
     }
 
-    private void applyClickEvents(SegmentoViewHolder holder, final int position){
+    private void applyClickEvents(SegmentoViewHolder holder, final int position) {
         holder.rlItemSegmentos.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -70,15 +70,24 @@ public class SegmentoAdapter extends RecyclerView.Adapter<SegmentoViewHolder> {
             selectedItems.put(pos, true);
         }
 
-        if(posAnterior >= 0){
+        if (posAnterior >= 0) {
             selectedItems.delete(posAnterior);
         }
-        posAnterior = pos;
-        selecionado = segmentos.get(pos);
+
+        if (pos == posAnterior) {
+            selectedItems.clear();
+            posAnterior = -1;
+        } else
+            posAnterior = pos;
+        segmentoSelecionado = segmentos.get(pos);
     }
 
-    public Segmento getItemSelecionado(){
-        return selecionado;
+    public int getSelectedItemCount() {
+        return selectedItems.size();
+    }
+
+    public Segmento getItemSelecionado() {
+        return segmentoSelecionado;
     }
 
     @Override
@@ -87,30 +96,30 @@ public class SegmentoAdapter extends RecyclerView.Adapter<SegmentoViewHolder> {
     }
 
 
-    public Segmento getItem(int position){
+    public Segmento getItem(int position) {
         return segmentos.get(position);
     }
 
-    public void marcarSelecionado(Segmento segmento){
+    public void marcarSelecionado(Segmento segmento) {
         //está variavel é responsavel para armazenar o index do objeto que correponde com o id do objeto que vem do banco
         int i = 0;
         //está variavel guarda a possição que se encontra o item que veio do banco
         int posicao = -1;
 
-        for(Segmento paraTeste : segmentos){
-            if(paraTeste.getIdSetor().contains(segmento.getIdSetor())){
+        for (Segmento paraTeste : segmentos) {
+            if (paraTeste.getIdSetor().contains(segmento.getIdSetor())) {
                 posicao = i;
                 break;
             }
             i++;
         }
 
-        if(posicao >= 0){
+        if (posicao >= 0) {
             toggleSelection(posicao);
         }
     }
 
-    public interface SegmentoListener{
+    public interface SegmentoListener {
         void onClick(int position);
     }
 }

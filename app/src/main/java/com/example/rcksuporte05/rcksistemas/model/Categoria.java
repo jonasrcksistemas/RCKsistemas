@@ -47,4 +47,9 @@ public class Categoria {
     public void setUsuarioId(String usuarioId) {
         this.usuarioId = usuarioId;
     }
+
+    @Override
+    public String toString() {
+        return nomeCategoria;
+    }
 }

@@ -7,6 +7,7 @@ import com.example.rcksuporte05.rcksistemas.model.Prospect;
 import com.example.rcksuporte05.rcksistemas.model.Segmento;
 import com.example.rcksuporte05.rcksistemas.model.Sincronia;
 import com.example.rcksuporte05.rcksistemas.model.Usuario;
+import com.example.rcksuporte05.rcksistemas.model.VisitaProspect;
 import com.example.rcksuporte05.rcksistemas.model.WebPedido;
 import com.example.rcksuporte05.rcksistemas.util.classesGeocoderUtil.RespostaGeocoder;
 
@@ -55,5 +56,8 @@ public interface Rotas {
     Call<List<Prospect>> salvarProspect(@HeaderMap Map<String, String> chaveDeAcesso, @Body List<Prospect> prospect);
 
     @GET("maps/api/geocode/json?key=AIzaSyATLB7h2anOZofvV4KCfrhqMuZ9-1hr4HM")
-    Call<RespostaGeocoder> getGeocoder(@Query("latlng") String latlng, @Query("sensor") Boolean sensor, @Query("language")String language);
+    Call<RespostaGeocoder> getGeocoder(@Query("latlng") String latlng, @Query("sensor") Boolean sensor, @Query("language") String language);
+
+    @POST("visita/salvar")
+    Call<List<VisitaProspect>> salvarVisita(@HeaderMap Map<String, String> chaveAcesso, @Body List<VisitaProspect> listaVisita);
 }

@@ -1,14 +1,18 @@
 package com.example.rcksuporte05.rcksistemas.activity;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -17,17 +21,18 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.UsuarioHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.VisitaHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.api.ApiGeocoder;
 import com.example.rcksuporte05.rcksistemas.api.Rotas;
 import com.example.rcksuporte05.rcksistemas.model.VisitaProspect;
-import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.util.DatePickerUtil;
 import com.example.rcksuporte05.rcksistemas.util.classesGeocoderUtil.RespostaGeocoder;
 import com.google.android.gms.common.ConnectionResult;
@@ -61,7 +66,7 @@ import retrofit2.Response;
  * Created by RCK 03 on 21/02/2018.
  */
 
-public class ActivityVisita extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
+public class ActivityVisita extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     @BindView(R.id.txtLatitude)
     TextView txtLatitude;
@@ -82,15 +87,16 @@ public class ActivityVisita extends AppCompatActivity implements GoogleApiClient
     Button btnCheckinVisita;
     @BindView(R.id.btnSalvarVisita)
     Button btnSalvarVisita;
+    boolean verificaObrigatorios;
 
 
     ProgressDialog progress;
 
     RespostaGeocoder respostaGeocoder;
-    private FusedLocationProviderClient mFusedLocationClient;
     Location mLocation;
-    private String[] tipoVisita = {"Presencial","Telefone"};
     DBHelper db;
+    private FusedLocationProviderClient mFusedLocationClient;
+    private String[] tipoVisita = {"Presencial", "Telefone"};
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -107,7 +113,7 @@ public class ActivityVisita extends AppCompatActivity implements GoogleApiClient
         txtLongitude.setVisibility(View.GONE);
         txtChekinEndereco.setVisibility(View.GONE);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter(this,android.R.layout.simple_list_item_activated_1,tipoVisita);
+        ArrayAdapter<String> adapter = new ArrayAdapter(this, android.R.layout.simple_list_item_activated_1, tipoVisita);
         spTipoVisita.setAdapter(adapter);
 
         edtDataRetornoVisita.setOnClickListener(new View.OnClickListener() {
@@ -118,16 +124,33 @@ public class ActivityVisita extends AppCompatActivity implements GoogleApiClient
             }
         });
 
+        edtDataRetornoVisita.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                AlertDialog.Builder alert = new AlertDialog.Builder(ActivityVisita.this);
+                alert.setMessage("Deseja limpar o campo da data de retorno?");
+                alert.setNegativeButton("NÃO", null);
+                alert.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        edtDataRetornoVisita.setText("  /  /    ");
+                    }
+                });
+                alert.show();
+                return false;
+            }
+        });
+
         setSupportActionBar(tb_visita);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         int acao = getIntent().getIntExtra("acao", 0);
-        switch (acao){
+        switch (acao) {
             case 1:
                 injetaDadosNaTela();
-                edtDescricaoVisita.setEnabled(false);
+                edtDescricaoVisita.setFocusable(false);
                 edtDataRetornoVisita.setEnabled(false);
                 btnCheckinVisita.setEnabled(false);
-                btnSalvarVisita.setEnabled(false);
+                btnSalvarVisita.setVisibility(View.GONE);
                 spTipoVisita.setEnabled(false);
                 break;
             case 2:
@@ -149,75 +172,56 @@ public class ActivityVisita extends AppCompatActivity implements GoogleApiClient
 
     @Override
     protected void onResume() {
-       super.onResume();
+        super.onResume();
     }
 
     @OnClick(R.id.btnSalvarVisita)
-    public void salvar(){
-        VisitaProspect visita = new VisitaProspect();
-        boolean verificaObrigatorios = true;
+    public void salvar() {
+        VisitaProspect visita;
+        if (VisitaHelper.getVisitaProspect() != null)
+            visita = VisitaHelper.getVisitaProspect();
+        else
+            visita = new VisitaProspect();
+        verificaObrigatorios = true;
 
         visita.setProspect(VisitaHelper.getProspect());
         visita.setDataVisita(db.pegaDataAtual());
         visita.setUsuario_id(UsuarioHelper.getUsuario().getId_usuario());
         visita.setTipoContato(tipoVisita[spTipoVisita.getSelectedItemPosition()]);
 
-       if(spTipoVisita.getSelectedItemPosition() == 0) {
-        if(edtDescricaoVisita.getText() != null && !edtDescricaoVisita.getText().toString().trim().equals("")){
-            visita.setDescricaoVisita(edtDescricaoVisita.getText().toString());
-        }else{
-            edtDescricaoVisita.setError("Campo Obrigatorio");
-            edtDescricaoVisita.requestFocus();
-            verificaObrigatorios = false;
-        }
-
-        if (edtDataRetornoVisita.getText() != null && !edtDataRetornoVisita.getText().toString().trim().isEmpty()) {
-            String dataCapturada = "";
-            Calendar dataAtual = new GregorianCalendar();
-            Calendar dataRetorno = new GregorianCalendar();
-            Date date = new Date();
-            dataAtual.setTime(date);
-
-            //pegar data da tela
-            try{
-                 dataCapturada = new SimpleDateFormat("yyyy-MM-dd").format(new SimpleDateFormat("dd/MM/yyyy")
-                          .parse(edtDataRetornoVisita.getText().toString().trim()));
-            }catch (ParseException e){
-                e.printStackTrace();
-            }
-
-            //converte no mesmo padrão da capitura da atual
-            try {
-                dataRetorno.setTime(new SimpleDateFormat("yyyy-MM-dd").parse(dataCapturada));
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-             
-            if (dataAtual.after(dataRetorno)){
-                edtDataRetornoVisita.setBackgroundResource(R.drawable.borda_edittext_erro);
-                Toast.makeText(this, "Data deve ser posterior a atual",Toast.LENGTH_SHORT).show();
+        if (spTipoVisita.getSelectedItemPosition() == 0) {
+            if (edtDescricaoVisita.getText() != null && !edtDescricaoVisita.getText().toString().trim().equals("")) {
+                visita.setDescricaoVisita(edtDescricaoVisita.getText().toString());
+            } else {
+                edtDescricaoVisita.setError("Campo Obrigatorio");
+                edtDescricaoVisita.requestFocus();
                 verificaObrigatorios = false;
-            }else {
-                visita.setDataRetorno(dataCapturada);
             }
-
-        }else {
-            edtDataRetornoVisita.setBackgroundResource(R.drawable.borda_edittext_erro);
-            Toast.makeText(this, "A Data é Obrigatoria",Toast.LENGTH_SHORT).show();
-        }
+            String dataRetorno = dataRetorno();
+            if (dataRetorno != null) {
+                visita.setDataRetorno(dataRetorno);
+            } else {
+                edtDataRetornoVisita.setBackgroundResource(R.drawable.borda_edittext_erro);
+                Toast.makeText(this, "A Data é Obrigatoria", Toast.LENGTH_SHORT).show();
+            }
 
             if (mLocation == null) {
-                if(txtLatitude.getText() != null && txtLatitude.getText().toString().trim().equals("")
-                   && txtLongitude.getText() != null && txtLongitude.getText().toString().trim().equals("") ){
+                if (txtLatitude.getText() != null && txtLatitude.getText().toString().trim().equals("")
+                        && txtLongitude.getText() != null && txtLongitude.getText().toString().trim().equals("")) {
                     Toast.makeText(this, "Fazer Check-in é obrigatorio", Toast.LENGTH_SHORT).show();
                     verificaObrigatorios = false;
                 }
-            }else {
+            } else {
                 visita.setLongitude(String.valueOf(mLocation.getLongitude()));
                 visita.setLatitude(String.valueOf(mLocation.getLatitude()));
             }
 
         } else {
+
+            String dataRetorno = dataRetorno();
+            if (dataRetorno != null) {
+                visita.setDataRetorno(dataRetorno);
+            }
 
             if (edtDescricaoVisita.getText() != null && !edtDescricaoVisita.getText().toString().trim().equals("")) {
                 visita.setDescricaoVisita(edtDescricaoVisita.getText().toString());
@@ -229,19 +233,53 @@ public class ActivityVisita extends AppCompatActivity implements GoogleApiClient
         }
 
 
-        if (verificaObrigatorios){
-            if(db.atualizaTBL_VISITA_PROSPECT(visita)){
+        if (verificaObrigatorios) {
+            if (db.atualizaTBL_VISITA_PROSPECT(visita)) {
                 Toast.makeText(this, "Visita salva", Toast.LENGTH_LONG).show();
                 finish();
-            }else {
+            } else {
                 Toast.makeText(this, "Falha ao salvar", Toast.LENGTH_LONG).show();
             }
         }
 
     }
 
+    private String dataRetorno() {
+        if (edtDataRetornoVisita.getText() != null && !edtDataRetornoVisita.getText().toString().trim().isEmpty()) {
+            String dataCapturada = "";
+            Calendar dataAtual = new GregorianCalendar();
+            Calendar dataRetorno = new GregorianCalendar();
+            Date date = new Date();
+            dataAtual.setTime(date);
+
+            //pegar data da tela
+            try {
+                dataCapturada = new SimpleDateFormat("yyyy-MM-dd").format(new SimpleDateFormat("dd/MM/yyyy")
+                        .parse(edtDataRetornoVisita.getText().toString().trim()));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            //converte no mesmo padrão da capitura da atual
+            try {
+                dataRetorno.setTime(new SimpleDateFormat("yyyy-MM-dd").parse(dataCapturada));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            if (dataAtual.after(dataRetorno)) {
+                edtDataRetornoVisita.setBackgroundResource(R.drawable.borda_edittext_erro);
+                Toast.makeText(this, "Data deve ser posterior a atual", Toast.LENGTH_SHORT).show();
+                verificaObrigatorios = false;
+            } else {
+                return dataCapturada;
+            }
+        }
+        return null;
+    }
+
     @OnClick(R.id.btnCheckinVisita)
-    public void checkin(){
+    public void checkin() {
         progress = new ProgressDialog(ActivityVisita.this);
         progress.setMessage("Fazendo Check-in");
         progress.setTitle("Aguarde");
@@ -250,21 +288,21 @@ public class ActivityVisita extends AppCompatActivity implements GoogleApiClient
         EnableGPSAutoMatically();
     }
 
-    public void injetaDadosNaTela(){
-        try{
+    public void injetaDadosNaTela() {
+        try {
             edtDescricaoVisita.setText(VisitaHelper.getVisitaProspect().getDescricaoVisita());
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        try{
+        try {
             edtDataRetornoVisita.setText(new SimpleDateFormat("dd/MM/yyyy")
                     .format(new SimpleDateFormat("yyyy-MM-dd")
                             .parse(VisitaHelper.getVisitaProspect().getDataRetorno())));
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
-        if(VisitaHelper.getVisitaProspect().getLatitude() != null && VisitaHelper.getVisitaProspect().getLongitude() != null){
+        if (VisitaHelper.getVisitaProspect().getLatitude() != null && VisitaHelper.getVisitaProspect().getLongitude() != null) {
             progress = new ProgressDialog(ActivityVisita.this);
             progress.setMessage("Requisitando Endereço");
             progress.setTitle("Aguarde");
@@ -272,21 +310,21 @@ public class ActivityVisita extends AppCompatActivity implements GoogleApiClient
             getGeocoder();
         }
 
-        if(VisitaHelper.getVisitaProspect().getTipoContato() != null && VisitaHelper.getVisitaProspect().getTipoContato().equals(tipoVisita[0])){
+        if (VisitaHelper.getVisitaProspect().getTipoContato() != null && VisitaHelper.getVisitaProspect().getTipoContato().equals(tipoVisita[0])) {
             spTipoVisita.setSelection(0);
-        }else {
+        } else {
             spTipoVisita.setSelection(1);
         }
 
     }
 
-    public void getGeocoder(){
+    public void getGeocoder() {
         Rotas rotas = ApiGeocoder.buildRetrofit();
         Call<RespostaGeocoder> call;
-        if(mLocation != null){
-            call = rotas.getGeocoder(String.valueOf(mLocation.getLatitude())+","+String.valueOf(mLocation.getLongitude()), true, "pt-BR");
-        }else {
-            call = rotas.getGeocoder(VisitaHelper.getVisitaProspect().getLatitude()+","+VisitaHelper.getVisitaProspect().getLongitude(), true, "pt-BR");
+        if (mLocation != null) {
+            call = rotas.getGeocoder(String.valueOf(mLocation.getLatitude()) + "," + String.valueOf(mLocation.getLongitude()), true, "pt-BR");
+        } else {
+            call = rotas.getGeocoder(VisitaHelper.getVisitaProspect().getLatitude() + "," + VisitaHelper.getVisitaProspect().getLongitude(), true, "pt-BR");
         }
 
 
@@ -294,15 +332,15 @@ public class ActivityVisita extends AppCompatActivity implements GoogleApiClient
             @Override
             public void onResponse(Call<RespostaGeocoder> call, Response<RespostaGeocoder> response) {
                 respostaGeocoder = response.body();
-                if(response.body().getResult().size() > 0) {
+                if (response.body().getResult().size() > 0) {
                     txtChekinEndereco.setVisibility(View.VISIBLE);
                     txtChekinEndereco.setText(respostaGeocoder.getResult().get(1).getFormattedAddress());
-                }else {
+                } else {
                     txtLatitude.setVisibility(View.VISIBLE);
                     txtLongitude.setVisibility(View.VISIBLE);
                     txtLatitude.setText(String.valueOf(mLocation.getLatitude()));
                     txtLongitude.setText(String.valueOf(mLocation.getLongitude()));
-                    Toast.makeText(ActivityVisita.this,"Endereço não encontrado! somente latitude e longitude", Toast.LENGTH_LONG).show();
+                    Toast.makeText(ActivityVisita.this, "Endereço não encontrado! somente latitude e longitude", Toast.LENGTH_LONG).show();
                 }
                 progress.dismiss();
             }
@@ -310,12 +348,13 @@ public class ActivityVisita extends AppCompatActivity implements GoogleApiClient
             @Override
             public void onFailure(Call<RespostaGeocoder> call, Throwable t) {
                 progress.dismiss();
-                Toast.makeText(ActivityVisita.this,"Falha ao requisitar", Toast.LENGTH_LONG).show();
+                Toast.makeText(ActivityVisita.this, "Falha ao requisitar", Toast.LENGTH_LONG).show();
             }
         });
     }
 
-    public void pegarUltimaLocalizacao(){
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public void pegarUltimaLocalizacao() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             mFusedLocationClient.getLastLocation()
@@ -336,17 +375,18 @@ public class ActivityVisita extends AppCompatActivity implements GoogleApiClient
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         if (requestCode == 0) {
-            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+            if (grantResults.length == 1 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 progress = new ProgressDialog(ActivityVisita.this);
                 progress.setMessage("Fazendo Check-in");
                 progress.setTitle("Aguarde");
                 progress.show();
                 pegarUltimaLocalizacao();
             } else {
-                Toast.makeText(this, "Sem a permissão função indisponivel",Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Sem a permissão função indisponivel", Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -355,10 +395,10 @@ public class ActivityVisita extends AppCompatActivity implements GoogleApiClient
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == 1){
-            if(resultCode != 0){
+        if (requestCode == 1) {
+            if (resultCode != 0) {
                 Toast.makeText(ActivityVisita.this, "Tente Novamente", Toast.LENGTH_LONG).show();
-            }else {
+            } else {
                 Toast.makeText(ActivityVisita.this, "Sem Localização ativa, recurso indisponível", Toast.LENGTH_LONG).show();
             }
 
@@ -406,6 +446,7 @@ public class ActivityVisita extends AppCompatActivity implements GoogleApiClient
             PendingResult<LocationSettingsResult> result = LocationServices.SettingsApi
                     .checkLocationSettings(googleApiClient, builder.build());
             result.setResultCallback(new ResultCallback<LocationSettingsResult>() {
+                @RequiresApi(api = Build.VERSION_CODES.M)
                 @Override
                 public void onResult(LocationSettingsResult result) {
                     final Status status = result.getStatus();
