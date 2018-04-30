@@ -18,11 +18,9 @@ import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
@@ -58,15 +56,15 @@ public class ActivityListaProspect extends AppCompatActivity {
     @BindView(R.id.edtTotalProspect)
     EditText edtTotalProspect;
 
-    @BindView(R.id.spFiltaProspect)
-    Spinner spFiltraProspect;
+    @BindView(R.id.rgFiltaProspect)
+    RadioGroup rgFiltaProspect;
 
-    private String[] prospectLista = {"Ambos", "Pendentes", "Salvos"};
     private ListaProspectAdapter listaProspectAdapter;
     private ActionMode actionMode;
     private List<Prospect> listaProspect;
     private DBHelper db;
     private ProgressDialog progress;
+    private SearchView searchView;
 
     @OnClick(R.id.btnAddProspect)
     public void novoProspect() {
@@ -84,27 +82,56 @@ public class ActivityListaProspect extends AppCompatActivity {
         ButterKnife.bind(this);
         db = new DBHelper(this);
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.spinner, prospectLista);
-        adapter.setDropDownViewResource(R.layout.drop_down_spinner);
-        spFiltraProspect.setAdapter(adapter);
-
-        spFiltraProspect.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        rgFiltaProspect.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
                 try {
-                    DBHelper db = new DBHelper(ActivityListaProspect.this);
-                    listaProspect = db.listaProspect(spFiltraProspect.getSelectedItemPosition());
-                    preencheLista(listaProspect);
+                    if (actionMode != null)
+                        actionMode.finish();
+
+                    switch (checkedId) {
+                        case R.id.filtraProspectAmbos:
+                            listaProspect = db.listaProspect(Prospect.PROSPECT_PENDENTE_SALVO);
+                            if (searchView != null && !searchView.getQuery().toString().trim().isEmpty()) {
+                                preencheLista(buscaProspect(listaProspect, searchView.getQuery().toString()));
+                            } else {
+                                preencheLista(listaProspect);
+                                edtTotalProspect.setText(listaProspect.size() + ": Prospects Listados");
+                            }
+                            break;
+                        case R.id.filtraProspectPendentes:
+                            listaProspect = db.listaProspect(Prospect.PROSPECT_PENDENTE);
+                            if (searchView != null && !searchView.getQuery().toString().trim().isEmpty()) {
+                                preencheLista(buscaProspect(listaProspect, searchView.getQuery().toString()));
+                            } else {
+                                preencheLista(listaProspect);
+                                edtTotalProspect.setText(listaProspect.size() + ": Prospects Listados");
+                            }
+                            break;
+                        case R.id.filtraProspectSalvos:
+                            listaProspect = db.listaProspect(Prospect.PROSPECT_SALVO);
+                            if (searchView != null && !searchView.getQuery().toString().trim().isEmpty()) {
+                                preencheLista(buscaProspect(listaProspect, searchView.getQuery().toString()));
+                            } else {
+                                preencheLista(listaProspect);
+                                edtTotalProspect.setText(listaProspect.size() + ": Prospects Listados");
+                            }
+                            break;
+                        default:
+                            listaProspect = db.listaProspect(Prospect.PROSPECT_PENDENTE_SALVO);
+                            if (searchView != null && !searchView.getQuery().toString().trim().isEmpty()) {
+                                preencheLista(buscaProspect(listaProspect, searchView.getQuery().toString()));
+                            } else {
+                                preencheLista(listaProspect);
+                                edtTotalProspect.setText(listaProspect.size() + ": Prospects Listados");
+                            }
+                            break;
+                    }
                 } catch (CursorIndexOutOfBoundsException e) {
-                    recycleProspect.setVisibility(View.INVISIBLE);
                     e.printStackTrace();
+                    recycleProspect.setVisibility(View.INVISIBLE);
                     edtTotalProspect.setText("0: Prospects Listados");
                 }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
 
@@ -120,8 +147,6 @@ public class ActivityListaProspect extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.menu_cliente, menu);
-
-        SearchView searchView;
 
         final MenuItem item = menu.findItem(R.id.buscaCliente);
 
@@ -231,6 +256,7 @@ public class ActivityListaProspect extends AppCompatActivity {
                 e.printStackTrace();
             }
         }
+        edtTotalProspect.setText(lista.size() + ": Prospects Encontrados");
         return lista;
     }
 
@@ -368,10 +394,31 @@ public class ActivityListaProspect extends AppCompatActivity {
     public void atualizaTela() {
         try {
             DBHelper db = new DBHelper(this);
-            listaProspect = db.listaProspect(spFiltraProspect.getSelectedItemPosition());
-            preencheLista(listaProspect);
+            switch (rgFiltaProspect.getCheckedRadioButtonId()) {
+                case R.id.filtraProspectAmbos:
+                    listaProspect = db.listaProspect(Prospect.PROSPECT_PENDENTE_SALVO);
+                    edtTotalProspect.setText(listaProspect.size() + ": Prospects Listados");
+                    preencheLista(listaProspect);
+                    break;
+                case R.id.filtraProspectPendentes:
+                    listaProspect = db.listaProspect(Prospect.PROSPECT_PENDENTE);
+                    edtTotalProspect.setText(listaProspect.size() + ": Prospects Listados");
+                    preencheLista(listaProspect);
+                    break;
+                case R.id.filtraProspectSalvos:
+                    listaProspect = db.listaProspect(Prospect.PROSPECT_SALVO);
+                    edtTotalProspect.setText(listaProspect.size() + ": Prospects Listados");
+                    preencheLista(listaProspect);
+                    break;
+                default:
+                    listaProspect = db.listaProspect(Prospect.PROSPECT_PENDENTE_SALVO);
+                    edtTotalProspect.setText(listaProspect.size() + ": Prospects Listados");
+                    preencheLista(listaProspect);
+                    break;
+            }
         } catch (CursorIndexOutOfBoundsException e) {
             e.printStackTrace();
+            recycleProspect.setVisibility(View.INVISIBLE);
             edtTotalProspect.setText("0: Prospects Listados");
         }
     }

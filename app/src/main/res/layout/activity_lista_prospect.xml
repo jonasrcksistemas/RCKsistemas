@@ -1,43 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/lyRecycler"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/lyRecycler"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_weight="1"
+    android:orientation="vertical"
+    tools:context="com.example.rcksuporte05.rcksistemas.activity.ActivityListaProspect">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:orientation="vertical"
-        tools:context="com.example.rcksuporte05.rcksistemas.activity.ActivityListaProspect">
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:theme="@style/Theme.Toolbar"
+        app:title="Prospect" />
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
+    <RadioGroup
+        android:id="@+id/rgFiltaProspect"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="15dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/filtraProspectAmbos"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/colorPrimary"
-            android:theme="@style/Theme.Toolbar"
-            app:title="Prospect">
+            android:checked="true"
+            android:text="Ambos" />
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end">
+        <RadioButton
+            android:id="@+id/filtraProspectPendentes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pendentes" />
 
-                <Spinner
-                    android:id="@+id/spFiltaProspect"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_below="@id/txtNomeCliente"
-                    android:layout_marginTop="15dp"
-                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-                    android:theme="@style/Theme.MeuTemaPedido" />
+        <RadioButton
+            android:id="@+id/filtraProspectSalvos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Salvos" />
 
-            </LinearLayout>
-
-        </android.support.v7.widget.Toolbar>
+    </RadioGroup>
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -56,8 +63,9 @@
             android:id="@+id/btnAddProspect"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
             android:layout_gravity="end"
             android:layout_marginBottom="12dp"
             android:layout_marginEnd="12dp"
@@ -67,13 +75,14 @@
             android:gravity="center_horizontal|center_vertical"
             android:text="+"
             android:textColor="@color/colorPrimaryDark"
-            android:textSize="25sp"
-            android:layout_alignParentEnd="true" />
+            android:textSize="25sp" />
     </RelativeLayout>
+
     <LinearLayout
-        android:layout_weight="0"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_weight="0">
+
         <EditText
             android:id="@+id/edtTotalProspect"
             android:layout_width="match_parent"
@@ -82,6 +91,8 @@
             android:background="#dddfdd"
             android:focusable="false"
             android:gravity="end"
+            android:paddingEnd="10dp"
+            android:paddingRight="10dp"
             android:text="total" />
     </LinearLayout>
 
