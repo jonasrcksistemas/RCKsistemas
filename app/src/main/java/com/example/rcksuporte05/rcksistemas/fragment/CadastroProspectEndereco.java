@@ -129,7 +129,7 @@ public class CadastroProspectEndereco extends Fragment {
             }
         });
 
-        if(ProspectHelper.getPaises().size() > 0){
+        if (ProspectHelper.getPaises().size() > 0) {
             paisAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_activated_1, ProspectHelper.getPaises());
             spPaisProspect.setAdapter(paisAdapter);
             spPaisProspect.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -200,22 +200,22 @@ public class CadastroProspectEndereco extends Fragment {
         return view;
     }
 
-    public void injetaDadosNaTela(){
+    public void injetaDadosNaTela() {
 
-        if(ProspectHelper.getProspect().getEndereco() != null){
+        if (ProspectHelper.getProspect().getEndereco() != null) {
             edtEnderecoProspect.setText(ProspectHelper.getProspect().getEndereco());
 
         }
-        if(ProspectHelper.getProspect().getEndereco_numero() != null){
+        if (ProspectHelper.getProspect().getEndereco_numero() != null) {
             edtNumeroProspect.setText(ProspectHelper.getProspect().getEndereco_numero());
 
         }
-        if(ProspectHelper.getProspect().getEndereco_bairro() != null){
+        if (ProspectHelper.getProspect().getEndereco_bairro() != null) {
             edtBairroProspect.setText(ProspectHelper.getProspect().getEndereco_bairro());
 
         }
 
-        if(ProspectHelper.getProspect().getEndereco_cep() != null){
+        if (ProspectHelper.getProspect().getEndereco_cep() != null) {
             edtCep.setText(ProspectHelper.getProspect().getEndereco_cep());
         }
 
@@ -256,7 +256,6 @@ public class CadastroProspectEndereco extends Fragment {
         }
 
 
-
         if (ProspectHelper.getProspect().getNome_municipio() != null && !ProspectHelper.getProspect().getNome_municipio().trim().isEmpty()) {
             for (int i = 0; getResources().getStringArray(listaUf[spUfProspect.getSelectedItemPosition()]).length > i; i++) {
                 if (ProspectHelper.getProspect().getNome_municipio().equals(getResources().getStringArray(listaUf[ProspectHelper.getPosicaoUf()])[i])) {
@@ -269,10 +268,10 @@ public class CadastroProspectEndereco extends Fragment {
 
         if (ProspectHelper.getProspect().getSituacaoPredio() != null && !ProspectHelper.getProspect().getSituacaoPredio().trim().isEmpty()) {
             switch (ProspectHelper.getProspect().getSituacaoPredio()) {
-                case "Alugado":
+                case "ALUGADO":
                     rdAlugado.setChecked(true);
                     break;
-                case "Proprio":
+                case "PROPRIO":
                     rdProprio.setChecked(true);
                     break;
             }
@@ -281,27 +280,27 @@ public class CadastroProspectEndereco extends Fragment {
 
 
     @SuppressLint("ResourceType")
-    public void inserirDadosDaFrame(){
-        if(edtEnderecoProspect.getText() != null){
+    public void inserirDadosDaFrame() {
+        if (edtEnderecoProspect.getText() != null) {
             ProspectHelper.getProspect().setEndereco(edtEnderecoProspect.getText().toString());
         }
 
-        if(edtNumeroProspect.getText() != null){
+        if (edtNumeroProspect.getText() != null) {
             ProspectHelper.getProspect().setEndereco_numero(edtNumeroProspect.getText().toString());
         }
 
-        if(edtBairroProspect.getText() != null){
+        if (edtBairroProspect.getText() != null) {
             ProspectHelper.getProspect().setEndereco_bairro(edtBairroProspect.getText().toString());
         }
 
 
-        if(edtCep.getText() != null){
+        if (edtCep.getText() != null) {
             ProspectHelper.getProspect().setEndereco_cep(edtCep.getText().toString());
         }
 
-        if(rgSituacaoPredio.getCheckedRadioButtonId() > 0){
+        if (rgSituacaoPredio.getCheckedRadioButtonId() > 0) {
             rdSituacaoPredio = (RadioButton) view.findViewById(rgSituacaoPredio.getCheckedRadioButtonId());
-            ProspectHelper.getProspect().setSituacaoPredio(rdSituacaoPredio.getText().toString());
+            ProspectHelper.getProspect().setSituacaoPredio(rdSituacaoPredio.getText().toString().toUpperCase());
         }
 
         if (edtComplementoProspect.getText() != null && !edtComplementoProspect.getText().toString().trim().isEmpty()) {
