@@ -530,7 +530,7 @@ public class CadastroProspectFotoSalvar extends Fragment implements GoogleApiCli
                 progress.show();
                 pegarUltimaLocalizacao();
             } else {
-                Toast.makeText(getContext(), "Sem a permissão função indisponivel", Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "Sem a permissão, função indisponivel!", Toast.LENGTH_LONG).show();
             }
         }
     }

@@ -198,8 +198,6 @@ public class PedidoHelper {
                                     webPedido.setDesconto_per(String.valueOf(mediaDesconto));
                                     webPedido.setValor_produtos(String.valueOf(valorProdutos));
                                     webPedido.setValor_desconto(String.valueOf(descontoReal));
-                                    webPedido.setPontos_cor(db.consulta("SELECT I.COR_WEB, I.ID_ITEM FROM TBL_TABELA_PRECO_ITENS I JOIN TBL_TABELA_PRECO_CAB T ON T.ID_TABELA=I.ID_TABELA WHERE PERC_DESC_INICIAL<= " + mediaDesconto + " AND PERC_DESC_FINAL>= " + mediaDesconto + ";", "COR_WEB"));
-                                    webPedido.setId_tabela_preco_faixa(db.consulta("SELECT I.COR_WEB, I.ID_ITEM FROM TBL_TABELA_PRECO_ITENS I JOIN TBL_TABELA_PRECO_CAB T ON T.ID_TABELA=I.ID_TABELA WHERE PERC_DESC_INICIAL<= " + mediaDesconto + " AND PERC_DESC_FINAL>= " + mediaDesconto + ";", "ID_ITEM"));
                                     //TODO Verificar rotina de exclusão dos produtos excluidos
                                     if (Pedido1.listaProdutoRemovido.size() > 0 && PedidoHelper.getIdPedido() > 0) {
                                         PedidoBO pedidoBO = new PedidoBO();

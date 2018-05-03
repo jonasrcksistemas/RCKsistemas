@@ -11,9 +11,6 @@ import android.graphics.Matrix;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.FileUriExposedException;
-import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -38,14 +35,17 @@ import com.example.rcksuporte05.rcksistemas.api.Rotas;
 import com.example.rcksuporte05.rcksistemas.model.Sincronia;
 import com.example.rcksuporte05.rcksistemas.model.Usuario;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -54,18 +54,39 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
     private static final int sair = 1;
     private static final int AtualizarBanco = 2;
     private static final int Sobre = 3;
-    private static final int Foto = 4;
-    private Button btnCliente;
-    private Button btnProduto;
-    private Button btnPedidos;
-    private Button btnSincroniza;
-    private Button btnPedidoFinalizado;
-    private Button btnPedidoPendente;
-    private Button btnProspectNovo;
-    private Button btnProspectLista;
+//    private static final int Foto = 4;
+
+    @BindView(R.id.btnCliente)
+    Button btnCliente;
+
+    @BindView(R.id.btnProduto)
+    Button btnProduto;
+
+    @BindView(R.id.btnPedido)
+    Button btnPedidos;
+
+    @BindView(R.id.btnSincroniza)
+    Button btnSincroniza;
+
+    @BindView(R.id.btnPedidoFinalizado)
+    Button btnPedidoFinalizado;
+
+    @BindView(R.id.btnPedidoPendente)
+    Button btnPedidoPendente;
+
+    @BindView(R.id.btnProspectNovo)
+    Button btnProspectNovo;
+
+    @BindView(R.id.btnProspectListar)
+    Button btnProspectLista;
+
+    @BindView(R.id.ivInternet)
+    ImageView ivInternet;
+
+    @BindView(R.id.tb_principal)
+    Toolbar tb_principal;
+
     private int aperta = 0;
-    private Toolbar tb_principal;
-    private ImageView ivInternet;
     private SincroniaBO sincroniaBO = new SincroniaBO();
     private Sincronia sincronia;
     private List<Usuario> usuarioList = new ArrayList<>();
@@ -78,18 +99,9 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_principal);
-
+        ButterKnife.bind(this);
         db = new DBHelper(this);
 
-        btnCliente = (Button) findViewById(R.id.btnCliente);
-        btnProduto = (Button) findViewById(R.id.btnProduto);
-        btnPedidos = (Button) findViewById(R.id.btnPedido);
-        btnSincroniza = (Button) findViewById(R.id.btnSincroniza);
-        btnPedidoFinalizado = (Button) findViewById(R.id.btnPedidoFinalizado);
-        btnPedidoPendente = (Button) findViewById(R.id.btnPedidoPendente);
-        btnProspectNovo = (Button) findViewById(R.id.btnProspectNovo);
-        btnProspectLista = (Button) findViewById(R.id.btnProspectListar);
-        ivInternet = (ImageView) findViewById(R.id.ivInternet);
         btnPedidos.setOnClickListener(this);
         btnProduto.setOnClickListener(this);
         btnCliente.setOnClickListener(this);
@@ -98,7 +110,6 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
         btnPedidoFinalizado.setOnClickListener(this);
         btnProspectNovo.setOnClickListener(this);
         btnProspectLista.setOnClickListener(this);
-        tb_principal = (Toolbar) findViewById(R.id.tb_principal);
         tb_principal.setTitle(getString(R.string.app_name));
         tb_principal.setSubtitle("Usuario: " + UsuarioHelper.getUsuario().getNome_usuario());
         tb_principal.setLogo(R.mipmap.ic_launcher);
@@ -108,9 +119,7 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
         if (ContextCompat.checkSelfPermission(PrincipalActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(PrincipalActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(PrincipalActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA}, 0);
         }
-
         setSupportActionBar(tb_principal);
-
     }
 
     @Override
@@ -129,7 +138,6 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
             getUsuarios();
             Intent intent = new Intent(PrincipalActivity.this, ActivityPedidoMain.class);
             startActivity(intent);
-//            Toast.makeText(this, "Novas Politicas de Vendas, função temporariamente inativa", Toast.LENGTH_SHORT).show();
         } else if (view == btnSincroniza) {
             getUsuarios();
             Intent intent = new Intent(PrincipalActivity.this, ActivityDialogSincronia.class);
@@ -138,11 +146,9 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
         } else if (view == btnPedidoFinalizado) {
             Intent telaPedidoEnviado = new Intent(PrincipalActivity.this, ListagemPedidoEnviado.class);
             startActivity(telaPedidoEnviado);
-//            Toast.makeText(this, "Novas Politicas de Vendas, função temporariamente inativa", Toast.LENGTH_SHORT).show();
         } else if (view == btnPedidoPendente) {
             Intent telaPedidoPendentes = new Intent(PrincipalActivity.this, ListagemPedidoPendente.class);
             startActivity(telaPedidoPendentes);
-//            Toast.makeText(this, "Novas Politicas de Vendas, função temporariamente inativa", Toast.LENGTH_SHORT).show();
         } else if (view == btnProspectNovo) {
             getUsuarios();
             Intent intent = new Intent(PrincipalActivity.this, ActivityListaProspect.class);
@@ -182,7 +188,7 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
     public boolean onCreateOptionsMenu(Menu menu) {
         menu.add(0, sair, 0, "Sair");
         menu.add(0, Sobre, 0, "Informações do sistema");
-        menu.add(0, Foto, 0, "Tirar uma foto");
+//        menu.add(0, Foto, 0, "Tirar uma foto");
 
 
         if (UsuarioHelper.getUsuario().getNome_usuario().equalsIgnoreCase("RCK SISTEMAS")) {
@@ -218,11 +224,12 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                 startActivity(intent);
                 break;
 
-            case Foto:
+            /*case Foto:
                 AlertDialog.Builder fotoAcao = new AlertDialog.Builder(PrincipalActivity.this);
                 fotoAcao.setTitle("Escolha a forma de capturar a imagem");
                 String[] array = {"Camera", "Galeria"};
                 fotoAcao.setItems(array, new DialogInterface.OnClickListener() {
+                    @RequiresApi(api = Build.VERSION_CODES.N)
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         switch (which) {
@@ -250,7 +257,7 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                 });
                 fotoAcao.show();
 
-                break;
+                break;*/
         }
         return false;
     }
@@ -348,6 +355,9 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
             public void onResponse(Call<List<Usuario>> call, Response<List<Usuario>> response) {
                 usuarioList = response.body();
                 ivInternet.setVisibility(View.GONE);
+                if (!db.consulta("SELECT DATA_SINCRONIA FROM TBL_LOGIN", "DATA_SINCRONIA").equals(new SimpleDateFormat("yyyy-MM-dd").format(new Date()))) {
+                    Toast.makeText(PrincipalActivity.this, "Sincronia atrasada, por favor faça a sincronia!", Toast.LENGTH_SHORT).show();
+                }
                 if (!usuarioBO.sincronizaNobanco(usuarioList, PrincipalActivity.this))
                     Toast.makeText(PrincipalActivity.this, "Houve um erro ao salvar os usuarios", Toast.LENGTH_LONG).show();
                 else {

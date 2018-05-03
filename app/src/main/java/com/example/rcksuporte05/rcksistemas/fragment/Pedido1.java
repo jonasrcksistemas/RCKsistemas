@@ -184,14 +184,16 @@ public class Pedido1 extends Fragment implements ListaAdapterProdutoPedido.Produ
             idCliente = ClienteHelper.getCliente().getId_cadastro();
             tabelaPrecoItem = db.listaTabelaPrecoItem("SELECT * FROM TBL_TABELA_PRECO_ITENS WHERE ID_CATEGORIA = " + ClienteHelper.getCliente().getIdCategoria()).get(0);
             PedidoBO pedidoBO = new PedidoBO();
-            for (WebPedidoItens webPedidoItens : listaProdutoPedido) {
-                Float descontoPedido = pedidoBO.calculaDesconto(ClienteHelper.getCliente().getId_cadastro(), webPedidoItens.getId_produto(), getActivity()).getValorDesconto();
-                if (descontoPedido <= 0 || Float.parseFloat(tabelaPrecoItem.getPerc_desc_final()) > descontoPedido)
-                    descontoPedido = Float.parseFloat(tabelaPrecoItem.getPerc_desc_final());
-                if (Float.parseFloat(webPedidoItens.getValor_desconto_per()) > descontoPedido)
-                    webPedidoItens.setDescontoIndevido(true);
-                else
-                    webPedidoItens.setDescontoIndevido(false);
+            if (bundle.getInt("vizualizacao") != 1) {
+                for (WebPedidoItens webPedidoItens : listaProdutoPedido) {
+                    Float descontoPedido = pedidoBO.calculaDesconto(ClienteHelper.getCliente().getId_cadastro(), webPedidoItens.getId_produto(), getActivity()).getValorDesconto();
+                    if (descontoPedido <= 0 || Float.parseFloat(tabelaPrecoItem.getPerc_desc_final()) > descontoPedido)
+                        descontoPedido = Float.parseFloat(tabelaPrecoItem.getPerc_desc_final());
+                    if (Float.parseFloat(webPedidoItens.getValor_desconto_per()) > descontoPedido)
+                        webPedidoItens.setDescontoIndevido(true);
+                    else
+                        webPedidoItens.setDescontoIndevido(false);
+                }
             }
             listaAdapterProdutoPedido.notifyDataSetChanged();
         }
@@ -218,22 +220,29 @@ public class Pedido1 extends Fragment implements ListaAdapterProdutoPedido.Produ
         if (listaAdapterProdutoPedido.getSelectedItemCount() > 0) {
             toggleSelection(position);
         } else {
-            if (bundle.getInt("vizualizacao") != 1) {
-                Intent intent = new Intent(getContext(), ProdutoPedidoActivity.class);
-                intent.putExtra("pedido", 1);
-                intent.putExtra("position", position);
-                PedidoHelper.setWebPedidoItem(listaProdutoPedido.get(position));
-                startActivity(intent);
+            if (listaProdutoPedido.get(position).getProdutoBase()) {
+                if (bundle.getInt("vizualizacao") != 1) {
+                    Intent intent = new Intent(getContext(), ProdutoPedidoActivity.class);
+                    intent.putExtra("pedido", 1);
+                    intent.putExtra("position", position);
+                    PedidoHelper.setWebPedidoItem(listaProdutoPedido.get(position));
+                    startActivity(intent);
+                } else {
+                    Intent intent = new Intent(getContext(), ProdutoPedidoActivity.class);
+                    intent.putExtra("pedido", 1);
+                    intent.putExtra("vizualizacao", 1);
+                    intent.putExtra("position", position);
+                    PedidoHelper.setWebPedidoItem(listaProdutoPedido.get(position));
+                    startActivity(intent);
+                }
             } else {
-                Intent intent = new Intent(getContext(), ProdutoPedidoActivity.class);
-                intent.putExtra("pedido", 1);
-                intent.putExtra("vizualizacao", 1);
-                intent.putExtra("position", position);
-                PedidoHelper.setWebPedidoItem(listaProdutoPedido.get(position));
-                startActivity(intent);
+                AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+                alert.setTitle("Atenção!");
+                alert.setMessage("O produto " + listaProdutoPedido.get(position).getNome_produto() + " não esta mais disponivel para venda externa!");
+                alert.setNeutralButton("OK", null);
+                alert.show();
             }
         }
-
     }
 
     @Override

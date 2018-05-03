@@ -213,7 +213,11 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            webPedidoItem = new WebPedidoItens(PedidoHelper.getProduto());
+            try {
+                webPedidoItem = new WebPedidoItens(PedidoHelper.getProduto());
+            } catch (NullPointerException nullPointer) {
+                nullPointer.printStackTrace();
+            }
         }
 
         if (Float.parseFloat(edtDesconto.getText().toString()) <= 0)

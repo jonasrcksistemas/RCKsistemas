@@ -113,7 +113,7 @@
                 android:id="@+id/id_opcao_prospect"
                 android:layout_width="245dp"
                 android:layout_height="wrap_content"
-                android:checked="false"
+                android:checked="true"
                 android:text="Prospects Pendentes"
                 android:textColor="@color/colorAccent"
                 android:textSize="16sp" />
@@ -147,7 +147,7 @@
                 android:id="@+id/id_opcao_visiatas_pendentes"
                 android:layout_width="245dp"
                 android:layout_height="wrap_content"
-                android:checked="false"
+                android:checked="true"
                 android:text="Visitas Pendentes"
                 android:textColor="@color/colorAccent"
                 android:textSize="16sp" />

@@ -42,7 +42,8 @@ public class WebPedidoItens extends Produto {
     private String valor_preco_pago;
     private String id_web_item_servidor;
     private String tipoDesconto;
-    private Boolean descontoIndevido;
+    private Boolean descontoIndevido = false;
+    private Boolean produtoBase = true;
 
     public WebPedidoItens(Produto produto) {
         this.setAtivo(produto.getAtivo());
@@ -479,5 +480,13 @@ public class WebPedidoItens extends Produto {
 
     public void setDescontoIndevido(Boolean descontoIndevido) {
         this.descontoIndevido = descontoIndevido;
+    }
+
+    public Boolean getProdutoBase() {
+        return produtoBase;
+    }
+
+    public void setProdutoBase(Boolean produtoBase) {
+        this.produtoBase = produtoBase;
     }
 }

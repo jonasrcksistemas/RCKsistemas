@@ -34,7 +34,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private static String NomeBanco = "Banco.db";
 
     public DBHelper(Context context) {
-        super(context, NomeBanco, null, 3);
+        super(context, NomeBanco, null, 2);
     }
 
     @Override
@@ -79,7 +79,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 "SENHA VARCHAR(100), " +
                 "LOGADO VARCHAR(1), " +
                 "TOKEN VARCHAR(60), " +
-                "APARELHO_ID VARCHAR(20));");
+                "APARELHO_ID VARCHAR(20), " +
+                "DATA_SINCRONIA VARCAHR(10));");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS TBL_CADASTRO " +
                 "(ATIVO VARCHAR(1) DEFAULT 'S'  NOT NULL ," +
@@ -420,7 +421,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 "VALOR_PRECO_PAGO DECIMAL(12, 8)," +
                 "ITEM_ENVIADO VARCHAR(1) DEFAULT 'N'," +
                 "ID_WEB_ITEM_SERVIDOR INTEGER," +
-                "TIPO_DESCONTO VARCHAR(1) DEFAULT 'P');");
+                "TIPO_DESCONTO VARCHAR(1) DEFAULT 'P', " +
+                "NOME_PRODUTO VARCHAR(60));");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS TBL_PROSPECT " +
                 "(ATIVO VARCHAR(1) DEFAULT 'S' NOT NULL," +
@@ -676,9 +678,9 @@ public class DBHelper extends SQLiteOpenHelper {
                     "ID_VISITA_SERVIDOR INTEGER, " +
                     "ID_CADASTRO INTEGER);");
 
-//            db.execSQL("ALTER TABLE TBL_TABELA_PRECO_ITENS ADD COLUMN ID_CATEGORIA INTEGER;");
+            db.execSQL("ALTER TABLE TBL_TABELA_PRECO_ITENS ADD COLUMN ID_CATEGORIA INTEGER;");
 
-//            db.execSQL("ALTER TABLE TBL_CADASTRO ADD COLUMN ID_CATEGORIA INTEGER;");
+            db.execSQL("ALTER TABLE TBL_CADASTRO ADD COLUMN ID_CATEGORIA INTEGER;");
 
             db.execSQL("CREATE TABLE IF NOT EXISTS TBL_CADASTRO_CATEGORIA(ID_CATEGORIA INTEGER NOT NULL PRIMARY KEY," +
                     "  ID_EMPRESA     INTEGER    NOT NULL," +
@@ -731,7 +733,9 @@ public class DBHelper extends SQLiteOpenHelper {
                     "  CONSTRAINT PK_TBL_PROMOCAO_PRODUTO" +
                     "  PRIMARY KEY (ID_PROMOCAO, ID_PRODUTO));");
 
-//            db.execSQL("ALTER TABLE TBL_WEB_PEDIDO_ITENS ADD COLUMN TIPO_DESCONTO VARCHAR(1) DEFAULT 'P';");
+            db.execSQL("ALTER TABLE TBL_WEB_PEDIDO_ITENS ADD COLUMN TIPO_DESCONTO VARCHAR(1) DEFAULT 'P';");
+
+            db.execSQL("ALTER TABLE TBL_WEB_PEDIDO_ITENS ADD COLUMN NOME_PRODUTO VARCHAR(60);");
 
             db.execSQL("DROP TABLE TBL_WEB_PEDIDO");
 
@@ -779,6 +783,8 @@ public class DBHelper extends SQLiteOpenHelper {
             db.execSQL("ALTER TABLE TBL_PROSPECT ADD COLUMN ID_VENDEDOR INTEGER;");
 
             db.execSQL("ALTER TABLE TBL_PROSPECT ADD COLUMN ID_CATEGORIA INTEGER;");
+
+            db.execSQL("ALTER TABLE TBL_LOGIN ADD COLUMN DATA_SINCRONIA VARCAHR(10);");
         }
     }
 

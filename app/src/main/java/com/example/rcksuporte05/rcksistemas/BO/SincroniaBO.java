@@ -548,6 +548,7 @@ public class SincroniaBO {
             @Override
             public void run() {
                 progress.dismiss();
+                db.alterar("UPDATE TBL_LOGIN SET DATA_SINCRONIA = '" + db.pegaDataAtual() + "';");
                 alert.show();
             }
         });

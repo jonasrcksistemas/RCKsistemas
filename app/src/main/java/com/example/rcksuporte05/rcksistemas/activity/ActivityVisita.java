@@ -260,7 +260,7 @@ public class ActivityVisita extends AppCompatActivity implements GoogleApiClient
                 e.printStackTrace();
             }
 
-            //converte no mesmo padrão da capitura da atual
+            //converte no mesmo padrão da captura da atual
             try {
                 dataRetorno.setTime(new SimpleDateFormat("yyyy-MM-dd").parse(dataCapturada));
             } catch (ParseException e) {

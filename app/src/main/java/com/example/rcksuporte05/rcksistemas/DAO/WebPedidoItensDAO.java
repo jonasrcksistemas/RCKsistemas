@@ -2,6 +2,7 @@ package com.example.rcksuporte05.rcksistemas.DAO;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.CursorIndexOutOfBoundsException;
 
 import com.example.rcksuporte05.rcksistemas.model.WebPedidoItens;
 
@@ -57,6 +58,7 @@ public class WebPedidoItensDAO {
         content.put("VALOR_PRECO_PAGO", webPedidoItem.getValor_preco_pago());
         content.put("TIPO_DESCONTO", webPedidoItem.getTipoDesconto());
         content.put("VALOR_DESCONTO_PER", webPedidoItem.getValor_desconto_per());
+        content.put("NOME_PRODUTO", webPedidoItem.getNome_produto());
 
         db.salvarDados("TBL_WEB_PEDIDO_ITENS", content);
         System.gc();
@@ -107,6 +109,7 @@ public class WebPedidoItensDAO {
         content.put("VALOR_PRECO_PAGO", webPedidoItem.getValor_preco_pago());
         content.put("TIPO_DESCONTO", webPedidoItem.getTipoDesconto());
         content.put("VALOR_DESCONTO_PER", webPedidoItem.getValor_desconto_per());
+        content.put("NOME_PRODUTO", webPedidoItem.getNome_produto());
 
         if (db.contagem("SELECT COUNT(*) FROM TBL_WEB_PEDIDO_ITENS WHERE ID_WEB_ITEM = " + webPedidoItem.getId_web_item()) <= 0) {
             db.salvarDados("TBL_WEB_PEDIDO_ITENS", content);
@@ -168,7 +171,14 @@ public class WebPedidoItensDAO {
             webPedidoItens.setPontos_total_orig(cursor.getString(cursor.getColumnIndex("PONTOS_TOTAL_ORIG")));
             webPedidoItens.setPontos_cor_orig(cursor.getString(cursor.getColumnIndex("PONTOS_COR_ORIG")));
             webPedidoItens.setTipoDesconto(cursor.getString(cursor.getColumnIndex("TIPO_DESCONTO")));
-            webPedidoItens.setProduto(db.listaProduto("SELECT * FROM TBL_PRODUTO WHERE ID_PRODUTO = '" + webPedidoItens.getId_produto() + "'").get(0));
+            try {
+                webPedidoItens.setProduto(db.listaProduto("SELECT * FROM TBL_PRODUTO WHERE ID_PRODUTO = '" + webPedidoItens.getId_produto() + "'").get(0));
+                webPedidoItens.setProdutoBase(true);
+            } catch (CursorIndexOutOfBoundsException e) {
+                webPedidoItens.setProdutoBase(false);
+                webPedidoItens.setNome_produto(cursor.getString(cursor.getColumnIndex("NOME_PRODUTO")));
+                e.printStackTrace();
+            }
 
             lista.add(webPedidoItens);
             System.gc();
