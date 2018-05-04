@@ -52,13 +52,11 @@ public class Pedido2 extends Fragment {
     private Bundle bundle;
     private PedidoHelper pedidoHelper;
     private EditText edtDataEntrega;
-    private Button btnDataEntrega;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_pedido2, container, false);
         ButterKnife.bind(this, view);
-
 
         db = new DBHelper(PedidoHelper.getActivityPedidoMain());
         webPedidoDAO = new WebPedidoDAO(db);
@@ -69,7 +67,6 @@ public class Pedido2 extends Fragment {
 
         edtObservacao = (EditText) view.findViewById(R.id.edtObservacao);
         edtDataEntrega = (EditText) view.findViewById(R.id.edtDataEntrega);
-        btnDataEntrega = (Button) view.findViewById(R.id.btnDataEntrega);
 
         try {
             spPagamento = (Spinner) view.findViewById(R.id.spPagamento);
@@ -170,7 +167,7 @@ public class Pedido2 extends Fragment {
             edtDataEntrega.setFocusable(false);
             spOperacao.setEnabled(false);
         } else {
-            btnDataEntrega.setOnClickListener(new View.OnClickListener() {
+            edtDataEntrega.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     mostraDatePickerDialog(PedidoHelper.getActivityPedidoMain(), edtDataEntrega);

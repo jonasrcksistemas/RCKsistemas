@@ -678,9 +678,17 @@ public class DBHelper extends SQLiteOpenHelper {
                     "ID_VISITA_SERVIDOR INTEGER, " +
                     "ID_CADASTRO INTEGER);");
 
-            db.execSQL("ALTER TABLE TBL_TABELA_PRECO_ITENS ADD COLUMN ID_CATEGORIA INTEGER;");
+            try {
+                db.execSQL("ALTER TABLE TBL_TABELA_PRECO_ITENS ADD COLUMN ID_CATEGORIA INTEGER;");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
-            db.execSQL("ALTER TABLE TBL_CADASTRO ADD COLUMN ID_CATEGORIA INTEGER;");
+            try {
+                db.execSQL("ALTER TABLE TBL_CADASTRO ADD COLUMN ID_CATEGORIA INTEGER;");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
             db.execSQL("CREATE TABLE IF NOT EXISTS TBL_CADASTRO_CATEGORIA(ID_CATEGORIA INTEGER NOT NULL PRIMARY KEY," +
                     "  ID_EMPRESA     INTEGER    NOT NULL," +
@@ -733,9 +741,17 @@ public class DBHelper extends SQLiteOpenHelper {
                     "  CONSTRAINT PK_TBL_PROMOCAO_PRODUTO" +
                     "  PRIMARY KEY (ID_PROMOCAO, ID_PRODUTO));");
 
-            db.execSQL("ALTER TABLE TBL_WEB_PEDIDO_ITENS ADD COLUMN TIPO_DESCONTO VARCHAR(1) DEFAULT 'P';");
+            try {
+                db.execSQL("ALTER TABLE TBL_WEB_PEDIDO_ITENS ADD COLUMN TIPO_DESCONTO VARCHAR(1) DEFAULT 'P';");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
-            db.execSQL("ALTER TABLE TBL_WEB_PEDIDO_ITENS ADD COLUMN NOME_PRODUTO VARCHAR(60);");
+            try {
+                db.execSQL("ALTER TABLE TBL_WEB_PEDIDO_ITENS ADD COLUMN NOME_PRODUTO VARCHAR(60);");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
             db.execSQL("DROP TABLE TBL_WEB_PEDIDO");
 
@@ -780,11 +796,23 @@ public class DBHelper extends SQLiteOpenHelper {
                     " ID_WEB_PEDIDO_SERVIDOR INTEGER," +
                     " DATA_PREV_ENTREGA DATE);");
 
-            db.execSQL("ALTER TABLE TBL_PROSPECT ADD COLUMN ID_VENDEDOR INTEGER;");
+            try {
+                db.execSQL("ALTER TABLE TBL_PROSPECT ADD COLUMN ID_VENDEDOR INTEGER;");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
-            db.execSQL("ALTER TABLE TBL_PROSPECT ADD COLUMN ID_CATEGORIA INTEGER;");
+            try {
+                db.execSQL("ALTER TABLE TBL_PROSPECT ADD COLUMN ID_CATEGORIA INTEGER;");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
-            db.execSQL("ALTER TABLE TBL_LOGIN ADD COLUMN DATA_SINCRONIA VARCAHR(10);");
+            try {
+                db.execSQL("ALTER TABLE TBL_LOGIN ADD COLUMN DATA_SINCRONIA VARCAHR(10);");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

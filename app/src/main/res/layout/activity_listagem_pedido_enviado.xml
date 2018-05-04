@@ -33,5 +33,7 @@
         android:background="#dddfdd"
         android:focusable="false"
         android:gravity="end"
+        android:paddingEnd="10dp"
+        android:paddingRight="10dp"
         android:text="0: Pedidos Enviados" />
 </LinearLayout>

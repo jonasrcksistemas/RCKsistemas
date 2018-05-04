@@ -5,11 +5,11 @@
     android:id="@+id/activity_produto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_weight="1"
     android:orientation="vertical"
     app:theme="@style/Theme.Toolbar"
     tools:context="com.example.rcksuporte05.rcksistemas.activity.ActivityProduto"
-    tools:showIn="com.example.rcksuporte05.rcksistemas.ActivityProduto"
-    android:layout_weight="1">
+    tools:showIn="com.example.rcksuporte05.rcksistemas.ActivityProduto">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/tb_produto"
@@ -24,8 +24,7 @@
         android:id="@+id/listaProdutoRecycler"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"
-        />
+        android:layout_weight="1" />
 
     <EditText
         android:id="@+id/edtTotalProdutos"
@@ -35,6 +34,8 @@
         android:background="#dddfdd"
         android:focusable="false"
         android:gravity="end"
-        android:text="Não há produtos a serem exibidos!   "/>
+        android:paddingEnd="10dp"
+        android:paddingRight="10dp"
+        android:text="Não há produtos a serem exibidos!" />
 
 </LinearLayout>
