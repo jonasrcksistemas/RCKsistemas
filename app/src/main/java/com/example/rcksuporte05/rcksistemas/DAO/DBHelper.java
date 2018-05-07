@@ -376,7 +376,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 " ID_WEB_PEDIDO_SERVIDOR INTEGER," +
                 " DATA_PREV_ENTREGA DATE);");
 
-        db.execSQL("CREATE TABLE IF NOT EXISTS TBL_OPERACAO_ESTOQUE (ATIVO CHAR(1) DEFAULT 'S'  NOT NULL, ID_OPERACAO INTEGER DEFAULT 0 PRIMARY KEY, NOME_OPERACAO VARCHAR(60) NOT NULL);");
+        db.execSQL("CREATE TABLE IF NOT EXISTS TBL_OPERACAO_ESTOQUE (ATIVO CHAR(1) DEFAULT 'S'  NOT NULL, ID_OPERACAO INTEGER DEFAULT 0 PRIMARY KEY, NOME_OPERACAO VARCHAR(60) NOT NULL, NATUREZA_OPERACAO VARCHAR(60));");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS TBL_WEB_PEDIDO_ITENS (ID_WEB_ITEM INTEGER PRIMARY KEY AUTOINCREMENT ," +
                 "ID_PEDIDO INTEGER NOT NULL," +
@@ -809,7 +809,13 @@ public class DBHelper extends SQLiteOpenHelper {
             }
 
             try {
-                db.execSQL("ALTER TABLE TBL_LOGIN ADD COLUMN DATA_SINCRONIA VARCAHR(10);");
+                db.execSQL("ALTER TABLE TBL_LOGIN ADD COLUMN DATA_SINCRONIA VARCHAR(10);");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+                db.execSQL("ALTER TABLE TBL_OPERACAO_ESTOQUE ADD COLUMN NATUREZA_OPERACAO VARCHAR(60);");
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -1936,16 +1942,18 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("ATIVO", operacao.getAtivo());
         content.put("ID_OPERACAO", operacao.getId_operacao());
         content.put("NOME_OPERACAO", operacao.getNome_operacao());
+        content.put("NATUREZA_OPERACAO", operacao.getNatureza_operacao());
         db.insert("TBL_OPERACAO_ESTOQUE", null, content);
         System.gc();
     }
 
-    public void atualizarTBL_OPERACAO_ESTOQUE(String ATIVO, String ID_OPERACAO, String NOME_OPERACAO) throws android.database.sqlite.SQLiteConstraintException {
+    public void atualizarTBL_OPERACAO_ESTOQUE(Operacao operacao) throws android.database.sqlite.SQLiteConstraintException {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content = new ContentValues();
-        content.put("ATIVO", ATIVO);
-        content.put("NOME_OPERACAO", NOME_OPERACAO);
-        db.update("TBL_OPERACAO_ESTOQUE", content, "ID_OPERACAO = " + ID_OPERACAO, null);
+        content.put("ATIVO", operacao.getAtivo());
+        content.put("NOME_OPERACAO", operacao.getNome_operacao());
+        content.put("NATUREZA_OPERACAO", operacao.getNatureza_operacao());
+        db.update("TBL_OPERACAO_ESTOQUE", content, "ID_OPERACAO = " + operacao.getId_operacao(), null);
         System.gc();
     }
 
@@ -2199,6 +2207,7 @@ public class DBHelper extends SQLiteOpenHelper {
             operacao.setId_operacao(cursor.getString(cursor.getColumnIndex("ID_OPERACAO")));
             operacao.setAtivo(cursor.getString(cursor.getColumnIndex("ATIVO")));
             operacao.setNome_operacao(cursor.getString(cursor.getColumnIndex("NOME_OPERACAO")));
+            operacao.setNatureza_operacao(cursor.getString(cursor.getColumnIndex("NATUREZA_OPERACAO")));
 
             lista.add(operacao);
             System.gc();

@@ -201,9 +201,11 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         try {
-            if (PedidoHelper.getProduto() != null && getIntent().getIntExtra("pedido", 0) != 1 && PedidoHelper.getProduto().getId_produto() != PedidoHelper.getWebPedidoItem().getId_produto())
+            if (PedidoHelper.getProduto() != null && PedidoHelper.getProduto().getId_produto() != PedidoHelper.getWebPedidoItem().getId_produto()) {
                 webPedidoItem = new WebPedidoItens(PedidoHelper.getProduto());
-            else {
+                if (Float.parseFloat(edtDesconto.getText().toString()) <= 0)
+                    edtDesconto.setText(tabelaPrecoItem.getPerc_desc_final());
+            } else {
                 webPedidoItem = PedidoHelper.getWebPedidoItem();
                 edtQuantidade.setText(webPedidoItem.getQuantidade().toString().replace(".0", ""));
                 edtDesconto.setText(webPedidoItem.getValor_desconto_per());
@@ -215,13 +217,12 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
             e.printStackTrace();
             try {
                 webPedidoItem = new WebPedidoItens(PedidoHelper.getProduto());
+                if (Float.parseFloat(edtDesconto.getText().toString()) <= 0)
+                    edtDesconto.setText(tabelaPrecoItem.getPerc_desc_final());
             } catch (NullPointerException nullPointer) {
                 nullPointer.printStackTrace();
             }
         }
-
-        if (Float.parseFloat(edtDesconto.getText().toString()) <= 0)
-            edtDesconto.setText(tabelaPrecoItem.getPerc_desc_final());
 
         promocaoRetorno = pedidoBO.calculaDesconto(ClienteHelper.getCliente().getId_cadastro(), webPedidoItem.getId_produto(), ProdutoPedidoActivity.this);
         if (promocaoRetorno != null && promocaoRetorno.getValorDesconto() > 0 && promocaoRetorno.getValorDesconto() > Float.parseFloat(tabelaPrecoItem.getPerc_desc_final())) {
@@ -363,7 +364,6 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
                     } else {
                         edtDesconto.setBackgroundResource(R.drawable.borda_edittext);
                     }
-
                 }
             }
         } catch (Exception e) {

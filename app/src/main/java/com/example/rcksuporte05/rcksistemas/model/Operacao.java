@@ -5,6 +5,7 @@ public class Operacao {
     private String ativo;
     private String id_operacao;
     private String nome_operacao;
+    private String natureza_operacao;
 
     public String getAtivo() {
         return ativo;
@@ -30,8 +31,16 @@ public class Operacao {
         this.nome_operacao = nome_operacao;
     }
 
+    public String getNatureza_operacao() {
+        return natureza_operacao;
+    }
+
+    public void setNatureza_operacao(String natureza_operacao) {
+        this.natureza_operacao = natureza_operacao;
+    }
+
     @Override
     public String toString() {
-        return nome_operacao;
+        return natureza_operacao;
     }
 }

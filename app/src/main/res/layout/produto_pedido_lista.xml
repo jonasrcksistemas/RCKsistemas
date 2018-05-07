@@ -25,7 +25,8 @@
         android:maxLines="1"
         android:scrollHorizontally="true"
         android:text="nomeListaProduto"
-        android:textColor="#000000" />
+        android:textColor="#000000"
+        android:textSize="16dp" />
 
     <TextView
         android:id="@+id/precoProduto"
@@ -36,7 +37,8 @@
         android:layout_toRightOf="@+id/textViewUnidadeMedida"
         android:ellipsize="end"
         android:scrollHorizontally="true"
-        android:text="precoProduto" />
+        android:text="precoProduto"
+        android:textSize="10dp" />
 
     <TextView
         android:id="@+id/textViewUnidadeMedida"
@@ -52,14 +54,18 @@
         android:maxLines="1"
         android:scrollHorizontally="true"
         android:text="textViewUnidadeMedida"
-        android:textAlignment="center" />
+        android:textAlignment="center"
+        android:textSize="10dp" />
 
     <TextView
         android:id="@+id/txtDesconto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
         android:layout_alignTop="@id/idPosition"
-        android:layout_marginEnd="10dp" />
+        android:layout_marginEnd="10dp"
+        android:layout_marginRight="10dp"
+        android:textSize="10dp" />
 
 </RelativeLayout>
