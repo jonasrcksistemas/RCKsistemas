@@ -131,7 +131,6 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
             startActivity(intent);
         } else if (view == btnProduto) {
             getUsuarios();
-
             Intent intent = new Intent(PrincipalActivity.this, ActivityProduto.class);
             startActivity(intent);
         } else if (view == btnPedidos) {
@@ -139,14 +138,15 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
             Intent intent = new Intent(PrincipalActivity.this, ActivityPedidoMain.class);
             startActivity(intent);
         } else if (view == btnSincroniza) {
-            getUsuarios();
             Intent intent = new Intent(PrincipalActivity.this, ActivityDialogSincronia.class);
             SincroniaBO.setActivity(PrincipalActivity.this);
             startActivity(intent);
         } else if (view == btnPedidoFinalizado) {
+            getUsuarios();
             Intent telaPedidoEnviado = new Intent(PrincipalActivity.this, ListagemPedidoEnviado.class);
             startActivity(telaPedidoEnviado);
         } else if (view == btnPedidoPendente) {
+            getUsuarios();
             Intent telaPedidoPendentes = new Intent(PrincipalActivity.this, ListagemPedidoPendente.class);
             startActivity(telaPedidoPendentes);
         } else if (view == btnProspectNovo) {
