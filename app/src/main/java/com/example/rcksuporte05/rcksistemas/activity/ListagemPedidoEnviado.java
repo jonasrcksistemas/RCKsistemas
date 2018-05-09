@@ -76,7 +76,6 @@ public class ListagemPedidoEnviado extends AppCompatActivity implements ListaPed
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerViewPedidos.setLayoutManager(layoutManager);
-        recyclerViewPedidos.addItemDecoration(new DividerItemDecoration(this, LinearLayout.VERTICAL));
 
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

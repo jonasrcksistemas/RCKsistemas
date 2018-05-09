@@ -45,15 +45,14 @@ public class ListaPedidoAdapter extends RecyclerView.Adapter<PedidoViewHolder> {
     @Override
     public void onBindViewHolder(PedidoViewHolder holder, int position) {
         if (pedidos.get(position).getId_web_pedido_servidor() != null && !pedidos.get(position).getId_web_pedido_servidor().equals(""))
-            holder.txtIdPedido.setText(pedidos.get(position).getId_web_pedido_servidor());
+            holder.txtIdPedido.setText("Nº " + pedidos.get(position).getId_web_pedido_servidor());
         else
-            holder.txtIdPedido.setText(pedidos.get(position).getId_web_pedido());
+            holder.txtIdPedido.setText("Nº " + pedidos.get(position).getId_web_pedido());
 
         holder.txtNomeCliente.setText(pedidos.get(position).getCadastro().getNome_cadastro());
         holder.txtPrecoPedido.setText(MascaraUtil.mascaraReal(pedidos.get(position).getValor_total()));
 
         try {
-
             holder.txtDataEmissaoPedido.setText(new SimpleDateFormat("dd/MM/yyyy").format(new SimpleDateFormat("yyyy-MM-dd").parse(pedidos.get(position).getData_emissao())));
 
             holder.txtDataEntrega.setText(new SimpleDateFormat("dd/MM/yyyy").format(new SimpleDateFormat("yyyy-MM-dd").parse(pedidos.get(position).getData_prev_entrega())));

@@ -3,6 +3,7 @@ package com.example.rcksuporte05.rcksistemas.adapters.viewHolder;
 import android.support.v7.widget.RecyclerView;
 import android.view.HapticFeedbackConstants;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -29,7 +30,7 @@ public class PedidoViewHolder extends RecyclerView.ViewHolder implements View.On
     @BindView(R.id.txtDataEmissaoPedido)
     public TextView txtDataEmissaoPedido;
     @BindView(R.id.item_lista_pedido)
-    public RelativeLayout itemListaPedido;
+    public LinearLayout itemListaPedido;
 
 
     ListaPedidoAdapter.PedidoAdapterListener listener;
