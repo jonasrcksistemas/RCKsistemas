@@ -132,7 +132,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"
             android:text="SALVAR E VALIDAR"
-            android:theme="@style/Button" />
+            android:theme="@style/ButtonSalvar" />
 
     </RelativeLayout>
 </LinearLayout>

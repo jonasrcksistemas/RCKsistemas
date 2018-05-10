@@ -149,6 +149,12 @@
         <item name="android:checkableBehavior">all</item>
     </style>
 
+    <style name="ButtonSalvar" parent="Widget.AppCompat.Button.Colored">
+        <item name="colorButtonNormal">#58ae23</item>
+        <item name="android:textColor">@color/branco</item>
+        <item name="android:checkableBehavior">all</item>
+    </style>
+
     <style name="txtStyle">
         <item name="android:textColor">@color/colorAccent</item>
         <item name="android:textStyle">bold</item>

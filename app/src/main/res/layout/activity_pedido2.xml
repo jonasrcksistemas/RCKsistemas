@@ -156,10 +156,9 @@
                 android:layout_alignStart="@+id/edtObservacao"
                 android:layout_below="@+id/edtObservacao"
                 android:layout_marginTop="10dp"
-                android:background="@drawable/borda_edittext"
+                android:theme="@style/ButtonSalvar"
                 android:text="Salvar Pedido"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
-                android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
 
         </RelativeLayout>

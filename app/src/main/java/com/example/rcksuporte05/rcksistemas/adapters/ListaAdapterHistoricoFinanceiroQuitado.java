@@ -56,11 +56,12 @@ public class ListaAdapterHistoricoFinanceiroQuitado extends ArrayAdapter<Histori
 
         txtValor.setText(MascaraUtil.mascaraReal(itemPosicao.getValor_total()));
         if (itemPosicao.getPontualidade_status().trim().equals("A")) {
-            txtValor.setTextColor(Color.RED);
+            txtPontualidade.setTextColor(Color.RED);
         } else {
-            txtValor.setTextColor(Color.parseColor("#4caf50"));
+            txtPontualidade.setTextColor(Color.parseColor("#4caf50"));
         }
 
+        txtValor.setTextColor(Color.parseColor("#4caf50"));
         return convertView;
     }
 }

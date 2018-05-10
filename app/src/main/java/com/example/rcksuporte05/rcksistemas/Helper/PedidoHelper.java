@@ -111,7 +111,8 @@ public class PedidoHelper {
 
     public static void pintaTxtNomeCliente() {
         TextView txtNomeCliente = (TextView) activityPedidoMain.findViewById(R.id.txtNomeCliente);
-        txtNomeCliente.setTextColor(Color.YELLOW);
+        txtNomeCliente.setTextColor(Color.RED
+        );
     }
 
     public static EditText editTextDataEntrega() {

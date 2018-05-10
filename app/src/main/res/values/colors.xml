@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#00796b</color>
-    <color name="colorPrimaryDark">#004d40</color>
-    <color name="colorAccent">#607D8B</color>
+    <color name="colorPrimary">#999999</color>
+    <color name="colorPrimaryDark">#ffbf00</color>
+    <color name="colorAccent">#608b73</color>
     <color name="colorAccentDarck">#546e7b</color>
     <color name="colorControlNormal">#00796b</color>
     <color name="colorPrimaryDarkAzul">#01579B</color>
@@ -10,10 +10,10 @@
     <color name="colorControlNormalAzul">#0277BD</color>
     <color name="branco">#ffffff</color>
     <color name="row_activated">#e0e0e0</color>
-    <color name="bg_action_mode">#757575</color>
+    <color name="bg_action_mode">#c1c1c1</color>
     <color name="colorPedidoEnviado">#B2DFDB</color>
-    <color name="colorPrimaryCinza">#607d8a</color>
-    <color name="colorPrimaryDarkCinza">#546e7b</color>
+    <color name="colorPrimaryCinza">#63c443</color>
+    <color name="colorPrimaryDarkCinza">#54a949</color>
     <color name="corBotao">#e6b220</color>
     <color name="fundoClaro">#e5f0fa</color>
     <color name="corFloatButton">#dddfdd</color>

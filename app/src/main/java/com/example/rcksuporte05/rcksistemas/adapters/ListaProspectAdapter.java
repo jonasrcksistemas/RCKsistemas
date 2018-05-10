@@ -81,7 +81,7 @@ public class ListaProspectAdapter extends RecyclerView.Adapter<ProspectViewHolde
             if (listaProspect.get(position).getProspectSalvo().equals("S"))
                 holder.itemView.setBackgroundColor(Color.parseColor("#5800a387"));
             else
-                holder.itemView.setBackgroundColor(Color.parseColor("#58a30054"));
+                holder.itemView.setBackgroundColor(Color.parseColor("#58a30005"));
         else
             holder.itemView.setBackgroundColor(Color.TRANSPARENT);
 

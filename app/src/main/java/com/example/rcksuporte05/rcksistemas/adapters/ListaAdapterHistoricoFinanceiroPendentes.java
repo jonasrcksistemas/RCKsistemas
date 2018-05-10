@@ -53,13 +53,15 @@ public class ListaAdapterHistoricoFinanceiroPendentes extends ArrayAdapter<Histo
         }
         txtDocumento.setText(itemPosicao.getDocumento());
         txtParcela.setText(itemPosicao.getParcela());
-        txtDiasVenc.setText(itemPosicao.getDias_atrazo());
+        txtDiasVenc.setText("-" + itemPosicao.getDias_atrazo());
         txtValor.setText(MascaraUtil.mascaraReal(itemPosicao.getValor_total()));
 
         if (Integer.parseInt(itemPosicao.getDias_atrazo()) > 0) {
             txtValor.setTextColor(Color.RED);
+            txtDiasVenc.setTextColor(Color.RED);
         } else {
             txtValor.setTextColor(Color.parseColor("#4caf50"));
+            txtDiasVenc.setTextColor(Color.parseColor("#4caf50"));
         }
 
         return convertView;

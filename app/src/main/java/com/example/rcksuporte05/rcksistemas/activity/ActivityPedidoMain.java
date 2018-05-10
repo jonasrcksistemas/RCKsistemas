@@ -72,7 +72,7 @@ public class ActivityPedidoMain extends AppCompatActivity {
             HistoricoFinanceiroHelper.setCliente(objetoCliente);
             this.startActivity(intent);
         } else {
-            txtNomeCliente.setTextColor(Color.YELLOW);
+            txtNomeCliente.setTextColor(Color.parseColor("#ffbf00"));
             Toast.makeText(this, "Você precisa selecionar o cliente para consultar seu historico financeiro", Toast.LENGTH_SHORT).show();
         }
     }
@@ -109,9 +109,9 @@ public class ActivityPedidoMain extends AppCompatActivity {
 
         if (vizualizacao == 1) {
             toolbar.setTitle("Vizualização de Pedido");
-            toolbar2.setBackgroundColor(getResources().getColor(R.color.colorPrimaryCinza));
-            toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimaryCinza));
-            stl_tabsPedido.setBackgroundColor(getResources().getColor(R.color.colorPrimaryCinza));
+//            toolbar2.setBackgroundColor(getResources().getColor(R.color.colorPrimaryCinza));
+//            toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimaryCinza));
+//            stl_tabsPedido.setBackgroundColor(getResources().getColor(R.color.colorPrimaryCinza));
             txtNomeCliente.setFocusable(false);
 
             this.setTheme(R.style.Theme_MeuTemaPedido);
