@@ -93,7 +93,8 @@
             android:gravity="end"
             android:paddingEnd="10dp"
             android:paddingRight="10dp"
-            android:text="total" />
+            android:text="total"
+            android:textSize="15sp" />
     </LinearLayout>
 
 </LinearLayout>

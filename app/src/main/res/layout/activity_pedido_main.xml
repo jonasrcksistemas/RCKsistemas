@@ -98,6 +98,6 @@
         android:paddingEnd="10dp"
         android:paddingRight="10dp"
         android:text="TOTAL    R$00,00"
-        android:textSize="20dp" />
+        android:textSize="15sp" />
 
 </LinearLayout>

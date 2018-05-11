@@ -36,6 +36,7 @@
         android:gravity="end"
         android:paddingEnd="10dp"
         android:paddingRight="10dp"
-        android:text="Não há produtos a serem exibidos!" />
+        android:text="Não há produtos a serem exibidos!"
+        android:textSize="15sp" />
 
 </LinearLayout>

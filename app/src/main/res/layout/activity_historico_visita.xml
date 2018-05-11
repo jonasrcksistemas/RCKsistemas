@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
         android:theme="@style/Theme.Toolbar"
-        app:title="Historico de Visitas"/>
+        app:title="Historico de Visitas" />
 
     <RelativeLayout
         android:layout_width="wrap_content"
@@ -95,7 +95,8 @@
             android:gravity="end"
             android:paddingEnd="10dp"
             android:paddingRight="10dp"
-            android:text="total" />
+            android:text="total"
+            android:textSize="15sp" />
     </RelativeLayout>
 </LinearLayout>
 

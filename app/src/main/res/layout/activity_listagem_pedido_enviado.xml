@@ -20,9 +20,7 @@
         android:id="@+id/listaPedidoEnviados"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="1">
-
-    </android.support.v7.widget.RecyclerView>
+        android:layout_weight="1"/>
 
 
     <EditText
@@ -35,5 +33,6 @@
         android:gravity="end"
         android:paddingEnd="10dp"
         android:paddingRight="10dp"
+        android:textSize="15sp"
         android:text="0: Pedidos Enviados" />
 </LinearLayout>
