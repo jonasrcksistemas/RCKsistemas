@@ -71,10 +71,11 @@ public class ListaProspectAdapter extends RecyclerView.Adapter<ProspectViewHolde
                     break;
             }
         }
+
         if (listaProspect.get(position).getProspectSalvo().equals("S")) {
-            holder.prospectSalvo.setImageResource(R.mipmap.ic_prospect_salvo);
-        } else {
             holder.prospectSalvo.setImageResource(R.mipmap.ic_prospect_pendente);
+        } else {
+            holder.prospectSalvo.setImageResource(R.mipmap.ic_prospect_nao_salvo);
         }
 
         if (selectedItems.get(position))

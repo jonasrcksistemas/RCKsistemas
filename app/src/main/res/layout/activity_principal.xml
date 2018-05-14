@@ -5,9 +5,9 @@
     android:id="@+id/activity_cliente"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/branco"
     android:orientation="vertical"
     app:theme="@style/Theme.Toolbar"
-    android:background="@color/branco"
     tools:context="com.example.rcksuporte05.rcksistemas.activity.PrincipalActivity">
 
     <android.support.v7.widget.Toolbar
@@ -16,8 +16,9 @@
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
         android:minHeight="?attr/actionBarSize"
-        app:subtitleTextAppearance="@style/subtitlePrincipal"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+        app:subtitleTextAppearance="@style/subtitlePrincipal"
+        app:titleMarginStart="30dp"
         tools:context=".activity.PrincipalActivity" />
 
     <LinearLayout

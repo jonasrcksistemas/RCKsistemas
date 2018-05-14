@@ -1,5 +1,6 @@
 package com.example.rcksuporte05.rcksistemas.adapters;
 
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseBooleanArray;
 import android.view.HapticFeedbackConstants;
@@ -59,6 +60,10 @@ public class ListaPedidoAdapter extends RecyclerView.Adapter<PedidoViewHolder> {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        holder.itemView
+                .setBackgroundColor(selectedItems.get(position) ? Color.parseColor("#5800a387")
+                        : Color.TRANSPARENT);
 
         holder.itemView.setActivated(selectedItems.get(position, false));
 
