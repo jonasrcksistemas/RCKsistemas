@@ -40,7 +40,9 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/edtObservacaoComercial"
                 android:layout_marginTop="12dp"
-                android:text="LIMETE DE CREDITO SUGERIDO"
+                android:layout_toLeftOf="@+id/edtLimiteCreditoSugerido"
+                android:layout_toStartOf="@+id/edtLimiteCreditoSugerido"
+                android:text="LIMITE DE CREDITO SUGERIDO"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
 
@@ -60,7 +62,9 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/edtLimiteCreditoSugerido"
                 android:layout_marginTop="12dp"
-                android:text="LIMETE DE PRAZO SUGERIDO"
+                android:layout_toLeftOf="@+id/edtLimiteCreditoSugerido"
+                android:layout_toStartOf="@+id/edtLimiteCreditoSugerido"
+                android:text="LIMITE DE PRAZO SUGERIDO"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
 
