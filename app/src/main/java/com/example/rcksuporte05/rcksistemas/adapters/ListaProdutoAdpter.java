@@ -34,9 +34,7 @@ public class ListaProdutoAdpter extends RecyclerView.Adapter<ProdutoViewHolder> 
     @Override
     public void onBindViewHolder(ProdutoViewHolder holder, int position) {
 
-        holder.idProduto.setText(String.valueOf(produtos.get(position).getId_produto()));
-
-        holder.nomeListaProduto.setText(produtos.get(position).getNome_produto());
+        holder.nomeListaProduto.setText(String.valueOf(produtos.get(position).getId_produto() + " - " + produtos.get(position).getNome_produto()));
 
         String preco = null;
         try {
@@ -46,12 +44,17 @@ public class ListaProdutoAdpter extends RecyclerView.Adapter<ProdutoViewHolder> 
         }
 
         if (!produtos.get(position).getVenda_preco().trim().equalsIgnoreCase("")) {
-            holder.precoProduto.setText("R$ " + preco);
+            holder.precoProduto.setText("Preço:\nR$ " + preco);
         } else {
-            holder.precoProduto.setText(produtos.get(position).getVenda_preco().replace(".", ","));
+            holder.precoProduto.setText("Preço:\n" + produtos.get(position).getVenda_preco().replace(".", ","));
         }
 
-        holder.textUN.setText(produtos.get(position).getUnidade());
+        holder.textUN.setText("Unidade:\n" + produtos.get(position).getUnidade());
+
+        if (produtos.get(position).getCodigo_em_barras() != null)
+            holder.txtCodBarra.setText("Cod Ean:\n " + produtos.get(position).getCodigo_em_barras());
+
+        holder.txtNomeSubGrupo.setText(produtos.get(position).getNome_sub_grupo());
 
         System.gc();
     }

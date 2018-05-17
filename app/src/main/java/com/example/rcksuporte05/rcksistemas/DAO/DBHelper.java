@@ -34,7 +34,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private static String NomeBanco = "Banco.db";
 
     public DBHelper(Context context) {
-        super(context, NomeBanco, null, 2);
+        super(context, NomeBanco, null, 3);
     }
 
     @Override
@@ -220,7 +220,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 " VENDA_PERC_COMISSAO DECIMAL(12, 6)," +
                 " VENDA_PRECO DECIMAL(12, 6)," +
                 " VENDA_PERC_COMISSAO_DOIS DECIMAL(12, 4)," +
-                " DESCRICAO VARCHAR(20));");
+                " DESCRICAO VARCHAR(20), " +
+                " NOME_SUB_GRUPO VARHAR(60));");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS TBL_TABELA_PRECO_CAB (ID_TABELA INTEGER PRIMARY KEY," +
                 " ID_EMPRESA INTEGER NOT NULL," +
@@ -555,269 +556,278 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         if (newVersion > oldVersion) {
-            db.execSQL("CREATE TABLE IF NOT EXISTS TBL_PROSPECT " +
-                    "(ATIVO VARCHAR(1) DEFAULT 'S' NOT NULL," +
-                    "ID_PROSPECT INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    "ID_PROSPECT_SERVIDOR INTEGER," +
-                    "ID_CADASTRO INTEGER," +
-                    "ID_SEGMENTO INTEGER," +
-                    "ID_MOTIVO_NAO_CADASTRAMENTO INTEGER," +
-                    "REFERENCIA_BANCARIA INTEGER," +
-                    "REFERENCIA_COMERCIAL INTEGER," +
-                    "LISTA_CONTATO INTEGER," +
-                    "NOME_CADASTRO VARCHAR(60)," +
-                    "NOME_FANTASIA VARCHAR(60)," +
-                    "PESSOA_F_J VARCHAR(1)," +
-                    "CPF_CNPJ VARCHAR(20)," +
-                    "INSCRI_ESTADUAL VARCHAR(20)," +
-                    "INSCRI_MUNICIPAL VARCHAR(20)," +
-                    "ENDERECO VARCHAR(60)," +
-                    "ENDERECO_BAIRRO VARCHAR(60)," +
-                    "ENDERECO_NUMERO VARCHAR(20)," +
-                    "ENDERECO_COMPLEMENTO VARCHAR(300)," +
-                    "ENDERECO_UF VARCHAR(2)," +
-                    "NOME_MUNICIPIO VARCHAR(60)," +
-                    "ENDERECO_CEP VARCHAR(20)," +
-                    "ID_PAIS INTEGER," +
-                    "USUARIO_ID INTEGER," +
-                    "USUARIO_NOME VARCHAR(60)," +
-                    "USUARIO_DATA DATE," +
-                    "SITUACAO_PREDIO VARCHAR(1)," +
-                    "LIMITE_CREDITO_SUGERIDO DECIMAL(12,2)," +
-                    "LIMITE_PRAZO_SUGERIDO DECIMAL(12,2)," +
-                    "ID_EMPRESA INTEGER," +
-                    "DIA_VISITA VARCHAR(20)," +
-                    "DATA_RETORNO DATE," +
-                    "IND_DA_IE_DESTINATARIO_PROSPECT INTEGER, " +
-                    "FOTO_PRINCIPAL_BASE64 BLOB," +
-                    "FOTO_SECUNDARIA_BASE64 BLOB," +
-                    "OBSERVACOES_COMERCIAIS VARCHAR(300)," +
-                    "LATITUDE VARCHAR (60), " +
-                    "LONGITUDE VARCHAR (60), " +
-                    "DESCRICAO_SEGMENTO VARCHAR(300)," +
-                    "DESCRICAO_MOTIVO_NAO_CAD VARCHAR(300)," +
-                    "PROSPECT_SALVO VARCHAR(1) DEFAULT 'N');");
+            if (newVersion >= 2) {
+                db.execSQL("CREATE TABLE IF NOT EXISTS TBL_PROSPECT " +
+                        "(ATIVO VARCHAR(1) DEFAULT 'S' NOT NULL," +
+                        "ID_PROSPECT INTEGER PRIMARY KEY AUTOINCREMENT," +
+                        "ID_PROSPECT_SERVIDOR INTEGER," +
+                        "ID_CADASTRO INTEGER," +
+                        "ID_SEGMENTO INTEGER," +
+                        "ID_MOTIVO_NAO_CADASTRAMENTO INTEGER," +
+                        "REFERENCIA_BANCARIA INTEGER," +
+                        "REFERENCIA_COMERCIAL INTEGER," +
+                        "LISTA_CONTATO INTEGER," +
+                        "NOME_CADASTRO VARCHAR(60)," +
+                        "NOME_FANTASIA VARCHAR(60)," +
+                        "PESSOA_F_J VARCHAR(1)," +
+                        "CPF_CNPJ VARCHAR(20)," +
+                        "INSCRI_ESTADUAL VARCHAR(20)," +
+                        "INSCRI_MUNICIPAL VARCHAR(20)," +
+                        "ENDERECO VARCHAR(60)," +
+                        "ENDERECO_BAIRRO VARCHAR(60)," +
+                        "ENDERECO_NUMERO VARCHAR(20)," +
+                        "ENDERECO_COMPLEMENTO VARCHAR(300)," +
+                        "ENDERECO_UF VARCHAR(2)," +
+                        "NOME_MUNICIPIO VARCHAR(60)," +
+                        "ENDERECO_CEP VARCHAR(20)," +
+                        "ID_PAIS INTEGER," +
+                        "USUARIO_ID INTEGER," +
+                        "USUARIO_NOME VARCHAR(60)," +
+                        "USUARIO_DATA DATE," +
+                        "SITUACAO_PREDIO VARCHAR(1)," +
+                        "LIMITE_CREDITO_SUGERIDO DECIMAL(12,2)," +
+                        "LIMITE_PRAZO_SUGERIDO DECIMAL(12,2)," +
+                        "ID_EMPRESA INTEGER," +
+                        "DIA_VISITA VARCHAR(20)," +
+                        "DATA_RETORNO DATE," +
+                        "IND_DA_IE_DESTINATARIO_PROSPECT INTEGER, " +
+                        "FOTO_PRINCIPAL_BASE64 BLOB," +
+                        "FOTO_SECUNDARIA_BASE64 BLOB," +
+                        "OBSERVACOES_COMERCIAIS VARCHAR(300)," +
+                        "LATITUDE VARCHAR (60), " +
+                        "LONGITUDE VARCHAR (60), " +
+                        "DESCRICAO_SEGMENTO VARCHAR(300)," +
+                        "DESCRICAO_MOTIVO_NAO_CAD VARCHAR(300)," +
+                        "PROSPECT_SALVO VARCHAR(1) DEFAULT 'N');");
 
-            db.execSQL("CREATE TABLE IF NOT EXISTS TBL_SEGMENTO" +
-                    "(ATIVO VARCHAR(1) DEFAULT 'S' NOT NULL," +
-                    "ID_SETOR INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    "NOME_SETOR VARCHAR(60)," +
-                    "DESCRICAO_OUTROS VARCHAR(300));");
+                db.execSQL("CREATE TABLE IF NOT EXISTS TBL_SEGMENTO" +
+                        "(ATIVO VARCHAR(1) DEFAULT 'S' NOT NULL," +
+                        "ID_SETOR INTEGER PRIMARY KEY AUTOINCREMENT," +
+                        "NOME_SETOR VARCHAR(60)," +
+                        "DESCRICAO_OUTROS VARCHAR(300));");
 
-            db.execSQL("CREATE TABLE IF NOT EXISTS TBL_CADASTRO_MOTIVO_NAO_CAD" +
-                    "(ID_ITEM INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    "MOTIVO VARCHAR(300)," +
-                    "DESCRICAO_OUTROS VARCHAR(300));");
+                db.execSQL("CREATE TABLE IF NOT EXISTS TBL_CADASTRO_MOTIVO_NAO_CAD" +
+                        "(ID_ITEM INTEGER PRIMARY KEY AUTOINCREMENT," +
+                        "MOTIVO VARCHAR(300)," +
+                        "DESCRICAO_OUTROS VARCHAR(300));");
 
-            db.execSQL("CREATE TABLE IF NOT EXISTS TBL_PAISES " +
-                    "(ID_PAIS INTEGER PRIMARY KEY, " +
-                    "NOME_PAIS VARCHAR(60) NOT NULL);");
+                db.execSQL("CREATE TABLE IF NOT EXISTS TBL_PAISES " +
+                        "(ID_PAIS INTEGER PRIMARY KEY, " +
+                        "NOME_PAIS VARCHAR(60) NOT NULL);");
 
-            db.execSQL("CREATE TABLE IF NOT EXISTS TBL_BANCOS_FEBRABAN " +
-                    "(CODIGO_FEBRABAN VARCHAR(6) PRIMARY KEY AUTOINCREMENT," +
-                    " NOME_BANCO VARCHAR(60)," +
-                    " HOME_PAGE VARCHAR(60));");
+                db.execSQL("CREATE TABLE IF NOT EXISTS TBL_BANCOS_FEBRABAN " +
+                        "(CODIGO_FEBRABAN VARCHAR(6) PRIMARY KEY AUTOINCREMENT," +
+                        " NOME_BANCO VARCHAR(60)," +
+                        " HOME_PAGE VARCHAR(60));");
 
-            db.execSQL("CREATE TABLE IF NOT EXISTS TBL_REFERENCIA_BANCARIA" +
-                    "(ID_REFERENCIA_BANCARIA INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    "ID_REFERENCIA_BANCARIA_SERVIDOR INTEGER, " +
-                    "ID_CADASTRO_SERVIDOR INTEGER, " +
-                    "CODIGO_FEBRABAN INTEGER," +
-                    "NOME_BANCO VARCHAR(60)," +
-                    "CONTA_CORRENTE VARCHAR(60)," +
-                    "AGENCIA VARCHAR(60)," +
-                    "ID_CADASTRO INTEGER," +
-                    "USUARIO_ID INTEGER," +
-                    "NOME_USUARIO VARCHAR(60));");
+                db.execSQL("CREATE TABLE IF NOT EXISTS TBL_REFERENCIA_BANCARIA" +
+                        "(ID_REFERENCIA_BANCARIA INTEGER PRIMARY KEY AUTOINCREMENT," +
+                        "ID_REFERENCIA_BANCARIA_SERVIDOR INTEGER, " +
+                        "ID_CADASTRO_SERVIDOR INTEGER, " +
+                        "CODIGO_FEBRABAN INTEGER," +
+                        "NOME_BANCO VARCHAR(60)," +
+                        "CONTA_CORRENTE VARCHAR(60)," +
+                        "AGENCIA VARCHAR(60)," +
+                        "ID_CADASTRO INTEGER," +
+                        "USUARIO_ID INTEGER," +
+                        "NOME_USUARIO VARCHAR(60));");
 
-            db.execSQL("CREATE TABLE IF NOT EXISTS TBL_REFERENCIA_COMERCIAL" +
-                    "(ID_REFERENCIA_COMERCIAL INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    "ID_REFERENCIA_COMERCIAL_SERVIDOR INTEGER, " +
-                    "ID_CADASTRO_SERVIDOR INTEGER, " +
-                    "NOME_FORNECEDOR_REFERENCIA VARCHAR(60)," +
-                    "TELEFONE VARCHAR(20)," +
-                    "ID_CADASTRO INTEGER," +
-                    "USUARIO_ID INTEGER," +
-                    "NOME_USUARIO VARCHAR(60));");
+                db.execSQL("CREATE TABLE IF NOT EXISTS TBL_REFERENCIA_COMERCIAL" +
+                        "(ID_REFERENCIA_COMERCIAL INTEGER PRIMARY KEY AUTOINCREMENT," +
+                        "ID_REFERENCIA_COMERCIAL_SERVIDOR INTEGER, " +
+                        "ID_CADASTRO_SERVIDOR INTEGER, " +
+                        "NOME_FORNECEDOR_REFERENCIA VARCHAR(60)," +
+                        "TELEFONE VARCHAR(20)," +
+                        "ID_CADASTRO INTEGER," +
+                        "USUARIO_ID INTEGER," +
+                        "NOME_USUARIO VARCHAR(60));");
 
-            db.execSQL("CREATE TABLE IF NOT EXISTS TBL_CADASTRO_CONTATO" +
-                    "(ID_CONTATO INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    "ID_CADASTRO INTEGER," +
-                    "ID_CONTATO_SERVIDOR INTEGER," +
-                    "ID_CADASTRO_SERVIDOR INTEGER," +
-                    "ATIVO VARCHAR(1)," +
-                    "PESSOA_CONTATO VARCHAR(60)," +
-                    "FUNCAO VARCHAR(60)," +
-                    "EMAIL VARCHAR(60)," +
-                    "TIPO_TELEFONE VARCHAR(60)," +
-                    "OPERADORA VARCHAR(60)," +
-                    "NUMERO_TELEFONE VARCHAR(20)," +
-                    "DATA_ANIVERSARIO DATE," +
-                    "OBSERVACAO VARCHAR(300)," +
-                    "USUARIO_ID INTEGER," +
-                    "USUARIO_NOME VARCHAR(60)," +
-                    "USUARIO_DATA DATE," +
-                    "CELULAR VARCHAR(20)," +
-                    "CELULAR2 VARCHAR(20)," +
-                    "EMAIL2 VARCHAR(60)," +
-                    "FORNECEDOR1 VARCHAR(60)," +
-                    "FORNECEDOR2 VARCHAR(60)," +
-                    "TEL_FORNEC1 VARCHAR(20)," +
-                    "TEL_FORNEC2 VARCHAR(20));");
+                db.execSQL("CREATE TABLE IF NOT EXISTS TBL_CADASTRO_CONTATO" +
+                        "(ID_CONTATO INTEGER PRIMARY KEY AUTOINCREMENT," +
+                        "ID_CADASTRO INTEGER," +
+                        "ID_CONTATO_SERVIDOR INTEGER," +
+                        "ID_CADASTRO_SERVIDOR INTEGER," +
+                        "ATIVO VARCHAR(1)," +
+                        "PESSOA_CONTATO VARCHAR(60)," +
+                        "FUNCAO VARCHAR(60)," +
+                        "EMAIL VARCHAR(60)," +
+                        "TIPO_TELEFONE VARCHAR(60)," +
+                        "OPERADORA VARCHAR(60)," +
+                        "NUMERO_TELEFONE VARCHAR(20)," +
+                        "DATA_ANIVERSARIO DATE," +
+                        "OBSERVACAO VARCHAR(300)," +
+                        "USUARIO_ID INTEGER," +
+                        "USUARIO_NOME VARCHAR(60)," +
+                        "USUARIO_DATA DATE," +
+                        "CELULAR VARCHAR(20)," +
+                        "CELULAR2 VARCHAR(20)," +
+                        "EMAIL2 VARCHAR(60)," +
+                        "FORNECEDOR1 VARCHAR(60)," +
+                        "FORNECEDOR2 VARCHAR(60)," +
+                        "TEL_FORNEC1 VARCHAR(20)," +
+                        "TEL_FORNEC2 VARCHAR(20));");
 
-            db.execSQL("CREATE TABLE IF NOT EXISTS TBL_VISITA_PROSPECT (" +
-                    "ID_VISITA INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                    "DESCRICAO_VISTA VARCHAR(300), " +
-                    "DATA_VISITA DATE, " +
-                    "USUARIO_ID INTEGER, " +
-                    "DATA_PROXIMA_VISITA DATE, " +
-                    "TIPO_CONTATO VARCHAR(20), " +
-                    "LATITUDE VARCHAR(200), " +
-                    "LONGITUDE VARCHAR(200)," +
-                    "ID_CADASTRO_SERVIDOR INTEGER," +
-                    "ID_VISITA_SERVIDOR INTEGER, " +
-                    "ID_CADASTRO INTEGER);");
+                db.execSQL("CREATE TABLE IF NOT EXISTS TBL_VISITA_PROSPECT (" +
+                        "ID_VISITA INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                        "DESCRICAO_VISTA VARCHAR(300), " +
+                        "DATA_VISITA DATE, " +
+                        "USUARIO_ID INTEGER, " +
+                        "DATA_PROXIMA_VISITA DATE, " +
+                        "TIPO_CONTATO VARCHAR(20), " +
+                        "LATITUDE VARCHAR(200), " +
+                        "LONGITUDE VARCHAR(200)," +
+                        "ID_CADASTRO_SERVIDOR INTEGER," +
+                        "ID_VISITA_SERVIDOR INTEGER, " +
+                        "ID_CADASTRO INTEGER);");
 
-            try {
-                db.execSQL("ALTER TABLE TBL_TABELA_PRECO_ITENS ADD COLUMN ID_CATEGORIA INTEGER;");
-            } catch (Exception e) {
-                e.printStackTrace();
+                try {
+                    db.execSQL("ALTER TABLE TBL_TABELA_PRECO_ITENS ADD COLUMN ID_CATEGORIA INTEGER;");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    db.execSQL("ALTER TABLE TBL_CADASTRO ADD COLUMN ID_CATEGORIA INTEGER;");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                db.execSQL("CREATE TABLE IF NOT EXISTS TBL_CADASTRO_CATEGORIA(ID_CATEGORIA INTEGER NOT NULL PRIMARY KEY," +
+                        "  ID_EMPRESA     INTEGER    NOT NULL," +
+                        "  ATIVO          VARCHAR(1) NOT NULL," +
+                        "  NOME_CATEGORIA VARCHAR(60)," +
+                        "  USUARIO_ID     INTEGER    NOT NULL," +
+                        "  USUARIO_NOME   VARCHAR(60)," +
+                        "  USUARIO_DATA   TIMESTAMP(19));");
+
+                db.execSQL("CREATE TABLE IF NOT EXISTS TBL_PROMOCAO_CAB(ID_PROMOCAO INTEGER NOT NULL" +
+                        "    CONSTRAINT PK_TBL_PROMOCAO_CAB" +
+                        "    PRIMARY KEY," +
+                        "  ID_EMPRESA           INTEGER    NOT NULL," +
+                        "  NUMERO_CLIENTES      INTEGER," +
+                        "  NUMERO_PRODUTOS      INTEGER," +
+                        "  ATIVO                VARCHAR(1) NOT NULL," +
+                        "  APLICACAO_CLIENTE    INTEGER," +
+                        "  APLICACAO_PRODUTO    INTEGER," +
+                        "  DESCONTO_PERC        DECIMAL(12, 4)," +
+                        "  DATA_INICIO_PROMOCAO DATE (10)," +
+                        "  DATA_FIM_PROMOCAO    DATE (10)," +
+                        "  NOME_PROMOCAO        VARCHAR(60)," +
+                        "  USUARIO_ID           INTEGER    NOT NULL," +
+                        "  USUARIO_NOME         VARCHAR(60)," +
+                        "  USUARIO_DATA         TIMESTAMP(19));");
+
+                db.execSQL("CREATE TABLE IF NOT EXISTS TBL_PROMOCAO_CLIENTE(ID_PROMOCAO  INTEGER NOT NULL," +
+                        "  ID_CADASTRO  INTEGER NOT NULL," +
+                        "  ID_EMPRESA   INTEGER NOT NULL," +
+                        "  ATIVO        VARCHAR(1)," +
+                        "  USUARIO_ID   INTEGER NOT NULL," +
+                        "  USUARIO_NOME VARCHAR(60)," +
+                        "  USUARIO_DATA TIMESTAMP(19)," +
+                        "  CONSTRAINT PK_TBL_PROMOCAO_CLIENTE" +
+                        "  PRIMARY KEY (ID_PROMOCAO, ID_CADASTRO));");
+
+                db.execSQL("CREATE TABLE IF NOT EXISTS TBL_PROMOCAO_PRODUTO(ID_PROMOCAO INTEGER NOT NULL," +
+                        "  ID_PRODUTO          VARCHAR(20) NOT NULL," +
+                        "  ID_EMPRESA          INTEGER     NOT NULL," +
+                        "  ATIVO               VARCHAR(1)," +
+                        "  TIPO_DESCONTO       CHAR(1)," +
+                        "  DESCONTO_PERC       DECIMAL(12, 4)," +
+                        "  DESCONTO_VALOR      DECIMAL(12, 4)," +
+                        "  PERC_COM_INTERNO    DECIMAL(12, 4)," +
+                        "  PERC_COM_EXTERNO    DECIMAL(12, 4)," +
+                        "  PERC_COM_EXPORTACAO DECIMAL(12, 4)," +
+                        "  USUARIO_ID          INTEGER     NOT NULL," +
+                        "  USUARIO_NOME        VARCHAR(60)," +
+                        "  USUARIO_DATA        TIMESTAMP(19)," +
+                        "  CONSTRAINT PK_TBL_PROMOCAO_PRODUTO" +
+                        "  PRIMARY KEY (ID_PROMOCAO, ID_PRODUTO));");
+
+                try {
+                    db.execSQL("ALTER TABLE TBL_WEB_PEDIDO_ITENS ADD COLUMN TIPO_DESCONTO VARCHAR(1) DEFAULT 'P';");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    db.execSQL("ALTER TABLE TBL_WEB_PEDIDO_ITENS ADD COLUMN NOME_PRODUTO VARCHAR(60);");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                db.execSQL("DROP TABLE TBL_WEB_PEDIDO");
+
+                db.execSQL("CREATE TABLE IF NOT EXISTS TBL_WEB_PEDIDO (ID_WEB_PEDIDO INTEGER PRIMARY KEY AUTOINCREMENT," +
+                        " ID_EMPRESA INTEGER NOT NULL," +
+                        " ID_CADASTRO INTEGER NOT NULL," +
+                        " ID_VENDEDOR INTEGER NOT NULL," +
+                        " ID_CONDICAO_PAGAMENTO INTEGER NOT NULL," +
+                        " ID_OPERACAO INTEGER NOT NULL," +
+                        " ID_TABELA INTEGER," +
+                        " NOME_EXTENSO VARCHAR(150)," +
+                        " DATA_EMISSAO DATE," +
+                        " VALOR_PRODUTOS DECIMAL(12, 2)," +
+                        " VALOR_DESCONTO DECIMAL(12, 2)," +
+                        " VALOR_DESCONTO_ADD DECIMAL(12, 2)," +
+                        " DESCONTO_PER DECIMAL(12, 2)," +
+                        " DESCONTO_PER_ADD DECIMAL(12, 2)," +
+                        " VALOR_TOTAL DECIMAL(12, 3)," +
+                        " EXCLUIDO VARCHAR(1) NOT NULL," +
+                        " EXCLUIDO_USUARIO_ID INTEGER," +
+                        " EXCLUIDO_USUARIO_NOME VARCHAR(40)," +
+                        " EXCLUIDO_USUARIO_DATA TIMESTAMP," +
+                        " JUSTIFICATIVA_EXCLUSAO VARCHAR(250)," +
+                        " USUARIO_LANCAMENTO_ID INTEGER NOT NULL," +
+                        " USUARIO_LANCAMENTO_NOME VARCHAR(40)," +
+                        " USUARIO_LANCAMENTO_DATA TIMESTAMP," +
+                        " OBSERVACOES VARCHAR(300)," +
+                        " STATUS VARCHAR(1) NOT NULL," +
+                        " ID_PEDIDO_VENDA INTEGER," +
+                        " ID_NOTA_FISCAL INTEGER," +
+                        " ID_TABELA_PRECO_FAIXA INTEGER," +
+                        " PONTOS_TOTAL DECIMAL(12, 4)," +
+                        " PONTOS_COEFICIENTE DECIMAL(12, 4)," +
+                        " PONTOS_COR VARCHAR(15)," +
+                        " COMISSAO_PERCENTUAL DECIMAL(12, 4)," +
+                        " COMISSAO_VALOR DECIMAL(12, 2)," +
+                        " ID_FAIXA_FINAL INTEGER," +
+                        " VALOR_BONUS_CREDOR DECIMAL(12, 2)," +
+                        " PERC_BONUS_CREDOR DECIMAL(12, 4), " +
+                        " FATURADO VARCHAR(1)," +
+                        " PEDIDO_ENVIADO VARCHAR(1) DEFAULT 'N', " +
+                        " ID_WEB_PEDIDO_SERVIDOR INTEGER," +
+                        " DATA_PREV_ENTREGA DATE);");
+
+                try {
+                    db.execSQL("ALTER TABLE TBL_PROSPECT ADD COLUMN ID_VENDEDOR INTEGER;");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    db.execSQL("ALTER TABLE TBL_PROSPECT ADD COLUMN ID_CATEGORIA INTEGER;");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    db.execSQL("ALTER TABLE TBL_LOGIN ADD COLUMN DATA_SINCRONIA VARCHAR(10);");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    db.execSQL("ALTER TABLE TBL_OPERACAO_ESTOQUE ADD COLUMN NATUREZA_OPERACAO VARCHAR(60);");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
-
-            try {
-                db.execSQL("ALTER TABLE TBL_CADASTRO ADD COLUMN ID_CATEGORIA INTEGER;");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            db.execSQL("CREATE TABLE IF NOT EXISTS TBL_CADASTRO_CATEGORIA(ID_CATEGORIA INTEGER NOT NULL PRIMARY KEY," +
-                    "  ID_EMPRESA     INTEGER    NOT NULL," +
-                    "  ATIVO          VARCHAR(1) NOT NULL," +
-                    "  NOME_CATEGORIA VARCHAR(60)," +
-                    "  USUARIO_ID     INTEGER    NOT NULL," +
-                    "  USUARIO_NOME   VARCHAR(60)," +
-                    "  USUARIO_DATA   TIMESTAMP(19));");
-
-            db.execSQL("CREATE TABLE IF NOT EXISTS TBL_PROMOCAO_CAB(ID_PROMOCAO INTEGER NOT NULL" +
-                    "    CONSTRAINT PK_TBL_PROMOCAO_CAB" +
-                    "    PRIMARY KEY," +
-                    "  ID_EMPRESA           INTEGER    NOT NULL," +
-                    "  NUMERO_CLIENTES      INTEGER," +
-                    "  NUMERO_PRODUTOS      INTEGER," +
-                    "  ATIVO                VARCHAR(1) NOT NULL," +
-                    "  APLICACAO_CLIENTE    INTEGER," +
-                    "  APLICACAO_PRODUTO    INTEGER," +
-                    "  DESCONTO_PERC        DECIMAL(12, 4)," +
-                    "  DATA_INICIO_PROMOCAO DATE (10)," +
-                    "  DATA_FIM_PROMOCAO    DATE (10)," +
-                    "  NOME_PROMOCAO        VARCHAR(60)," +
-                    "  USUARIO_ID           INTEGER    NOT NULL," +
-                    "  USUARIO_NOME         VARCHAR(60)," +
-                    "  USUARIO_DATA         TIMESTAMP(19));");
-
-            db.execSQL("CREATE TABLE IF NOT EXISTS TBL_PROMOCAO_CLIENTE(ID_PROMOCAO  INTEGER NOT NULL," +
-                    "  ID_CADASTRO  INTEGER NOT NULL," +
-                    "  ID_EMPRESA   INTEGER NOT NULL," +
-                    "  ATIVO        VARCHAR(1)," +
-                    "  USUARIO_ID   INTEGER NOT NULL," +
-                    "  USUARIO_NOME VARCHAR(60)," +
-                    "  USUARIO_DATA TIMESTAMP(19)," +
-                    "  CONSTRAINT PK_TBL_PROMOCAO_CLIENTE" +
-                    "  PRIMARY KEY (ID_PROMOCAO, ID_CADASTRO));");
-
-            db.execSQL("CREATE TABLE IF NOT EXISTS TBL_PROMOCAO_PRODUTO(ID_PROMOCAO INTEGER NOT NULL," +
-                    "  ID_PRODUTO          VARCHAR(20) NOT NULL," +
-                    "  ID_EMPRESA          INTEGER     NOT NULL," +
-                    "  ATIVO               VARCHAR(1)," +
-                    "  TIPO_DESCONTO       CHAR(1)," +
-                    "  DESCONTO_PERC       DECIMAL(12, 4)," +
-                    "  DESCONTO_VALOR      DECIMAL(12, 4)," +
-                    "  PERC_COM_INTERNO    DECIMAL(12, 4)," +
-                    "  PERC_COM_EXTERNO    DECIMAL(12, 4)," +
-                    "  PERC_COM_EXPORTACAO DECIMAL(12, 4)," +
-                    "  USUARIO_ID          INTEGER     NOT NULL," +
-                    "  USUARIO_NOME        VARCHAR(60)," +
-                    "  USUARIO_DATA        TIMESTAMP(19)," +
-                    "  CONSTRAINT PK_TBL_PROMOCAO_PRODUTO" +
-                    "  PRIMARY KEY (ID_PROMOCAO, ID_PRODUTO));");
-
-            try {
-                db.execSQL("ALTER TABLE TBL_WEB_PEDIDO_ITENS ADD COLUMN TIPO_DESCONTO VARCHAR(1) DEFAULT 'P';");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            try {
-                db.execSQL("ALTER TABLE TBL_WEB_PEDIDO_ITENS ADD COLUMN NOME_PRODUTO VARCHAR(60);");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            db.execSQL("DROP TABLE TBL_WEB_PEDIDO");
-
-            db.execSQL("CREATE TABLE IF NOT EXISTS TBL_WEB_PEDIDO (ID_WEB_PEDIDO INTEGER PRIMARY KEY AUTOINCREMENT," +
-                    " ID_EMPRESA INTEGER NOT NULL," +
-                    " ID_CADASTRO INTEGER NOT NULL," +
-                    " ID_VENDEDOR INTEGER NOT NULL," +
-                    " ID_CONDICAO_PAGAMENTO INTEGER NOT NULL," +
-                    " ID_OPERACAO INTEGER NOT NULL," +
-                    " ID_TABELA INTEGER," +
-                    " NOME_EXTENSO VARCHAR(150)," +
-                    " DATA_EMISSAO DATE," +
-                    " VALOR_PRODUTOS DECIMAL(12, 2)," +
-                    " VALOR_DESCONTO DECIMAL(12, 2)," +
-                    " VALOR_DESCONTO_ADD DECIMAL(12, 2)," +
-                    " DESCONTO_PER DECIMAL(12, 2)," +
-                    " DESCONTO_PER_ADD DECIMAL(12, 2)," +
-                    " VALOR_TOTAL DECIMAL(12, 3)," +
-                    " EXCLUIDO VARCHAR(1) NOT NULL," +
-                    " EXCLUIDO_USUARIO_ID INTEGER," +
-                    " EXCLUIDO_USUARIO_NOME VARCHAR(40)," +
-                    " EXCLUIDO_USUARIO_DATA TIMESTAMP," +
-                    " JUSTIFICATIVA_EXCLUSAO VARCHAR(250)," +
-                    " USUARIO_LANCAMENTO_ID INTEGER NOT NULL," +
-                    " USUARIO_LANCAMENTO_NOME VARCHAR(40)," +
-                    " USUARIO_LANCAMENTO_DATA TIMESTAMP," +
-                    " OBSERVACOES VARCHAR(300)," +
-                    " STATUS VARCHAR(1) NOT NULL," +
-                    " ID_PEDIDO_VENDA INTEGER," +
-                    " ID_NOTA_FISCAL INTEGER," +
-                    " ID_TABELA_PRECO_FAIXA INTEGER," +
-                    " PONTOS_TOTAL DECIMAL(12, 4)," +
-                    " PONTOS_COEFICIENTE DECIMAL(12, 4)," +
-                    " PONTOS_COR VARCHAR(15)," +
-                    " COMISSAO_PERCENTUAL DECIMAL(12, 4)," +
-                    " COMISSAO_VALOR DECIMAL(12, 2)," +
-                    " ID_FAIXA_FINAL INTEGER," +
-                    " VALOR_BONUS_CREDOR DECIMAL(12, 2)," +
-                    " PERC_BONUS_CREDOR DECIMAL(12, 4), " +
-                    " FATURADO VARCHAR(1)," +
-                    " PEDIDO_ENVIADO VARCHAR(1) DEFAULT 'N', " +
-                    " ID_WEB_PEDIDO_SERVIDOR INTEGER," +
-                    " DATA_PREV_ENTREGA DATE);");
-
-            try {
-                db.execSQL("ALTER TABLE TBL_PROSPECT ADD COLUMN ID_VENDEDOR INTEGER;");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            try {
-                db.execSQL("ALTER TABLE TBL_PROSPECT ADD COLUMN ID_CATEGORIA INTEGER;");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            try {
-                db.execSQL("ALTER TABLE TBL_LOGIN ADD COLUMN DATA_SINCRONIA VARCHAR(10);");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            try {
-                db.execSQL("ALTER TABLE TBL_OPERACAO_ESTOQUE ADD COLUMN NATUREZA_OPERACAO VARCHAR(60);");
-            } catch (Exception e) {
-                e.printStackTrace();
+            if (newVersion >= 3) {
+                try {
+                    db.execSQL("ALTER TABLE TBL_PRODUTO ADD COLUMN NOME_SUB_GRUPO VARCHAR(60);");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -1767,63 +1777,9 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("VENDA_PRECO", produto.getVenda_preco());
         content.put("VENDA_PERC_COMISSAO_DOIS", produto.getVenda_perc_comissao_dois());
         content.put("DESCRICAO", produto.getDescricao());
-        db.insert("TBL_PRODUTO", null, content);
-        System.gc();
-    }
+        content.put("NOME_SUB_GRUPO", produto.getNome_sub_grupo());
 
-    public void atualizarTBL_PRODUTO(String ATIVO, String ID_PRODUTO, String NOME_PRODUTO, String UNIDADE, String TIPO_CADASTRO, String ID_ENTIDADE, String NCM, String ID_GRUPO, String ID_SUB_GRUPO, String PESO_BRUTO, String PESO_LIQUIDO, String CODIGO_EM_BARRAS, String MOVIMENTA_ESTOQUE, String NOME_DA_MARCA, String ID_EMPRESA, String ID_ORIGEM, String CUSTO_PRODUTO, String CUSTO_PER_IPI, String CUSTO_IPI, String CUSTO_PER_FRETE, String CUSTO_FRETE, String CUSTO_PER_ICMS, String CUSTO_ICMS, String CUSTO_PER_FIN, String CUSTO_FIN, String CUSTO_PER_SUBST, String CUSTO_SUBT, String CUSTO_PER_OUTROS, String CUSTO_OUTROS, String VALOR_CUSTO, String EXCLUIDO, String EXCLUIDO_POR, String EXCLUIDO_POR_DATA, String EXCLUIDO_CODIGO_NOVO, String AJUSTE_PRECO_DATA, String AJUSTE_PRECO_NFE, String AJUSTE_PRECO_USUARIO, String TOTAL_CUSTO, String TOTAL_CREDITO, String VALOR_CUSTO_ESTOQUE, String CUSTO_DATA_INICIAL, String CUSTO_VALOR_INICIAL, String PRODUTO_VENDA, String PRODUTO_INSUMO, String PRODUTO_CONSUMO, String PRODUTO_PRODUCAO, String VENDA_PERC_COMISSAO, String VENDA_PRECO, String VENDA_PERC_COMISSAO_DOIS, String DESCRICAO) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues content = new ContentValues();
-        content.put("ATIVO", ATIVO);
-        content.put("NOME_PRODUTO", NOME_PRODUTO);
-        content.put("UNIDADE", UNIDADE);
-        content.put("TIPO_CADASTRO", TIPO_CADASTRO);
-        content.put("ID_ENTIDADE", ID_ENTIDADE);
-        content.put("NCM", NCM);
-        content.put("ID_GRUPO", ID_GRUPO);
-        content.put("ID_SUB_GRUPO", ID_SUB_GRUPO);
-        content.put("PESO_BRUTO", PESO_BRUTO);
-        content.put("PESO_LIQUIDO", PESO_LIQUIDO);
-        content.put("CODIGO_EM_BARRAS", CODIGO_EM_BARRAS);
-        content.put("MOVIMENTA_ESTOQUE", MOVIMENTA_ESTOQUE);
-        content.put("NOME_DA_MARCA", NOME_DA_MARCA);
-        content.put("ID_EMPRESA", ID_EMPRESA);
-        content.put("ID_ORIGEM", ID_ORIGEM);
-        content.put("CUSTO_PRODUTO", CUSTO_PRODUTO);
-        content.put("CUSTO_PER_IPI", CUSTO_PER_IPI);
-        content.put("CUSTO_IPI", CUSTO_IPI);
-        content.put("CUSTO_PER_FRETE", CUSTO_PER_FRETE);
-        content.put("CUSTO_FRETE", CUSTO_FRETE);
-        content.put("CUSTO_PER_ICMS", CUSTO_PER_ICMS);
-        content.put("CUSTO_ICMS", CUSTO_ICMS);
-        content.put("CUSTO_PER_FIN", CUSTO_PER_FIN);
-        content.put("CUSTO_FIN", CUSTO_FIN);
-        content.put("CUSTO_PER_SUBST", CUSTO_PER_SUBST);
-        content.put("CUSTO_SUBT", CUSTO_SUBT);
-        content.put("CUSTO_PER_OUTROS", CUSTO_PER_OUTROS);
-        content.put("CUSTO_OUTROS", CUSTO_OUTROS);
-        content.put("VALOR_CUSTO", VALOR_CUSTO);
-        content.put("EXCLUIDO", EXCLUIDO);
-        content.put("EXCLUIDO_POR", EXCLUIDO_POR);
-        content.put("EXCLUIDO_POR_DATA", EXCLUIDO_POR_DATA);
-        content.put("EXCLUIDO_CODIGO_NOVO", EXCLUIDO_CODIGO_NOVO);
-        content.put("AJUSTE_PRECO_DATA", AJUSTE_PRECO_DATA);
-        content.put("AJUSTE_PRECO_NFE", AJUSTE_PRECO_NFE);
-        content.put("AJUSTE_PRECO_USUARIO", AJUSTE_PRECO_USUARIO);
-        content.put("TOTAL_CUSTO", TOTAL_CUSTO);
-        content.put("TOTAL_CREDITO", TOTAL_CREDITO);
-        content.put("VALOR_CUSTO_ESTOQUE", VALOR_CUSTO_ESTOQUE);
-        content.put("CUSTO_DATA_INICIAL", CUSTO_DATA_INICIAL);
-        content.put("CUSTO_VALOR_INICIAL", CUSTO_VALOR_INICIAL);
-        content.put("PRODUTO_VENDA", PRODUTO_VENDA);
-        content.put("PRODUTO_INSUMO", PRODUTO_INSUMO);
-        content.put("PRODUTO_CONSUMO", PRODUTO_CONSUMO);
-        content.put("PRODUTO_PRODUCAO", PRODUTO_PRODUCAO);
-        content.put("VENDA_PERC_COMISSAO", VENDA_PERC_COMISSAO);
-        content.put("VENDA_PRECO", VENDA_PRECO);
-        content.put("VENDA_PERC_COMISSAO_DOIS", VENDA_PERC_COMISSAO_DOIS);
-        content.put("DESCRICAO", DESCRICAO);
-        db.update("TBL_PRODUTO", content, "ID_PRODUTO = '" + ID_PRODUTO + "'", null);
+        db.insert("TBL_PRODUTO", null, content);
         System.gc();
     }
 
@@ -2184,6 +2140,8 @@ public class DBHelper extends SQLiteOpenHelper {
             produto.setUnidade(cursor.getString(cursor.getColumnIndex("UNIDADE")));
             produto.setVenda_preco(cursor.getString(cursor.getColumnIndex("VENDA_PRECO")));
             produto.setAtivo(cursor.getString(cursor.getColumnIndex("ATIVO")));
+            produto.setCodigo_em_barras(cursor.getString(cursor.getColumnIndex("CODIGO_EM_BARRAS")));
+            produto.setNome_sub_grupo(cursor.getString(cursor.getColumnIndex("NOME_SUB_GRUPO")));
 
             lista.add(produto);
             System.gc();

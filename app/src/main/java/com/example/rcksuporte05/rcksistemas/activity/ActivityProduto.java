@@ -168,7 +168,7 @@ public class ActivityProduto extends AppCompatActivity {
 
         if (!query.trim().equals("")) {
             try {
-                lista = db.listaProduto("SELECT * FROM TBL_PRODUTO WHERE NOME_PRODUTO LIKE '%" + query + "%' OR ID_PRODUTO LIKE '%" + query + "%' ORDER BY ATIVO DESC, NOME_PRODUTO;");
+                lista = db.listaProduto("SELECT * FROM TBL_PRODUTO WHERE NOME_PRODUTO LIKE '%" + query + "%' OR ID_PRODUTO LIKE '%" + query + "%' OR CODIGO_EM_BARRAS LIKE '%" + query + "%' ORDER BY ATIVO DESC, NOME_PRODUTO;");
                 edtTotalProdutos.setText("Produtos encontrados: " + lista.size() + "   ");
                 edtTotalProdutos.setTextColor(Color.BLACK);
             } catch (CursorIndexOutOfBoundsException | NullPointerException e) {

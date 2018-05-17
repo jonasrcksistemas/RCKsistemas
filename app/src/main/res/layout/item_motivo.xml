@@ -1,22 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="35dp"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/rlItemMotivos"
-    android:background="@drawable/bg_list_row_chamar_atencao"
-    >
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_list_row_chamar_atencao">
 
     <TextView
         android:id="@+id/txtMotivo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/colorAccent"
-        android:textStyle="bold"
-        android:text="Academia"
-        android:textSize="12sp"
-        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp"
         android:layout_marginLeft="8dp"
-        />
+        android:layout_marginTop="10dp"
+        android:text="Academia"
+        android:textColor="@color/colorAccent"
+        android:textSize="12sp"
+        android:textStyle="bold" />
 
 </RelativeLayout>

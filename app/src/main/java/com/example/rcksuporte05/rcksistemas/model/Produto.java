@@ -51,6 +51,7 @@ public class Produto {
     private String venda_preco;
     private String venda_perc_comissao_dois;
     private String descricao;
+    private String nome_sub_grupo;
 
     public String getDescricao() {
         return this.descricao;
@@ -452,4 +453,11 @@ public class Produto {
         this.venda_perc_comissao_dois = venda_perc_comissao_dois;
     }
 
+    public String getNome_sub_grupo() {
+        return nome_sub_grupo;
+    }
+
+    public void setNome_sub_grupo(String nome_sub_grupo) {
+        this.nome_sub_grupo = nome_sub_grupo;
+    }
 }

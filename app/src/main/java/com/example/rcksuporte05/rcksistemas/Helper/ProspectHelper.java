@@ -467,7 +467,7 @@ public class ProspectHelper {
             }
         }
 
-        /*if(verificaMovimento){
+        if(verificaMovimento){
             if(localizacao == null){
                 Toast.makeText(activityMain, "Fazer Check-in é obrigatório",Toast.LENGTH_LONG).show();
                 verificaMovimento = false;
@@ -475,7 +475,7 @@ public class ProspectHelper {
                 prospect.setLatitude(String.valueOf(localizacao.getLatitude()));
                 prospect.setLongitude(String.valueOf(localizacao.getLongitude()));
             }
-        }*/
+        }
 
         return verificaMovimento;
 
