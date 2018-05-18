@@ -96,6 +96,8 @@ public class WebPedidoItens extends Produto {
         this.setVenda_preco(produto.getVenda_preco());
         this.setVenda_perc_comissao_dois(produto.getVenda_perc_comissao_dois());
         this.setDescricao(produto.getDescricao());
+        this.setProduto_tercerizacao(produto.getProduto_tercerizacao());
+        this.setProduto_materia_prima(produto.getProduto_materia_prima());
     }
 
 

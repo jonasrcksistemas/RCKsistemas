@@ -169,11 +169,13 @@ public class Pedido1 extends Fragment implements ListaAdapterProdutoPedido.Produ
                     public void onClick(DialogInterface dialog, int which) {
                         String descontoCategoria = db.listaTabelaPrecoItem("SELECT * FROM TBL_TABELA_PRECO_ITENS WHERE ID_CATEGORIA = " + ClienteHelper.getCliente().getIdCategoria()).get(0).getPerc_desc_final();
                         for (WebPedidoItens webPedidoItem : listaProdutoPedido) {
-                            webPedidoItem.setValor_desconto_per(descontoCategoria);
-                            webPedidoItem.setDescontoIndevido(false);
-                            Float descontoReais = (Float.parseFloat(descontoCategoria) * Float.parseFloat(webPedidoItem.getValor_bruto())) / 100;
-                            webPedidoItem.setValor_desconto_real(String.valueOf(descontoReais));
-                            webPedidoItem.setValor_total(String.valueOf(Float.parseFloat(webPedidoItem.getValor_bruto()) - descontoReais));
+                            if (!webPedidoItem.getProduto_tercerizacao().equals("S") && !webPedidoItem.getProduto_materia_prima().equals("S")) {
+                                webPedidoItem.setValor_desconto_per(descontoCategoria);
+                                webPedidoItem.setDescontoIndevido(false);
+                                Float descontoReais = (Float.parseFloat(descontoCategoria) * Float.parseFloat(webPedidoItem.getValor_bruto())) / 100;
+                                webPedidoItem.setValor_desconto_real(String.valueOf(descontoReais));
+                                webPedidoItem.setValor_total(String.valueOf(Float.parseFloat(webPedidoItem.getValor_bruto()) - descontoReais));
+                            }
                         }
                         listaAdapterProdutoPedido.notifyDataSetChanged();
                         PedidoHelper.calculaValorPedido(listaProdutoPedido, PedidoHelper.getActivityPedidoMain());

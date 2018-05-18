@@ -375,7 +375,6 @@ public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRe
         recyclerViewPedidos.setLayoutManager(layoutManager);
 
         listaPedidoAdapter = new ListaPedidoAdapter(listaPedido, this);
-        recyclerViewPedidos.addItemDecoration(new DividerItemDecoration(this, LinearLayout.VERTICAL));
         recyclerViewPedidos.setAdapter(listaPedidoAdapter);
 
         listaPedidoAdapter.notifyDataSetChanged();

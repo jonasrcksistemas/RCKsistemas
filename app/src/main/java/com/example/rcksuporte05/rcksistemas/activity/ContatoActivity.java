@@ -21,6 +21,7 @@ import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.HistoricoFinanceiroHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.model.Cliente;
+import com.example.rcksuporte05.rcksistemas.util.MascaraUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -53,6 +54,9 @@ public class ContatoActivity extends AppCompatActivity {
     LinearLayout lyNomeCliente;
     @BindView(R.id.lyFinanceiro)
     LinearLayout lyFinanceiro;
+    @BindView(R.id.txtLimiteCredito)
+    TextView txtLimiteCredito;
+
     private Cliente cliente;
 
     @Override
@@ -183,7 +187,6 @@ public class ContatoActivity extends AppCompatActivity {
                                 Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
                                 mapIntent.setPackage("com.google.android.apps.maps");
                                 startActivity(mapIntent);
-
                             }
                         });
                         alert.show();
@@ -209,6 +212,9 @@ public class ContatoActivity extends AppCompatActivity {
                     cadastroClienteMain.finish();
                 }
             });
+
+            if (cliente.getLimite_credito() != null && !cliente.getLimite_credito().trim().isEmpty())
+                txtLimiteCredito.setText(MascaraUtil.mascaraReal(cliente.getLimite_credito()));
 
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);

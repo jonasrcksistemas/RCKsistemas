@@ -224,15 +224,32 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
             }
         }
 
-        promocaoRetorno = pedidoBO.calculaDesconto(ClienteHelper.getCliente().getId_cadastro(), webPedidoItem.getId_produto(), ProdutoPedidoActivity.this);
-        if (promocaoRetorno != null && promocaoRetorno.getValorDesconto() > 0 && promocaoRetorno.getValorDesconto() > Float.parseFloat(tabelaPrecoItem.getPerc_desc_final())) {
-            rbPorcentagem.setText("Desconto %(max " + promocaoRetorno.getValorDesconto().toString().replace(".0", "") + "%)");
-            cdPromocao.setVisibility(View.VISIBLE);
-            txtPromocao.setText("**PRODUTO EM PROMOÇÃO**\n" + promocaoRetorno.getNomePromocao());
+        if (!webPedidoItem.getProduto_tercerizacao().equals("S") && !webPedidoItem.getProduto_materia_prima().equals("S")) {
+            edtDesconto.setEnabled(true);
+            edtDescontoReais.setEnabled(true);
+            rbPorcentagem.setEnabled(true);
+            rbReal.setEnabled(true);
+            promocaoRetorno = pedidoBO.calculaDesconto(ClienteHelper.getCliente().getId_cadastro(), webPedidoItem.getId_produto(), ProdutoPedidoActivity.this);
+            if (promocaoRetorno != null && promocaoRetorno.getValorDesconto() > 0 && promocaoRetorno.getValorDesconto() > Float.parseFloat(tabelaPrecoItem.getPerc_desc_final())) {
+                rbPorcentagem.setText("Desconto %(max " + promocaoRetorno.getValorDesconto().toString().replace(".0", "") + "%)");
+                cdPromocao.setVisibility(View.VISIBLE);
+                txtPromocao.setText("**PRODUTO EM PROMOÇÃO**\n" + promocaoRetorno.getNomePromocao());
+            } else {
+                cdPromocao.setVisibility(View.GONE);
+                rbPorcentagem.setText("Desconto %(max " + tabelaPrecoItem.getPerc_desc_final() + "%)");
+            }
         } else {
-            cdPromocao.setVisibility(View.GONE);
-            rbPorcentagem.setText("Desconto %(max " + tabelaPrecoItem.getPerc_desc_final() + "%)");
+            rbPorcentagem.setEnabled(false);
+            rbReal.setEnabled(false);
+            edtDesconto.setEnabled(false);
+            edtDesconto.setText("00");
+            edtDescontoReais.setEnabled(false);
+            edtDescontoReais.setText("0.00");
+            cdPromocao.setVisibility(View.VISIBLE);
+            txtPromocao.setText("PRODUTO COM PREÇO FIXO");
+            rbPorcentagem.setText("Desconto %(max 0%)");
         }
+
 
         edtNomeProduto.setText(webPedidoItem.getNome_produto());
         edtTabelaPreco.setText(MascaraUtil.mascaraVirgula(webPedidoItem.getVenda_preco()));
@@ -314,7 +331,6 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
                     Toast.makeText(this, "Informe um produto", Toast.LENGTH_SHORT).show();
                 }
                 break;
-
         }
         return super.onOptionsItemSelected(item);
     }

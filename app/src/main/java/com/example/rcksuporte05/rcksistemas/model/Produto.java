@@ -2,7 +2,7 @@ package com.example.rcksuporte05.rcksistemas.model;
 
 public class Produto {
     private String ativo;
-    private int id_produto;
+    private int  id_produto;
     private String nome_produto;
     private String unidade;
     private String tipo_cadastro;
@@ -52,6 +52,8 @@ public class Produto {
     private String venda_perc_comissao_dois;
     private String descricao;
     private String nome_sub_grupo;
+    private String produto_materia_prima;
+    private String produto_tercerizacao;
 
     public String getDescricao() {
         return this.descricao;
@@ -459,5 +461,21 @@ public class Produto {
 
     public void setNome_sub_grupo(String nome_sub_grupo) {
         this.nome_sub_grupo = nome_sub_grupo;
+    }
+
+    public String getProduto_materia_prima() {
+        return produto_materia_prima;
+    }
+
+    public void setProduto_materia_prima(String produto_materia_prima) {
+        this.produto_materia_prima = produto_materia_prima;
+    }
+
+    public String getProduto_tercerizacao() {
+        return produto_tercerizacao;
+    }
+
+    public void setProduto_tercerizacao(String produto_tercerizacao) {
+        this.produto_tercerizacao = produto_tercerizacao;
     }
 }

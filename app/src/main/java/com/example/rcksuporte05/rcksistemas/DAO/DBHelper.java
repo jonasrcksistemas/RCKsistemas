@@ -221,7 +221,9 @@ public class DBHelper extends SQLiteOpenHelper {
                 " VENDA_PRECO DECIMAL(12, 6)," +
                 " VENDA_PERC_COMISSAO_DOIS DECIMAL(12, 4)," +
                 " DESCRICAO VARCHAR(20), " +
-                " NOME_SUB_GRUPO VARHAR(60));");
+                " NOME_SUB_GRUPO VARHAR(60), " +
+                " PRODUTO_MATERIA_PRIMA VARCHAR(1), " +
+                " PRODUTO_TERCERIZACAO VARCHAR(1));");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS TBL_TABELA_PRECO_CAB (ID_TABELA INTEGER PRIMARY KEY," +
                 " ID_EMPRESA INTEGER NOT NULL," +
@@ -423,7 +425,9 @@ public class DBHelper extends SQLiteOpenHelper {
                 "ITEM_ENVIADO VARCHAR(1) DEFAULT 'N'," +
                 "ID_WEB_ITEM_SERVIDOR INTEGER," +
                 "TIPO_DESCONTO VARCHAR(1) DEFAULT 'P', " +
-                "NOME_PRODUTO VARCHAR(60));");
+                "NOME_PRODUTO VARCHAR(60)," +
+                "PRODUTO_MATERIA_PRIMA VARCHAR(1), " +
+                "PRODUTO_TERCERIZACAO VARCHAR(1));");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS TBL_PROSPECT " +
                 "(ATIVO VARCHAR(1) DEFAULT 'S' NOT NULL," +
@@ -825,6 +829,30 @@ public class DBHelper extends SQLiteOpenHelper {
             if (newVersion >= 3) {
                 try {
                     db.execSQL("ALTER TABLE TBL_PRODUTO ADD COLUMN NOME_SUB_GRUPO VARCHAR(60);");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    db.execSQL("ALTER TABLE TBL_PRODUTO ADD COLUMN PRODUTO_MATERIA_PRIMA VARCHAR(1);");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    db.execSQL("ALTER TABLE TBL_PRODUTO ADD COLUMN PRODUTO_TERCERIZACAO VARCHAR(1);");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    db.execSQL("ALTER TABLE TBL_WEB_PEDIDO_ITENS ADD COLUMN PRODUTO_MATERIA_PRIMA VARCHAR(1);");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    db.execSQL("ALTER TABLE TBL_WEB_PEDIDO_ITENS ADD COLUMN PRODUTO_TERCERIZACAO VARCHAR(1);");
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -1778,6 +1806,8 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("VENDA_PERC_COMISSAO_DOIS", produto.getVenda_perc_comissao_dois());
         content.put("DESCRICAO", produto.getDescricao());
         content.put("NOME_SUB_GRUPO", produto.getNome_sub_grupo());
+        content.put("PRODUTO_MATERIA_PRIMA", produto.getProduto_materia_prima());
+        content.put("PRODUTO_TERCERIZACAO", produto.getProduto_tercerizacao());
 
         db.insert("TBL_PRODUTO", null, content);
         System.gc();
@@ -2142,6 +2172,8 @@ public class DBHelper extends SQLiteOpenHelper {
             produto.setAtivo(cursor.getString(cursor.getColumnIndex("ATIVO")));
             produto.setCodigo_em_barras(cursor.getString(cursor.getColumnIndex("CODIGO_EM_BARRAS")));
             produto.setNome_sub_grupo(cursor.getString(cursor.getColumnIndex("NOME_SUB_GRUPO")));
+            produto.setProduto_tercerizacao(cursor.getString(cursor.getColumnIndex("PRODUTO_TERCERIZACAO")));
+            produto.setProduto_materia_prima(cursor.getString(cursor.getColumnIndex("PRODUTO_MATERIA_PRIMA")));
 
             lista.add(produto);
             System.gc();
