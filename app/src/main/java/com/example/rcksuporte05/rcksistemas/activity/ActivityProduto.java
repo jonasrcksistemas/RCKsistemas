@@ -16,8 +16,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.PedidoHelper;
@@ -27,6 +27,8 @@ import com.example.rcksuporte05.rcksistemas.adapters.RecyclerTouchListener;
 import com.example.rcksuporte05.rcksistemas.model.Produto;
 import com.example.rcksuporte05.rcksistemas.util.DividerItemDecoration;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,14 +36,23 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class ActivityProduto extends AppCompatActivity {
+
     @BindView(R.id.listaProdutoRecycler)
     RecyclerView listaProdutoRecyclerView;
+
+    @BindView(R.id.tb_produto)
+    Toolbar toolbar;
+
+    @BindView(R.id.edtTotalProdutos)
+    TextView edtTotalProdutos;
+
+    @BindView(R.id.edtDataSincronia)
+    TextView edtDataSincronia;
+
     private MenuItem novo_produto;
     private SearchView busca_produto;
-    private Toolbar toolbar;
     private List<Produto> lista;
     private DBHelper db = new DBHelper(this);
-    private EditText edtTotalProdutos;
     private ListaProdutoAdpter listaProdutoAdpter;
 
     @Override
@@ -50,10 +61,13 @@ public class ActivityProduto extends AppCompatActivity {
         setContentView(R.layout.activity_produto);
         ButterKnife.bind(this);
 
-        edtTotalProdutos = (EditText) findViewById(R.id.edtTotalProdutos);
-        toolbar = (Toolbar) findViewById(R.id.tb_produto);
         toolbar.setTitle("Lista de Produtos");
 
+        try {
+            edtDataSincronia.setText(new SimpleDateFormat("dd/MM/yyyy HH:mm").format(new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse(db.consulta("SELECT DATA_SINCRONIA_PRODUTO FROM TBL_LOGIN", "DATA_SINCRONIA_PRODUTO"))));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         listaProdutoRecyclerView.setLayoutManager(layoutManager);
@@ -133,7 +147,7 @@ public class ActivityProduto extends AppCompatActivity {
                 try {
                     if (query.trim().equals("")) {
                         listaProdutoAdpter = new ListaProdutoAdpter(lista);
-                        edtTotalProdutos.setText("Produtos listados: " + lista.size() + "   ");
+                        edtTotalProdutos.setText(lista.size() + " Produtos listados");
                         edtTotalProdutos.setTextColor(Color.BLACK);
                     } else {
                         listaProdutoAdpter = new ListaProdutoAdpter(buscarProdutos(query));
@@ -169,11 +183,14 @@ public class ActivityProduto extends AppCompatActivity {
         if (!query.trim().equals("")) {
             try {
                 lista = db.listaProduto("SELECT * FROM TBL_PRODUTO WHERE NOME_PRODUTO LIKE '%" + query + "%' OR ID_PRODUTO LIKE '%" + query + "%' OR CODIGO_EM_BARRAS LIKE '%" + query + "%' ORDER BY ATIVO DESC, NOME_PRODUTO;");
-                edtTotalProdutos.setText("Produtos encontrados: " + lista.size() + "   ");
+                if (lista.size() > 1)
+                    edtTotalProdutos.setText(lista.size() + " Produtos encontrados");
+                else
+                    edtTotalProdutos.setText(lista.size() + " Produto encontrado");
                 edtTotalProdutos.setTextColor(Color.BLACK);
             } catch (CursorIndexOutOfBoundsException | NullPointerException e) {
                 e.printStackTrace();
-                edtTotalProdutos.setText("Nenhum produto encontrado   ");
+                edtTotalProdutos.setText("Nenhum produto encontrado");
                 edtTotalProdutos.setTextColor(Color.RED);
             }
         }
@@ -191,10 +208,10 @@ public class ActivityProduto extends AppCompatActivity {
     @Override
     protected void onResume() {
         if (lista != null) {
-            edtTotalProdutos.setText("Produtos listados: " + lista.size() + "   ");
+            edtTotalProdutos.setText(lista.size() + " Produtos listados");
             edtTotalProdutos.setTextColor(Color.BLACK);
         } else {
-            edtTotalProdutos.setText("Não há produtos a serem exibidos!   ");
+            edtTotalProdutos.setText("Não há produtos a serem exibidos!");
             edtTotalProdutos.setTextColor(Color.RED);
         }
         super.onResume();

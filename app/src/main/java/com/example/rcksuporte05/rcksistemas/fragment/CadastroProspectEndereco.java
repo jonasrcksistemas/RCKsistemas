@@ -276,6 +276,10 @@ public class CadastroProspectEndereco extends Fragment {
                     break;
             }
         }
+
+        if (ProspectHelper.getProspect().getEndereco_complemento() != null && !ProspectHelper.getProspect().getEndereco_complemento().trim().isEmpty()) {
+            edtComplementoProspect.setText(ProspectHelper.getProspect().getEndereco_complemento());
+        }
     }
 
 

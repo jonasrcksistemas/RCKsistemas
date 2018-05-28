@@ -72,22 +72,34 @@ public class CadastroProspectFotoSalvar extends Fragment implements GoogleApiCli
 
     static int REQUEST_CODE_IMAGEM_1 = 798;
     static int REQUEST_CODE_IMAGEM_2 = 987;
+
     @BindView(R.id.edtDataRetorno)
     public EditText edtDataRetorno;
+
     @BindView(R.id.imagemProspect1)
     ImageButton imagemProspect1;
+
     @BindView(R.id.imagemProspect2)
     ImageButton imagemProspect2;
+
     @BindView(R.id.btnSalvarParcial)
     Button btnSalvarParcial;
+
     @BindView(R.id.btnSalvarProspect)
     Button btnSalvarProspect;
+
+    @BindView(R.id.btnCheckinVisitaProspect)
+    Button btnCheckinVisitaProspect;
+
     @BindView(R.id.txtLatitudeProspect)
     TextView txtLatitudeProspect;
+
     @BindView(R.id.txtLongitudeProspect)
     TextView txtLongitudeProspect;
+
     @BindView(R.id.txtChekinEnderecoProspect)
     TextView txtChekinEnderecoProspect;
+
     String encodedImage;
     Bitmap mImagem1;
     Bitmap mImagem2;
@@ -124,6 +136,7 @@ public class CadastroProspectFotoSalvar extends Fragment implements GoogleApiCli
             btnSalvarProspect.setVisibility(View.INVISIBLE);
             imagemProspect1.setEnabled(false);
             imagemProspect2.setEnabled(false);
+            btnCheckinVisitaProspect.setClickable(false);
 
         } else {
             edtDataRetorno.setOnClickListener(new View.OnClickListener() {
@@ -160,7 +173,10 @@ public class CadastroProspectFotoSalvar extends Fragment implements GoogleApiCli
             e.printStackTrace();
         }
 
-
+        if (mLocation != null) {
+            ProspectHelper.getProspect().setLatitude(String.valueOf(mLocation.getLatitude()));
+            ProspectHelper.getProspect().setLongitude(String.valueOf(mLocation.getLongitude()));
+        }
     }
 
     public void insereDadosNaTela() {
@@ -234,6 +250,11 @@ public class CadastroProspectFotoSalvar extends Fragment implements GoogleApiCli
             alert.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    if (ProspectHelper.getProspect().getId_prospect() != null && !ProspectHelper.getProspect().getId_prospect().trim().isEmpty()) {
+                        System.out.println("Esse prospect já tem id!");
+                    } else {
+                        ProspectHelper.getProspect().setId_prospect(String.valueOf(db.contagem("SELECT COUNT(*) FROM TBL_PROSPECT;") + 1));
+                    }
                     ProspectHelper.getProspect().setProspectSalvo("N");
                     ProspectHelper.getProspect().setIdEmpresa(UsuarioHelper.getUsuario().getIdEmpresaMultiDevice());
                     ProspectHelper.getProspect().setUsuario_id(UsuarioHelper.getUsuario().getId_usuario());
@@ -256,26 +277,46 @@ public class CadastroProspectFotoSalvar extends Fragment implements GoogleApiCli
     @OnClick(R.id.btnSalvarProspect)
     public void salvarProspect() {
         insereDadosDaFrame();
-        if (ProspectHelper.salvarProspect()) {
-            AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
-            alert.setTitle("Atenção");
-            alert.setMessage("Tem certeza que deseja salvar esse prospect PERMANENTEMENTE?");
-            alert.setNegativeButton("NÃO", null);
-            alert.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    ProspectHelper.getProspect().setProspectSalvo("S");
-                    ProspectHelper.getProspect().setIdEmpresa(UsuarioHelper.getUsuario().getIdEmpresaMultiDevice());
-                    ProspectHelper.getProspect().setUsuario_id(UsuarioHelper.getUsuario().getId_usuario());
-                    ProspectHelper.getProspect().setUsuario_nome(UsuarioHelper.getUsuario().getNome_usuario());
-                    ProspectHelper.getProspect().setUsuario_data(db.pegaDataAtual());
-                    ProspectHelper.getProspect().setIdVendedor(Integer.parseInt(UsuarioHelper.getUsuario().getId_quando_vendedor()));
+        if (ProspectHelper.salvarParcial()) {
+            if (ProspectHelper.getProspect().getId_prospect() != null && !ProspectHelper.getProspect().getId_prospect().trim().isEmpty()) {
+                System.out.println("Esse prospect já tem id!");
+            } else {
+                ProspectHelper.getProspect().setId_prospect(String.valueOf(db.contagem("SELECT COUNT(*) FROM TBL_PROSPECT;") + 1));
+            }
+            ProspectHelper.getProspect().setProspectSalvo("N");
+            ProspectHelper.getProspect().setIdEmpresa(UsuarioHelper.getUsuario().getIdEmpresaMultiDevice());
+            ProspectHelper.getProspect().setUsuario_id(UsuarioHelper.getUsuario().getId_usuario());
+            ProspectHelper.getProspect().setUsuario_nome(UsuarioHelper.getUsuario().getNome_usuario());
+            try {
+                ProspectHelper.getProspect().setUsuario_data(new SimpleDateFormat("dd/MM/yyyy")
+                        .format(new SimpleDateFormat("yyyy-MM-dd")
+                                .parse(db.pegaDataAtual())));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            db.atualizarTBL_PROSPECT(ProspectHelper.getProspect());
 
-                    db.atualizarTBL_PROSPECT(ProspectHelper.getProspect());
-                    getActivity().finish();
-                }
-            });
-            alert.show();
+            if (ProspectHelper.salvarProspect()) {
+                AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+                alert.setTitle("Atenção");
+                alert.setMessage("Tem certeza que deseja salvar esse prospect PERMANENTEMENTE?");
+                alert.setNegativeButton("NÃO", null);
+                alert.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        ProspectHelper.getProspect().setProspectSalvo("S");
+                        ProspectHelper.getProspect().setIdEmpresa(UsuarioHelper.getUsuario().getIdEmpresaMultiDevice());
+                        ProspectHelper.getProspect().setUsuario_id(UsuarioHelper.getUsuario().getId_usuario());
+                        ProspectHelper.getProspect().setUsuario_nome(UsuarioHelper.getUsuario().getNome_usuario());
+                        ProspectHelper.getProspect().setUsuario_data(db.pegaDataAtual());
+                        ProspectHelper.getProspect().setIdVendedor(Integer.parseInt(UsuarioHelper.getUsuario().getId_quando_vendedor()));
+
+                        db.atualizarTBL_PROSPECT(ProspectHelper.getProspect());
+                        getActivity().finish();
+                    }
+                });
+                alert.show();
+            }
         }
     }
 

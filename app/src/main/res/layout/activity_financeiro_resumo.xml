@@ -13,9 +13,7 @@
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
         android:theme="@style/Base.ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:title="Resumo Financeiro">
-
-    </android.support.v7.widget.Toolbar>
+        app:title="Resumo Financeiro" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -28,9 +26,46 @@
         android:paddingStart="@dimen/activity_horizontal_margin"
         android:paddingTop="@dimen/activity_vertical_margin">
 
+
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="55dp"
+            android:gravity="center">
+
+            <LinearLayout
+                android:id="@+id/lyLimiteCredito"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingEnd="@dimen/activity_horizontal_margin"
+                android:paddingStart="@dimen/activity_horizontal_margin">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="end"
+                    android:text="LIMITE DE CRÉDITO"
+                    android:textColor="#000000" />
+
+                <TextView
+                    android:id="@+id/txtLimiteCredito"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="end"
+                    android:text="R$0,00"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+                    android:textColor="#0015ff" />
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginTop="25dp"
             android:gravity="center">
 
             <LinearLayout
@@ -69,7 +104,7 @@
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="55dp"
-            android:layout_marginTop="95dp"
+            android:layout_marginTop="25dp"
             android:gravity="center">
 
             <LinearLayout
@@ -108,7 +143,7 @@
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="55dp"
-            android:layout_marginTop="95dp"
+            android:layout_marginTop="25dp"
             android:gravity="center">
 
             <LinearLayout

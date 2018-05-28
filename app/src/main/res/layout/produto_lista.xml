@@ -51,14 +51,30 @@
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/txtUnidadeListaProduto"
+        android:id="@+id/txtSaldoEstoque"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/precoProduto"
         android:layout_alignLeft="@+id/nomeListaProduto"
         android:layout_alignStart="@+id/nomeListaProduto"
+        android:gravity="center"
+        android:text="Estoque: 00,00"
+        android:textColor="#000000"
+        android:textSize="10dp" />
+
+    <TextView
+        android:id="@+id/txtUnidadeListaProduto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/txtSaldoEstoque"
+        android:layout_toEndOf="@+id/txtSaldoEstoque"
+        android:layout_toLeftOf="@+id/precoProduto"
+        android:layout_toRightOf="@+id/txtSaldoEstoque"
+        android:layout_toStartOf="@+id/precoProduto"
+        android:paddingLeft="5dp"
+        android:paddingStart="5dp"
         android:text="UN"
-        android:textColor="@color/colorAccent"
+        android:textColor="#000000"
         android:textSize="10sp" />
 
 </RelativeLayout>

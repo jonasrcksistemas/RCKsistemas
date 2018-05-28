@@ -26,17 +26,52 @@
         android:layout_height="0dp"
         android:layout_weight="1" />
 
-    <EditText
-        android:id="@+id/edtTotalProdutos"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
         android:background="#dddfdd"
-        android:focusable="false"
-        android:gravity="end"
-        android:paddingEnd="10dp"
-        android:paddingRight="10dp"
-        android:text="Não há produtos a serem exibidos!"
-        android:textSize="15sp" />
+        android:orientation="horizontal">
+
+
+        <TextView
+            android:id="@+id/edtTotalProdutos"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toLeftOf="@+id/edtDataSincronia"
+            android:layout_toStartOf="@+id/edtDataSincronia"
+            android:ellipsize="end"
+            android:focusable="false"
+            android:gravity="start"
+            android:maxLines="1"
+            android:text="Não há produtos a serem exibidos!"
+            android:textColor="#000000"
+            android:textSize="14sp"
+            android:paddingStart="5dp"
+            android:paddingLeft="5dp" />
+
+        <TextView
+            android:id="@+id/edtDataSincronia"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_toLeftOf="@+id/imageView"
+            android:layout_toStartOf="@+id/imageView"
+            android:ellipsize="end"
+            android:focusable="false"
+            android:gravity="end"
+            android:maxLines="1"
+            android:textColor="#000000"
+            android:textSize="14sp" />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/ic_sincroniza_main" />
+
+    </RelativeLayout>
+
 
 </LinearLayout>

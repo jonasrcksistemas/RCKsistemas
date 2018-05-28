@@ -54,6 +54,7 @@ public class Produto {
     private String nome_sub_grupo;
     private String produto_materia_prima;
     private String produto_tercerizacao;
+    private Float saldo_estoque;
 
     public String getDescricao() {
         return this.descricao;
@@ -477,5 +478,13 @@ public class Produto {
 
     public void setProduto_tercerizacao(String produto_tercerizacao) {
         this.produto_tercerizacao = produto_tercerizacao;
+    }
+
+    public Float getSaldo_estoque() {
+        return saldo_estoque;
+    }
+
+    public void setSaldo_estoque(Float saldo_estoque) {
+        this.saldo_estoque = saldo_estoque;
     }
 }

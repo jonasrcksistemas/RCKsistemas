@@ -46,6 +46,8 @@ public class FinanceiroResumoActivity extends AppCompatActivity {
     LinearLayout lyVencer;
     @BindView(R.id.lyQuitada)
     LinearLayout lyQuitada;
+    @BindView(R.id.txtLimiteCredito)
+    TextView txtLimiteCredito;
 
     private ProgressDialog progress;
     private AlertDialog.Builder alert;
@@ -135,6 +137,11 @@ public class FinanceiroResumoActivity extends AppCompatActivity {
 
                 txtQuitada.setText(MascaraUtil.mascaraReal(response.body().getTotalQuitado()));
 
+                if (HistoricoFinanceiroHelper.getCliente().getLimite_credito() != null && !HistoricoFinanceiroHelper.getCliente().getLimite_credito().trim().isEmpty())
+                    txtLimiteCredito.setText(MascaraUtil.mascaraReal(HistoricoFinanceiroHelper.getCliente().getLimite_credito()));
+                else
+                    txtLimiteCredito.setText("< Não cadastrado >");
+
                 progress.dismiss();
             }
 
@@ -163,6 +170,12 @@ public class FinanceiroResumoActivity extends AppCompatActivity {
             txtAvencer.setText(MascaraUtil.mascaraReal(HistoricoFinanceiroHelper.getHistoricoFinanceiro().getTotalAvencer()));
 
             txtQuitada.setText(MascaraUtil.mascaraReal(HistoricoFinanceiroHelper.getHistoricoFinanceiro().getTotalQuitado()));
+
+            if (HistoricoFinanceiroHelper.getCliente().getLimite_credito() != null && !HistoricoFinanceiroHelper.getCliente().getLimite_credito().trim().isEmpty())
+                txtLimiteCredito.setText(MascaraUtil.mascaraReal(HistoricoFinanceiroHelper.getCliente().getLimite_credito()));
+            else
+                txtLimiteCredito.setText("< Não cadastrado >");
+
         } catch (NullPointerException e) {
             carregarHistoricoFinanceiro(HistoricoFinanceiroHelper.getCliente().getId_cadastro());
         }

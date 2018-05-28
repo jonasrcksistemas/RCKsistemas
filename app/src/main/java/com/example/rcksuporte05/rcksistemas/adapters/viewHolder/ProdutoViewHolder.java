@@ -22,6 +22,8 @@ public class ProdutoViewHolder extends RecyclerView.ViewHolder implements View.O
     public TextView textUN;
     @BindView(R.id.idProduto)
     public TextView idProduto;
+    @BindView(R.id.txtSaldoEstoque)
+    public TextView txtSaldoEstoque;
 
     public ProdutoViewHolder(View itemView) {
         super(itemView);

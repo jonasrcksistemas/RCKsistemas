@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.viewHolder.ProdutoViewHolder;
 import com.example.rcksuporte05.rcksistemas.model.Produto;
+import com.example.rcksuporte05.rcksistemas.util.MascaraUtil;
 
 import java.util.List;
 
@@ -53,6 +54,10 @@ public class ListaProdutoAdpter extends RecyclerView.Adapter<ProdutoViewHolder> 
 
         holder.textUN.setText(produtos.get(position).getUnidade());
 
+        if (produtos.get(position).getSaldo_estoque().toString().contains("-"))
+            holder.txtSaldoEstoque.setText("Estoque: 00");
+        else
+            holder.txtSaldoEstoque.setText("Estoque: " + MascaraUtil.mascaraVirgula(produtos.get(position).getSaldo_estoque()).replace(",00", ""));
         System.gc();
     }
 

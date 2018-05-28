@@ -13,13 +13,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.rcksuporte05.rcksistemas.BO.UsuarioBO;
+import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.UsuarioHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.api.Api;
 import com.example.rcksuporte05.rcksistemas.api.Rotas;
-import com.example.rcksuporte05.rcksistemas.BO.UsuarioBO;
 import com.example.rcksuporte05.rcksistemas.model.Usuario;
-import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 }
             }
         } else if (view == btnAtualizarUsuarios) {
-            getUsuarios();
+            getUsuarios(true);
         } else if (view == informacao) {
             Intent intent = new Intent(MainActivity.this, infoDialog.class);
             startActivity(intent);
@@ -100,7 +100,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Usuario usuario = db.listaUsuario("SELECT * FROM TBL_WEB_USUARIO WHERE LOGIN = '" + edtLogin.getText().toString() + "'").get(0);
                 loginNaApi(usuario, alterado);
             }
-            getUsuarios();
+            getUsuarios(false);
         } catch (CursorIndexOutOfBoundsException e) {
             e.printStackTrace();
             edtLogin.setError("Usuario inexistente!");
@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    public void getUsuarios() {
+    public void getUsuarios(final Boolean mostrar) {
         progress = new ProgressDialog(MainActivity.this);
         progress.setMessage("Carregando Usuarios");
         progress.setTitle("Aguarde");
@@ -124,10 +124,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         call.enqueue(new Callback<List<Usuario>>() {
             @Override
             public void onResponse(Call<List<Usuario>> call, Response<List<Usuario>> response) {
+                AlertDialog.Builder alert = new AlertDialog.Builder(MainActivity.this);
+                alert.setTitle("Configurações inciais atualizadas!");
+                alert.setNeutralButton("OK", null);
                 usuarioList = response.body();
                 if (!usuarioBO.sincronizaNobanco(usuarioList, MainActivity.this))
                     Toast.makeText(MainActivity.this, "Houve um erro ao salvar os usuarios", Toast.LENGTH_LONG).show();
                 progress.dismiss();
+                if (mostrar)
+                    alert.show();
             }
 
             @Override
@@ -215,7 +220,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     protected void onResume() {
-        getUsuarios();
+        getUsuarios(true);
         super.onResume();
     }
 }

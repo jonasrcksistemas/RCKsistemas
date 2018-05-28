@@ -81,7 +81,7 @@ public class SincroniaBO {
         SincroniaBO.activity = activity;
     }
 
-    public void sincronizaBanco(Sincronia sincronia, final NotificationCompat.Builder notificacao, final NotificationManager mNotificationManager, final ProgressDialog progress) {
+    public void sincronizaBanco(final Sincronia sincronia, final NotificationCompat.Builder notificacao, final NotificationManager mNotificationManager, final ProgressDialog progress) {
         //controla o progresso da notificação e do progressDialog
         int contadorNotificacaoEProgresso = 0;
         String relatorio = "";
@@ -548,7 +548,11 @@ public class SincroniaBO {
             @Override
             public void run() {
                 progress.dismiss();
-                db.alterar("UPDATE TBL_LOGIN SET DATA_SINCRONIA = '" + db.pegaDataAtual() + "';");
+                if (sincronia.isProduto()) {
+                    db.alterar("UPDATE TBL_LOGIN SET DATA_SINCRONIA = '" + db.pegaDataHoraAtual() + "', DATA_SINCRONIA_PRODUTO = '" + db.pegaDataHoraAtual() + "';");
+                } else {
+                    db.alterar("UPDATE TBL_LOGIN SET DATA_SINCRONIA = '" + db.pegaDataHoraAtual() + "';");
+                }
                 alert.show();
             }
         });

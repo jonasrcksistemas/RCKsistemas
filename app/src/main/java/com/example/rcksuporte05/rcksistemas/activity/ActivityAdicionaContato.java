@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.ProspectHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.model.Contato;
@@ -25,7 +26,7 @@ import butterknife.ButterKnife;
  * Created by RCK 03 on 05/02/2018.
  */
 
-public class ActivityAdicionaContato extends AppCompatActivity{
+public class ActivityAdicionaContato extends AppCompatActivity {
 
     @BindView(R.id.edtResponsavelProspect)
     EditText edtResponsavelProspect;
@@ -95,42 +96,48 @@ public class ActivityAdicionaContato extends AppCompatActivity{
         }
     }
 
-    public boolean insereDadosdaFrame(){
+    public boolean insereDadosdaFrame() {
         Contato contato = new Contato();
 
-        if(edtResponsavelProspect.getText() != null && !edtResponsavelProspect.getText().toString().trim().isEmpty()){
+        if (edtResponsavelProspect.getText() != null && !edtResponsavelProspect.getText().toString().trim().isEmpty()) {
             contato.setPessoa_contato(edtResponsavelProspect.getText().toString());
-        }else {
+        } else {
             Toast.makeText(this, "O campo Responsavel é obrigatorio!", Toast.LENGTH_SHORT).show();
             edtResponsavelProspect.requestFocus();
             return false;
         }
-        if(edtFuncaoResponsavelProspect.getText() != null && !edtFuncaoResponsavelProspect.getText().toString().trim().isEmpty()){
+        if (edtFuncaoResponsavelProspect.getText() != null && !edtFuncaoResponsavelProspect.getText().toString().trim().isEmpty()) {
             contato.setFuncao(edtFuncaoResponsavelProspect.getText().toString());
-        }else {
+        } else {
             Toast.makeText(this, "O campo Funcao Responsavel é obrigatorio!", Toast.LENGTH_SHORT).show();
             edtFuncaoResponsavelProspect.requestFocus();
             return false;
         }
-        if(spTipoTelefone.getSelectedItemPosition() >= 0){
+        if (spTipoTelefone.getSelectedItemPosition() >= 0) {
             contato.setTipo_telefone(tiposTelefone.get(spTipoTelefone.getSelectedItemPosition()));
-        }else {
+        } else {
             Toast.makeText(this, "O campo Tipo Telefone é obrigatorio!", Toast.LENGTH_SHORT).show();
             spTipoTelefone.requestFocus();
             return false;
         }
-        if(edtTelefoneProspect.getText() != null && !edtTelefoneProspect.getText().toString().trim().isEmpty()){
+        if (edtTelefoneProspect.getText() != null && !edtTelefoneProspect.getText().toString().trim().isEmpty()) {
             contato.setNumero_telefone(edtTelefoneProspect.getText().toString());
-        }else {
+        } else {
             Toast.makeText(this, "O campo Telefone é obrigatorio!", Toast.LENGTH_SHORT).show();
             edtTelefoneProspect.requestFocus();
             return false;
         }
-        if(edtEmailProspect.getText() != null && !edtEmailProspect.getText().toString().trim().isEmpty()){
+        if (edtEmailProspect.getText() != null && !edtEmailProspect.getText().toString().trim().isEmpty()) {
             contato.setEmail(edtEmailProspect.getText().toString());
         }
 
         contato.setAtivo("S");
+
+        DBHelper db = new DBHelper(this);
+        contato.setId_contato(String.valueOf(db.contagem("SELECT COUNT(*) FROM TBL_CADASTRO_CONTATO;") + 1));
+
+        db.atualizarContato(contato, "0");
+
         ProspectHelper.getProspect().getListaContato().add(contato);
         return true;
     }
@@ -152,9 +159,9 @@ public class ActivityAdicionaContato extends AppCompatActivity{
                 finish();
                 break;
             case R.id.menu_salvar:
-                    if(insereDadosdaFrame()){
-                        finish();
-                    }
+                if (insereDadosdaFrame()) {
+                    finish();
+                }
                 break;
         }
 

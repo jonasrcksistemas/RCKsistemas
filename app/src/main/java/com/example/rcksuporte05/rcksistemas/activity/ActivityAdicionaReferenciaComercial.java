@@ -9,6 +9,7 @@ import android.view.MenuItem;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.ProspectHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.model.ReferenciaComercial;
@@ -20,7 +21,7 @@ import butterknife.ButterKnife;
  * Created by RCK 03 on 06/02/2018.
  */
 
-public class ActivityAdicionaReferenciaComercial extends AppCompatActivity{
+public class ActivityAdicionaReferenciaComercial extends AppCompatActivity {
 
     @BindView(R.id.edtFonecedorProspect)
     EditText edtFonecedorProspect;
@@ -46,7 +47,7 @@ public class ActivityAdicionaReferenciaComercial extends AppCompatActivity{
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        if(getIntent().getIntExtra("edicao", 0) == 1){
+        if (getIntent().getIntExtra("edicao", 0) == 1) {
 
         }
 
@@ -70,7 +71,7 @@ public class ActivityAdicionaReferenciaComercial extends AppCompatActivity{
                 finish();
                 break;
             case R.id.menu_salvar:
-                if(insereDadosdaFrame()){
+                if (insereDadosdaFrame()) {
                     finish();
                 }
                 break;
@@ -87,20 +88,25 @@ public class ActivityAdicionaReferenciaComercial extends AppCompatActivity{
     private boolean insereDadosdaFrame() {
         ReferenciaComercial referenciaComercial = new ReferenciaComercial();
 
-        if(edtFonecedorProspect.getText() != null && !edtFonecedorProspect.getText().toString().trim().isEmpty()){
+        if (edtFonecedorProspect.getText() != null && !edtFonecedorProspect.getText().toString().trim().isEmpty()) {
             referenciaComercial.setNome_fornecedor_referencia(edtFonecedorProspect.getText().toString());
-        }else{
+        } else {
             Toast.makeText(ActivityAdicionaReferenciaComercial.this, "O campo Fornecedor é obrigatorio!", Toast.LENGTH_LONG).show();
             edtFonecedorProspect.requestFocus();
             return false;
         }
-        if(edtTelFonecedorProspect.getText() != null && !edtTelFonecedorProspect.getText().toString().replaceAll("[^0-9]", "").trim().isEmpty() && edtTelFonecedorProspect.getText().toString().replaceAll("[^0-9]", "").length() >= 8 && edtTelFonecedorProspect.getText().toString().replaceAll("[^0-9]", "").length() <= 11){
+        if (edtTelFonecedorProspect.getText() != null && !edtTelFonecedorProspect.getText().toString().replaceAll("[^0-9]", "").trim().isEmpty() && edtTelFonecedorProspect.getText().toString().replaceAll("[^0-9]", "").length() >= 8 && edtTelFonecedorProspect.getText().toString().replaceAll("[^0-9]", "").length() <= 11) {
             referenciaComercial.setTelefone(edtTelFonecedorProspect.getText().toString());
-        }else{
+        } else {
             Toast.makeText(ActivityAdicionaReferenciaComercial.this, "Campo Telefone invalido ou vazio!", Toast.LENGTH_LONG).show();
             edtTelFonecedorProspect.requestFocus();
             return false;
         }
+
+        DBHelper db = new DBHelper(this);
+        referenciaComercial.setId_referencia_comercial(String.valueOf(db.contagem("SELECT COUNT(*) FROM TBL_REFERENCIA_COMERCIAL;") + 1));
+
+        db.atualizarReferenciaComercial(referenciaComercial, "0");
 
         ProspectHelper.getProspect().getReferenciasComerciais().add(referenciaComercial);
         return true;

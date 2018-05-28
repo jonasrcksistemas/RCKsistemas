@@ -37,6 +37,7 @@ import com.example.rcksuporte05.rcksistemas.model.Usuario;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -355,7 +356,13 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
             public void onResponse(Call<List<Usuario>> call, Response<List<Usuario>> response) {
                 usuarioList = response.body();
                 ivInternet.setVisibility(View.GONE);
-                if (!db.consulta("SELECT DATA_SINCRONIA FROM TBL_LOGIN", "DATA_SINCRONIA").equals(new SimpleDateFormat("yyyy-MM-dd").format(new Date()))) {
+                String dataSincronia = "";
+                try {
+                    dataSincronia = new SimpleDateFormat("yyyy-MM-dd").format(new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").parse(db.consulta("SELECT DATA_SINCRONIA FROM TBL_LOGIN", "DATA_SINCRONIA")));
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                if (!dataSincronia.equals(new SimpleDateFormat("yyyy-MM-dd").format(new Date()))) {
                     Toast.makeText(PrincipalActivity.this, "Sincronia atrasada, por favor faça a sincronia!", Toast.LENGTH_SHORT).show();
                 }
                 if (!usuarioBO.sincronizaNobanco(usuarioList, PrincipalActivity.this))

@@ -40,14 +40,14 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/edtObservacaoComercial"
                 android:layout_marginTop="12dp"
-                android:layout_toLeftOf="@+id/edtLimiteCreditoSugerido"
-                android:layout_toStartOf="@+id/edtLimiteCreditoSugerido"
+                android:layout_toLeftOf="@+id/edtLimiteDeCreditoSugerido"
+                android:layout_toStartOf="@+id/edtLimiteDeCreditoSugerido"
                 android:text="LIMITE DE CREDITO SUGERIDO"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
 
             <EditText
-                android:id="@+id/edtLimiteCreditoSugerido"
+                android:id="@+id/edtLimiteDeCreditoSugerido"
                 android:layout_width="120dp"
                 android:layout_height="25dp"
                 android:layout_alignParentEnd="true"
@@ -60,10 +60,10 @@
                 android:id="@+id/txtPrazoSugerido"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/edtLimiteCreditoSugerido"
+                android:layout_below="@+id/edtLimiteDeCreditoSugerido"
                 android:layout_marginTop="12dp"
-                android:layout_toLeftOf="@+id/edtLimiteCreditoSugerido"
-                android:layout_toStartOf="@+id/edtLimiteCreditoSugerido"
+                android:layout_toLeftOf="@+id/edtLimiteDeCreditoSugerido"
+                android:layout_toStartOf="@+id/edtLimiteDeCreditoSugerido"
                 android:text="LIMITE DE PRAZO SUGERIDO"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
@@ -99,7 +99,7 @@
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/recyclerReferenciaComercial"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+                    android:layout_height="wrap_content"/>
             </RelativeLayout>
 
             <Button

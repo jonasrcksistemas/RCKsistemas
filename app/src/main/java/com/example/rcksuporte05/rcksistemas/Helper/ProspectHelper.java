@@ -5,11 +5,9 @@ import android.location.Location;
 import android.support.v4.view.ViewPager;
 import android.widget.Toast;
 
+import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.R;
-import com.example.rcksuporte05.rcksistemas.model.MotivoNaoCadastramento;
-import com.example.rcksuporte05.rcksistemas.model.Pais;
-import com.example.rcksuporte05.rcksistemas.model.Prospect;
-import com.example.rcksuporte05.rcksistemas.model.Segmento;
+import com.example.rcksuporte05.rcksistemas.activity.ActivityCadastroProspect;
 import com.example.rcksuporte05.rcksistemas.fragment.CadastroProspectContatos;
 import com.example.rcksuporte05.rcksistemas.fragment.CadastroProspectEndereco;
 import com.example.rcksuporte05.rcksistemas.fragment.CadastroProspectFotoSalvar;
@@ -17,7 +15,13 @@ import com.example.rcksuporte05.rcksistemas.fragment.CadastroProspectGeral;
 import com.example.rcksuporte05.rcksistemas.fragment.CadastroProspectMotivos;
 import com.example.rcksuporte05.rcksistemas.fragment.CadastroProspectObservacoesComerciais;
 import com.example.rcksuporte05.rcksistemas.fragment.CadastroProspectSegmentos;
-import com.example.rcksuporte05.rcksistemas.activity.ActivityCadastroProspect;
+import com.example.rcksuporte05.rcksistemas.model.Contato;
+import com.example.rcksuporte05.rcksistemas.model.MotivoNaoCadastramento;
+import com.example.rcksuporte05.rcksistemas.model.Pais;
+import com.example.rcksuporte05.rcksistemas.model.Prospect;
+import com.example.rcksuporte05.rcksistemas.model.ReferenciaBancaria;
+import com.example.rcksuporte05.rcksistemas.model.ReferenciaComercial;
+import com.example.rcksuporte05.rcksistemas.model.Segmento;
 import com.example.rcksuporte05.rcksistemas.util.MascaraUtil;
 
 import java.text.ParseException;
@@ -32,6 +36,10 @@ import java.util.List;
  */
 
 public class ProspectHelper {
+    public static Bitmap imagem1;
+    public static Bitmap imagem2;
+    public static String checkin;
+    public static Location localizacao;
     private static Prospect prospect;
     private static List<Segmento> segmentos;
     private static List<MotivoNaoCadastramento> motivos;
@@ -48,11 +56,6 @@ public class ProspectHelper {
     private static int posicaoPais = -1;
     private static int posicaoUf = -1;
     private static int posicaoMunicipio = -1;
-    public static Bitmap imagem1;
-    public static Bitmap imagem2;
-    public static String checkin;
-    public static Location localizacao;
-
 
     public static Prospect getProspect() {
         return prospect;
@@ -170,6 +173,10 @@ public class ProspectHelper {
         return posicaoMunicipio;
     }
 
+    public static void setPosicaoMunicipio(int posicaoMunicipio) {
+        ProspectHelper.posicaoMunicipio = posicaoMunicipio;
+    }
+
     public static Bitmap getImagem1() {
         return imagem1;
     }
@@ -184,10 +191,6 @@ public class ProspectHelper {
 
     public static void setImagem2(Bitmap imagem2) {
         ProspectHelper.imagem2 = imagem2;
-    }
-
-    public static void setPosicaoMunicipio(int posicaoMunicipio) {
-        ProspectHelper.posicaoMunicipio = posicaoMunicipio;
     }
 
     public static String getCheckin() {
@@ -217,6 +220,8 @@ public class ProspectHelper {
         /*
         Esta variavel é usada para validar o movimento das frags, assim que movimenta, não movimenta outra frag
          */
+
+
         boolean verificaMovimento = true;
 
         //Tela geral
@@ -257,24 +262,24 @@ public class ProspectHelper {
             }
             cadastroProspectGeral.edtCpfCnpjProspect.setError("Campo Obrigatorio");
             cadastroProspectGeral.edtCpfCnpjProspect.requestFocus();
-        }else if(prospect.getPessoa_f_j().equals("F")){
-              if(!MascaraUtil.isValidCPF(prospect.getCpf_cnpj())){
-                  if (verificaMovimento) {
-                      verificaMovimento = false;
-                      moveTela(0);
-                  }
-                  cadastroProspectGeral.edtCpfCnpjProspect.setError("CPF invalido");
-                  cadastroProspectGeral.edtCpfCnpjProspect.requestFocus();
-              }
-        }else if(prospect.getPessoa_f_j().equals("J")){
-                if (!MascaraUtil.isValidCNPJ(prospect.getCpf_cnpj())){
-                    if (verificaMovimento) {
-                        verificaMovimento = false;
-                        moveTela(0);
-                    }
-                    cadastroProspectGeral.edtCpfCnpjProspect.setError("CNPJ invalido");
-                    cadastroProspectGeral.edtCpfCnpjProspect.requestFocus();
+        } else if (prospect.getPessoa_f_j().equals("F")) {
+            if (!MascaraUtil.isValidCPF(prospect.getCpf_cnpj())) {
+                if (verificaMovimento) {
+                    verificaMovimento = false;
+                    moveTela(0);
                 }
+                cadastroProspectGeral.edtCpfCnpjProspect.setError("CPF invalido");
+                cadastroProspectGeral.edtCpfCnpjProspect.requestFocus();
+            }
+        } else if (prospect.getPessoa_f_j().equals("J")) {
+            if (!MascaraUtil.isValidCNPJ(prospect.getCpf_cnpj())) {
+                if (verificaMovimento) {
+                    verificaMovimento = false;
+                    moveTela(0);
+                }
+                cadastroProspectGeral.edtCpfCnpjProspect.setError("CNPJ invalido");
+                cadastroProspectGeral.edtCpfCnpjProspect.requestFocus();
+            }
         }
 
 
@@ -292,11 +297,11 @@ public class ProspectHelper {
         }*/
 
         if (prospect.getDiaVisita() == null || prospect.getDiaVisita().trim().equals("")) {
-                if (verificaMovimento) {
-                    verificaMovimento = false;
-                    Toast.makeText(activityMain, "Escolha um dia da semana para a Visita", Toast.LENGTH_LONG).show();
-                    moveTela(0);
-                }
+            if (verificaMovimento) {
+                verificaMovimento = false;
+                Toast.makeText(activityMain, "Escolha um dia da semana para a Visita", Toast.LENGTH_LONG).show();
+                moveTela(0);
+            }
         }
 
         //tela 2 Endereços
@@ -328,7 +333,6 @@ public class ProspectHelper {
             cadastroProspectEndereco.edtBairroProspect.requestFocus();
             cadastroProspectEndereco.edtBairroProspect.setError("Campo Obrigatorio");
         }
-
 
 
         if (prospect.getEndereco_cep() == null || prospect.getEndereco_cep().trim().isEmpty()) {
@@ -442,32 +446,32 @@ public class ProspectHelper {
             }
         }
 
-        if(verificaMovimento){
+        if (verificaMovimento) {
             try {
-                if(prospect.getFotoPrincipalBase64().trim().isEmpty()){
-                    Toast.makeText(activityMain, "Foto 1 obrigatoria",Toast.LENGTH_LONG).show();
+                if (prospect.getFotoPrincipalBase64().trim().isEmpty()) {
+                    Toast.makeText(activityMain, "Foto 1 obrigatoria", Toast.LENGTH_LONG).show();
                     verificaMovimento = false;
                 }
-            }catch (Exception e){
-                Toast.makeText(activityMain, "Foto 1 obrigatoria",Toast.LENGTH_LONG).show();
+            } catch (Exception e) {
+                Toast.makeText(activityMain, "Foto 1 obrigatoria", Toast.LENGTH_LONG).show();
                 verificaMovimento = false;
             }
 
         }
 
-        if(verificaMovimento){
+        if (verificaMovimento) {
             try {
-                if(prospect.getFotoSecundariaBase64().trim().isEmpty()){
-                    Toast.makeText(activityMain, "Foto 2 obrigatoria",Toast.LENGTH_LONG).show();
+                if (prospect.getFotoSecundariaBase64().trim().isEmpty()) {
+                    Toast.makeText(activityMain, "Foto 2 obrigatoria", Toast.LENGTH_LONG).show();
                     verificaMovimento = false;
                 }
-            }catch (Exception e){
-                Toast.makeText(activityMain, "Foto 2 obrigatoria",Toast.LENGTH_LONG).show();
+            } catch (Exception e) {
+                Toast.makeText(activityMain, "Foto 2 obrigatoria", Toast.LENGTH_LONG).show();
                 verificaMovimento = false;
             }
         }
 
-        if(verificaMovimento){
+        /*if(verificaMovimento){
             if(localizacao == null){
                 Toast.makeText(activityMain, "Fazer Check-in é obrigatório",Toast.LENGTH_LONG).show();
                 verificaMovimento = false;
@@ -475,13 +479,13 @@ public class ProspectHelper {
                 prospect.setLatitude(String.valueOf(localizacao.getLatitude()));
                 prospect.setLongitude(String.valueOf(localizacao.getLongitude()));
             }
-        }
+        }*/
 
         return verificaMovimento;
 
     }
 
-    public static boolean salvarParcial(){
+    public static boolean salvarParcial() {
          /*
         Esta variavel é usada para validar o movimento das frags, assim que movimenta, não movimenta outra frag
          */
@@ -525,8 +529,8 @@ public class ProspectHelper {
             }
             cadastroProspectGeral.edtCpfCnpjProspect.setError("Campo Obrigatorio");
             cadastroProspectGeral.edtCpfCnpjProspect.requestFocus();
-        }else if(prospect.getPessoa_f_j().equals("F")){
-            if(!MascaraUtil.isValidCPF(prospect.getCpf_cnpj())){
+        } else if (prospect.getPessoa_f_j().equals("F")) {
+            if (!MascaraUtil.isValidCPF(prospect.getCpf_cnpj())) {
                 if (verificaMovimento) {
                     verificaMovimento = false;
                     moveTela(0);
@@ -534,8 +538,8 @@ public class ProspectHelper {
                 cadastroProspectGeral.edtCpfCnpjProspect.setError("CPF invalido");
                 cadastroProspectGeral.edtCpfCnpjProspect.requestFocus();
             }
-        }else if(prospect.getPessoa_f_j().equals("J")){
-            if (!MascaraUtil.isValidCNPJ(prospect.getCpf_cnpj())){
+        } else if (prospect.getPessoa_f_j().equals("J")) {
+            if (!MascaraUtil.isValidCNPJ(prospect.getCpf_cnpj())) {
                 if (verificaMovimento) {
                     verificaMovimento = false;
                     moveTela(0);

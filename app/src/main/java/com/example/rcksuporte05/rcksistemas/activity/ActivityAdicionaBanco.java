@@ -11,11 +11,11 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.ProspectHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.model.Banco;
 import com.example.rcksuporte05.rcksistemas.model.ReferenciaBancaria;
-import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -105,6 +105,11 @@ public class ActivityAdicionaBanco extends AppCompatActivity {
             edtAgenciaProspect.requestFocus();
             return false;
         }
+
+        DBHelper db = new DBHelper(this);
+        bancos.setId_referencia_bancaria(String.valueOf(db.contagem("SELECT COUNT(*) FROM TBL_REFERENCIA_BANCARIA;") + 1));
+
+        db.atualizarRefernciaBancaria(bancos, "0");
 
         ProspectHelper.getProspect().getReferenciasBancarias().add(bancos);
         return true;
