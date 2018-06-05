@@ -34,7 +34,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private static String NomeBanco = "Banco.db";
 
     public DBHelper(Context context) {
-        super(context, NomeBanco, null, 5);
+        super(context, NomeBanco, null, 6);
     }
 
     @Override
@@ -268,7 +268,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 " COR_WEB VARCHAR(20), " +
                 " ID_CATEGORIA INTEGER);");
 
-        db.execSQL("CREATE TABLE TBL_CADASTRO_CATEGORIA(ID_CATEGORIA INTEGER NOT NULL PRIMARY KEY," +
+        db.execSQL("CREATE TABLE IF NOT EXISTS TBL_CADASTRO_CATEGORIA(ID_CATEGORIA INTEGER NOT NULL PRIMARY KEY," +
                 "  ID_EMPRESA     INTEGER    NOT NULL," +
                 "  ATIVO          VARCHAR(1) NOT NULL," +
                 "  NOME_CATEGORIA VARCHAR(60)," +
@@ -276,7 +276,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 "  USUARIO_NOME   VARCHAR(60)," +
                 "  USUARIO_DATA   TIMESTAMP(19));");
 
-        db.execSQL("CREATE TABLE TBL_PROMOCAO_CAB(ID_PROMOCAO INTEGER NOT NULL" +
+        db.execSQL("CREATE TABLE IF NOT EXISTS TBL_PROMOCAO_CAB(ID_PROMOCAO INTEGER NOT NULL" +
                 "    CONSTRAINT PK_TBL_PROMOCAO_CAB" +
                 "    PRIMARY KEY," +
                 "  ID_EMPRESA           INTEGER    NOT NULL," +
@@ -293,7 +293,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 "  USUARIO_NOME         VARCHAR(60)," +
                 "  USUARIO_DATA         TIMESTAMP(19));");
 
-        db.execSQL("CREATE TABLE TBL_PROMOCAO_CLIENTE(ID_PROMOCAO  INTEGER NOT NULL," +
+        db.execSQL("CREATE TABLE IF NOT EXISTS TBL_PROMOCAO_CLIENTE(ID_PROMOCAO  INTEGER NOT NULL," +
                 "  ID_CADASTRO  INTEGER NOT NULL," +
                 "  ID_EMPRESA   INTEGER NOT NULL," +
                 "  ATIVO        VARCHAR(1)," +
@@ -303,7 +303,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 "  CONSTRAINT PK_TBL_PROMOCAO_CLIENTE" +
                 "  PRIMARY KEY (ID_PROMOCAO, ID_CADASTRO));");
 
-        db.execSQL("CREATE TABLE TBL_PROMOCAO_PRODUTO(ID_PROMOCAO INTEGER NOT NULL," +
+        db.execSQL("CREATE TABLE IF NOT EXISTS TBL_PROMOCAO_PRODUTO(ID_PROMOCAO INTEGER NOT NULL," +
                 "  ID_PRODUTO          VARCHAR(20) NOT NULL," +
                 "  ID_EMPRESA          INTEGER     NOT NULL," +
                 "  ATIVO               VARCHAR(1)," +
@@ -556,34 +556,38 @@ public class DBHelper extends SQLiteOpenHelper {
                 "ID_VISITA_SERVIDOR INTEGER, " +
                 "ID_CADASTRO INTEGER);");
 
+        db.execSQL("CREATE TABLE IF NOT EXISTS TBL_CADASTRO_FINANCEIRO_RESUMO (ID_CADASTRO INTEGER NOT NULL PRIMARY KEY,\n" +
+                "               LIMITE_CREDITO NUMERIC (18,2),\n" +
+                "               FINANCEIRO_VENCIDO NUMERIC (18,2),\n" +
+                "               FINANCEIRO_VENCER NUMERIC (18,2),\n" +
+                "               FINANCEIRO_QUITADO NUMERIC (18,2),\n" +
+                "               PEDIDOS_LIBERADOS NUMERIC (18,2),\n" +
+                "               LIMITE_UTILIZADO NUMERIC (18,2),\n" +
+                "               LIMITE_DISPONIVEL NUMERIC (18,2),\n" +
+                "               USUARIO_ID INTEGER,\n" +
+                "               USUARIO_NOME VARCHAR (60),\n" +
+                "               USUARIO_DATA TIMESTAMP ,\n" +
+                "               DATA_ULTIMA_ATUALIZACAO TIMESTAMP);");
+
         System.gc();
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         if (newVersion > oldVersion) {
-            if (newVersion >= 5) {
-                try {
-                    db.execSQL("ALTER TABLE TBL_PRODUTO ADD COLUMN SALDO_ESTOQUE NUMERIC(15, 8);");
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                try {
-                    db.execSQL("DROP TABLE TBL_LOGIN;");
-
-                    db.execSQL("CREATE TABLE IF NOT EXISTS TBL_LOGIN " +
-                            "(ID_LOGIN INTEGER PRIMARY KEY, " +
-                            "LOGIN VARCHAR(100), " +
-                            "SENHA VARCHAR(100), " +
-                            "LOGADO VARCHAR(1), " +
-                            "TOKEN VARCHAR(60), " +
-                            "APARELHO_ID VARCHAR(20), " +
-                            "DATA_SINCRONIA TIMESTAMP, " +
-                            "DATA_SINCRONIA_PRODUTO TIMESTAMP);");
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+            if (newVersion >= 6) {
+                db.execSQL("CREATE TABLE IF NOT EXISTS TBL_CADASTRO_FINANCEIRO_RESUMO (ID_CADASTRO INTEGER NOT NULL PRIMARY KEY,\n" +
+                        "               LIMITE_CREDITO NUMERIC (18,2),\n" +
+                        "               FINANCEIRO_VENCIDO NUMERIC (18,2),\n" +
+                        "               FINANCEIRO_VENCER NUMERIC (18,2),\n" +
+                        "               FINANCEIRO_QUITADO NUMERIC (18,2),\n" +
+                        "               PEDIDOS_LIBERADOS NUMERIC (18,2),\n" +
+                        "               LIMITE_UTILIZADO NUMERIC (18,2),\n" +
+                        "               LIMITE_DISPONIVEL NUMERIC (18,2),\n" +
+                        "               USUARIO_ID INTEGER,\n" +
+                        "               USUARIO_NOME VARCHAR (60),\n" +
+                        "               USUARIO_DATA TIMESTAMP ,\n" +
+                        "               DATA_ULTIMA_ATUALIZACAO TIMESTAMP);");
             }
         }
     }

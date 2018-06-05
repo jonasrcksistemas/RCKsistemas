@@ -15,6 +15,7 @@ import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.example.rcksuporte05.rcksistemas.DAO.CadastroFinanceiroResumoDAO;
 import com.example.rcksuporte05.rcksistemas.DAO.CategoriaDAO;
 import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.DAO.PromocaoClienteDAO;
@@ -28,6 +29,7 @@ import com.example.rcksuporte05.rcksistemas.activity.MainActivity;
 import com.example.rcksuporte05.rcksistemas.api.Api;
 import com.example.rcksuporte05.rcksistemas.api.Rotas;
 import com.example.rcksuporte05.rcksistemas.model.Banco;
+import com.example.rcksuporte05.rcksistemas.model.CadastroFinanceiroResumo;
 import com.example.rcksuporte05.rcksistemas.model.Categoria;
 import com.example.rcksuporte05.rcksistemas.model.Cliente;
 import com.example.rcksuporte05.rcksistemas.model.CondicoesPagamento;
@@ -72,6 +74,7 @@ public class SincroniaBO {
     private PromocaoProdutoDAO promocaoProdutoDAO;
     private WebPedidoDAO webPedidoDAO;
     private WebPedidoItensDAO webPedidoItensDAO;
+    private CadastroFinanceiroResumoDAO cadastroFinanceiroResumoDAO;
 
     public static Activity getActivity() {
         return activity;
@@ -472,6 +475,23 @@ public class SincroniaBO {
             mNotificationManager.notify(0, notificacao.build());
         }
 
+        db.alterar("DELETE FROM TBL_CADASTRO_FINANCEIRO_RESUMO;");
+        for (CadastroFinanceiroResumo cadastroFinanceiroResumo : sincronia.getListaCadastroFinanceiroResumo()) {
+            notificacao.setProgress(maxProgress, contadorNotificacaoEProgresso, false);
+
+            cadastroFinanceiroResumoDAO.atualizarCadastroFinanceiroResumo(cadastroFinanceiroResumo);
+
+            contadorNotificacaoEProgresso++;
+            final int finalContadorNotificacaoEProgresso = contadorNotificacaoEProgresso;
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    progress.setProgress(finalContadorNotificacaoEProgresso);
+                }
+            });
+            mNotificationManager.notify(0, notificacao.build());
+        }
+
         db.alterar("DELETE FROM TBL_PROMOCAO_CAB");
 
         for (Promocao promocao : sincronia.getListaPromocao()) {
@@ -569,6 +589,7 @@ public class SincroniaBO {
         promocaoProdutoDAO = new PromocaoProdutoDAO(db);
         webPedidoDAO = new WebPedidoDAO(db);
         webPedidoItensDAO = new WebPedidoItensDAO(db);
+        cadastroFinanceiroResumoDAO = new CadastroFinanceiroResumoDAO(db);
 
         final NotificationCompat.Builder notificacao = new NotificationCompat.Builder(activity)
                 .setSmallIcon(R.mipmap.ic_sincroniza_main)

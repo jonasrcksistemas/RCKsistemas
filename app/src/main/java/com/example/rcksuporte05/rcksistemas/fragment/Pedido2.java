@@ -137,25 +137,49 @@ public class Pedido2 extends Fragment {
                 dialog.setCancelable(false);
                 dialog.show();
 
-                if (pedidoHelper.salvaPedido()) {
-                    dialog.dismiss();
-                    AlertDialog.Builder alert = new AlertDialog.Builder(PedidoHelper.getActivityPedidoMain());
-                    alert.setTitle("Pedido salvo com sucesso!");
-                    alert.setNeutralButton("OK", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            PedidoHelper.getActivityPedidoMain().finish();
-                        }
-                    });
-                    alert.setCancelable(false);
-                    alert.show();
-                } else {
-                    dialog.dismiss();
+                if (adapterPagamento.getItem(spPagamento.getSelectedItemPosition()).getNome_condicao().contains("A VISTA")) {
+                    if (pedidoHelper.salvaPedido()) {
+                        dialog.dismiss();
+                        AlertDialog.Builder alert = new AlertDialog.Builder(PedidoHelper.getActivityPedidoMain());
+                        alert.setTitle("Pedido salvo com sucesso!");
+                        alert.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                PedidoHelper.getActivityPedidoMain().finish();
+                            }
+                        });
+                        alert.setCancelable(false);
+                        alert.show();
+                    } else {
+                        dialog.dismiss();
                     /*AlertDialog.Builder alert = new AlertDialog.Builder(PedidoHelper.getActivityPedidoMain());
                     alert.setTitle("Atenção!");
                     alert.setMessage("O pedido não foi salvo!");
                     alert.setNeutralButton("OK", null);
                     alert.show();*/
+                    }
+                } else {
+                    if (pedidoHelper.validaCredito()) {
+                        dialog.dismiss();
+                        AlertDialog.Builder alert = new AlertDialog.Builder(PedidoHelper.getActivityPedidoMain());
+                        alert.setTitle("Pedido salvo com sucesso!");
+                        alert.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                PedidoHelper.getActivityPedidoMain().finish();
+                            }
+                        });
+                        alert.setCancelable(false);
+                        alert.show();
+                    } else {
+
+                        dialog.dismiss();
+                    /*AlertDialog.Builder alert = new AlertDialog.Builder(PedidoHelper.getActivityPedidoMain());
+                    alert.setTitle("Atenção!");
+                    alert.setMessage("O pedido não foi salvo!");
+                    alert.setNeutralButton("OK", null);
+                    alert.show();*/
+                    }
                 }
             }
         });

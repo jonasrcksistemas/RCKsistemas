@@ -93,6 +93,7 @@
         <activity
             android:name=".activity.ActivityListaProspect"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".activity.activityAnaliseDeCredito" />
     </application>
 
 </manifest>

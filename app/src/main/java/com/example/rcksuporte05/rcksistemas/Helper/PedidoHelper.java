@@ -15,6 +15,7 @@ import com.example.rcksuporte05.rcksistemas.activity.ActivityPedidoMain;
 import com.example.rcksuporte05.rcksistemas.activity.ProdutoPedidoActivity;
 import com.example.rcksuporte05.rcksistemas.fragment.Pedido1;
 import com.example.rcksuporte05.rcksistemas.fragment.Pedido2;
+import com.example.rcksuporte05.rcksistemas.model.CadastroFinanceiroResumo;
 import com.example.rcksuporte05.rcksistemas.model.Produto;
 import com.example.rcksuporte05.rcksistemas.model.WebPedido;
 import com.example.rcksuporte05.rcksistemas.model.WebPedidoItens;
@@ -130,6 +131,14 @@ public class PedidoHelper {
         edtTotalVenda.setText(MascaraUtil.mascaraReal(resultado));
     }
 
+    public static Float getValorVenda() {
+        return valorVenda;
+    }
+
+    public static void setValorVenda(Float valorVenda) {
+        PedidoHelper.valorVenda = valorVenda;
+    }
+
     public void inserirProduto(WebPedidoItens webPedidoItem) {
         pedido1.inserirProduto(webPedidoItem);
     }
@@ -145,6 +154,18 @@ public class PedidoHelper {
 
     public boolean verificaCliente() {
         return activityPedidoMain.verificaCliente();
+    }
+
+    public boolean validaCredito() {
+        CadastroFinanceiroResumo cadastroFinanceiroResumo = HistoricoFinanceiroHelper.getCadastroFinanceiroResumo();
+
+        Float saldoRestante = cadastroFinanceiroResumo.getLimiteCredito() - cadastroFinanceiroResumo.getLimiteUtilizado() - valorVenda;
+
+        if (saldoRestante < 0 || cadastroFinanceiroResumo.getFinanceiroVencido() > 0) {
+            Toast.makeText(activityPedidoMain, "Esse pedido não passou na análise de crédito!", Toast.LENGTH_SHORT).show();
+            return false;
+        } else
+            return salvaPedido();
     }
 
     public boolean salvaPedido() {

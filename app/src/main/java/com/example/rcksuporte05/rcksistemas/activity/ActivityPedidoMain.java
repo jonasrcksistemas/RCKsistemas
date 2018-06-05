@@ -49,8 +49,6 @@ public class ActivityPedidoMain extends AppCompatActivity {
     TextView txtNomeCliente;
     @BindView(R.id.BtnFinanceiro)
     Button BtnFinanceiro;
-    @BindView(R.id.toolbar2)
-    Toolbar toolbar2;
     @BindView((R.id.txtCategoria))
     TextView txtCategoria;
     ActionModeCallback actionModeCallback;
@@ -68,7 +66,8 @@ public class ActivityPedidoMain extends AppCompatActivity {
     @OnClick(R.id.BtnFinanceiro)
     public void financeiro() {
         if (objetoCliente != null) {
-            Intent intent = new Intent(this, FinanceiroResumoActivity.class);
+            Intent intent = new Intent(this, activityAnaliseDeCredito.class);
+            intent.putExtra("valorPedido", PedidoHelper.getValorVenda());
             HistoricoFinanceiroHelper.setCliente(objetoCliente);
             this.startActivity(intent);
         } else {
@@ -238,6 +237,7 @@ public class ActivityPedidoMain extends AppCompatActivity {
         pedidoHelper.limparDados();
         objetoCliente = null;
         ClienteHelper.setCliente(null);
+        HistoricoFinanceiroHelper.limparDados();
         System.gc();
         super.onDestroy();
     }

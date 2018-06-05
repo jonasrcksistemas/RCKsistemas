@@ -14,9 +14,6 @@ public class HistoricoFinanceiroPendente {
     private String dias_atrazo;
 
     public String getDocumento() {
-        if (documento == null) {
-            documento = " ";
-        }
         return documento;
     }
 
@@ -25,9 +22,6 @@ public class HistoricoFinanceiroPendente {
     }
 
     public String getParcela() {
-        if (parcela == null) {
-            parcela = " ";
-        }
         return parcela;
     }
 
@@ -36,9 +30,6 @@ public class HistoricoFinanceiroPendente {
     }
 
     public String getEspecie() {
-        if (especie == null) {
-            especie = " ";
-        }
         return especie;
     }
 
@@ -47,9 +38,6 @@ public class HistoricoFinanceiroPendente {
     }
 
     public String getNome_conta() {
-        if (nome_conta == null) {
-            nome_conta = " ";
-        }
         return nome_conta;
     }
 
@@ -58,9 +46,6 @@ public class HistoricoFinanceiroPendente {
     }
 
     public String getData_emissao() {
-        if (data_emissao == null) {
-            data_emissao = " ";
-        }
         return data_emissao;
     }
 
@@ -69,9 +54,6 @@ public class HistoricoFinanceiroPendente {
     }
 
     public String getData_vencimento() {
-        if (data_vencimento == null) {
-            data_vencimento = " ";
-        }
         return data_vencimento;
     }
 
@@ -80,9 +62,6 @@ public class HistoricoFinanceiroPendente {
     }
 
     public String getValor_total() {
-        if (valor_total == null) {
-            valor_total = " ";
-        }
         return valor_total;
     }
 
@@ -91,9 +70,6 @@ public class HistoricoFinanceiroPendente {
     }
 
     public String getCobranca_descricao_status() {
-        if (cobranca_descricao_status == null) {
-            cobranca_descricao_status = " ";
-        }
         return cobranca_descricao_status;
     }
 
@@ -102,9 +78,6 @@ public class HistoricoFinanceiroPendente {
     }
 
     public String getHistorico() {
-        if (historico == null) {
-            historico = " ";
-        }
         return historico;
     }
 
@@ -113,9 +86,6 @@ public class HistoricoFinanceiroPendente {
     }
 
     public String getDias_atrazo() {
-        if (dias_atrazo == null) {
-            dias_atrazo = " ";
-        }
         return dias_atrazo;
     }
 

@@ -17,9 +17,11 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.rcksuporte05.rcksistemas.BO.PedidoBO;
+import com.example.rcksuporte05.rcksistemas.DAO.CadastroFinanceiroResumoDAO;
 import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.DAO.WebPedidoItensDAO;
 import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
+import com.example.rcksuporte05.rcksistemas.Helper.HistoricoFinanceiroHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.PedidoHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.UsuarioHelper;
 import com.example.rcksuporte05.rcksistemas.R;
@@ -45,6 +47,7 @@ public class Pedido1 extends Fragment implements ListaAdapterProdutoPedido.Produ
     private Button btnInserirProduto;
     private Bundle bundle;
     private int idCliente;
+    private CadastroFinanceiroResumoDAO cadastroFinanceiroResumoDAO;
 
     public static ListaAdapterProdutoPedido getListaAdapterProdutoPedido() {
         return listaAdapterProdutoPedido;
@@ -158,6 +161,14 @@ public class Pedido1 extends Fragment implements ListaAdapterProdutoPedido.Produ
     @Override
     public void onResume() {
         PedidoHelper.calculaValorPedido(listaProdutoPedido, PedidoHelper.getActivityPedidoMain());
+        if (ClienteHelper.getCliente() != null) {
+            cadastroFinanceiroResumoDAO = new CadastroFinanceiroResumoDAO(db);
+            HistoricoFinanceiroHelper.setCadastroFinanceiroResumo(cadastroFinanceiroResumoDAO.listaCadastroFinanceiroResumo(ClienteHelper.getCliente().getId_cadastro()));
+            if (HistoricoFinanceiroHelper.getCadastroFinanceiroResumo().getFinanceiroVencido() > 0) {
+                PedidoHelper.pintaTxtNomeCliente();
+                Toast.makeText(getActivity(), "Este cliente possui pendências finaneiras, pedido bloqueado até a regularização!", Toast.LENGTH_LONG).show();
+            }
+        }
         if (listaProdutoPedido.size() > 0) {
             if (ClienteHelper.getCliente().getId_cadastro() != idCliente && idCliente > 0) {
                 AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());

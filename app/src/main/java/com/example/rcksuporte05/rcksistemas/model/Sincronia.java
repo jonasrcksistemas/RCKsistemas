@@ -31,6 +31,7 @@ public class Sincronia {
     private List<VisitaProspect> visitas;
     private List<Categoria> listaCategoria;
     private List<Promocao> listaPromocao;
+    private List<CadastroFinanceiroResumo> listaCadastroFinanceiroResumo;
 
     public Sincronia(boolean cliente,
                      boolean produto,
@@ -270,5 +271,13 @@ public class Sincronia {
 
     public void setListaProspectPositivados(List<Prospect> listaProspectPositivados) {
         this.listaProspectPositivados = listaProspectPositivados;
+    }
+
+    public List<CadastroFinanceiroResumo> getListaCadastroFinanceiroResumo() {
+        return listaCadastroFinanceiroResumo;
+    }
+
+    public void setListaCadastroFinanceiroResumo(List<CadastroFinanceiroResumo> listaCadastroFinanceiroResumo) {
+        this.listaCadastroFinanceiroResumo = listaCadastroFinanceiroResumo;
     }
 }
