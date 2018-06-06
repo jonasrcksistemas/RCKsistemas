@@ -1,14 +1,16 @@
 package com.example.rcksuporte05.rcksistemas.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class HistoricoFinanceiro {
-    private List<HistoricoFinanceiroPendente> listaVencida;
-    private List<HistoricoFinanceiroPendente> listaAvencer;
-    private List<HistoricoFinanceiroQuitado> listaQuitado;
+    private List<HistoricoFinanceiroPendente> listaVencida = new ArrayList<>();
+    private List<HistoricoFinanceiroPendente> listaAvencer = new ArrayList<>();
+    private List<HistoricoFinanceiroQuitado> listaQuitado = new ArrayList<>();
     private Float totalVencida = 0.f;
     private Float totalAvencer = 0.f;
     private Float totalQuitado = 0.f;
+    private CadastroFinanceiroResumo cadastroFinanceiroResumo;
 
     public List<HistoricoFinanceiroPendente> getListaVencida() {
         return listaVencida;
@@ -56,5 +58,13 @@ public class HistoricoFinanceiro {
 
     public void setTotalQuitado(Float totalQuitado) {
         this.totalQuitado = totalQuitado;
+    }
+
+    public CadastroFinanceiroResumo getCadastroFinanceiroResumo() {
+        return cadastroFinanceiroResumo;
+    }
+
+    public void setCadastroFinanceiroResumo(CadastroFinanceiroResumo cadastroFinanceiroResumo) {
+        this.cadastroFinanceiroResumo = cadastroFinanceiroResumo;
     }
 }

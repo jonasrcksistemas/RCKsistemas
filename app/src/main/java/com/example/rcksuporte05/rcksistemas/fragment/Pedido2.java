@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.CursorIndexOutOfBoundsException;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -20,8 +21,10 @@ import android.widget.TextView;
 
 import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.DAO.WebPedidoDAO;
+import com.example.rcksuporte05.rcksistemas.Helper.HistoricoFinanceiroHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.PedidoHelper;
 import com.example.rcksuporte05.rcksistemas.R;
+import com.example.rcksuporte05.rcksistemas.activity.activityAnaliseDeCredito;
 import com.example.rcksuporte05.rcksistemas.model.Cliente;
 import com.example.rcksuporte05.rcksistemas.model.CondicoesPagamento;
 import com.example.rcksuporte05.rcksistemas.model.Operacao;
@@ -163,6 +166,7 @@ public class Pedido2 extends Fragment {
                         dialog.dismiss();
                         AlertDialog.Builder alert = new AlertDialog.Builder(PedidoHelper.getActivityPedidoMain());
                         alert.setTitle("Pedido salvo com sucesso!");
+                        alert.setMessage("Pedido com crédito Aprovado");
                         alert.setNeutralButton("OK", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
@@ -172,13 +176,11 @@ public class Pedido2 extends Fragment {
                         alert.setCancelable(false);
                         alert.show();
                     } else {
-
+                        Intent intent = new Intent(getActivity(), activityAnaliseDeCredito.class);
+                        intent.putExtra("valorPedido", PedidoHelper.getValorVenda());
+                        HistoricoFinanceiroHelper.setCliente(objetoCliente);
                         dialog.dismiss();
-                    /*AlertDialog.Builder alert = new AlertDialog.Builder(PedidoHelper.getActivityPedidoMain());
-                    alert.setTitle("Atenção!");
-                    alert.setMessage("O pedido não foi salvo!");
-                    alert.setNeutralButton("OK", null);
-                    alert.show();*/
+                        startActivity(intent);
                     }
                 }
             }

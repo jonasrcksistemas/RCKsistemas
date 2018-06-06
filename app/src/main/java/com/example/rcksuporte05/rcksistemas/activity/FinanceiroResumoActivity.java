@@ -13,14 +13,19 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.rcksuporte05.rcksistemas.DAO.CadastroFinanceiroResumoDAO;
+import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.HistoricoFinanceiroHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.UsuarioHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.api.Api;
 import com.example.rcksuporte05.rcksistemas.api.Rotas;
+import com.example.rcksuporte05.rcksistemas.model.CadastroFinanceiroResumo;
 import com.example.rcksuporte05.rcksistemas.model.HistoricoFinanceiro;
 import com.example.rcksuporte05.rcksistemas.util.MascaraUtil;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -48,10 +53,15 @@ public class FinanceiroResumoActivity extends AppCompatActivity {
     LinearLayout lyQuitada;
     @BindView(R.id.txtLimiteCredito)
     TextView txtLimiteCredito;
-
+    @BindView(R.id.lySincronia)
+    LinearLayout lySincronia;
+    @BindView(R.id.txtDataHoraSincroniza)
+    TextView txtDataHoraSincroniza;
     private ProgressDialog progress;
     private AlertDialog.Builder alert;
     private MenuItem sincroniza;
+    private CadastroFinanceiroResumo cadastroFinanceiroResumo;
+    private DBHelper db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +69,11 @@ public class FinanceiroResumoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_financeiro_resumo);
         ButterKnife.bind(this);
 
+        db = new DBHelper(this);
+
         toolbar.setSubtitle(HistoricoFinanceiroHelper.getCliente().getNome_cadastro());
+
+        cadastroFinanceiroResumo = HistoricoFinanceiroHelper.getCadastroFinanceiroResumo();
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -67,29 +81,85 @@ public class FinanceiroResumoActivity extends AppCompatActivity {
         lyVencida.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(FinanceiroResumoActivity.this, FinanceiroDetalheActivity.class);
-                intent.putExtra("financeiro", 1);
-                startActivity(intent);
+                if (HistoricoFinanceiroHelper.getHistoricoFinanceiro() != null) {
+                    Intent intent = new Intent(FinanceiroResumoActivity.this, FinanceiroDetalheActivity.class);
+                    intent.putExtra("financeiro", 1);
+                    startActivity(intent);
+                } else {
+                    AlertDialog.Builder alert = new AlertDialog.Builder(FinanceiroResumoActivity.this);
+                    alert.setMessage("Deseja carregar historico financeiro detalhado desse cliente?");
+                    alert.setNegativeButton("NÂO", null);
+                    alert.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            carregarHistoricoFinanceiro(HistoricoFinanceiroHelper.getCliente().getId_cadastro());
+                        }
+                    });
+                    alert.show();
+                }
             }
         });
 
         lyVencer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(FinanceiroResumoActivity.this, FinanceiroDetalheActivity.class);
-                intent.putExtra("financeiro", 2);
-                startActivity(intent);
+                if (HistoricoFinanceiroHelper.getHistoricoFinanceiro() != null) {
+                    Intent intent = new Intent(FinanceiroResumoActivity.this, FinanceiroDetalheActivity.class);
+                    intent.putExtra("financeiro", 2);
+                    startActivity(intent);
+                } else {
+                    AlertDialog.Builder alert = new AlertDialog.Builder(FinanceiroResumoActivity.this);
+                    alert.setMessage("Deseja carregar historico financeiro detalhado desse cliente?");
+                    alert.setNegativeButton("NÂO", null);
+                    alert.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            carregarHistoricoFinanceiro(HistoricoFinanceiroHelper.getCliente().getId_cadastro());
+                        }
+                    });
+                    alert.show();
+                }
             }
         });
 
         lyQuitada.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(FinanceiroResumoActivity.this, FinanceiroDetalheActivity.class);
-                intent.putExtra("financeiro", 3);
-                startActivity(intent);
+                if (HistoricoFinanceiroHelper.getHistoricoFinanceiro() != null) {
+                    Intent intent = new Intent(FinanceiroResumoActivity.this, FinanceiroDetalheActivity.class);
+                    intent.putExtra("financeiro", 3);
+                    startActivity(intent);
+                } else {
+                    AlertDialog.Builder alert = new AlertDialog.Builder(FinanceiroResumoActivity.this);
+                    alert.setMessage("Deseja carregar historico financeiro detalhado desse cliente?");
+                    alert.setNegativeButton("NÂO", null);
+                    alert.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            carregarHistoricoFinanceiro(HistoricoFinanceiroHelper.getCliente().getId_cadastro());
+                        }
+                    });
+                    alert.show();
+                }
             }
         });
+
+        txtVencida.setText(MascaraUtil.mascaraReal(HistoricoFinanceiroHelper.getCadastroFinanceiroResumo().getFinanceiroVencido()));
+
+        txtAvencer.setText(MascaraUtil.mascaraReal(HistoricoFinanceiroHelper.getCadastroFinanceiroResumo().getFinanceiroVencer()));
+
+        txtQuitada.setText(MascaraUtil.mascaraReal(HistoricoFinanceiroHelper.getCadastroFinanceiroResumo().getFinanceiroQuitado()));
+
+        if (HistoricoFinanceiroHelper.getCliente().getLimite_credito() != null && !HistoricoFinanceiroHelper.getCliente().getLimite_credito().trim().isEmpty())
+            txtLimiteCredito.setText(MascaraUtil.mascaraReal(HistoricoFinanceiroHelper.getCliente().getLimite_credito()));
+        else
+            txtLimiteCredito.setText("< Não cadastrado >");
+
+        try {
+            txtDataHoraSincroniza.setText(new SimpleDateFormat("dd/MM/yyyy HH:mm").format(new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse(db.consulta("SELECT DATA_SINCRONIA_PRODUTO FROM TBL_LOGIN", "DATA_SINCRONIA_PRODUTO"))));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -108,7 +178,16 @@ public class FinanceiroResumoActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.menu_sincroniza:
-                carregarHistoricoFinanceiro(HistoricoFinanceiroHelper.getCliente().getId_cadastro());
+                AlertDialog.Builder alert = new AlertDialog.Builder(this);
+                alert.setMessage("Deseja carregar historico financeiro detalhado desse cliente?");
+                alert.setNegativeButton("NÂO", null);
+                alert.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        carregarHistoricoFinanceiro(HistoricoFinanceiroHelper.getCliente().getId_cadastro());
+                    }
+                });
+                alert.show();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -141,6 +220,12 @@ public class FinanceiroResumoActivity extends AppCompatActivity {
                     txtLimiteCredito.setText(MascaraUtil.mascaraReal(HistoricoFinanceiroHelper.getCliente().getLimite_credito()));
                 else
                     txtLimiteCredito.setText("< Não cadastrado >");
+
+                CadastroFinanceiroResumoDAO cadastroFinanceiroResumoDAO = new CadastroFinanceiroResumoDAO(db);
+                cadastroFinanceiroResumoDAO.atualizarCadastroFinanceiroResumo(response.body().getCadastroFinanceiroResumo());
+                HistoricoFinanceiroHelper.setCadastroFinanceiroResumo(response.body().getCadastroFinanceiroResumo());
+
+                lySincronia.setVisibility(View.GONE);
 
                 progress.dismiss();
             }
@@ -177,7 +262,7 @@ public class FinanceiroResumoActivity extends AppCompatActivity {
                 txtLimiteCredito.setText("< Não cadastrado >");
 
         } catch (NullPointerException e) {
-            carregarHistoricoFinanceiro(HistoricoFinanceiroHelper.getCliente().getId_cadastro());
+            e.printStackTrace();
         }
         super.onResume();
     }

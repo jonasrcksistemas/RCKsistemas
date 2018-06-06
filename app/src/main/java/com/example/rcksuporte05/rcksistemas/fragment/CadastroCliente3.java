@@ -11,6 +11,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.rcksuporte05.rcksistemas.DAO.CadastroFinanceiroResumoDAO;
+import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.HistoricoFinanceiroHelper;
 import com.example.rcksuporte05.rcksistemas.R;
@@ -106,6 +108,9 @@ public class CadastroCliente3 extends Fragment implements View.OnClickListener {
             if (ClienteHelper.getCliente() != null) {
                 Intent intent = new Intent(getContext(), FinanceiroResumoActivity.class);
                 HistoricoFinanceiroHelper.setCliente(ClienteHelper.getCliente());
+                DBHelper db = new DBHelper(getActivity());
+                CadastroFinanceiroResumoDAO cadastroFinanceiroResumoDAO = new CadastroFinanceiroResumoDAO(db);
+                HistoricoFinanceiroHelper.setCadastroFinanceiroResumo(cadastroFinanceiroResumoDAO.listaCadastroFinanceiroResumo(ClienteHelper.getCliente().getId_cadastro()));
                 System.gc();
                 getContext().startActivity(intent);
                 CadastroClienteMain cadastroClienteMain = new CadastroClienteMain();

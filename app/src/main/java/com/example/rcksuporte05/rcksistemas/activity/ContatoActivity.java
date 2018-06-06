@@ -15,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.rcksuporte05.rcksistemas.DAO.CadastroFinanceiroResumoDAO;
 import com.example.rcksuporte05.rcksistemas.DAO.CategoriaDAO;
 import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
@@ -67,6 +68,7 @@ public class ContatoActivity extends AppCompatActivity {
 
         DBHelper db = new DBHelper(this);
         CategoriaDAO categoriaDAO = new CategoriaDAO(db);
+        final CadastroFinanceiroResumoDAO cadastroFinanceiroResumoDAO = new CadastroFinanceiroResumoDAO(db);
 
         try {
             cliente = ClienteHelper.getCliente();
@@ -206,6 +208,7 @@ public class ContatoActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     Intent intent = new Intent(ContatoActivity.this, FinanceiroResumoActivity.class);
                     HistoricoFinanceiroHelper.setCliente(ClienteHelper.getCliente());
+                    HistoricoFinanceiroHelper.setCadastroFinanceiroResumo(cadastroFinanceiroResumoDAO.listaCadastroFinanceiroResumo(ClienteHelper.getCliente().getId_cadastro()));
                     System.gc();
                     startActivity(intent);
                     CadastroClienteMain cadastroClienteMain = new CadastroClienteMain();

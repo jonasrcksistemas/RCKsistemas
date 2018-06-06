@@ -159,7 +159,7 @@ public class PedidoHelper {
     public boolean validaCredito() {
         CadastroFinanceiroResumo cadastroFinanceiroResumo = HistoricoFinanceiroHelper.getCadastroFinanceiroResumo();
 
-        Float saldoRestante = cadastroFinanceiroResumo.getLimiteCredito() - cadastroFinanceiroResumo.getLimiteUtilizado() - valorVenda;
+        Float saldoRestante = cadastroFinanceiroResumo.getLimiteCredito() - cadastroFinanceiroResumo.getLimiteUtilizado() - valorVenda - cadastroFinanceiroResumo.getFinanceiroVencido();
 
         if (saldoRestante < 0 || cadastroFinanceiroResumo.getFinanceiroVencido() > 0) {
             Toast.makeText(activityPedidoMain, "Esse pedido não passou na análise de crédito!", Toast.LENGTH_SHORT).show();

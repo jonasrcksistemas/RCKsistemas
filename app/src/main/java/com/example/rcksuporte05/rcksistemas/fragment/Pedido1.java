@@ -166,7 +166,7 @@ public class Pedido1 extends Fragment implements ListaAdapterProdutoPedido.Produ
             HistoricoFinanceiroHelper.setCadastroFinanceiroResumo(cadastroFinanceiroResumoDAO.listaCadastroFinanceiroResumo(ClienteHelper.getCliente().getId_cadastro()));
             if (HistoricoFinanceiroHelper.getCadastroFinanceiroResumo().getFinanceiroVencido() > 0) {
                 PedidoHelper.pintaTxtNomeCliente();
-                Toast.makeText(getActivity(), "Este cliente possui pendências finaneiras, pedido bloqueado até a regularização!", Toast.LENGTH_LONG).show();
+                Toast.makeText(getActivity(), "Este cliente possui pendências finaneiras!", Toast.LENGTH_LONG).show();
             }
         }
         if (listaProdutoPedido.size() > 0) {

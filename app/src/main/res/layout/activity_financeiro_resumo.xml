@@ -16,6 +16,30 @@
         app:title="Resumo Financeiro" />
 
     <LinearLayout
+        android:id="@+id/lySincronia"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="end"
+        android:orientation="horizontal"
+        android:paddingEnd="5dp"
+        android:paddingRight="5dp">
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="@drawable/ic_sincroniza_main" />
+
+        <TextView
+            android:id="@+id/txtDataHoraSincroniza"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="end"
+            android:text="sincronia" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
