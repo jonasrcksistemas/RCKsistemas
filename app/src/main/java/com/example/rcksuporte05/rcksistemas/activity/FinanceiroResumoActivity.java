@@ -156,7 +156,7 @@ public class FinanceiroResumoActivity extends AppCompatActivity {
             txtLimiteCredito.setText("< Não cadastrado >");
 
         try {
-            txtDataHoraSincroniza.setText(new SimpleDateFormat("dd/MM/yyyy HH:mm").format(new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse(db.consulta("SELECT DATA_SINCRONIA_PRODUTO FROM TBL_LOGIN", "DATA_SINCRONIA_PRODUTO"))));
+            txtDataHoraSincroniza.setText(new SimpleDateFormat("dd/MM/yyyy HH:mm").format(new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse(cadastroFinanceiroResumo.getDataUltimaAtualizacao())));
         } catch (ParseException e) {
             e.printStackTrace();
         }

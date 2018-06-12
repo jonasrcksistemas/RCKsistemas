@@ -86,7 +86,8 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE IF NOT EXISTS TBL_CADASTRO " +
                 "(ATIVO VARCHAR(1) DEFAULT 'S'  NOT NULL ," +
                 " ID_EMPRESA INTEGER NOT NULL," +
-                " ID_CADASTRO INTEGER PRIMARY KEY," +
+                " ID_CADASTRO INTEGER PRIMARY KEY AUTOINCREMENT," +
+                " ID_CADASTRO_SERVIDOR INTEGER ," +
                 " PESSOA_F_J VARCHAR(1)," +
                 " DATA_ANIVERSARIO DATE," +
                 " NOME_CADASTRO VARCHAR(60)," +
@@ -99,7 +100,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 " ENDERECO_NUMERO VARCHAR(20)," +
                 " ENDERECO_COMPLEMENTO VARCHAR(20)," +
                 " ENDERECO_UF CHAR(2) NOT NULL," +
-                " ENDERECO_ID_MUNICIPIO VARCHAR(50)," +
+                " NOME_MUNICIPIO VARCHAR(50)," +
                 " ENDERECO_CEP VARCHAR(8)," +
                 " USUARIO_ID INTEGER," +
                 " USUARIO_NOME VARCHAR(60)," +
@@ -118,7 +119,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 " F_ID_TRANSPORTADOR INTEGER," +
                 " TELEFONE_PRINCIPAL VARCHAR(20)," +
                 " EMAIL_PRINCIPAL VARCHAR(100)," +
-                " NOME_PAIS VARCHAR(60) ," +
+                " ID_PAIS INTEGER ," +
                 " F_ID_FUNCIONARIO INTEGER," +
                 " AVISAR_COM_DIAS INTEGER DEFAULT 0 ," +
                 " OBSERVACOES BLOB," +
@@ -130,9 +131,9 @@ public class DBHelper extends SQLiteOpenHelper {
                 " COB_ENDERECO_NUMERO VARCHAR(20)," +
                 " COB_ENDERECO_COMPLEMENTO VARCHAR(20)," +
                 " COB_ENDERECO_UF VARCHAR(2)," +
-                " COB_ENDERECO_ID_MUNICIPIO VARCHAR(60)," +
+                " NOME_COB_MUNICIPIO VARCHAR(60)," +
                 " COB_ENDERECO_CEP VARCHAR(8)," +
-                " NOME_PAIS_COB ," +
+                " COB_ENDERECO_ID_PAIS INTEGER ," +
                 " LIMITE_CREDITO DECIMAL(12, 2)," +
                 " LIMITE_DISPONIVEL DECIMAL(12, 2)," +
                 " PESSOA_CONTATO_FINANCEIRO VARCHAR(80)," +
@@ -168,7 +169,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 " MOT_ID_TRANSPORTADORA INTEGER," +
                 " LOCAL_CADASTRO VARCHAR(20)," +
                 " ID_EMPRESA_MULTIDEVICE INTEGER," +
-                " ID_CATEGORIA INTEGER);");
+                " ID_CATEGORIA INTEGER," +
+                " ID_VENDEDOR INTEGER);");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS TBL_PRODUTO (ATIVO VARCHAR(1) DEFAULT 'S'  NOT NULL," +
                 " ID_PRODUTO VARCHAR(20) PRIMARY KEY," +
@@ -575,7 +577,7 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         if (newVersion > oldVersion) {
-            if (newVersion >= 6) {
+            if (newVersion >= 7) {
                 db.execSQL("CREATE TABLE IF NOT EXISTS TBL_CADASTRO_FINANCEIRO_RESUMO (ID_CADASTRO INTEGER NOT NULL PRIMARY KEY,\n" +
                         "               LIMITE_CREDITO NUMERIC (18,2),\n" +
                         "               FINANCEIRO_VENCIDO NUMERIC (18,2),\n" +
@@ -588,6 +590,102 @@ public class DBHelper extends SQLiteOpenHelper {
                         "               USUARIO_NOME VARCHAR (60),\n" +
                         "               USUARIO_DATA TIMESTAMP ,\n" +
                         "               DATA_ULTIMA_ATUALIZACAO TIMESTAMP);");
+
+                try {
+                    db.execSQL("DROP TABLE TBL_CADASTRO;");
+
+                    db.execSQL("CREATE TABLE IF NOT EXISTS TBL_CADASTRO " +
+                            "(ATIVO VARCHAR(1) DEFAULT 'S'  NOT NULL ," +
+                            " ID_EMPRESA INTEGER NOT NULL," +
+                            " ID_CADASTRO INTEGER PRIMARY KEY AUTOINCREMENT," +
+                            " ID_CADASTRO_SERVIDOR INTEGER ," +
+                            " PESSOA_F_J VARCHAR(1)," +
+                            " DATA_ANIVERSARIO DATE," +
+                            " NOME_CADASTRO VARCHAR(60)," +
+                            " NOME_FANTASIA VARCHAR(60)," +
+                            " CPF_CNPJ VARCHAR(14)," +
+                            " INSCRI_ESTADUAL VARCHAR(20)," +
+                            " INSCRI_MUNICIPAL VARCHAR(20)," +
+                            " ENDERECO VARCHAR(60)," +
+                            " ENDERECO_BAIRRO VARCHAR(60)," +
+                            " ENDERECO_NUMERO VARCHAR(20)," +
+                            " ENDERECO_COMPLEMENTO VARCHAR(20)," +
+                            " ENDERECO_UF CHAR(2) NOT NULL," +
+                            " NOME_MUNICIPIO VARCHAR(50)," +
+                            " ENDERECO_CEP VARCHAR(8)," +
+                            " USUARIO_ID INTEGER," +
+                            " USUARIO_NOME VARCHAR(60)," +
+                            " USUARIO_DATA TIMESTAMP," +
+                            " F_CLIENTE VARCHAR(1) DEFAULT 'N'  NOT NULL," +
+                            " F_FORNECEDOR VARCHAR(1) DEFAULT 'N'  NOT NULL," +
+                            " F_FUNCIONARIO VARCHAR(1) DEFAULT 'N'  NOT NULL," +
+                            " F_VENDEDOR VARCHAR(1) DEFAULT 'N'  NOT NULL," +
+                            " F_TRANSPORTADOR VARCHAR(1) DEFAULT 'N'  NOT NULL," +
+                            " DATA_ULTIMA_COMPRA DATE," +
+                            " NOME_VENDEDOR VARCHAR(60)," +
+                            " F_ID_CLIENTE INTEGER," +
+                            " ID_ENTIDADE INTEGER NOT NULL," +
+                            " F_ID_FORNECEDOR INTEGER," +
+                            " F_ID_VENDEDOR SMALLINT," +
+                            " F_ID_TRANSPORTADOR INTEGER," +
+                            " TELEFONE_PRINCIPAL VARCHAR(20)," +
+                            " EMAIL_PRINCIPAL VARCHAR(100)," +
+                            " ID_PAIS INTEGER ," +
+                            " F_ID_FUNCIONARIO INTEGER," +
+                            " AVISAR_COM_DIAS INTEGER DEFAULT 0 ," +
+                            " OBSERVACOES BLOB," +
+                            " PADRAO_ID_C_CUSTO INTEGER," +
+                            " PADRAO_ID_C_GERENCIADORA INTEGER," +
+                            " PADRAO_ID_C_ANALITICA INTEGER," +
+                            " COB_ENDERECO VARCHAR(60)," +
+                            " COB_ENDERECO_BAIRRO VARCHAR(60)," +
+                            " COB_ENDERECO_NUMERO VARCHAR(20)," +
+                            " COB_ENDERECO_COMPLEMENTO VARCHAR(20)," +
+                            " COB_ENDERECO_UF VARCHAR(2)," +
+                            " NOME_COB_MUNICIPIO VARCHAR(60)," +
+                            " COB_ENDERECO_CEP VARCHAR(8)," +
+                            " COB_ENDERECO_ID_PAIS INTEGER ," +
+                            " LIMITE_CREDITO DECIMAL(12, 2)," +
+                            " LIMITE_DISPONIVEL DECIMAL(12, 2)," +
+                            " PESSOA_CONTATO_FINANCEIRO VARCHAR(80)," +
+                            " EMAIL_FINANCEIRO VARCHAR(80)," +
+                            " OBSERVACOES_FATURAMENTO VARCHAR(300)," +
+                            " OBSERVACOES_FINANCEIRO VARCHAR(300)," +
+                            " TELEFONE_DOIS VARCHAR(20)," +
+                            " TELEFONE_TRES VARCHAR(20)," +
+                            " PESSOA_CONTATO_PRINCIPAL VARCHAR(80)," +
+                            " IND_DA_IE_DESTINATARIO INTEGER," +
+                            " COMISSAO_PERCENTUAL DECIMAL(12, 4)," +
+                            " ID_SETOR INTEGER," +
+                            " NFE_EMAIL_ENVIAR VARCHAR(1)," +
+                            " NFE_EMAIL_UM VARCHAR(60)," +
+                            " NFE_EMAIL_DOIS VARCHAR(60)," +
+                            " NFE_EMAIL_TRES VARCHAR(60)," +
+                            " NFE_EMAIL_QUATRO VARCHAR(60)," +
+                            " NFE_EMAIL_CINCO VARCHAR(60)," +
+                            " ID_GRUPO_VENDEDOR INTEGER," +
+                            " VENDEDOR_USA_PORTAL VARCHAR(1)," +
+                            " VENDEDOR_ID_USER_PORTAL INTEGER," +
+                            " F_TARIFA VARCHAR(1)," +
+                            " F_ID_TARIFA INTEGER," +
+                            " F_PRODUTOR VARCHAR(1)," +
+                            " RG_NUMERO VARCHAR(30)," +
+                            " RG_SSP VARCHAR(10)," +
+                            " CONTA_CONTABIL VARCHAR(15)," +
+                            " MOTORISTA VARCHAR(1)," +
+                            " F_ID_MOTORISTA INTEGER," +
+                            " HABILITACAO_NUMERO VARCHAR(20)," +
+                            " HABILITACAO_CATEGORIA VARCHAR(10)," +
+                            " HABILITACAO_VENCIMENTO DATE," +
+                            " MOT_ID_TRANSPORTADORA INTEGER," +
+                            " LOCAL_CADASTRO VARCHAR(20)," +
+                            " ID_EMPRESA_MULTIDEVICE INTEGER," +
+                            " ID_CATEGORIA INTEGER," +
+                            " ID_VENDEDOR INTEGER);");
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
@@ -1378,7 +1476,7 @@ public class DBHelper extends SQLiteOpenHelper {
         ContentValues content = new ContentValues();
         content.put("ATIVO", cliente.getAtivo());
         content.put("ID_EMPRESA", cliente.getId_empresa());
-        content.put("ID_CADASTRO", cliente.getId_cadastro());
+        content.put("ID_CADASTRO_SERVIDOR", cliente.getId_cadastro_servidor());
         content.put("PESSOA_F_J", cliente.getPessoa_f_j());
         content.put("DATA_ANIVERSARIO", cliente.getData_aniversario());
         content.put("NOME_CADASTRO", cliente.getNome_cadastro());
@@ -1391,7 +1489,7 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("ENDERECO_NUMERO", cliente.getEndereco_numero());
         content.put("ENDERECO_COMPLEMENTO", cliente.getEndereco_complemento());
         content.put("ENDERECO_UF", cliente.getEndereco_uf());
-        content.put("ENDERECO_ID_MUNICIPIO", cliente.getEndereco_id_municipio());
+        content.put("NOME_MUNICIPIO", cliente.getNome_municipio());
         content.put("ENDERECO_CEP", cliente.getEndereco_cep());
         content.put("USUARIO_ID", cliente.getUsuario_id());
         content.put("USUARIO_NOME", cliente.getUsuario_nome());
@@ -1410,7 +1508,7 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("F_ID_TRANSPORTADOR", cliente.getF_id_transportador());
         content.put("TELEFONE_PRINCIPAL", cliente.getTelefone_principal());
         content.put("EMAIL_PRINCIPAL", cliente.getEmail_principal());
-        content.put("NOME_PAIS", cliente.getNome_pais());
+        content.put("ID_PAIS", cliente.getId_pais());
         content.put("F_ID_FUNCIONARIO", cliente.getF_id_funcionario());
         content.put("AVISAR_COM_DIAS", cliente.getAvisar_com_dias());
         content.put("OBSERVACOES", cliente.getObservacoes());
@@ -1422,9 +1520,9 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("COB_ENDERECO_NUMERO", cliente.getCob_endereco_numero());
         content.put("COB_ENDERECO_COMPLEMENTO", cliente.getCob_endereco_complemento());
         content.put("COB_ENDERECO_UF", cliente.getCob_endereco_uf());
-        content.put("COB_ENDERECO_ID_MUNICIPIO", cliente.getCob_endereco_id_municipio());
+        content.put("NOME_COB_MUNICIPIO", cliente.getNome_cob_municipio());
         content.put("COB_ENDERECO_CEP", cliente.getCob_endereco_cep());
-        content.put("NOME_PAIS_COB", cliente.getNome_pais_cob());
+        content.put("COB_ENDERECO_ID_PAIS", cliente.getCob_endereco_id_pais());
         content.put("LIMITE_CREDITO", cliente.getLimite_credito());
         content.put("LIMITE_DISPONIVEL", cliente.getLimite_disponivel());
         content.put("PESSOA_CONTATO_FINANCEIRO", cliente.getPessoa_contato_financeiro());
@@ -1460,6 +1558,7 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("MOT_ID_TRANSPORTADORA", cliente.getMot_id_transportadora());
         content.put("LOCAL_CADASTRO", cliente.getLocal_cadastro());
         content.put("ID_CATEGORIA", cliente.getIdCategoria());
+        content.put("ID_VENDEDOR", cliente.getId_vendedor());
 
         db.insert("TBL_CADASTRO", null, content);
         System.gc();
@@ -1470,7 +1569,7 @@ public class DBHelper extends SQLiteOpenHelper {
         ContentValues content = new ContentValues();
         content.put("ATIVO", cliente.getAtivo());
         content.put("ID_EMPRESA", cliente.getId_empresa());
-        content.put("ID_CADASTRO", cliente.getId_cadastro());
+        content.put("ID_CADASTRO_SERVIDOR", cliente.getId_cadastro_servidor());
         content.put("PESSOA_F_J", cliente.getPessoa_f_j());
         content.put("DATA_ANIVERSARIO", cliente.getData_aniversario());
         content.put("NOME_CADASTRO", cliente.getNome_cadastro());
@@ -1483,7 +1582,7 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("ENDERECO_NUMERO", cliente.getEndereco_numero());
         content.put("ENDERECO_COMPLEMENTO", cliente.getEndereco_complemento());
         content.put("ENDERECO_UF", cliente.getEndereco_uf());
-        content.put("ENDERECO_ID_MUNICIPIO", cliente.getEndereco_id_municipio());
+        content.put("NOME_MUNICIPIO", cliente.getNome_municipio());
         content.put("ENDERECO_CEP", cliente.getEndereco_cep());
         content.put("USUARIO_ID", cliente.getUsuario_id());
         content.put("USUARIO_NOME", cliente.getUsuario_nome());
@@ -1502,7 +1601,7 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("F_ID_TRANSPORTADOR", cliente.getF_id_transportador());
         content.put("TELEFONE_PRINCIPAL", cliente.getTelefone_principal());
         content.put("EMAIL_PRINCIPAL", cliente.getEmail_principal());
-        content.put("NOME_PAIS", cliente.getNome_pais());
+        content.put("ID_PAIS", cliente.getId_pais());
         content.put("F_ID_FUNCIONARIO", cliente.getF_id_funcionario());
         content.put("AVISAR_COM_DIAS", cliente.getAvisar_com_dias());
         content.put("OBSERVACOES", cliente.getObservacoes());
@@ -1514,9 +1613,9 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("COB_ENDERECO_NUMERO", cliente.getCob_endereco_numero());
         content.put("COB_ENDERECO_COMPLEMENTO", cliente.getCob_endereco_complemento());
         content.put("COB_ENDERECO_UF", cliente.getCob_endereco_uf());
-        content.put("COB_ENDERECO_ID_MUNICIPIO", cliente.getCob_endereco_id_municipio());
+        content.put("NOME_COB_MUNICIPIO", cliente.getNome_cob_municipio());
         content.put("COB_ENDERECO_CEP", cliente.getCob_endereco_cep());
-        content.put("NOME_PAIS_COB", cliente.getNome_pais_cob());
+        content.put("COB_ENDERECO_ID_PAIS", cliente.getCob_endereco_id_pais());
         content.put("LIMITE_CREDITO", cliente.getLimite_credito());
         content.put("LIMITE_DISPONIVEL", cliente.getLimite_disponivel());
         content.put("PESSOA_CONTATO_FINANCEIRO", cliente.getPessoa_contato_financeiro());
@@ -1551,6 +1650,7 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("HABILITACAO_VENCIMENTO", cliente.getHabilitacao_vencimento());
         content.put("MOT_ID_TRANSPORTADORA", cliente.getMot_id_transportadora());
         content.put("ID_CATEGORIA", cliente.getIdCategoria());
+        content.put("ID_VENDEDOR", cliente.getId_vendedor());
 
         db.update("TBL_CADASTRO", content, "ID_CADASTRO = " + cliente.getId_cadastro(), null);
         System.gc();
@@ -1866,8 +1966,9 @@ public class DBHelper extends SQLiteOpenHelper {
             Cliente cliente = new Cliente();
 
             cliente.setAtivo(cursor.getString(cursor.getColumnIndex("ATIVO")));
-            cliente.setId_empresa(cursor.getString(cursor.getColumnIndex("ID_EMPRESA")));
+            cliente.setId_empresa(cursor.getInt(cursor.getColumnIndex("ID_EMPRESA")));
             cliente.setId_cadastro(cursor.getInt(cursor.getColumnIndex("ID_CADASTRO")));
+            cliente.setId_cadastro_servidor(cursor.getInt(cursor.getColumnIndex("ID_CADASTRO_SERVIDOR")));
             cliente.setPessoa_f_j(cursor.getString(cursor.getColumnIndex("PESSOA_F_J")));
             cliente.setData_aniversario(cursor.getString(cursor.getColumnIndex("DATA_ANIVERSARIO")));
             cliente.setNome_cadastro(cursor.getString(cursor.getColumnIndex("NOME_CADASTRO")));
@@ -1880,9 +1981,9 @@ public class DBHelper extends SQLiteOpenHelper {
             cliente.setEndereco_numero(cursor.getString(cursor.getColumnIndex("ENDERECO_NUMERO")));
             cliente.setEndereco_complemento(cursor.getString(cursor.getColumnIndex("ENDERECO_COMPLEMENTO")));
             cliente.setEndereco_uf(cursor.getString(cursor.getColumnIndex("ENDERECO_UF")));
-            cliente.setEndereco_id_municipio(cursor.getString(cursor.getColumnIndex("ENDERECO_ID_MUNICIPIO")));
+            cliente.setNome_municipio(cursor.getString(cursor.getColumnIndex("NOME_MUNICIPIO")));
             cliente.setEndereco_cep(cursor.getString(cursor.getColumnIndex("ENDERECO_CEP")));
-            cliente.setUsuario_id(cursor.getString(cursor.getColumnIndex("USUARIO_ID")));
+            cliente.setUsuario_id(cursor.getInt(cursor.getColumnIndex("USUARIO_ID")));
             cliente.setUsuario_nome(cursor.getString(cursor.getColumnIndex("USUARIO_NOME")));
             cliente.setUsuario_data(cursor.getString(cursor.getColumnIndex("USUARIO_DATA")));
             cliente.setF_cliente(cursor.getString(cursor.getColumnIndex("F_CLIENTE")));
@@ -1899,7 +2000,7 @@ public class DBHelper extends SQLiteOpenHelper {
             cliente.setF_id_transportador(cursor.getString(cursor.getColumnIndex("F_ID_TRANSPORTADOR")));
             cliente.setTelefone_principal(cursor.getString(cursor.getColumnIndex("TELEFONE_PRINCIPAL")));
             cliente.setEmail_principal(cursor.getString(cursor.getColumnIndex("EMAIL_PRINCIPAL")));
-            cliente.setNome_pais(cursor.getString(cursor.getColumnIndex("NOME_PAIS")));
+            cliente.setId_pais(cursor.getInt(cursor.getColumnIndex("ID_PAIS")));
             cliente.setF_id_funcionario(cursor.getString(cursor.getColumnIndex("F_ID_FUNCIONARIO")));
             cliente.setAvisar_com_dias(cursor.getString(cursor.getColumnIndex("AVISAR_COM_DIAS")));
             cliente.setObservacoes(cursor.getString(cursor.getColumnIndex("OBSERVACOES")));
@@ -1911,9 +2012,9 @@ public class DBHelper extends SQLiteOpenHelper {
             cliente.setCob_endereco_numero(cursor.getString(cursor.getColumnIndex("COB_ENDERECO_NUMERO")));
             cliente.setCob_endereco_complemento(cursor.getString(cursor.getColumnIndex("COB_ENDERECO_COMPLEMENTO")));
             cliente.setCob_endereco_uf(cursor.getString(cursor.getColumnIndex("COB_ENDERECO_UF")));
-            cliente.setCob_endereco_id_municipio(cursor.getString(cursor.getColumnIndex("COB_ENDERECO_ID_MUNICIPIO")));
+            cliente.setNome_cob_municipio(cursor.getString(cursor.getColumnIndex("NOME_COB_MUNICIPIO")));
             cliente.setCob_endereco_cep(cursor.getString(cursor.getColumnIndex("COB_ENDERECO_CEP")));
-            cliente.setNome_pais_cob(cursor.getString(cursor.getColumnIndex("NOME_PAIS_COB")));
+            cliente.setCob_endereco_id_pais(cursor.getInt(cursor.getColumnIndex("COB_ENDERECO_ID_PAIS")));
             cliente.setLimite_credito(cursor.getString(cursor.getColumnIndex("LIMITE_CREDITO")));
             cliente.setLimite_disponivel(cursor.getString(cursor.getColumnIndex("LIMITE_DISPONIVEL")));
             cliente.setPessoa_contato_financeiro(cursor.getString(cursor.getColumnIndex("PESSOA_CONTATO_FINANCEIRO")));
@@ -1949,6 +2050,7 @@ public class DBHelper extends SQLiteOpenHelper {
             cliente.setMot_id_transportadora(cursor.getString(cursor.getColumnIndex("MOT_ID_TRANSPORTADORA")));
             cliente.setLocal_cadastro(cursor.getString(cursor.getColumnIndex("LOCAL_CADASTRO")));
             cliente.setIdCategoria(cursor.getInt(cursor.getColumnIndex("ID_CATEGORIA")));
+            cliente.setId_vendedor(cursor.getInt(cursor.getColumnIndex("ID_VENDEDOR")));
 
             lista.add(cliente);
             System.gc();
