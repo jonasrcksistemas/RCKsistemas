@@ -20,6 +20,7 @@
                 android:id="@+id/edtLimiteCredito"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/txtLimiteCredito"
                 android:layout_margin="3dp"
@@ -32,6 +33,7 @@
                 android:id="@+id/txtLimiteCredito"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:text="LIMITE DE CREDITO"
@@ -42,6 +44,7 @@
                 android:id="@+id/edtContatoFinanceiro"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/txtContatoFinanceiro"
                 android:layout_margin="3dp"
@@ -64,10 +67,12 @@
                 android:id="@+id/edtEmailFinanceiro"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/txtEmailFinanceiro"
                 android:layout_margin="3dp"
                 android:layout_toEndOf="@+id/txtEmailFinanceiro"
+                android:layout_toRightOf="@+id/txtEmailFinanceiro"
                 android:background="@drawable/borda_edittext"
                 android:hint="E-mail Financeiro"
                 android:inputType="textEmailAddress"
@@ -88,6 +93,7 @@
                 android:layout_alignBottom="@+id/btnHistoricoFinanceiro"
                 android:layout_alignTop="@+id/btnHistoricoFinanceiro"
                 android:layout_toEndOf="@+id/btnHistoricoFinanceiro"
+                android:layout_toRightOf="@+id/btnHistoricoFinanceiro"
                 android:gravity="center_vertical"
                 android:text="Historico Financeiro"
                 android:textColor="@color/colorAccent" />
@@ -113,6 +119,7 @@
                 android:id="@+id/txtEnderecoCobrancaMarca"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/btnHistoricoFinanceiro"
                 android:layout_marginTop="33dp"
@@ -124,10 +131,12 @@
                 android:id="@+id/edtEnderecoCobranca"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/txtEnderecoCobranca"
                 android:layout_margin="3dp"
                 android:layout_toEndOf="@+id/txtEnderecoCobranca"
+                android:layout_toRightOf="@+id/txtRighterecoCobranca"
                 android:background="@drawable/borda_edittext"
                 android:hint="Endereço"
                 android:inputType="textCapCharacters"
@@ -147,10 +156,12 @@
                 android:id="@+id/edtNumero"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/txtCepCobranca"
                 android:layout_alignStart="@+id/txtCepCobranca"
                 android:layout_below="@+id/txtNumeroCobranca"
                 android:layout_margin="3dp"
                 android:layout_toEndOf="@+id/txtNumeroCobranca"
+                android:layout_toRightOf="@+id/txtNumeroCobranca"
                 android:background="@drawable/borda_edittext"
                 android:hint="Numero"
                 android:inputType="number"
@@ -189,6 +200,7 @@
                 android:id="@+id/txtPaisCobranca"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/edtNumero"
                 android:layout_marginTop="12dp"
@@ -196,32 +208,33 @@
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
 
-            <EditText
+            <Spinner
                 android:id="@+id/edtPaisCobranca"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/txtPaisCobranca"
-                android:background="@drawable/borda_edittext" />
+                android:layout_below="@+id/txtPaisCobranca" />
 
             <TextView
                 android:id="@+id/txtUfCobranca"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/edtNumero"
+                android:layout_marginLeft="12dp"
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="12dp"
                 android:layout_toEndOf="@+id/edtPaisCobranca"
-                android:text="UF: "
+                android:layout_toRightOf="@+id/edtPaisCobranca"
+                android:text="UF"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
 
-            <EditText
+            <Spinner
                 android:id="@+id/edtUfCobranca"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/txtUfCobranca"
                 android:layout_alignStart="@id/txtUfCobranca"
-                android:layout_below="@+id/txtUfCobranca"
-                android:background="@drawable/borda_edittext" />
+                android:layout_below="@+id/txtUfCobranca" />
 
             <TextView
                 android:id="@+id/txtMunicipioCobranca"
@@ -230,6 +243,22 @@
                 android:layout_below="@+id/edtPaisCobranca"
                 android:layout_marginTop="12dp"
                 android:text="MUNICIPIO"
+                android:textColor="@color/colorAccent"
+                android:textStyle="bold" />
+
+            <Spinner
+                android:id="@+id/edtMunicipioCobranca"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txtMunicipioCobranca" />
+
+            <TextView
+                android:id="@+id/txtCepCobranca"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/edtMunicipioCobranca"
+                android:layout_marginTop="12dp"
+                android:text="CEP"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
 
@@ -243,24 +272,6 @@
                 android:hint="CEP"
                 android:inputType="textFilter|number"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small" />
-
-            <TextView
-                android:id="@+id/txtCepCobranca"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/edtMunicipioCobranca"
-                android:layout_marginTop="12dp"
-                android:text="CEP"
-                android:textColor="@color/colorAccent"
-                android:textStyle="bold" />
-
-            <EditText
-                android:id="@+id/edtMunicipioCobranca"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/txtMunicipioCobranca"
-                android:background="@drawable/borda_edittext" />
-
 
         </RelativeLayout>
     </ScrollView>

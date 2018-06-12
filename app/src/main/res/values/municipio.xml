@@ -129,6 +129,7 @@
         <item>VIÇOSA</item>
         <item>ÁGUA BRANCA</item>
     </string-array>
+
     <string-array name="AM">
         <item>ALVARÃES</item>
         <item>AMATURÁ</item>
@@ -193,6 +194,7 @@
         <item>URUCARÁ</item>
         <item>URUCURITUBA</item>
     </string-array>
+
     <string-array name="AP">
         <item>AMAPÁ</item>
         <item>CALÇOENE</item>
@@ -211,6 +213,7 @@
         <item>TARTARUGALZINHO</item>
         <item>VITÓRIA DO JARI</item>
     </string-array>
+
     <string-array name="BA">
         <item>ABARÉ</item>
         <item>ABAÍRA</item>
@@ -630,6 +633,7 @@
         <item>ÁGUA FRIA</item>
         <item>ÉRICO CARDOSO</item>
     </string-array>
+
     <string-array name="CE">
         <item>ABAIARA</item>
         <item>ACARAPE</item>
@@ -816,9 +820,11 @@
         <item>VIÇOSA DO CEARÁ</item>
         <item>VÁRZEA ALEGRE</item>
     </string-array>
+
     <string-array name="DF">
         <item>BRASÍLIA</item>
     </string-array>
+
     <string-array name="ES">
         <item>AFONSO CLÁUDIO</item>
         <item>ALEGRE</item>
@@ -899,9 +905,11 @@
         <item>ÁGUA DOCE DO NORTE</item>
         <item>ÁGUIA BRANCA</item>
     </string-array>
+
     <string-array name="EX">
         <item>EXTERIOR</item>
     </string-array>
+
     <string-array name="GO">
         <item>ABADIA DE GOIÁS</item>
         <item>ABADIÂNIA</item>
@@ -1150,6 +1158,7 @@
         <item>ÁGUA LIMPA</item>
         <item>ÁGUAS LINDAS DE GOIÁS</item>
     </string-array>
+
     <string-array name="MA">
         <item>AFONSO CUNHA</item>
         <item>ALCÂNTARA</item>
@@ -1369,6 +1378,7 @@
         <item>ZÉ DOCA</item>
         <item>ÁGUA DOCE DO MARANHÃO</item>
     </string-array>
+
     <string-array name="MG">
         <item>ABADIA DOS DOURADOS</item>
         <item>ABAETÉ</item>
@@ -2224,6 +2234,7 @@
         <item>ÁGUAS FORMOSAS</item>
         <item>ÁGUAS VERMELHAS</item>
     </string-array>
+
     <string-array name="MS">
         <item>ALCINÓPOLIS</item>
         <item>AMAMBAÍ</item>
@@ -2304,6 +2315,7 @@
         <item>VICENTINA</item>
         <item>ÁGUA CLARA</item>
     </string-array>
+
     <string-array name="MT">
         <item>ACORIZAL</item>
         <item>ALTA FLORESTA</item>
@@ -2447,6 +2459,7 @@
         <item>VÁRZEA GRANDE</item>
         <item>ÁGUA BOA</item>
     </string-array>
+
     <string-array name="PA">
         <item>ABAETETUBA</item>
         <item>ABEL FIGUEIREDO</item>
@@ -2592,6 +2605,7 @@
         <item>ÁGUA AZUL DO NORTE</item>
         <item>ÓBIDOS</item>
     </string-array>
+
     <string-array name="PB">
         <item>AGUIAR</item>
         <item>ALAGOA GRANDE</item>
@@ -2817,6 +2831,7 @@
         <item>ZABELÊ</item>
         <item>ÁGUA BRANCA</item>
     </string-array>
+
     <string-array name="PE">
         <item>ABREU E LIMA</item>
         <item>AFOGADOS DA INGAZEIRA</item>
@@ -3004,6 +3019,7 @@
         <item>ÁGUA PRETA</item>
         <item>ÁGUAS BELAS</item>
     </string-array>
+
     <string-array name="PI">
         <item>ACAUÃ</item>
         <item>AGRICOLÂNDIA</item>
@@ -3229,6 +3245,7 @@
         <item>WALL FERRAZ</item>
         <item>ÁGUA BRANCA</item>
     </string-array>
+
     <string-array name="PR">
         <item>ABATIÁ</item>
         <item>ADRIANÓPOLIS</item>
@@ -3630,6 +3647,7 @@
         <item>XAMBRÊ</item>
         <item>ÂNGULO</item>
     </string-array>
+
     <string-array name="RJ">
         <item>ANGRA DOS REIS</item>
         <item>APERIBÉ</item>
@@ -3724,6 +3742,7 @@
         <item>VASSOURAS</item>
         <item>VOLTA REDONDA</item>
     </string-array>
+
     <string-array name="RN">
         <item>ACARI</item>
         <item>AFONSO BEZERRA</item>
@@ -3888,6 +3907,7 @@
         <item>VÁRZEA</item>
         <item>ÁGUA NOVA</item>
     </string-array>
+
     <string-array name="RO">
         <item>ALTA FLORESTA D'OESTE</item>
         <item>ALTO ALEGRE DOS PARECIS</item>
@@ -3941,6 +3961,7 @@
         <item>VALE DO PARAÍSO</item>
         <item>VILHENA</item>
     </string-array>
+
     <string-array name="RR">
         <item>ALTO ALEGRE</item>
         <item>AMAJARI</item>
@@ -3958,6 +3979,7 @@
         <item>SÃO LUIZ</item>
         <item>UIRAMUTÃ</item>
     </string-array>
+
     <string-array name="RS">
         <item>ACEGUÁ</item>
         <item>AGUDO</item>
@@ -4456,6 +4478,7 @@
         <item>ÁGUA SANTA</item>
         <item>ÁUREA</item>
     </string-array>
+
     <string-array name="SC">
         <item>ABDON BATISTA</item>
         <item>ABELARDO LUZ</item>
@@ -4751,6 +4774,7 @@
         <item>ÁGUAS FRIAS</item>
         <item>ÁGUAS MORNAS</item>
     </string-array>
+
     <string-array name="SE">
         <item>AMPARO DE SÃO FRANCISCO</item>
         <item>AQUIDABÃ</item>
@@ -4828,6 +4852,7 @@
         <item>TOMAR DO GERU</item>
         <item>UMBAÚBA</item>
     </string-array>
+
     <string-array name="SP">
         <item>ADAMANTINA</item>
         <item>ADOLFO</item>
@@ -5475,6 +5500,7 @@
         <item>ÁLVARO DE CARVALHO</item>
         <item>ÓLEO</item>
     </string-array>
+
     <string-array name="TO">
         <item>ABREULÂNDIA</item>
         <item>AGUIARNÓPOLIS</item>

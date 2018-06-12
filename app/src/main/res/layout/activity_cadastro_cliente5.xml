@@ -20,6 +20,7 @@
                 android:id="@+id/txtobsFat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
                 android:text="OBSERVAÇÕES QUE DEVEM APARECER NO MOMENTO DO FATURAMENTO"
@@ -41,6 +42,7 @@
                 android:id="@+id/txtObsFinancas"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/edtobsFat"
                 android:layout_marginTop="16dp"
@@ -59,9 +61,21 @@
                 android:maxLength="300"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
+            <Button
+                android:id="@+id/btnSalvar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
+                android:text="SALVAR"
+                android:theme="@style/ButtonSalvar" />
+
+
         </RelativeLayout>
 
     </ScrollView>
-
 
 </LinearLayout>

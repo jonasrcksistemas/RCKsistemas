@@ -34,15 +34,26 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class ActivityCliente extends AppCompatActivity {
     @BindView(R.id.listaRecycler)
     RecyclerView listaDeClientes;
-    private Toolbar toolbar;
+    @BindView(R.id.edtTotalClientes)
+    EditText edtTotalClientes;
+    @BindView(R.id.tb_cliente)
+    Toolbar toolbar;
     private List<Cliente> lista;
-    private EditText edtTotalClientes;
     private DBHelper db = new DBHelper(this);
     private ListaClienteAdapter listaClienteAdapter;
+
+    @OnClick(R.id.btnInserirCliente)
+    public void inserirCliente() {
+        Cliente cliente = new Cliente();
+        Intent intent = new Intent(ActivityCliente.this, CadastroClienteMain.class);
+        ClienteHelper.setCliente(cliente);
+        startActivity(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,9 +61,6 @@ public class ActivityCliente extends AppCompatActivity {
         setContentView(R.layout.activity_cliente);
         ButterKnife.bind(this);
 
-
-        edtTotalClientes = (EditText) findViewById(R.id.edtTotalClientes);
-        toolbar = (Toolbar) findViewById(R.id.tb_cliente);
         toolbar.setTitle("Lista de Clientes");
         try {
             lista = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE F_CLIENTE = 'S' AND F_VENDEDOR = 'N' AND ATIVO = 'S' ORDER BY ATIVO DESC, NOME_CADASTRO;");
@@ -98,7 +106,6 @@ public class ActivityCliente extends AppCompatActivity {
                 public void onClick(View view, int position) {
                     Intent intent = new Intent(ActivityCliente.this, ContatoActivity.class);
                     ClienteHelper.setCliente(listaClienteAdapter.getItem(position));
-                    intent.putExtra("id_cliente", listaClienteAdapter.getItem(position).getId_cadastro());
                     System.gc();
                     startActivity(intent);
                 }
@@ -189,7 +196,7 @@ public class ActivityCliente extends AppCompatActivity {
 
         if (!query.trim().equals("")) {
             try {
-                lista = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE ATIVO = 'S' AND (NOME_CADASTRO LIKE '%" + query + "%' OR NOME_FANTASIA LIKE '%" + query + "%' OR CPF_CNPJ LIKE '" + query + "%' OR TELEFONE_PRINCIPAL LIKE '%" + query + "%' OR ID_CADASTRO LIKE '%" + query + "%') ORDER BY ATIVO DESC, NOME_CADASTRO");
+                lista = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE ATIVO = 'S' AND (NOME_CADASTRO LIKE '%" + query + "%' OR NOME_FANTASIA LIKE '%" + query + "%' OR CPF_CNPJ LIKE '" + query + "%' OR TELEFONE_PRINCIPAL LIKE '%" + query + "%' OR ID_CADASTRO_SERVIDOR LIKE '%" + query + "%') ORDER BY ATIVO DESC, NOME_CADASTRO");
                 edtTotalClientes.setText("Clientes encontrados: " + lista.size() + "   ");
                 edtTotalClientes.setTextColor(Color.BLACK);
                 return lista;
@@ -210,7 +217,6 @@ public class ActivityCliente extends AppCompatActivity {
         listaDeClientes.addItemDecoration(new DividerItemDecoration(this, LinearLayout.VERTICAL));
         listaDeClientes.setAdapter(listaClienteAdapter);
         listaClienteAdapter.notifyDataSetChanged();
-
     }
 
     @Override

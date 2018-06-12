@@ -9,9 +9,6 @@ public class Pais {
     private String nome_pais;
 
     public String getId_pais() {
-        if(id_pais.equals("anyType{}")){
-            id_pais = "";
-        }
         return id_pais;
     }
 
@@ -20,9 +17,6 @@ public class Pais {
     }
 
     public String getNome_pais() {
-        if(nome_pais.equals("anyType{}")){
-            nome_pais = "";
-        }
         return nome_pais;
     }
 

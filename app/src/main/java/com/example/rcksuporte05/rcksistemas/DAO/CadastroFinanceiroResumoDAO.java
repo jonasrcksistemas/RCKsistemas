@@ -26,7 +26,7 @@ public class CadastroFinanceiroResumoDAO {
         content.put("USUARIO_ID", cadastroFinanceiroResumo.getUsuarioId());
         content.put("USUARIO_NOME", cadastroFinanceiroResumo.getUsuarioNome());
         content.put("USUARIO_DATA", cadastroFinanceiroResumo.getUsuarioData());
-        content.put("DATA_ULTIMA_ATUALIZACAO", cadastroFinanceiroResumo.getDataUltimaAtualizacao());
+        content.put("DATA_ULTIMA_ATUALIZACAO", db.pegaDataHoraAtual());
 
         if (cadastroFinanceiroResumo.getIdCadastro() != 0 && db.contagem("SELECT COUNT(ID_CADASTRO) FROM TBL_CADASTRO_FINANCEIRO_RESUMO WHERE ID_CADASTRO = " + cadastroFinanceiroResumo.getIdCadastro() + ";") > 0) {
             db.atualizaDados("TBL_CADASTRO_FINANCEIRO_RESUMO", content, "ID_CADASTRO = " + cadastroFinanceiroResumo.getIdCadastro());

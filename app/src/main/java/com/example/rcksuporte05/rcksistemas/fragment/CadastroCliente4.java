@@ -11,29 +11,32 @@ import android.widget.RadioButton;
 import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class CadastroCliente4 extends Fragment {
-    private RadioButton rdSim;
-    private RadioButton rdNao;
-    private EditText edtEmail4;
-    private EditText edtEmail1;
-    private EditText edtEmail5;
-    private EditText edtEmail3;
-    private EditText edtEmail2;
+
+    @BindView(R.id.rdSim)
+    RadioButton rdSim;
+    @BindView(R.id.rdNao)
+    RadioButton rdNao;
+    @BindView(R.id.edtEmail4)
+    EditText edtEmail4;
+    @BindView(R.id.edtEmail1)
+    EditText edtEmail1;
+    @BindView(R.id.edtEmail5)
+    EditText edtEmail5;
+    @BindView(R.id.edtEmail3)
+    EditText edtEmail3;
+    @BindView(R.id.edtEmail2)
+    EditText edtEmail2;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_cadastro_cliente4, container, false);
+        ButterKnife.bind(this, view);
 
-        rdSim = (RadioButton) view.findViewById(R.id.rdSim);
-        rdNao = (RadioButton) view.findViewById(R.id.rdNao);
-        edtEmail4 = (EditText) view.findViewById(R.id.edtEmail4);
-        edtEmail1 = (EditText) view.findViewById(R.id.edtEmail1);
-        edtEmail5 = (EditText) view.findViewById(R.id.edtEmail5);
-        edtEmail3 = (EditText) view.findViewById(R.id.edtEmail3);
-        edtEmail2 = (EditText) view.findViewById(R.id.edtEmail2);
-
-
-        if (ClienteHelper.getCliente() != null) {
+        if (getActivity().getIntent().getIntExtra("vizualizacao", 0) >= 1) {
 
             rdSim.setClickable(false);
             rdNao.setClickable(false);
@@ -58,7 +61,28 @@ public class CadastroCliente4 extends Fragment {
             edtEmail5.setText(ClienteHelper.getCliente().getNfe_email_cinco());
         }
         System.gc();
+
+        ClienteHelper.setCadastroCliente4(this);
         return view;
+    }
+
+    public void inserirDadosDaFrame() {
+        if (rdSim.isChecked()) {
+            ClienteHelper.getCliente().setNfe_email_enviar("S");
+        } else if (rdNao.isChecked()) {
+            ClienteHelper.getCliente().setNfe_email_enviar("N");
+        }
+
+        if (!edtEmail4.getText().toString().trim().isEmpty())
+            ClienteHelper.getCliente().setNfe_email_quatro(edtEmail4.getText().toString());
+        if (!edtEmail1.getText().toString().trim().isEmpty())
+            ClienteHelper.getCliente().setNfe_email_um(edtEmail1.getText().toString());
+        if (!edtEmail5.getText().toString().trim().isEmpty())
+            ClienteHelper.getCliente().setNfe_email_cinco(edtEmail5.getText().toString());
+        if (!edtEmail3.getText().toString().trim().isEmpty())
+            ClienteHelper.getCliente().setNfe_email_tres(edtEmail3.getText().toString());
+        if (!edtEmail2.getText().toString().trim().isEmpty())
+            ClienteHelper.getCliente().setNfe_email_dois(edtEmail2.getText().toString());
     }
 
     @Override

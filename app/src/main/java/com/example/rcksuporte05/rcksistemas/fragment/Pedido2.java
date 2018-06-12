@@ -140,7 +140,7 @@ public class Pedido2 extends Fragment {
                 dialog.setCancelable(false);
                 dialog.show();
 
-                if (adapterPagamento.getItem(spPagamento.getSelectedItemPosition()).getNome_condicao().contains("A VISTA")) {
+                if (adapterPagamento.getItem(spPagamento.getSelectedItemPosition()).getId_condicao().equals("1")) {
                     if (pedidoHelper.salvaPedido()) {
                         dialog.dismiss();
                         AlertDialog.Builder alert = new AlertDialog.Builder(PedidoHelper.getActivityPedidoMain());

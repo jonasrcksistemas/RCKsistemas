@@ -1,5 +1,7 @@
 package com.example.rcksuporte05.rcksistemas.fragment;
 
+import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -12,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.Spinner;
@@ -19,94 +22,100 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
+import com.example.rcksuporte05.rcksistemas.Helper.UsuarioHelper;
 import com.example.rcksuporte05.rcksistemas.R;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 
 public class CadastroCliente1 extends Fragment {
 
+    @BindView(R.id.txtId)
+    TextView txtId;
+    @BindView(R.id.rdFisica)
+    RadioButton rdFisica;
+    @BindView(R.id.rdJuridica)
+    RadioButton rdJuridica;
+    @BindView(R.id.txtNomeCliente)
+    TextView txtNomeCliente;
+    @BindView(R.id.edtData)
+    EditText edtData;
+    @BindView(R.id.edtNomeFantasia)
+    EditText edtNomeFantasia;
+    @BindView(R.id.txtCpfCnpj)
+    TextView txtCpfCnpj;
+    @BindView(R.id.edtCpfCnpj)
+    EditText edtCpfCnpj;
+    @BindView(R.id.edtTelefonePrincipal)
+    EditText edtTelefonePrincipal;
+    @BindView(R.id.edtTelefone1)
+    EditText edtTelefone1;
+    @BindView(R.id.edtTelefone2)
+    EditText edtTelefone2;
+    @BindView(R.id.edtPessoaContato)
+    EditText edtPessoaContato;
+    @BindView(R.id.edtEmailPrincipal)
+    EditText edtEmailPrincipal;
+    @BindView(R.id.edtNomeCliente)
+    EditText edtNomeCliente;
+    @BindView(R.id.edtInscEstadual)
+    EditText edtInscEstadual;
+    @BindView(R.id.spIe)
+    Spinner spIe;
+    @BindView(R.id.txtData)
+    TextView txtData;
+    @BindView(R.id.edtVendedor)
+    EditText edtVendedor;
+    @BindView(R.id.edtInscMunicipal)
+    EditText edtInscMunicipal;
+    @BindView(R.id.btnLigar1)
+    Button btnLigar1;
+    @BindView(R.id.btnLigar2)
+    Button btnLigar2;
+    @BindView(R.id.btnLigar3)
+    Button btnLigar3;
     private ArrayAdapter arrayIe;
     private String[] contribuinte = {"Contribuinte", "Isento", "Não Contribuinte"};
-    private TextView txtId;
-    private RadioButton rdFisica;
-    private RadioButton rdJuridica;
-    private TextView txtNomeCliente;
-    private EditText edtData;
-    private EditText edtNomeFantasia;
-    private TextView txtCpfCnpj;
-    private EditText edtCpfCnpj;
-    private EditText edtTelefonePrincipal;
-    private EditText edtTelefone1;
-    private EditText edtTelefone2;
-    private EditText edtPessoaContato;
-    private EditText edtEmailPrincipal;
-    private EditText edtNomeCliente;
-    private EditText edtInscEstadual;
-    private Spinner spIe;
-    private TextView txtData;
-    private EditText edtVendedor;
-    private EditText edtInscMunicipal;
-    private Button btnLigar1;
-    private Button btnLigar2;
-    private Button btnLigar3;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_cadastro_cliente1, container, false);
+        ButterKnife.bind(this, view);
 
-        txtId = (TextView) view.findViewById(R.id.txtId);
-        rdFisica = (RadioButton) view.findViewById(R.id.rdFisica);
-        rdJuridica = (RadioButton) view.findViewById(R.id.rdJuridica);
-        txtNomeCliente = (TextView) view.findViewById(R.id.txtNomeCliente);
-        edtData = (EditText) view.findViewById(R.id.edtData);
-        edtNomeFantasia = (EditText) view.findViewById(R.id.edtNomeFantasia);
-        txtCpfCnpj = (TextView) view.findViewById(R.id.txtCpfCnpj);
-        edtCpfCnpj = (EditText) view.findViewById(R.id.edtCpfCnpj);
-        edtTelefonePrincipal = (EditText) view.findViewById(R.id.edtTelefonePrincipal);
-        edtTelefone1 = (EditText) view.findViewById(R.id.edtTelefone1);
-        edtTelefone2 = (EditText) view.findViewById(R.id.edtTelefone2);
-        edtPessoaContato = (EditText) view.findViewById(R.id.edtPessoaContato);
-        edtEmailPrincipal = (EditText) view.findViewById(R.id.edtEmailPrincipal);
-        edtNomeCliente = (EditText) view.findViewById(R.id.edtNomeCliente);
-        edtInscEstadual = (EditText) view.findViewById(R.id.edtInscEstadual);
-        edtInscMunicipal = (EditText) view.findViewById(R.id.edtInscMunicipal);
-        spIe = (Spinner) view.findViewById(R.id.spIe);
-        txtData = (TextView) view.findViewById(R.id.txtData);
-        edtVendedor = (EditText) view.findViewById(R.id.edtVendedor);
-        btnLigar1 = (Button) view.findViewById(R.id.btnLigar1);
-        btnLigar2 = (Button) view.findViewById(R.id.btnLigar2);
-        btnLigar3 = (Button) view.findViewById(R.id.btnLigar3);
+        if (getActivity().getIntent().getIntExtra("vizualizacao", 0) >= 1) {
 
-        btnLigar1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                fazerChamada(edtTelefonePrincipal.getText().toString(), ClienteHelper.getCliente().getNome_cadastro());
-            }
-        });
+            btnLigar1.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    fazerChamada(edtTelefonePrincipal.getText().toString(), ClienteHelper.getCliente().getNome_cadastro());
+                }
+            });
 
-        btnLigar2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                fazerChamada(edtTelefone1.getText().toString(), ClienteHelper.getCliente().getNome_cadastro());
-            }
-        });
+            btnLigar2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    fazerChamada(edtTelefone1.getText().toString(), ClienteHelper.getCliente().getNome_cadastro());
+                }
+            });
 
-        btnLigar3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                fazerChamada(edtTelefone2.getText().toString(), ClienteHelper.getCliente().getNome_cadastro());
-            }
-        });
+            btnLigar3.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    fazerChamada(edtTelefone2.getText().toString(), ClienteHelper.getCliente().getNome_cadastro());
+                }
+            });
 
-        arrayIe = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_activated_1, contribuinte);
-        spIe.setAdapter(arrayIe);
+            arrayIe = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_activated_1, contribuinte);
+            spIe.setAdapter(arrayIe);
 
-        edtVendedor.setText(ClienteHelper.getCliente().getNome_vendedor());
-
-        if (ClienteHelper.getCliente() != null) {
+            edtVendedor.setText(ClienteHelper.getCliente().getNome_vendedor());
 
             rdFisica.setClickable(false);
             rdJuridica.setClickable(false);
-            edtData.setFocusable(false);
             edtNomeFantasia.setFocusable(false);
             edtCpfCnpj.setFocusable(false);
             edtTelefonePrincipal.setFocusable(false);
@@ -118,9 +127,11 @@ public class CadastroCliente1 extends Fragment {
             edtInscEstadual.setFocusable(false);
             edtInscMunicipal.setFocusable(false);
             spIe.setEnabled(false);
-            edtVendedor.setFocusable(false);
 
-            txtId.setText("ID: " + ClienteHelper.getCliente().getId_cadastro());
+            if (ClienteHelper.getCliente().getId_cadastro_servidor() > 0)
+                txtId.setText("ID: " + ClienteHelper.getCliente().getId_cadastro_servidor());
+            else
+                txtId.setText("ID: " + ClienteHelper.getCliente().getId_cadastro());
             edtNomeCliente.setText(ClienteHelper.getCliente().getNome_cadastro());
             edtNomeFantasia.setText(ClienteHelper.getCliente().getNome_fantasia());
 
@@ -205,6 +216,15 @@ public class CadastroCliente1 extends Fragment {
             btnLigar1.setVisibility(View.INVISIBLE);
             btnLigar2.setVisibility(View.INVISIBLE);
             btnLigar3.setVisibility(View.INVISIBLE);
+
+            edtData.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    mostraDatePickerDialog(getActivity(), edtData);
+                }
+            });
+
+            edtVendedor.setText(UsuarioHelper.getUsuario().getNome_usuario());
         }
 
         if (rdJuridica.isChecked()) {
@@ -252,7 +272,51 @@ public class CadastroCliente1 extends Fragment {
             }
         });
         System.gc();
+
+        ClienteHelper.setCadastroCliente1(this);
         return (view);
+    }
+
+    public void inserirDadosDaFrame() {
+        if (rdFisica.isChecked())
+            ClienteHelper.getCliente().setPessoa_f_j("F");
+        else if (rdJuridica.isChecked())
+            ClienteHelper.getCliente().setPessoa_f_j("J");
+
+        if (!edtNomeCliente.getText().toString().trim().isEmpty())
+            ClienteHelper.getCliente().setNome_cadastro(edtNomeCliente.getText().toString());
+
+        if (!edtNomeFantasia.getText().toString().trim().isEmpty())
+            ClienteHelper.getCliente().setNome_fantasia(edtNomeFantasia.getText().toString());
+
+        if (!edtData.getText().toString().trim().isEmpty())
+            ClienteHelper.getCliente().setData_aniversario(edtData.getText().toString());
+
+        if (!edtCpfCnpj.getText().toString().trim().isEmpty())
+            ClienteHelper.getCliente().setCpf_cnpj(edtCpfCnpj.getText().toString());
+
+        if (!edtTelefonePrincipal.getText().toString().trim().isEmpty())
+            ClienteHelper.getCliente().setTelefone_principal(edtTelefonePrincipal.getText().toString());
+
+        if (!edtTelefone1.getText().toString().trim().isEmpty())
+            ClienteHelper.getCliente().setTelefone_dois(edtTelefone1.getText().toString());
+
+        if (!edtTelefone2.getText().toString().trim().isEmpty())
+            ClienteHelper.getCliente().setTelefone_tres(edtTelefone2.getText().toString());
+
+        if (!edtPessoaContato.getText().toString().trim().isEmpty())
+            ClienteHelper.getCliente().setPessoa_contato_financeiro(edtPessoaContato.getText().toString());
+
+        if (!edtEmailPrincipal.getText().toString().trim().isEmpty())
+            ClienteHelper.getCliente().setEmail_principal(edtEmailPrincipal.getText().toString());
+
+        if (!edtInscEstadual.getText().toString().trim().isEmpty())
+            ClienteHelper.getCliente().setInscri_estadual(edtInscEstadual.getText().toString());
+
+        if (!edtInscMunicipal.getText().toString().trim().isEmpty())
+            ClienteHelper.getCliente().setInscri_municipal(edtInscMunicipal.getText().toString());
+
+        ClienteHelper.getCliente().setId_vendedor(Integer.parseInt(UsuarioHelper.getUsuario().getId_quando_vendedor()));
     }
 
     public void fazerChamada(final String telefone, final String nome) {
@@ -290,6 +354,26 @@ public class CadastroCliente1 extends Fragment {
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public void mostraDatePickerDialog(Context context, final EditText campoTexto) {
+        final Calendar calendar;
+        //Prepara data anterior caso ja tenha sido selecionada
+        if (campoTexto.getTag() != null) {
+            calendar = ((Calendar) campoTexto.getTag());
+        } else {
+            calendar = Calendar.getInstance();
+        }
+
+        new DatePickerDialog(context, new DatePickerDialog.OnDateSetListener() {
+            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                Calendar newDate = Calendar.getInstance();
+                newDate.set(year, monthOfYear, dayOfMonth);
+                campoTexto.setText(new SimpleDateFormat("dd/MM/yyyy").format(newDate.getTime()));
+                campoTexto.setTag(newDate);
+            }
+
+        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
     }
 
     @Override

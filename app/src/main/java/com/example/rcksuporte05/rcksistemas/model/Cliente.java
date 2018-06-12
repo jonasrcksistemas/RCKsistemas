@@ -3,8 +3,9 @@ package com.example.rcksuporte05.rcksistemas.model;
 public class Cliente {
 
     private String ativo;
-    private String id_empresa;
+    private int id_empresa;
     private int id_cadastro;
+    private int id_cadastro_servidor;
     private String pessoa_f_j;
     private String data_aniversario;
     private String nome_cadastro;
@@ -17,9 +18,9 @@ public class Cliente {
     private String endereco_numero;
     private String endereco_complemento;
     private String endereco_uf;
-    private String endereco_id_municipio;
+    private String nome_municipio;
     private String endereco_cep;
-    private String usuario_id;
+    private int usuario_id;
     private String usuario_nome;
     private String usuario_data;
     private String f_cliente;
@@ -36,7 +37,7 @@ public class Cliente {
     private String f_id_transportador;
     private String telefone_principal;
     private String email_principal;
-    private String nome_pais;
+    private int id_pais;
     private String f_id_funcionario;
     private String avisar_com_dias;
     private String observacoes;
@@ -48,9 +49,9 @@ public class Cliente {
     private String cob_endereco_numero;
     private String cob_endereco_complemento;
     private String cob_endereco_uf;
-    private String cob_endereco_id_municipio;
+    private String nome_cob_municipio;
     private String cob_endereco_cep;
-    private String nome_pais_cob;
+    private int cob_endereco_id_pais;
     private String limite_credito;
     private String limite_disponivel;
     private String pessoa_contato_financeiro;
@@ -86,6 +87,7 @@ public class Cliente {
     private String mot_id_transportadora;
     private String local_cadastro;
     private int idCategoria;
+    private int id_vendedor;
 
     public String getAtivo() {
         return ativo;
@@ -95,11 +97,11 @@ public class Cliente {
         this.ativo = ativo;
     }
 
-    public String getId_empresa() {
+    public int getId_empresa() {
         return id_empresa;
     }
 
-    public void setId_empresa(String id_empresa) {
+    public void setId_empresa(int id_empresa) {
         this.id_empresa = id_empresa;
     }
 
@@ -109,6 +111,14 @@ public class Cliente {
 
     public void setId_cadastro(int id_cadastro) {
         this.id_cadastro = id_cadastro;
+    }
+
+    public int getId_cadastro_servidor() {
+        return id_cadastro_servidor;
+    }
+
+    public void setId_cadastro_servidor(int id_cadastro_servidor) {
+        this.id_cadastro_servidor = id_cadastro_servidor;
     }
 
     public String getPessoa_f_j() {
@@ -207,12 +217,12 @@ public class Cliente {
         this.endereco_uf = endereco_uf;
     }
 
-    public String getEndereco_id_municipio() {
-        return endereco_id_municipio;
+    public String getNome_municipio() {
+        return nome_municipio;
     }
 
-    public void setEndereco_id_municipio(String endereco_id_municipio) {
-        this.endereco_id_municipio = endereco_id_municipio;
+    public void setNome_municipio(String nome_municipio) {
+        this.nome_municipio = nome_municipio;
     }
 
     public String getEndereco_cep() {
@@ -223,11 +233,11 @@ public class Cliente {
         this.endereco_cep = endereco_cep;
     }
 
-    public String getUsuario_id() {
+    public int getUsuario_id() {
         return usuario_id;
     }
 
-    public void setUsuario_id(String usuario_id) {
+    public void setUsuario_id(int usuario_id) {
         this.usuario_id = usuario_id;
     }
 
@@ -295,6 +305,14 @@ public class Cliente {
         this.data_ultima_compra = data_ultima_compra;
     }
 
+    public String getNome_vendedor() {
+        return nome_vendedor;
+    }
+
+    public void setNome_vendedor(String nome_vendedor) {
+        this.nome_vendedor = nome_vendedor;
+    }
+
     public String getF_id_cliente() {
         return f_id_cliente;
     }
@@ -349,6 +367,14 @@ public class Cliente {
 
     public void setEmail_principal(String email_principal) {
         this.email_principal = email_principal;
+    }
+
+    public int getId_pais() {
+        return id_pais;
+    }
+
+    public void setId_pais(int id_pais) {
+        this.id_pais = id_pais;
     }
 
     public String getF_id_funcionario() {
@@ -439,12 +465,12 @@ public class Cliente {
         this.cob_endereco_uf = cob_endereco_uf;
     }
 
-    public String getCob_endereco_id_municipio() {
-        return cob_endereco_id_municipio;
+    public String getNome_cob_municipio() {
+        return nome_cob_municipio;
     }
 
-    public void setCob_endereco_id_municipio(String cob_endereco_id_municipio) {
-        this.cob_endereco_id_municipio = cob_endereco_id_municipio;
+    public void setNome_cob_municipio(String nome_cob_municipio) {
+        this.nome_cob_municipio = nome_cob_municipio;
     }
 
     public String getCob_endereco_cep() {
@@ -455,12 +481,12 @@ public class Cliente {
         this.cob_endereco_cep = cob_endereco_cep;
     }
 
-    public String getNome_pais_cob() {
-        return nome_pais_cob;
+    public int getCob_endereco_id_pais() {
+        return cob_endereco_id_pais;
     }
 
-    public void setNome_pais_cob(String nome_pais_cob) {
-        this.nome_pais_cob = nome_pais_cob;
+    public void setCob_endereco_id_pais(int cob_endereco_id_pais) {
+        this.cob_endereco_id_pais = cob_endereco_id_pais;
     }
 
     public String getLimite_credito() {
@@ -735,28 +761,20 @@ public class Cliente {
         this.local_cadastro = local_cadastro;
     }
 
-    public String getNome_vendedor() {
-        return nome_vendedor;
-    }
-
-    public void setNome_vendedor(String nome_vendedor) {
-        this.nome_vendedor = nome_vendedor;
-    }
-
-    public String getNome_pais() {
-        return nome_pais;
-    }
-
-    public void setNome_pais(String nome_pais) {
-        this.nome_pais = nome_pais;
-    }
-
     public int getIdCategoria() {
         return idCategoria;
     }
 
     public void setIdCategoria(int idCategoria) {
         this.idCategoria = idCategoria;
+    }
+
+    public int getId_vendedor() {
+        return id_vendedor;
+    }
+
+    public void setId_vendedor(int id_vendedor) {
+        this.id_vendedor = id_vendedor;
     }
 }
 

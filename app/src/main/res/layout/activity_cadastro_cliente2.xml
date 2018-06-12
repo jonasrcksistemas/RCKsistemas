@@ -75,12 +75,11 @@
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
 
-            <EditText
+            <Spinner
                 android:id="@+id/edtPais"
                 android:layout_width="150dp"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/txtPais"
-                android:background="@drawable/borda_edittext" />
+                android:layout_below="@+id/txtPais" />
 
             <TextView
                 android:id="@+id/txtUf"
@@ -94,13 +93,12 @@
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
 
-            <EditText
+            <Spinner
                 android:id="@+id/edtUf"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignStart="@id/txtUf"
-                android:layout_below="@id/txtUf"
-                android:background="@drawable/borda_edittext" />
+                android:layout_below="@id/txtUf" />
 
             <TextView
                 android:id="@+id/txtMunicipio"
@@ -112,12 +110,11 @@
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
 
-            <EditText
+            <Spinner
                 android:id="@+id/edtMunicipio"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/txtMunicipio"
-                android:background="@drawable/borda_edittext" />
+                android:layout_below="@+id/txtMunicipio"/>
 
             <EditText
                 android:id="@+id/edtCep"

@@ -196,6 +196,7 @@ public class CadastroProspectGeral extends Fragment {
                 spPessoaProspect.setSelection(1);
             }
         }
+
         if (ProspectHelper.getProspect().getNome_cadastro() != null && !ProspectHelper.getProspect().getNome_cadastro().equals("")) {
             edtNomeClienteProspect.setText(ProspectHelper.getProspect().getNome_cadastro());
         }

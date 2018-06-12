@@ -206,13 +206,18 @@ public class ContatoActivity extends AppCompatActivity {
             lyFinanceiro.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(ContatoActivity.this, FinanceiroResumoActivity.class);
-                    HistoricoFinanceiroHelper.setCliente(ClienteHelper.getCliente());
-                    HistoricoFinanceiroHelper.setCadastroFinanceiroResumo(cadastroFinanceiroResumoDAO.listaCadastroFinanceiroResumo(ClienteHelper.getCliente().getId_cadastro()));
-                    System.gc();
-                    startActivity(intent);
-                    CadastroClienteMain cadastroClienteMain = new CadastroClienteMain();
-                    cadastroClienteMain.finish();
+                    try {
+                        Intent intent = new Intent(ContatoActivity.this, FinanceiroResumoActivity.class);
+                        HistoricoFinanceiroHelper.setCliente(ClienteHelper.getCliente());
+                        HistoricoFinanceiroHelper.setCadastroFinanceiroResumo(cadastroFinanceiroResumoDAO.listaCadastroFinanceiroResumo(ClienteHelper.getCliente().getId_cadastro_servidor()));
+                        System.gc();
+                        startActivity(intent);
+                        CadastroClienteMain cadastroClienteMain = new CadastroClienteMain();
+                        cadastroClienteMain.finish();
+                    } catch (CursorIndexOutOfBoundsException e) {
+                        e.printStackTrace();
+                        Toast.makeText(ContatoActivity.this, "Financeiro não encontrado, por favor faça a sincronia e tente novamente!", Toast.LENGTH_LONG).show();
+                    }
                 }
             });
 
@@ -303,6 +308,7 @@ public class ContatoActivity extends AppCompatActivity {
 
     public void detalhes() {
         Intent intent = new Intent(ContatoActivity.this, CadastroClienteMain.class);
+        intent.putExtra("vizualizacao", 1);
         startActivity(intent);
     }
 
