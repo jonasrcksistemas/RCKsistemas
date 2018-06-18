@@ -26,7 +26,7 @@ import butterknife.ButterKnife;
 
 public class CadastroProspectSegmentos extends Fragment implements SegmentoAdapter.SegmentoListener {
 
-    @BindView(R.id.edtOutrosSegmentosProspect)
+    @BindView(R.id.edtOutrosSegmentosCliente)
     public EditText edtOutrosSegmentosProspect;
     @BindView(R.id.recyclerSegmentos)
     RecyclerView recyclerSegmentos;

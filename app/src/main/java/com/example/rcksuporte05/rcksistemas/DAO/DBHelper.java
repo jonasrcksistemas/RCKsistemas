@@ -87,6 +87,11 @@ public class DBHelper extends SQLiteOpenHelper {
                 "(ATIVO VARCHAR(1) DEFAULT 'S'  NOT NULL ," +
                 " ID_EMPRESA INTEGER NOT NULL," +
                 " ID_CADASTRO INTEGER PRIMARY KEY AUTOINCREMENT," +
+                " ID_PROSPECT INTEGER ," +
+                " ID_SEGMENTO INTEGER," +
+                " DESCRICAO_SEGMENTO VARCHAR(300)," +
+                " REFERENCIA_BANCARIA INTEGER," +
+                " REFERENCIA_COMERCIAL INTEGER," +
                 " ID_CADASTRO_SERVIDOR INTEGER ," +
                 " PESSOA_F_J VARCHAR(1)," +
                 " DATA_ANIVERSARIO DATE," +
@@ -577,7 +582,7 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         if (newVersion > oldVersion) {
-            if (newVersion >= 7) {
+            if (newVersion >= 6) {
                 db.execSQL("CREATE TABLE IF NOT EXISTS TBL_CADASTRO_FINANCEIRO_RESUMO (ID_CADASTRO INTEGER NOT NULL PRIMARY KEY,\n" +
                         "               LIMITE_CREDITO NUMERIC (18,2),\n" +
                         "               FINANCEIRO_VENCIDO NUMERIC (18,2),\n" +
@@ -598,6 +603,11 @@ public class DBHelper extends SQLiteOpenHelper {
                             "(ATIVO VARCHAR(1) DEFAULT 'S'  NOT NULL ," +
                             " ID_EMPRESA INTEGER NOT NULL," +
                             " ID_CADASTRO INTEGER PRIMARY KEY AUTOINCREMENT," +
+                            " ID_PROSPECT INTEGER ," +
+                            " ID_SEGMENTO INTEGER," +
+                            " DESCRICAO_SEGMENTO VARCHAR(300)," +
+                            " REFERENCIA_BANCARIA INTEGER," +
+                            " REFERENCIA_COMERCIAL INTEGER," +
                             " ID_CADASTRO_SERVIDOR INTEGER ," +
                             " PESSOA_F_J VARCHAR(1)," +
                             " DATA_ANIVERSARIO DATE," +
@@ -1473,10 +1483,25 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public void inserirTBL_CADASTRO(Cliente cliente) {
         SQLiteDatabase db = this.getWritableDatabase();
+        cliente.setId_cadastro(contagem("SELECT MAX(ID_CADASTRO) FROM TBL_CADASTRO;") + 1);
+
         ContentValues content = new ContentValues();
         content.put("ATIVO", cliente.getAtivo());
         content.put("ID_EMPRESA", cliente.getId_empresa());
+        content.put("ID_CADASTRO", cliente.getId_cadastro());
         content.put("ID_CADASTRO_SERVIDOR", cliente.getId_cadastro_servidor());
+        content.put("ID_PROSPECT", cliente.getId_prospect());
+        try {
+            content.put("ID_SEGMENTO", cliente.getSegmento().getIdSetor());
+        } catch (NullPointerException e) {
+            content.put("ID_SEGMENTO", 0);
+        }
+        try {
+            content.put("DESCRICAO_SEGMENTO", cliente.getSegmento().getDescricaoOutros());
+        } catch (NullPointerException e) {
+            content.put("DESCRICAO_SEGMENTO", 0);
+            e.printStackTrace();
+        }
         content.put("PESSOA_F_J", cliente.getPessoa_f_j());
         content.put("DATA_ANIVERSARIO", cliente.getData_aniversario());
         content.put("NOME_CADASTRO", cliente.getNome_cadastro());
@@ -1560,6 +1585,10 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("ID_CATEGORIA", cliente.getIdCategoria());
         content.put("ID_VENDEDOR", cliente.getId_vendedor());
 
+        atualizarTBL_REFERENCIA_BANCARIA(cliente.getReferenciasBancarias(), String.valueOf(cliente.getId_cadastro()));
+        atualizarTBL_REFERENCIA_COMERCIAL(cliente.getReferenciasComerciais(), String.valueOf(cliente.getId_cadastro()));
+        atualizarTBL_CADASTRO_CONTATO(cliente.getListaContato(), String.valueOf(cliente.getId_cadastro()));
+
         db.insert("TBL_CADASTRO", null, content);
         System.gc();
     }
@@ -1570,6 +1599,18 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("ATIVO", cliente.getAtivo());
         content.put("ID_EMPRESA", cliente.getId_empresa());
         content.put("ID_CADASTRO_SERVIDOR", cliente.getId_cadastro_servidor());
+        content.put("ID_PROSPECT", cliente.getId_prospect());
+        try {
+            content.put("ID_SEGMENTO", cliente.getSegmento().getIdSetor());
+        } catch (NullPointerException e) {
+            content.put("ID_SEGMENTO", 0);
+        }
+        try {
+            content.put("DESCRICAO_SEGMENTO", cliente.getSegmento().getDescricaoOutros());
+        } catch (NullPointerException e) {
+            content.put("DESCRICAO_SEGMENTO", 0);
+            e.printStackTrace();
+        }
         content.put("PESSOA_F_J", cliente.getPessoa_f_j());
         content.put("DATA_ANIVERSARIO", cliente.getData_aniversario());
         content.put("NOME_CADASTRO", cliente.getNome_cadastro());
@@ -1649,8 +1690,13 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("HABILITACAO_CATEGORIA", cliente.getHabilitacao_categoria());
         content.put("HABILITACAO_VENCIMENTO", cliente.getHabilitacao_vencimento());
         content.put("MOT_ID_TRANSPORTADORA", cliente.getMot_id_transportadora());
+        content.put("LOCAL_CADASTRO", cliente.getLocal_cadastro());
         content.put("ID_CATEGORIA", cliente.getIdCategoria());
         content.put("ID_VENDEDOR", cliente.getId_vendedor());
+
+        atualizarTBL_REFERENCIA_BANCARIA(cliente.getReferenciasBancarias(), String.valueOf(cliente.getId_cadastro()));
+        atualizarTBL_REFERENCIA_COMERCIAL(cliente.getReferenciasComerciais(), String.valueOf(cliente.getId_cadastro()));
+        atualizarTBL_CADASTRO_CONTATO(cliente.getListaContato(), String.valueOf(cliente.getId_cadastro()));
 
         db.update("TBL_CADASTRO", content, "ID_CADASTRO = " + cliente.getId_cadastro(), null);
         System.gc();
@@ -1964,6 +2010,28 @@ public class DBHelper extends SQLiteOpenHelper {
         cursor.moveToFirst();
         do {
             Cliente cliente = new Cliente();
+
+            try {
+                cliente.setSegmento(listaSegmento(cursor.getString(cursor.getColumnIndex("ID_SEGMENTO"))));
+                cliente.getSegmento().setDescricaoOutros(cursor.getString(cursor.getColumnIndex("DESCRICAO_SEGMENTO")));
+            } catch (CursorIndexOutOfBoundsException e) {
+                e.printStackTrace();
+            }
+            try {
+                cliente.setReferenciasBancarias(listaReferenciaBancaria(cursor.getString(cursor.getColumnIndex("ID_CADASTRO"))));
+            } catch (CursorIndexOutOfBoundsException e) {
+                e.printStackTrace();
+            }
+            try {
+                cliente.setReferenciasComerciais(listaReferenciacomercial(cursor.getString(cursor.getColumnIndex("ID_CADASTRO"))));
+            } catch (CursorIndexOutOfBoundsException e) {
+                e.printStackTrace();
+            }
+            try {
+                cliente.setListaContato(listaContato(cursor.getString(cursor.getColumnIndex("ID_CADASTRO"))));
+            } catch (CursorIndexOutOfBoundsException e) {
+                e.printStackTrace();
+            }
 
             cliente.setAtivo(cursor.getString(cursor.getColumnIndex("ATIVO")));
             cliente.setId_empresa(cursor.getInt(cursor.getColumnIndex("ID_EMPRESA")));

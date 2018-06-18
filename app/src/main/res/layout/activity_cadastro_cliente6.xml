@@ -16,69 +16,6 @@
             android:paddingTop="@dimen/activity_vertical_margin">
 
             <TextView
-                android:id="@+id/txtObsComercias"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="OBSERVAÇÕES COMERCIAIS"
-                android:textColor="@color/colorAccent"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <EditText
-                android:id="@+id/edtObservacaoComercial"
-                android:layout_width="match_parent"
-                android:layout_height="96dp"
-                android:layout_below="@+id/txtObsComercias"
-                android:background="@drawable/borda_edittext"
-                android:gravity="top"
-                android:inputType="textCapCharacters|textMultiLine"
-                android:maxLength="300" />
-
-            <TextView
-                android:id="@+id/txtLimiteCreditoSugerido"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/edtObservacaoComercial"
-                android:layout_marginTop="12dp"
-                android:layout_toLeftOf="@+id/edtLimiteDeCreditoSugerido"
-                android:layout_toStartOf="@+id/edtLimiteDeCreditoSugerido"
-                android:text="LIMITE DE CREDITO SUGERIDO"
-                android:textColor="@color/colorAccent"
-                android:textStyle="bold" />
-
-            <EditText
-                android:id="@+id/edtLimiteDeCreditoSugerido"
-                android:layout_width="120dp"
-                android:layout_height="25dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignTop="@+id/txtLimiteCreditoSugerido"
-                android:background="@drawable/borda_edittext"
-                android:inputType="number" />
-
-            <TextView
-                android:id="@+id/txtPrazoSugerido"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/edtLimiteDeCreditoSugerido"
-                android:layout_marginTop="12dp"
-                android:layout_toLeftOf="@+id/edtLimiteDeCreditoSugerido"
-                android:layout_toStartOf="@+id/edtLimiteDeCreditoSugerido"
-                android:text="LIMITE DE PRAZO SUGERIDO"
-                android:textColor="@color/colorAccent"
-                android:textStyle="bold" />
-
-            <EditText
-                android:id="@+id/edtLimiteDePrazoSugerido"
-                android:layout_width="120dp"
-                android:layout_height="25dp"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignTop="@+id/txtPrazoSugerido"
-                android:background="@drawable/borda_edittext"
-                android:inputType="number" />
-
-            <TextView
                 android:id="@+id/txtReferenciaComercial"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -99,7 +36,7 @@
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/recyclerReferenciaComercial"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content" />
             </RelativeLayout>
 
             <Button

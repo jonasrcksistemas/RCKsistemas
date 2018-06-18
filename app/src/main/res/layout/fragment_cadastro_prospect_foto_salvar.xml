@@ -16,7 +16,7 @@
             android:id="@+id/txtImagem"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="IMAGENS PROSPECT"
+            android:text="IMAGENS PROSPECT *"
             android:theme="@style/txtStyle" />
 
         <ImageButton
@@ -87,7 +87,7 @@
             android:layout_height="wrap_content"
             android:layout_above="@+id/btnSalvarParcial"
             android:layout_marginBottom="21dp"
-            android:text="DATA RETORNO"
+            android:text="DATA RETORNO *"
             android:textColor="@color/colorAccent"
             android:textStyle="bold" />
 

@@ -123,10 +123,10 @@ public class CadastroProspectGeral extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (arrayPessoaProspect.getItem(position).equals("Fisica")) {
                     txtCpfCnpjProspect.setText("CPF");
-                    edtCpfCnpjProspect.setHint("CPF");
+                    edtCpfCnpjProspect.setHint("CPF *");
                 } else {
                     txtCpfCnpjProspect.setText("CNPJ");
-                    edtCpfCnpjProspect.setHint("CNPJ");
+                    edtCpfCnpjProspect.setHint("CNPJ *");
                 }
             }
 

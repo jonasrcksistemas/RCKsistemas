@@ -12,24 +12,28 @@ import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.TabsAdapterCliente;
 import com.example.rcksuporte05.rcksistemas.util.SlidingTabLayout;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class CadastroClienteMain extends AppCompatActivity {
-    private SlidingTabLayout mSlidingTabLayout;
-    private ViewPager mViewPager;
+    @BindView(R.id.vp_tabs)
+    public ViewPager mViewPager;
+    @BindView(R.id.toolbarFrags)
+    Toolbar toolbar;
+    @BindView(R.id.stl_tabs)
+    SlidingTabLayout mSlidingTabLayout;
     private TabsAdapterCliente tabsAdapterCliente;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cadastro_cliente_main);
-
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarFrags);
+        ButterKnife.bind(this);
         toolbar.setTitle("Cadastro de Clientes");
 
-        mViewPager = (ViewPager) findViewById(R.id.vp_tabs);
         tabsAdapterCliente = new TabsAdapterCliente(getSupportFragmentManager());
         mViewPager.setAdapter(tabsAdapterCliente);
 
-        mSlidingTabLayout = (SlidingTabLayout) findViewById(R.id.stl_tabs);
         mSlidingTabLayout.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         mSlidingTabLayout.setSelectedIndicatorColors(Color.WHITE);
         mSlidingTabLayout.setViewPager(mViewPager);
@@ -53,14 +57,19 @@ public class CadastroClienteMain extends AppCompatActivity {
                             ClienteHelper.getCadastroCliente3().inserirDadosDaFrame();
                         }
                         break;
-                    case 3:
-                        if (ClienteHelper.getCadastroCliente4() != null) {
-                            ClienteHelper.getCadastroCliente4().inserirDadosDaFrame();
-                        }
-                        break;
                     case 4:
                         if (ClienteHelper.getCadastroCliente5() != null) {
                             ClienteHelper.getCadastroCliente5().inserirDadosDaFrame();
+                        }
+                        break;
+                    case 6:
+                        if (ClienteHelper.getCadastroCliente7() != null) {
+                            ClienteHelper.getCadastroCliente7().inserirDadosDaFrame();
+                        }
+                        break;
+                    case 7:
+                        if (ClienteHelper.getCadastroCliente8() != null) {
+                            ClienteHelper.getCadastroCliente8().inserirDadosDaFrame();
                         }
                         break;
                 }
@@ -76,6 +85,8 @@ public class CadastroClienteMain extends AppCompatActivity {
 
             }
         });
+
+        ClienteHelper.setCadastroClienteMain(this);
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -101,5 +112,11 @@ public class CadastroClienteMain extends AppCompatActivity {
                 }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onDestroy() {
+        ClienteHelper.clear();
+        super.onDestroy();
     }
 }

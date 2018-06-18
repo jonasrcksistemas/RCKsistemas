@@ -106,19 +106,18 @@ public class CadastroProspectEndereco extends Fragment {
         spUfProspect.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (ProspectHelper.getPosicaoMunicipio() > -1 && spUfProspect.getSelectedItemPosition() != ProspectHelper.getPosicaoUf())
+                    ProspectHelper.setPosicaoMunicipio(0);
+
                 if (paisAdapter.getItem(spPaisProspect.getSelectedItemPosition()).getId_pais().equals("1058")) {
                     municipioAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_activated_1, getResources().getStringArray(listaUf[position]));
                     spMunicipioProspect.setAdapter(municipioAdapter);
                 }
                 ProspectHelper.setPosicaoUf(position);
-                if (ProspectHelper.getProspect().getNome_municipio() != null && !ProspectHelper.getProspect().getNome_municipio().trim().isEmpty()) {
-                    for (int i = 0; getResources().getStringArray(listaUf[spUfProspect.getSelectedItemPosition()]).length > i; i++) {
-                        if (ProspectHelper.getProspect().getNome_municipio().equals(getResources().getStringArray(listaUf[ProspectHelper.getPosicaoUf()])[i])) {
-                            spMunicipioProspect.setSelection(i);
-                            ProspectHelper.setPosicaoMunicipio(i);
-                            break;
-                        }
-                    }
+                try {
+                    spMunicipioProspect.setSelection(ProspectHelper.getPosicaoMunicipio());
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
 
             }
@@ -137,6 +136,8 @@ public class CadastroProspectEndereco extends Fragment {
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     if (!paisAdapter.getItem(position).getId_pais().equals("1058")) {
                         String[] uf = {"EX"};
+                        ProspectHelper.setPosicaoUf(0);
+                        ProspectHelper.setPosicaoMunicipio(0);
                         ufAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_activated_1, uf);
                         spUfProspect.setAdapter(ufAdapter);
                         municipioAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_activated_1, getResources().getStringArray(listaUf[8]));

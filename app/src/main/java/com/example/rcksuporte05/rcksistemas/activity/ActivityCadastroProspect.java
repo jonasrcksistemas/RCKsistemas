@@ -26,7 +26,6 @@ import butterknife.ButterKnife;
 
 public class ActivityCadastroProspect extends AppCompatActivity {
     TabsAdapterProspect tabsAdapterProspect;
-    ProgressDialog progress;
 
     private DBHelper db;
 
@@ -206,7 +205,6 @@ public class ActivityCadastroProspect extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         ProspectHelper.clear();
-        System.gc();
         super.onDestroy();
     }
 }

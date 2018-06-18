@@ -12,10 +12,10 @@ public class Prospect {
     public static int PROSPECT_PENDENTE = 1;
     public static int PROSPECT_SALVO = 2;
     public static int PROSPECT_ENVIADO = 3;
-    public String latitude;
-    public String longitude;
-    public int idVendedor;
-    public int idCategoria;
+    private String latitude;
+    private String longitude;
+    private int idVendedor;
+    private int idCategoria;
     private String id_prospect;
     private String id_prospect_servidor;
     private String id_cadastro;

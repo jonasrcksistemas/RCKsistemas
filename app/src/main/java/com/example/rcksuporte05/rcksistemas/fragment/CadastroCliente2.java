@@ -21,20 +21,20 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class CadastroCliente2 extends Fragment {
+    @BindView(R.id.edtNumero)
+    public EditText edtNumero;
+    @BindView(R.id.edtBairro)
+    public EditText edtBairro;
+    @BindView(R.id.edtCep)
+    public EditText edtCep;
+    @BindView(R.id.edtEndereco)
+    public EditText edtEndereco;
     @BindView(R.id.edtPais)
     Spinner edtPais;
     @BindView(R.id.edtUf)
     Spinner edtUf;
     @BindView(R.id.edtMunicipio)
     Spinner edtMunicipio;
-    @BindView(R.id.edtNumero)
-    EditText edtNumero;
-    @BindView(R.id.edtBairro)
-    EditText edtBairro;
-    @BindView(R.id.edtCep)
-    EditText edtCep;
-    @BindView(R.id.edtEndereco)
-    EditText edtEndereco;
     private int[] listaUf = {R.array.AC,
             R.array.AL,
             R.array.AM,
@@ -84,6 +84,46 @@ public class CadastroCliente2 extends Fragment {
         edtUf.setAdapter(ufAdapter);
 
 
+        if (ClienteHelper.getCliente().getId_pais() > 0) {
+            for (int i = 0; listaPaises.size() > i; i++) {
+                if (listaPaises.get(i).getId_pais().equals(String.valueOf(ClienteHelper.getCliente().getId_pais()))) {
+                    edtPais.setSelection(i);
+                    ClienteHelper.setPosicaoPais(i);
+                    break;
+                }
+            }
+        } else {
+            for (int i = 0; listaPaises.size() > i; i++) {
+                if (paisAdapter.getItem(i).getId_pais().equals("1058")) {
+                    edtPais.setSelection(i);
+                    ClienteHelper.setPosicaoPais(i);
+                    break;
+                }
+            }
+        }
+
+        if (ClienteHelper.getCliente().getEndereco_uf() != null && !ClienteHelper.getCliente().getEndereco_uf().trim().isEmpty()) {
+            for (int i = 0; getResources().getStringArray(R.array.uf).length > i; i++) {
+                if (ClienteHelper.getCliente().getEndereco_uf().equals(getResources().getStringArray(R.array.uf)[i])) {
+                    edtUf.setSelection(i);
+                    ClienteHelper.setPosicaoUf(i);
+                    municipioAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_activated_1, getResources().getStringArray(listaUf[i]));
+                    edtMunicipio.setAdapter(municipioAdapter);
+                    break;
+                }
+            }
+        }
+
+        if (ClienteHelper.getCliente().getNome_municipio() != null && !ClienteHelper.getCliente().getNome_municipio().trim().isEmpty()) {
+            for (int i = 0; getResources().getStringArray(listaUf[edtUf.getSelectedItemPosition()]).length > i; i++) {
+                if (ClienteHelper.getCliente().getNome_municipio().equals(getResources().getStringArray(listaUf[edtUf.getSelectedItemPosition()])[i])) {
+                    edtMunicipio.setSelection(i);
+                    ClienteHelper.setPosicaoMunicipio(i);
+                    break;
+                }
+            }
+        }
+
         if (getActivity().getIntent().getIntExtra("vizualizacao", 0) >= 1) {
 
             edtNumero.setFocusable(false);
@@ -94,38 +134,6 @@ public class CadastroCliente2 extends Fragment {
             edtUf.setEnabled(false);
             edtMunicipio.setEnabled(false);
 
-            if (ClienteHelper.getCliente().getId_pais() > -1) {
-                for (int i = 0; listaPaises.size() > i; i++) {
-                    if (listaPaises.get(i).getId_pais().equals(String.valueOf(ClienteHelper.getCliente().getId_pais()))) {
-                        edtPais.setSelection(i);
-                        break;
-                    }
-                }
-            }
-
-            if (ClienteHelper.getCliente().getEndereco_uf() != null && !ClienteHelper.getCliente().getEndereco_uf().trim().isEmpty()) {
-                for (int i = 0; getResources().getStringArray(R.array.uf).length > i; i++) {
-                    if (ClienteHelper.getCliente().getEndereco_uf().equals(getResources().getStringArray(R.array.uf)[i])) {
-                        edtUf.setSelection(i);
-                        municipioAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_activated_1, getResources().getStringArray(listaUf[i]));
-                        edtMunicipio.setAdapter(municipioAdapter);
-                        break;
-                    }
-                }
-            }
-
-            if (ClienteHelper.getCliente().getNome_municipio() != null && !ClienteHelper.getCliente().getNome_municipio().trim().isEmpty()) {
-                for (int i = 0; getResources().getStringArray(listaUf[edtUf.getSelectedItemPosition()]).length > i; i++) {
-                    if (ClienteHelper.getCliente().getNome_municipio().equals(getResources().getStringArray(listaUf[edtUf.getSelectedItemPosition()])[i])) {
-                        edtMunicipio.setSelection(i);
-                        break;
-                    }
-                }
-            }
-
-            edtEndereco.setText(ClienteHelper.getCliente().getEndereco());
-            edtNumero.setText(ClienteHelper.getCliente().getEndereco_numero());
-            edtBairro.setText(ClienteHelper.getCliente().getEndereco_bairro());
             if (ClienteHelper.getCliente().getEndereco_cep() != null) {
                 String cep = ClienteHelper.getCliente().getEndereco_cep().trim().replaceAll("[^0-9]", "");
                 if (cep.length() >= 8) {
@@ -135,26 +143,80 @@ public class CadastroCliente2 extends Fragment {
                 }
             }
         } else {
-
-            for (int i = 0; listaPaises.size() > i; i++) {
-                if (paisAdapter.getItem(i).getId_pais().equals("1058")) {
-                    edtPais.setSelection(i);
-                    break;
+            if (ClienteHelper.getCliente().getId_pais() <= 0) {
+                for (int i = 0; listaPaises.size() > i; i++) {
+                    if (paisAdapter.getItem(i).getId_pais().equals("1058")) {
+                        edtPais.setSelection(i);
+                        break;
+                    }
                 }
             }
+
+            edtMunicipio.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    ClienteHelper.setPosicaoMunicipio(position);
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
 
             edtUf.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    if (ClienteHelper.getPosicaoMunicipio() > -1 && edtUf.getSelectedItemPosition() != ClienteHelper.getPosicaoUf())
+                        ClienteHelper.setPosicaoMunicipio(0);
+
                     if (paisAdapter.getItem(edtPais.getSelectedItemPosition()).getId_pais().equals("1058")) {
                         municipioAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_activated_1, getResources().getStringArray(listaUf[position]));
                         edtMunicipio.setAdapter(municipioAdapter);
                     }
-                    if (ClienteHelper.getCliente().getNome_municipio() != null && !ClienteHelper.getCliente().getNome_municipio().trim().isEmpty()) {
-                        for (int i = 0; getResources().getStringArray(listaUf[edtUf.getSelectedItemPosition()]).length > i; i++) {
-                            if (ClienteHelper.getCliente().getNome_municipio().equals(getResources().getStringArray(listaUf[edtUf.getSelectedItemPosition()])[i])) {
-                                edtMunicipio.setSelection(i);
-                                break;
+                    ClienteHelper.setPosicaoUf(position);
+                    try {
+                        edtMunicipio.setSelection(ClienteHelper.getPosicaoMunicipio());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
+
+            edtPais.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    if (!paisAdapter.getItem(position).getId_pais().equals("1058")) {
+                        ClienteHelper.setPosicaoUf(0);
+                        ClienteHelper.setPosicaoMunicipio(0);
+                        String[] uf = {"EX"};
+                        ufAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_activated_1, uf);
+                        edtUf.setAdapter(ufAdapter);
+                        municipioAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_activated_1, getResources().getStringArray(listaUf[8]));
+                        edtMunicipio.setAdapter(municipioAdapter);
+                    } else {
+                        ufAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_activated_1, getResources().getStringArray(R.array.uf));
+                        edtUf.setAdapter(ufAdapter);
+                    }
+                    ClienteHelper.setPosicaoPais(position);
+                    try {
+                        edtUf.setSelection(ClienteHelper.getPosicaoUf());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        if (ClienteHelper.getCliente().getEndereco_uf() != null && !ClienteHelper.getCliente().getEndereco_uf().trim().isEmpty()) {
+                            for (int i = 0; getResources().getStringArray(R.array.uf).length > i; i++) {
+                                if (ClienteHelper.getCliente().getEndereco_uf().equals(getResources().getStringArray(R.array.uf)[i])) {
+                                    edtUf.setSelection(i);
+                                    ClienteHelper.setPosicaoUf(i);
+                                    municipioAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_activated_1, getResources().getStringArray(listaUf[i]));
+                                    edtMunicipio.setAdapter(municipioAdapter);
+                                    break;
+                                }
                             }
                         }
                     }
@@ -165,7 +227,18 @@ public class CadastroCliente2 extends Fragment {
 
                 }
             });
+
+            if (ClienteHelper.getCliente().getEndereco_cep() != null)
+                edtCep.setText(ClienteHelper.getCliente().getEndereco_cep());
         }
+
+        if (ClienteHelper.getCliente().getEndereco() != null)
+            edtEndereco.setText(ClienteHelper.getCliente().getEndereco());
+        if (ClienteHelper.getCliente().getEndereco_numero() != null)
+            edtNumero.setText(ClienteHelper.getCliente().getEndereco_numero());
+        if (ClienteHelper.getCliente().getEndereco_bairro() != null)
+            edtBairro.setText(ClienteHelper.getCliente().getEndereco_bairro());
+
         System.gc();
 
         ClienteHelper.setCadastroCliente2(this);
@@ -175,12 +248,24 @@ public class CadastroCliente2 extends Fragment {
     public void inserirDadosDaFrame() {
         if (!edtNumero.getText().toString().trim().isEmpty())
             ClienteHelper.getCliente().setEndereco_numero(edtNumero.getText().toString());
+        else
+            ClienteHelper.getCliente().setEndereco_numero(null);
+
         if (!edtBairro.getText().toString().trim().isEmpty())
             ClienteHelper.getCliente().setEndereco_bairro(edtBairro.getText().toString());
+        else
+            ClienteHelper.getCliente().setEndereco_bairro(null);
+
         if (!edtCep.getText().toString().trim().isEmpty())
             ClienteHelper.getCliente().setEndereco_cep(edtCep.getText().toString());
+        else
+            ClienteHelper.getCliente().setEndereco_cep(null);
+
         if (!edtEndereco.getText().toString().trim().isEmpty())
-            ClienteHelper.getCliente().setEndereco_bairro(edtEndereco.getText().toString());
+            ClienteHelper.getCliente().setEndereco(edtEndereco.getText().toString());
+        else
+            ClienteHelper.getCliente().setEndereco(null);
+
         try {
             ClienteHelper.getCliente().setId_pais(Integer.parseInt(listaPaises.get(edtPais.getSelectedItemPosition()).getId_pais()));
             ClienteHelper.getCliente().setEndereco_uf(ufAdapter.getItem(edtUf.getSelectedItemPosition()).toString());

@@ -68,7 +68,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/txtNomeClienteProspect"
                 android:background="@drawable/borda_edittext"
-                android:hint="Razão Social"
+                android:hint="Razão Social *"
                 android:inputType="textCapCharacters"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
@@ -95,7 +95,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_below="@+id/txtRazaoSocialProspect"
                 android:background="@drawable/borda_edittext"
-                android:hint="Nome Fantasia"
+                android:hint="Nome Fantasia *"
                 android:inputType="textCapCharacters"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
@@ -121,7 +121,7 @@
                 android:layout_toEndOf="@+id/txtCpfCnpjProspect"
                 android:layout_toRightOf="@+id/txtCpfCnpjProspect"
                 android:background="@drawable/borda_edittext"
-                android:hint="CPF/CNPJ"
+                android:hint="CPF/CNPJ *"
                 android:inputType="textFilter|number"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
@@ -211,7 +211,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/spCategoriaProspect"
-                android:text="Dia de Rota" />
+                android:text="Dia de Rota *" />
 
             <RadioGroup
                 android:id="@+id/rgRotaProspect"

@@ -136,7 +136,7 @@
                 android:layout_below="@+id/txtEnderecoCobranca"
                 android:layout_margin="3dp"
                 android:layout_toEndOf="@+id/txtEnderecoCobranca"
-                android:layout_toRightOf="@+id/txtRighterecoCobranca"
+                android:layout_toRightOf="@+id/txtEnderecoCobranca"
                 android:background="@drawable/borda_edittext"
                 android:hint="Endereço"
                 android:inputType="textCapCharacters"
@@ -149,6 +149,16 @@
                 android:layout_below="@+id/View"
                 android:layout_marginTop="20dp"
                 android:text="ENDEREÇO"
+                android:textColor="@color/colorAccent"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txtNumeroCobranca"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/edtEnderecoCobranca"
+                android:layout_marginTop="12dp"
+                android:text="NUMERO"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
 
@@ -168,14 +178,29 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
             <TextView
-                android:id="@+id/txtNumeroCobranca"
+                android:id="@+id/txtBairroCobranca"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/edtEnderecoCobranca"
+                android:layout_below="@+id/edtNumero"
                 android:layout_marginTop="12dp"
-                android:text="NUMERO"
+                android:text="BAIRRO"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/edtBairro"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/txtNumeroCobranca"
+                android:layout_alignStart="@+id/txtNumeroCobranca"
+                android:layout_below="@+id/txtBairroCobranca"
+                android:layout_margin="3dp"
+                android:layout_toEndOf="@+id/txtNumeroCobranca"
+                android:layout_toRightOf="@+id/txtNumeroCobranca"
+                android:background="@drawable/borda_edittext"
+                android:hint="Bairro"
+                android:inputType="textCapCharacters"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
             <TextView
                 android:id="@+id/txtComplementoCobranca"
@@ -202,7 +227,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_below="@+id/edtNumero"
+                android:layout_below="@+id/edtBairro"
                 android:layout_marginTop="12dp"
                 android:text="PAÍS"
                 android:textColor="@color/colorAccent"
@@ -218,7 +243,7 @@
                 android:id="@+id/txtUfCobranca"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/edtNumero"
+                android:layout_below="@+id/edtBairro"
                 android:layout_marginLeft="12dp"
                 android:layout_marginStart="12dp"
                 android:layout_marginTop="12dp"
@@ -271,6 +296,7 @@
                 android:background="@drawable/borda_edittext"
                 android:hint="CEP"
                 android:inputType="textFilter|number"
+                android:maxLength="8"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
         </RelativeLayout>

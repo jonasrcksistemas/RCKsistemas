@@ -46,6 +46,8 @@ public class CadastroCliente3 extends Fragment implements View.OnClickListener {
     EditText edtEnderecoCobranca;
     @BindView(R.id.edtNumero)
     EditText edtNumero;
+    @BindView(R.id.edtBairro)
+    EditText edtBairro;
     @BindView(R.id.edtComplemento)
     EditText edtComplemento;
     @BindView(R.id.edtCepCobranca)
@@ -113,50 +115,17 @@ public class CadastroCliente3 extends Fragment implements View.OnClickListener {
             edtEmailFinanceiro.setFocusable(false);
             edtEnderecoCobranca.setFocusable(false);
             edtNumero.setFocusable(false);
+            edtBairro.setFocusable(false);
             edtComplemento.setFocusable(false);
             edtCepCobranca.setFocusable(false);
             edtMunicipioCobranca.setEnabled(false);
             edtPaisCobranca.setEnabled(false);
             edtUfCobranca.setEnabled(false);
 
-            if (ClienteHelper.getCliente().getId_pais() > -1) {
-                for (int i = 0; listaPaises.size() > i; i++) {
-                    if (listaPaises.get(i).getId_pais().equals(String.valueOf(ClienteHelper.getCliente().getId_pais()))) {
-                        edtPaisCobranca.setSelection(i);
-                        break;
-                    }
-                }
-            }
-
-            if (ClienteHelper.getCliente().getEndereco_uf() != null && !ClienteHelper.getCliente().getEndereco_uf().trim().isEmpty()) {
-                for (int i = 0; getResources().getStringArray(R.array.uf).length > i; i++) {
-                    if (ClienteHelper.getCliente().getEndereco_uf().equals(getResources().getStringArray(R.array.uf)[i])) {
-                        edtUfCobranca.setSelection(i);
-                        municipioAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_activated_1, getResources().getStringArray(listaUf[i]));
-                        edtMunicipioCobranca.setAdapter(municipioAdapter);
-                        break;
-                    }
-                }
-            }
-
-            if (ClienteHelper.getCliente().getNome_municipio() != null && !ClienteHelper.getCliente().getNome_municipio().trim().isEmpty()) {
-                for (int i = 0; getResources().getStringArray(listaUf[edtUfCobranca.getSelectedItemPosition()]).length > i; i++) {
-                    if (ClienteHelper.getCliente().getNome_municipio().equals(getResources().getStringArray(listaUf[edtUfCobranca.getSelectedItemPosition()])[i])) {
-                        edtMunicipioCobranca.setSelection(i);
-                        break;
-                    }
-                }
-            }
-
             if (ClienteHelper.getCliente().getLimite_credito() != null) {
                 Float limiteCredito = Float.parseFloat(ClienteHelper.getCliente().getLimite_credito());
                 edtLimiteCredito.setText("R$" + String.format("%.2f", limiteCredito));
             }
-            edtContatoFinanceiro.setText(ClienteHelper.getCliente().getPessoa_contato_financeiro());
-            edtEmailFinanceiro.setText(ClienteHelper.getCliente().getEmail_financeiro());
-            edtEnderecoCobranca.setText(ClienteHelper.getCliente().getCob_endereco());
-            edtNumero.setText(ClienteHelper.getCliente().getCob_endereco_numero());
-            edtComplemento.setText(ClienteHelper.getCliente().getCob_endereco_complemento());
 
             if (ClienteHelper.getCliente().getCob_endereco_cep() != null) {
                 String cep = ClienteHelper.getCliente().getCob_endereco_cep().trim().replaceAll("[^0-9]", "");
@@ -171,27 +140,77 @@ public class CadastroCliente3 extends Fragment implements View.OnClickListener {
             btnHistoricoFinanceiro.setVisibility(View.GONE);
             txtHistoricoFinanceiro.setVisibility(View.GONE);
 
-            for (int i = 0; listaPaises.size() > i; i++) {
-                if (paisAdapter.getItem(i).getId_pais().equals("1058")) {
-                    edtPaisCobranca.setSelection(i);
-                    break;
+            if (ClienteHelper.getCliente().getLimite_credito() != null)
+                edtLimiteCredito.setText(ClienteHelper.getCliente().getLimite_credito());
+
+            if (ClienteHelper.getCliente().getCob_endereco_cep() != null)
+                edtCepCobranca.setText(ClienteHelper.getCliente().getCob_endereco_cep());
+
+            if (ClienteHelper.getCliente().getCob_endereco_id_pais() <= 0) {
+                for (int i = 0; listaPaises.size() > i; i++) {
+                    if (paisAdapter.getItem(i).getId_pais().equals("1058")) {
+                        edtPaisCobranca.setSelection(i);
+                        break;
+                    }
                 }
             }
+
+            edtMunicipioCobranca.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    ClienteHelper.setPosicaoCobrancaMunicipio(position);
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
 
             edtUfCobranca.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    if (ClienteHelper.getPosicaoCobrancaMunicipio() > -1 && edtUfCobranca.getSelectedItemPosition() != ClienteHelper.getPosicaoCobrancaUf())
+                        ClienteHelper.setPosicaoCobrancaMunicipio(0);
+
                     if (paisAdapter.getItem(edtPaisCobranca.getSelectedItemPosition()).getId_pais().equals("1058")) {
                         municipioAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_activated_1, getResources().getStringArray(listaUf[position]));
                         edtMunicipioCobranca.setAdapter(municipioAdapter);
                     }
-                    if (ClienteHelper.getCliente().getNome_cob_municipio() != null && !ClienteHelper.getCliente().getNome_cob_municipio().trim().isEmpty()) {
-                        for (int i = 0; getResources().getStringArray(listaUf[edtUfCobranca.getSelectedItemPosition()]).length > i; i++) {
-                            if (ClienteHelper.getCliente().getNome_cob_municipio().equals(getResources().getStringArray(listaUf[edtUfCobranca.getSelectedItemPosition()])[i])) {
-                                edtMunicipioCobranca.setSelection(i);
-                                break;
-                            }
-                        }
+                    ClienteHelper.setPosicaoCobrancaUf(position);
+                    try {
+                        edtMunicipioCobranca.setSelection(ClienteHelper.getPosicaoCobrancaMunicipio());
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
+                }
+            });
+
+            edtPaisCobranca.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    if (!paisAdapter.getItem(position).getId_pais().equals("1058")) {
+                        ClienteHelper.setPosicaoCobrancaUf(0);
+                        ClienteHelper.setPosicaoCobrancaMunicipio(0);
+                        String[] uf = {"EX"};
+                        ufAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_activated_1, uf);
+                        edtUfCobranca.setAdapter(ufAdapter);
+                        municipioAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_activated_1, getResources().getStringArray(listaUf[8]));
+                        edtMunicipioCobranca.setAdapter(municipioAdapter);
+                    } else {
+                        ufAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_activated_1, getResources().getStringArray(R.array.uf));
+                        edtUfCobranca.setAdapter(ufAdapter);
+                    }
+                    ClienteHelper.setPosicaoCobrancaPais(position);
+                    try {
+                        edtUfCobranca.setSelection(ClienteHelper.getPosicaoCobrancaUf());
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
                 }
 
@@ -201,7 +220,59 @@ public class CadastroCliente3 extends Fragment implements View.OnClickListener {
                 }
             });
         }
-        System.gc();
+
+        if (ClienteHelper.getCliente().getCob_endereco_id_pais() > 0) {
+            for (int i = 0; listaPaises.size() > i; i++) {
+                if (listaPaises.get(i).getId_pais().equals(String.valueOf(ClienteHelper.getCliente().getCob_endereco_id_pais()))) {
+                    edtPaisCobranca.setSelection(i);
+                    ClienteHelper.setPosicaoCobrancaPais(i);
+                    break;
+                }
+            }
+        } else {
+            for (int i = 0; listaPaises.size() > i; i++) {
+                if (paisAdapter.getItem(i).getId_pais().equals("1058")) {
+                    edtPaisCobranca.setSelection(i);
+                    ClienteHelper.setPosicaoCobrancaPais(i);
+                    break;
+                }
+            }
+        }
+
+        if (ClienteHelper.getCliente().getCob_endereco_uf() != null && !ClienteHelper.getCliente().getCob_endereco_uf().trim().isEmpty()) {
+            for (int i = 0; getResources().getStringArray(R.array.uf).length > i; i++) {
+                if (ClienteHelper.getCliente().getCob_endereco_uf().equals(getResources().getStringArray(R.array.uf)[i])) {
+                    edtUfCobranca.setSelection(i);
+                    ClienteHelper.setPosicaoCobrancaUf(i);
+                    municipioAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_activated_1, getResources().getStringArray(listaUf[i]));
+                    edtMunicipioCobranca.setAdapter(municipioAdapter);
+                    break;
+                }
+            }
+        }
+
+        if (ClienteHelper.getCliente().getNome_cob_municipio() != null && !ClienteHelper.getCliente().getNome_cob_municipio().trim().isEmpty()) {
+            for (int i = 0; getResources().getStringArray(listaUf[edtUfCobranca.getSelectedItemPosition()]).length > i; i++) {
+                if (ClienteHelper.getCliente().getNome_cob_municipio().equals(getResources().getStringArray(listaUf[edtUfCobranca.getSelectedItemPosition()])[i])) {
+                    edtMunicipioCobranca.setSelection(i);
+                    ClienteHelper.setPosicaoCobrancaMunicipio(i);
+                    break;
+                }
+            }
+        }
+
+        if (ClienteHelper.getCliente().getPessoa_contato_financeiro() != null)
+            edtContatoFinanceiro.setText(ClienteHelper.getCliente().getPessoa_contato_financeiro());
+        if (ClienteHelper.getCliente().getEmail_financeiro() != null)
+            edtEmailFinanceiro.setText(ClienteHelper.getCliente().getEmail_financeiro());
+        if (ClienteHelper.getCliente().getCob_endereco() != null)
+            edtEnderecoCobranca.setText(ClienteHelper.getCliente().getCob_endereco());
+        if (ClienteHelper.getCliente().getCob_endereco_numero() != null)
+            edtNumero.setText(ClienteHelper.getCliente().getCob_endereco_numero());
+        if (ClienteHelper.getCliente().getCob_endereco_bairro() != null)
+            edtBairro.setText(ClienteHelper.getCliente().getCob_endereco_bairro());
+        if (ClienteHelper.getCliente().getCob_endereco_complemento() != null)
+            edtComplemento.setText(ClienteHelper.getCliente().getCob_endereco_complemento());
 
         ClienteHelper.setCadastroCliente3(this);
         return view;
@@ -209,19 +280,44 @@ public class CadastroCliente3 extends Fragment implements View.OnClickListener {
 
     public void inserirDadosDaFrame() {
         if (!edtLimiteCredito.getText().toString().trim().isEmpty())
-            ClienteHelper.getCliente().setLimite_credito(edtLimiteCredito.getText().toString());
+            ClienteHelper.getCliente().setLimite_credito(edtLimiteCredito.getText().toString().replaceAll("[^0-9]", ""));
+        else
+            ClienteHelper.getCliente().setLimite_credito(null);
+
         if (!edtContatoFinanceiro.getText().toString().trim().isEmpty())
             ClienteHelper.getCliente().setPessoa_contato_financeiro(edtContatoFinanceiro.getText().toString());
+        else
+            ClienteHelper.getCliente().setPessoa_contato_financeiro(null);
+
         if (!edtEmailFinanceiro.getText().toString().trim().isEmpty())
             ClienteHelper.getCliente().setEmail_financeiro(edtEmailFinanceiro.getText().toString());
+        else
+            ClienteHelper.getCliente().setEmail_financeiro(null);
+
         if (!edtEnderecoCobranca.getText().toString().trim().isEmpty())
             ClienteHelper.getCliente().setCob_endereco(edtEnderecoCobranca.getText().toString());
+        else
+            ClienteHelper.getCliente().setCob_endereco(null);
+
         if (!edtNumero.getText().toString().trim().isEmpty())
             ClienteHelper.getCliente().setCob_endereco_numero(edtNumero.getText().toString());
+        else
+            ClienteHelper.getCliente().setCob_endereco_numero(null);
+
+        if (!edtBairro.getText().toString().trim().isEmpty())
+            ClienteHelper.getCliente().setCob_endereco_bairro(edtBairro.getText().toString());
+        else
+            ClienteHelper.getCliente().setCob_endereco_bairro(null);
+
         if (!edtComplemento.getText().toString().trim().isEmpty())
             ClienteHelper.getCliente().setCob_endereco_complemento(edtComplemento.getText().toString());
+        else
+            ClienteHelper.getCliente().setCob_endereco_complemento(null);
+
         if (!edtCepCobranca.getText().toString().trim().isEmpty())
             ClienteHelper.getCliente().setCob_endereco_cep(edtCepCobranca.getText().toString());
+        else
+            ClienteHelper.getCliente().setCob_endereco_cep(null);
 
         try {
             ClienteHelper.getCliente().setCob_endereco_id_pais(Integer.parseInt(listaPaises.get(edtPaisCobranca.getSelectedItemPosition()).getId_pais()));
@@ -230,12 +326,6 @@ public class CadastroCliente3 extends Fragment implements View.OnClickListener {
         } catch (ArrayIndexOutOfBoundsException e) {
             e.printStackTrace();
         }
-    }
-
-    @Override
-    public void onDestroy() {
-        System.gc();
-        super.onDestroy();
     }
 
     @Override

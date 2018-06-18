@@ -13,17 +13,46 @@
         android:id="@+id/tb_cliente"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        android:minHeight="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
         app:theme="@style/Theme.Toolbar"
         tools:context=".activity.ActivityCliente" />
+
+    <RadioGroup
+        android:id="@+id/rgFiltraCliente"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tb_cliente"
+        android:elevation="15dp"
+        android:gravity="center"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/filtraTodosClientes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="Todos" />
+
+        <RadioButton
+            android:id="@+id/filtraClientesEfetivados"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Efetivados" />
+
+        <RadioButton
+            android:id="@+id/filtraClientesNaoEfetivados"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Não Efetivados" />
+
+    </RadioGroup>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/listaRecycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@+id/edtTotalClientes"
-        android:layout_below="@+id/tb_cliente"
+        android:layout_below="@+id/rgFiltraCliente"
         android:layout_weight="1"
         android:clipToPadding="false"
         android:paddingBottom="60dp" />

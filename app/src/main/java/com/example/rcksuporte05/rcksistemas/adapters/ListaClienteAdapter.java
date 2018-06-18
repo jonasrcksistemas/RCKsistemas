@@ -54,6 +54,11 @@ public class ListaClienteAdapter extends RecyclerView.Adapter<ClientesViewHolder
                 holder.textViewTelefone.setText(telefone);
             }
         }
+
+        if (clientes.get(position).getId_cadastro_servidor() > 0)
+            holder.imStatus.setImageResource(R.mipmap.ic_prospect_salvo);
+        else
+            holder.imStatus.setImageResource(R.mipmap.ic_prospect_pendente);
     }
 
 

@@ -24,7 +24,9 @@ import android.widget.Toast;
 import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.UsuarioHelper;
 import com.example.rcksuporte05.rcksistemas.R;
+import com.example.rcksuporte05.rcksistemas.util.MascaraUtil;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
@@ -34,6 +36,26 @@ import butterknife.ButterKnife;
 
 public class CadastroCliente1 extends Fragment {
 
+    @BindView(R.id.edtData)
+    public EditText edtData;
+    @BindView(R.id.edtNomeFantasia)
+    public EditText edtNomeFantasia;
+    @BindView(R.id.edtCpfCnpj)
+    public EditText edtCpfCnpj;
+    @BindView(R.id.edtTelefonePrincipal)
+    public EditText edtTelefonePrincipal;
+    @BindView(R.id.edtTelefone1)
+    public EditText edtTelefone1;
+    @BindView(R.id.edtTelefone2)
+    public EditText edtTelefone2;
+    @BindView(R.id.edtPessoaContato)
+    public EditText edtPessoaContato;
+    @BindView(R.id.edtEmailPrincipal)
+    public EditText edtEmailPrincipal;
+    @BindView(R.id.edtNomeCliente)
+    public EditText edtNomeCliente;
+    @BindView(R.id.edtInscEstadual)
+    public EditText edtInscEstadual;
     @BindView(R.id.txtId)
     TextView txtId;
     @BindView(R.id.rdFisica)
@@ -42,28 +64,8 @@ public class CadastroCliente1 extends Fragment {
     RadioButton rdJuridica;
     @BindView(R.id.txtNomeCliente)
     TextView txtNomeCliente;
-    @BindView(R.id.edtData)
-    EditText edtData;
-    @BindView(R.id.edtNomeFantasia)
-    EditText edtNomeFantasia;
     @BindView(R.id.txtCpfCnpj)
     TextView txtCpfCnpj;
-    @BindView(R.id.edtCpfCnpj)
-    EditText edtCpfCnpj;
-    @BindView(R.id.edtTelefonePrincipal)
-    EditText edtTelefonePrincipal;
-    @BindView(R.id.edtTelefone1)
-    EditText edtTelefone1;
-    @BindView(R.id.edtTelefone2)
-    EditText edtTelefone2;
-    @BindView(R.id.edtPessoaContato)
-    EditText edtPessoaContato;
-    @BindView(R.id.edtEmailPrincipal)
-    EditText edtEmailPrincipal;
-    @BindView(R.id.edtNomeCliente)
-    EditText edtNomeCliente;
-    @BindView(R.id.edtInscEstadual)
-    EditText edtInscEstadual;
     @BindView(R.id.spIe)
     Spinner spIe;
     @BindView(R.id.txtData)
@@ -109,11 +111,6 @@ public class CadastroCliente1 extends Fragment {
                 }
             });
 
-            arrayIe = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_activated_1, contribuinte);
-            spIe.setAdapter(arrayIe);
-
-            edtVendedor.setText(ClienteHelper.getCliente().getNome_vendedor());
-
             rdFisica.setClickable(false);
             rdJuridica.setClickable(false);
             edtNomeFantasia.setFocusable(false);
@@ -128,35 +125,26 @@ public class CadastroCliente1 extends Fragment {
             edtInscMunicipal.setFocusable(false);
             spIe.setEnabled(false);
 
-            if (ClienteHelper.getCliente().getId_cadastro_servidor() > 0)
-                txtId.setText("ID: " + ClienteHelper.getCliente().getId_cadastro_servidor());
-            else
-                txtId.setText("ID: " + ClienteHelper.getCliente().getId_cadastro());
-            edtNomeCliente.setText(ClienteHelper.getCliente().getNome_cadastro());
-            edtNomeFantasia.setText(ClienteHelper.getCliente().getNome_fantasia());
+            txtId.setText("ID: " + ClienteHelper.getCliente().getId_cadastro_servidor());
 
-            if (ClienteHelper.getCliente().getData_aniversario() != null) {
-                String data = ClienteHelper.getCliente().getData_aniversario().replaceAll("[^0-9]", "");
-                if (!data.isEmpty()) {
-                    edtData.setText(data.substring(6, 8) + "/" + data.substring(4, 6) + "/" + data.substring(0, 4));
+            if (ClienteHelper.getCliente().getCpf_cnpj() != null && ClienteHelper.getCliente().getPessoa_f_j() != null) {
+                switch (ClienteHelper.getCliente().getPessoa_f_j()) {
+                    case "J":
+                        rdJuridica.setChecked(true);
+                        try {
+                            edtCpfCnpj.setText(MascaraUtil.mascaraCNPJ(ClienteHelper.getCliente().getCpf_cnpj()));
+                        } catch (StringIndexOutOfBoundsException e) {
+                            Toast.makeText(getContext(), "Falta de informações no cadastro", Toast.LENGTH_SHORT).show();
+                        }
+                        break;
+                    case "F":
+                        rdFisica.setChecked(true);
+                        edtCpfCnpj.setText(MascaraUtil.mascaraCPF(ClienteHelper.getCliente().getCpf_cnpj()));
+                        break;
+                    default:
+                        edtCpfCnpj.setText(ClienteHelper.getCliente().getCpf_cnpj());
+                        break;
                 }
-            }
-
-            edtInscEstadual.setText(ClienteHelper.getCliente().getInscri_estadual());
-            edtInscMunicipal.setText(ClienteHelper.getCliente().getInscri_municipal());
-            String cpfCnpj = ClienteHelper.getCliente().getCpf_cnpj().trim().replaceAll("[^0-9]", "");
-            if (ClienteHelper.getCliente().getPessoa_f_j().equals("J")) {
-                rdJuridica.setChecked(true);
-                try {
-                    edtCpfCnpj.setText(cpfCnpj.substring(0, 2) + "." + cpfCnpj.substring(2, 5) + "." + cpfCnpj.substring(5, 8) + "/" + cpfCnpj.substring(8, 12) + "-" + cpfCnpj.substring(12, 14));
-                } catch (StringIndexOutOfBoundsException e) {
-                    Toast.makeText(getContext(), "Falta de informações no cadastro", Toast.LENGTH_SHORT).show();
-                }
-            } else if (ClienteHelper.getCliente().getPessoa_f_j().equals("F")) {
-                rdFisica.setChecked(true);
-                edtCpfCnpj.setText(cpfCnpj.substring(0, 3) + "." + cpfCnpj.substring(3, 6) + "." + cpfCnpj.substring(6, 9) + "-" + cpfCnpj.substring(9, 11));
-            } else {
-                edtCpfCnpj.setText(cpfCnpj);
             }
 
             if (ClienteHelper.getCliente().getTelefone_principal() != null) {
@@ -204,18 +192,39 @@ public class CadastroCliente1 extends Fragment {
                     edtTelefone2.setText(telefone2);
                 }
             }
-
-            edtPessoaContato.setText(ClienteHelper.getCliente().getPessoa_contato_principal());
-            edtEmailPrincipal.setText(ClienteHelper.getCliente().getEmail_principal());
-            try {
-                spIe.setSelection(Integer.parseInt(ClienteHelper.getCliente().getInd_da_ie_destinatario()) - 1);
-            } catch (NumberFormatException e) {
-                System.out.println(e.getMessage());
-            }
         } else {
+            txtId.setText("ID: " + ClienteHelper.getCliente().getId_cadastro());
+
+            if (ClienteHelper.getCliente().getCpf_cnpj() != null && ClienteHelper.getCliente().getPessoa_f_j() != null) {
+                switch (ClienteHelper.getCliente().getPessoa_f_j()) {
+                    case "J":
+                        rdJuridica.setChecked(true);
+                        try {
+                            edtCpfCnpj.setText(ClienteHelper.getCliente().getCpf_cnpj());
+                        } catch (StringIndexOutOfBoundsException e) {
+                            Toast.makeText(getContext(), "Falta de informações no cadastro", Toast.LENGTH_SHORT).show();
+                        }
+                        break;
+                    case "F":
+                        rdFisica.setChecked(true);
+                        edtCpfCnpj.setText(ClienteHelper.getCliente().getCpf_cnpj());
+                        break;
+                    default:
+                        edtCpfCnpj.setText(ClienteHelper.getCliente().getCpf_cnpj());
+                        break;
+                }
+            }
+
             btnLigar1.setVisibility(View.INVISIBLE);
             btnLigar2.setVisibility(View.INVISIBLE);
             btnLigar3.setVisibility(View.INVISIBLE);
+
+            if (ClienteHelper.getCliente().getTelefone_principal() != null)
+                edtTelefonePrincipal.setText((ClienteHelper.getCliente().getTelefone_principal()));
+            if (ClienteHelper.getCliente().getTelefone_dois() != null)
+                edtTelefone1.setText((ClienteHelper.getCliente().getTelefone_dois()));
+            if (ClienteHelper.getCliente().getTelefone_tres() != null)
+                edtTelefone2.setText((ClienteHelper.getCliente().getTelefone_tres()));
 
             edtData.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -225,23 +234,66 @@ public class CadastroCliente1 extends Fragment {
             });
 
             edtVendedor.setText(UsuarioHelper.getUsuario().getNome_usuario());
+
+            edtCpfCnpj.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View v, boolean hasFocus) {
+                    if (!hasFocus)
+                        validaCpfCnpj();
+                    else
+                        edtCpfCnpj.setText(edtCpfCnpj.getText().toString().replaceAll("[^0-9]", ""));
+                }
+            });
+        }
+
+        arrayIe = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_activated_1, contribuinte);
+        spIe.setAdapter(arrayIe);
+
+        if (ClienteHelper.getCliente().getInd_da_ie_destinatario() != null) {
+            try {
+                spIe.setSelection(Integer.parseInt(ClienteHelper.getCliente().getInd_da_ie_destinatario()) - 1);
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (ClienteHelper.getCliente().getNome_vendedor() != null)
+            edtVendedor.setText(ClienteHelper.getCliente().getNome_vendedor());
+        if (ClienteHelper.getCliente().getNome_cadastro() != null)
+            edtNomeCliente.setText(ClienteHelper.getCliente().getNome_cadastro());
+        if (ClienteHelper.getCliente().getNome_fantasia() != null)
+            edtNomeFantasia.setText(ClienteHelper.getCliente().getNome_fantasia());
+        if (ClienteHelper.getCliente().getInscri_estadual() != null)
+            edtInscEstadual.setText(ClienteHelper.getCliente().getInscri_estadual());
+        if (ClienteHelper.getCliente().getInscri_municipal() != null)
+            edtInscMunicipal.setText(ClienteHelper.getCliente().getInscri_municipal());
+        if (ClienteHelper.getCliente().getPessoa_contato_principal() != null)
+            edtPessoaContato.setText(ClienteHelper.getCliente().getPessoa_contato_principal());
+        if (ClienteHelper.getCliente().getEmail_principal() != null)
+            edtEmailPrincipal.setText(ClienteHelper.getCliente().getEmail_principal());
+        if (ClienteHelper.getCliente().getData_aniversario() != null) {
+            try {
+                edtData.setText(new SimpleDateFormat("dd/MM/yyyy").format(new SimpleDateFormat("YYYY-MM-dd").parse(ClienteHelper.getCliente().getData_aniversario())));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
         }
 
         if (rdJuridica.isChecked()) {
             txtNomeCliente.setText("RAZÃO SOCIAL");
-            edtNomeCliente.setHint("Razão Social");
+            edtNomeCliente.setHint("Razão Social *");
             txtData.setText("DATA ABERTURA");
-            edtData.setHint("Data Abertura");
+            edtData.setHint("Data Abertura *");
             txtCpfCnpj.setText("CNPJ");
-            edtCpfCnpj.setHint("CNPJ");
+            edtCpfCnpj.setHint("CNPJ *");
 
         } else if (rdFisica.isChecked()) {
             txtNomeCliente.setText("NOME");
-            edtNomeCliente.setHint("Nome");
+            edtNomeCliente.setHint("Nome *");
             txtData.setText("DATA NASCIMENTO");
-            edtData.setHint("Data Nascimento");
+            edtData.setHint("Data Nascimento *");
             txtCpfCnpj.setText("CPF");
-            edtCpfCnpj.setHint("CPF");
+            edtCpfCnpj.setHint("CPF *");
         }
 
         rdJuridica.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -249,11 +301,11 @@ public class CadastroCliente1 extends Fragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     txtNomeCliente.setText("RAZÃO SOCIAL");
-                    edtNomeCliente.setHint("Razão Social");
+                    edtNomeCliente.setHint("Razão Social *");
                     txtData.setText("DATA ABERTURA");
-                    edtData.setHint("Data Abertura");
+                    edtData.setHint("Data Abertura *");
                     txtCpfCnpj.setText("CNPJ");
-                    edtCpfCnpj.setHint("CNPJ");
+                    edtCpfCnpj.setHint("CNPJ *");
                 }
             }
         });
@@ -263,11 +315,11 @@ public class CadastroCliente1 extends Fragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     txtNomeCliente.setText("NOME");
-                    edtNomeCliente.setHint("Nome");
+                    edtNomeCliente.setHint("Nome *");
                     txtData.setText("DATA NASCIMENTO");
-                    edtData.setHint("Data Nascimento");
+                    edtData.setHint("Data Nascimento *");
                     txtCpfCnpj.setText("CPF");
-                    edtCpfCnpj.setHint("CPF");
+                    edtCpfCnpj.setHint("CPF *");
                 }
             }
         });
@@ -275,6 +327,27 @@ public class CadastroCliente1 extends Fragment {
 
         ClienteHelper.setCadastroCliente1(this);
         return (view);
+    }
+
+    public void validaCpfCnpj() {
+        if (rdFisica.isChecked()) {
+            if (MascaraUtil.isValidCPF(edtCpfCnpj.getText().toString().replaceAll("[^0-9]", ""))) {
+                edtCpfCnpj.setText(MascaraUtil.mascaraCPF(edtCpfCnpj.getText().toString().replaceAll("[^0-9]", "")));
+            } else {
+                edtCpfCnpj.setError("CPF Inválido");
+                edtCpfCnpj.requestFocus();
+            }
+        } else if (rdJuridica.isChecked()) {
+            if (MascaraUtil.isValidCNPJ(edtCpfCnpj.getText().toString().replaceAll("[^0-9]", ""))) {
+                edtCpfCnpj.setText(MascaraUtil.mascaraCNPJ(edtCpfCnpj.getText().toString().replaceAll("[^0-9]", "")));
+            } else {
+                edtCpfCnpj.setError("CNPJ Inválido");
+                edtCpfCnpj.requestFocus();
+            }
+        } else {
+            Toast.makeText(getActivity(), "Você precisa informar o se é pessoa Física ou Jurídica", Toast.LENGTH_SHORT).show();
+            rdFisica.requestFocus();
+        }
     }
 
     public void inserirDadosDaFrame() {
@@ -285,43 +358,71 @@ public class CadastroCliente1 extends Fragment {
 
         if (!edtNomeCliente.getText().toString().trim().isEmpty())
             ClienteHelper.getCliente().setNome_cadastro(edtNomeCliente.getText().toString());
-
+        else
+            ClienteHelper.getCliente().setNome_cadastro(null)
+                    ;
         if (!edtNomeFantasia.getText().toString().trim().isEmpty())
             ClienteHelper.getCliente().setNome_fantasia(edtNomeFantasia.getText().toString());
+        else
+            ClienteHelper.getCliente().setNome_fantasia(null);
 
-        if (!edtData.getText().toString().trim().isEmpty())
-            ClienteHelper.getCliente().setData_aniversario(edtData.getText().toString());
+        if (!edtData.getText().toString().trim().isEmpty()) {
+            try {
+                ClienteHelper.getCliente().setData_aniversario(new SimpleDateFormat("YYYY-MM-dd").format(new SimpleDateFormat("dd/MM/yyyy").parse(edtData.getText().toString())));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        } else
+            ClienteHelper.getCliente().setData_aniversario(null);
+
 
         if (!edtCpfCnpj.getText().toString().trim().isEmpty())
             ClienteHelper.getCliente().setCpf_cnpj(edtCpfCnpj.getText().toString());
+        else
+            ClienteHelper.getCliente().setCpf_cnpj(null);
 
         if (!edtTelefonePrincipal.getText().toString().trim().isEmpty())
             ClienteHelper.getCliente().setTelefone_principal(edtTelefonePrincipal.getText().toString());
+        else
+            ClienteHelper.getCliente().setTelefone_principal(null);
 
         if (!edtTelefone1.getText().toString().trim().isEmpty())
             ClienteHelper.getCliente().setTelefone_dois(edtTelefone1.getText().toString());
+        else
+            ClienteHelper.getCliente().setTelefone_dois(null);
 
         if (!edtTelefone2.getText().toString().trim().isEmpty())
             ClienteHelper.getCliente().setTelefone_tres(edtTelefone2.getText().toString());
+        else
+            ClienteHelper.getCliente().setTelefone_tres(null);
 
         if (!edtPessoaContato.getText().toString().trim().isEmpty())
-            ClienteHelper.getCliente().setPessoa_contato_financeiro(edtPessoaContato.getText().toString());
+            ClienteHelper.getCliente().setPessoa_contato_principal(edtPessoaContato.getText().toString());
+        else
+            ClienteHelper.getCliente().setPessoa_contato_principal(null);
 
         if (!edtEmailPrincipal.getText().toString().trim().isEmpty())
             ClienteHelper.getCliente().setEmail_principal(edtEmailPrincipal.getText().toString());
+        else
+            ClienteHelper.getCliente().setEmail_principal(null);
 
         if (!edtInscEstadual.getText().toString().trim().isEmpty())
             ClienteHelper.getCliente().setInscri_estadual(edtInscEstadual.getText().toString());
+        else
+            ClienteHelper.getCliente().setInscri_estadual(null);
 
         if (!edtInscMunicipal.getText().toString().trim().isEmpty())
             ClienteHelper.getCliente().setInscri_municipal(edtInscMunicipal.getText().toString());
+        else
+            ClienteHelper.getCliente().setInscri_municipal(null);
 
         ClienteHelper.getCliente().setId_vendedor(Integer.parseInt(UsuarioHelper.getUsuario().getId_quando_vendedor()));
+
+        ClienteHelper.getCliente().setInd_da_ie_destinatario(String.valueOf(spIe.getSelectedItemPosition() + 1));
     }
 
     public void fazerChamada(final String telefone, final String nome) {
         try {
-
             if (!telefone.replaceAll("[^0-9]", "").trim().isEmpty()) {
                 if (telefone.replaceAll("[^0-9]", "").length() >= 8 && telefone.replaceAll("[^0-9]", "").length() <= 11) {
                     final Intent intent = new Intent(Intent.ACTION_DIAL);

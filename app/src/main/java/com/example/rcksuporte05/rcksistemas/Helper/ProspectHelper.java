@@ -5,7 +5,6 @@ import android.location.Location;
 import android.support.v4.view.ViewPager;
 import android.widget.Toast;
 
-import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.activity.ActivityCadastroProspect;
 import com.example.rcksuporte05.rcksistemas.fragment.CadastroProspectContatos;
@@ -15,12 +14,9 @@ import com.example.rcksuporte05.rcksistemas.fragment.CadastroProspectGeral;
 import com.example.rcksuporte05.rcksistemas.fragment.CadastroProspectMotivos;
 import com.example.rcksuporte05.rcksistemas.fragment.CadastroProspectObservacoesComerciais;
 import com.example.rcksuporte05.rcksistemas.fragment.CadastroProspectSegmentos;
-import com.example.rcksuporte05.rcksistemas.model.Contato;
 import com.example.rcksuporte05.rcksistemas.model.MotivoNaoCadastramento;
 import com.example.rcksuporte05.rcksistemas.model.Pais;
 import com.example.rcksuporte05.rcksistemas.model.Prospect;
-import com.example.rcksuporte05.rcksistemas.model.ReferenciaBancaria;
-import com.example.rcksuporte05.rcksistemas.model.ReferenciaComercial;
 import com.example.rcksuporte05.rcksistemas.model.Segmento;
 import com.example.rcksuporte05.rcksistemas.util.MascaraUtil;
 
@@ -209,7 +205,7 @@ public class ProspectHelper {
         ProspectHelper.localizacao = localizacao;
     }
 
-    public static void moveTela(int position) {
+    private static void moveTela(int position) {
         mViewPager = (ViewPager) activityMain.findViewById(R.id.vp_tabs_prospect);
         if (mViewPager.getCurrentItem() != position) {
             mViewPager.setCurrentItem(position);
@@ -220,7 +216,6 @@ public class ProspectHelper {
         /*
         Esta variavel é usada para validar o movimento das frags, assim que movimenta, não movimenta outra frag
          */
-
 
         boolean verificaMovimento = true;
 
@@ -471,15 +466,15 @@ public class ProspectHelper {
             }
         }
 
-        /*if(verificaMovimento){
-            if(localizacao == null){
-                Toast.makeText(activityMain, "Fazer Check-in é obrigatório",Toast.LENGTH_LONG).show();
+        if (verificaMovimento) {
+            if (localizacao == null) {
+                Toast.makeText(activityMain, "Fazer Check-in é obrigatório", Toast.LENGTH_LONG).show();
                 verificaMovimento = false;
-            }else {
+            } else {
                 prospect.setLatitude(String.valueOf(localizacao.getLatitude()));
                 prospect.setLongitude(String.valueOf(localizacao.getLongitude()));
             }
-        }*/
+        }
 
         return verificaMovimento;
 
@@ -571,6 +566,5 @@ public class ProspectHelper {
         imagem2 = null;
         localizacao = null;
         checkin = null;
-        System.gc();
     }
 }

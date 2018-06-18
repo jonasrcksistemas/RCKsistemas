@@ -1,93 +1,84 @@
 package com.example.rcksuporte05.rcksistemas.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.RadioButton;
+import android.widget.LinearLayout;
 
 import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
 import com.example.rcksuporte05.rcksistemas.R;
+import com.example.rcksuporte05.rcksistemas.activity.ActivityAdicionaContato;
+import com.example.rcksuporte05.rcksistemas.adapters.ListaContatoAdapter;
+import com.example.rcksuporte05.rcksistemas.util.DividerItemDecoration;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
-public class CadastroCliente4 extends Fragment {
+/**
+ * Created by RCK 03 on 26/01/2018.
+ */
 
-    @BindView(R.id.rdSim)
-    RadioButton rdSim;
-    @BindView(R.id.rdNao)
-    RadioButton rdNao;
-    @BindView(R.id.edtEmail4)
-    EditText edtEmail4;
-    @BindView(R.id.edtEmail1)
-    EditText edtEmail1;
-    @BindView(R.id.edtEmail5)
-    EditText edtEmail5;
-    @BindView(R.id.edtEmail3)
-    EditText edtEmail3;
-    @BindView(R.id.edtEmail2)
-    EditText edtEmail2;
+public class CadastroCliente4 extends Fragment implements ListaContatoAdapter.ListaContatoListener {
 
+    @BindView(R.id.recyclerContatos)
+    RecyclerView recyclerContatos;
+
+    @BindView(R.id.btnAddContato)
+    FloatingActionButton btnAddContato;
+
+    ListaContatoAdapter listaContatoAdapter;
+
+    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_cadastro_cliente4, container, false);
         ButterKnife.bind(this, view);
 
-        if (getActivity().getIntent().getIntExtra("vizualizacao", 0) >= 1) {
+        recyclerContatos.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerContatos.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayout.VERTICAL));
 
-            rdSim.setClickable(false);
-            rdNao.setClickable(false);
-            edtEmail4.setFocusable(false);
-            edtEmail1.setFocusable(false);
-            edtEmail5.setFocusable(false);
-            edtEmail3.setFocusable(false);
-            edtEmail2.setFocusable(false);
+        preencheListaContatos();
 
-            if (ClienteHelper.getCliente().getNfe_email_enviar() != null) {
-                if (ClienteHelper.getCliente().getNfe_email_enviar().equals("S")) {
-                    rdSim.setChecked(true);
-                } else if (ClienteHelper.getCliente().getNfe_email_enviar().equals("N")) {
-                    rdNao.setChecked(true);
-                }
-            }
-
-            edtEmail1.setText(ClienteHelper.getCliente().getNfe_email_um());
-            edtEmail2.setText(ClienteHelper.getCliente().getNfe_email_dois());
-            edtEmail3.setText(ClienteHelper.getCliente().getNfe_email_tres());
-            edtEmail4.setText(ClienteHelper.getCliente().getNfe_email_quatro());
-            edtEmail5.setText(ClienteHelper.getCliente().getNfe_email_cinco());
+        if (ClienteHelper.getCliente().getId_cadastro_servidor() > 0) {
+            btnAddContato.setVisibility(View.GONE);
         }
-        System.gc();
 
         ClienteHelper.setCadastroCliente4(this);
         return view;
     }
 
-    public void inserirDadosDaFrame() {
-        if (rdSim.isChecked()) {
-            ClienteHelper.getCliente().setNfe_email_enviar("S");
-        } else if (rdNao.isChecked()) {
-            ClienteHelper.getCliente().setNfe_email_enviar("N");
-        }
+    private void preencheListaContatos() {
+        listaContatoAdapter = new ListaContatoAdapter(ClienteHelper.getCliente().getListaContato(), this);
+        recyclerContatos.setAdapter(listaContatoAdapter);
+        listaContatoAdapter.notifyDataSetChanged();
+    }
 
-        if (!edtEmail4.getText().toString().trim().isEmpty())
-            ClienteHelper.getCliente().setNfe_email_quatro(edtEmail4.getText().toString());
-        if (!edtEmail1.getText().toString().trim().isEmpty())
-            ClienteHelper.getCliente().setNfe_email_um(edtEmail1.getText().toString());
-        if (!edtEmail5.getText().toString().trim().isEmpty())
-            ClienteHelper.getCliente().setNfe_email_cinco(edtEmail5.getText().toString());
-        if (!edtEmail3.getText().toString().trim().isEmpty())
-            ClienteHelper.getCliente().setNfe_email_tres(edtEmail3.getText().toString());
-        if (!edtEmail2.getText().toString().trim().isEmpty())
-            ClienteHelper.getCliente().setNfe_email_dois(edtEmail2.getText().toString());
+    @OnClick(R.id.btnAddContato)
+    public void abrirTela() {
+        Intent intent = new Intent(getContext(), ActivityAdicionaContato.class);
+        intent.putExtra("visualizacao", 1);
+        intent.putExtra("cliente", 1);
+        startActivity(intent);
     }
 
     @Override
-    public void onDestroy() {
-        System.gc();
-        super.onDestroy();
+    public void onClick(int position) {
+        Intent intent = new Intent(getContext(), ActivityAdicionaContato.class);
+        intent.putExtra("contato", position);
+        startActivity(intent);
+    }
+
+    @Override
+    public void onResume() {
+        preencheListaContatos();
+        super.onResume();
     }
 }

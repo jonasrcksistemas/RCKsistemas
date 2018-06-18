@@ -12,6 +12,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
+import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.ProspectHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.model.Contato;
@@ -138,7 +139,11 @@ public class ActivityAdicionaContato extends AppCompatActivity {
 
         db.atualizarContato(contato, "0");
 
-        ProspectHelper.getProspect().getListaContato().add(contato);
+        if (getIntent().getIntExtra("cliente", 0) == 1)
+            ClienteHelper.getCliente().getListaContato().add(contato);
+        else {
+            ProspectHelper.getProspect().getListaContato().add(contato);
+        }
         return true;
     }
 

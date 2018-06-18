@@ -101,7 +101,7 @@ public class SincroniaBO {
 
         //Primeiro delete todos os itens da tabela em questao
         if (sincronia.isCliente()) {
-            db.alterar("DELETE FROM TBL_CADASTRO");
+            db.alterar("DELETE FROM TBL_CADASTRO WHERE ID_CADASTRO_SERVIDOR > 0;");
             //insere todos os itens da tabela em questao
             for (Cliente cliente : sincronia.getListaCliente()) {
                 notificacao.setProgress(maxProgress, contadorNotificacaoEProgresso, false);

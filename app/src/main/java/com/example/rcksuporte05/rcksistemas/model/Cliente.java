@@ -1,5 +1,8 @@
 package com.example.rcksuporte05.rcksistemas.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Cliente {
 
     private String ativo;
@@ -88,6 +91,44 @@ public class Cliente {
     private String local_cadastro;
     private int idCategoria;
     private int id_vendedor;
+    private int id_prospect;
+    private Segmento segmento;
+    private List<ReferenciaBancaria> referenciasBancarias = new ArrayList<>();
+    private List<ReferenciaComercial> referenciasComerciais = new ArrayList<>();
+    private List<Contato> listaContato = new ArrayList<>();
+
+    public Cliente(Prospect prospect) {
+        this.setId_vendedor(prospect.getIdVendedor());
+        this.setIdCategoria(prospect.getIdCategoria());
+        this.setId_prospect(Integer.parseInt(prospect.getId_prospect()));
+        this.setSegmento(prospect.getSegmento());
+        this.setReferenciasBancarias(prospect.getReferenciasBancarias());
+        this.setReferenciasComerciais(prospect.getReferenciasComerciais());
+        this.setListaContato(prospect.getListaContato());
+        this.setNome_cadastro(prospect.getNome_cadastro());
+        this.setNome_fantasia(prospect.getNome_fantasia());
+        this.setPessoa_f_j(prospect.getPessoa_f_j());
+        this.setCpf_cnpj(prospect.getCpf_cnpj());
+        this.setInscri_estadual(prospect.getInscri_estadual());
+        this.setInscri_municipal(prospect.getInscri_municipal());
+        this.setEndereco(prospect.getEndereco());
+        this.setEndereco_bairro(prospect.getEndereco_bairro());
+        this.setEndereco_numero(prospect.getEndereco_numero());
+        this.setEndereco_complemento(prospect.getEndereco_complemento());
+        this.setEndereco_uf(prospect.getEndereco_uf());
+        this.setNome_municipio(prospect.getNome_municipio());
+        this.setEndereco_cep(prospect.getEndereco_cep());
+        this.setId_pais(Integer.parseInt(prospect.getId_pais()));
+        this.setUsuario_id(Integer.parseInt(prospect.getUsuario_id()));
+        this.setUsuario_data(prospect.getUsuario_data());
+        this.setId_empresa(Integer.parseInt(prospect.getIdEmpresa()));
+        this.setObservacoes_faturamento(prospect.getObservacoesComerciais());
+        this.setInd_da_ie_destinatario(prospect.getInd_da_ie_destinatario_prospect());
+        this.setUsuario_nome(prospect.getUsuario_nome());
+    }
+
+    public Cliente() {
+    }
 
     public String getAtivo() {
         return ativo;
@@ -775,6 +816,46 @@ public class Cliente {
 
     public void setId_vendedor(int id_vendedor) {
         this.id_vendedor = id_vendedor;
+    }
+
+    public int getId_prospect() {
+        return id_prospect;
+    }
+
+    public void setId_prospect(int id_prospect) {
+        this.id_prospect = id_prospect;
+    }
+
+    public Segmento getSegmento() {
+        return segmento;
+    }
+
+    public void setSegmento(Segmento segmento) {
+        this.segmento = segmento;
+    }
+
+    public List<ReferenciaBancaria> getReferenciasBancarias() {
+        return referenciasBancarias;
+    }
+
+    public void setReferenciasBancarias(List<ReferenciaBancaria> referenciasBancarias) {
+        this.referenciasBancarias = referenciasBancarias;
+    }
+
+    public List<ReferenciaComercial> getReferenciasComerciais() {
+        return referenciasComerciais;
+    }
+
+    public void setReferenciasComerciais(List<ReferenciaComercial> referenciasComerciais) {
+        this.referenciasComerciais = referenciasComerciais;
+    }
+
+    public List<Contato> getListaContato() {
+        return listaContato;
+    }
+
+    public void setListaContato(List<Contato> listaContato) {
+        this.listaContato = listaContato;
     }
 }
 

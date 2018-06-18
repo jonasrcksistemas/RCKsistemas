@@ -12,6 +12,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
+import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.ProspectHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.model.Banco;
@@ -111,7 +112,10 @@ public class ActivityAdicionaBanco extends AppCompatActivity {
 
         db.atualizarRefernciaBancaria(bancos, "0");
 
-        ProspectHelper.getProspect().getReferenciasBancarias().add(bancos);
+        if (getIntent().getIntExtra("cliente", 0) == 1)
+            ClienteHelper.getCliente().getReferenciasBancarias().add(bancos);
+        else
+            ProspectHelper.getProspect().getReferenciasBancarias().add(bancos);
         return true;
     }
 

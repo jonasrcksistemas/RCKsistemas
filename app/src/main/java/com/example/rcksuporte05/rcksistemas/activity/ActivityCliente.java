@@ -19,6 +19,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
@@ -29,7 +32,6 @@ import com.example.rcksuporte05.rcksistemas.fragment.Pedido2;
 import com.example.rcksuporte05.rcksistemas.model.Cliente;
 import com.example.rcksuporte05.rcksistemas.util.DividerItemDecoration;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -43,9 +45,17 @@ public class ActivityCliente extends AppCompatActivity {
     EditText edtTotalClientes;
     @BindView(R.id.tb_cliente)
     Toolbar toolbar;
-    private List<Cliente> lista;
+    @BindView(R.id.rgFiltraCliente)
+    RadioGroup rgFiltraCliente;
+    @BindView(R.id.filtraTodosClientes)
+    RadioButton filtraTodosClientes;
+    @BindView(R.id.filtraClientesEfetivados)
+    RadioButton filtraClientesEfetivados;
+    @BindView(R.id.filtraClientesNaoEfetivados)
+    RadioButton filtraClientesNaoEfetivados;
     private DBHelper db = new DBHelper(this);
     private ListaClienteAdapter listaClienteAdapter;
+    private SearchView searchView;
 
     @OnClick(R.id.btnInserirCliente)
     public void inserirCliente() {
@@ -62,13 +72,9 @@ public class ActivityCliente extends AppCompatActivity {
         ButterKnife.bind(this);
 
         toolbar.setTitle("Lista de Clientes");
-        try {
-            lista = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE F_CLIENTE = 'S' AND F_VENDEDOR = 'N' AND ATIVO = 'S' ORDER BY ATIVO DESC, NOME_CADASTRO;");
-            preencheLista(lista);
-            System.gc();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        listaDeClientes.setLayoutManager(layoutManager);
+        listaDeClientes.addItemDecoration(new DividerItemDecoration(this, LinearLayout.VERTICAL));
 
         if (getIntent().getIntExtra("acao", 0) == 1) {
             toolbar.setTitle("Pesquisa de Clientes");
@@ -104,10 +110,17 @@ public class ActivityCliente extends AppCompatActivity {
             listaDeClientes.addOnItemTouchListener(new RecyclerTouchListener(this, listaDeClientes, new RecyclerTouchListener.ClickListener() {
                 @Override
                 public void onClick(View view, int position) {
-                    Intent intent = new Intent(ActivityCliente.this, ContatoActivity.class);
-                    ClienteHelper.setCliente(listaClienteAdapter.getItem(position));
-                    System.gc();
-                    startActivity(intent);
+                    if (listaClienteAdapter.getItem(position).getId_cadastro_servidor() > 0) {
+                        Intent intent = new Intent(ActivityCliente.this, ContatoActivity.class);
+                        ClienteHelper.setCliente(listaClienteAdapter.getItem(position));
+                        System.gc();
+                        startActivity(intent);
+                    } else {
+                        Intent intent = new Intent(ActivityCliente.this, CadastroClienteMain.class);
+                        ClienteHelper.setCliente(listaClienteAdapter.getItem(position));
+                        System.gc();
+                        startActivity(intent);
+                    }
                 }
 
                 @Override
@@ -118,12 +131,34 @@ public class ActivityCliente extends AppCompatActivity {
 
         }
 
+        rgFiltraCliente.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if (searchView.getQuery() != null && searchView.getQuery().toString().trim().isEmpty())
+                    preencheLista(listaClientes());
+                else
+                    preencheLista(buscaClientes(searchView.getQuery().toString()));
+            }
+        });
+
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-//        registerForContextMenu(listaDeClientes);
-
         System.gc();
+    }
+
+    @Override
+    protected void onResume() {
+        try {
+            if (searchView != null && !searchView.getQuery().toString().trim().isEmpty())
+                preencheLista(buscaClientes(searchView.getQuery().toString()));
+            else {
+                preencheLista(listaClientes());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        super.onResume();
     }
 
     @Override
@@ -134,7 +169,6 @@ public class ActivityCliente extends AppCompatActivity {
 //        novo_cliente = menu.findItem(R.id.menu_item_novo_cliente);
 
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView;
         MenuItem item = menu.findItem(R.id.buscaCliente);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
@@ -152,14 +186,10 @@ public class ActivityCliente extends AppCompatActivity {
             public boolean onQueryTextChange(final String query) {
                 try {
                     if (query.trim().equals("")) {
-                        listaClienteAdapter = new ListaClienteAdapter(lista);
-                        edtTotalClientes.setText("Clientes listados: " + lista.size() + "   ");
-                        edtTotalClientes.setTextColor(Color.BLACK);
+                        preencheLista(listaClientes());
                     } else {
-                        listaClienteAdapter = new ListaClienteAdapter(buscaClientes(query));
+                        preencheLista(buscaClientes(query));
                     }
-                    listaDeClientes.setAdapter(listaClienteAdapter);
-                    listaClienteAdapter.notifyDataSetChanged();
                     System.gc();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -190,45 +220,71 @@ public class ActivityCliente extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-
     public List<Cliente> buscaClientes(final String query) {
-        List<Cliente> lista = new ArrayList<>();
-
-        if (!query.trim().equals("")) {
-            try {
-                lista = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE ATIVO = 'S' AND (NOME_CADASTRO LIKE '%" + query + "%' OR NOME_FANTASIA LIKE '%" + query + "%' OR CPF_CNPJ LIKE '" + query + "%' OR TELEFONE_PRINCIPAL LIKE '%" + query + "%' OR ID_CADASTRO_SERVIDOR LIKE '%" + query + "%') ORDER BY ATIVO DESC, NOME_CADASTRO");
-                edtTotalClientes.setText("Clientes encontrados: " + lista.size() + "   ");
-                edtTotalClientes.setTextColor(Color.BLACK);
-                return lista;
-            } catch (CursorIndexOutOfBoundsException | NullPointerException e) {
-                e.printStackTrace();
-                edtTotalClientes.setText("Nenhum cliente encontrado!   ");
-                edtTotalClientes.setTextColor(Color.RED);
+        try {
+            List<Cliente> listaCliente;
+            switch (rgFiltraCliente.getCheckedRadioButtonId()) {
+                case R.id.filtraTodosClientes:
+                    listaCliente = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE F_CLIENTE = 'S' AND F_VENDEDOR = 'N' AND ATIVO = 'S' AND (NOME_CADASTRO LIKE '%" + query + "%' OR NOME_FANTASIA LIKE '%" + query + "%' OR CPF_CNPJ LIKE '" + query + "%' OR TELEFONE_PRINCIPAL LIKE '%" + query + "%' OR ID_CADASTRO_SERVIDOR LIKE '%" + query + "%') ORDER BY ATIVO DESC, NOME_CADASTRO");
+                    break;
+                case R.id.filtraClientesEfetivados:
+                    listaCliente = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE F_CLIENTE = 'S' AND F_VENDEDOR = 'N' AND ATIVO = 'S' AND ID_CADASTRO_SERVIDOR > 0 AND (NOME_CADASTRO LIKE '%" + query + "%' OR NOME_FANTASIA LIKE '%" + query + "%' OR CPF_CNPJ LIKE '?%' OR TELEFONE_PRINCIPAL LIKE '%" + query + "%' OR ID_CADASTRO_SERVIDOR LIKE '%" + query + "%') ORDER BY ATIVO DESC, NOME_CADASTRO;");
+                    break;
+                case R.id.filtraClientesNaoEfetivados:
+                    listaCliente = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE F_CLIENTE = 'S' AND F_VENDEDOR = 'N' AND ATIVO = 'S' AND ID_CADASTRO_SERVIDOR <= 0 AND (NOME_CADASTRO LIKE '%" + query + "%' OR NOME_FANTASIA LIKE '%" + query + "%' OR CPF_CNPJ LIKE '?%' OR TELEFONE_PRINCIPAL LIKE '%" + query + "%' OR ID_CADASTRO_SERVIDOR LIKE '%" + query + "%') ORDER BY ATIVO DESC, NOME_CADASTRO;");
+                    break;
+                default:
+                    listaCliente = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE F_CLIENTE = 'S' AND F_VENDEDOR = 'N' AND ATIVO = 'S' AND (NOME_CADASTRO LIKE '%" + query + "%' OR NOME_FANTASIA LIKE '%" + query + "%' OR CPF_CNPJ LIKE '?%' OR TELEFONE_PRINCIPAL LIKE '%" + query + "%' OR ID_CADASTRO_SERVIDOR LIKE '%" + query + "%') ORDER BY ATIVO DESC, NOME_CADASTRO;");
+                    break;
             }
-        }
-        System.gc();
-        return lista;
-    }
-
-    public void preencheLista(List<Cliente> clientes) {
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        listaDeClientes.setLayoutManager(layoutManager);
-        listaClienteAdapter = new ListaClienteAdapter(clientes);
-        listaDeClientes.addItemDecoration(new DividerItemDecoration(this, LinearLayout.VERTICAL));
-        listaDeClientes.setAdapter(listaClienteAdapter);
-        listaClienteAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    protected void onResume() {
-        if (lista != null) {
-            edtTotalClientes.setText("Clientes listados: " + lista.size() + "   ");
+            listaDeClientes.setVisibility(View.VISIBLE);
+            edtTotalClientes.setText("Clientes listados: " + listaCliente.size() + "   ");
             edtTotalClientes.setTextColor(Color.BLACK);
-        } else {
+            return listaCliente;
+        } catch (CursorIndexOutOfBoundsException e) {
+            e.printStackTrace();
+            listaDeClientes.setVisibility(View.INVISIBLE);
             edtTotalClientes.setText("Não há clientes a serem exibidos!   ");
             edtTotalClientes.setTextColor(Color.RED);
         }
-        super.onResume();
+        return null;
+    }
+
+    public List<Cliente> listaClientes() {
+        try {
+            List<Cliente> listaCliente;
+            switch (rgFiltraCliente.getCheckedRadioButtonId()) {
+                case R.id.filtraTodosClientes:
+                    listaCliente = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE F_CLIENTE = 'S' AND F_VENDEDOR = 'N' AND ATIVO = 'S' ORDER BY ATIVO DESC, NOME_CADASTRO;");
+                    break;
+                case R.id.filtraClientesEfetivados:
+                    listaCliente = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE F_CLIENTE = 'S' AND F_VENDEDOR = 'N' AND ATIVO = 'S' AND ID_CADASTRO_SERVIDOR > 0 ORDER BY ATIVO DESC, NOME_CADASTRO;");
+                    break;
+                case R.id.filtraClientesNaoEfetivados:
+                    listaCliente = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE F_CLIENTE = 'S' AND F_VENDEDOR = 'N' AND ATIVO = 'S' AND ID_CADASTRO_SERVIDOR <= 0 ORDER BY ATIVO DESC, NOME_CADASTRO;");
+                    break;
+                default:
+                    listaCliente = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE F_CLIENTE = 'S' AND F_VENDEDOR = 'N' AND ATIVO = 'S' ORDER BY ATIVO DESC, NOME_CADASTRO;");
+                    break;
+            }
+            listaDeClientes.setVisibility(View.VISIBLE);
+            edtTotalClientes.setText("Clientes listados: " + listaCliente.size() + "   ");
+            edtTotalClientes.setTextColor(Color.BLACK);
+            return listaCliente;
+        } catch (CursorIndexOutOfBoundsException e) {
+            e.printStackTrace();
+            listaDeClientes.setVisibility(View.INVISIBLE);
+            edtTotalClientes.setText("Não há clientes a serem exibidos!   ");
+            edtTotalClientes.setTextColor(Color.RED);
+            Toast.makeText(this, "Nenhum registro encontrado!", Toast.LENGTH_SHORT).show();
+        }
+        return null;
+    }
+
+    public void preencheLista(List<Cliente> clientes) {
+        listaClienteAdapter = new ListaClienteAdapter(clientes);
+        listaDeClientes.setAdapter(listaClienteAdapter);
+        listaClienteAdapter.notifyDataSetChanged();
     }
 
     @Override

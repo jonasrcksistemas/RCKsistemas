@@ -24,12 +24,14 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
+import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.ProspectHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.UsuarioHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.ListaProspectAdapter;
 import com.example.rcksuporte05.rcksistemas.api.Api;
 import com.example.rcksuporte05.rcksistemas.api.Rotas;
+import com.example.rcksuporte05.rcksistemas.model.Cliente;
 import com.example.rcksuporte05.rcksistemas.model.Prospect;
 
 import java.util.ArrayList;
@@ -65,6 +67,7 @@ public class ActivityListaProspect extends AppCompatActivity {
     private DBHelper db;
     private ProgressDialog progress;
     private SearchView searchView;
+    private MenuItem viraCliente;
 
     @OnClick(R.id.btnAddProspect)
     public void novoProspect() {
@@ -272,9 +275,10 @@ public class ActivityListaProspect extends AppCompatActivity {
                 actionMode = startActionMode(new ActionMode.Callback() {
                     @Override
                     public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-                        if (listaProspectAdapter.getItem(position).getProspectSalvo().equals("S"))
-                            mode.getMenuInflater().inflate(R.menu.subir_foto, menu);
-                        else
+                        if (listaProspectAdapter.getItem(position).getProspectSalvo().equals("S")) {
+                            mode.getMenuInflater().inflate(R.menu.subir_vira_cliente, menu);
+                            viraCliente = menu.findItem(R.id.viraCliente);
+                        } else
                             mode.getMenuInflater().inflate(R.menu.menu_action_mode_produtos, menu);
                         return true;
                     }
@@ -285,13 +289,17 @@ public class ActivityListaProspect extends AppCompatActivity {
                     }
 
                     @Override
-                    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                    public boolean onActionItemClicked(final ActionMode mode, MenuItem item) {
                         switch (item.getItemId()) {
                             case R.id.action_delete:
                                 AlertDialog.Builder alert = new AlertDialog.Builder(ActivityListaProspect.this);
-                                alert.setTitle("Atenção!");
-                                alert.setMessage("Deseja realmente excluir" +
-                                        " esses " + listaProspectAdapter.getItensSelecionadosCount() + "itens?");
+                                alert.setTitle("Atenção");
+                                if (listaProspectAdapter.getItensSelecionadosCount() > 1)
+                                    alert.setMessage("Deseja realmente excluir" +
+                                            " esses " + listaProspectAdapter.getItensSelecionadosCount() + "itens?");
+                                else
+                                    alert.setMessage("Deseja realmente excluir" +
+                                            " o prospect " + listaProspectAdapter.getItensSelecionados().get(0).getId_prospect() + " ?");
                                 alert.setNegativeButton("NÃO", null);
                                 alert.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
                                     @Override
@@ -310,13 +318,47 @@ public class ActivityListaProspect extends AppCompatActivity {
                                 alert.show();
                                 break;
                             case R.id.uploadFoto:
-                                progress = new ProgressDialog(ActivityListaProspect.this);
-                                progress.setMessage("Enviando Prospects");
-                                progress.setTitle("Aguarde");
-                                progress.show();
-                                List<Prospect> listaEnvio = listaProspectAdapter.getItensSelecionados();
-                                enviarProspects(listaEnvio);
+                                alert = new AlertDialog.Builder(ActivityListaProspect.this);
+                                alert.setTitle("Atenção");
+                                if (listaProspectAdapter.getItensSelecionadosCount() > 1)
+                                    alert.setMessage("Tem certeza que deseja enviar esses " + listaProspectAdapter.getItensSelecionadosCount()
+                                            + " prospects para o servidor?");
+                                else
+                                    alert.setMessage("Tem certeza que deseja enviar o prospect " + listaProspectAdapter.getItensSelecionados().get(0).getId_prospect()
+                                            + " para o servidor?");
+                                alert.setNegativeButton("NÃo", null);
+                                alert.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        progress = new ProgressDialog(ActivityListaProspect.this);
+                                        progress.setMessage("Enviando Prospects");
+                                        progress.setTitle("Aguarde");
+                                        progress.show();
+                                        List<Prospect> listaEnvio = listaProspectAdapter.getItensSelecionados();
+                                        enviarProspects(listaEnvio);
+                                    }
+                                });
+                                alert.show();
                                 break;
+                            case R.id.viraCliente:
+                                if (listaProspectAdapter.getItensSelecionadosCount() == 1) {
+                                    alert = new AlertDialog.Builder(ActivityListaProspect.this);
+                                    alert.setTitle("Atenção");
+                                    alert.setMessage("Deseja transformar " + listaProspectAdapter.getItensSelecionados().get(0).getNome_cadastro() + " em cliente?");
+                                    alert.setNegativeButton("NÃO", null);
+                                    alert.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            Cliente cliente = new Cliente(listaProspectAdapter.getItensSelecionados().get(0));
+                                            Intent intent = new Intent(ActivityListaProspect.this, CadastroClienteMain.class);
+                                            intent.putExtra("prospect", Integer.parseInt(listaProspectAdapter.getItensSelecionados().get(0).getId_prospect()));
+                                            ClienteHelper.setCliente(cliente);
+                                            startActivity(intent);
+                                            onDestroyActionMode(mode);
+                                        }
+                                    });
+                                    alert.show();
+                                }
                         }
                         return true;
                     }
@@ -341,6 +383,13 @@ public class ActivityListaProspect extends AppCompatActivity {
             actionMode.finish();
             actionMode = null;
         } else {
+            if (viraCliente != null) {
+                if (listaProspectAdapter.getItensSelecionadosCount() > 1) {
+                    viraCliente.setVisible(false);
+                } else {
+                    viraCliente.setVisible(true);
+                }
+            }
             actionMode.setTitle(String.valueOf(listaProspectAdapter.getItensSelecionadosCount()));
             actionMode.invalidate();
         }

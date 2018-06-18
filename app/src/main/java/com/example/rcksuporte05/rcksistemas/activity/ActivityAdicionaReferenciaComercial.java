@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
+import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.ProspectHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.model.ReferenciaComercial;
@@ -108,7 +109,10 @@ public class ActivityAdicionaReferenciaComercial extends AppCompatActivity {
 
         db.atualizarReferenciaComercial(referenciaComercial, "0");
 
-        ProspectHelper.getProspect().getReferenciasComerciais().add(referenciaComercial);
+        if (getIntent().getIntExtra("cliente", 0) == 1)
+            ClienteHelper.getCliente().getReferenciasComerciais().add(referenciaComercial);
+        else
+            ProspectHelper.getProspect().getReferenciasComerciais().add(referenciaComercial);
         return true;
     }
 //
