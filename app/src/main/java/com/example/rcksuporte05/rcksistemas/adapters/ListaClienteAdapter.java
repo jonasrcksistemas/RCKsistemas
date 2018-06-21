@@ -1,6 +1,8 @@
 package com.example.rcksuporte05.rcksistemas.adapters;
 
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +11,7 @@ import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.viewHolder.ClientesViewHolder;
 import com.example.rcksuporte05.rcksistemas.model.Cliente;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,10 +20,13 @@ import java.util.List;
 
 public class ListaClienteAdapter extends RecyclerView.Adapter<ClientesViewHolder> {
     private List<Cliente> clientes;
+    private ClienteAdapterListener listener;
+    private SparseBooleanArray selectedItems;
 
-
-    public ListaClienteAdapter(List<Cliente> clientes) {
+    public ListaClienteAdapter(List<Cliente> clientes, ClienteAdapterListener listener) {
         this.clientes = clientes;
+        this.listener = listener;
+        this.selectedItems = new SparseBooleanArray();
     }
 
     @Override
@@ -55,10 +61,22 @@ public class ListaClienteAdapter extends RecyclerView.Adapter<ClientesViewHolder
             }
         }
 
-        if (clientes.get(position).getId_cadastro_servidor() > 0)
-            holder.imStatus.setImageResource(R.mipmap.ic_prospect_salvo);
-        else
+        if (clientes.get(position).getId_cadastro_servidor() > 0) {
+            if (clientes.get(position).getF_cliente().equals("S")) {
+                holder.imStatus.setImageResource(R.mipmap.ic_prospect_salvo);
+            } else {
+                holder.imStatus.setImageResource(R.mipmap.ic_time);
+                holder.txtClienteAguarda.setVisibility(View.VISIBLE);
+            }
+        } else {
             holder.imStatus.setImageResource(R.mipmap.ic_prospect_pendente);
+        }
+
+        holder.itemView
+                .setBackgroundColor(selectedItems.get(position) ? Color.parseColor("#dfdfdf")
+                        : Color.TRANSPARENT);
+
+        applyCLickEnvents(holder, position);
     }
 
 
@@ -72,5 +90,53 @@ public class ListaClienteAdapter extends RecyclerView.Adapter<ClientesViewHolder
             return clientes.size();
 
         return 0;
+    }
+
+    public void applyCLickEnvents(ClientesViewHolder holder, final int position) {
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                listener.onClickListener(position);
+            }
+        });
+        holder.itemView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                listener.onLongClickListener(position);
+                return true;
+            }
+        });
+    }
+
+    public void toggleSelection(int pos) {
+        if (selectedItems.get(pos, false)) {
+            selectedItems.delete(pos);
+        } else {
+            selectedItems.put(pos, true);
+        }
+        notifyDataSetChanged();
+    }
+
+    public int getSelectedItensCount() {
+        return selectedItems.size();
+    }
+
+    public List<Cliente> getItensSelecionados() {
+        List<Cliente> clientesSelecionados = new ArrayList<>();
+        for (int i = 0; i < selectedItems.size(); i++) {
+            clientesSelecionados.add(clientes.get(selectedItems.keyAt(i)));
+        }
+        return clientesSelecionados;
+    }
+
+    public void clearSelection() {
+        selectedItems.clear();
+        notifyDataSetChanged();
+    }
+
+    public interface ClienteAdapterListener {
+        void onClickListener(int position);
+
+        void onLongClickListener(int position);
     }
 }

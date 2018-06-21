@@ -165,7 +165,7 @@ public class ClienteHelper {
         ClienteHelper.posicaoCobrancaMunicipio = posicaoCobrancaMunicipio;
     }
 
-    private static void moveTela(int position) {
+    public static void moveTela(int position) {
         if (cadastroClienteMain.mViewPager.getCurrentItem() != position)
             cadastroClienteMain.mViewPager.setCurrentItem(position);
     }

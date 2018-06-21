@@ -1,6 +1,7 @@
 package com.example.rcksuporte05.rcksistemas.api;
 
 import com.example.rcksuporte05.rcksistemas.model.CadastroFinanceiroResumo;
+import com.example.rcksuporte05.rcksistemas.model.Cliente;
 import com.example.rcksuporte05.rcksistemas.model.Foto;
 import com.example.rcksuporte05.rcksistemas.model.HistoricoFinanceiro;
 import com.example.rcksuporte05.rcksistemas.model.MotivoNaoCadastramento;
@@ -64,4 +65,7 @@ public interface Rotas {
 
     @GET("cadastrofinanceiroresumo/listar/{id}")
     Call<CadastroFinanceiroResumo> atualizaFinanceiro(@Path("id") int id, @HeaderMap Map<String, String> chaveAcesso);
+
+    @POST("cliente/salvar")
+    Call<List<Cliente>> salvarClientes(@HeaderMap Map<String, String> chaveAcesso, @Body List<Cliente> clientes);
 }

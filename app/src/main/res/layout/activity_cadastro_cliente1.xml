@@ -87,23 +87,19 @@
                 android:textStyle="bold" />
 
             <EditText
-                android:id="@+id/edtData"
+                android:id="@+id/edtNomeCliente"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_alignParentEnd="true"
+                android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:layout_alignParentRight="true"
                 android:layout_alignParentStart="true"
-                android:layout_below="@+id/txtData"
+                android:layout_below="@+id/txtNomeCliente"
                 android:background="@drawable/borda_edittext"
-                android:focusable="false"
-                android:inputType="date|textMultiLine"
-                android:padding="5dp"
-                android:text="  /  /    "
+                android:hint="Nome *"
+                android:inputType="textCapCharacters|textMultiLine"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
             <TextView
-                android:id="@+id/txtRazaoSocial"
+                android:id="@+id/txtNomeFantasia"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
@@ -122,10 +118,187 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentStart="true"
-                android:layout_below="@+id/txtRazaoSocial"
+                android:layout_below="@+id/txtNomeFantasia"
                 android:background="@drawable/borda_edittext"
                 android:hint="Nome Fantasia *"
                 android:inputType="textCapCharacters|textMultiLine"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+            <TextView
+                android:id="@+id/txtTelefonePrincipal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/edtNomeFantasia"
+                android:layout_marginTop="12dp"
+                android:text="TELEFONE PRINCIPAL"
+                android:textColor="@color/colorAccent"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/edtTelefonePrincipal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/txtTelefonePrincipal"
+                android:layout_toLeftOf="@+id/btnLigar1"
+                android:layout_toStartOf="@+id/btnLigar1"
+                android:background="@drawable/borda_edittext"
+                android:hint="Telefone Principal"
+                android:inputType="phone|textMultiLine"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+            <Button
+                android:id="@+id/btnLigar1"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignBottom="@+id/edtTelefonePrincipal"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:background="@mipmap/ic_telefone"
+                android:scaleType="centerCrop" />
+
+            <TextView
+                android:id="@+id/txtTelefone1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/edtTelefonePrincipal"
+                android:layout_marginTop="12dp"
+                android:text="TELEFONE I"
+                android:textColor="@color/colorAccent"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/edtTelefone1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/txtTelefone1"
+                android:layout_toEndOf="@+id/txtTelefone1"
+                android:layout_toLeftOf="@+id/btnLigar2"
+                android:layout_toRightOf="@+id/txtTelefone1"
+                android:layout_toStartOf="@+id/btnLigar2"
+                android:background="@drawable/borda_edittext"
+                android:hint="Telefone I"
+                android:inputType="phone|textMultiLine"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+            <Button
+                android:id="@+id/btnLigar2"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignBottom="@+id/edtTelefone1"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:background="@mipmap/ic_telefone"
+                android:scaleType="centerCrop" />
+
+            <TextView
+                android:id="@+id/txtTelefone2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/edtTelefone1"
+                android:layout_marginTop="12dp"
+                android:text="TELEFONE II"
+                android:textColor="@color/colorAccent"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/edtTelefone2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txtTelefone2"
+                android:layout_toLeftOf="@+id/btnLigar3"
+                android:layout_toStartOf="@+id/btnLigar3"
+                android:background="@drawable/borda_edittext"
+                android:hint="Telefone II"
+                android:inputType="phone|textMultiLine"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+            <Button
+                android:id="@+id/btnLigar3"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_alignBottom="@+id/edtTelefone2"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:background="@mipmap/ic_telefone"
+                android:scaleType="centerCrop" />
+
+            <TextView
+                android:id="@+id/txtVendedor"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/edtTelefone2"
+                android:layout_marginTop="12dp"
+                android:text="VENDEDOR"
+                android:textColor="@color/colorAccent"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/edtVendedor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txtVendedor"
+                android:background="@drawable/borda_edittext"
+                android:focusable="false" />
+
+            <TextView
+                android:id="@+id/txtPessoaContato"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/edtVendedor"
+                android:layout_marginTop="12dp"
+                android:text="PESSOA CONTATO"
+                android:textColor="@color/colorAccent"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/edtPessoaContato"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/txtPessoaContato"
+                android:layout_toEndOf="@+id/txtPessoaContato"
+                android:layout_toRightOf="@+id/txtPessoaContato"
+                android:background="@drawable/borda_edittext"
+                android:hint="Pessoa Contato"
+                android:inputType="textCapCharacters|textMultiLine"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+            <TextView
+                android:id="@+id/txtEmailPrincipal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/edtPessoaContato"
+                android:layout_marginTop="12dp"
+                android:minLines="1"
+                android:text="E-MAIL PRINCIPAL"
+                android:textColor="@color/colorAccent"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/edtEmailPrincipal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/txtEmailPrincipal"
+                android:layout_toEndOf="@+id/txtEmailPrincipal"
+                android:layout_toRightOf="@+id/txtEmailPrincipal"
+                android:background="@drawable/borda_edittext"
+                android:hint="E-mail Principal"
+                android:inputType="textEmailAddress|textMultiLine"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
             <TextView
@@ -155,157 +328,67 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
             <TextView
+                android:id="@+id/txtData"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/edtCpfCnpj"
+                android:layout_marginTop="12dp"
+                android:text="DATA"
+                android:textColor="@color/colorAccent"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/edtData"
+                android:layout_width="100dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/txtData"
+                android:background="@drawable/borda_edittext"
+                android:focusable="false"
+                android:gravity="center"
+                android:inputType="date|textMultiLine"
+                android:padding="5dp"
+                android:text="  /  /    "
+                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+            <TextView
+                android:id="@+id/txtCategoria"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/spCategoria"
+                android:layout_alignLeft="@+id/spCategoria"
+                android:layout_alignRight="@+id/spCategoria"
+                android:layout_alignStart="@+id/spCategoria"
+                android:layout_alignTop="@+id/txtData"
+                android:gravity="center"
+                android:text="CATEGORIA"
+                android:textColor="@color/colorAccent"
+                android:textStyle="bold" />
+
+            <Spinner
+                android:id="@+id/spCategoria"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignTop="@+id/edtData"
+                android:layout_marginLeft="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_toEndOf="@+id/edtData"
+                android:layout_toRightOf="@+id/edtData" />
+
+            <TextView
                 android:id="@+id/txtInscEstadual"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_below="@+id/edtCpfCnpj"
+                android:layout_below="@+id/edtData"
                 android:layout_marginTop="12dp"
                 android:text="INSCRIÇÃO ESTADUAL"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
-
-            <EditText
-                android:id="@+id/edtTelefonePrincipal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/txtTelefonePrincipal"
-                android:layout_toLeftOf="@+id/btnLigar1"
-                android:layout_toStartOf="@+id/btnLigar1"
-                android:background="@drawable/borda_edittext"
-                android:hint="Telefone Principal"
-                android:inputType="phone|textMultiLine"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
-
-            <TextView
-                android:id="@+id/txtTelefonePrincipal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/edtNomeFantasia"
-                android:layout_marginTop="12dp"
-                android:text="TELEFONE PRINCIPAL"
-                android:textColor="@color/colorAccent"
-                android:textStyle="bold" />
-
-            <EditText
-                android:id="@+id/edtTelefone1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/txtTelefone1"
-                android:layout_toEndOf="@+id/txtTelefone1"
-                android:layout_toLeftOf="@+id/btnLigar2"
-                android:layout_toRightOf="@+id/txtTelefone1"
-                android:layout_toStartOf="@+id/btnLigar2"
-                android:background="@drawable/borda_edittext"
-                android:hint="Telefone I"
-                android:inputType="phone|textMultiLine"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
-
-            <TextView
-                android:id="@+id/txtTelefone1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/edtTelefonePrincipal"
-                android:layout_marginTop="12dp"
-                android:text="TELEFONE I"
-                android:textColor="@color/colorAccent"
-                android:textStyle="bold" />
-
-            <EditText
-                android:id="@+id/edtTelefone2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/txtTelefone2"
-                android:layout_toLeftOf="@+id/btnLigar3"
-                android:layout_toStartOf="@+id/btnLigar3"
-                android:background="@drawable/borda_edittext"
-                android:hint="Telefone II"
-                android:inputType="phone|textMultiLine"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
-
-            <TextView
-                android:id="@+id/txtTelefone2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/edtTelefone1"
-                android:layout_marginTop="12dp"
-                android:text="TELEFONE II"
-                android:textColor="@color/colorAccent"
-                android:textStyle="bold" />
-
-            <EditText
-                android:id="@+id/edtPessoaContato"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/txtPessoaContato"
-                android:layout_toEndOf="@+id/txtPessoaContato"
-                android:layout_toRightOf="@+id/txtPessoaContato"
-                android:background="@drawable/borda_edittext"
-                android:hint="Pessoa Contato"
-                android:inputType="textCapCharacters|textMultiLine"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
-
-            <TextView
-                android:id="@+id/txtPessoaContato"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/edtVendedor"
-                android:layout_marginTop="12dp"
-                android:text="PESSOA CONTATO"
-                android:textColor="@color/colorAccent"
-                android:textStyle="bold" />
-
-            <EditText
-                android:id="@+id/edtEmailPrincipal"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/txtEmailPrincipal"
-                android:layout_toEndOf="@+id/txtEmailPrincipal"
-                android:layout_toRightOf="@+id/txtEmailPrincipal"
-                android:background="@drawable/borda_edittext"
-                android:hint="E-mail Principal"
-                android:inputType="textEmailAddress|textMultiLine"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
-
-            <TextView
-                android:id="@+id/txtEmailPrincipal"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/edtPessoaContato"
-                android:layout_marginTop="12dp"
-                android:minLines="1"
-                android:text="E-MAIL PRINCIPAL"
-                android:textColor="@color/colorAccent"
-                android:textStyle="bold" />
-
-            <EditText
-                android:id="@+id/edtNomeCliente"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/txtNomeCliente"
-                android:background="@drawable/borda_edittext"
-                android:hint="Nome *"
-                android:inputType="textCapCharacters|textMultiLine"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
             <EditText
                 android:id="@+id/edtInscEstadual"
@@ -331,34 +414,6 @@
                 android:layout_toRightOf="@+id/edtInscEstadual" />
 
             <TextView
-                android:id="@+id/txtData"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/edtInscMunicipal"
-                android:layout_marginTop="12dp"
-                android:text="DATA"
-                android:textColor="@color/colorAccent"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/txtVendedor"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/edtTelefone2"
-                android:layout_marginTop="12dp"
-                android:text="VENDEDOR"
-                android:textColor="@color/colorAccent"
-                android:textStyle="bold" />
-
-            <EditText
-                android:id="@+id/edtVendedor"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/txtVendedor"
-                android:background="@drawable/borda_edittext"
-                android:focusable="false" />
-
-            <TextView
                 android:id="@+id/txtInscMunicipal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -377,36 +432,6 @@
                 android:hint="Inscrição Municipal"
                 android:inputType="textFilter|numberSigned|textMultiLine"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small" />
-
-            <Button
-                android:id="@+id/btnLigar1"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_alignBottom="@+id/edtTelefonePrincipal"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:background="@mipmap/ic_telefone"
-                android:scaleType="centerCrop" />
-
-            <Button
-                android:id="@+id/btnLigar2"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_alignBottom="@+id/edtTelefone1"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:background="@mipmap/ic_telefone"
-                android:scaleType="centerCrop" />
-
-            <Button
-                android:id="@+id/btnLigar3"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_alignBottom="@+id/edtTelefone2"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:background="@mipmap/ic_telefone"
-                android:scaleType="centerCrop" />
 
         </RelativeLayout>
     </ScrollView>

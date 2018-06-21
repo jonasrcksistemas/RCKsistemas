@@ -1,8 +1,10 @@
 package com.example.rcksuporte05.rcksistemas.activity;
 
 import android.app.AlertDialog;
+import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.CursorIndexOutOfBoundsException;
 import android.graphics.Color;
@@ -14,6 +16,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,18 +28,25 @@ import android.widget.Toast;
 
 import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
+import com.example.rcksuporte05.rcksistemas.Helper.UsuarioHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.ListaClienteAdapter;
-import com.example.rcksuporte05.rcksistemas.adapters.RecyclerTouchListener;
+import com.example.rcksuporte05.rcksistemas.api.Api;
+import com.example.rcksuporte05.rcksistemas.api.Rotas;
 import com.example.rcksuporte05.rcksistemas.fragment.Pedido2;
 import com.example.rcksuporte05.rcksistemas.model.Cliente;
 import com.example.rcksuporte05.rcksistemas.util.DividerItemDecoration;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ActivityCliente extends AppCompatActivity {
     @BindView(R.id.listaRecycler)
@@ -56,6 +66,7 @@ public class ActivityCliente extends AppCompatActivity {
     private DBHelper db = new DBHelper(this);
     private ListaClienteAdapter listaClienteAdapter;
     private SearchView searchView;
+    private ActionMode actionMode;
 
     @OnClick(R.id.btnInserirCliente)
     public void inserirCliente() {
@@ -77,58 +88,13 @@ public class ActivityCliente extends AppCompatActivity {
         listaDeClientes.addItemDecoration(new DividerItemDecoration(this, LinearLayout.VERTICAL));
 
         if (getIntent().getIntExtra("acao", 0) == 1) {
-            toolbar.setTitle("Pesquisa de Clientes");
-
-            listaDeClientes.addOnItemTouchListener(new RecyclerTouchListener(this, listaDeClientes, new RecyclerTouchListener.ClickListener() {
-
-                @Override
-                public void onClick(View view, int position) {
-                    if (listaClienteAdapter.getItem(position).getIdCategoria() <= 0) {
-                        AlertDialog.Builder alert = new AlertDialog.Builder(ActivityCliente.this);
-                        alert.setTitle("Atenção");
-                        alert.setMessage("Este cliente não tem categoria definida!");
-                        alert.setNeutralButton("OK", null);
-                        alert.show();
-                    } else {
-                        ActivityPedidoMain activityPedidoMain = new ActivityPedidoMain();
-                        Pedido2 pedido2 = new Pedido2();
-                        activityPedidoMain.pegaCliente(listaClienteAdapter.getItem(position));
-                        pedido2.pegaCliente(listaClienteAdapter.getItem(position));
-                        System.gc();
-                        finish();
-                    }
-                }
-
-                @Override
-                public void onLongClick(View view, int position) {
-
-                }
-            }));
-
-        } else {
-
-            listaDeClientes.addOnItemTouchListener(new RecyclerTouchListener(this, listaDeClientes, new RecyclerTouchListener.ClickListener() {
-                @Override
-                public void onClick(View view, int position) {
-                    if (listaClienteAdapter.getItem(position).getId_cadastro_servidor() > 0) {
-                        Intent intent = new Intent(ActivityCliente.this, ContatoActivity.class);
-                        ClienteHelper.setCliente(listaClienteAdapter.getItem(position));
-                        System.gc();
-                        startActivity(intent);
-                    } else {
-                        Intent intent = new Intent(ActivityCliente.this, CadastroClienteMain.class);
-                        ClienteHelper.setCliente(listaClienteAdapter.getItem(position));
-                        System.gc();
-                        startActivity(intent);
-                    }
-                }
-
-                @Override
-                public void onLongClick(View view, int position) {
-
-                }
-            }));
-
+            filtraClientesEfetivados.setChecked(true);
+            filtraClientesNaoEfetivados.setChecked(false);
+            filtraTodosClientes.setChecked(false);
+            rgFiltraCliente.setEnabled(false);
+            filtraClientesEfetivados.setEnabled(false);
+            filtraClientesNaoEfetivados.setEnabled(false);
+            filtraTodosClientes.setEnabled(false);
         }
 
         rgFiltraCliente.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -165,8 +131,6 @@ public class ActivityCliente extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.menu_cliente, menu);
-
-//        novo_cliente = menu.findItem(R.id.menu_item_novo_cliente);
 
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         MenuItem item = menu.findItem(R.id.buscaCliente);
@@ -206,13 +170,6 @@ public class ActivityCliente extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-           /* case R.id.menu_item_novo_cliente:
-                Intent intent = new Intent(ActivityCliente.this, CadastroClienteMain.class);
-                bundle = new Bundle();
-                bundle.putString("cliente", "0");
-                intent.putExtras(bundle);
-                startActivity(intent);
-                break;*/
             case android.R.id.home:
                 System.gc();
                 finish();
@@ -225,16 +182,16 @@ public class ActivityCliente extends AppCompatActivity {
             List<Cliente> listaCliente;
             switch (rgFiltraCliente.getCheckedRadioButtonId()) {
                 case R.id.filtraTodosClientes:
-                    listaCliente = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE F_CLIENTE = 'S' AND F_VENDEDOR = 'N' AND ATIVO = 'S' AND (NOME_CADASTRO LIKE '%" + query + "%' OR NOME_FANTASIA LIKE '%" + query + "%' OR CPF_CNPJ LIKE '" + query + "%' OR TELEFONE_PRINCIPAL LIKE '%" + query + "%' OR ID_CADASTRO_SERVIDOR LIKE '%" + query + "%') ORDER BY ATIVO DESC, NOME_CADASTRO");
+                    listaCliente = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE ATIVO = 'S' AND (NOME_CADASTRO LIKE '%" + query + "%' OR NOME_FANTASIA LIKE '%" + query + "%' OR CPF_CNPJ LIKE '" + query + "%' OR TELEFONE_PRINCIPAL LIKE '%" + query + "%' OR ID_CADASTRO_SERVIDOR LIKE '%" + query + "%') ORDER BY ATIVO DESC, NOME_CADASTRO");
                     break;
                 case R.id.filtraClientesEfetivados:
                     listaCliente = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE F_CLIENTE = 'S' AND F_VENDEDOR = 'N' AND ATIVO = 'S' AND ID_CADASTRO_SERVIDOR > 0 AND (NOME_CADASTRO LIKE '%" + query + "%' OR NOME_FANTASIA LIKE '%" + query + "%' OR CPF_CNPJ LIKE '?%' OR TELEFONE_PRINCIPAL LIKE '%" + query + "%' OR ID_CADASTRO_SERVIDOR LIKE '%" + query + "%') ORDER BY ATIVO DESC, NOME_CADASTRO;");
                     break;
                 case R.id.filtraClientesNaoEfetivados:
-                    listaCliente = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE F_CLIENTE = 'S' AND F_VENDEDOR = 'N' AND ATIVO = 'S' AND ID_CADASTRO_SERVIDOR <= 0 AND (NOME_CADASTRO LIKE '%" + query + "%' OR NOME_FANTASIA LIKE '%" + query + "%' OR CPF_CNPJ LIKE '?%' OR TELEFONE_PRINCIPAL LIKE '%" + query + "%' OR ID_CADASTRO_SERVIDOR LIKE '%" + query + "%') ORDER BY ATIVO DESC, NOME_CADASTRO;");
+                    listaCliente = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE F_CLIENTE <> 'S' AND ATIVO = 'S' AND (NOME_CADASTRO LIKE '%" + query + "%' OR NOME_FANTASIA LIKE '%" + query + "%' OR CPF_CNPJ LIKE '?%' OR TELEFONE_PRINCIPAL LIKE '%" + query + "%' OR ID_CADASTRO_SERVIDOR LIKE '%" + query + "%') ORDER BY ATIVO DESC, NOME_CADASTRO;");
                     break;
                 default:
-                    listaCliente = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE F_CLIENTE = 'S' AND F_VENDEDOR = 'N' AND ATIVO = 'S' AND (NOME_CADASTRO LIKE '%" + query + "%' OR NOME_FANTASIA LIKE '%" + query + "%' OR CPF_CNPJ LIKE '?%' OR TELEFONE_PRINCIPAL LIKE '%" + query + "%' OR ID_CADASTRO_SERVIDOR LIKE '%" + query + "%') ORDER BY ATIVO DESC, NOME_CADASTRO;");
+                    listaCliente = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE ATIVO = 'S' AND (NOME_CADASTRO LIKE '%" + query + "%' OR NOME_FANTASIA LIKE '%" + query + "%' OR CPF_CNPJ LIKE '" + query + "%' OR TELEFONE_PRINCIPAL LIKE '%" + query + "%' OR ID_CADASTRO_SERVIDOR LIKE '%" + query + "%') ORDER BY ATIVO DESC, NOME_CADASTRO");
                     break;
             }
             listaDeClientes.setVisibility(View.VISIBLE);
@@ -255,16 +212,16 @@ public class ActivityCliente extends AppCompatActivity {
             List<Cliente> listaCliente;
             switch (rgFiltraCliente.getCheckedRadioButtonId()) {
                 case R.id.filtraTodosClientes:
-                    listaCliente = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE F_CLIENTE = 'S' AND F_VENDEDOR = 'N' AND ATIVO = 'S' ORDER BY ATIVO DESC, NOME_CADASTRO;");
+                    listaCliente = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE ATIVO = 'S' ORDER BY ATIVO DESC, NOME_CADASTRO;");
                     break;
                 case R.id.filtraClientesEfetivados:
                     listaCliente = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE F_CLIENTE = 'S' AND F_VENDEDOR = 'N' AND ATIVO = 'S' AND ID_CADASTRO_SERVIDOR > 0 ORDER BY ATIVO DESC, NOME_CADASTRO;");
                     break;
                 case R.id.filtraClientesNaoEfetivados:
-                    listaCliente = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE F_CLIENTE = 'S' AND F_VENDEDOR = 'N' AND ATIVO = 'S' AND ID_CADASTRO_SERVIDOR <= 0 ORDER BY ATIVO DESC, NOME_CADASTRO;");
+                    listaCliente = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE F_CLIENTE <> 'S' AND ATIVO = 'S' ORDER BY ATIVO DESC, NOME_CADASTRO;");
                     break;
                 default:
-                    listaCliente = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE F_CLIENTE = 'S' AND F_VENDEDOR = 'N' AND ATIVO = 'S' ORDER BY ATIVO DESC, NOME_CADASTRO;");
+                    listaCliente = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE AND ATIVO = 'S' ORDER BY ATIVO DESC, NOME_CADASTRO;");
                     break;
             }
             listaDeClientes.setVisibility(View.VISIBLE);
@@ -276,20 +233,209 @@ public class ActivityCliente extends AppCompatActivity {
             listaDeClientes.setVisibility(View.INVISIBLE);
             edtTotalClientes.setText("Não há clientes a serem exibidos!   ");
             edtTotalClientes.setTextColor(Color.RED);
-            Toast.makeText(this, "Nenhum registro encontrado!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Nenhum registro encontrado", Toast.LENGTH_SHORT).show();
         }
         return null;
     }
 
     public void preencheLista(List<Cliente> clientes) {
-        listaClienteAdapter = new ListaClienteAdapter(clientes);
+        if (getIntent().getIntExtra("acao", 0) == 1) {
+
+            listaClienteAdapter = new ListaClienteAdapter(clientes, new ListaClienteAdapter.ClienteAdapterListener() {
+                @Override
+                public void onClickListener(int position) {
+                    if (listaClienteAdapter.getSelectedItensCount() > 0) {
+                        enableActionMode(position);
+                    } else {
+                        if (listaClienteAdapter.getItem(position).getIdCategoria() <= 0) {
+                            AlertDialog.Builder alert = new AlertDialog.Builder(ActivityCliente.this);
+                            alert.setTitle("Atenção");
+                            alert.setMessage("Este cliente não tem categoria definida");
+                            alert.setNeutralButton("OK", null);
+                            alert.show();
+                        } else {
+                            ActivityPedidoMain activityPedidoMain = new ActivityPedidoMain();
+                            Pedido2 pedido2 = new Pedido2();
+                            activityPedidoMain.pegaCliente(listaClienteAdapter.getItem(position));
+                            pedido2.pegaCliente(listaClienteAdapter.getItem(position));
+                            System.gc();
+                            finish();
+                        }
+                    }
+                }
+
+                @Override
+                public void onLongClickListener(int position) {
+                    enableActionMode(position);
+                }
+            });
+
+        } else {
+            listaClienteAdapter = new ListaClienteAdapter(clientes, new ListaClienteAdapter.ClienteAdapterListener() {
+                @Override
+                public void onClickListener(int position) {
+                    if (listaClienteAdapter.getSelectedItensCount() > 0) {
+                        enableActionMode(position);
+                    } else {
+                        Intent intent;
+                        if (listaClienteAdapter.getItem(position).getF_cliente().equals("S")) {
+                            intent = new Intent(ActivityCliente.this, ContatoActivity.class);
+                            ClienteHelper.setCliente(listaClienteAdapter.getItem(position));
+                            if (listaClienteAdapter.getItem(position).getId_cadastro_servidor() > 0)
+                                intent.putExtra("vizualizacao", 1);
+                        } else {
+                            intent = new Intent(ActivityCliente.this, CadastroClienteMain.class);
+                            ClienteHelper.setCliente(listaClienteAdapter.getItem(position));
+                        }
+                        System.gc();
+                        startActivity(intent);
+                    }
+                }
+
+                @Override
+                public void onLongClickListener(int position) {
+                    enableActionMode(position);
+                }
+            });
+        }
         listaDeClientes.setAdapter(listaClienteAdapter);
         listaClienteAdapter.notifyDataSetChanged();
     }
 
-    @Override
-    protected void onDestroy() {
-        System.gc();
-        super.onDestroy();
+    public void enableActionMode(final int position) {
+        if (listaClienteAdapter.getItem(position).getId_cadastro_servidor() <= 0) {
+            if (actionMode == null) {
+                actionMode = startActionMode(new ActionMode.Callback() {
+                    @Override
+                    public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                        mode.getMenuInflater().inflate(R.menu.menu_cadastro_cliente, menu);
+                        return true;
+                    }
+
+                    @Override
+                    public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                        switch (item.getItemId()) {
+                            case R.id.subir_cliente:
+                                AlertDialog.Builder alertEnviar = new AlertDialog.Builder(ActivityCliente.this);
+                                alertEnviar.setTitle("Atenção");
+                                if (listaClienteAdapter.getSelectedItensCount() > 1)
+                                    alertEnviar.setMessage("Deseja enviar os " + listaClienteAdapter.getSelectedItensCount() + " cadastros de clientes selecionandos ao servidor?");
+                                else
+                                    alertEnviar.setMessage("Deseja enviar o cliente " + listaClienteAdapter.getItensSelecionados().get(0).getNome_cadastro() + " ao servidor?");
+                                alertEnviar.setNegativeButton("NÃO", null);
+                                alertEnviar.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        enviarClientes(listaClienteAdapter.getItensSelecionados());
+                                    }
+                                });
+                                alertEnviar.show();
+                                break;
+                            case R.id.excluir_cliente:
+                                AlertDialog.Builder alertExcluir = new AlertDialog.Builder(ActivityCliente.this);
+                                alertExcluir.setTitle("Atenção");
+                                if (listaClienteAdapter.getSelectedItensCount() > 1)
+                                    alertExcluir.setMessage("Deseja excluir esses " + listaClienteAdapter.getSelectedItensCount() + " cadastros?");
+                                else
+                                    alertExcluir.setMessage("Deseja excluir o cadastro de " + listaClienteAdapter.getItensSelecionados().get(0).getNome_cadastro() + " ?");
+                                alertExcluir.setNegativeButton("NÃO", null);
+                                alertExcluir.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        for (Cliente cliente : listaClienteAdapter.getItensSelecionados()) {
+                                            db.excluirClienteLocal(cliente);
+                                        }
+                                        onResume();
+                                    }
+                                });
+                                alertExcluir.show();
+                                break;
+                        }
+                        return true;
+                    }
+
+                    @Override
+                    public void onDestroyActionMode(ActionMode mode) {
+                        actionMode.finish();
+                        listaClienteAdapter.clearSelection();
+                        actionMode = null;
+                    }
+                });
+            }
+            toggleSelection(position);
+        } else if (listaClienteAdapter.getItem(position).getF_cliente().equals("S")) {
+            Toast.makeText(ActivityCliente.this, "Esse cliente já está efetivado", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(ActivityCliente.this, "Cliente foi enviado e esta aguardando análise para efetivação", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+    public void toggleSelection(int position) {
+        listaClienteAdapter.toggleSelection(position);
+        if (listaClienteAdapter.getSelectedItensCount() == 0) {
+            actionMode.finish();
+            actionMode = null;
+        } else {
+            actionMode.setTitle(String.valueOf(listaClienteAdapter.getSelectedItensCount()));
+            actionMode.invalidate();
+        }
+    }
+
+    public void enviarClientes(List<Cliente> listaClientes) {
+        final ProgressDialog progress = new ProgressDialog(ActivityCliente.this);
+        progress.setTitle("Aguarde");
+        progress.setMessage("Enviando os cadastros dos clientes");
+        progress.setCancelable(false);
+        progress.show();
+        Rotas apiRetrofit = Api.buildRetrofit();
+
+        Map<String, String> cabecalho = new HashMap<>();
+        cabecalho.put("AUTHORIZATION", UsuarioHelper.getUsuario().getToken());
+
+        Call<List<Cliente>> call = apiRetrofit.salvarClientes(cabecalho, listaClientes);
+
+        call.enqueue(new Callback<List<Cliente>>() {
+            @Override
+            public void onResponse(Call<List<Cliente>> call, Response<List<Cliente>> response) {
+                switch (response.code()) {
+                    case 200:
+                        List<Cliente> clientesRetorno = response.body();
+                        if (clientesRetorno != null && clientesRetorno.size() > 0) {
+                            for (Cliente cliente : clientesRetorno) {
+                                db.atualizarTBL_CADASTRO(cliente);
+                            }
+                            listaClienteAdapter.clearSelection();
+                            actionMode.finish();
+                            actionMode = null;
+                            progress.dismiss();
+                            Toast.makeText(ActivityCliente.this, "Enviado com sucesso", Toast.LENGTH_SHORT).show();
+                            onResume();
+                        }
+                        break;
+                    case 500:
+                        listaClienteAdapter.clearSelection();
+                        actionMode.finish();
+                        actionMode = null;
+                        progress.dismiss();
+                        Toast.makeText(ActivityCliente.this, "Erro ao enviar os cadastros", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Cliente>> call, Throwable t) {
+                progress.dismiss();
+                Toast.makeText(ActivityCliente.this, "Falha ao enviar cadastros", Toast.LENGTH_SHORT).show();
+                listaClienteAdapter.clearSelection();
+                actionMode.finish();
+                actionMode = null;
+            }
+        });
     }
 }

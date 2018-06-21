@@ -108,7 +108,10 @@ public class CadastroCliente3 extends Fragment implements View.OnClickListener {
         ufAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_activated_1, getResources().getStringArray(R.array.uf));
         edtUfCobranca.setAdapter(ufAdapter);
 
-        if (getActivity().getIntent().getIntExtra("vizualizacao", 0) >= 1) {
+        municipioAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_activated_1, getResources().getStringArray(listaUf[edtUfCobranca.getSelectedItemPosition()]));
+        edtMunicipioCobranca.setAdapter(municipioAdapter);
+
+        if (getActivity().getIntent().getIntExtra("vizualizacao", 0) >= 1 || ClienteHelper.getCliente().getId_cadastro_servidor() > 0) {
 
             edtLimiteCredito.setFocusable(false);
             edtContatoFinanceiro.setFocusable(false);

@@ -11,6 +11,7 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -21,14 +22,18 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.rcksuporte05.rcksistemas.DAO.CategoriaDAO;
+import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.UsuarioHelper;
 import com.example.rcksuporte05.rcksistemas.R;
+import com.example.rcksuporte05.rcksistemas.model.Categoria;
 import com.example.rcksuporte05.rcksistemas.util.MascaraUtil;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -68,6 +73,10 @@ public class CadastroCliente1 extends Fragment {
     TextView txtCpfCnpj;
     @BindView(R.id.spIe)
     Spinner spIe;
+    @BindView(R.id.spCategoria)
+    Spinner spCategoria;
+    @BindView(R.id.txtCategoria)
+    TextView txtCategoria;
     @BindView(R.id.txtData)
     TextView txtData;
     @BindView(R.id.edtVendedor)
@@ -81,14 +90,32 @@ public class CadastroCliente1 extends Fragment {
     @BindView(R.id.btnLigar3)
     Button btnLigar3;
     private ArrayAdapter arrayIe;
+    private ArrayAdapter arrayCategoria;
     private String[] contribuinte = {"Contribuinte", "Isento", "Não Contribuinte"};
+    private List<Categoria> listaCategoria;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_cadastro_cliente1, container, false);
         ButterKnife.bind(this, view);
 
-        if (getActivity().getIntent().getIntExtra("vizualizacao", 0) >= 1) {
+        DBHelper db = new DBHelper(getActivity());
+
+        CategoriaDAO categoriaDAO = new CategoriaDAO(db);
+
+        listaCategoria = categoriaDAO.listaCategoria();
+        arrayCategoria = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_activated_1, listaCategoria);
+        spCategoria.setAdapter(arrayCategoria);
+
+        if (ClienteHelper.getCliente().getIdCategoria() > 0) {
+            for (int i = 0; listaCategoria.size() > i; i++) {
+                if (listaCategoria.get(i).getIdCategoria() == ClienteHelper.getCliente().getIdCategoria()) {
+                    spCategoria.setSelection(i);
+                }
+            }
+        }
+
+        if (getActivity().getIntent().getIntExtra("vizualizacao", 0) >= 1 || ClienteHelper.getCliente().getId_cadastro_servidor() > 0) {
 
             btnLigar1.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -124,6 +151,13 @@ public class CadastroCliente1 extends Fragment {
             edtInscEstadual.setFocusable(false);
             edtInscMunicipal.setFocusable(false);
             spIe.setEnabled(false);
+
+            if (ClienteHelper.getCliente().getIdCategoria() <= 0) {
+                spCategoria.setVisibility(View.INVISIBLE);
+                txtCategoria.setText("CATEGORIA NÃO INFORMADA");
+            } else {
+                spCategoria.setEnabled(false);
+            }
 
             txtId.setText("ID: " + ClienteHelper.getCliente().getId_cadastro_servidor());
 
@@ -242,6 +276,23 @@ public class CadastroCliente1 extends Fragment {
                         validaCpfCnpj();
                     else
                         edtCpfCnpj.setText(edtCpfCnpj.getText().toString().replaceAll("[^0-9]", ""));
+                }
+            });
+
+            spIe.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                    if (position != 0) {
+                        edtInscEstadual.setEnabled(false);
+                        edtInscEstadual.setText("");
+                    } else {
+                        edtInscEstadual.setEnabled(true);
+                    }
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) {
+
                 }
             });
         }
@@ -377,7 +428,7 @@ public class CadastroCliente1 extends Fragment {
 
 
         if (!edtCpfCnpj.getText().toString().trim().isEmpty())
-            ClienteHelper.getCliente().setCpf_cnpj(edtCpfCnpj.getText().toString());
+            ClienteHelper.getCliente().setCpf_cnpj(edtCpfCnpj.getText().toString().replaceAll("[^0-9]", ""));
         else
             ClienteHelper.getCliente().setCpf_cnpj(null);
 
@@ -419,6 +470,8 @@ public class CadastroCliente1 extends Fragment {
         ClienteHelper.getCliente().setId_vendedor(Integer.parseInt(UsuarioHelper.getUsuario().getId_quando_vendedor()));
 
         ClienteHelper.getCliente().setInd_da_ie_destinatario(String.valueOf(spIe.getSelectedItemPosition() + 1));
+
+        ClienteHelper.getCliente().setIdCategoria(listaCategoria.get(spCategoria.getSelectedItemPosition()).getIdCategoria());
     }
 
     public void fazerChamada(final String telefone, final String nome) {

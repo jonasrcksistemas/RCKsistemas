@@ -3,6 +3,7 @@ package com.example.rcksuporte05.rcksistemas.adapters.viewHolder;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.rcksuporte05.rcksistemas.R;
@@ -21,10 +22,14 @@ public class ClientesViewHolder extends RecyclerView.ViewHolder {
     public TextView textViewTelefone;
     @BindView(R.id.textViewNomeFantasia)
     public TextView textViewNomeFantasia;
+    @BindView(R.id.txtClienteAguarda)
+    public TextView txtClienteAguarda;
     @BindView(R.id.idCliente)
     public TextView idCliente;
     @BindView(R.id.imStatus)
     public ImageView imStatus;
+    @BindView(R.id.lyCliente)
+    public RelativeLayout itemView;
 
     public ClientesViewHolder(View itemView) {
         super(itemView);

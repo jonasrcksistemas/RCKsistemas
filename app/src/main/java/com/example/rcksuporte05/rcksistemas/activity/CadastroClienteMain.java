@@ -116,7 +116,9 @@ public class CadastroClienteMain extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        ClienteHelper.clear();
+        if (getIntent().getIntExtra("vizualizacao", 0) < 1) {
+            ClienteHelper.clear();
+        }
         super.onDestroy();
     }
 }

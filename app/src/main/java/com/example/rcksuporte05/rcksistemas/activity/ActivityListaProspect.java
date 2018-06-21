@@ -425,6 +425,8 @@ public class ActivityListaProspect extends AppCompatActivity {
                         progress.dismiss();
                         Toast.makeText(ActivityListaProspect.this, "Erro, não foi possivel enviar o prospect", Toast.LENGTH_SHORT).show();
                         listaProspectAdapter.clearSelections();
+                        actionMode.finish();
+                        actionMode = null;
                         break;
                 }
             }

@@ -1,5 +1,6 @@
 package com.example.rcksuporte05.rcksistemas.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Sincronia {
@@ -11,27 +12,27 @@ public class Sincronia {
     private boolean prospectEnviados;
     private boolean visitasPendentes;
     private int maxProgress;
-    private List<Cliente> listaCliente;
-    private List<CondicoesPagamento> listaCondicoesPagamento;
-    private List<Operacao> listaOperacao;
-    private List<Produto> listaProduto;
-    private List<TabelaPreco> listaTabelaPreco;
-    private List<TabelaPrecoItem> listaTabelaPrecoItem;
-    private List<Usuario> listaUsuario;
-    private List<VendedorBonusResumo> listaVendedorBonusResumo;
-    private List<WebPedido> listaWebPedidosPendentes;
-    private List<WebPedido> listaWebPedidosFinalizados;
-    private List<Pais> listaPais;
-    private List<Banco> bancos;
-    private List<Segmento> segmentos;
-    private List<MotivoNaoCadastramento> motivos;
-    private List<Prospect> listaProspectPendentes;
-    private List<Prospect> listaProspectEnviados;
-    private List<Prospect> listaProspectPositivados;
-    private List<VisitaProspect> visitas;
-    private List<Categoria> listaCategoria;
-    private List<Promocao> listaPromocao;
-    private List<CadastroFinanceiroResumo> listaCadastroFinanceiroResumo;
+    private List<Cliente> listaCliente = new ArrayList<>();
+    private List<CondicoesPagamento> listaCondicoesPagamento = new ArrayList<>();
+    private List<Operacao> listaOperacao = new ArrayList<>();
+    private List<Produto> listaProduto = new ArrayList<>();
+    private List<TabelaPreco> listaTabelaPreco = new ArrayList<>();
+    private List<TabelaPrecoItem> listaTabelaPrecoItem = new ArrayList<>();
+    private List<Usuario> listaUsuario = new ArrayList<>();
+    private List<VendedorBonusResumo> listaVendedorBonusResumo = new ArrayList<>();
+    private List<WebPedido> listaWebPedidosPendentes = new ArrayList<>();
+    private List<WebPedido> listaWebPedidosFinalizados = new ArrayList<>();
+    private List<Pais> listaPais = new ArrayList<>();
+    private List<Banco> bancos = new ArrayList<>();
+    private List<Segmento> segmentos = new ArrayList<>();
+    private List<MotivoNaoCadastramento> motivos = new ArrayList<>();
+    private List<Prospect> listaProspectPendentes = new ArrayList<>();
+    private List<Prospect> listaProspectEnviados = new ArrayList<>();
+    private List<Prospect> listaProspectPositivados = new ArrayList<>();
+    private List<VisitaProspect> visitas = new ArrayList<>();
+    private List<Categoria> listaCategoria = new ArrayList<>();
+    private List<Promocao> listaPromocao = new ArrayList<>();
+    private List<CadastroFinanceiroResumo> listaCadastroFinanceiroResumo = new ArrayList<>();
 
     public Sincronia(boolean cliente,
                      boolean produto,

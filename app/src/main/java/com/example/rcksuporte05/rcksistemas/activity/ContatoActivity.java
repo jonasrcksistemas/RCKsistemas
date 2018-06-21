@@ -35,7 +35,7 @@ public class ContatoActivity extends AppCompatActivity {
     Toolbar toolbar;
     @BindView(R.id.imFisicaJuridica)
     ImageView imFisicaJuridica;
-    @BindView(R.id.txtRazaoSocial)
+    @BindView(R.id.txtNomeFantasia)
     TextView txtRazaoSocial;
     @BindView(R.id.txtTelefone)
     TextView txtTelefone;
@@ -314,7 +314,7 @@ public class ContatoActivity extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        ClienteHelper.setCliente(null);
+        ClienteHelper.clear();
         super.onDestroy();
     }
 }

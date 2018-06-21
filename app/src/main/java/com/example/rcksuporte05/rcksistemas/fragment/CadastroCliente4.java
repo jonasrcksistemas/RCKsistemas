@@ -73,6 +73,7 @@ public class CadastroCliente4 extends Fragment implements ListaContatoAdapter.Li
     public void onClick(int position) {
         Intent intent = new Intent(getContext(), ActivityAdicionaContato.class);
         intent.putExtra("contato", position);
+        intent.putExtra("cliente", 1);
         startActivity(intent);
     }
 

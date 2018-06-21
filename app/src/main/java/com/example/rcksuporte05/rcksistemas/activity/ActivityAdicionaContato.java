@@ -81,7 +81,12 @@ public class ActivityAdicionaContato extends AppCompatActivity {
 
 
     public void injetaDadosNaTela(int position) {
-        Contato contato = ProspectHelper.getProspect().getListaContato().get(position);
+        Contato contato;
+
+        if (getIntent().getIntExtra("cliente", 0) == 1)
+            contato = ClienteHelper.getCliente().getListaContato().get(position);
+        else
+            contato = ProspectHelper.getProspect().getListaContato().get(position);
 
         edtResponsavelProspect.setText(contato.getPessoa_contato());
         edtFuncaoResponsavelProspect.setText(contato.getFuncao());

@@ -14,7 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
-        app:theme="@style/Theme.Toolbar"
+        android:theme="@style/Theme.Toolbar"
         tools:context=".activity.ActivityCliente" />
 
     <RadioGroup

@@ -9,12 +9,12 @@ import com.example.rcksuporte05.rcksistemas.fragment.CadastroCliente2;
 import com.example.rcksuporte05.rcksistemas.fragment.CadastroCliente3;
 import com.example.rcksuporte05.rcksistemas.fragment.CadastroCliente4;
 import com.example.rcksuporte05.rcksistemas.fragment.CadastroCliente5;
+import com.example.rcksuporte05.rcksistemas.fragment.CadastroCliente6;
 import com.example.rcksuporte05.rcksistemas.fragment.CadastroCliente7;
 import com.example.rcksuporte05.rcksistemas.fragment.CadastroCliente8;
-import com.example.rcksuporte05.rcksistemas.fragment.CadastroCliente6;
 
 public class TabsAdapterCliente extends FragmentPagerAdapter {
-    private String[] titles = {"GERAL", "ENDEREÇO", "FINANCEIRO/COBRANÇA", "CONTATO", "SEGMENTOS", "OBSERVAÇÕES COMERCIAIS", "EMAIL NFE", "OBSERVAÇÕES"};
+    private String[] titles = {"GERAL", "ENDEREÇO", "FINANCEIRO/COBRANÇA", "CONTATO *", "SEGMENTOS *", "OBSERVAÇÕES COMERCIAIS", "EMAIL NFE", "OBSERVAÇÕES"};
 
     public TabsAdapterCliente(FragmentManager fm) {
         super(fm);

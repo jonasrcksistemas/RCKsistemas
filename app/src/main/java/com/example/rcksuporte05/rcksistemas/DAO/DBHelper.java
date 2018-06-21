@@ -809,14 +809,14 @@ public class DBHelper extends SQLiteOpenHelper {
             content.put("ID_PROSPECT", prospect.getId_prospect());
             atualizarTBL_REFERENCIA_BANCARIA(prospect.getReferenciasBancarias(), prospect.getId_prospect());
             atualizarTBL_REFERENCIA_COMERCIAL(prospect.getReferenciasComerciais(), prospect.getId_prospect());
-            atualizarTBL_CADASTRO_CONTATO(prospect.getListaContato(), prospect.getId_prospect());
+            atualizaListaContatos(prospect.getListaContato(), prospect.getId_prospect());
             db.update("TBL_PROSPECT", content, "ID_PROSPECT = " + prospect.getId_prospect(), null);
         } else {
             content.put("ID_PROSPECT", prospect.getId_prospect());
             prospect.setId_prospect(prospect.getId_prospect());
             atualizarTBL_REFERENCIA_BANCARIA(prospect.getReferenciasBancarias(), prospect.getId_prospect());
             atualizarTBL_REFERENCIA_COMERCIAL(prospect.getReferenciasComerciais(), prospect.getId_prospect());
-            atualizarTBL_CADASTRO_CONTATO(prospect.getListaContato(), prospect.getId_prospect());
+            atualizaListaContatos(prospect.getListaContato(), prospect.getId_prospect());
             db.insert("TBL_PROSPECT", null, content);
         }
 
@@ -1172,13 +1172,12 @@ public class DBHelper extends SQLiteOpenHelper {
         return listaReferenciacomercial;
     }
 
-    public void atualizarTBL_CADASTRO_CONTATO(List<Contato> listaContato, String idCadastro) {
+    public void atualizaListaContatos(List<Contato> listaContato, String idCadastro) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content = new ContentValues();
 
         for (Contato contato : listaContato) {
             content.put("ID_CONTATO", contato.getId_contato());
-            content.put("ID_CONTATO_SERVIDOR", contato.getId_contato_servidor());
             content.put("ATIVO", contato.getAtivo());
             content.put("PESSOA_CONTATO", contato.getPessoa_contato());
             content.put("FUNCAO", contato.getFuncao());
@@ -1587,7 +1586,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
         atualizarTBL_REFERENCIA_BANCARIA(cliente.getReferenciasBancarias(), String.valueOf(cliente.getId_cadastro()));
         atualizarTBL_REFERENCIA_COMERCIAL(cliente.getReferenciasComerciais(), String.valueOf(cliente.getId_cadastro()));
-        atualizarTBL_CADASTRO_CONTATO(cliente.getListaContato(), String.valueOf(cliente.getId_cadastro()));
+        atualizaListaContatos(cliente.getListaContato(), String.valueOf(cliente.getId_cadastro()));
 
         db.insert("TBL_CADASTRO", null, content);
         System.gc();
@@ -1596,8 +1595,10 @@ public class DBHelper extends SQLiteOpenHelper {
     public void atualizarTBL_CADASTRO(Cliente cliente) throws android.database.sqlite.SQLiteConstraintException {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content = new ContentValues();
+
         content.put("ATIVO", cliente.getAtivo());
         content.put("ID_EMPRESA", cliente.getId_empresa());
+        content.put("ID_CADASTRO", cliente.getId_cadastro());
         content.put("ID_CADASTRO_SERVIDOR", cliente.getId_cadastro_servidor());
         content.put("ID_PROSPECT", cliente.getId_prospect());
         try {
@@ -1696,7 +1697,8 @@ public class DBHelper extends SQLiteOpenHelper {
 
         atualizarTBL_REFERENCIA_BANCARIA(cliente.getReferenciasBancarias(), String.valueOf(cliente.getId_cadastro()));
         atualizarTBL_REFERENCIA_COMERCIAL(cliente.getReferenciasComerciais(), String.valueOf(cliente.getId_cadastro()));
-        atualizarTBL_CADASTRO_CONTATO(cliente.getListaContato(), String.valueOf(cliente.getId_cadastro()));
+        atualizaListaContatos(cliente.getListaContato(), String.valueOf(cliente.getId_cadastro()));
+
 
         db.update("TBL_CADASTRO", content, "ID_CADASTRO = " + cliente.getId_cadastro(), null);
         System.gc();
@@ -2127,6 +2129,22 @@ public class DBHelper extends SQLiteOpenHelper {
         System.gc();
 
         return lista;
+    }
+
+    public void excluirClienteServidor(Cliente cliente) {
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL("DELETE FROM TBL_CADASTRO WHERE ID_CADASTRO_SERVIDOR = " + cliente.getId_cadastro_servidor());
+        db.execSQL("DELETE FROM TBL_CADASTRO_CONTATO WHERE ID_CADASTRO_SERVIDOR = " + cliente.getId_cadastro_servidor());
+        db.execSQL("DELETE FROM TBL_REFERENCIA_BANCARIA WHERE ID_CADASTRO_SERVIDOR = " + cliente.getId_cadastro_servidor());
+        db.execSQL("DELETE FROM TBL_REFERENCIA_COMERCIAL WHERE ID_CADASTRO_SERVIDOR = " + cliente.getId_cadastro_servidor());
+    }
+
+    public void excluirClienteLocal(Cliente cliente) {
+        SQLiteDatabase db = getWritableDatabase();
+        db.execSQL("DELETE FROM TBL_CADASTRO WHERE ID_CADASTRO = " + cliente.getId_cadastro());
+        db.execSQL("DELETE FROM TBL_CADASTRO_CONTATO WHERE ID_CADASTRO = " + cliente.getId_cadastro());
+        db.execSQL("DELETE FROM TBL_REFERENCIA_BANCARIA WHERE ID_CADASTRO = " + cliente.getId_cadastro());
+        db.execSQL("DELETE FROM TBL_REFERENCIA_COMERCIAL WHERE ID_CADASTRO = " + cliente.getId_cadastro());
     }
 
     public List<Produto> listaProduto(String SQL) {
