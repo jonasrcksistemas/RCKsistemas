@@ -9,12 +9,14 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.model.Pais;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -67,7 +69,7 @@ public class CadastroCliente2 extends Fragment {
     private ArrayAdapter municipioAdapter;
     private ArrayAdapter ufAdapter;
     private ArrayAdapter<Pais> paisAdapter;
-    private List<Pais> listaPaises;
+    private List<Pais> listaPaises = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -76,28 +78,34 @@ public class CadastroCliente2 extends Fragment {
 
         DBHelper db = new DBHelper(getActivity());
 
-        listaPaises = db.listaPaises();
-        paisAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_activated_1, listaPaises);
-        edtPais.setAdapter(paisAdapter);
+        try {
+            listaPaises = db.listaPaises();
+            paisAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_activated_1, listaPaises);
+            edtPais.setAdapter(paisAdapter);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         ufAdapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_activated_1, getResources().getStringArray(R.array.uf));
         edtUf.setAdapter(ufAdapter);
 
 
-        if (ClienteHelper.getCliente().getId_pais() > 0) {
-            for (int i = 0; listaPaises.size() > i; i++) {
-                if (listaPaises.get(i).getId_pais().equals(String.valueOf(ClienteHelper.getCliente().getId_pais()))) {
-                    edtPais.setSelection(i);
-                    ClienteHelper.setPosicaoPais(i);
-                    break;
+        if (listaPaises.size() > 0) {
+            if (ClienteHelper.getCliente().getId_pais() > 0) {
+                for (int i = 0; listaPaises.size() > i; i++) {
+                    if (listaPaises.get(i).getId_pais().equals(String.valueOf(ClienteHelper.getCliente().getId_pais()))) {
+                        edtPais.setSelection(i);
+                        ClienteHelper.setPosicaoPais(i);
+                        break;
+                    }
                 }
-            }
-        } else {
-            for (int i = 0; listaPaises.size() > i; i++) {
-                if (paisAdapter.getItem(i).getId_pais().equals("1058")) {
-                    edtPais.setSelection(i);
-                    ClienteHelper.setPosicaoPais(i);
-                    break;
+            } else {
+                for (int i = 0; listaPaises.size() > i; i++) {
+                    if (paisAdapter.getItem(i).getId_pais().equals("1058")) {
+                        edtPais.setSelection(i);
+                        ClienteHelper.setPosicaoPais(i);
+                        break;
+                    }
                 }
             }
         }
@@ -169,10 +177,11 @@ public class CadastroCliente2 extends Fragment {
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     if (ClienteHelper.getPosicaoMunicipio() > -1 && edtUf.getSelectedItemPosition() != ClienteHelper.getPosicaoUf())
                         ClienteHelper.setPosicaoMunicipio(0);
-
-                    if (paisAdapter.getItem(edtPais.getSelectedItemPosition()).getId_pais().equals("1058")) {
-                        municipioAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_activated_1, getResources().getStringArray(listaUf[position]));
-                        edtMunicipio.setAdapter(municipioAdapter);
+                    if(paisAdapter != null) {
+                        if (paisAdapter.getItem(edtPais.getSelectedItemPosition()).getId_pais().equals("1058")) {
+                            municipioAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_activated_1, getResources().getStringArray(listaUf[position]));
+                            edtMunicipio.setAdapter(municipioAdapter);
+                        }
                     }
                     ClienteHelper.setPosicaoUf(position);
                     try {

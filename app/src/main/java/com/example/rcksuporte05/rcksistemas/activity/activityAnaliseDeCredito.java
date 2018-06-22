@@ -12,7 +12,9 @@ import android.widget.TextView;
 
 import com.example.rcksuporte05.rcksistemas.DAO.CadastroFinanceiroResumoDAO;
 import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
+import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.HistoricoFinanceiroHelper;
+import com.example.rcksuporte05.rcksistemas.Helper.PedidoHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.UsuarioHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.api.Api;
@@ -59,6 +61,7 @@ public class activityAnaliseDeCredito extends AppCompatActivity {
     private CadastroFinanceiroResumo cadastroFinanceiroResumo;
     private MenuItem sincroniza;
     private ProgressDialog progress;
+    private DBHelper db;
 
     @OnClick(R.id.btnOk)
     public void sair() {
@@ -71,6 +74,8 @@ public class activityAnaliseDeCredito extends AppCompatActivity {
         setContentView(R.layout.activity_analise_de_credito);
         ButterKnife.bind(this);
 
+        db = new DBHelper(activityAnaliseDeCredito.this);
+
         atualizaDados();
 
         setSupportActionBar(toolbar);
@@ -82,8 +87,8 @@ public class activityAnaliseDeCredito extends AppCompatActivity {
 
         txtNomeCliente.setText(HistoricoFinanceiroHelper.getCliente().getNome_cadastro());
 
-        if (HistoricoFinanceiroHelper.getCliente().getLimite_credito() != null && !HistoricoFinanceiroHelper.getCliente().getLimite_credito().trim().isEmpty())
-            txtLimiteCredito.setText("(+)" + MascaraUtil.mascaraReal(HistoricoFinanceiroHelper.getCliente().getLimite_credito()));
+        if (HistoricoFinanceiroHelper.getCadastroFinanceiroResumo().getLimiteCredito() != null && HistoricoFinanceiroHelper.getCadastroFinanceiroResumo().getLimiteCredito() > 0)
+            txtLimiteCredito.setText("(+)" + MascaraUtil.mascaraReal(HistoricoFinanceiroHelper.getCadastroFinanceiroResumo().getLimiteCredito()));
         else
             txtLimiteCredito.setText("(+)" + MascaraUtil.mascaraReal(0.f));
 
@@ -94,12 +99,17 @@ public class activityAnaliseDeCredito extends AppCompatActivity {
         else
             txtPendenciaFinanceira.setText("(*)R$ NÃO TEM");
 
-        if (cadastroFinanceiroResumo.getLimiteUtilizado() != null && cadastroFinanceiroResumo.getLimiteUtilizado() > 0)
-            txtLimiteUtilizado.setText("(-)" + MascaraUtil.mascaraReal(cadastroFinanceiroResumo.getLimiteUtilizado()));
+        Float limiteUltilizado = db.soma("SELECT SUM(VALOR_TOTAL) FROM TBL_WEB_PEDIDO " +
+                "WHERE PEDIDO_ENVIADO = 'N' AND ID_CONDICAO_PAGAMENTO <> 1 " +
+                "AND ID_WEB_PEDIDO <> " + PedidoHelper.getIdPedido() + " " +
+                "AND ID_CADASTRO = " + ClienteHelper.getCliente().getId_cadastro() + ";") + cadastroFinanceiroResumo.getLimiteUtilizado();
+
+        if (limiteUltilizado != null && limiteUltilizado > 0)
+            txtLimiteUtilizado.setText("(-)" + MascaraUtil.mascaraReal(limiteUltilizado));
         else
             txtLimiteUtilizado.setText("(-)" + MascaraUtil.mascaraReal(0.f));
 
-        Float saldoRestante = cadastroFinanceiroResumo.getLimiteCredito() - cadastroFinanceiroResumo.getLimiteUtilizado() - getIntent().getFloatExtra("valorPedido", 0) - cadastroFinanceiroResumo.getFinanceiroVencido();
+        Float saldoRestante = cadastroFinanceiroResumo.getLimiteCredito() - limiteUltilizado - getIntent().getFloatExtra("valorPedido", 0) - cadastroFinanceiroResumo.getFinanceiroVencido();
 
         if (saldoRestante < 0 || cadastroFinanceiroResumo.getFinanceiroVencido() > 0) {
             txtStatus.setText("<NEGADO>");
@@ -130,13 +140,13 @@ public class activityAnaliseDeCredito extends AppCompatActivity {
                 finish();
                 break;
             case R.id.menu_sincroniza:
-                atualizaFinanceiro(HistoricoFinanceiroHelper.getCliente().getId_cadastro());
+                atualizaFinanceiro(HistoricoFinanceiroHelper.getCliente().getId_cadastro_servidor());
                 break;
         }
         return super.onOptionsItemSelected(item);
     }
 
-    public void atualizaFinanceiro(int idCadastro) {
+    public void atualizaFinanceiro(int idCadastroServidor) {
         progress = new ProgressDialog(activityAnaliseDeCredito.this);
         progress.setMessage("Carregando financeiro!");
         progress.setCancelable(false);
@@ -145,12 +155,11 @@ public class activityAnaliseDeCredito extends AppCompatActivity {
         Rotas apiRotas = Api.buildRetrofit();
         Map<String, String> cabecalho = new HashMap<>();
         cabecalho.put("AUTHORIZATION", UsuarioHelper.getUsuario().getToken());
-        Call<CadastroFinanceiroResumo> call = apiRotas.atualizaFinanceiro(idCadastro, cabecalho);
+        Call<CadastroFinanceiroResumo> call = apiRotas.atualizaFinanceiro(idCadastroServidor, cabecalho);
 
         call.enqueue(new Callback<CadastroFinanceiroResumo>() {
             @Override
             public void onResponse(Call<CadastroFinanceiroResumo> call, Response<CadastroFinanceiroResumo> response) {
-                DBHelper db = new DBHelper(activityAnaliseDeCredito.this);
                 CadastroFinanceiroResumoDAO cadastroFinanceiroResumoDAO = new CadastroFinanceiroResumoDAO(db);
                 cadastroFinanceiroResumoDAO.atualizarCadastroFinanceiroResumo(response.body());
                 HistoricoFinanceiroHelper.setCadastroFinanceiroResumo(response.body());

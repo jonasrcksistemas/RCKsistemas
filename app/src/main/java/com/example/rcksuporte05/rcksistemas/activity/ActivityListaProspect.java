@@ -467,6 +467,13 @@ public class ActivityListaProspect extends AppCompatActivity {
                     preencheLista(listaProspect);
                     break;
             }
+
+            if (searchView != null && !searchView.getQuery().toString().trim().isEmpty()) {
+                preencheLista(buscaProspect(listaProspect, searchView.getQuery().toString()));
+            } else {
+                preencheLista(listaProspect);
+            }
+
         } catch (CursorIndexOutOfBoundsException e) {
             e.printStackTrace();
             recycleProspect.setVisibility(View.INVISIBLE);

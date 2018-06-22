@@ -1,13 +1,13 @@
 package com.example.rcksuporte05.rcksistemas.activity;
 
-import android.app.SearchManager;
-import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.CursorIndexOutOfBoundsException;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -25,6 +25,7 @@ import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.ListaProdutoAdpter;
 import com.example.rcksuporte05.rcksistemas.adapters.RecyclerTouchListener;
 import com.example.rcksuporte05.rcksistemas.model.Produto;
+import com.example.rcksuporte05.rcksistemas.model.WebPedidoItens;
 import com.example.rcksuporte05.rcksistemas.util.DividerItemDecoration;
 
 import java.text.ParseException;
@@ -49,8 +50,7 @@ public class ActivityProduto extends AppCompatActivity {
     @BindView(R.id.edtDataSincronia)
     TextView edtDataSincronia;
 
-    private MenuItem novo_produto;
-    private SearchView busca_produto;
+    private SearchView buscaProduto;
     private List<Produto> lista;
     private DBHelper db = new DBHelper(this);
     private ListaProdutoAdpter listaProdutoAdpter;
@@ -75,8 +75,7 @@ public class ActivityProduto extends AppCompatActivity {
 
         try {
             lista = db.listaProduto("SELECT * FROM TBL_PRODUTO WHERE ATIVO = 'S' ORDER BY NOME_PRODUTO");
-            preecheRecyclerProduto(this, lista);
-
+            preecheRecyclerProduto(lista);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -86,10 +85,39 @@ public class ActivityProduto extends AppCompatActivity {
             listaProdutoRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(this, listaProdutoRecyclerView, new RecyclerTouchListener.ClickListener() {
                 @Override
                 public void onClick(View view, int position) {
-                    Intent intent = new Intent(ActivityProduto.this, ProdutoPedidoActivity.class);
-                    PedidoHelper.setProduto(listaProdutoAdpter.getItem(position));
-                    startActivity(intent);
-                    finish();
+                    final Intent intent = new Intent(ActivityProduto.this, ProdutoPedidoActivity.class);
+                    if (buscaProduto != null) {
+                        PedidoHelper.setBuscaProduto(buscaProduto.getQuery().toString());
+                    }
+                    Boolean produtoRepetido = false;
+                    if (PedidoHelper.getListaWebPedidoItens() != null) {
+                        for (final WebPedidoItens webPedidoItens : PedidoHelper.getListaWebPedidoItens()) {
+                            if (webPedidoItens.getId_produto() == listaProdutoAdpter.getItem(position).getId_produto()) {
+                                produtoRepetido = true;
+                                AlertDialog.Builder alert = new AlertDialog.Builder(ActivityProduto.this);
+                                alert.setTitle("Atenção");
+                                alert.setMessage("O produto " + listaProdutoAdpter.getItem(position).getNome_produto() + " já esta nesse pedido, deseja alterá-lo?");
+                                alert.setNegativeButton("NÃO", null);
+                                alert.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        PedidoHelper.setProduto(null);
+                                        PedidoHelper.setWebPedidoItem(webPedidoItens);
+                                        intent.putExtra("pedido", 1);
+                                        startActivity(intent);
+                                        finish();
+                                    }
+                                });
+                                alert.show();
+                                break;
+                            }
+                        }
+                    }
+                    if (!produtoRepetido) {
+                        PedidoHelper.setProduto(listaProdutoAdpter.getItem(position));
+                        startActivity(intent);
+                        finish();
+                    }
                 }
 
                 @Override
@@ -102,6 +130,29 @@ public class ActivityProduto extends AppCompatActivity {
             listaProdutoRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(this, listaProdutoRecyclerView, new RecyclerTouchListener.ClickListener() {
                 @Override
                 public void onClick(View view, int position) {
+                    if (buscaProduto != null) {
+                        PedidoHelper.setBuscaProduto(buscaProduto.getQuery().toString());
+                    }
+                    if (PedidoHelper.getListaWebPedidoItens() != null) {
+                        for (final WebPedidoItens webPedidoItens : PedidoHelper.getListaWebPedidoItens()) {
+                            if (webPedidoItens.getId_produto() == listaProdutoAdpter.getItem(position).getId_produto()) {
+                                AlertDialog.Builder alert = new AlertDialog.Builder(ActivityProduto.this);
+                                alert.setTitle("Atenção");
+                                alert.setMessage("O produto " + listaProdutoAdpter.getItem(position).getNome_produto() + " já esta nesse pedido, deseja alterá-lo?");
+                                alert.setNegativeButton("NÃO", null);
+                                alert.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        PedidoHelper.setProduto(null);
+                                        PedidoHelper.setWebPedidoItem(webPedidoItens);
+                                        finish();
+                                    }
+                                });
+                                alert.show();
+                                break;
+                            }
+                        }
+                    }
                     PedidoHelper.setProduto(listaProdutoAdpter.getItem(position));
                     finish();
                 }
@@ -111,10 +162,7 @@ public class ActivityProduto extends AppCompatActivity {
 
                 }
             }));
-
-
         }
-
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -126,17 +174,14 @@ public class ActivityProduto extends AppCompatActivity {
         super.onCreateOptionsMenu(menu);
 
         getMenuInflater().inflate(R.menu.menu_produto, menu);
-
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView;
         MenuItem item = menu.findItem(R.id.buscaProduto);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            searchView = (SearchView) item.getActionView();
+            buscaProduto = (SearchView) item.getActionView();
         } else {
-            searchView = (SearchView) MenuItemCompat.getActionView(item);
+            buscaProduto = (SearchView) MenuItemCompat.getActionView(item);
         }
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+        buscaProduto.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 return false;
@@ -161,8 +206,12 @@ public class ActivityProduto extends AppCompatActivity {
             }
         });
 
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
-        searchView.setQueryHint("Nome Produto");
+        buscaProduto.setQueryHint("Nome Produto");
+
+        /*if (PedidoHelper.getBuscaProduto() != null && !PedidoHelper.getBuscaProduto().trim().isEmpty()) {
+            item.expandActionView();
+            buscaProduto.setQuery(PedidoHelper.getBuscaProduto(), true);
+        }*/
 
         return true;
     }
@@ -198,7 +247,7 @@ public class ActivityProduto extends AppCompatActivity {
         return lista;
     }
 
-    public void preecheRecyclerProduto(Context context, List<Produto> produtos) {
+    public void preecheRecyclerProduto(List<Produto> produtos) {
         listaProdutoAdpter = new ListaProdutoAdpter(produtos);
         listaProdutoRecyclerView.setAdapter(listaProdutoAdpter);
 

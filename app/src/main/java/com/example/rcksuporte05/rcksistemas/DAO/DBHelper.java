@@ -1986,6 +1986,15 @@ public class DBHelper extends SQLiteOpenHelper {
         return resultado;
     }
 
+    public Float soma(String SQL) {
+        Float resultado;
+        SQLiteDatabase banco = this.getReadableDatabase();
+        Cursor cursor = banco.rawQuery(SQL, null);
+        cursor.moveToFirst();
+        resultado = cursor.getFloat(0);
+        return resultado;
+    }
+
     public void alterar(String SQL) {
         SQLiteDatabase banco = this.getWritableDatabase();
         banco.execSQL(SQL);

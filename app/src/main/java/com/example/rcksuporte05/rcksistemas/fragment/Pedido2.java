@@ -44,17 +44,21 @@ public class Pedido2 extends Fragment {
     TextView txtDataEmissao;
     @BindView(R.id.spOperacao)
     Spinner spOperacao;
+    @BindView(R.id.edtObservacao)
+    EditText edtObservacao;
+    @BindView(R.id.edtDataEntrega)
+    EditText edtDataEntrega;
+    @BindView(R.id.spPagamento)
+    Spinner spPagamento;
+    @BindView(R.id.btnSalvarPedido)
+    Button btnSalvarPedido;
     private ArrayAdapter<Operacao> adapterOperacao;
-    private Spinner spPagamento;
     private ArrayAdapter<CondicoesPagamento> adapterPagamento;
     private DBHelper db;
     private WebPedidoDAO webPedidoDAO;
-    private EditText edtObservacao;
-    private Button btnSalvarPedido;
     private WebPedido webPedido = new WebPedido();
     private Bundle bundle;
     private PedidoHelper pedidoHelper;
-    private EditText edtDataEntrega;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -68,12 +72,8 @@ public class Pedido2 extends Fragment {
 
         bundle = getArguments();
 
-        edtObservacao = (EditText) view.findViewById(R.id.edtObservacao);
-        edtDataEntrega = (EditText) view.findViewById(R.id.edtDataEntrega);
 
         try {
-            spPagamento = (Spinner) view.findViewById(R.id.spPagamento);
-
             adapterPagamento = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_activated_1, db.listaCondicoesPagamento("SELECT * FROM TBL_CONDICOES_PAG_CAB;"));
             spPagamento.setAdapter(adapterPagamento);
 
@@ -130,7 +130,6 @@ public class Pedido2 extends Fragment {
             }
         }
 
-        btnSalvarPedido = (Button) view.findViewById(R.id.btnSalvarPedido);
         btnSalvarPedido.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -178,6 +177,7 @@ public class Pedido2 extends Fragment {
                     } else {
                         Intent intent = new Intent(getActivity(), activityAnaliseDeCredito.class);
                         intent.putExtra("valorPedido", PedidoHelper.getValorVenda());
+                        intent.putExtra("idPedido", PedidoHelper.getWebPedido().getId_web_pedido());
                         HistoricoFinanceiroHelper.setCliente(objetoCliente);
                         dialog.dismiss();
                         startActivity(intent);

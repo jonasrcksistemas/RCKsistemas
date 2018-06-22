@@ -1,7 +1,9 @@
 package com.example.rcksuporte05.rcksistemas.activity;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -17,6 +19,8 @@ import com.example.rcksuporte05.rcksistemas.Helper.ProspectHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.model.Banco;
 import com.example.rcksuporte05.rcksistemas.model.ReferenciaBancaria;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -120,7 +124,21 @@ public class ActivityAdicionaBanco extends AppCompatActivity {
     }
 
     private void preencheBancos() {
-        adapter = new ArrayAdapter<Banco>(ActivityAdicionaBanco.this, android.R.layout.simple_spinner_dropdown_item, db.listaBancos());
-        spBancoProspect.setAdapter(adapter);
+        List<Banco> listaBanco = db.listaBancos();
+        if (listaBanco.size() > 0) {
+            adapter = new ArrayAdapter<Banco>(ActivityAdicionaBanco.this, android.R.layout.simple_spinner_dropdown_item, listaBanco);
+            spBancoProspect.setAdapter(adapter);
+        } else {
+            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+            alert.setTitle("Atenção");
+            alert.setMessage("Não há bancos salvos na base, entre em contato com a empresa para esclarecer a situação");
+            alert.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    finish();
+                }
+            });
+            alert.show();
+        }
     }
 }

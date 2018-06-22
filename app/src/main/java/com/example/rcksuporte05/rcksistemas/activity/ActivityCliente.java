@@ -91,8 +91,7 @@ public class ActivityCliente extends AppCompatActivity {
             filtraClientesEfetivados.setChecked(true);
             filtraClientesNaoEfetivados.setChecked(false);
             filtraTodosClientes.setChecked(false);
-            rgFiltraCliente.setEnabled(false);
-            filtraClientesEfetivados.setEnabled(false);
+            filtraClientesEfetivados.setClickable(false);
             filtraClientesNaoEfetivados.setEnabled(false);
             filtraTodosClientes.setEnabled(false);
         }

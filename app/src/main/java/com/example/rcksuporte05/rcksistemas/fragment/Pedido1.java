@@ -92,6 +92,7 @@ public class Pedido1 extends Fragment implements ListaAdapterProdutoPedido.Produ
                 if (pedidoHelper.verificaCliente()) {
                     Intent intent = new Intent(getContext(), ActivityProduto.class);
                     intent.putExtra("acao", 1);
+                    PedidoHelper.setListaWebPedidoItens(listaProdutoPedido);
                     startActivity(intent);
                 } else {
                     Toast.makeText(getContext(), "Selecione um cliente antes de prosseguir!", Toast.LENGTH_SHORT).show();
@@ -163,7 +164,7 @@ public class Pedido1 extends Fragment implements ListaAdapterProdutoPedido.Produ
         PedidoHelper.calculaValorPedido(listaProdutoPedido, PedidoHelper.getActivityPedidoMain());
         if (ClienteHelper.getCliente() != null) {
             cadastroFinanceiroResumoDAO = new CadastroFinanceiroResumoDAO(db);
-            HistoricoFinanceiroHelper.setCadastroFinanceiroResumo(cadastroFinanceiroResumoDAO.listaCadastroFinanceiroResumo(ClienteHelper.getCliente().getId_cadastro()));
+            HistoricoFinanceiroHelper.setCadastroFinanceiroResumo(cadastroFinanceiroResumoDAO.listaCadastroFinanceiroResumo(ClienteHelper.getCliente().getId_cadastro_servidor()));
             if (HistoricoFinanceiroHelper.getCadastroFinanceiroResumo().getFinanceiroVencido() > 0) {
                 PedidoHelper.pintaTxtNomeCliente();
                 Toast.makeText(getActivity(), "Este cliente possui pendências finaneiras!", Toast.LENGTH_LONG).show();

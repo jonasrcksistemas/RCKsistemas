@@ -40,6 +40,7 @@ public class PedidoHelper {
     private static List<WebPedidoItens> listaWebPedidoItens;
     private static Produto produto;
     private static int idPedido;
+    private static String buscaProduto;
     private Float valorProdutos = 0.0f;
     private Float descontoReal = 0.0f;
     private Float mediaDesconto = 0.0f;
@@ -85,6 +86,22 @@ public class PedidoHelper {
         return produtoPedidoActivity;
     }
 
+    public static List<WebPedidoItens> getListaWebPedidoItens() {
+        return listaWebPedidoItens;
+    }
+
+    public static void setListaWebPedidoItens(List<WebPedidoItens> listaWebPedidoItens) {
+        PedidoHelper.listaWebPedidoItens = listaWebPedidoItens;
+    }
+
+    public static WebPedido getWebPedido() {
+        return webPedido;
+    }
+
+    public static void setWebPedido(WebPedido webPedido) {
+        PedidoHelper.webPedido = webPedido;
+    }
+
     public static int getIdPedido() {
         return idPedido;
     }
@@ -108,6 +125,14 @@ public class PedidoHelper {
 
     public static void setProduto(Produto produto) {
         PedidoHelper.produto = produto;
+    }
+
+    public static String getBuscaProduto() {
+        return buscaProduto;
+    }
+
+    public static void setBuscaProduto(String buscaProduto) {
+        PedidoHelper.buscaProduto = buscaProduto;
     }
 
     public static void pintaTxtNomeCliente() {
@@ -301,6 +326,7 @@ public class PedidoHelper {
         pedido1 = null;
         webPedido = null;
         idPedido = 0;
+        buscaProduto = null;
         System.gc();
     }
 }

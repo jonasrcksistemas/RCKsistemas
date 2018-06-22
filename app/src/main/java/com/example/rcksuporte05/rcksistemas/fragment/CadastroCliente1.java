@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.CursorIndexOutOfBoundsException;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -32,6 +33,7 @@ import com.example.rcksuporte05.rcksistemas.util.MascaraUtil;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -92,7 +94,7 @@ public class CadastroCliente1 extends Fragment {
     private ArrayAdapter arrayIe;
     private ArrayAdapter arrayCategoria;
     private String[] contribuinte = {"Contribuinte", "Isento", "Não Contribuinte"};
-    private List<Categoria> listaCategoria;
+    private List<Categoria> listaCategoria = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -103,9 +105,24 @@ public class CadastroCliente1 extends Fragment {
 
         CategoriaDAO categoriaDAO = new CategoriaDAO(db);
 
-        listaCategoria = categoriaDAO.listaCategoria();
-        arrayCategoria = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_activated_1, listaCategoria);
-        spCategoria.setAdapter(arrayCategoria);
+        try {
+            listaCategoria = categoriaDAO.listaCategoria();
+            arrayCategoria = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_activated_1, listaCategoria);
+            spCategoria.setAdapter(arrayCategoria);
+        } catch (CursorIndexOutOfBoundsException e) {
+            e.printStackTrace();
+            AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+            alert.setTitle("Atenção");
+            alert.setMessage("Você precisa ter sincroniza do pelo menos uma vez");
+            alert.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    getActivity().finish();
+                }
+            });
+            alert.setCancelable(false);
+            alert.show();
+        }
 
         if (ClienteHelper.getCliente().getIdCategoria() > 0) {
             for (int i = 0; listaCategoria.size() > i; i++) {
@@ -324,7 +341,7 @@ public class CadastroCliente1 extends Fragment {
             edtEmailPrincipal.setText(ClienteHelper.getCliente().getEmail_principal());
         if (ClienteHelper.getCliente().getData_aniversario() != null) {
             try {
-                edtData.setText(new SimpleDateFormat("dd/MM/yyyy").format(new SimpleDateFormat("YYYY-MM-dd").parse(ClienteHelper.getCliente().getData_aniversario())));
+                edtData.setText(new SimpleDateFormat("dd/MM/yyyy").format(new SimpleDateFormat("yyyy-MM-dd").parse(ClienteHelper.getCliente().getData_aniversario())));
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -419,7 +436,7 @@ public class CadastroCliente1 extends Fragment {
 
         if (!edtData.getText().toString().trim().isEmpty()) {
             try {
-                ClienteHelper.getCliente().setData_aniversario(new SimpleDateFormat("YYYY-MM-dd").format(new SimpleDateFormat("dd/MM/yyyy").parse(edtData.getText().toString())));
+                ClienteHelper.getCliente().setData_aniversario(new SimpleDateFormat("yyyy-MM-dd").format(new SimpleDateFormat("dd/MM/yyyy").parse(edtData.getText().toString())));
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -471,7 +488,8 @@ public class CadastroCliente1 extends Fragment {
 
         ClienteHelper.getCliente().setInd_da_ie_destinatario(String.valueOf(spIe.getSelectedItemPosition() + 1));
 
-        ClienteHelper.getCliente().setIdCategoria(listaCategoria.get(spCategoria.getSelectedItemPosition()).getIdCategoria());
+        if (listaCategoria.size() > 0)
+            ClienteHelper.getCliente().setIdCategoria(listaCategoria.get(spCategoria.getSelectedItemPosition()).getIdCategoria());
     }
 
     public void fazerChamada(final String telefone, final String nome) {
