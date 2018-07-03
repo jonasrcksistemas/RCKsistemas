@@ -72,6 +72,11 @@ public class ListaClienteAdapter extends RecyclerView.Adapter<ClientesViewHolder
             holder.imStatus.setImageResource(R.mipmap.ic_prospect_pendente);
         }
 
+        if (clientes.get(position).getAlterado().equals("S")) {
+            holder.txtClienteAguarda.setTextColor(Color.RED);
+            holder.txtClienteAguarda.setText("Cliente com alterações pendentes");
+        }
+
         holder.itemView
                 .setBackgroundColor(selectedItems.get(position) ? Color.parseColor("#dfdfdf")
                         : Color.TRANSPARENT);
@@ -92,7 +97,7 @@ public class ListaClienteAdapter extends RecyclerView.Adapter<ClientesViewHolder
         return 0;
     }
 
-    public void applyCLickEnvents(ClientesViewHolder holder, final int position) {
+    private void applyCLickEnvents(ClientesViewHolder holder, final int position) {
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

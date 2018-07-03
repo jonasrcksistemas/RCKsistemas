@@ -49,10 +49,9 @@ public class CadastroCliente5 extends Fragment implements SegmentoAdapter.Segmen
         preencheRecycler(db.listaSegmento());
         insereDadosNaTela();
 
-        if (ClienteHelper.getCliente().getId_cadastro_servidor() > 0) {
+        if (getActivity().getIntent().getIntExtra("vizualizacao", 0) >= 1) {
             recyclerSegmentos.setClickable(false);
             edtOutrosSegmentosCliente.setFocusable(false);
-
         }
 
         ClienteHelper.setCadastroCliente5(this);
@@ -87,7 +86,7 @@ public class CadastroCliente5 extends Fragment implements SegmentoAdapter.Segmen
 
 
     public void preencheRecycler(List<Segmento> listaSegmento) {
-        if (ClienteHelper.getCliente().getId_cadastro_servidor() > 0) {
+        if (getActivity().getIntent().getIntExtra("vizualizacao", 0) >= 1) {
             segmentoAdapter = new SegmentoAdapter(listaSegmento, new SegmentoAdapter.SegmentoListener() {
                 @Override
                 public void onClick(int position) {

@@ -175,7 +175,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 " LOCAL_CADASTRO VARCHAR(20)," +
                 " ID_EMPRESA_MULTIDEVICE INTEGER," +
                 " ID_CATEGORIA INTEGER," +
-                " ID_VENDEDOR INTEGER);");
+                " ID_VENDEDOR INTEGER," +
+                " ALTERADO VARCHAR(1) DEFAULT 'N');");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS TBL_PRODUTO (ATIVO VARCHAR(1) DEFAULT 'S'  NOT NULL," +
                 " ID_PRODUTO VARCHAR(20) PRIMARY KEY," +
@@ -576,6 +577,15 @@ public class DBHelper extends SQLiteOpenHelper {
                 "               USUARIO_DATA TIMESTAMP ,\n" +
                 "               DATA_ULTIMA_ATUALIZACAO TIMESTAMP);");
 
+        db.execSQL("CREATE TABLE IF NOT EXISTS TBL_CADASTRO_ANEXOS(ID_ANEXO INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
+                "               ID_ANEXO_SERVIDOR INTEGER , " +
+                "               ID_ENTIDADE INTEGER NOT NULL DEFAULT 1, " +
+                "               ID_CADASTRO INTEGER, " +
+                "               ID_CADASTRO_SERVIDOR INTEGER, " +
+                "               NOME_ANEXO VARCHAR(150), " +
+                "               ANEXO BLOB, " +
+                "               EXCLUIDO VARCHAR(1) DEFAULT 'N');");
+
         System.gc();
     }
 
@@ -691,7 +701,17 @@ public class DBHelper extends SQLiteOpenHelper {
                             " LOCAL_CADASTRO VARCHAR(20)," +
                             " ID_EMPRESA_MULTIDEVICE INTEGER," +
                             " ID_CATEGORIA INTEGER," +
-                            " ID_VENDEDOR INTEGER);");
+                            " ID_VENDEDOR INTEGER," +
+                            " ALTERADO VARCHAR(1) DEFAULT 'N');");
+
+                    db.execSQL("CREATE TABLE IF NOT EXISTS TBL_CADASTRO_ANEXOS(ID_ANEXO INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
+                            "               ID_ANEXO_SERVIDOR INTEGER , " +
+                            "               ID_ENTIDADE INTEGER NOT NULL DEFAULT 1, " +
+                            "               ID_CADASTRO INTEGER, " +
+                            "               ID_CADASTRO_SERVIDOR INTEGER, " +
+                            "               NOME_ANEXO VARCHAR(150), " +
+                            "               ANEXO BLOB, " +
+                            "               EXCLUIDO VARCHAR(1) DEFAULT 'N');");
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -1480,7 +1500,7 @@ public class DBHelper extends SQLiteOpenHelper {
         System.gc();
     }
 
-    public void inserirTBL_CADASTRO(Cliente cliente) {
+    public int inserirTBL_CADASTRO(Cliente cliente) {
         SQLiteDatabase db = this.getWritableDatabase();
         cliente.setId_cadastro(contagem("SELECT MAX(ID_CADASTRO) FROM TBL_CADASTRO;") + 1);
 
@@ -1583,6 +1603,7 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("LOCAL_CADASTRO", cliente.getLocal_cadastro());
         content.put("ID_CATEGORIA", cliente.getIdCategoria());
         content.put("ID_VENDEDOR", cliente.getId_vendedor());
+        content.put("ALTERADO", "N");
 
         atualizarTBL_REFERENCIA_BANCARIA(cliente.getReferenciasBancarias(), String.valueOf(cliente.getId_cadastro()));
         atualizarTBL_REFERENCIA_COMERCIAL(cliente.getReferenciasComerciais(), String.valueOf(cliente.getId_cadastro()));
@@ -1590,6 +1611,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
         db.insert("TBL_CADASTRO", null, content);
         System.gc();
+        return cliente.getId_cadastro();
     }
 
     public void atualizarTBL_CADASTRO(Cliente cliente) throws android.database.sqlite.SQLiteConstraintException {
@@ -1694,6 +1716,7 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("LOCAL_CADASTRO", cliente.getLocal_cadastro());
         content.put("ID_CATEGORIA", cliente.getIdCategoria());
         content.put("ID_VENDEDOR", cliente.getId_vendedor());
+        content.put("ALTERADO", cliente.getAlterado());
 
         atualizarTBL_REFERENCIA_BANCARIA(cliente.getReferenciasBancarias(), String.valueOf(cliente.getId_cadastro()));
         atualizarTBL_REFERENCIA_COMERCIAL(cliente.getReferenciasComerciais(), String.valueOf(cliente.getId_cadastro()));
@@ -2047,6 +2070,7 @@ public class DBHelper extends SQLiteOpenHelper {
             cliente.setAtivo(cursor.getString(cursor.getColumnIndex("ATIVO")));
             cliente.setId_empresa(cursor.getInt(cursor.getColumnIndex("ID_EMPRESA")));
             cliente.setId_cadastro(cursor.getInt(cursor.getColumnIndex("ID_CADASTRO")));
+            cliente.setId_prospect(cursor.getInt(cursor.getColumnIndex("ID_PROSPECT")));
             cliente.setId_cadastro_servidor(cursor.getInt(cursor.getColumnIndex("ID_CADASTRO_SERVIDOR")));
             cliente.setPessoa_f_j(cursor.getString(cursor.getColumnIndex("PESSOA_F_J")));
             cliente.setData_aniversario(cursor.getString(cursor.getColumnIndex("DATA_ANIVERSARIO")));
@@ -2130,6 +2154,7 @@ public class DBHelper extends SQLiteOpenHelper {
             cliente.setLocal_cadastro(cursor.getString(cursor.getColumnIndex("LOCAL_CADASTRO")));
             cliente.setIdCategoria(cursor.getInt(cursor.getColumnIndex("ID_CATEGORIA")));
             cliente.setId_vendedor(cursor.getInt(cursor.getColumnIndex("ID_VENDEDOR")));
+            cliente.setAlterado(cursor.getString(cursor.getColumnIndex("ALTERADO")));
 
             lista.add(cliente);
             System.gc();
@@ -2146,6 +2171,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("DELETE FROM TBL_CADASTRO_CONTATO WHERE ID_CADASTRO_SERVIDOR = " + cliente.getId_cadastro_servidor());
         db.execSQL("DELETE FROM TBL_REFERENCIA_BANCARIA WHERE ID_CADASTRO_SERVIDOR = " + cliente.getId_cadastro_servidor());
         db.execSQL("DELETE FROM TBL_REFERENCIA_COMERCIAL WHERE ID_CADASTRO_SERVIDOR = " + cliente.getId_cadastro_servidor());
+        db.execSQL("DELETE FROM TBL_CADASTRO_ANEXOS WHERE ID_CADASTRO_SERVIDOR = " + cliente.getId_cadastro_servidor());
     }
 
     public void excluirClienteLocal(Cliente cliente) {
@@ -2154,6 +2180,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("DELETE FROM TBL_CADASTRO_CONTATO WHERE ID_CADASTRO = " + cliente.getId_cadastro());
         db.execSQL("DELETE FROM TBL_REFERENCIA_BANCARIA WHERE ID_CADASTRO = " + cliente.getId_cadastro());
         db.execSQL("DELETE FROM TBL_REFERENCIA_COMERCIAL WHERE ID_CADASTRO = " + cliente.getId_cadastro());
+        db.execSQL("DELETE FROM TBL_CADASTRO_ANEXOS WHERE ID_CADASTRO = " + cliente.getId_cadastro());
     }
 
     public List<Produto> listaProduto(String SQL) {

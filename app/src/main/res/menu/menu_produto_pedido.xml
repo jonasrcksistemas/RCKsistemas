@@ -5,7 +5,7 @@
     tools:context="com.example.rcksuporte05.rcksistemas.activity.ActivityCliente">
 
     <item android:id="@+id/menu_salvar_produto"
-        android:title="Lançar Produto no pedido!"
+        android:title="Lançar Produto no pedido"
         android:icon="@mipmap/ic_salvar"
         app:showAsAction="always"
         android:orderInCategory="0"/>

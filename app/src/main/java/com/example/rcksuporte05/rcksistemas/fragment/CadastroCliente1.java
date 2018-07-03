@@ -132,7 +132,7 @@ public class CadastroCliente1 extends Fragment {
             }
         }
 
-        if (getActivity().getIntent().getIntExtra("vizualizacao", 0) >= 1 || ClienteHelper.getCliente().getId_cadastro_servidor() > 0) {
+        if (getActivity().getIntent().getIntExtra("vizualizacao", 0) >= 1) {
 
             btnLigar1.setOnClickListener(new View.OnClickListener() {
                 @Override

@@ -229,7 +229,7 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
             edtDescontoReais.setEnabled(true);
             rbPorcentagem.setEnabled(true);
             rbReal.setEnabled(true);
-            promocaoRetorno = pedidoBO.calculaDesconto(ClienteHelper.getCliente().getId_cadastro(), webPedidoItem.getId_produto(), ProdutoPedidoActivity.this);
+            promocaoRetorno = pedidoBO.calculaDesconto(ClienteHelper.getCliente().getId_cadastro_servidor(), webPedidoItem.getId_produto(), ProdutoPedidoActivity.this);
             if (promocaoRetorno != null && promocaoRetorno.getValorDesconto() > 0 && promocaoRetorno.getValorDesconto() > Float.parseFloat(tabelaPrecoItem.getPerc_desc_final())) {
                 rbPorcentagem.setText("Desconto %(max " + promocaoRetorno.getValorDesconto().toString().replace(".0", "") + "%)");
                 cdPromocao.setVisibility(View.VISIBLE);

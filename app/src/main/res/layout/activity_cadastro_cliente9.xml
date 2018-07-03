@@ -1,0 +1,80 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.rcksuporte05.rcksistemas.activity.CadastroClienteMain">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin">
+
+            <TextView
+                android:id="@+id/txtobsFat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:text="OBSERVAÇÕES QUE DEVEM APARECER NO MOMENTO DO FATURAMENTO"
+                android:textColor="@color/colorAccent"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/edtobsFat"
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                android:layout_below="@+id/txtobsFat"
+                android:background="@drawable/borda_edittext"
+                android:gravity="top"
+                android:inputType="textCapCharacters|textMultiLine"
+                android:maxLength="300"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+            <TextView
+                android:id="@+id/txtObsFinancas"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/edtobsFat"
+                android:layout_marginTop="16dp"
+                android:text="OBSERVAÇÕES FINANCEIRAS"
+                android:textColor="@color/colorAccent"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/edtObsFinancas"
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                android:layout_below="@+id/txtObsFinancas"
+                android:background="@drawable/borda_edittext"
+                android:gravity="top"
+                android:inputType="textCapCharacters|textMultiLine"
+                android:maxLength="300"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+            <Button
+                android:id="@+id/btnSalvar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_below="@+id/edtObsFinancas"
+                android:layout_marginLeft="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="12dp"
+                android:text="SALVAR"
+                android:theme="@style/ButtonSalvar" />
+
+        </RelativeLayout>
+    </ScrollView>
+</LinearLayout>

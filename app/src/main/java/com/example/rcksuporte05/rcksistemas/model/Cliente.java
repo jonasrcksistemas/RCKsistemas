@@ -92,10 +92,12 @@ public class Cliente {
     private int idCategoria;
     private int id_vendedor;
     private int id_prospect;
+    private String alterado;
     private Segmento segmento;
     private List<ReferenciaBancaria> referenciasBancarias = new ArrayList<>();
     private List<ReferenciaComercial> referenciasComerciais = new ArrayList<>();
     private List<Contato> listaContato = new ArrayList<>();
+    private List<CadastroAnexo> listaCadastroAnexo = new ArrayList<>();
 
     public Cliente(Prospect prospect) {
         this.setId_vendedor(prospect.getIdVendedor());
@@ -856,6 +858,22 @@ public class Cliente {
 
     public void setListaContato(List<Contato> listaContato) {
         this.listaContato = listaContato;
+    }
+
+    public String getAlterado() {
+        return alterado;
+    }
+
+    public void setAlterado(String alterado) {
+        this.alterado = alterado;
+    }
+
+    public List<CadastroAnexo> getListaCadastroAnexo() {
+        return listaCadastroAnexo;
+    }
+
+    public void setListaCadastroAnexo(List<CadastroAnexo> listaCadastroAnexo) {
+        this.listaCadastroAnexo = listaCadastroAnexo;
     }
 }
 

@@ -4,16 +4,13 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.CursorIndexOutOfBoundsException;
 import android.graphics.Color;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -50,7 +47,9 @@ public class ActivityProduto extends AppCompatActivity {
     @BindView(R.id.edtDataSincronia)
     TextView edtDataSincronia;
 
-    private SearchView buscaProduto;
+    @BindView(R.id.buscaProduto)
+    SearchView buscaProduto;
+
     private List<Produto> lista;
     private DBHelper db = new DBHelper(this);
     private ListaProdutoAdpter listaProdutoAdpter;
@@ -75,6 +74,8 @@ public class ActivityProduto extends AppCompatActivity {
 
         try {
             lista = db.listaProduto("SELECT * FROM TBL_PRODUTO WHERE ATIVO = 'S' ORDER BY NOME_PRODUTO");
+            edtTotalProdutos.setText(lista.size() + " Produtos listados");
+            edtTotalProdutos.setTextColor(Color.BLACK);
             preecheRecyclerProduto(lista);
         } catch (Exception e) {
             e.printStackTrace();
@@ -133,9 +134,11 @@ public class ActivityProduto extends AppCompatActivity {
                     if (buscaProduto != null) {
                         PedidoHelper.setBuscaProduto(buscaProduto.getQuery().toString());
                     }
+                    Boolean produtoRepetido = false;
                     if (PedidoHelper.getListaWebPedidoItens() != null) {
                         for (final WebPedidoItens webPedidoItens : PedidoHelper.getListaWebPedidoItens()) {
                             if (webPedidoItens.getId_produto() == listaProdutoAdpter.getItem(position).getId_produto()) {
+                                produtoRepetido = true;
                                 AlertDialog.Builder alert = new AlertDialog.Builder(ActivityProduto.this);
                                 alert.setTitle("Atenção");
                                 alert.setMessage("O produto " + listaProdutoAdpter.getItem(position).getNome_produto() + " já esta nesse pedido, deseja alterá-lo?");
@@ -145,6 +148,7 @@ public class ActivityProduto extends AppCompatActivity {
                                     public void onClick(DialogInterface dialog, int which) {
                                         PedidoHelper.setProduto(null);
                                         PedidoHelper.setWebPedidoItem(webPedidoItens);
+                                        PedidoHelper.getProdutoPedidoActivity().getIntent().putExtra("pedido", 1);
                                         finish();
                                     }
                                 });
@@ -153,8 +157,10 @@ public class ActivityProduto extends AppCompatActivity {
                             }
                         }
                     }
-                    PedidoHelper.setProduto(listaProdutoAdpter.getItem(position));
-                    finish();
+                    if (!produtoRepetido) {
+                        PedidoHelper.setProduto(listaProdutoAdpter.getItem(position));
+                        finish();
+                    }
                 }
 
                 @Override
@@ -164,23 +170,6 @@ public class ActivityProduto extends AppCompatActivity {
             }));
         }
 
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-
-        getMenuInflater().inflate(R.menu.menu_produto, menu);
-        MenuItem item = menu.findItem(R.id.buscaProduto);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-            buscaProduto = (SearchView) item.getActionView();
-        } else {
-            buscaProduto = (SearchView) MenuItemCompat.getActionView(item);
-        }
         buscaProduto.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -206,21 +195,23 @@ public class ActivityProduto extends AppCompatActivity {
             }
         });
 
-        buscaProduto.setQueryHint("Nome Produto");
-
-        /*if (PedidoHelper.getBuscaProduto() != null && !PedidoHelper.getBuscaProduto().trim().isEmpty()) {
-            item.expandActionView();
+        if (PedidoHelper.getBuscaProduto() != null && !PedidoHelper.getBuscaProduto().trim().isEmpty()) {
+            buscaProduto.setIconified(false);
             buscaProduto.setQuery(PedidoHelper.getBuscaProduto(), true);
-        }*/
+        }
 
-        return true;
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                finish();
+                if (!buscaProduto.isIconified())
+                    buscaProduto.setIconified(true);
+                else
+                    finish();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -252,23 +243,5 @@ public class ActivityProduto extends AppCompatActivity {
         listaProdutoRecyclerView.setAdapter(listaProdutoAdpter);
 
         listaProdutoAdpter.notifyDataSetChanged();
-    }
-
-    @Override
-    protected void onResume() {
-        if (lista != null) {
-            edtTotalProdutos.setText(lista.size() + " Produtos listados");
-            edtTotalProdutos.setTextColor(Color.BLACK);
-        } else {
-            edtTotalProdutos.setText("Não há produtos a serem exibidos!");
-            edtTotalProdutos.setTextColor(Color.RED);
-        }
-        super.onResume();
-    }
-
-    @Override
-    protected void onDestroy() {
-        System.gc();
-        super.onDestroy();
     }
 }

@@ -200,7 +200,7 @@ public class Pedido1 extends Fragment implements ListaAdapterProdutoPedido.Produ
             PedidoBO pedidoBO = new PedidoBO();
             if (bundle.getInt("vizualizacao") != 1) {
                 for (WebPedidoItens webPedidoItens : listaProdutoPedido) {
-                    Float descontoPedido = pedidoBO.calculaDesconto(ClienteHelper.getCliente().getId_cadastro(), webPedidoItens.getId_produto(), getActivity()).getValorDesconto();
+                    Float descontoPedido = pedidoBO.calculaDesconto(ClienteHelper.getCliente().getId_cadastro_servidor(), webPedidoItens.getId_produto(), getActivity()).getValorDesconto();
                     if (descontoPedido <= 0 || Float.parseFloat(tabelaPrecoItem.getPerc_desc_final()) > descontoPedido)
                         descontoPedido = Float.parseFloat(tabelaPrecoItem.getPerc_desc_final());
                     if (Float.parseFloat(webPedidoItens.getValor_desconto_per()) > descontoPedido)

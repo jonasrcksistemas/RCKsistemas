@@ -277,28 +277,6 @@ public class ProspectHelper {
             }
         }
 
-
-        /*if (prospect.getPessoa_f_j() != null && prospect.getPessoa_f_j().equals("J")) {
-            if(Integer.parseInt(prospect.getInd_da_ie_destinatario_prospect()) == 0){
-                if (prospect.getInscri_estadual() == null || prospect.getInscri_estadual().trim().isEmpty()) {
-                    if (verificaMovimento) {
-                        verificaMovimento = false;
-                        moveTela(0);
-                    }
-                    cadastroProspectGeral.edtInscEstadualProspect.setError("Campo Obrigatorio");
-                    cadastroProspectGeral.edtInscEstadualProspect.requestFocus();
-                }
-            }
-        }*/
-
-        if (prospect.getDiaVisita() == null || prospect.getDiaVisita().trim().equals("")) {
-            if (verificaMovimento) {
-                verificaMovimento = false;
-                Toast.makeText(activityMain, "Escolha um dia da semana para a Visita", Toast.LENGTH_LONG).show();
-                moveTela(0);
-            }
-        }
-
         //tela 2 Endereços
         if (prospect.getEndereco() == null || prospect.getEndereco().trim().isEmpty()) {
             if (verificaMovimento) {
@@ -309,7 +287,6 @@ public class ProspectHelper {
             cadastroProspectEndereco.edtEnderecoProspect.setError("Campo Obrigatorio");
         }
 
-
         if (prospect.getEndereco_numero() == null || prospect.getEndereco_numero().trim().isEmpty()) {
             if (verificaMovimento) {
                 verificaMovimento = false;
@@ -318,7 +295,6 @@ public class ProspectHelper {
             cadastroProspectEndereco.edtNumeroProspect.requestFocus();
             cadastroProspectEndereco.edtNumeroProspect.setError("Campo Obrigatorio");
         }
-
 
         if (prospect.getEndereco_bairro() == null || prospect.getEndereco_bairro().trim().isEmpty()) {
             if (verificaMovimento) {
@@ -329,33 +305,31 @@ public class ProspectHelper {
             cadastroProspectEndereco.edtBairroProspect.setError("Campo Obrigatorio");
         }
 
-
-        if (prospect.getEndereco_cep() == null || prospect.getEndereco_cep().trim().isEmpty()) {
+        /*if (prospect.getEndereco_cep() == null || prospect.getEndereco_cep().trim().isEmpty()) {
             if (verificaMovimento) {
                 verificaMovimento = false;
                 moveTela(1);
             }
             cadastroProspectEndereco.edtCep.requestFocus();
             cadastroProspectEndereco.edtCep.setError("Campo Obrigatorio");
-        }
+        }*/
 
-        if (prospect.getSituacaoPredio() == null || prospect.getSituacaoPredio().trim().isEmpty()) {
+        /*if (prospect.getSituacaoPredio() == null || prospect.getSituacaoPredio().trim().isEmpty()) {
             if (verificaMovimento) {
                 verificaMovimento = false;
                 Toast.makeText(activityMain, "Informe a situação do Predio", Toast.LENGTH_LONG).show();
                 moveTela(1);
             }
-        }
+        }*/
 
-
-        //tela 3 Contato
+        /*//tela 3 Contato
         if (prospect.getListaContato().size() < 1) {
             if (verificaMovimento) {
                 verificaMovimento = false;
                 Toast.makeText(activityMain, "Pelo menos 1 contato é Obrigatorio!", Toast.LENGTH_LONG).show();
                 moveTela(2);
             }
-        }
+        }*/
 
 
         //Tela 4 seguimentos
@@ -404,16 +378,14 @@ public class ProspectHelper {
             }
         }
 
-
         //tela 6 Observações Comerciais
-        if (prospect.getReferenciasComerciais().size() < 2) {
+        /*if (prospect.getReferenciasComerciais().size() < 2) {
             if (verificaMovimento) {
                 verificaMovimento = false;
                 Toast.makeText(activityMain, "Insira Pelo Menos 2 referencias comercias ", Toast.LENGTH_LONG).show();
                 moveTela(5);
             }
-        }
-
+        }*/
 
         //Tela 7 salvar foto
         if (verificaMovimento) {
@@ -441,7 +413,7 @@ public class ProspectHelper {
             }
         }
 
-        if (verificaMovimento) {
+        /*if (verificaMovimento) {
             try {
                 if (prospect.getFotoPrincipalBase64().trim().isEmpty()) {
                     Toast.makeText(activityMain, "Foto 1 obrigatoria", Toast.LENGTH_LONG).show();
@@ -451,10 +423,9 @@ public class ProspectHelper {
                 Toast.makeText(activityMain, "Foto 1 obrigatoria", Toast.LENGTH_LONG).show();
                 verificaMovimento = false;
             }
+        }*/
 
-        }
-
-        if (verificaMovimento) {
+        /*if (verificaMovimento) {
             try {
                 if (prospect.getFotoSecundariaBase64().trim().isEmpty()) {
                     Toast.makeText(activityMain, "Foto 2 obrigatoria", Toast.LENGTH_LONG).show();
@@ -464,7 +435,7 @@ public class ProspectHelper {
                 Toast.makeText(activityMain, "Foto 2 obrigatoria", Toast.LENGTH_LONG).show();
                 verificaMovimento = false;
             }
-        }
+        }*/
 
         if (verificaMovimento) {
             if (localizacao == null) {

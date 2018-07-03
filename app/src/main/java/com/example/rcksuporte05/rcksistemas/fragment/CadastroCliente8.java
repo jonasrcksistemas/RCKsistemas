@@ -1,129 +1,184 @@
 package com.example.rcksuporte05.rcksistemas.fragment;
 
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.LinearLayout;
 
-import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
-import com.example.rcksuporte05.rcksistemas.Helper.UsuarioHelper;
 import com.example.rcksuporte05.rcksistemas.R;
+import com.example.rcksuporte05.rcksistemas.activity.ActivityAddCadastroAnexo;
+import com.example.rcksuporte05.rcksistemas.adapters.CadastroAnexoAdapter;
+import com.example.rcksuporte05.rcksistemas.model.CadastroAnexo;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
-public class CadastroCliente8 extends Fragment {
-    @BindView(R.id.btnSalvar)
-    Button btnSalvar;
-    @BindView(R.id.edtobsFat)
-    EditText edtobsFat;
-    @BindView(R.id.edtObsFinancas)
-    EditText edtObsFinancas;
-    private DBHelper db;
+public class CadastroCliente8 extends Fragment implements CadastroAnexoAdapter.CadastroAnexoAdapterListener {
+
+    @BindView(R.id.recyclerAnexo)
+    RecyclerView recyclerAnexo;
+
+    @BindView(R.id.edtTotalAnexos)
+    EditText edtTotalAnexos;
+
+    @BindView(R.id.btnAddAnexos)
+    FloatingActionButton btnAddAnexos;
+
+    private CadastroAnexoAdapter cadastroAnexoAdapter;
+    private ActionMode actionMode;
+
+    @OnClick(R.id.btnAddAnexos)
+    public void addAnexo() {
+        Intent intent = new Intent(getActivity(), ActivityAddCadastroAnexo.class);
+        startActivity(intent);
+    }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_cadastro_cliente8, container, false);
         ButterKnife.bind(this, view);
 
-        if (getActivity().getIntent().getIntExtra("vizualizacao", 0) >= 1 || ClienteHelper.getCliente().getId_cadastro_servidor() > 0) {
+        recyclerAnexo.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerAnexo.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayout.VERTICAL));
 
-            edtobsFat.setFocusable(false);
-            edtObsFinancas.setFocusable(false);
-
-            btnSalvar.setVisibility(View.GONE);
-        } else {
-            btnSalvar.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    try {
-                        db = new DBHelper(getActivity());
-                        inserirDadosDaFrame();
-
-                        if (ClienteHelper.salvarCliente()) {
-                            if (verificaCpfCnpj(ClienteHelper.getCliente().getCpf_cnpj())) {
-                                if (ClienteHelper.getCliente().getId_cadastro() <= 0)
-                                    db.inserirTBL_CADASTRO(ClienteHelper.getCliente());
-                                else
-                                    db.atualizarTBL_CADASTRO(ClienteHelper.getCliente());
-
-                                if (getActivity().getIntent().getIntExtra("prospect", 0) > 0)
-                                    db.alterar("DELETE FROM TBL_PROSPECT WHERE ID_PROSPECT = " + getActivity().getIntent().getIntExtra("prospect", 0) + ";");
-
-                                Toast.makeText(getActivity(), "Cliente salvo com sucesso!", Toast.LENGTH_LONG).show();
-                                getActivity().finish();
-
-                            } else {
-                                AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-                                alert.setTitle("Atenção");
-                                switch (ClienteHelper.getCliente().getPessoa_f_j()) {
-                                    case "F":
-                                        alert.setMessage("Já existe outro cliente com esse CPF");
-                                        break;
-                                    case "J":
-                                        alert.setMessage("Já existe outro cliente com esse CNPJ");
-                                        break;
-                                    default:
-                                        alert.setMessage("Já existe outro cliente com esse CPF/CNPJ");
-                                        break;
-                                }
-                                alert.setNeutralButton("OK", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        ClienteHelper.moveTela(0);
-                                    }
-                                });
-                                alert.show();
-                            }
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
+        if (getActivity().getIntent().getIntExtra("vizualizacao", 0) >= 1) {
+            btnAddAnexos.setVisibility(View.GONE);
         }
-
-        if (ClienteHelper.getCliente().getObservacoes_faturamento() != null && !ClienteHelper.getCliente().getObservacoes_faturamento().trim().isEmpty())
-            edtobsFat.setText(ClienteHelper.getCliente().getObservacoes_faturamento());
-        if (ClienteHelper.getCliente().getObservacoes_financeiro() != null && !ClienteHelper.getCliente().getObservacoes_financeiro().trim().isEmpty())
-            edtObsFinancas.setText(ClienteHelper.getCliente().getObservacoes_financeiro());
 
         ClienteHelper.setCadastroCliente8(this);
         return view;
     }
 
-    public void inserirDadosDaFrame() {
-        if (!edtobsFat.getText().toString().trim().isEmpty())
-            ClienteHelper.getCliente().setObservacoes_faturamento(edtobsFat.getText().toString());
-        else
-            ClienteHelper.getCliente().setObservacoes_faturamento(null);
-
-        if (!edtObsFinancas.getText().toString().trim().isEmpty())
-            ClienteHelper.getCliente().setObservacoes_financeiro(edtObsFinancas.getText().toString());
-        else
-            ClienteHelper.getCliente().setObservacoes_financeiro(null);
-
-        ClienteHelper.getCliente().setAtivo("S");
-        ClienteHelper.getCliente().setId_empresa(Integer.parseInt(UsuarioHelper.getUsuario().getIdEmpresaMultiDevice()));
-        ClienteHelper.getCliente().setF_cliente("N");
-        ClienteHelper.getCliente().setF_fornecedor("N");
-        ClienteHelper.getCliente().setF_funcionario("N");
-        ClienteHelper.getCliente().setF_transportador("N");
-        ClienteHelper.getCliente().setF_vendedor("N");
-        ClienteHelper.getCliente().setId_entidade("10");
+    @Override
+    public void onResume() {
+        preencheListaAnexo();
+        super.onResume();
     }
 
-    public boolean verificaCpfCnpj(String cpfCnpj) {
-        if (db.contagem("SELECT COUNT(*) FROM TBL_CADASTRO WHERE CPF_CNPJ = '" + cpfCnpj + "' AND ID_CADASTRO <> " + ClienteHelper.getCliente().getId_cadastro() + ";") > 0)
-            return false;
+    private void preencheListaAnexo() {
+        cadastroAnexoAdapter = new CadastroAnexoAdapter(ClienteHelper.getListaCadastroAnexo(), this);
+        recyclerAnexo.setAdapter(cadastroAnexoAdapter);
+        cadastroAnexoAdapter.notifyDataSetChanged();
+        if (ClienteHelper.getListaCadastroAnexo() != null && ClienteHelper.getListaCadastroAnexo().size() > 0)
+            edtTotalAnexos.setText("Anexos listados: " + ClienteHelper.getListaCadastroAnexo().size());
         else
-            return true;
+            edtTotalAnexos.setText("Nenhum anexo registrado");
+    }
+
+    @Override
+    public void onClickListener(int position) {
+        if (cadastroAnexoAdapter.getSelectedItensCount() > 0) {
+            enableActionMode(position);
+        } else {
+            Intent intent = new Intent(getActivity(), ActivityAddCadastroAnexo.class);
+            intent.putExtra("Alteracao", position);
+            if (getActivity().getIntent().getIntExtra("vizualizacao", 0) >= 1) {
+                intent.putExtra("vizualizacao", 1);
+            }
+            startActivity(intent);
+        }
+    }
+
+    @Override
+    public void onLongClickListener(int position) {
+        enableActionMode(position);
+    }
+
+    public void enableActionMode(final int position) {
+        if (actionMode == null) {
+            actionMode = getActivity().startActionMode(new ActionMode.Callback() {
+                @Override
+                public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                    mode.getMenuInflater().inflate(R.menu.cadastro_anexo_menu, menu);
+                    return true;
+                }
+
+                @Override
+                public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                    return false;
+                }
+
+                @Override
+                public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                    switch (item.getItemId()) {
+                        case R.id.action_delete:
+                            AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+                            alert.setTitle("Atenção");
+                            if (cadastroAnexoAdapter.getSelectedItensCount() > 1)
+                                alert.setMessage("Deseja mesmo excluir os " + cadastroAnexoAdapter.getSelectedItensCount() + " anexos selecionados?");
+                            else
+                                alert.setMessage("Deseja mesmo excluir o anexo selecionado?");
+                            alert.setNegativeButton("NÃO", null);
+                            alert.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    for (CadastroAnexo cadastroAnexo : cadastroAnexoAdapter.getItensSelecionados()) {
+                                        if (ClienteHelper.getListaCadastroAnexoExcluidos() != null) {
+                                            ClienteHelper.getListaCadastroAnexoExcluidos().add(cadastroAnexo);
+                                        } else {
+                                            List<CadastroAnexo> listaCadastroAnexoExcluidos = new ArrayList<>();
+                                            listaCadastroAnexoExcluidos.add(cadastroAnexo);
+                                            ClienteHelper.setListaCadastroAnexoExcluidos(listaCadastroAnexoExcluidos);
+                                        }
+                                        ClienteHelper.getListaCadastroAnexo().remove(cadastroAnexo);
+                                    }
+
+                                    finishActionMode();
+                                    preencheListaAnexo();
+                                }
+                            });
+                            alert.show();
+                            break;
+                    }
+                    return false;
+                }
+
+                @Override
+                public void onDestroyActionMode(ActionMode mode) {
+                    finishActionMode();
+                }
+            });
+        }
+        toggleSelection(position);
+    }
+
+    public void toggleSelection(int position) {
+        cadastroAnexoAdapter.toggleSelection(position);
+        if (cadastroAnexoAdapter.getSelectedItensCount() == 0) {
+            actionMode.finish();
+            actionMode = null;
+        } else {
+            actionMode.setTitle(String.valueOf(cadastroAnexoAdapter.getSelectedItensCount()));
+            actionMode.invalidate();
+        }
+    }
+
+    public void finishActionMode() {
+        if (actionMode != null) {
+            actionMode.finish();
+            cadastroAnexoAdapter.clearSelection();
+            actionMode = null;
+        }
     }
 }

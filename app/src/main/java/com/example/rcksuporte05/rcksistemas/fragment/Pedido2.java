@@ -177,7 +177,6 @@ public class Pedido2 extends Fragment {
                     } else {
                         Intent intent = new Intent(getActivity(), activityAnaliseDeCredito.class);
                         intent.putExtra("valorPedido", PedidoHelper.getValorVenda());
-                        intent.putExtra("idPedido", PedidoHelper.getWebPedido().getId_web_pedido());
                         HistoricoFinanceiroHelper.setCliente(objetoCliente);
                         dialog.dismiss();
                         startActivity(intent);

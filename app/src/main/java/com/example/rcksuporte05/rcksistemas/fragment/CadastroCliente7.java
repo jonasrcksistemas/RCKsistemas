@@ -36,7 +36,7 @@ public class CadastroCliente7 extends Fragment {
         View view = inflater.inflate(R.layout.activity_cadastro_cliente7, container, false);
         ButterKnife.bind(this, view);
 
-        if (getActivity().getIntent().getIntExtra("vizualizacao", 0) >= 1 || ClienteHelper.getCliente().getId_cadastro_servidor() > 0) {
+        if (getActivity().getIntent().getIntExtra("vizualizacao", 0) >= 1) {
 
             rdSim.setClickable(false);
             rdNao.setClickable(false);

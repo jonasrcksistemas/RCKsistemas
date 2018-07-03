@@ -12,9 +12,10 @@ import com.example.rcksuporte05.rcksistemas.fragment.CadastroCliente5;
 import com.example.rcksuporte05.rcksistemas.fragment.CadastroCliente6;
 import com.example.rcksuporte05.rcksistemas.fragment.CadastroCliente7;
 import com.example.rcksuporte05.rcksistemas.fragment.CadastroCliente8;
+import com.example.rcksuporte05.rcksistemas.fragment.CadastroCliente9;
 
 public class TabsAdapterCliente extends FragmentPagerAdapter {
-    private String[] titles = {"GERAL", "ENDEREÇO", "FINANCEIRO/COBRANÇA", "CONTATO *", "SEGMENTOS *", "OBSERVAÇÕES COMERCIAIS", "EMAIL NFE", "OBSERVAÇÕES"};
+    private String[] titles = {"GERAL", "ENDEREÇO", "FINANCEIRO/COBRANÇA", "CONTATO *", "SEGMENTOS *", "OBSERVAÇÕES COMERCIAIS", "EMAIL NFE", "ANEXOS", "OBSERVAÇÕES"};
 
     public TabsAdapterCliente(FragmentManager fm) {
         super(fm);
@@ -47,6 +48,9 @@ public class TabsAdapterCliente extends FragmentPagerAdapter {
                 break;
             case 7:
                 frag = new CadastroCliente8();
+                break;
+            case 8:
+                frag = new CadastroCliente9();
                 break;
         }
 

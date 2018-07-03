@@ -60,7 +60,7 @@ public class CadastroCliente6 extends Fragment implements ReferenciaComercialAda
 
         injetaDadosNaTela();
 
-        if (ClienteHelper.getCliente().getId_cadastro_servidor() > 0) {
+        if (getActivity().getIntent().getIntExtra("vizualizacao", 0) >= 1) {
             btnAddReferencia.setVisibility(View.INVISIBLE);
             btnAddBancos.setVisibility(View.INVISIBLE);
         }

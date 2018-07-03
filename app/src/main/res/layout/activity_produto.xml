@@ -15,10 +15,20 @@
         android:id="@+id/tb_produto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?attr/colorPrimary"
-        android:minHeight="?attr/actionBarSize"
+        android:background="@color/colorPrimary"
+        android:gravity="end"
+        android:textAlignment="textEnd"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-        tools:context=".activity.ActivityProduto" />
+        app:title="Lista de Produtos"
+        tools:context=".activity.ActivityProduto">
+
+        <android.support.v7.widget.SearchView
+            android:id="@+id/buscaProduto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:queryHint="Nome Produto" />
+
+    </android.support.v7.widget.Toolbar>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/listaProdutoRecycler"
@@ -32,7 +42,6 @@
         android:background="#dddfdd"
         android:orientation="horizontal">
 
-
         <TextView
             android:id="@+id/edtTotalProdutos"
             android:layout_width="match_parent"
@@ -43,11 +52,11 @@
             android:focusable="false"
             android:gravity="start"
             android:maxLines="1"
+            android:paddingLeft="5dp"
+            android:paddingStart="5dp"
             android:text="Não há produtos a serem exibidos!"
             android:textColor="#000000"
-            android:textSize="14sp"
-            android:paddingStart="5dp"
-            android:paddingLeft="5dp" />
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/edtDataSincronia"
@@ -72,6 +81,4 @@
             android:background="@drawable/ic_sincroniza_main" />
 
     </RelativeLayout>
-
-
 </LinearLayout>

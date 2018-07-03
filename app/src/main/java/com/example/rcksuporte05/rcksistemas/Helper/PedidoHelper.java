@@ -147,11 +147,11 @@ public class PedidoHelper {
 
     public static void calculaValorPedido(List<WebPedidoItens> produtoPedido, ActivityPedidoMain activityPedidoMain) {
 
-        Float resultado = Float.valueOf("0");
+        Float resultado = 0.f;
         for (int i = 0; produtoPedido.size() > i; i++) {
             resultado += Float.valueOf(produtoPedido.get(i).getValor_total());
         }
-        valorVenda = resultado;
+        setValorVenda(resultado);
         EditText edtTotalVenda = (EditText) activityPedidoMain.findViewById(R.id.edtTotalVenda);
         edtTotalVenda.setText(MascaraUtil.mascaraReal(resultado));
     }
@@ -184,7 +184,12 @@ public class PedidoHelper {
     public boolean validaCredito() {
         CadastroFinanceiroResumo cadastroFinanceiroResumo = HistoricoFinanceiroHelper.getCadastroFinanceiroResumo();
 
-        Float saldoRestante = cadastroFinanceiroResumo.getLimiteCredito() - cadastroFinanceiroResumo.getLimiteUtilizado() - valorVenda - cadastroFinanceiroResumo.getFinanceiroVencido();
+        Float limiteUltilizado = db.soma("SELECT SUM(VALOR_TOTAL) FROM TBL_WEB_PEDIDO " +
+                "WHERE PEDIDO_ENVIADO = 'N' AND ID_CONDICAO_PAGAMENTO <> 1 " +
+                "AND ID_WEB_PEDIDO <> " + PedidoHelper.getIdPedido() + " " +
+                "AND ID_CADASTRO = " + ClienteHelper.getCliente().getId_cadastro() + ";") + cadastroFinanceiroResumo.getLimiteUtilizado();
+
+        Float saldoRestante = cadastroFinanceiroResumo.getLimiteCredito() - limiteUltilizado - getValorVenda() - cadastroFinanceiroResumo.getFinanceiroVencido();
 
         if (saldoRestante < 0 || cadastroFinanceiroResumo.getFinanceiroVencido() > 0) {
             Toast.makeText(activityPedidoMain, "Esse pedido não passou na análise de crédito!", Toast.LENGTH_SHORT).show();
@@ -245,11 +250,12 @@ public class PedidoHelper {
                                     webPedido.setDesconto_per(String.valueOf(mediaDesconto));
                                     webPedido.setValor_produtos(String.valueOf(valorProdutos));
                                     webPedido.setValor_desconto(String.valueOf(descontoReal));
-                                    //TODO Verificar rotina de exclusão dos produtos excluidos
                                     if (Pedido1.listaProdutoRemovido.size() > 0 && PedidoHelper.getIdPedido() > 0) {
                                         PedidoBO pedidoBO = new PedidoBO();
                                         pedidoBO.excluiItenPedido(PedidoHelper.getActivityPedidoMain(), Pedido1.listaProdutoRemovido);
                                     }
+                                    calculaValorPedido(listaWebPedidoItens, activityPedidoMain);
+                                    webPedido.setValor_total(String.valueOf(getValorVenda()));
 
                                     if (PedidoHelper.getIdPedido() > 0) {
                                         webPedido.setId_web_pedido(String.valueOf(PedidoHelper.getIdPedido()));

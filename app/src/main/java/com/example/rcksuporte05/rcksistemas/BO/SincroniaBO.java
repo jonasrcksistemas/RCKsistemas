@@ -15,6 +15,7 @@ import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.ImageView;
 
+import com.example.rcksuporte05.rcksistemas.DAO.CadastroAnexoDAO;
 import com.example.rcksuporte05.rcksistemas.DAO.CadastroFinanceiroResumoDAO;
 import com.example.rcksuporte05.rcksistemas.DAO.CategoriaDAO;
 import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
@@ -29,6 +30,7 @@ import com.example.rcksuporte05.rcksistemas.activity.MainActivity;
 import com.example.rcksuporte05.rcksistemas.api.Api;
 import com.example.rcksuporte05.rcksistemas.api.Rotas;
 import com.example.rcksuporte05.rcksistemas.model.Banco;
+import com.example.rcksuporte05.rcksistemas.model.CadastroAnexo;
 import com.example.rcksuporte05.rcksistemas.model.CadastroFinanceiroResumo;
 import com.example.rcksuporte05.rcksistemas.model.Categoria;
 import com.example.rcksuporte05.rcksistemas.model.Cliente;
@@ -75,6 +77,7 @@ public class SincroniaBO {
     private WebPedidoDAO webPedidoDAO;
     private WebPedidoItensDAO webPedidoItensDAO;
     private CadastroFinanceiroResumoDAO cadastroFinanceiroResumoDAO;
+    private CadastroAnexoDAO cadastroAnexoDAO;
 
     public static Activity getActivity() {
         return activity;
@@ -107,7 +110,13 @@ public class SincroniaBO {
                 db.excluirClienteServidor(cliente);
                 notificacao.setProgress(maxProgress, contadorNotificacaoEProgresso, false);
 
-                db.inserirTBL_CADASTRO(cliente);
+                int idCadastro = db.inserirTBL_CADASTRO(cliente);
+                if (cliente.getListaCadastroAnexo().size() > 0) {
+                    for (CadastroAnexo cadastroAnexo : cliente.getListaCadastroAnexo()) {
+                        cadastroAnexo.setIdCadastro(idCadastro);
+                        cadastroAnexoDAO.atualizarCadastroAnexo(cadastroAnexo);
+                    }
+                }
 
                 //incrementa o progresso da notificao
                 //ação e do progressDialog
@@ -591,6 +600,7 @@ public class SincroniaBO {
         webPedidoDAO = new WebPedidoDAO(db);
         webPedidoItensDAO = new WebPedidoItensDAO(db);
         cadastroFinanceiroResumoDAO = new CadastroFinanceiroResumoDAO(db);
+        cadastroAnexoDAO = new CadastroAnexoDAO(db);
 
         final NotificationCompat.Builder notificacao = new NotificationCompat.Builder(activity)
                 .setSmallIcon(R.mipmap.ic_sincroniza_main)

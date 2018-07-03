@@ -132,7 +132,7 @@ public class CadastroCliente2 extends Fragment {
             }
         }
 
-        if (getActivity().getIntent().getIntExtra("vizualizacao", 0) >= 1 || ClienteHelper.getCliente().getId_cadastro_servidor() > 0) {
+        if (getActivity().getIntent().getIntExtra("vizualizacao", 0) >= 1) {
 
             edtNumero.setFocusable(false);
             edtBairro.setFocusable(false);

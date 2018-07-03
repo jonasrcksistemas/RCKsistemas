@@ -46,7 +46,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/txtPessoaProspect"
                 android:layout_toEndOf="@+id/txtIdProspect"
-                android:layout_toRightOf="@+id/txtIdProspect"></Spinner>
+                android:layout_toRightOf="@+id/txtIdProspect"/>
 
             <TextView
                 android:id="@+id/txtNomeClienteProspect"
@@ -211,7 +211,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/spCategoriaProspect"
-                android:text="Dia de Rota *" />
+                android:text="Dia de Rota" />
 
             <RadioGroup
                 android:id="@+id/rgRotaProspect"

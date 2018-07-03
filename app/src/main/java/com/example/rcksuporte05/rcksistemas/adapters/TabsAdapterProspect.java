@@ -18,7 +18,7 @@ import com.example.rcksuporte05.rcksistemas.fragment.CadastroProspectSegmentos;
  */
 
 public class TabsAdapterProspect extends FragmentPagerAdapter{
-    private String[] titles = {"Geral", "Endereços", "Contato *","Segmentos *", "Motivos não Cadastramento *", "Observações Comerciais",
+    private String[] titles = {"Geral", "Endereços", "Contato","Segmentos *", "Motivos não Cadastramento *", "Observações Comerciais",
     "adicionar Foto e Salvar"};
 
     public TabsAdapterProspect(FragmentManager fm) {

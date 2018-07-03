@@ -11,8 +11,13 @@ import com.example.rcksuporte05.rcksistemas.fragment.CadastroCliente5;
 import com.example.rcksuporte05.rcksistemas.fragment.CadastroCliente6;
 import com.example.rcksuporte05.rcksistemas.fragment.CadastroCliente7;
 import com.example.rcksuporte05.rcksistemas.fragment.CadastroCliente8;
+import com.example.rcksuporte05.rcksistemas.fragment.CadastroCliente9;
+import com.example.rcksuporte05.rcksistemas.model.CadastroAnexo;
 import com.example.rcksuporte05.rcksistemas.model.Cliente;
 import com.example.rcksuporte05.rcksistemas.util.MascaraUtil;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by RCKSUPORTE05 on 10/10/2017.
@@ -29,6 +34,9 @@ public class ClienteHelper {
     private static CadastroCliente6 cadastroCliente6;
     private static CadastroCliente7 cadastroCliente7;
     private static CadastroCliente8 cadastroCliente8;
+    private static CadastroCliente9 cadastroCliente9;
+    private static List<CadastroAnexo> listaCadastroAnexo = new ArrayList<>();
+    private static List<CadastroAnexo> listaCadastroAnexoExcluidos = new ArrayList<>();
     private static int posicaoPais = -1;
     private static int posicaoUf = -1;
     private static int posicaoMunicipio = -1;
@@ -115,6 +123,30 @@ public class ClienteHelper {
 
     public static void setCadastroCliente8(CadastroCliente8 cadastroCliente8) {
         ClienteHelper.cadastroCliente8 = cadastroCliente8;
+    }
+
+    public static CadastroCliente9 getCadastroCliente9() {
+        return cadastroCliente9;
+    }
+
+    public static void setCadastroCliente9(CadastroCliente9 cadastroCliente9) {
+        ClienteHelper.cadastroCliente9 = cadastroCliente9;
+    }
+
+    public static List<CadastroAnexo> getListaCadastroAnexo() {
+        return listaCadastroAnexo;
+    }
+
+    public static void setListaCadastroAnexo(List<CadastroAnexo> listaCadastroAnexo) {
+        ClienteHelper.listaCadastroAnexo = listaCadastroAnexo;
+    }
+
+    public static List<CadastroAnexo> getListaCadastroAnexoExcluidos() {
+        return listaCadastroAnexoExcluidos;
+    }
+
+    public static void setListaCadastroAnexoExcluidos(List<CadastroAnexo> listaCadastroAnexoExcluidos) {
+        ClienteHelper.listaCadastroAnexoExcluidos = listaCadastroAnexoExcluidos;
     }
 
     public static int getPosicaoPais() {
@@ -330,6 +362,12 @@ public class ClienteHelper {
         cadastroCliente3 = null;
         cadastroCliente4 = null;
         cadastroCliente5 = null;
+        cadastroCliente6 = null;
+        cadastroCliente7 = null;
+        cadastroCliente8 = null;
+        cadastroCliente9 = null;
+        listaCadastroAnexo = null;
+        listaCadastroAnexoExcluidos = null;
         posicaoPais = -1;
         posicaoUf = -1;
         posicaoMunicipio = -1;

@@ -421,9 +421,16 @@ public class ActivityListaProspect extends AppCompatActivity {
                             finish();
                         }
                         break;
-                    default:
+                    case 500:
                         progress.dismiss();
                         Toast.makeText(ActivityListaProspect.this, "Erro, não foi possivel enviar o prospect", Toast.LENGTH_SHORT).show();
+                        listaProspectAdapter.clearSelections();
+                        actionMode.finish();
+                        actionMode = null;
+                        break;
+                    default:
+                        progress.dismiss();
+                        Toast.makeText(ActivityListaProspect.this, "Erro não catalogado: " + response.code(), Toast.LENGTH_SHORT).show();
                         listaProspectAdapter.clearSelections();
                         actionMode.finish();
                         actionMode = null;
@@ -434,8 +441,10 @@ public class ActivityListaProspect extends AppCompatActivity {
             @Override
             public void onFailure(Call<List<Prospect>> call, Throwable t) {
                 progress.dismiss();
-                Toast.makeText(ActivityListaProspect.this, "Falhou tente novamente, ou entre em contato com o suporte", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ActivityListaProspect.this, "Falhou, tente novamente, ou entre em contato com o suporte", Toast.LENGTH_SHORT).show();
                 listaProspectAdapter.clearSelections();
+                actionMode.finish();
+                actionMode = null;
             }
         });
 

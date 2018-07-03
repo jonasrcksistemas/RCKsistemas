@@ -34,7 +34,7 @@ public class CadastroCliente4 extends Fragment implements ListaContatoAdapter.Li
     @BindView(R.id.btnAddContato)
     FloatingActionButton btnAddContato;
 
-    ListaContatoAdapter listaContatoAdapter;
+    private ListaContatoAdapter listaContatoAdapter;
 
     @Nullable
     @Override
@@ -42,12 +42,12 @@ public class CadastroCliente4 extends Fragment implements ListaContatoAdapter.Li
         View view = inflater.inflate(R.layout.activity_cadastro_cliente4, container, false);
         ButterKnife.bind(this, view);
 
-        recyclerContatos.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerContatos.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayout.VERTICAL));
+        recyclerContatos.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerContatos.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayout.VERTICAL));
 
         preencheListaContatos();
 
-        if (ClienteHelper.getCliente().getId_cadastro_servidor() > 0) {
+        if (getActivity().getIntent().getIntExtra("vizualizacao", 0) >= 1) {
             btnAddContato.setVisibility(View.GONE);
         }
 
@@ -63,7 +63,7 @@ public class CadastroCliente4 extends Fragment implements ListaContatoAdapter.Li
 
     @OnClick(R.id.btnAddContato)
     public void abrirTela() {
-        Intent intent = new Intent(getContext(), ActivityAdicionaContato.class);
+        Intent intent = new Intent(getActivity(), ActivityAdicionaContato.class);
         intent.putExtra("visualizacao", 1);
         intent.putExtra("cliente", 1);
         startActivity(intent);
@@ -71,7 +71,7 @@ public class CadastroCliente4 extends Fragment implements ListaContatoAdapter.Li
 
     @Override
     public void onClick(int position) {
-        Intent intent = new Intent(getContext(), ActivityAdicionaContato.class);
+        Intent intent = new Intent(getActivity(), ActivityAdicionaContato.class);
         intent.putExtra("contato", position);
         intent.putExtra("cliente", 1);
         startActivity(intent);

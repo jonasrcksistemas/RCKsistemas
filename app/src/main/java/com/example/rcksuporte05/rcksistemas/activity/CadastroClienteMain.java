@@ -1,5 +1,6 @@
 package com.example.rcksuporte05.rcksistemas.activity;
 
+import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -7,10 +8,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
+import com.example.rcksuporte05.rcksistemas.BO.CadastroAnexoBO;
+import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.TabsAdapterCliente;
+import com.example.rcksuporte05.rcksistemas.model.CadastroAnexo;
 import com.example.rcksuporte05.rcksistemas.util.SlidingTabLayout;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,6 +47,8 @@ public class CadastroClienteMain extends AppCompatActivity {
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                if (ClienteHelper.getCadastroCliente8() != null)
+                    ClienteHelper.getCadastroCliente8().finishActionMode();
                 switch (position) {
                     case 0:
                         if (ClienteHelper.getCadastroCliente1() != null) {
@@ -67,9 +75,9 @@ public class CadastroClienteMain extends AppCompatActivity {
                             ClienteHelper.getCadastroCliente7().inserirDadosDaFrame();
                         }
                         break;
-                    case 7:
-                        if (ClienteHelper.getCadastroCliente8() != null) {
-                            ClienteHelper.getCadastroCliente8().inserirDadosDaFrame();
+                    case 8:
+                        if (ClienteHelper.getCadastroCliente9() != null) {
+                            ClienteHelper.getCadastroCliente9().inserirDadosDaFrame();
                         }
                         break;
                 }
@@ -85,6 +93,30 @@ public class CadastroClienteMain extends AppCompatActivity {
 
             }
         });
+
+        DBHelper db = new DBHelper(this);
+        if (db.contagem("SELECT COUNT(ID_ANEXO) FROM TBL_CADASTRO_ANEXOS WHERE ID_CADASTRO = " + ClienteHelper.getCliente().getId_cadastro() + " AND EXCLUIDO = 'N';") > 0) {
+            final ProgressDialog progress = new ProgressDialog(this);
+            progress.setTitle("Aguarde");
+            progress.setMessage("Carregando anexos do cliente");
+            progress.setCancelable(false);
+            progress.show();
+            final CadastroAnexoBO cadastroAnexoBO = new CadastroAnexoBO();
+            Thread a = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    List<CadastroAnexo> listaCadastroAnexo = cadastroAnexoBO.listaCadastroAnexoComMiniatura(CadastroClienteMain.this, ClienteHelper.getCliente().getId_cadastro());
+                    ClienteHelper.setListaCadastroAnexo(listaCadastroAnexo);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            progress.dismiss();
+                        }
+                    });
+                }
+            });
+            a.start();
+        }
 
         ClienteHelper.setCadastroClienteMain(this);
 
