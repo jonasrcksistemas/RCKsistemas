@@ -20,6 +20,7 @@ import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
@@ -27,8 +28,10 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.example.rcksuporte05.rcksistemas.DAO.CadastroAnexoDAO;
+import com.example.rcksuporte05.rcksistemas.DAO.CadastroFinanceiroResumoDAO;
 import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
+import com.example.rcksuporte05.rcksistemas.Helper.HistoricoFinanceiroHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.UsuarioHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.ListaClienteAdapter;
@@ -72,6 +75,9 @@ public class ActivityCliente extends AppCompatActivity {
     @BindView(R.id.filtraClientesNaoEfetivados)
     RadioButton filtraClientesNaoEfetivados;
 
+    @BindView(R.id.btnInserirCliente)
+    Button btnInserirCliente;
+
     private DBHelper db = new DBHelper(this);
     private ListaClienteAdapter listaClienteAdapter;
     private SearchView searchView;
@@ -103,6 +109,8 @@ public class ActivityCliente extends AppCompatActivity {
             filtraClientesEfetivados.setClickable(false);
             filtraClientesNaoEfetivados.setEnabled(false);
             filtraTodosClientes.setEnabled(false);
+
+            btnInserirCliente.setVisibility(View.GONE);
         }
 
         rgFiltraCliente.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -252,29 +260,32 @@ public class ActivityCliente extends AppCompatActivity {
             listaClienteAdapter = new ListaClienteAdapter(clientes, new ListaClienteAdapter.ClienteAdapterListener() {
                 @Override
                 public void onClickListener(int position) {
-                    if (listaClienteAdapter.getSelectedItensCount() > 0) {
-                        enableActionMode(position);
+                    if (listaClienteAdapter.getItem(position).getIdCategoria() <= 0) {
+                        AlertDialog.Builder alert = new AlertDialog.Builder(ActivityCliente.this);
+                        alert.setTitle("Atenção");
+                        alert.setMessage("Este cliente não tem categoria definida");
+                        alert.setNeutralButton("OK", null);
+                        alert.show();
                     } else {
-                        if (listaClienteAdapter.getItem(position).getIdCategoria() <= 0) {
-                            AlertDialog.Builder alert = new AlertDialog.Builder(ActivityCliente.this);
-                            alert.setTitle("Atenção");
-                            alert.setMessage("Este cliente não tem categoria definida");
-                            alert.setNeutralButton("OK", null);
-                            alert.show();
-                        } else {
+                        try {
                             ActivityPedidoMain activityPedidoMain = new ActivityPedidoMain();
                             Pedido2 pedido2 = new Pedido2();
                             activityPedidoMain.pegaCliente(listaClienteAdapter.getItem(position));
                             pedido2.pegaCliente(listaClienteAdapter.getItem(position));
+                            CadastroFinanceiroResumoDAO cadastroFinanceiroResumoDAO = new CadastroFinanceiroResumoDAO(db);
+                            HistoricoFinanceiroHelper.setCadastroFinanceiroResumo(cadastroFinanceiroResumoDAO.listaCadastroFinanceiroResumo(ClienteHelper.getCliente().getId_cadastro_servidor()));
                             System.gc();
                             finish();
+                        } catch (CursorIndexOutOfBoundsException e) {
+                            e.printStackTrace();
+                            Toast.makeText(ActivityCliente.this, "Financeiro não encontrado, por favor faça a sincronia e tente novamente!", Toast.LENGTH_LONG).show();
                         }
                     }
                 }
 
                 @Override
                 public void onLongClickListener(int position) {
-                    enableActionMode(position);
+
                 }
             });
 
@@ -361,6 +372,9 @@ public class ActivityCliente extends AppCompatActivity {
                                             for (Cliente cliente : listaClienteAdapter.getItensSelecionados()) {
                                                 db.excluirClienteLocal(cliente);
                                             }
+                                            actionMode.finish();
+                                            listaClienteAdapter.clearSelection();
+                                            actionMode = null;
                                             onResume();
                                         }
                                     });
@@ -389,7 +403,6 @@ public class ActivityCliente extends AppCompatActivity {
         }
     }
 
-
     public void toggleSelection(int position) {
         listaClienteAdapter.toggleSelection(position);
         if (listaClienteAdapter.getSelectedItensCount() == 0) {
@@ -412,8 +425,12 @@ public class ActivityCliente extends AppCompatActivity {
         Map<String, String> cabecalho = new HashMap<>();
         cabecalho.put("AUTHORIZATION", UsuarioHelper.getUsuario().getToken());
         final CadastroAnexoDAO cadastroAnexoDAO = new CadastroAnexoDAO(db);
-        for (Cliente cliente : listaClientes) {
-            cliente.setListaCadastroAnexo(cadastroAnexoDAO.enviarCadastroAnexo(cliente.getId_cadastro()));
+        try {
+            for (Cliente cliente : listaClientes) {
+                cliente.setListaCadastroAnexo(cadastroAnexoDAO.enviarCadastroAnexo(cliente.getId_cadastro()));
+            }
+        } catch (CursorIndexOutOfBoundsException e) {
+            e.printStackTrace();
         }
         Call<List<Cliente>> call = apiRetrofit.salvarClientes(cabecalho, listaClientes);
 

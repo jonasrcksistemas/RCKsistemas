@@ -38,7 +38,7 @@ public class CadastroAnexoAdapter extends RecyclerView.Adapter<CadastroAnexoView
     public void onBindViewHolder(@NonNull CadastroAnexoViewHolder holder, int position) {
         holder.txtPosition.setText(String.valueOf(position + 1));
 
-        holder.txtNomeAnexo.setText(cadastroAnexo.get(position).getNomeAnexo());
+        holder.txtNomeAnexo.setText(cadastroAnexo.get(position).getNomeAnexo().replace(".jpg", ""));
 
         holder.imAnexo.setImageBitmap(cadastroAnexo.get(position).getMiniatura());
 

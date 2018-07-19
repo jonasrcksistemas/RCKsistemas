@@ -238,7 +238,7 @@ public class ClienteHelper {
             }
             cadastroCliente1.edtCpfCnpj.setError("Campo Obrigatorio");
             cadastroCliente1.edtCpfCnpj.requestFocus();
-        } else if (cliente.getCpf_cnpj().equals("F")) {
+        } else if (cliente.getPessoa_f_j().equals("F")) {
             if (!MascaraUtil.isValidCPF(cliente.getCpf_cnpj())) {
                 if (verificaMovimento) {
                     verificaMovimento = false;
@@ -247,7 +247,7 @@ public class ClienteHelper {
                 cadastroCliente1.edtCpfCnpj.setError("CPF Inválido");
                 cadastroCliente1.edtCpfCnpj.requestFocus();
             }
-        } else if (cliente.getCpf_cnpj().equals("J")) {
+        } else if (cliente.getPessoa_f_j().equals("J")) {
             if (!MascaraUtil.isValidCNPJ(cliente.getCpf_cnpj())) {
                 if (verificaMovimento) {
                     verificaMovimento = false;
@@ -258,7 +258,7 @@ public class ClienteHelper {
             }
         }
 
-        if (cliente.getPessoa_f_j() != null && cliente.getPessoa_f_j().equals("J")) {
+        if (cliente.getInd_da_ie_destinatario() != null && cliente.getInd_da_ie_destinatario().equals("1")) {
             if (Integer.parseInt(cliente.getInd_da_ie_destinatario()) == 1) {
                 if (cliente.getInscri_estadual() == null || cliente.getInscri_estadual().trim().isEmpty()) {
                     if (verificaMovimento) {
@@ -268,6 +268,15 @@ public class ClienteHelper {
                     cadastroCliente1.edtInscEstadual.setError("Campo Obrigatorio");
                     cadastroCliente1.edtInscEstadual.requestFocus();
                 }
+            }
+        }
+
+        if (cliente.getDiaVisita() == null || cliente.getDiaVisita().trim().isEmpty()) {
+            if (verificaMovimento) {
+                verificaMovimento = false;
+                moveTela(0);
+                Toast.makeText(cadastroClienteMain, "Escolha um dia da semana para a Visita", Toast.LENGTH_LONG).show();
+                cadastroCliente1.rgRotaCliente.requestFocus();
             }
         }
         //Tela 2
@@ -309,6 +318,14 @@ public class ClienteHelper {
             }
             cadastroCliente2.edtCep.requestFocus();
             cadastroCliente2.edtCep.setError("Campo Obrigatorio");
+        }
+
+        if (cliente.getSituacaoPredio() == null || cliente.getSituacaoPredio().trim().isEmpty()) {
+            if (verificaMovimento) {
+                verificaMovimento = false;
+                Toast.makeText(cadastroClienteMain, "Informe a situação do Predio", Toast.LENGTH_LONG).show();
+                moveTela(1);
+            }
         }
 
         //Tela 4

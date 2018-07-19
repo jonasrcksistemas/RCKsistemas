@@ -1,0 +1,20 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:mContext="com.example.rcksuporte05.rcksistemas.activity.ListagemPedidoEnviado">
+
+    <item
+        android:id="@+id/action_delete"
+        android:icon="@drawable/ic_delete_white_24dp"
+        android:orderInCategory="2"
+        android:title="Deletar os produtos selecionados"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/viraCliente"
+        android:icon="@mipmap/ic_vira_cliente"
+        android:orderInCategory="1"
+        android:title="Transformar prospect em cliente"
+        app:showAsAction="always" />
+
+</menu>

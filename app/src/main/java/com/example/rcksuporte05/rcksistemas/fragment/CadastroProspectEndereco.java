@@ -39,11 +39,9 @@ public class CadastroProspectEndereco extends Fragment {
     @BindView(R.id.edtCep)
     public EditText edtCep;
 
-    @BindView(R.id.rgSituacaoPredio)
-    public RadioGroup rgSituacaoPredio;
-
     @BindView(R.id.spMunicipioProspect)
     public Spinner spMunicipioProspect;
+
 
     @BindView(R.id.spPaisProspect)
     public Spinner spPaisProspect;
@@ -53,6 +51,8 @@ public class CadastroProspectEndereco extends Fragment {
 
     @BindView(R.id.edtComplementoProspect)
     public EditText edtComplementoProspect;
+    @BindView(R.id.rgSituacaoPredio)
+    public RadioGroup rgSituacaoPredio;
 
     @BindView(R.id.rdAlugado)
     RadioButton rdAlugado;

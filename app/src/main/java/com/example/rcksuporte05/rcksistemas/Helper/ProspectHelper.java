@@ -229,7 +229,6 @@ public class ProspectHelper {
             cadastroProspectGeral.edtNomeClienteProspect.requestFocus();
         }
 
-
         if (prospect.getNome_cadastro() == null || prospect.getNome_cadastro().trim().equals("")) {
             if (verificaMovimento) {
                 verificaMovimento = false;
@@ -438,13 +437,13 @@ public class ProspectHelper {
         }*/
 
         if (verificaMovimento) {
-            if (localizacao == null) {
+            if (prospect.getLatitude() == null && prospect.getLongitude() == null) {
                 Toast.makeText(activityMain, "Fazer Check-in é obrigatório", Toast.LENGTH_LONG).show();
                 verificaMovimento = false;
-            } else {
+            } /*else {
                 prospect.setLatitude(String.valueOf(localizacao.getLatitude()));
                 prospect.setLongitude(String.valueOf(localizacao.getLongitude()));
-            }
+            }*/
         }
 
         return verificaMovimento;

@@ -154,32 +154,31 @@ public class Pedido2 extends Fragment {
                         alert.show();
                     } else {
                         dialog.dismiss();
-                    /*AlertDialog.Builder alert = new AlertDialog.Builder(PedidoHelper.getActivityPedidoMain());
-                    alert.setTitle("Atenção!");
-                    alert.setMessage("O pedido não foi salvo!");
-                    alert.setNeutralButton("OK", null);
-                    alert.show();*/
                     }
                 } else {
-                    if (pedidoHelper.validaCredito()) {
-                        dialog.dismiss();
-                        AlertDialog.Builder alert = new AlertDialog.Builder(PedidoHelper.getActivityPedidoMain());
-                        alert.setTitle("Pedido salvo com sucesso!");
-                        alert.setMessage("Pedido com crédito Aprovado");
-                        alert.setNeutralButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                PedidoHelper.getActivityPedidoMain().finish();
-                            }
-                        });
-                        alert.setCancelable(false);
-                        alert.show();
+                    if (pedidoHelper.salvaPedido()) {
+                        if (pedidoHelper.validaCredito()) {
+                            dialog.dismiss();
+                            AlertDialog.Builder alert = new AlertDialog.Builder(PedidoHelper.getActivityPedidoMain());
+                            alert.setTitle("Pedido salvo com sucesso!");
+                            alert.setMessage("Pedido com crédito Aprovado");
+                            alert.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    PedidoHelper.getActivityPedidoMain().finish();
+                                }
+                            });
+                            alert.setCancelable(false);
+                            alert.show();
+                        } else {
+                            Intent intent = new Intent(getActivity(), activityAnaliseDeCredito.class);
+                            intent.putExtra("valorPedido", PedidoHelper.getValorVenda());
+                            HistoricoFinanceiroHelper.setCliente(objetoCliente);
+                            dialog.dismiss();
+                            startActivity(intent);
+                        }
                     } else {
-                        Intent intent = new Intent(getActivity(), activityAnaliseDeCredito.class);
-                        intent.putExtra("valorPedido", PedidoHelper.getValorVenda());
-                        HistoricoFinanceiroHelper.setCliente(objetoCliente);
                         dialog.dismiss();
-                        startActivity(intent);
                     }
                 }
             }

@@ -1,6 +1,5 @@
 package com.example.rcksuporte05.rcksistemas.fragment;
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.CursorIndexOutOfBoundsException;
@@ -53,15 +52,11 @@ public class Pedido1 extends Fragment implements ListaAdapterProdutoPedido.Produ
         return listaAdapterProdutoPedido;
     }
 
-    public static void setListaAdapterProdutoPedido(ListaAdapterProdutoPedido listaAdapterProdutoPedido) {
-        Pedido1.listaAdapterProdutoPedido = listaAdapterProdutoPedido;
-    }
-
-    public static void removeProdutos(final List<WebPedidoItens> webPedidoItens, Context context) {
+    public static void removeProdutos(final List<WebPedidoItens> webPedidoItens) {
         for (WebPedidoItens webPedidoIten : webPedidoItens) {
             listaProdutoPedido.remove(webPedidoIten);
             if (PedidoHelper.getIdPedido() > 0) {
-                listaProdutoRemovido = webPedidoItens;
+                listaProdutoRemovido.add(webPedidoIten);
             }
         }
         listaAdapterProdutoPedido.getList(listaProdutoPedido);
@@ -163,11 +158,15 @@ public class Pedido1 extends Fragment implements ListaAdapterProdutoPedido.Produ
     public void onResume() {
         PedidoHelper.calculaValorPedido(listaProdutoPedido, PedidoHelper.getActivityPedidoMain());
         if (ClienteHelper.getCliente() != null) {
-            cadastroFinanceiroResumoDAO = new CadastroFinanceiroResumoDAO(db);
-            HistoricoFinanceiroHelper.setCadastroFinanceiroResumo(cadastroFinanceiroResumoDAO.listaCadastroFinanceiroResumo(ClienteHelper.getCliente().getId_cadastro_servidor()));
-            if (HistoricoFinanceiroHelper.getCadastroFinanceiroResumo().getFinanceiroVencido() > 0) {
-                PedidoHelper.pintaTxtNomeCliente();
-                Toast.makeText(getActivity(), "Este cliente possui pendências finaneiras!", Toast.LENGTH_LONG).show();
+            try {
+                cadastroFinanceiroResumoDAO = new CadastroFinanceiroResumoDAO(db);
+                HistoricoFinanceiroHelper.setCadastroFinanceiroResumo(cadastroFinanceiroResumoDAO.listaCadastroFinanceiroResumo(ClienteHelper.getCliente().getId_cadastro_servidor()));
+                if (HistoricoFinanceiroHelper.getCadastroFinanceiroResumo().getFinanceiroVencido() > 0) {
+                    PedidoHelper.pintaTxtNomeCliente();
+                    Toast.makeText(getActivity(), "Este cliente possui pendências finaneiras!", Toast.LENGTH_LONG).show();
+                }
+            } catch (CursorIndexOutOfBoundsException e) {
+                e.printStackTrace();
             }
         }
         if (listaProdutoPedido.size() > 0) {
@@ -240,6 +239,7 @@ public class Pedido1 extends Fragment implements ListaAdapterProdutoPedido.Produ
                     intent.putExtra("pedido", 1);
                     intent.putExtra("position", position);
                     PedidoHelper.setWebPedidoItem(listaProdutoPedido.get(position));
+                    PedidoHelper.setListaWebPedidoItens(listaProdutoPedido);
                     startActivity(intent);
                 } else {
                     Intent intent = new Intent(getContext(), ProdutoPedidoActivity.class);

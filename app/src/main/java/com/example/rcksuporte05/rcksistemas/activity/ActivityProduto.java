@@ -92,6 +92,7 @@ public class ActivityProduto extends AppCompatActivity {
                     }
                     Boolean produtoRepetido = false;
                     if (PedidoHelper.getListaWebPedidoItens() != null) {
+                        int i = 0;
                         for (final WebPedidoItens webPedidoItens : PedidoHelper.getListaWebPedidoItens()) {
                             if (webPedidoItens.getId_produto() == listaProdutoAdpter.getItem(position).getId_produto()) {
                                 produtoRepetido = true;
@@ -99,12 +100,14 @@ public class ActivityProduto extends AppCompatActivity {
                                 alert.setTitle("Atenção");
                                 alert.setMessage("O produto " + listaProdutoAdpter.getItem(position).getNome_produto() + " já esta nesse pedido, deseja alterá-lo?");
                                 alert.setNegativeButton("NÃO", null);
+                                final int posicao = i;
                                 alert.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
                                         PedidoHelper.setProduto(null);
                                         PedidoHelper.setWebPedidoItem(webPedidoItens);
                                         intent.putExtra("pedido", 1);
+                                        intent.putExtra("position", posicao);
                                         startActivity(intent);
                                         finish();
                                     }
@@ -112,6 +115,7 @@ public class ActivityProduto extends AppCompatActivity {
                                 alert.show();
                                 break;
                             }
+                            i++;
                         }
                     }
                     if (!produtoRepetido) {
@@ -141,8 +145,8 @@ public class ActivityProduto extends AppCompatActivity {
                                 produtoRepetido = true;
                                 AlertDialog.Builder alert = new AlertDialog.Builder(ActivityProduto.this);
                                 alert.setTitle("Atenção");
-                                alert.setMessage("O produto " + listaProdutoAdpter.getItem(position).getNome_produto() + " já esta nesse pedido, deseja alterá-lo?");
-                                alert.setNegativeButton("NÃO", null);
+                                alert.setMessage("O produto " + listaProdutoAdpter.getItem(position).getNome_produto() + " já esta nesse pedido e não pode ser lançado novamente, somente alterado!");
+                                /*alert.setNegativeButton("NÃO", null);
                                 alert.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
                                     @Override
                                     public void onClick(DialogInterface dialog, int which) {
@@ -151,7 +155,8 @@ public class ActivityProduto extends AppCompatActivity {
                                         PedidoHelper.getProdutoPedidoActivity().getIntent().putExtra("pedido", 1);
                                         finish();
                                     }
-                                });
+                                });*/
+                                alert.setNeutralButton("OK", null);
                                 alert.show();
                                 break;
                             }

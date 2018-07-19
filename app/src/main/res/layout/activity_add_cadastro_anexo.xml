@@ -28,7 +28,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/borda_edittext"
-                android:hint="Descrição do Anexo" />
+                android:hint="Descrição do Anexo"
+                android:inputType="textCapSentences"/>
 
         </LinearLayout>
 

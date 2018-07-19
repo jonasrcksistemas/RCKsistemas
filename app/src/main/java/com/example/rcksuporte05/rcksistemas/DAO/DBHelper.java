@@ -176,6 +176,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 " ID_EMPRESA_MULTIDEVICE INTEGER," +
                 " ID_CATEGORIA INTEGER," +
                 " ID_VENDEDOR INTEGER," +
+                " SITUACAO_PREDIO VARCHAR(1)," +
+                " DIA_VISITA VARCHAR(20)," +
                 " ALTERADO VARCHAR(1) DEFAULT 'N');");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS TBL_PRODUTO (ATIVO VARCHAR(1) DEFAULT 'S'  NOT NULL," +
@@ -702,6 +704,8 @@ public class DBHelper extends SQLiteOpenHelper {
                             " ID_EMPRESA_MULTIDEVICE INTEGER," +
                             " ID_CATEGORIA INTEGER," +
                             " ID_VENDEDOR INTEGER," +
+                            " SITUACAO_PREDIO VARCHAR(1)," +
+                            " DIA_VISITA VARCHAR(20)," +
                             " ALTERADO VARCHAR(1) DEFAULT 'N');");
 
                     db.execSQL("CREATE TABLE IF NOT EXISTS TBL_CADASTRO_ANEXOS(ID_ANEXO INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
@@ -1604,6 +1608,8 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("ID_CATEGORIA", cliente.getIdCategoria());
         content.put("ID_VENDEDOR", cliente.getId_vendedor());
         content.put("ALTERADO", "N");
+        content.put("SITUACAO_PREDIO", cliente.getSituacaoPredio());
+        content.put("DIA_VISITA", cliente.getDiaVisita());
 
         atualizarTBL_REFERENCIA_BANCARIA(cliente.getReferenciasBancarias(), String.valueOf(cliente.getId_cadastro()));
         atualizarTBL_REFERENCIA_COMERCIAL(cliente.getReferenciasComerciais(), String.valueOf(cliente.getId_cadastro()));
@@ -1717,6 +1723,8 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("ID_CATEGORIA", cliente.getIdCategoria());
         content.put("ID_VENDEDOR", cliente.getId_vendedor());
         content.put("ALTERADO", cliente.getAlterado());
+        content.put("SITUACAO_PREDIO", cliente.getSituacaoPredio());
+        content.put("DIA_VISITA", cliente.getDiaVisita());
 
         atualizarTBL_REFERENCIA_BANCARIA(cliente.getReferenciasBancarias(), String.valueOf(cliente.getId_cadastro()));
         atualizarTBL_REFERENCIA_COMERCIAL(cliente.getReferenciasComerciais(), String.valueOf(cliente.getId_cadastro()));
@@ -2155,6 +2163,8 @@ public class DBHelper extends SQLiteOpenHelper {
             cliente.setIdCategoria(cursor.getInt(cursor.getColumnIndex("ID_CATEGORIA")));
             cliente.setId_vendedor(cursor.getInt(cursor.getColumnIndex("ID_VENDEDOR")));
             cliente.setAlterado(cursor.getString(cursor.getColumnIndex("ALTERADO")));
+            cliente.setSituacaoPredio(cursor.getString(cursor.getColumnIndex("SITUACAO_PREDIO")));
+            cliente.setDiaVisita(cursor.getString(cursor.getColumnIndex("DIA_VISITA")));
 
             lista.add(cliente);
             System.gc();

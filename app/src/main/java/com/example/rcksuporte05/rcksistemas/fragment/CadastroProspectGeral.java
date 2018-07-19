@@ -54,14 +54,14 @@ public class CadastroProspectGeral extends Fragment {
     @BindView(R.id.spPessoaProspect)
     public Spinner spPessoaProspect;
 
-    @BindView(R.id.rgRotaProspect)
-    public RadioGroup rgRotaProspect;
-
     @BindView(R.id.txtIdProspect)
     public TextView txtIdProspect;
 
-    @BindView(R.id.rdSegrospect)
-    RadioButton rdSegrospect;
+    @BindView(R.id.rgRotaProspect)
+    public RadioGroup rgRotaProspect;
+
+    @BindView(R.id.rdSegundaProspect)
+    RadioButton rdSegundaProspect;
 
     @BindView(R.id.rdTercaProspect)
     RadioButton rdTercaProspect;
@@ -169,9 +169,9 @@ public class CadastroProspectGeral extends Fragment {
             edtInscEstadualProspect.setFocusable(false);
             edtInscMunicipalProspect.setFocusable(false);
             spPessoaProspect.setEnabled(false);
-            rgRotaProspect.setClickable(false);
             txtIdProspect.setClickable(false);
-            rdSegrospect.setClickable(false);
+            rgRotaProspect.setClickable(false);
+            rdSegundaProspect.setClickable(false);
             rdTercaProspect.setClickable(false);
             rdQuartaProspect.setClickable(false);
             rdQuintaProspect.setClickable(false);
@@ -220,7 +220,7 @@ public class CadastroProspectGeral extends Fragment {
         if (ProspectHelper.getProspect().getDiaVisita() != null && !ProspectHelper.getProspect().getDiaVisita().trim().isEmpty()) {
             switch (ProspectHelper.getProspect().getDiaVisita()) {
                 case "segunda":
-                    rdSegrospect.setChecked(true);
+                    rdSegundaProspect.setChecked(true);
                     break;
                 case "terça":
                     rdTercaProspect.setChecked(true);

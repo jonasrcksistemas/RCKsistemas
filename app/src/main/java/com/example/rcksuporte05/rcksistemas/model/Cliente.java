@@ -98,35 +98,40 @@ public class Cliente {
     private List<ReferenciaComercial> referenciasComerciais = new ArrayList<>();
     private List<Contato> listaContato = new ArrayList<>();
     private List<CadastroAnexo> listaCadastroAnexo = new ArrayList<>();
+    private String situacaoPredio;
+    private String diaVisita;
 
     public Cliente(Prospect prospect) {
-        this.setId_vendedor(prospect.getIdVendedor());
-        this.setIdCategoria(prospect.getIdCategoria());
-        this.setId_prospect(Integer.parseInt(prospect.getId_prospect()));
-        this.setSegmento(prospect.getSegmento());
-        this.setReferenciasBancarias(prospect.getReferenciasBancarias());
-        this.setReferenciasComerciais(prospect.getReferenciasComerciais());
-        this.setListaContato(prospect.getListaContato());
-        this.setNome_cadastro(prospect.getNome_cadastro());
-        this.setNome_fantasia(prospect.getNome_fantasia());
-        this.setPessoa_f_j(prospect.getPessoa_f_j());
-        this.setCpf_cnpj(prospect.getCpf_cnpj());
-        this.setInscri_estadual(prospect.getInscri_estadual());
-        this.setInscri_municipal(prospect.getInscri_municipal());
-        this.setEndereco(prospect.getEndereco());
-        this.setEndereco_bairro(prospect.getEndereco_bairro());
-        this.setEndereco_numero(prospect.getEndereco_numero());
-        this.setEndereco_complemento(prospect.getEndereco_complemento());
-        this.setEndereco_uf(prospect.getEndereco_uf());
-        this.setNome_municipio(prospect.getNome_municipio());
-        this.setEndereco_cep(prospect.getEndereco_cep());
-        this.setId_pais(Integer.parseInt(prospect.getId_pais()));
-        this.setUsuario_id(Integer.parseInt(prospect.getUsuario_id()));
-        this.setUsuario_data(prospect.getUsuario_data());
-        this.setId_empresa(Integer.parseInt(prospect.getIdEmpresa()));
-        this.setObservacoes_faturamento(prospect.getObservacoesComerciais());
-        this.setInd_da_ie_destinatario(prospect.getInd_da_ie_destinatario_prospect());
-        this.setUsuario_nome(prospect.getUsuario_nome());
+        this.id_vendedor = prospect.getIdVendedor();
+        this.idCategoria = prospect.getIdCategoria();
+        this.id_prospect = Integer.parseInt(prospect.getId_prospect());
+        this.segmento = prospect.getSegmento();
+        this.referenciasBancarias = prospect.getReferenciasBancarias();
+        this.referenciasComerciais = prospect.getReferenciasComerciais();
+        this.listaContato = prospect.getListaContato();
+        this.nome_cadastro = prospect.getNome_cadastro();
+        this.nome_fantasia = prospect.getNome_fantasia();
+        this.pessoa_f_j = prospect.getPessoa_f_j();
+        this.cpf_cnpj = prospect.getCpf_cnpj();
+        this.inscri_estadual = prospect.getInscri_estadual();
+        this.inscri_municipal = prospect.getInscri_municipal();
+        this.endereco = prospect.getEndereco();
+        this.endereco_bairro = prospect.getEndereco_bairro();
+        this.endereco_numero = prospect.getEndereco_numero();
+        this.endereco_complemento = prospect.getEndereco_complemento();
+        this.endereco_uf = prospect.getEndereco_uf();
+        this.nome_municipio = prospect.getNome_municipio();
+        this.endereco_cep = prospect.getEndereco_cep();
+        this.id_pais = Integer.parseInt(prospect.getId_pais());
+        this.usuario_id = Integer.parseInt(prospect.getUsuario_id());
+        this.usuario_data = prospect.getUsuario_data();
+        this.situacaoPredio = prospect.getSituacaoPredio();
+        this.limite_credito = prospect.getLimiteDeCreditoSugerido();
+        this.id_empresa = Integer.parseInt(prospect.getIdEmpresa());
+        this.diaVisita = prospect.getDiaVisita();
+        this.observacoes_faturamento = prospect.getObservacoesComerciais();
+        this.ind_da_ie_destinatario = prospect.getInd_da_ie_destinatario_prospect();
+        this.usuario_nome = prospect.getUsuario_nome();
     }
 
     public Cliente() {
@@ -874,6 +879,22 @@ public class Cliente {
 
     public void setListaCadastroAnexo(List<CadastroAnexo> listaCadastroAnexo) {
         this.listaCadastroAnexo = listaCadastroAnexo;
+    }
+
+    public String getSituacaoPredio() {
+        return situacaoPredio;
+    }
+
+    public void setSituacaoPredio(String situacaoPredio) {
+        this.situacaoPredio = situacaoPredio;
+    }
+
+    public String getDiaVisita() {
+        return diaVisita;
+    }
+
+    public void setDiaVisita(String diaVisita) {
+        this.diaVisita = diaVisita;
     }
 }
 

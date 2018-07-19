@@ -1,5 +1,6 @@
 package com.example.rcksuporte05.rcksistemas.fragment;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -8,8 +9,9 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
@@ -31,12 +33,20 @@ public class CadastroCliente2 extends Fragment {
     public EditText edtCep;
     @BindView(R.id.edtEndereco)
     public EditText edtEndereco;
+    @BindView(R.id.rgSituacaoPredio)
+    public RadioGroup rgSituacaoPredio;
     @BindView(R.id.edtPais)
     Spinner edtPais;
     @BindView(R.id.edtUf)
     Spinner edtUf;
     @BindView(R.id.edtMunicipio)
     Spinner edtMunicipio;
+    @BindView(R.id.rdAlugado)
+    RadioButton rdAlugado;
+
+    @BindView(R.id.rdProprio)
+    RadioButton rdProprio;
+
     private int[] listaUf = {R.array.AC,
             R.array.AL,
             R.array.AM,
@@ -70,10 +80,11 @@ public class CadastroCliente2 extends Fragment {
     private ArrayAdapter ufAdapter;
     private ArrayAdapter<Pais> paisAdapter;
     private List<Pais> listaPaises = new ArrayList<>();
+    private View view;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_cadastro_cliente2, container, false);
+        view = inflater.inflate(R.layout.activity_cadastro_cliente2, container, false);
         ButterKnife.bind(this, view);
 
         DBHelper db = new DBHelper(getActivity());
@@ -141,6 +152,9 @@ public class CadastroCliente2 extends Fragment {
             edtPais.setEnabled(false);
             edtUf.setEnabled(false);
             edtMunicipio.setEnabled(false);
+            rgSituacaoPredio.setClickable(false);
+            rdAlugado.setClickable(false);
+            rdProprio.setClickable(false);
 
             if (ClienteHelper.getCliente().getEndereco_cep() != null) {
                 String cep = ClienteHelper.getCliente().getEndereco_cep().trim().replaceAll("[^0-9]", "");
@@ -177,7 +191,7 @@ public class CadastroCliente2 extends Fragment {
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     if (ClienteHelper.getPosicaoMunicipio() > -1 && edtUf.getSelectedItemPosition() != ClienteHelper.getPosicaoUf())
                         ClienteHelper.setPosicaoMunicipio(0);
-                    if(paisAdapter != null) {
+                    if (paisAdapter != null) {
                         if (paisAdapter.getItem(edtPais.getSelectedItemPosition()).getId_pais().equals("1058")) {
                             municipioAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_activated_1, getResources().getStringArray(listaUf[position]));
                             edtMunicipio.setAdapter(municipioAdapter);
@@ -248,12 +262,24 @@ public class CadastroCliente2 extends Fragment {
         if (ClienteHelper.getCliente().getEndereco_bairro() != null)
             edtBairro.setText(ClienteHelper.getCliente().getEndereco_bairro());
 
+        if (ClienteHelper.getCliente().getSituacaoPredio() != null && !ClienteHelper.getCliente().getSituacaoPredio().trim().isEmpty()) {
+            switch (ClienteHelper.getCliente().getSituacaoPredio().toUpperCase()) {
+                case "ALUGADO":
+                    rdAlugado.setChecked(true);
+                    break;
+                case "PROPRIO":
+                    rdProprio.setChecked(true);
+                    break;
+            }
+        }
+
         System.gc();
 
         ClienteHelper.setCadastroCliente2(this);
         return view;
     }
 
+    @SuppressLint("ResourceType")
     public void inserirDadosDaFrame() {
         if (!edtNumero.getText().toString().trim().isEmpty())
             ClienteHelper.getCliente().setEndereco_numero(edtNumero.getText().toString());
@@ -281,6 +307,11 @@ public class CadastroCliente2 extends Fragment {
             ClienteHelper.getCliente().setNome_municipio(municipioAdapter.getItem(edtMunicipio.getSelectedItemPosition()).toString());
         } catch (ArrayIndexOutOfBoundsException e) {
             e.printStackTrace();
+        }
+
+        if (rgSituacaoPredio.getCheckedRadioButtonId() > 0) {
+            RadioButton rdSituacaoPredio = (RadioButton) view.findViewById(rgSituacaoPredio.getCheckedRadioButtonId());
+            ClienteHelper.getCliente().setSituacaoPredio(rdSituacaoPredio.getText().toString().toUpperCase());
         }
     }
 

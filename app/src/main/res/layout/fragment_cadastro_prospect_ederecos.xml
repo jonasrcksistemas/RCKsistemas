@@ -212,7 +212,6 @@
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
 
-
             <RadioGroup
                 android:id="@+id/rgSituacaoPredio"
                 android:layout_width="wrap_content"
@@ -234,7 +233,6 @@
                     android:text="PROPRIO" />
 
             </RadioGroup>
-
 
         </RelativeLayout>
     </ScrollView>

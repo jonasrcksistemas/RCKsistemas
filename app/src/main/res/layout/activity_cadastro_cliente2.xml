@@ -18,6 +18,42 @@
             android:paddingRight="@dimen/activity_horizontal_margin"
             android:paddingTop="@dimen/activity_vertical_margin">
 
+            <TextView
+                android:id="@+id/txtEndereco"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:text="ENDEREÇO"
+                android:textColor="@color/colorAccent"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/edtEndereco"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="21dp"
+                android:background="@drawable/borda_edittext"
+                android:hint="Endereço *"
+                android:inputType="textCapCharacters"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+            <TextView
+                android:id="@+id/txtNumero"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/edtEndereco"
+                android:layout_marginTop="12dp"
+                android:text="NUMERO"
+                android:textColor="@color/colorAccent"
+                android:textStyle="bold" />
+
             <EditText
                 android:id="@+id/edtNumero"
                 android:layout_width="match_parent"
@@ -33,14 +69,14 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
             <TextView
-                android:id="@+id/txtNumero"
+                android:id="@+id/txtBairo"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
-                android:layout_below="@+id/edtEndereco"
+                android:layout_below="@+id/edtNumero"
                 android:layout_marginTop="12dp"
-                android:text="NUMERO"
+                android:text="BAIRRO"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
 
@@ -57,18 +93,6 @@
                 android:hint="Bairro *"
                 android:inputType="textCapCharacters"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small" />
-
-            <TextView
-                android:id="@+id/txtBairo"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/edtNumero"
-                android:layout_marginTop="12dp"
-                android:text="BAIRRO"
-                android:textColor="@color/colorAccent"
-                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/txtPais"
@@ -126,6 +150,18 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/txtMunicipio" />
 
+            <TextView
+                android:id="@+id/txtCep"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/edtMunicipio"
+                android:layout_marginTop="12dp"
+                android:text="CEP"
+                android:textColor="@color/colorAccent"
+                android:textStyle="bold" />
+
             <EditText
                 android:id="@+id/edtCep"
                 android:layout_width="match_parent"
@@ -141,42 +177,38 @@
                 android:maxLength="8"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
-            <EditText
-                android:id="@+id/edtEndereco"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginTop="21dp"
-                android:background="@drawable/borda_edittext"
-                android:hint="Endereço *"
-                android:inputType="textCapCharacters"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
-
             <TextView
-                android:id="@+id/txtCep"
+                android:id="@+id/txtRdSituacaoPredio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_below="@+id/edtMunicipio"
+                android:layout_below="@+id/edtCep"
                 android:layout_marginTop="12dp"
-                android:text="CEP"
+                android:text="PREDIO *"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/txtEndereco"
+            <RadioGroup
+                android:id="@+id/rgSituacaoPredio"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentTop="true"
-                android:text="ENDEREÇO"
-                android:textColor="@color/colorAccent"
-                android:textStyle="bold" />
+                android:layout_below="@+id/txtRdSituacaoPredio"
+                android:orientation="horizontal">
 
+                <RadioButton
+                    android:id="@+id/rdAlugado"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ALUGADO" />
+
+                <RadioButton
+                    android:id="@+id/rdProprio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="45dp"
+                    android:text="PROPRIO" />
+
+            </RadioGroup>
 
         </RelativeLayout>
     </ScrollView>

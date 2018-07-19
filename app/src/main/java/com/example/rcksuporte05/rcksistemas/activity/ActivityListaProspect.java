@@ -277,9 +277,10 @@ public class ActivityListaProspect extends AppCompatActivity {
                     public boolean onCreateActionMode(ActionMode mode, Menu menu) {
                         if (listaProspectAdapter.getItem(position).getProspectSalvo().equals("S")) {
                             mode.getMenuInflater().inflate(R.menu.subir_vira_cliente, menu);
-                            viraCliente = menu.findItem(R.id.viraCliente);
-                        } else
-                            mode.getMenuInflater().inflate(R.menu.menu_action_mode_produtos, menu);
+                        } else {
+                            mode.getMenuInflater().inflate(R.menu.excluir_vira_cliente, menu);
+                        }
+                        viraCliente = menu.findItem(R.id.viraCliente);
                         return true;
                     }
 

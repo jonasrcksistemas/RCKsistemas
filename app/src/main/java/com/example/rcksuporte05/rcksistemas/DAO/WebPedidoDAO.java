@@ -20,7 +20,7 @@ public class WebPedidoDAO {
         ContentValues content = new ContentValues();
 
         content.put("ID_EMPRESA", webPedido.getId_empresa());
-        content.put("ID_CADASTRO", webPedido.getCadastro().getId_cadastro());
+        content.put("ID_CADASTRO", webPedido.getCadastro().getId_cadastro_servidor());
         content.put("ID_VENDEDOR", webPedido.getId_vendedor());
         content.put("ID_CONDICAO_PAGAMENTO", webPedido.getId_condicao_pagamento());
         content.put("ID_OPERACAO", webPedido.getId_operacao());
@@ -67,7 +67,7 @@ public class WebPedidoDAO {
 
         content.put("ID_WEB_PEDIDO", webPedido.getId_web_pedido());
         content.put("ID_EMPRESA", webPedido.getId_empresa());
-        content.put("ID_CADASTRO", webPedido.getCadastro().getId_cadastro());
+        content.put("ID_CADASTRO", webPedido.getCadastro().getId_cadastro_servidor());
         content.put("ID_VENDEDOR", webPedido.getId_vendedor());
         content.put("ID_CONDICAO_PAGAMENTO", webPedido.getId_condicao_pagamento());
         content.put("ID_OPERACAO", webPedido.getId_operacao());
@@ -121,7 +121,8 @@ public class WebPedidoDAO {
 
                 webPedido.setId_web_pedido(cursor.getString(cursor.getColumnIndex("ID_WEB_PEDIDO")));
                 webPedido.setId_empresa(cursor.getString(cursor.getColumnIndex("ID_EMPRESA")));
-                webPedido.setCadastro(db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE ID_CADASTRO = " + cursor.getString(cursor.getColumnIndex("ID_CADASTRO"))).get(0));
+                System.out.println("SELECT * FROM TBL_CADASTRO WHERE ID_CADASTRO_SERVIDOR = " + cursor.getString(cursor.getColumnIndex("ID_CADASTRO")));
+                webPedido.setCadastro(db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE ID_CADASTRO_SERVIDOR = " + cursor.getString(cursor.getColumnIndex("ID_CADASTRO"))).get(0));
                 webPedido.setId_vendedor(cursor.getString(cursor.getColumnIndex("ID_VENDEDOR")));
                 webPedido.setId_condicao_pagamento(cursor.getString(cursor.getColumnIndex("ID_CONDICAO_PAGAMENTO")));
                 webPedido.setId_operacao(cursor.getString(cursor.getColumnIndex("ID_OPERACAO")));

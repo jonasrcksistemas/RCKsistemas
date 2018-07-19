@@ -63,7 +63,7 @@ public class ActivityAddCadastroAnexo extends AppCompatActivity {
             startActivityForResult(Intent.createChooser(intent, "Selecione uma imagem"), 123);
         } else {
             cadastroAnexo = ClienteHelper.getListaCadastroAnexo().get(getIntent().getIntExtra("Alteracao", -1));
-            edtAnexo.setText(cadastroAnexo.getNomeAnexo());
+            edtAnexo.setText(cadastroAnexo.getNomeAnexo().replace(".jpg", ""));
             byte[] data = Base64.decode(cadastroAnexo.getAnexo(), Base64.NO_WRAP);
             bitmap = BitmapFactory.decodeByteArray(data, 0, data.length);
             imAnexo.setImageBitmap(bitmap);
@@ -134,7 +134,11 @@ public class ActivityAddCadastroAnexo extends AppCompatActivity {
                 cadastroAnexo.setIdCadastroServidor(ClienteHelper.getCliente().getId_cadastro_servidor());
 
                 if (edtAnexo.getText().toString() != null && !edtAnexo.getText().toString().trim().isEmpty()) {
-                    cadastroAnexo.setNomeAnexo(edtAnexo.getText().toString());
+                    if (edtAnexo.getText().toString().contains(".jpg")) {
+                        cadastroAnexo.setNomeAnexo(edtAnexo.getText().toString());
+                    } else {
+                        cadastroAnexo.setNomeAnexo(edtAnexo.getText().toString() + ".jpg");
+                    }
                     if (getIntent().getIntExtra("Alteracao", -1) <= -1) {
                         if (ClienteHelper.getListaCadastroAnexo() != null) {
                             ClienteHelper.getListaCadastroAnexo().add(cadastroAnexo);

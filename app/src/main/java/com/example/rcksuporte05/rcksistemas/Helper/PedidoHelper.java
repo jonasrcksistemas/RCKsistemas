@@ -187,7 +187,7 @@ public class PedidoHelper {
         Float limiteUltilizado = db.soma("SELECT SUM(VALOR_TOTAL) FROM TBL_WEB_PEDIDO " +
                 "WHERE PEDIDO_ENVIADO = 'N' AND ID_CONDICAO_PAGAMENTO <> 1 " +
                 "AND ID_WEB_PEDIDO <> " + PedidoHelper.getIdPedido() + " " +
-                "AND ID_CADASTRO = " + ClienteHelper.getCliente().getId_cadastro() + ";") + cadastroFinanceiroResumo.getLimiteUtilizado();
+                "AND ID_CADASTRO = " + ClienteHelper.getCliente().getId_cadastro_servidor() + ";") + cadastroFinanceiroResumo.getLimiteUtilizado();
 
         Float saldoRestante = cadastroFinanceiroResumo.getLimiteCredito() - limiteUltilizado - getValorVenda() - cadastroFinanceiroResumo.getFinanceiroVencido();
 
@@ -195,7 +195,7 @@ public class PedidoHelper {
             Toast.makeText(activityPedidoMain, "Esse pedido não passou na análise de crédito!", Toast.LENGTH_SHORT).show();
             return false;
         } else
-            return salvaPedido();
+            return true;
     }
 
     public boolean salvaPedido() {
@@ -287,7 +287,6 @@ public class PedidoHelper {
 
                                     return false;
                                 }
-
                             } else {
                                 Toast.makeText(activityPedidoMain, "A data de entrega não pode ser menor que a data de emissão da venda", Toast.LENGTH_SHORT).show();
                                 editTextDataEntrega().setBackgroundResource(R.drawable.borda_edittext_erro);
@@ -297,7 +296,6 @@ public class PedidoHelper {
                         } else {
                             Toast.makeText(activityPedidoMain, "ATENÇÃO - Você precisa informar a data de entrega", Toast.LENGTH_SHORT).show();
                             editTextDataEntrega().setBackgroundResource(R.drawable.borda_edittext_erro);
-
                             return false;
                         }
                     } else {

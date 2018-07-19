@@ -14,8 +14,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class Api {
 
-    private static final String url = "http://rcksistemassuporte.ddns.com.br:3383/ws/";
-//    private static final String url = "http://rcksistemassuporte.ddns.com.br:1020/WhalleAPI/ws/";
+//    private static final String url = "http://rcksistemassuporte.ddns.com.br:3383/ws/";
+    private static final String url = "http://rcksistemassuporte.ddns.com.br:1020/WhalleAPI/ws/";
 //    private static final String url = "http://portalmixnutri.ddns.com.br:725/WhalleAPI/xws/";
 
     private static Rotas apiRotas;

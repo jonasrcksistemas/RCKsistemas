@@ -144,40 +144,6 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
             }
         });
 
-        btnBuscaProduto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ProdutoPedidoActivity.this, ActivityProduto.class);
-                intent.putExtra("acao", 2);
-                startActivity(intent);
-            }
-        });
-
-        edtNomeProduto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(ProdutoPedidoActivity.this, ActivityProduto.class);
-                intent.putExtra("acao", 2);
-                startActivity(intent);
-            }
-        });
-
-        rgRealPorc.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                switch (checkedId) {
-                    case R.id.porcentagem:
-                        edtDesconto.setEnabled(true);
-                        edtDescontoReais.setEnabled(false);
-                        break;
-                    case R.id.real:
-                        edtDesconto.setEnabled(false);
-                        edtDescontoReais.setEnabled(true);
-                        break;
-                }
-            }
-        });
-
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -195,6 +161,40 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
             rbPorcentagem.setClickable(false);
             toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimaryCinza));
             this.setTheme(R.style.Theme_MeuTemaPedido);
+        } else {
+            btnBuscaProduto.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(ProdutoPedidoActivity.this, ActivityProduto.class);
+                    intent.putExtra("acao", 2);
+                    startActivity(intent);
+                }
+            });
+
+            edtNomeProduto.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(ProdutoPedidoActivity.this, ActivityProduto.class);
+                    intent.putExtra("acao", 2);
+                    startActivity(intent);
+                }
+            });
+
+            rgRealPorc.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(RadioGroup group, int checkedId) {
+                    switch (checkedId) {
+                        case R.id.porcentagem:
+                            edtDesconto.setEnabled(true);
+                            edtDescontoReais.setEnabled(false);
+                            break;
+                        case R.id.real:
+                            edtDesconto.setEnabled(false);
+                            edtDescontoReais.setEnabled(true);
+                            break;
+                    }
+                }
+            });
         }
     }
 
@@ -249,7 +249,6 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
             txtPromocao.setText("PRODUTO COM PREÇO FIXO");
             rbPorcentagem.setText("Desconto %(max 0%)");
         }
-
 
         edtNomeProduto.setText(webPedidoItem.getNome_produto());
         edtTabelaPreco.setText(MascaraUtil.mascaraVirgula(webPedidoItem.getVenda_preco()));

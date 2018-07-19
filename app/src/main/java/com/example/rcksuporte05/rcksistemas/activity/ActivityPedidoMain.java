@@ -41,16 +41,16 @@ public class ActivityPedidoMain extends AppCompatActivity {
 
     public static ActionMode actionMode;
     private static Cliente objetoCliente = null;
+    @BindView(R.id.txtNomeCliente)
+    public TextView txtNomeCliente;
+    @BindView((R.id.txtCategoria))
+    public TextView txtCategoria;
     @BindView(R.id.stl_tabsPedido)
     SlidingTabLayout stl_tabsPedido;
     @BindView(R.id.vp_tabsPedido)
     ViewPager mViewPager;
-    @BindView(R.id.txtNomeCliente)
-    TextView txtNomeCliente;
     @BindView(R.id.BtnFinanceiro)
     Button BtnFinanceiro;
-    @BindView((R.id.txtCategoria))
-    TextView txtCategoria;
     ActionModeCallback actionModeCallback;
     private PedidoHelper pedidoHelper;
     private TabsAdapterPedido tabsAdapterPedido;
@@ -254,6 +254,7 @@ public class ActivityPedidoMain extends AppCompatActivity {
             txtCategoria.setText(listaCategoria.get(objetoCliente.getIdCategoria()).getNomeCategoria());
         } catch (NullPointerException e) {
             e.printStackTrace();
+            txtNomeCliente.setText("Toque aqui para selecionar seu cliente");
         }
         super.onResume();
     }
@@ -282,11 +283,10 @@ public class ActivityPedidoMain extends AppCompatActivity {
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.action_delete:
-                    pedido1.removeProdutos(pedido1.getListaAdapterProdutoPedido().getItensSelecionados(), ActivityPedidoMain.this);
+                    pedido1.removeProdutos(pedido1.getListaAdapterProdutoPedido().getItensSelecionados());
                     mode.finish();
                     return true;
             }
-
             return false;
         }
 

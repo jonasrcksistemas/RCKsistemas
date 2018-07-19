@@ -85,7 +85,40 @@ public class CadastroClienteMain extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
-
+                if (ClienteHelper.getCadastroCliente8() != null)
+                    ClienteHelper.getCadastroCliente8().finishActionMode();
+                switch (position) {
+                    case 0:
+                        if (ClienteHelper.getCadastroCliente1() != null) {
+                            ClienteHelper.getCadastroCliente1().inserirDadosDaFrame();
+                        }
+                        break;
+                    case 1:
+                        if (ClienteHelper.getCadastroCliente2() != null) {
+                            ClienteHelper.getCadastroCliente2().inserirDadosDaFrame();
+                        }
+                        break;
+                    case 2:
+                        if (ClienteHelper.getCadastroCliente3() != null) {
+                            ClienteHelper.getCadastroCliente3().inserirDadosDaFrame();
+                        }
+                        break;
+                    case 4:
+                        if (ClienteHelper.getCadastroCliente5() != null) {
+                            ClienteHelper.getCadastroCliente5().inserirDadosDaFrame();
+                        }
+                        break;
+                    case 6:
+                        if (ClienteHelper.getCadastroCliente7() != null) {
+                            ClienteHelper.getCadastroCliente7().inserirDadosDaFrame();
+                        }
+                        break;
+                    case 8:
+                        if (ClienteHelper.getCadastroCliente9() != null) {
+                            ClienteHelper.getCadastroCliente9().inserirDadosDaFrame();
+                        }
+                        break;
+                }
             }
 
             @Override

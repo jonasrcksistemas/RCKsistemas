@@ -102,7 +102,7 @@ public class activityAnaliseDeCredito extends AppCompatActivity {
         Float limiteUltilizado = db.soma("SELECT SUM(VALOR_TOTAL) FROM TBL_WEB_PEDIDO " +
                 "WHERE PEDIDO_ENVIADO = 'N' AND ID_CONDICAO_PAGAMENTO <> 1 " +
                 "AND ID_WEB_PEDIDO <> " + PedidoHelper.getIdPedido() + " " +
-                "AND ID_CADASTRO = " + ClienteHelper.getCliente().getId_cadastro() + ";") + cadastroFinanceiroResumo.getLimiteUtilizado();
+                "AND ID_CADASTRO = " + ClienteHelper.getCliente().getId_cadastro_servidor() + ";") + cadastroFinanceiroResumo.getLimiteUtilizado();
 
         if (limiteUltilizado != null && limiteUltilizado > 0)
             txtLimiteUtilizado.setText("(-)" + MascaraUtil.mascaraReal(limiteUltilizado));
