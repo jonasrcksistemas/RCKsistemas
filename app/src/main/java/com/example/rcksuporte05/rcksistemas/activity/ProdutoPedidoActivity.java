@@ -219,7 +219,7 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
                 webPedidoItem = new WebPedidoItens(PedidoHelper.getProduto());
                 if (Float.parseFloat(edtDesconto.getText().toString()) <= 0)
                     edtDesconto.setText(tabelaPrecoItem.getPerc_desc_final());
-            } catch (NullPointerException nullPointer) {
+            } catch (Exception nullPointer) {
                 nullPointer.printStackTrace();
             }
         }

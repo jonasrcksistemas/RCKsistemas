@@ -142,13 +142,16 @@ public class ActivityAdicionaContato extends AppCompatActivity {
         DBHelper db = new DBHelper(this);
         contato.setId_contato(String.valueOf(db.contagem("SELECT COUNT(*) FROM TBL_CADASTRO_CONTATO;") + 1));
 
-        db.atualizarContato(contato, "0");
-
-        if (getIntent().getIntExtra("cliente", 0) == 1)
+        if (getIntent().getIntExtra("cliente", 0) == 1) {
+            contato.setIdEntidade(1);
             ClienteHelper.getCliente().getListaContato().add(contato);
-        else {
+        } else {
+            contato.setIdEntidade(10);
             ProspectHelper.getProspect().getListaContato().add(contato);
         }
+
+        db.atualizarContato(contato, "0");
+
         return true;
     }
 

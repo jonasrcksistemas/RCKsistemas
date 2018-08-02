@@ -13,6 +13,7 @@ public class ReferenciaBancaria {
     private String agencia;
     private String id_cadastro;
     private String id_cadastro_servidor;
+    private int id_entidade;
 
 
     public String getId_referencia_bancaria() {
@@ -77,5 +78,13 @@ public class ReferenciaBancaria {
 
     public void setId_cadastro_servidor(String id_cadastro_servidor) {
         this.id_cadastro_servidor = id_cadastro_servidor;
+    }
+
+    public int getId_entidade() {
+        return id_entidade;
+    }
+
+    public void setId_entidade(int id_entidade) {
+        this.id_entidade = id_entidade;
     }
 }

@@ -132,6 +132,22 @@ public class Cliente {
         this.observacoes_faturamento = prospect.getObservacoesComerciais();
         this.ind_da_ie_destinatario = prospect.getInd_da_ie_destinatario_prospect();
         this.usuario_nome = prospect.getUsuario_nome();
+
+        final List<CadastroAnexo> listaCadastroAnexo = new ArrayList<>();
+        if (prospect.getFotoPrincipalBase64() != null) {
+            prospect.getFotoPrincipalBase64().setIdEntidade(1);
+            prospect.getFotoPrincipalBase64().setNomeAnexo("Imagem1");
+            listaCadastroAnexo.add(prospect.getFotoPrincipalBase64());
+        }
+
+        if (prospect.getFotoSecundariaBase64() != null) {
+            prospect.getFotoSecundariaBase64().setIdEntidade(1);
+            prospect.getFotoSecundariaBase64().setNomeAnexo("Imagem2");
+            listaCadastroAnexo.add(prospect.getFotoSecundariaBase64());
+        }
+
+        if (listaCadastroAnexo.size() > 0)
+            this.setListaCadastroAnexo(listaCadastroAnexo);
     }
 
     public Cliente() {

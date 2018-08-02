@@ -13,7 +13,6 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.rcksuporte05.rcksistemas.DAO.CadastroFinanceiroResumoDAO;
 import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.HistoricoFinanceiroHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.UsuarioHelper;
@@ -71,9 +70,23 @@ public class FinanceiroResumoActivity extends AppCompatActivity {
 
         db = new DBHelper(this);
 
-        toolbar.setSubtitle(HistoricoFinanceiroHelper.getCliente().getNome_cadastro());
+        try {
+            toolbar.setSubtitle(HistoricoFinanceiroHelper.getCliente().getNome_cadastro());
 
-        cadastroFinanceiroResumo = HistoricoFinanceiroHelper.getCadastroFinanceiroResumo();
+            cadastroFinanceiroResumo = HistoricoFinanceiroHelper.getCadastroFinanceiroResumo();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+            AlertDialog.Builder alert = new AlertDialog.Builder(FinanceiroResumoActivity.this);
+            alert.setMessage("Deseja carregar historico financeiro detalhado desse cliente?");
+            alert.setNegativeButton("NÂO", null);
+            alert.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    carregarHistoricoFinanceiro(HistoricoFinanceiroHelper.getCliente().getId_cadastro_servidor());
+                }
+            });
+            alert.show();
+        }
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -92,7 +105,7 @@ public class FinanceiroResumoActivity extends AppCompatActivity {
                     alert.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            carregarHistoricoFinanceiro(HistoricoFinanceiroHelper.getCliente().getId_cadastro());
+                            carregarHistoricoFinanceiro(HistoricoFinanceiroHelper.getCliente().getId_cadastro_servidor());
                         }
                     });
                     alert.show();
@@ -114,7 +127,7 @@ public class FinanceiroResumoActivity extends AppCompatActivity {
                     alert.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            carregarHistoricoFinanceiro(HistoricoFinanceiroHelper.getCliente().getId_cadastro());
+                            carregarHistoricoFinanceiro(HistoricoFinanceiroHelper.getCliente().getId_cadastro_servidor());
                         }
                     });
                     alert.show();
@@ -136,7 +149,7 @@ public class FinanceiroResumoActivity extends AppCompatActivity {
                     alert.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            carregarHistoricoFinanceiro(HistoricoFinanceiroHelper.getCliente().getId_cadastro());
+                            carregarHistoricoFinanceiro(HistoricoFinanceiroHelper.getCliente().getId_cadastro_servidor());
                         }
                     });
                     alert.show();
@@ -144,22 +157,29 @@ public class FinanceiroResumoActivity extends AppCompatActivity {
             }
         });
 
-        txtVencida.setText(MascaraUtil.mascaraReal(HistoricoFinanceiroHelper.getCadastroFinanceiroResumo().getFinanceiroVencido()));
-
-        txtAvencer.setText(MascaraUtil.mascaraReal(HistoricoFinanceiroHelper.getCadastroFinanceiroResumo().getFinanceiroVencer()));
-
-        txtQuitada.setText(MascaraUtil.mascaraReal(HistoricoFinanceiroHelper.getCadastroFinanceiroResumo().getFinanceiroQuitado()));
-
-        if (HistoricoFinanceiroHelper.getCliente().getLimite_credito() != null && !HistoricoFinanceiroHelper.getCliente().getLimite_credito().trim().isEmpty())
-            txtLimiteCredito.setText(MascaraUtil.mascaraReal(HistoricoFinanceiroHelper.getCliente().getLimite_credito()));
-        else
-            txtLimiteCredito.setText("< Não cadastrado >");
-
         try {
-            txtDataHoraSincroniza.setText(new SimpleDateFormat("dd/MM/yyyy HH:mm").format(new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse(cadastroFinanceiroResumo.getDataUltimaAtualizacao())));
-        } catch (ParseException e) {
+            txtVencida.setText(MascaraUtil.mascaraReal(HistoricoFinanceiroHelper.getCadastroFinanceiroResumo().getFinanceiroVencido()));
+
+            txtAvencer.setText(MascaraUtil.mascaraReal(HistoricoFinanceiroHelper.getCadastroFinanceiroResumo().getFinanceiroVencer()));
+
+            txtQuitada.setText(MascaraUtil.mascaraReal(HistoricoFinanceiroHelper.getCadastroFinanceiroResumo().getFinanceiroQuitado()));
+
+
+            if (HistoricoFinanceiroHelper.getCliente().getLimite_credito() != null && !HistoricoFinanceiroHelper.getCliente().getLimite_credito().trim().isEmpty())
+                txtLimiteCredito.setText(MascaraUtil.mascaraReal(HistoricoFinanceiroHelper.getCliente().getLimite_credito()));
+            else
+                txtLimiteCredito.setText("< Não cadastrado >");
+
+            try {
+                txtDataHoraSincroniza.setText(new SimpleDateFormat("dd/MM/yyyy HH:mm").format(new SimpleDateFormat("yyy-MM-dd HH:mm:ss").parse(cadastroFinanceiroResumo.getDataUltimaAtualizacao())));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        } catch (NullPointerException e) {
             e.printStackTrace();
         }
+
+        carregarHistoricoFinanceiro(HistoricoFinanceiroHelper.getCliente().getId_cadastro_servidor());
     }
 
     @Override
@@ -184,7 +204,7 @@ public class FinanceiroResumoActivity extends AppCompatActivity {
                 alert.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        carregarHistoricoFinanceiro(HistoricoFinanceiroHelper.getCliente().getId_cadastro());
+                        carregarHistoricoFinanceiro(HistoricoFinanceiroHelper.getCliente().getId_cadastro_servidor());
                     }
                 });
                 alert.show();
@@ -221,8 +241,8 @@ public class FinanceiroResumoActivity extends AppCompatActivity {
                 else
                     txtLimiteCredito.setText("< Não cadastrado >");
 
-                CadastroFinanceiroResumoDAO cadastroFinanceiroResumoDAO = new CadastroFinanceiroResumoDAO(db);
-                cadastroFinanceiroResumoDAO.atualizarCadastroFinanceiroResumo(response.body().getCadastroFinanceiroResumo());
+                /*CadastroFinanceiroResumoDAO cadastroFinanceiroResumoDAO = new CadastroFinanceiroResumoDAO(db);
+                cadastroFinanceiroResumoDAO.atualizarCadastroFinanceiroResumo(response.body().getCadastroFinanceiroResumo());*/
                 HistoricoFinanceiroHelper.setCadastroFinanceiroResumo(response.body().getCadastroFinanceiroResumo());
 
                 lySincronia.setVisibility(View.GONE);

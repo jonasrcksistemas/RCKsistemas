@@ -24,6 +24,7 @@ public class Contato {
     private String fornecedor2;
     private String tel_fornec1;
     private String tel_fornec2;
+    private int idEntidade;
 
     public String getId_contato() {
         return id_contato;
@@ -207,5 +208,13 @@ public class Contato {
 
     public void setId_cadastro_servidor(String id_cadastro_servidor) {
         this.id_cadastro_servidor = id_cadastro_servidor;
+    }
+
+    public int getIdEntidade() {
+        return idEntidade;
+    }
+
+    public void setIdEntidade(int idEntidade) {
+        this.idEntidade = idEntidade;
     }
 }

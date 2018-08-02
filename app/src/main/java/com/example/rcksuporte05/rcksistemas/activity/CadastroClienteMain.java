@@ -128,27 +128,33 @@ public class CadastroClienteMain extends AppCompatActivity {
         });
 
         DBHelper db = new DBHelper(this);
-        if (db.contagem("SELECT COUNT(ID_ANEXO) FROM TBL_CADASTRO_ANEXOS WHERE ID_CADASTRO = " + ClienteHelper.getCliente().getId_cadastro() + " AND EXCLUIDO = 'N';") > 0) {
-            final ProgressDialog progress = new ProgressDialog(this);
-            progress.setTitle("Aguarde");
-            progress.setMessage("Carregando anexos do cliente");
-            progress.setCancelable(false);
-            progress.show();
-            final CadastroAnexoBO cadastroAnexoBO = new CadastroAnexoBO();
-            Thread a = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    List<CadastroAnexo> listaCadastroAnexo = cadastroAnexoBO.listaCadastroAnexoComMiniatura(CadastroClienteMain.this, ClienteHelper.getCliente().getId_cadastro());
-                    ClienteHelper.setListaCadastroAnexo(listaCadastroAnexo);
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            progress.dismiss();
-                        }
-                    });
-                }
-            });
-            a.start();
+        if (ClienteHelper.getCliente().getId_cadastro() > 0) {
+            if (db.contagem("SELECT COUNT(ID_ANEXO) FROM TBL_CADASTRO_ANEXOS WHERE ID_CADASTRO = " + ClienteHelper.getCliente().getId_cadastro() + " AND EXCLUIDO = 'N';") > 0) {
+                final ProgressDialog progress = new ProgressDialog(this);
+                progress.setTitle("Aguarde");
+                progress.setMessage("Carregando anexos do cliente");
+                progress.setCancelable(false);
+                progress.show();
+                final CadastroAnexoBO cadastroAnexoBO = new CadastroAnexoBO();
+                Thread a = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        List<CadastroAnexo> listaCadastroAnexo = cadastroAnexoBO.listaCadastroAnexoComMiniatura(CadastroClienteMain.this, ClienteHelper.getCliente().getId_cadastro());
+                        ClienteHelper.setListaCadastroAnexo(listaCadastroAnexo);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                progress.dismiss();
+                            }
+                        });
+                    }
+                });
+                a.start();
+            }
+        } else {
+            if (ClienteHelper.getCliente().getListaCadastroAnexo().size() > 0) {
+                ClienteHelper.setListaCadastroAnexo(ClienteHelper.getCliente().getListaCadastroAnexo());
+            }
         }
 
         ClienteHelper.setCadastroClienteMain(this);

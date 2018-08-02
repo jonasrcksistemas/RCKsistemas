@@ -262,8 +262,10 @@ public class PedidoHelper {
                                         webPedidoDAO.atualizarTBL_WEB_PEDIDO(webPedido);
                                         for (int i = 0; listaWebPedidoItens.size() > i; i++) {
                                             if (listaWebPedidoItens.get(i).getId_web_item() == null) {
-                                                listaWebPedidoItens.get(i).setId_pedido(webPedido.getId_web_pedido());
-                                                webPedidoItensDAO.inserirTBL_WEB_PEDIDO_ITENS(listaWebPedidoItens.get(i));
+                                                if (db.contagem("SELECT COUNT(*) FROM TBL_WEB_PEDIDO_ITENS WHERE ID_PEDIDO = " + PedidoHelper.getIdPedido() + " AND ID_PRODUTO = " + listaWebPedidoItens.get(i).getId_produto() + ";") <= 0) {
+                                                    listaWebPedidoItens.get(i).setId_pedido(webPedido.getId_web_pedido());
+                                                    webPedidoItensDAO.inserirTBL_WEB_PEDIDO_ITENS(listaWebPedidoItens.get(i));
+                                                }
                                             } else {
                                                 webPedidoItensDAO.atualizarTBL_WEB_PEDIDO_ITENS(listaWebPedidoItens.get(i));
                                             }
@@ -275,9 +277,11 @@ public class PedidoHelper {
                                         webPedidoDAO.inserirTBL_WEB_PEDIDO(webPedido);
                                         int idPedido = db.contagem("SELECT MAX(ID_WEB_PEDIDO) FROM TBL_WEB_PEDIDO");
                                         for (int i = 0; listaWebPedidoItens.size() > i; i++) {
-                                            listaWebPedidoItens.get(i).setId_pedido(String.valueOf(idPedido));
-                                            listaWebPedidoItens.get(i).setId_empresa(UsuarioHelper.getUsuario().getIdEmpresaMultiDevice());
-                                            webPedidoItensDAO.inserirTBL_WEB_PEDIDO_ITENS(listaWebPedidoItens.get(i));
+                                            if (db.contagem("SELECT COUNT(*) FROM TBL_WEB_PEDIDO_ITENS WHERE ID_PEDIDO = " + idPedido + " AND ID_PRODUTO = " + listaWebPedidoItens.get(i).getId_produto() + ";") <= 0) {
+                                                listaWebPedidoItens.get(i).setId_pedido(String.valueOf(idPedido));
+                                                listaWebPedidoItens.get(i).setId_empresa(UsuarioHelper.getUsuario().getIdEmpresaMultiDevice());
+                                                webPedidoItensDAO.inserirTBL_WEB_PEDIDO_ITENS(listaWebPedidoItens.get(i));
+                                            }
                                         }
                                     }
                                     return true;

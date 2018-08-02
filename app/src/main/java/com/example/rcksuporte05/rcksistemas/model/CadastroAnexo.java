@@ -12,6 +12,7 @@ public class CadastroAnexo {
     private String anexo;
     transient private Bitmap miniatura;
     private String excluido;
+    private String principal;
 
     public int getIdAnexo() {
         return idAnexo;
@@ -83,5 +84,13 @@ public class CadastroAnexo {
 
     public void setExcluido(String excluido) {
         this.excluido = excluido;
+    }
+
+    public String getPrincipal() {
+        return principal;
+    }
+
+    public void setPrincipal(String principal) {
+        this.principal = principal;
     }
 }

@@ -35,6 +35,7 @@ import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.activity.FotoActivity;
 import com.example.rcksuporte05.rcksistemas.api.ApiGeocoder;
 import com.example.rcksuporte05.rcksistemas.api.Rotas;
+import com.example.rcksuporte05.rcksistemas.model.CadastroAnexo;
 import com.example.rcksuporte05.rcksistemas.util.DatePickerUtil;
 import com.example.rcksuporte05.rcksistemas.util.FotoUtil;
 import com.example.rcksuporte05.rcksistemas.util.classesGeocoderUtil.RespostaGeocoder;
@@ -193,7 +194,7 @@ public class CadastroProspectFotoSalvar extends Fragment implements GoogleApiCli
             imagemProspect1.setImageBitmap(ProspectHelper.getImagem1());
         } else {
             try {
-                byte[] data = Base64.decode(ProspectHelper.getProspect().getFotoPrincipalBase64(), Base64.NO_WRAP);
+                byte[] data = Base64.decode(ProspectHelper.getProspect().getFotoPrincipalBase64().getAnexo(), Base64.NO_WRAP);
                 mImagem1 = BitmapFactory.decodeByteArray(data, 0, data.length);
                 ProspectHelper.setImagem1(mImagem1);
                 imagemProspect1.setImageBitmap(Bitmap.createScaledBitmap(mImagem1, 220, 230, false));
@@ -208,7 +209,7 @@ public class CadastroProspectFotoSalvar extends Fragment implements GoogleApiCli
             imagemProspect2.setImageBitmap(ProspectHelper.getImagem2());
         } else {
             try {
-                byte[] data2 = Base64.decode(ProspectHelper.getProspect().getFotoSecundariaBase64(), Base64.NO_WRAP);
+                byte[] data2 = Base64.decode(ProspectHelper.getProspect().getFotoSecundariaBase64().getAnexo(), Base64.NO_WRAP);
                 mImagem2 = BitmapFactory.decodeByteArray(data2, 0, data2.length);
                 ProspectHelper.setImagem2(mImagem2);
                 imagemProspect2.setImageBitmap(Bitmap.createScaledBitmap(mImagem2, 220, 230, false));
@@ -255,6 +256,20 @@ public class CadastroProspectFotoSalvar extends Fragment implements GoogleApiCli
                     } else {
                         ProspectHelper.getProspect().setId_prospect(String.valueOf(db.contagem("SELECT COUNT(*) FROM TBL_PROSPECT;") + 1));
                     }
+                    if (ProspectHelper.getProspect().getFotoPrincipalBase64() != null) {
+                        ProspectHelper.getProspect().getFotoPrincipalBase64().setIdCadastro(Integer.parseInt(ProspectHelper.getProspect().getId_prospect()));
+                        ProspectHelper.getProspect().getFotoPrincipalBase64().setPrincipal("S");
+                        ProspectHelper.getProspect().getFotoPrincipalBase64().setIdEntidade(10);
+                        ProspectHelper.getProspect().getFotoPrincipalBase64().setExcluido("N");
+                    }
+
+                    if (ProspectHelper.getProspect().getFotoSecundariaBase64() != null) {
+                        ProspectHelper.getProspect().getFotoSecundariaBase64().setIdCadastro(Integer.parseInt(ProspectHelper.getProspect().getId_prospect()));
+                        ProspectHelper.getProspect().getFotoSecundariaBase64().setPrincipal("N");
+                        ProspectHelper.getProspect().getFotoSecundariaBase64().setIdEntidade(10);
+                        ProspectHelper.getProspect().getFotoSecundariaBase64().setExcluido("N");
+                    }
+
                     ProspectHelper.getProspect().setProspectSalvo("N");
                     ProspectHelper.getProspect().setIdEmpresa(UsuarioHelper.getUsuario().getIdEmpresaMultiDevice());
                     ProspectHelper.getProspect().setUsuario_id(UsuarioHelper.getUsuario().getId_usuario());
@@ -283,6 +298,21 @@ public class CadastroProspectFotoSalvar extends Fragment implements GoogleApiCli
             } else {
                 ProspectHelper.getProspect().setId_prospect(String.valueOf(db.contagem("SELECT COUNT(*) FROM TBL_PROSPECT;") + 1));
             }
+
+            if (ProspectHelper.getProspect().getFotoPrincipalBase64() != null) {
+                ProspectHelper.getProspect().getFotoPrincipalBase64().setIdCadastro(Integer.parseInt(ProspectHelper.getProspect().getId_prospect()));
+                ProspectHelper.getProspect().getFotoPrincipalBase64().setPrincipal("S");
+                ProspectHelper.getProspect().getFotoPrincipalBase64().setIdEntidade(10);
+                ProspectHelper.getProspect().getFotoPrincipalBase64().setExcluido("N");
+            }
+
+            if (ProspectHelper.getProspect().getFotoSecundariaBase64() != null) {
+                ProspectHelper.getProspect().getFotoSecundariaBase64().setIdCadastro(Integer.parseInt(ProspectHelper.getProspect().getId_prospect()));
+                ProspectHelper.getProspect().getFotoSecundariaBase64().setPrincipal("N");
+                ProspectHelper.getProspect().getFotoSecundariaBase64().setIdEntidade(10);
+                ProspectHelper.getProspect().getFotoSecundariaBase64().setExcluido("N");
+            }
+
             ProspectHelper.getProspect().setProspectSalvo("N");
             ProspectHelper.getProspect().setIdEmpresa(UsuarioHelper.getUsuario().getIdEmpresaMultiDevice());
             ProspectHelper.getProspect().setUsuario_id(UsuarioHelper.getUsuario().getId_usuario());
@@ -382,7 +412,9 @@ public class CadastroProspectFotoSalvar extends Fragment implements GoogleApiCli
                     byte[] fotoBinario = outputStream.toByteArray();
 
                     mImagem1 = bitmap;
-                    ProspectHelper.getProspect().setFotoPrincipalBase64(Base64.encodeToString(fotoBinario, Base64.NO_WRAP));
+                    if (ProspectHelper.getProspect().getFotoPrincipalBase64() == null)
+                        ProspectHelper.getProspect().setFotoPrincipalBase64(new CadastroAnexo());
+                    ProspectHelper.getProspect().getFotoPrincipalBase64().setAnexo(Base64.encodeToString(fotoBinario, Base64.NO_WRAP));
                     ProspectHelper.setImagem1(testeDeDimuir);
                     imagemProspect1.setImageBitmap(testeDeDimuir);
                 }
@@ -402,7 +434,9 @@ public class CadastroProspectFotoSalvar extends Fragment implements GoogleApiCli
                 byte[] fotoBinario = outputStream.toByteArray();
 
 
-                ProspectHelper.getProspect().setFotoSecundariaBase64(Base64.encodeToString(fotoBinario, Base64.NO_WRAP));
+                if (ProspectHelper.getProspect().getFotoSecundariaBase64() == null)
+                    ProspectHelper.getProspect().setFotoSecundariaBase64(new CadastroAnexo());
+                ProspectHelper.getProspect().getFotoSecundariaBase64().setAnexo(Base64.encodeToString(fotoBinario, Base64.NO_WRAP));
                 ProspectHelper.setImagem2(testeDeDimuir);
                 mImagem2 = bitmap;
                 imagemProspect2.setImageBitmap(testeDeDimuir);

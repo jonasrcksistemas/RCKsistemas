@@ -4,7 +4,6 @@ import android.app.DatePickerDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.database.CursorIndexOutOfBoundsException;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -21,10 +20,8 @@ import android.widget.TextView;
 
 import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.DAO.WebPedidoDAO;
-import com.example.rcksuporte05.rcksistemas.Helper.HistoricoFinanceiroHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.PedidoHelper;
 import com.example.rcksuporte05.rcksistemas.R;
-import com.example.rcksuporte05.rcksistemas.activity.activityAnaliseDeCredito;
 import com.example.rcksuporte05.rcksistemas.model.Cliente;
 import com.example.rcksuporte05.rcksistemas.model.CondicoesPagamento;
 import com.example.rcksuporte05.rcksistemas.model.Operacao;
@@ -139,23 +136,23 @@ public class Pedido2 extends Fragment {
                 dialog.setCancelable(false);
                 dialog.show();
 
-                if (adapterPagamento.getItem(spPagamento.getSelectedItemPosition()).getId_condicao().equals("1")) {
-                    if (pedidoHelper.salvaPedido()) {
-                        dialog.dismiss();
-                        AlertDialog.Builder alert = new AlertDialog.Builder(PedidoHelper.getActivityPedidoMain());
-                        alert.setTitle("Pedido salvo com sucesso!");
-                        alert.setNeutralButton("OK", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                PedidoHelper.getActivityPedidoMain().finish();
-                            }
-                        });
-                        alert.setCancelable(false);
-                        alert.show();
-                    } else {
-                        dialog.dismiss();
-                    }
+//                if (adapterPagamento.getItem(spPagamento.getSelectedItemPosition()).getId_condicao().equals("1")) {
+                if (pedidoHelper.salvaPedido()) {
+                    dialog.dismiss();
+                    AlertDialog.Builder alert = new AlertDialog.Builder(PedidoHelper.getActivityPedidoMain());
+                    alert.setTitle("Pedido salvo com sucesso!");
+                    alert.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            PedidoHelper.getActivityPedidoMain().finish();
+                        }
+                    });
+                    alert.setCancelable(false);
+                    alert.show();
                 } else {
+                    dialog.dismiss();
+                }
+            } /*else {
                     if (pedidoHelper.salvaPedido()) {
                         if (pedidoHelper.validaCredito()) {
                             dialog.dismiss();
@@ -181,7 +178,7 @@ public class Pedido2 extends Fragment {
                         dialog.dismiss();
                     }
                 }
-            }
+            }*/
         });
 
         if (bundle.getInt("vizualizacao") == 1) {

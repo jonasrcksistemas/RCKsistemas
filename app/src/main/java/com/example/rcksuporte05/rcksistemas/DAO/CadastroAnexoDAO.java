@@ -25,6 +25,7 @@ public class CadastroAnexoDAO {
         content.put("NOME_ANEXO", cadastroAnexo.getNomeAnexo());
         content.put("ANEXO", cadastroAnexo.getAnexo());
         content.put("EXCLUIDO", cadastroAnexo.getExcluido());
+        content.put("PRINCIPAL", cadastroAnexo.getPrincipal());
 
         if (cadastroAnexo.getIdAnexo() != 0 && db.contagem("SELECT COUNT(ID_ANEXO) FROM TBL_CADASTRO_ANEXOS WHERE ID_ANEXO = " + cadastroAnexo.getIdAnexo() + ";") > 0) {
             db.atualizaDados("TBL_CADASTRO_ANEXOS", content, "ID_ANEXO = " + cadastroAnexo.getIdAnexo() + ";");
@@ -37,8 +38,12 @@ public class CadastroAnexoDAO {
         return retornarCadastros(db.listaDados("SELECT * FROM TBL_CADASTRO_ANEXOS WHERE ID_CADASTRO = " + idCadastro + " ORDER BY ID_ANEXO;"));
     }
 
-    public List<CadastroAnexo> listaCadastroAnexo(int idCadastro) {
-        return retornarCadastros(db.listaDados("SELECT * FROM TBL_CADASTRO_ANEXOS WHERE ID_CADASTRO = " + idCadastro + " AND EXCLUIDO = 'N' ORDER BY ID_ANEXO;"));
+    public List<CadastroAnexo> listaCadastroAnexoCliente(int idCadastro) {
+        return retornarCadastros(db.listaDados("SELECT * FROM TBL_CADASTRO_ANEXOS WHERE ID_CADASTRO = " + idCadastro + " AND ID_ENTIDADE = 1 AND EXCLUIDO = 'N' ORDER BY ID_ANEXO;"));
+    }
+
+    public List<CadastroAnexo> listaCadastroAnexoProspect(int idCadastro) {
+        return retornarCadastros(db.listaDados("SELECT * FROM TBL_CADASTRO_ANEXOS WHERE ID_CADASTRO = " + idCadastro + " AND ID_ENTIDADE = 10 AND EXCLUIDO = 'N' ORDER BY ID_ANEXO;"));
     }
 
     private List<CadastroAnexo> retornarCadastros(Cursor cursor) {
@@ -56,6 +61,7 @@ public class CadastroAnexoDAO {
             cadastroAnexo.setNomeAnexo(cursor.getString(cursor.getColumnIndex("NOME_ANEXO")));
             cadastroAnexo.setAnexo(cursor.getString(cursor.getColumnIndex("ANEXO")));
             cadastroAnexo.setExcluido(cursor.getString(cursor.getColumnIndex("EXCLUIDO")));
+            cadastroAnexo.setPrincipal(cursor.getString(cursor.getColumnIndex("PRINCIPAL")));
 
             listaCadastroAnexo.add(cadastroAnexo);
         } while (cursor.moveToNext());

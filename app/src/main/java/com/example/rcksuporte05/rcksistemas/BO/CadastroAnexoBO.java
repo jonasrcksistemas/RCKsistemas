@@ -17,7 +17,7 @@ public class CadastroAnexoBO {
         DBHelper db = new DBHelper(context);
         CadastroAnexoDAO cadastroAnexoDAO = new CadastroAnexoDAO(db);
 
-        List<CadastroAnexo> listaCadastroAnexo = cadastroAnexoDAO.listaCadastroAnexo(idCadastro);
+        List<CadastroAnexo> listaCadastroAnexo = cadastroAnexoDAO.listaCadastroAnexoCliente(idCadastro);
 
         for (CadastroAnexo cadastroAnexo : listaCadastroAnexo) {
             byte[] data = Base64.decode(cadastroAnexo.getAnexo(), Base64.NO_WRAP);

@@ -66,6 +66,9 @@ public class CadastroCliente9 extends Fragment {
 
                                     for (CadastroAnexo cadastroAnexo : ClienteHelper.getListaCadastroAnexo()) {
                                         cadastroAnexo.setExcluido("N");
+                                        cadastroAnexo.setIdEntidade(1);
+                                        cadastroAnexo.setIdCadastro(ClienteHelper.getCliente().getId_cadastro());
+                                        cadastroAnexo.setIdCadastroServidor(ClienteHelper.getCliente().getId_cadastro_servidor());
                                         cadastroAnexoDAO.atualizarCadastroAnexo(cadastroAnexo);
                                     }
                                 }

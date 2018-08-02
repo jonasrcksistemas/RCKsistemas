@@ -23,6 +23,7 @@ import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.example.rcksuporte05.rcksistemas.DAO.CadastroAnexoDAO;
 import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.ProspectHelper;
@@ -31,6 +32,7 @@ import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.ListaProspectAdapter;
 import com.example.rcksuporte05.rcksistemas.api.Api;
 import com.example.rcksuporte05.rcksistemas.api.Rotas;
+import com.example.rcksuporte05.rcksistemas.model.CadastroAnexo;
 import com.example.rcksuporte05.rcksistemas.model.Cliente;
 import com.example.rcksuporte05.rcksistemas.model.Prospect;
 
@@ -350,6 +352,21 @@ public class ActivityListaProspect extends AppCompatActivity {
                                     alert.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
                                         @Override
                                         public void onClick(DialogInterface dialog, int which) {
+                                            try {
+                                                if (db.contagem("SELECT COUNT(*) FROM TBL_CADASTRO_ANEXOS WHERE ID_CADASTRO = " + listaProspectAdapter.getItensSelecionados().get(0).getId_prospect() + " AND ID_ENTIDADE = 10;") > 0) {
+                                                    CadastroAnexoDAO cadastroAnexoDAO = new CadastroAnexoDAO(db);
+                                                    List<CadastroAnexo> listaCadastroAnexo = cadastroAnexoDAO.listaCadastroAnexoProspect(Integer.parseInt(listaProspectAdapter.getItensSelecionados().get(0).getId_prospect()));
+
+                                                    for (CadastroAnexo cadastroAnexo : listaCadastroAnexo) {
+                                                        if (cadastroAnexo.getPrincipal().equals("S"))
+                                                            listaProspectAdapter.getItensSelecionados().get(0).setFotoPrincipalBase64(cadastroAnexo);
+                                                        else
+                                                            listaProspectAdapter.getItensSelecionados().get(0).setFotoSecundariaBase64(cadastroAnexo);
+                                                    }
+                                                }
+                                            } catch (CursorIndexOutOfBoundsException e) {
+                                                e.printStackTrace();
+                                            }
                                             Cliente cliente = new Cliente(listaProspectAdapter.getItensSelecionados().get(0));
                                             Intent intent = new Intent(ActivityListaProspect.this, CadastroClienteMain.class);
                                             intent.putExtra("prospect", Integer.parseInt(listaProspectAdapter.getItensSelecionados().get(0).getId_prospect()));
@@ -402,6 +419,23 @@ public class ActivityListaProspect extends AppCompatActivity {
         Map<String, String> cabecalho = new HashMap<>();
         cabecalho.put("AUTHORIZATION", UsuarioHelper.getUsuario().getToken());
 
+        for (Prospect prospect : prospectsEnvio) {
+            try {
+                if (db.contagem("SELECT COUNT(*) FROM TBL_CADASTRO_ANEXOS WHERE ID_CADASTRO = " + prospect.getId_prospect() + " AND ID_ENTIDADE = 10;") > 0) {
+                    CadastroAnexoDAO cadastroAnexoDAO = new CadastroAnexoDAO(db);
+                    List<CadastroAnexo> listaCadastroAnexo = cadastroAnexoDAO.listaCadastroAnexoProspect(Integer.parseInt(prospect.getId_prospect()));
+
+                    for (CadastroAnexo cadastroAnexo : listaCadastroAnexo) {
+                        if (cadastroAnexo.getPrincipal().equals("S"))
+                            prospect.setFotoPrincipalBase64(cadastroAnexo);
+                        else
+                            prospect.setFotoSecundariaBase64(cadastroAnexo);
+                    }
+                }
+            } catch (CursorIndexOutOfBoundsException e) {
+                e.printStackTrace();
+            }
+        }
         Call<List<Prospect>> call = apiRetrofit.salvarProspect(cabecalho, prospectsEnvio);
 
         call.enqueue(new Callback<List<Prospect>>() {

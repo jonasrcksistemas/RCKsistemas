@@ -1,6 +1,5 @@
 package com.example.rcksuporte05.rcksistemas.activity;
 
-import android.app.ProgressDialog;
 import android.database.CursorIndexOutOfBoundsException;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -11,11 +10,15 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.example.rcksuporte05.rcksistemas.DAO.CadastroAnexoDAO;
+import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.ProspectHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.TabsAdapterProspect;
-import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
+import com.example.rcksuporte05.rcksistemas.model.CadastroAnexo;
 import com.example.rcksuporte05.rcksistemas.util.SlidingTabLayout;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,18 +28,15 @@ import butterknife.ButterKnife;
  */
 
 public class ActivityCadastroProspect extends AppCompatActivity {
+    @BindView(R.id.vp_tabs_prospect)
+    public ViewPager mViewPager;
     TabsAdapterProspect tabsAdapterProspect;
-
-    private DBHelper db;
-
     @BindView(R.id.toolbarFragsProspect)
     Toolbar toolbar;
 
     @BindView(R.id.stl_tabs_Prospect)
     SlidingTabLayout mSlidingTabLayout;
-
-    @BindView(R.id.vp_tabs_prospect)
-    public ViewPager mViewPager;
+    private DBHelper db;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -61,29 +61,29 @@ public class ActivityCadastroProspect extends AppCompatActivity {
                                                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                                                    switch (position) {
                                                        case 0:
-                                                           if(ProspectHelper.getCadastroProspectGeral() != null) {
+                                                           if (ProspectHelper.getCadastroProspectGeral() != null) {
                                                                ProspectHelper.getCadastroProspectGeral().inserirDadosDaFrame();
                                                            }
                                                            break;
                                                        case 1:
-                                                           if(ProspectHelper.getCadastroProspectEndereco() != null){
+                                                           if (ProspectHelper.getCadastroProspectEndereco() != null) {
                                                                ProspectHelper.getCadastroProspectEndereco().inserirDadosDaFrame();
                                                            }
                                                            break;
                                                        case 2:
                                                            break;
                                                        case 3:
-                                                           if(ProspectHelper.getCadastroProspectSegmentos() != null){
+                                                           if (ProspectHelper.getCadastroProspectSegmentos() != null) {
                                                                ProspectHelper.getCadastroProspectSegmentos().insereDadosDaFrame();
                                                            }
                                                            break;
                                                        case 4:
-                                                           if(ProspectHelper.getCadastroProspectMotivos() != null){
+                                                           if (ProspectHelper.getCadastroProspectMotivos() != null) {
                                                                ProspectHelper.getCadastroProspectMotivos().insereDadosDaFrame();
                                                            }
                                                            break;
                                                        case 5:
-                                                           if(ProspectHelper.getCadastroProspectObservacoesComerciais() != null){
+                                                           if (ProspectHelper.getCadastroProspectObservacoesComerciais() != null) {
                                                                ProspectHelper.getCadastroProspectObservacoesComerciais().insereDadosDaFrame();
                                                            }
                                                            break;
@@ -99,29 +99,29 @@ public class ActivityCadastroProspect extends AppCompatActivity {
                                                public void onPageSelected(int position) {
                                                    switch (position) {
                                                        case 0:
-                                                           if(ProspectHelper.getCadastroProspectGeral() != null) {
+                                                           if (ProspectHelper.getCadastroProspectGeral() != null) {
                                                                ProspectHelper.getCadastroProspectGeral().inserirDadosDaFrame();
                                                            }
                                                            break;
                                                        case 1:
-                                                           if(ProspectHelper.getCadastroProspectEndereco() != null){
+                                                           if (ProspectHelper.getCadastroProspectEndereco() != null) {
                                                                ProspectHelper.getCadastroProspectEndereco().inserirDadosDaFrame();
                                                            }
                                                            break;
                                                        case 2:
                                                            break;
                                                        case 3:
-                                                           if(ProspectHelper.getCadastroProspectSegmentos() != null){
+                                                           if (ProspectHelper.getCadastroProspectSegmentos() != null) {
                                                                ProspectHelper.getCadastroProspectSegmentos().insereDadosDaFrame();
                                                            }
                                                            break;
                                                        case 4:
-                                                           if(ProspectHelper.getCadastroProspectMotivos() != null){
+                                                           if (ProspectHelper.getCadastroProspectMotivos() != null) {
                                                                ProspectHelper.getCadastroProspectMotivos().insereDadosDaFrame();
                                                            }
                                                            break;
                                                        case 5:
-                                                           if(ProspectHelper.getCadastroProspectObservacoesComerciais() != null){
+                                                           if (ProspectHelper.getCadastroProspectObservacoesComerciais() != null) {
                                                                ProspectHelper.getCadastroProspectObservacoesComerciais().insereDadosDaFrame();
                                                            }
                                                            break;
@@ -143,6 +143,22 @@ public class ActivityCadastroProspect extends AppCompatActivity {
         mSlidingTabLayout.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
         mSlidingTabLayout.setSelectedIndicatorColors(Color.WHITE);
         mSlidingTabLayout.setViewPager(mViewPager);
+
+        try {
+            if (db.contagem("SELECT COUNT(*) FROM TBL_CADASTRO_ANEXOS WHERE ID_CADASTRO = " + ProspectHelper.getProspect().getId_prospect() + " AND ID_ENTIDADE = 10;") > 0) {
+                CadastroAnexoDAO cadastroAnexoDAO = new CadastroAnexoDAO(db);
+                List<CadastroAnexo> listaCadastroAnexo = cadastroAnexoDAO.listaCadastroAnexoProspect(Integer.parseInt(ProspectHelper.getProspect().getId_prospect()));
+
+                for (CadastroAnexo cadastroAnexo : listaCadastroAnexo) {
+                    if (cadastroAnexo.getPrincipal().equals("S"))
+                        ProspectHelper.getProspect().setFotoPrincipalBase64(cadastroAnexo);
+                    else
+                        ProspectHelper.getProspect().setFotoSecundariaBase64(cadastroAnexo);
+                }
+            }
+        } catch (CursorIndexOutOfBoundsException e) {
+            e.printStackTrace();
+        }
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -175,13 +191,17 @@ public class ActivityCadastroProspect extends AppCompatActivity {
     }
 
     public void buscarSegmentos() {
-       try {ProspectHelper.setSegmentos(db.listaSegmento());}catch (CursorIndexOutOfBoundsException e){
+        try {
+            ProspectHelper.setSegmentos(db.listaSegmento());
+        } catch (CursorIndexOutOfBoundsException e) {
             e.printStackTrace();
-       }
+        }
     }
 
     public void buscarMotivos() {
-      try {ProspectHelper.setMotivos(db.listaMotivoNaoCadastramento());} catch (CursorIndexOutOfBoundsException e) {
+        try {
+            ProspectHelper.setMotivos(db.listaMotivoNaoCadastramento());
+        } catch (CursorIndexOutOfBoundsException e) {
             e.printStackTrace();
         }
     }
@@ -192,7 +212,7 @@ public class ActivityCadastroProspect extends AppCompatActivity {
     }
 
 
-    public void buscarPais(){
+    public void buscarPais() {
         try {
             ProspectHelper.setPaises(db.listaPaises());
         } catch (CursorIndexOutOfBoundsException e) {

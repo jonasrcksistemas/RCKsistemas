@@ -272,8 +272,8 @@ public class ActivityCliente extends AppCompatActivity {
                             Pedido2 pedido2 = new Pedido2();
                             activityPedidoMain.pegaCliente(listaClienteAdapter.getItem(position));
                             pedido2.pegaCliente(listaClienteAdapter.getItem(position));
-                            CadastroFinanceiroResumoDAO cadastroFinanceiroResumoDAO = new CadastroFinanceiroResumoDAO(db);
-                            HistoricoFinanceiroHelper.setCadastroFinanceiroResumo(cadastroFinanceiroResumoDAO.listaCadastroFinanceiroResumo(ClienteHelper.getCliente().getId_cadastro_servidor()));
+                            /*CadastroFinanceiroResumoDAO cadastroFinanceiroResumoDAO = new CadastroFinanceiroResumoDAO(db);
+                            HistoricoFinanceiroHelper.setCadastroFinanceiroResumo(cadastroFinanceiroResumoDAO.listaCadastroFinanceiroResumo(ClienteHelper.getCliente().getId_cadastro_servidor()));*/
                             System.gc();
                             finish();
                         } catch (CursorIndexOutOfBoundsException e) {

@@ -109,10 +109,13 @@ public class ActivityAdicionaReferenciaComercial extends AppCompatActivity {
 
         db.atualizarReferenciaComercial(referenciaComercial, "0");
 
-        if (getIntent().getIntExtra("cliente", 0) == 1)
+        if (getIntent().getIntExtra("cliente", 0) == 1) {
+            referenciaComercial.setId_entidade(1);
             ClienteHelper.getCliente().getReferenciasComerciais().add(referenciaComercial);
-        else
+        } else {
+            referenciaComercial.setId_entidade(10);
             ProspectHelper.getProspect().getReferenciasComerciais().add(referenciaComercial);
+        }
         return true;
     }
 //

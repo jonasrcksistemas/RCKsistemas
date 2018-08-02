@@ -116,10 +116,13 @@ public class ActivityAdicionaBanco extends AppCompatActivity {
 
         db.atualizarRefernciaBancaria(bancos, "0");
 
-        if (getIntent().getIntExtra("cliente", 0) == 1)
+        if (getIntent().getIntExtra("cliente", 0) == 1) {
+            bancos.setId_entidade(1);
             ClienteHelper.getCliente().getReferenciasBancarias().add(bancos);
-        else
+        } else {
+            bancos.setId_entidade(10);
             ProspectHelper.getProspect().getReferenciasBancarias().add(bancos);
+        }
         return true;
     }
 

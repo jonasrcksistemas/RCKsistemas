@@ -47,8 +47,8 @@ public class Prospect {
     private String idEmpresa;
     private String diaVisita;
     private String dataRetorno;
-    private String fotoPrincipalBase64;
-    private String fotoSecundariaBase64;
+    private CadastroAnexo fotoPrincipalBase64;
+    private CadastroAnexo fotoSecundariaBase64;
     private String observacoesComerciais;
     private String prospectSalvo;
     private String ind_da_ie_destinatario_prospect;
@@ -238,19 +238,19 @@ public class Prospect {
         this.dataRetorno = dataRetorno;
     }
 
-    public String getFotoPrincipalBase64() {
+    public CadastroAnexo getFotoPrincipalBase64() {
         return fotoPrincipalBase64;
     }
 
-    public void setFotoPrincipalBase64(String fotoPrincipalBase64) {
+    public void setFotoPrincipalBase64(CadastroAnexo fotoPrincipalBase64) {
         this.fotoPrincipalBase64 = fotoPrincipalBase64;
     }
 
-    public String getFotoSecundariaBase64() {
+    public CadastroAnexo getFotoSecundariaBase64() {
         return fotoSecundariaBase64;
     }
 
-    public void setFotoSecundariaBase64(String fotoSecundariaBase64) {
+    public void setFotoSecundariaBase64(CadastroAnexo fotoSecundariaBase64) {
         this.fotoSecundariaBase64 = fotoSecundariaBase64;
     }
 

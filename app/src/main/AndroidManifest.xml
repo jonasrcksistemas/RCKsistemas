@@ -108,7 +108,7 @@
             android:name=".activity.ActivityListaProspect"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".activity.activityAnaliseDeCredito" />
-        <activity android:name=".activity.ActivityAddCadastroAnexo"></activity>
+        <activity android:name=".activity.ActivityAddCadastroAnexo"/>
     </application>
 
 </manifest>

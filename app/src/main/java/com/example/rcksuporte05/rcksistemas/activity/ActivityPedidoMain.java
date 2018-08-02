@@ -66,7 +66,8 @@ public class ActivityPedidoMain extends AppCompatActivity {
     @OnClick(R.id.BtnFinanceiro)
     public void financeiro() {
         if (objetoCliente != null) {
-            Intent intent = new Intent(this, activityAnaliseDeCredito.class);
+//            Intent intent = new Intent(this, activityAnaliseDeCredito.class);
+            Intent intent = new Intent(this, FinanceiroResumoActivity.class);
             intent.putExtra("valorPedido", PedidoHelper.getValorVenda());
             HistoricoFinanceiroHelper.setCliente(objetoCliente);
             this.startActivity(intent);

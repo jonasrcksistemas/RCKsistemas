@@ -338,9 +338,9 @@ public class CadastroCliente3 extends Fragment implements View.OnClickListener {
                 try {
                     Intent intent = new Intent(getContext(), FinanceiroResumoActivity.class);
                     HistoricoFinanceiroHelper.setCliente(ClienteHelper.getCliente());
-                    DBHelper db = new DBHelper(getActivity());
-                    CadastroFinanceiroResumoDAO cadastroFinanceiroResumoDAO = new CadastroFinanceiroResumoDAO(db);
-                    HistoricoFinanceiroHelper.setCadastroFinanceiroResumo(cadastroFinanceiroResumoDAO.listaCadastroFinanceiroResumo(ClienteHelper.getCliente().getId_cadastro_servidor()));
+//                    DBHelper db = new DBHelper(getActivity());
+//                    CadastroFinanceiroResumoDAO cadastroFinanceiroResumoDAO = new CadastroFinanceiroResumoDAO(db);
+//                    HistoricoFinanceiroHelper.setCadastroFinanceiroResumo(cadastroFinanceiroResumoDAO.listaCadastroFinanceiroResumo(ClienteHelper.getCliente().getId_cadastro_servidor()));
                     System.gc();
                     getContext().startActivity(intent);
                     CadastroClienteMain cadastroClienteMain = new CadastroClienteMain();
