@@ -34,7 +34,7 @@ public class Api {
 
     private static OkHttpClient.Builder interceptor() {
         return new OkHttpClient.Builder()
-                .readTimeout(3, TimeUnit.MINUTES)
+                .readTimeout(180, TimeUnit.MINUTES)
                 .addInterceptor(new Interceptor() {
                     @Override
                     public okhttp3.Response intercept(Chain chain) throws IOException {
