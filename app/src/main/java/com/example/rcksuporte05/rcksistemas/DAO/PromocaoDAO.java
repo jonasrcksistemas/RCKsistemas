@@ -2,6 +2,7 @@ package com.example.rcksuporte05.rcksistemas.DAO;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.CursorIndexOutOfBoundsException;
 
 import com.example.rcksuporte05.rcksistemas.Helper.UsuarioHelper;
 import com.example.rcksuporte05.rcksistemas.model.Promocao;
@@ -43,33 +44,43 @@ public class PromocaoDAO {
     }
 
     public List<Promocao> listaPromocaoTodosClientes() {
-        PromocaoProdutoDAO promocaoProdutoDAO = new PromocaoProdutoDAO(db);
-        Cursor cursor = db.listaDados("SELECT * FROM TBL_PROMOCAO_CAB WHERE APLICACAO_CLIENTE = 0 AND ID_EMPRESA = " + UsuarioHelper.getUsuario().getIdEmpresaMultiDevice() + " ORDER BY APLICACAO_PRODUTO DESC, DESCONTO_PERC DESC;");
+        try {
+            PromocaoProdutoDAO promocaoProdutoDAO = new PromocaoProdutoDAO(db);
+            Cursor cursor = db.listaDados("SELECT * FROM TBL_PROMOCAO_CAB WHERE APLICACAO_CLIENTE = 0 AND ID_EMPRESA = " + UsuarioHelper.getUsuario().getIdEmpresaMultiDevice() + " ORDER BY APLICACAO_PRODUTO DESC, DESCONTO_PERC DESC;");
 
-        List<Promocao> listaPromocao = listaPromocao(cursor);
+            List<Promocao> listaPromocao = listaPromocao(cursor);
 
-        for (Promocao promocao : listaPromocao) {
-            if (promocao.getAplicacaoProduto() > 0)
-                promocao.setListaPromoProduto(promocaoProdutoDAO.listaPromocaoProduto(promocao.getIdPromocao()));
+            for (Promocao promocao : listaPromocao) {
+                if (promocao.getAplicacaoProduto() > 0)
+                    promocao.setListaPromoProduto(promocaoProdutoDAO.listaPromocaoProduto(promocao.getIdPromocao()));
+            }
+            return listaPromocao;
+        } catch (CursorIndexOutOfBoundsException e) {
+            e.printStackTrace();
+            return new ArrayList<>();
         }
-        return listaPromocao;
     }
 
     public List<Promocao> listaPromocaoClienteEspecifico() {
-        PromocaoClienteDAO promocaoClienteDAO = new PromocaoClienteDAO(db);
-        PromocaoProdutoDAO promocaoProdutoDAO = new PromocaoProdutoDAO(db);
-        Cursor cursor = db.listaDados("SELECT * FROM TBL_PROMOCAO_CAB WHERE APLICACAO_CLIENTE = 1 AND ID_EMPRESA = " + UsuarioHelper.getUsuario().getIdEmpresaMultiDevice() + " ORDER BY APLICACAO_PRODUTO DESC, DESCONTO_PERC DESC;");
+        try {
+            PromocaoClienteDAO promocaoClienteDAO = new PromocaoClienteDAO(db);
+            PromocaoProdutoDAO promocaoProdutoDAO = new PromocaoProdutoDAO(db);
+            Cursor cursor = db.listaDados("SELECT * FROM TBL_PROMOCAO_CAB WHERE APLICACAO_CLIENTE = 1 AND ID_EMPRESA = " + UsuarioHelper.getUsuario().getIdEmpresaMultiDevice() + " ORDER BY APLICACAO_PRODUTO DESC, DESCONTO_PERC DESC;");
 
-        List<Promocao> listaPromocao = listaPromocao(cursor);
+            List<Promocao> listaPromocao = listaPromocao(cursor);
 
-        for (Promocao promocao : listaPromocao) {
-            if (promocao.getAplicacaoCliente() > 0)
-                promocao.setListaPromoCliente(promocaoClienteDAO.listaPromocaoCliente(promocao.getIdPromocao()));
-            if (promocao.getAplicacaoProduto() > 0)
-                promocao.setListaPromoProduto(promocaoProdutoDAO.listaPromocaoProduto(promocao.getIdPromocao()));
+            for (Promocao promocao : listaPromocao) {
+                if (promocao.getAplicacaoCliente() > 0)
+                    promocao.setListaPromoCliente(promocaoClienteDAO.listaPromocaoCliente(promocao.getIdPromocao()));
+                if (promocao.getAplicacaoProduto() > 0)
+                    promocao.setListaPromoProduto(promocaoProdutoDAO.listaPromocaoProduto(promocao.getIdPromocao()));
+            }
+
+            return listaPromocao;
+        } catch (CursorIndexOutOfBoundsException e) {
+            e.printStackTrace();
+            return new ArrayList<>();
         }
-
-        return listaPromocao;
     }
 
     public List<Promocao> listaPromocao(Cursor cursor) {
