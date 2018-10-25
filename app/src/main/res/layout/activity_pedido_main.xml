@@ -38,21 +38,33 @@
                 android:id="@+id/txtNomeCliente"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
-                android:layout_marginRight="12dp"
                 android:layout_marginTop="15dp"
-                android:layout_toLeftOf="@+id/BtnFinanceiro"
+                android:layout_marginRight="12dp"
                 android:layout_toStartOf="@+id/BtnFinanceiro"
+                android:layout_toLeftOf="@+id/BtnFinanceiro"
                 android:text="Toque aqui para selecionar seu cliente"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
+
+            <TextView
+                android:id="@+id/txtNomeFantasia"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txtNomeCliente"
+                android:layout_alignStart="@+id/txtNomeCliente"
+                android:layout_alignLeft="@+id/txtNomeCliente"
+                android:layout_marginRight="12dp"
+                android:layout_toStartOf="@+id/BtnFinanceiro"
+                android:layout_toLeftOf="@+id/BtnFinanceiro"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
 
             <TextView
                 android:id="@+id/txtCategoria"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/txtNomeCliente"
+                android:layout_below="@+id/txtNomeFantasia"
                 android:layout_marginTop="12dp"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
 
@@ -60,9 +72,9 @@
                 android:id="@+id/BtnFinanceiro"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
+                android:layout_alignTop="@id/txtNomeCliente"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:layout_alignTop="@id/txtNomeCliente"
                 android:layout_marginEnd="12dp"
                 android:layout_marginRight="12dp"
                 android:background="@mipmap/ic_financeiro_botao" />
@@ -77,8 +89,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:clipToPadding="false"
-        android:paddingLeft="36dp"
         android:paddingStart="36dp"
+        android:paddingLeft="36dp"
         android:theme="@style/Theme.Toolbar" />
 
     <android.support.v4.view.ViewPager

@@ -2,6 +2,7 @@ package com.example.rcksuporte05.rcksistemas.adapters.viewHolder;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.rcksuporte05.rcksistemas.R;
@@ -24,6 +25,8 @@ public class ProdutoViewHolder extends RecyclerView.ViewHolder implements View.O
     public TextView idProduto;
     @BindView(R.id.txtSaldoEstoque)
     public TextView txtSaldoEstoque;
+    @BindView(R.id.itemView)
+    public RelativeLayout itemView;
 
     public ProdutoViewHolder(View itemView) {
         super(itemView);

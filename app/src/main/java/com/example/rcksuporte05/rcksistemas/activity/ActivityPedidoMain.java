@@ -43,6 +43,8 @@ public class ActivityPedidoMain extends AppCompatActivity {
     private static Cliente objetoCliente = null;
     @BindView(R.id.txtNomeCliente)
     public TextView txtNomeCliente;
+    @BindView(R.id.txtNomeFantasia)
+    public TextView txtNomeFantasia;
     @BindView((R.id.txtCategoria))
     public TextView txtCategoria;
     @BindView(R.id.stl_tabsPedido)
@@ -252,6 +254,7 @@ public class ActivityPedidoMain extends AppCompatActivity {
         try {
             txtNomeCliente.setTextColor(Color.WHITE);
             txtNomeCliente.setText(objetoCliente.getNome_cadastro());
+            txtNomeFantasia.setText(objetoCliente.getNome_fantasia());
             txtCategoria.setText(listaCategoria.get(objetoCliente.getIdCategoria()).getNomeCategoria());
         } catch (NullPointerException e) {
             e.printStackTrace();

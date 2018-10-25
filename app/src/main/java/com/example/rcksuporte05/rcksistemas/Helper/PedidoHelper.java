@@ -38,6 +38,7 @@ public class PedidoHelper {
     private static WebPedido webPedido;
     private static WebPedidoItens webPedidoItem;
     private static List<WebPedidoItens> listaWebPedidoItens;
+    private static List<Produto> listaProdutos;
     private static Produto produto;
     private static int idPedido;
     private static String buscaProduto;
@@ -92,6 +93,14 @@ public class PedidoHelper {
 
     public static void setListaWebPedidoItens(List<WebPedidoItens> listaWebPedidoItens) {
         PedidoHelper.listaWebPedidoItens = listaWebPedidoItens;
+    }
+
+    public static List<Produto> getListaProdutos() {
+        return listaProdutos;
+    }
+
+    public static void setListaProdutos(List<Produto> listaProdutos) {
+        PedidoHelper.listaProdutos = listaProdutos;
     }
 
     public static WebPedido getWebPedido() {
@@ -152,6 +161,7 @@ public class PedidoHelper {
             resultado += Float.valueOf(produtoPedido.get(i).getValor_total());
         }
         setValorVenda(resultado);
+        listaWebPedidoItens = produtoPedido;
         EditText edtTotalVenda = (EditText) activityPedidoMain.findViewById(R.id.edtTotalVenda);
         edtTotalVenda.setText(MascaraUtil.mascaraReal(resultado));
     }
@@ -335,6 +345,7 @@ public class PedidoHelper {
         webPedido = null;
         idPedido = 0;
         buscaProduto = null;
+        listaProdutos = null;
         System.gc();
     }
 }

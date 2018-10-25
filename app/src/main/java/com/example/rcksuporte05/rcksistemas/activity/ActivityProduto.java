@@ -11,8 +11,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.view.ActionMode;
+import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -20,7 +21,6 @@ import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.PedidoHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.ListaProdutoAdpter;
-import com.example.rcksuporte05.rcksistemas.adapters.RecyclerTouchListener;
 import com.example.rcksuporte05.rcksistemas.model.Produto;
 import com.example.rcksuporte05.rcksistemas.model.WebPedidoItens;
 import com.example.rcksuporte05.rcksistemas.util.DividerItemDecoration;
@@ -53,6 +53,8 @@ public class ActivityProduto extends AppCompatActivity {
     private List<Produto> lista;
     private DBHelper db = new DBHelper(this);
     private ListaProdutoAdpter listaProdutoAdpter;
+    private ActionMode actionMode;
+    private ListaProdutoAdpter.ProdutoAdapterListener listener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,72 +74,71 @@ public class ActivityProduto extends AppCompatActivity {
         listaProdutoRecyclerView.setLayoutManager(layoutManager);
         listaProdutoRecyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayout.VERTICAL));
 
-        try {
-            lista = db.listaProduto("SELECT * FROM TBL_PRODUTO WHERE ATIVO = 'S' ORDER BY NOME_PRODUTO");
-            edtTotalProdutos.setText(lista.size() + " Produtos listados");
-            edtTotalProdutos.setTextColor(Color.BLACK);
-            preecheRecyclerProduto(lista);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
         if (getIntent().getIntExtra("acao", 0) == 1) {
-
-            listaProdutoRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(this, listaProdutoRecyclerView, new RecyclerTouchListener.ClickListener() {
+            listener = new ListaProdutoAdpter.ProdutoAdapterListener() {
                 @Override
-                public void onClick(View view, int position) {
-                    final Intent intent = new Intent(ActivityProduto.this, ProdutoPedidoActivity.class);
-                    if (buscaProduto != null) {
-                        PedidoHelper.setBuscaProduto(buscaProduto.getQuery().toString());
-                    }
-                    Boolean produtoRepetido = false;
-                    if (PedidoHelper.getListaWebPedidoItens() != null) {
-                        int i = 0;
-                        for (final WebPedidoItens webPedidoItens : PedidoHelper.getListaWebPedidoItens()) {
-                            if (webPedidoItens.getId_produto() == listaProdutoAdpter.getItem(position).getId_produto()) {
-                                produtoRepetido = true;
-                                AlertDialog.Builder alert = new AlertDialog.Builder(ActivityProduto.this);
-                                alert.setTitle("Atenção");
-                                alert.setMessage("O produto " + listaProdutoAdpter.getItem(position).getNome_produto() + " já esta nesse pedido, deseja alterá-lo?");
-                                alert.setNegativeButton("NÃO", null);
-                                final int posicao = i;
-                                alert.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        PedidoHelper.setProduto(null);
-                                        PedidoHelper.setWebPedidoItem(webPedidoItens);
-                                        intent.putExtra("pedido", 1);
-                                        intent.putExtra("position", posicao);
-                                        startActivity(intent);
-                                        finish();
-                                    }
-                                });
-                                alert.show();
-                                break;
+                public void onClickListener(int position) {
+                    if (listaProdutoAdpter.getSelectedItensCount() > 0) {
+                        Boolean produtoRepetido = false;
+                        if (PedidoHelper.getListaWebPedidoItens() != null) {
+                            for (final WebPedidoItens webPedidoItens : PedidoHelper.getListaWebPedidoItens()) {
+                                if (webPedidoItens.getId_produto() == listaProdutoAdpter.getItem(position).getId_produto()) {
+                                    produtoRepetido = true;
+                                    AlertDialog.Builder alert = new AlertDialog.Builder(ActivityProduto.this);
+                                    alert.setTitle("Atenção");
+                                    alert.setMessage("O produto " + listaProdutoAdpter.getItem(position).getNome_produto() + " já esta nesse pedido e não pode ser lançado novamente, somente alterado!");
+                                    alert.setNeutralButton("OK", null);
+                                    alert.show();
+                                    break;
+                                }
                             }
-                            i++;
+                        }
+                        if (!produtoRepetido) {
+                            enableActionMode(position);
+                        }
+                    } else {
+                        final Intent intent = new Intent(ActivityProduto.this, ProdutoPedidoActivity.class);
+                        if (buscaProduto != null) {
+                            PedidoHelper.setBuscaProduto(buscaProduto.getQuery().toString());
+                        }
+                        Boolean produtoRepetido = false;
+                        if (PedidoHelper.getListaWebPedidoItens() != null) {
+                            int i = 0;
+                            for (final WebPedidoItens webPedidoItens : PedidoHelper.getListaWebPedidoItens()) {
+                                if (webPedidoItens.getId_produto() == listaProdutoAdpter.getItem(position).getId_produto()) {
+                                    produtoRepetido = true;
+                                    AlertDialog.Builder alert = new AlertDialog.Builder(ActivityProduto.this);
+                                    alert.setTitle("Atenção");
+                                    alert.setMessage("O produto " + listaProdutoAdpter.getItem(position).getNome_produto() + " já esta nesse pedido, deseja alterá-lo?");
+                                    alert.setNegativeButton("NÃO", null);
+                                    final int posicao = i;
+                                    alert.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            PedidoHelper.setProduto(null);
+                                            PedidoHelper.setWebPedidoItem(webPedidoItens);
+                                            intent.putExtra("pedido", 1);
+                                            intent.putExtra("position", posicao);
+                                            startActivity(intent);
+                                            finish();
+                                        }
+                                    });
+                                    alert.show();
+                                    break;
+                                }
+                                i++;
+                            }
+                        }
+                        if (!produtoRepetido) {
+                            PedidoHelper.setProduto(listaProdutoAdpter.getItem(position));
+                            startActivity(intent);
+                            finish();
                         }
                     }
-                    if (!produtoRepetido) {
-                        PedidoHelper.setProduto(listaProdutoAdpter.getItem(position));
-                        startActivity(intent);
-                        finish();
-                    }
                 }
 
                 @Override
-                public void onLongClick(View view, int position) {
-
-                }
-            }));
-
-        } else if (getIntent().getIntExtra("acao", 0) == 2) {
-            listaProdutoRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(this, listaProdutoRecyclerView, new RecyclerTouchListener.ClickListener() {
-                @Override
-                public void onClick(View view, int position) {
-                    if (buscaProduto != null) {
-                        PedidoHelper.setBuscaProduto(buscaProduto.getQuery().toString());
-                    }
+                public void onLongClickListener(int position) {
                     Boolean produtoRepetido = false;
                     if (PedidoHelper.getListaWebPedidoItens() != null) {
                         for (final WebPedidoItens webPedidoItens : PedidoHelper.getListaWebPedidoItens()) {
@@ -146,16 +147,6 @@ public class ActivityProduto extends AppCompatActivity {
                                 AlertDialog.Builder alert = new AlertDialog.Builder(ActivityProduto.this);
                                 alert.setTitle("Atenção");
                                 alert.setMessage("O produto " + listaProdutoAdpter.getItem(position).getNome_produto() + " já esta nesse pedido e não pode ser lançado novamente, somente alterado!");
-                                /*alert.setNegativeButton("NÃO", null);
-                                alert.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        PedidoHelper.setProduto(null);
-                                        PedidoHelper.setWebPedidoItem(webPedidoItens);
-                                        PedidoHelper.getProdutoPedidoActivity().getIntent().putExtra("pedido", 1);
-                                        finish();
-                                    }
-                                });*/
                                 alert.setNeutralButton("OK", null);
                                 alert.show();
                                 break;
@@ -163,16 +154,79 @@ public class ActivityProduto extends AppCompatActivity {
                         }
                     }
                     if (!produtoRepetido) {
-                        PedidoHelper.setProduto(listaProdutoAdpter.getItem(position));
-                        finish();
+                        enableActionMode(position);
+                    }
+                }
+            };
+
+        } else if (getIntent().getIntExtra("acao", 0) == 2) {
+            listener = new ListaProdutoAdpter.ProdutoAdapterListener() {
+                @Override
+                public void onClickListener(int position) {
+                    if (listaProdutoAdpter.getSelectedItensCount() > 0) {
+                        Boolean produtoRepetido = false;
+                        if (PedidoHelper.getListaWebPedidoItens() != null) {
+                            for (final WebPedidoItens webPedidoItens : PedidoHelper.getListaWebPedidoItens()) {
+                                if (webPedidoItens.getId_produto() == listaProdutoAdpter.getItem(position).getId_produto()) {
+                                    produtoRepetido = true;
+                                    AlertDialog.Builder alert = new AlertDialog.Builder(ActivityProduto.this);
+                                    alert.setTitle("Atenção");
+                                    alert.setMessage("O produto " + listaProdutoAdpter.getItem(position).getNome_produto() + " já esta nesse pedido e não pode ser lançado novamente, somente alterado!");
+                                    alert.setNeutralButton("OK", null);
+                                    alert.show();
+                                    break;
+                                }
+                            }
+                        }
+                        if (!produtoRepetido) {
+                            enableActionMode(position);
+                        }
+                    } else {
+                        if (buscaProduto != null) {
+                            PedidoHelper.setBuscaProduto(buscaProduto.getQuery().toString());
+                        }
+                        Boolean produtoRepetido = false;
+                        if (PedidoHelper.getListaWebPedidoItens() != null) {
+                            for (final WebPedidoItens webPedidoItens : PedidoHelper.getListaWebPedidoItens()) {
+                                if (webPedidoItens.getId_produto() == listaProdutoAdpter.getItem(position).getId_produto()) {
+                                    produtoRepetido = true;
+                                    AlertDialog.Builder alert = new AlertDialog.Builder(ActivityProduto.this);
+                                    alert.setTitle("Atenção");
+                                    alert.setMessage("O produto " + listaProdutoAdpter.getItem(position).getNome_produto() + " já esta nesse pedido e não pode ser lançado novamente, somente alterado!");
+                                    alert.setNeutralButton("OK", null);
+                                    alert.show();
+                                    break;
+                                }
+                            }
+                        }
+                        if (!produtoRepetido) {
+                            PedidoHelper.setProduto(listaProdutoAdpter.getItem(position));
+                            finish();
+                        }
                     }
                 }
 
                 @Override
-                public void onLongClick(View view, int position) {
-
+                public void onLongClickListener(int position) {
+                    Boolean produtoRepetido = false;
+                    if (PedidoHelper.getListaWebPedidoItens() != null) {
+                        for (final WebPedidoItens webPedidoItens : PedidoHelper.getListaWebPedidoItens()) {
+                            if (webPedidoItens.getId_produto() == listaProdutoAdpter.getItem(position).getId_produto()) {
+                                produtoRepetido = true;
+                                AlertDialog.Builder alert = new AlertDialog.Builder(ActivityProduto.this);
+                                alert.setTitle("Atenção");
+                                alert.setMessage("O produto " + listaProdutoAdpter.getItem(position).getNome_produto() + " já esta nesse pedido e não pode ser lançado novamente, somente alterado!");
+                                alert.setNeutralButton("OK", null);
+                                alert.show();
+                                break;
+                            }
+                        }
+                    }
+                    if (!produtoRepetido) {
+                        enableActionMode(position);
+                    }
                 }
-            }));
+            };
         }
 
         buscaProduto.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -185,11 +239,11 @@ public class ActivityProduto extends AppCompatActivity {
             public boolean onQueryTextChange(final String query) {
                 try {
                     if (query.trim().equals("")) {
-                        listaProdutoAdpter = new ListaProdutoAdpter(lista);
+                        listaProdutoAdpter = new ListaProdutoAdpter(lista, listener);
                         edtTotalProdutos.setText(lista.size() + " Produtos listados");
                         edtTotalProdutos.setTextColor(Color.BLACK);
                     } else {
-                        listaProdutoAdpter = new ListaProdutoAdpter(buscarProdutos(query));
+                        listaProdutoAdpter = new ListaProdutoAdpter(buscarProdutos(query), listener);
                     }
                     listaProdutoAdpter.notifyDataSetChanged();
                     listaProdutoRecyclerView.setAdapter(listaProdutoAdpter);
@@ -203,6 +257,15 @@ public class ActivityProduto extends AppCompatActivity {
         if (PedidoHelper.getBuscaProduto() != null && !PedidoHelper.getBuscaProduto().trim().isEmpty()) {
             buscaProduto.setIconified(false);
             buscaProduto.setQuery(PedidoHelper.getBuscaProduto(), true);
+        }
+
+        try {
+            lista = db.listaProduto("SELECT * FROM TBL_PRODUTO WHERE ATIVO = 'S' ORDER BY NOME_PRODUTO");
+            edtTotalProdutos.setText(lista.size() + " Produtos listados");
+            edtTotalProdutos.setTextColor(Color.BLACK);
+            preecheRecyclerProduto(lista);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         setSupportActionBar(toolbar);
@@ -244,9 +307,68 @@ public class ActivityProduto extends AppCompatActivity {
     }
 
     public void preecheRecyclerProduto(List<Produto> produtos) {
-        listaProdutoAdpter = new ListaProdutoAdpter(produtos);
+        listaProdutoAdpter = new ListaProdutoAdpter(produtos, listener);
         listaProdutoRecyclerView.setAdapter(listaProdutoAdpter);
 
         listaProdutoAdpter.notifyDataSetChanged();
+    }
+
+    public void enableActionMode(final int position) {
+        if (actionMode == null) {
+            actionMode = startActionMode(new ActionMode.Callback() {
+                @Override
+                public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                    mode.getMenuInflater().inflate(R.menu.menu_action_mode_produtos_pedido, menu);
+                    return true;
+                }
+
+                @Override
+                public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                    return false;
+                }
+
+                @Override
+                public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+                    switch (item.getItemId()) {
+                        case R.id.action_continua_pedido:
+                            AlertDialog.Builder alert = new AlertDialog.Builder(ActivityProduto.this);
+                            alert.setTitle("Atenção");
+                            alert.setMessage("Deseja enviar esses " + listaProdutoAdpter.getSelectedItensCount() + " para o pedido?");
+                            alert.setNegativeButton("Não", null);
+                            alert.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    PedidoHelper.setListaProdutos(listaProdutoAdpter.getItensSelecionados());
+                                    Intent intent = new Intent(ActivityProduto.this, ProdutoPedidoActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            });
+                            alert.show();
+                            break;
+                    }
+                    return true;
+                }
+
+                @Override
+                public void onDestroyActionMode(ActionMode mode) {
+                    actionMode.finish();
+                    listaProdutoAdpter.clearSelection();
+                    actionMode = null;
+                }
+            });
+        }
+        toggleSelection(position);
+    }
+
+    public void toggleSelection(int position) {
+        listaProdutoAdpter.toggleSelection(position);
+        if (listaProdutoAdpter.getSelectedItensCount() == 0) {
+            actionMode.finish();
+            actionMode = null;
+        } else {
+            actionMode.setTitle(String.valueOf(listaProdutoAdpter.getSelectedItensCount()));
+            actionMode.invalidate();
+        }
     }
 }

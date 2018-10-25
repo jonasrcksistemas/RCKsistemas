@@ -1,0 +1,13 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:mContext="com.example.rcksuporte05.rcksistemas.activity.ActivityProduto">
+
+    <item
+        android:id="@+id/action_continua_pedido"
+        android:icon="@drawable/ic_produto_pedido"
+        android:orderInCategory="1"
+        android:title="Continuar o pedido"
+        app:showAsAction="always" />
+
+</menu>

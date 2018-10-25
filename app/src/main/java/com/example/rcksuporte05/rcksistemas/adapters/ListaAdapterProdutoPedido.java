@@ -44,8 +44,10 @@ public class ListaAdapterProdutoPedido extends RecyclerView.Adapter<ProdutoPedid
         if (lista.get(position).getValor_desconto_per() != null && !lista.get(position).getValor_desconto_per().trim().isEmpty() && Float.parseFloat(lista.get(position).getValor_desconto_per()) > 0) {
             valorProduto = lista.get(position).getValor_unitario() - (Float.parseFloat(lista.get(position).getValor_desconto_real()) / Float.parseFloat(lista.get(position).getQuantidade()));
             holder.txtDesconto.setText("Desconto: " + lista.get(position).getValor_desconto_per() + "%");
-        } else
+        } else {
             valorProduto = lista.get(position).getValor_unitario();
+            holder.txtDesconto.setText("");
+        }
 
         holder.precoProduto.setText(MascaraUtil.duasCasaDecimal(lista.get(position).getQuantidade()) + " x " + MascaraUtil.mascaraReal(valorProduto) + " = " + MascaraUtil.mascaraReal(lista.get(position).getValor_total()));
 

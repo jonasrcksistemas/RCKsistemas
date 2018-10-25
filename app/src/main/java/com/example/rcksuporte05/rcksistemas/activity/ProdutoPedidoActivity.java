@@ -22,10 +22,13 @@ import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.PedidoHelper;
 import com.example.rcksuporte05.rcksistemas.R;
+import com.example.rcksuporte05.rcksistemas.model.Produto;
 import com.example.rcksuporte05.rcksistemas.model.PromocaoRetorno;
 import com.example.rcksuporte05.rcksistemas.model.TabelaPrecoItem;
 import com.example.rcksuporte05.rcksistemas.model.WebPedidoItens;
 import com.example.rcksuporte05.rcksistemas.util.MascaraUtil;
+
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -200,59 +203,75 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        try {
-            if (PedidoHelper.getProduto() != null && PedidoHelper.getProduto().getId_produto() != PedidoHelper.getWebPedidoItem().getId_produto()) {
-                webPedidoItem = new WebPedidoItens(PedidoHelper.getProduto());
-                if (Float.parseFloat(edtDesconto.getText().toString()) <= 0)
-                    edtDesconto.setText(tabelaPrecoItem.getPerc_desc_final());
-            } else {
-                webPedidoItem = PedidoHelper.getWebPedidoItem();
-                edtQuantidade.setText(webPedidoItem.getQuantidade().toString().replace(".0", ""));
-                edtDesconto.setText(webPedidoItem.getValor_desconto_per());
-                edtDescontoReais.setText(webPedidoItem.getValor_desconto_real());
-                if (webPedidoItem.getTipoDesconto().equals("R"))
-                    rbReal.setChecked(true);
+        if (PedidoHelper.getListaProdutos() != null && PedidoHelper.getListaProdutos().size() > 0) {
+            Float valorUnitario = 0.f;
+            for (Produto produto : PedidoHelper.getListaProdutos()) {
+                valorUnitario += Float.parseFloat(produto.getVenda_preco());
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            try {
-                webPedidoItem = new WebPedidoItens(PedidoHelper.getProduto());
-                if (Float.parseFloat(edtDesconto.getText().toString()) <= 0)
-                    edtDesconto.setText(tabelaPrecoItem.getPerc_desc_final());
-            } catch (Exception nullPointer) {
-                nullPointer.printStackTrace();
-            }
-        }
-
-        if (!webPedidoItem.getProduto_tercerizacao().equals("S") && !webPedidoItem.getProduto_materia_prima().equals("S")) {
-            edtDesconto.setEnabled(true);
-            edtDescontoReais.setEnabled(true);
-            rbPorcentagem.setEnabled(true);
-            rbReal.setEnabled(true);
-            promocaoRetorno = pedidoBO.calculaDesconto(ClienteHelper.getCliente().getId_cadastro_servidor(), webPedidoItem.getId_produto(), ProdutoPedidoActivity.this);
-            if (promocaoRetorno != null && promocaoRetorno.getValorDesconto() > 0 && promocaoRetorno.getValorDesconto() > Float.parseFloat(tabelaPrecoItem.getPerc_desc_final())) {
-                rbPorcentagem.setText("Desconto %(max " + promocaoRetorno.getValorDesconto().toString().replace(".0", "") + "%)");
-                cdPromocao.setVisibility(View.VISIBLE);
-                txtPromocao.setText("**PRODUTO EM PROMOÇÃO**\n" + promocaoRetorno.getNomePromocao());
-            } else {
-                cdPromocao.setVisibility(View.GONE);
-                rbPorcentagem.setText("Desconto %(max " + tabelaPrecoItem.getPerc_desc_final() + "%)");
-            }
-        } else {
-            rbPorcentagem.setEnabled(false);
-            rbReal.setEnabled(false);
-            edtDesconto.setEnabled(false);
-            edtDesconto.setText("00");
-            edtDescontoReais.setEnabled(false);
-            edtDescontoReais.setText("0.00");
+            webPedidoItem = new WebPedidoItens();
+            webPedidoItem.setNome_produto("VARIOS PRODUTOS SELECIONADOS");
+            edtNomeProduto.setText("VARIOS PRODUTOS SELECIONADOS");
+            webPedidoItem.setVenda_preco(valorUnitario.toString());
+            edtTabelaPreco.setText(valorUnitario.toString());
+            rbPorcentagem.setText("Desconto %(max " + tabelaPrecoItem.getPerc_desc_final() + "%)");
+            edtDesconto.setText(tabelaPrecoItem.getPerc_desc_final());
             cdPromocao.setVisibility(View.VISIBLE);
-            txtPromocao.setText("PRODUTO COM PREÇO FIXO");
-            rbPorcentagem.setText("Desconto %(max 0%)");
-        }
+            txtPromocao.setText(PedidoHelper.getListaProdutos().size() + " PRODUTOS SELECIONADOS");
+        } else {
+            try {
+                if (PedidoHelper.getProduto() != null && PedidoHelper.getProduto().getId_produto() != PedidoHelper.getWebPedidoItem().getId_produto()) {
+                    webPedidoItem = new WebPedidoItens(PedidoHelper.getProduto());
+                    if (Float.parseFloat(edtDesconto.getText().toString()) <= 0)
+                        edtDesconto.setText(tabelaPrecoItem.getPerc_desc_final());
+                } else {
+                    webPedidoItem = PedidoHelper.getWebPedidoItem();
+                    edtQuantidade.setText(webPedidoItem.getQuantidade().toString().replace(".0", ""));
+                    edtDesconto.setText(webPedidoItem.getValor_desconto_per());
+                    edtDescontoReais.setText(webPedidoItem.getValor_desconto_real());
+                    if (webPedidoItem.getTipoDesconto().equals("R"))
+                        rbReal.setChecked(true);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                try {
+                    webPedidoItem = new WebPedidoItens(PedidoHelper.getProduto());
+                    if (Float.parseFloat(edtDesconto.getText().toString()) <= 0)
+                        edtDesconto.setText(tabelaPrecoItem.getPerc_desc_final());
+                } catch (Exception nullPointer) {
+                    nullPointer.printStackTrace();
+                }
+            }
 
-        edtNomeProduto.setText(webPedidoItem.getNome_produto());
-        edtTabelaPreco.setText(MascaraUtil.mascaraVirgula(webPedidoItem.getVenda_preco()));
-        calculaDesconto();
+            if (!webPedidoItem.getProduto_tercerizacao().equals("S") && !webPedidoItem.getProduto_materia_prima().equals("S")) {
+                edtDesconto.setEnabled(true);
+                edtDescontoReais.setEnabled(true);
+                rbPorcentagem.setEnabled(true);
+                rbReal.setEnabled(true);
+                promocaoRetorno = pedidoBO.calculaDesconto(ClienteHelper.getCliente().getId_cadastro_servidor(), webPedidoItem.getId_produto(), ProdutoPedidoActivity.this);
+                if (promocaoRetorno != null && promocaoRetorno.getValorDesconto() > 0 && promocaoRetorno.getValorDesconto() > Float.parseFloat(tabelaPrecoItem.getPerc_desc_final())) {
+                    rbPorcentagem.setText("Desconto %(max " + promocaoRetorno.getValorDesconto().toString().replace(".0", "") + "%)");
+                    cdPromocao.setVisibility(View.VISIBLE);
+                    txtPromocao.setText("**PRODUTO EM PROMOÇÃO**\n" + promocaoRetorno.getNomePromocao());
+                } else {
+                    cdPromocao.setVisibility(View.GONE);
+                    rbPorcentagem.setText("Desconto %(max " + tabelaPrecoItem.getPerc_desc_final() + "%)");
+                }
+            } else {
+                rbPorcentagem.setEnabled(false);
+                rbReal.setEnabled(false);
+                edtDesconto.setEnabled(false);
+                edtDesconto.setText("00");
+                edtDescontoReais.setEnabled(false);
+                edtDescontoReais.setText("0.00");
+                cdPromocao.setVisibility(View.VISIBLE);
+                txtPromocao.setText("DESCONTO NÃO AUTORIZADO");
+                rbPorcentagem.setText("Desconto %(max 0%)");
+            }
+
+            edtNomeProduto.setText(webPedidoItem.getNome_produto());
+            edtTabelaPreco.setText(MascaraUtil.mascaraVirgula(webPedidoItem.getVenda_preco()));
+            calculaDesconto();
+        }
         super.onResume();
     }
 
@@ -290,25 +309,48 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
                             if (!edtTabelaPreco.getText().toString().isEmpty()) {
                                 if (Float.parseFloat(webPedidoItem.getVenda_preco()) > 0) {
                                     if (Float.parseFloat(edtDesconto.getText().toString()) <= descontoPedido) {
+                                        if (PedidoHelper.getListaProdutos() != null && PedidoHelper.getListaProdutos().size() > 0) {
+                                            final List<Produto> listaProdutosSelecionados = PedidoHelper.getListaProdutos();
+                                            for (Produto produto : listaProdutosSelecionados) {
+                                                WebPedidoItens produtoSelecionado = new WebPedidoItens(produto);
 
-                                        webPedidoItem.setValor_unitario(Float.parseFloat(webPedidoItem.getVenda_preco()));
-                                        webPedidoItem.setQuantidade(quantidade.toString());
-                                        webPedidoItem.setValor_total(String.valueOf(totalProdutoBruto - Float.parseFloat(edtDescontoReais.getText().toString())));
-                                        webPedidoItem.setValor_bruto(String.valueOf(totalProdutoBruto));
-                                        webPedidoItem.setValor_desconto_per(edtDesconto.getText().toString());
-                                        webPedidoItem.setValor_desconto_real(edtDescontoReais.getText().toString());
+                                                produtoSelecionado.setValor_unitario(Float.valueOf(produto.getVenda_preco()));
+                                                produtoSelecionado.setQuantidade(quantidade.toString());
+                                                produtoSelecionado.setValor_total(String.valueOf((Float.parseFloat(produto.getVenda_preco()) * quantidade) - ((Float.parseFloat(edtDesconto.getText().toString()) / 100) * (Float.parseFloat(produto.getVenda_preco()) * quantidade))));
+                                                produtoSelecionado.setValor_bruto(String.valueOf(Float.valueOf(produtoSelecionado.getVenda_preco()) * Float.parseFloat(quantidade.toString())));
+                                                produtoSelecionado.setValor_desconto_per(edtDesconto.getText().toString());
+                                                produtoSelecionado.setValor_desconto_real(String.valueOf((Float.parseFloat(edtDesconto.getText().toString()) / 100) * (Float.parseFloat(produto.getVenda_preco()) * quantidade)));
 
-                                        if (rbPorcentagem.isChecked())
-                                            webPedidoItem.setTipoDesconto("P");
-                                        else if (rbReal.isChecked())
-                                            webPedidoItem.setTipoDesconto("R");
+                                                if (rbPorcentagem.isChecked())
+                                                    produtoSelecionado.setTipoDesconto("P");
+                                                else if (rbReal.isChecked())
+                                                    produtoSelecionado.setTipoDesconto("R");
 
-                                        if (getIntent().getIntExtra("pedido", 0) != 1) {
-                                            PedidoHelper pedidoHelper = new PedidoHelper();
-                                            pedidoHelper.inserirProduto(webPedidoItem);
+                                                PedidoHelper pedidoHelper = new PedidoHelper();
+                                                pedidoHelper.inserirProduto(produtoSelecionado);
+
+                                                PedidoHelper.setListaProdutos(null);
+                                            }
                                         } else {
-                                            PedidoHelper pedidoHelper = new PedidoHelper();
-                                            pedidoHelper.alterarProduto(webPedidoItem, getIntent().getIntExtra("position", 0));
+                                            webPedidoItem.setValor_unitario(Float.parseFloat(webPedidoItem.getVenda_preco()));
+                                            webPedidoItem.setQuantidade(quantidade.toString());
+                                            webPedidoItem.setValor_total(String.valueOf(totalProdutoBruto - Float.parseFloat(edtDescontoReais.getText().toString())));
+                                            webPedidoItem.setValor_bruto(String.valueOf(totalProdutoBruto));
+                                            webPedidoItem.setValor_desconto_per(edtDesconto.getText().toString());
+                                            webPedidoItem.setValor_desconto_real(edtDescontoReais.getText().toString());
+
+                                            if (rbPorcentagem.isChecked())
+                                                webPedidoItem.setTipoDesconto("P");
+                                            else if (rbReal.isChecked())
+                                                webPedidoItem.setTipoDesconto("R");
+
+                                            if (getIntent().getIntExtra("pedido", 0) != 1) {
+                                                PedidoHelper pedidoHelper = new PedidoHelper();
+                                                pedidoHelper.inserirProduto(webPedidoItem);
+                                            } else {
+                                                PedidoHelper pedidoHelper = new PedidoHelper();
+                                                pedidoHelper.alterarProduto(webPedidoItem, getIntent().getIntExtra("position", 0));
+                                            }
                                         }
                                         finish();
                                     } else {
@@ -344,7 +386,7 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
 
     private void calculaDesconto() {
         try {
-            if (webPedidoItem != null) {
+            if (webPedidoItem != null || (PedidoHelper.getListaProdutos() != null && PedidoHelper.getListaProdutos().size() > 0)) {
                 if (!edtQuantidade.getText().toString().trim().isEmpty()) {
                     quantidade = Float.parseFloat(edtQuantidade.getText().toString());
                     totalProdutoBruto = quantidade * Float.parseFloat(webPedidoItem.getVenda_preco());
