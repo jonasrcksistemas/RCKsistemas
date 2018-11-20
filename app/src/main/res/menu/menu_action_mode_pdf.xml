@@ -23,5 +23,4 @@
         android:orderInCategory="3"
         android:title="Envia um espelho dos pedidos selecionados ao email do cliente"
         app:showAsAction="always" />
-
 </menu>

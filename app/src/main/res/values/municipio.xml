@@ -85,9 +85,9 @@
         <item>MONTEIRÓPOLIS</item>
         <item>MURICI</item>
         <item>NOVO LINO</item>
-        <item>OLHO D'ÁGUA DAS FLORES</item>
-        <item>OLHO D'ÁGUA DO CASADO</item>
-        <item>OLHO D'ÁGUA GRANDE</item>
+        <item>OLHO D\'ÁGUA DAS FLORES</item>
+        <item>OLHO D\'ÁGUA DO CASADO</item>
+        <item>OLHO D\'ÁGUA GRANDE</item>
         <item>OLIVENÇA</item>
         <item>OURO BRANCO</item>
         <item>PALESTINA</item>
@@ -121,7 +121,7 @@
         <item>SÃO MIGUEL DOS CAMPOS</item>
         <item>SÃO MIGUEL DOS MILAGRES</item>
         <item>SÃO SEBASTIÃO</item>
-        <item>TANQUE D'ARCA</item>
+        <item>TANQUE D\'ARCA</item>
         <item>TAQUARANA</item>
         <item>TEOTÔNIO VILELA</item>
         <item>TRAIPU</item>
@@ -331,7 +331,7 @@
         <item>CURAÇÁ</item>
         <item>CÂNDIDO SALES</item>
         <item>CÍCERO DANTAS</item>
-        <item>DIAS D'ÁVILA</item>
+        <item>DIAS D\'ÁVILA</item>
         <item>DOM BASÍLIO</item>
         <item>DOM MACEDO COSTA</item>
         <item>DÁRIO MEIRA</item>
@@ -1127,7 +1127,7 @@
         <item>SIMOLÂNDIA</item>
         <item>SÃO DOMINGOS</item>
         <item>SÃO FRANCISCO DE GOIÁS</item>
-        <item>SÃO JOÃO D'ALIANÇA</item>
+        <item>SÃO JOÃO D\'ALIANÇA</item>
         <item>SÃO JOÃO DA PARAÚNA</item>
         <item>SÃO LUÍS DE MONTES BELOS</item>
         <item>SÃO LUÍZ DO NORTE</item>
@@ -1135,7 +1135,7 @@
         <item>SÃO MIGUEL DO PASSA QUATRO</item>
         <item>SÃO PATRÍCIO</item>
         <item>SÃO SIMÃO</item>
-        <item>SÍTIO D'ABADIA</item>
+        <item>SÍTIO D\'ABADIA</item>
         <item>TAQUARAL DE GOIÁS</item>
         <item>TERESINA DE GOIÁS</item>
         <item>TEREZÓPOLIS DE GOIÁS</item>
@@ -1286,7 +1286,7 @@
         <item>NOVA COLINAS</item>
         <item>NOVA IORQUE</item>
         <item>NOVA OLINDA DO MARANHÃO</item>
-        <item>OLHO D'ÁGUA DAS CUNHÃS</item>
+        <item>OLHO D\'ÁGUA DAS CUNHÃS</item>
         <item>OLINDA NOVA DO MARANHÃO</item>
         <item>PALMEIRÂNDIA</item>
         <item>PARAIBANO</item>
@@ -1906,7 +1906,7 @@
         <item>NOVO ORIENTE DE MINAS</item>
         <item>NOVORIZONTE</item>
         <item>OLARIA</item>
-        <item>OLHOS-D'ÁGUA</item>
+        <item>OLHOS-D\'ÁGUA</item>
         <item>OLIVEIRA</item>
         <item>OLIVEIRA FORTES</item>
         <item>OLÍMPIO NORONHA</item>
@@ -1967,7 +1967,7 @@
         <item>PIEDADE DO RIO GRANDE</item>
         <item>PIEDADE DOS GERAIS</item>
         <item>PIMENTA</item>
-        <item>PINGO-D'ÁGUA</item>
+        <item>PINGO-D\'ÁGUA</item>
         <item>PINTÓPOLIS</item>
         <item>PIRACEMA</item>
         <item>PIRAJUBA</item>
@@ -2350,7 +2350,7 @@
         <item>COLÍDER</item>
         <item>COMODORO</item>
         <item>CONFRESA</item>
-        <item>CONQUISTA D'OESTE</item>
+        <item>CONQUISTA D\'OESTE</item>
         <item>COTRIGUAÇU</item>
         <item>CUIABÁ</item>
         <item>CURVELÂNDIA</item>
@@ -2359,10 +2359,10 @@
         <item>DIAMANTINO</item>
         <item>DOM AQUINO</item>
         <item>FELIZ NATAL</item>
-        <item>FIGUEIRÓPOLIS D'OESTE</item>
+        <item>FIGUEIRÓPOLIS D\'OESTE</item>
         <item>GAÚCHA DO NORTE</item>
         <item>GENERAL CARNEIRO</item>
-        <item>GLÓRIA D'OESTE</item>
+        <item>GLÓRIA D\'OESTE</item>
         <item>GUARANTÃ DO NORTE</item>
         <item>GUIRATINGA</item>
         <item>INDIAVAÍ</item>
@@ -2377,12 +2377,12 @@
         <item>JURUENA</item>
         <item>JUSCIMEIRA</item>
         <item>JUÍNA</item>
-        <item>LAMBARI D'OESTE</item>
+        <item>LAMBARI D\'OESTE</item>
         <item>LUCAS DO RIO VERDE</item>
         <item>LUCIÁRA</item>
         <item>MARCELÂNDIA</item>
         <item>MATUPÁ</item>
-        <item>MIRASSOL D'OESTE</item>
+        <item>MIRASSOL D\'OESTE</item>
         <item>NOBRES</item>
         <item>NORTELÂNDIA</item>
         <item>NOSSA SENHORA DO LIVRAMENTO</item>
@@ -2548,7 +2548,7 @@
         <item>PALESTINA DO PARÁ</item>
         <item>PARAGOMINAS</item>
         <item>PARAUAPEBAS</item>
-        <item>PAU D'ARCO</item>
+        <item>PAU D\'ARCO</item>
         <item>PEIXE-BOI</item>
         <item>PIÇARRA</item>
         <item>PLACAS</item>
@@ -2729,13 +2729,13 @@
         <item>MONTE HOREBE</item>
         <item>MONTEIRO</item>
         <item>MULUNGU</item>
-        <item>MÃE D'ÁGUA</item>
+        <item>MÃE D\'ÁGUA</item>
         <item>NATUBA</item>
         <item>NAZAREZINHO</item>
         <item>NOVA FLORESTA</item>
         <item>NOVA OLINDA</item>
         <item>NOVA PALMEIRA</item>
-        <item>OLHO D'ÁGUA</item>
+        <item>OLHO D\'ÁGUA</item>
         <item>OLIVEDOS</item>
         <item>OURO VELHO</item>
         <item>PARARI</item>
@@ -3038,7 +3038,7 @@
         <item>ASSUNÇÃO DO PIAUÍ</item>
         <item>AVELINO LOPES</item>
         <item>BAIXA GRANDE DO RIBEIRO</item>
-        <item>BARRA D'ALCÂNTARA</item>
+        <item>BARRA D\'ALCÂNTARA</item>
         <item>BARRAS</item>
         <item>BARREIRAS DO PIAUÍ</item>
         <item>BARRO DURO</item>
@@ -3162,7 +3162,7 @@
         <item>NOVO ORIENTE DO PIAUÍ</item>
         <item>NOVO SANTO ANTÔNIO</item>
         <item>OEIRAS</item>
-        <item>OLHO D'ÁGUA DO PIAUÍ</item>
+        <item>OLHO D\'ÁGUA DO PIAUÍ</item>
         <item>PADRE MARCOS</item>
         <item>PAES LANDIM</item>
         <item>PAJEÚ DO PIAUÍ</item>
@@ -3173,7 +3173,7 @@
         <item>PARNAÍBA</item>
         <item>PASSAGEM FRANCA DO PIAUÍ</item>
         <item>PATOS DO PIAUÍ</item>
-        <item>PAU D'ARCO DO PIAUÍ</item>
+        <item>PAU D\'ARCO DO PIAUÍ</item>
         <item>PAULISTANA</item>
         <item>PAVUSSU</item>
         <item>PEDRO II</item>
@@ -3342,7 +3342,7 @@
         <item>CURIÚVA</item>
         <item>CÂNDIDO DE ABREU</item>
         <item>CÉU AZUL</item>
-        <item>DIAMANTE D'OESTE</item>
+        <item>DIAMANTE D\'OESTE</item>
         <item>DIAMANTE DO NORTE</item>
         <item>DIAMANTE DO SUL</item>
         <item>DOIS VIZINHOS</item>
@@ -3406,7 +3406,7 @@
         <item>ITAIPULÂNDIA</item>
         <item>ITAMBARACÁ</item>
         <item>ITAMBÉ</item>
-        <item>ITAPEJARA D'OESTE</item>
+        <item>ITAPEJARA D\'OESTE</item>
         <item>ITAPERUÇU</item>
         <item>ITAÚNA DO SUL</item>
         <item>IVAIPORÃ</item>
@@ -3533,7 +3533,7 @@
         <item>PRIMEIRO DE MAIO</item>
         <item>PRUDENTÓPOLIS</item>
         <item>PÉROLA</item>
-        <item>PÉROLA D'OESTE</item>
+        <item>PÉROLA D\'OESTE</item>
         <item>QUARTO CENTENÁRIO</item>
         <item>QUATIGUÁ</item>
         <item>QUATRO BARRAS</item>
@@ -3544,7 +3544,7 @@
         <item>QUITANDINHA</item>
         <item>RAMILÂNDIA</item>
         <item>RANCHO ALEGRE</item>
-        <item>RANCHO ALEGRE D'OESTE</item>
+        <item>RANCHO ALEGRE D\'OESTE</item>
         <item>REALEZA</item>
         <item>REBOUÇAS</item>
         <item>RENASCENÇA</item>
@@ -3597,7 +3597,7 @@
         <item>SULINA</item>
         <item>SÃO CARLOS DO IVAÍ</item>
         <item>SÃO JERÔNIMO DA SERRA</item>
-        <item>SÃO JORGE D'OESTE</item>
+        <item>SÃO JORGE D\'OESTE</item>
         <item>SÃO JORGE DO IVAÍ</item>
         <item>SÃO JORGE DO PATROCÍNIO</item>
         <item>SÃO JOSÉ DA BOA VISTA</item>
@@ -3806,7 +3806,7 @@
         <item>JOÃO DIAS</item>
         <item>JUCURUTU</item>
         <item>JUNDIÁ</item>
-        <item>LAGOA D'ANTA</item>
+        <item>LAGOA D\'ANTA</item>
         <item>LAGOA DE PEDRAS</item>
         <item>LAGOA DE VELHOS</item>
         <item>LAGOA NOVA</item>
@@ -3829,7 +3829,7 @@
         <item>NATAL</item>
         <item>NOVA CRUZ</item>
         <item>NÍSIA FLORESTA</item>
-        <item>OLHO-D'ÁGUA DO BORGES</item>
+        <item>OLHO-D\'ÁGUA DO BORGES</item>
         <item>OURO BRANCO</item>
         <item>PARANÁ</item>
         <item>PARAZINHO</item>
@@ -3909,10 +3909,10 @@
     </string-array>
 
     <string-array name="RO">
-        <item>ALTA FLORESTA D'OESTE</item>
+        <item>ALTA FLORESTA D\'OESTE</item>
         <item>ALTO ALEGRE DOS PARECIS</item>
         <item>ALTO PARAÍSO</item>
-        <item>ALVORADA D'OESTE</item>
+        <item>ALVORADA D\'OESTE</item>
         <item>ARIQUEMES</item>
         <item>BURITIS</item>
         <item>CABIXI</item>
@@ -3927,13 +3927,13 @@
         <item>CORUMBIARA</item>
         <item>COSTA MARQUES</item>
         <item>CUJUBIM</item>
-        <item>ESPIGÃO D'OESTE</item>
+        <item>ESPIGÃO D\'OESTE</item>
         <item>GOVERNADOR JORGE TEIXEIRA</item>
         <item>GUAJARÁ-MIRIM</item>
         <item>ITAPUÃ DO OESTE</item>
         <item>JARU</item>
         <item>JI-PARANÁ</item>
-        <item>MACHADINHO D'OESTE</item>
+        <item>MACHADINHO D\'OESTE</item>
         <item>MINISTRO ANDREAZZA</item>
         <item>MIRANTE DA SERRA</item>
         <item>MONTE NEGRO</item>
@@ -3949,9 +3949,9 @@
         <item>PRIMAVERA DE RONDÔNIA</item>
         <item>RIO CRESPO</item>
         <item>ROLIM DE MOURA</item>
-        <item>SANTA LUZIA D'OESTE</item>
+        <item>SANTA LUZIA D\'OESTE</item>
         <item>SERINGUEIRAS</item>
-        <item>SÃO FELIPE D'OESTE</item>
+        <item>SÃO FELIPE D\'OESTE</item>
         <item>SÃO FRANCISCO DO GUAPORÉ</item>
         <item>SÃO MIGUEL DO GUAPORÉ</item>
         <item>TEIXEIRÓPOLIS</item>
@@ -4581,7 +4581,7 @@
         <item>GUARAMIRIM</item>
         <item>GUARUJÁ DO SUL</item>
         <item>GUATAMBÚ</item>
-        <item>HERVAL D'OESTE</item>
+        <item>HERVAL D\'OESTE</item>
         <item>IBIAM</item>
         <item>IBICARÉ</item>
         <item>IBIRAMA</item>
@@ -4805,7 +4805,7 @@
         <item>ITABAIANA</item>
         <item>ITABAIANINHA</item>
         <item>ITABI</item>
-        <item>ITAPORANGA D'AJUDA</item>
+        <item>ITAPORANGA D\'AJUDA</item>
         <item>JAPARATUBA</item>
         <item>JAPOATÃ</item>
         <item>LAGARTO</item>
@@ -4875,7 +4875,7 @@
         <item>ANHEMBI</item>
         <item>ANHUMAS</item>
         <item>APARECIDA</item>
-        <item>APARECIDA D'OESTE</item>
+        <item>APARECIDA D\'OESTE</item>
         <item>APIAÍ</item>
         <item>ARAMINA</item>
         <item>ARANDU</item>
@@ -5022,7 +5022,7 @@
         <item>ESPÍRITO SANTO DO PINHAL</item>
         <item>ESPÍRITO SANTO DO TURVO</item>
         <item>ESTIVA GERBI</item>
-        <item>ESTRELA D'OESTE</item>
+        <item>ESTRELA D\'OESTE</item>
         <item>ESTRELA DO NORTE</item>
         <item>EUCLIDES DA CUNHA PAULISTA</item>
         <item>FARTURA</item>
@@ -5049,7 +5049,7 @@
         <item>GUAPIARA</item>
         <item>GUAPIAÇU</item>
         <item>GUARACI</item>
-        <item>GUARANI D'OESTE</item>
+        <item>GUARANI D\'OESTE</item>
         <item>GUARANTÃ</item>
         <item>GUARARAPES</item>
         <item>GUARAREMA</item>
@@ -5244,7 +5244,7 @@
         <item>PACAEMBU</item>
         <item>PALESTINA</item>
         <item>PALMARES PAULISTA</item>
-        <item>PALMEIRA D'OESTE</item>
+        <item>PALMEIRA D\'OESTE</item>
         <item>PALMITAL</item>
         <item>PANORAMA</item>
         <item>PARAGUAÇU PAULISTA</item>
@@ -5362,8 +5362,8 @@
         <item>SANTA ADÉLIA</item>
         <item>SANTA ALBERTINA</item>
         <item>SANTA BRANCA</item>
-        <item>SANTA BÁRBARA D'OESTE</item>
-        <item>SANTA CLARA D'OESTE</item>
+        <item>SANTA BÁRBARA D\'OESTE</item>
+        <item>SANTA CLARA D\'OESTE</item>
         <item>SANTA CRUZ DA CONCEIÇÃO</item>
         <item>SANTA CRUZ DA ESPERANÇA</item>
         <item>SANTA CRUZ DAS PALMEIRAS</item>
@@ -5375,7 +5375,7 @@
         <item>SANTA LÚCIA</item>
         <item>SANTA MARIA DA SERRA</item>
         <item>SANTA MERCEDES</item>
-        <item>SANTA RITA D'OESTE</item>
+        <item>SANTA RITA D\'OESTE</item>
         <item>SANTA RITA DO PASSA QUATRO</item>
         <item>SANTA ROSA DE VITERBO</item>
         <item>SANTA SALETE</item>
@@ -5422,7 +5422,7 @@
         <item>SÃO JOÃO DA BOA VISTA</item>
         <item>SÃO JOÃO DAS DUAS PONTES</item>
         <item>SÃO JOÃO DE IRACEMA</item>
-        <item>SÃO JOÃO DO PAU D'ALHO</item>
+        <item>SÃO JOÃO DO PAU D\'ALHO</item>
         <item>SÃO LOURENÇO DA SERRA</item>
         <item>SÃO LUÍS DO PARAITINGA</item>
         <item>SÃO MANUEL</item>
@@ -5596,7 +5596,7 @@
         <item>PALMEIRÓPOLIS</item>
         <item>PARANÃ</item>
         <item>PARAÍSO DO TOCANTINS</item>
-        <item>PAU D'ARCO</item>
+        <item>PAU D\'ARCO</item>
         <item>PEDRO AFONSO</item>
         <item>PEIXE</item>
         <item>PEQUIZEIRO</item>

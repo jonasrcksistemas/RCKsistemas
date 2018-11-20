@@ -169,7 +169,7 @@ public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRe
                         }
                     }
 
-                    PendingIntent pendingIntent = PendingIntent.getActivity(ListagemPedidoPendente.this, 0, new Intent(ListagemPedidoPendente.this, ListagemPedidoPendente.class), 0);
+                    PendingIntent pendingIntent = PendingIntent.getActivity(ListagemPedidoPendente.this, 0, new Intent(ListagemPedidoPendente.this, ListagemPedidoEnviado.class), 0);
 
                     notificacao.setContentTitle("Pedidos enviados com sucesso!")
                             .setContentText(listaParaEnvio.size() + " pedidos enviados.")
