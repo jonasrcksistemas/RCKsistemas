@@ -82,7 +82,7 @@ public class ActivityProduto extends AppCompatActivity {
                         Boolean produtoRepetido = false;
                         if (PedidoHelper.getListaWebPedidoItens() != null) {
                             for (final WebPedidoItens webPedidoItens : PedidoHelper.getListaWebPedidoItens()) {
-                                if (webPedidoItens.getId_produto() == listaProdutoAdpter.getItem(position).getId_produto()) {
+                                if (webPedidoItens.getId_produto().equals(listaProdutoAdpter.getItem(position).getId_produto())) {
                                     produtoRepetido = true;
                                     AlertDialog.Builder alert = new AlertDialog.Builder(ActivityProduto.this);
                                     alert.setTitle("Atenção");
@@ -93,8 +93,16 @@ public class ActivityProduto extends AppCompatActivity {
                                 }
                             }
                         }
-                        if (!produtoRepetido) {
-                            enableActionMode(position);
+                        if (listaProdutoAdpter.getItem(position).getSaldo_estoque() > 0) {
+                            if (!produtoRepetido) {
+                                enableActionMode(position);
+                            }
+                        } else {
+                            AlertDialog.Builder alert = new AlertDialog.Builder(ActivityProduto.this);
+                            alert.setTitle("Atenção");
+                            alert.setMessage("O produto " + listaProdutoAdpter.getItem(position).getNome_produto() + " está com saldo em estoque zerado e por isso não pode ser lançado no pedido");
+                            alert.setNeutralButton("OK", null);
+                            alert.show();
                         }
                     } else {
                         final Intent intent = new Intent(ActivityProduto.this, ProdutoPedidoActivity.class);
@@ -105,7 +113,7 @@ public class ActivityProduto extends AppCompatActivity {
                         if (PedidoHelper.getListaWebPedidoItens() != null) {
                             int i = 0;
                             for (final WebPedidoItens webPedidoItens : PedidoHelper.getListaWebPedidoItens()) {
-                                if (webPedidoItens.getId_produto() == listaProdutoAdpter.getItem(position).getId_produto()) {
+                                if (webPedidoItens.getId_produto().equals(listaProdutoAdpter.getItem(position).getId_produto())) {
                                     produtoRepetido = true;
                                     AlertDialog.Builder alert = new AlertDialog.Builder(ActivityProduto.this);
                                     alert.setTitle("Atenção");
@@ -129,10 +137,18 @@ public class ActivityProduto extends AppCompatActivity {
                                 i++;
                             }
                         }
-                        if (!produtoRepetido) {
-                            PedidoHelper.setProduto(listaProdutoAdpter.getItem(position));
-                            startActivity(intent);
-                            finish();
+                        if (listaProdutoAdpter.getItem(position).getSaldo_estoque() > 0) {
+                            if (!produtoRepetido) {
+                                PedidoHelper.setProduto(listaProdutoAdpter.getItem(position));
+                                startActivity(intent);
+                                finish();
+                            }
+                        } else {
+                            AlertDialog.Builder alert = new AlertDialog.Builder(ActivityProduto.this);
+                            alert.setTitle("Atenção");
+                            alert.setMessage("O produto " + listaProdutoAdpter.getItem(position).getNome_produto() + " está com saldo em estoque zerado e por isso não pode ser lançado no pedido");
+                            alert.setNeutralButton("OK", null);
+                            alert.show();
                         }
                     }
                 }
@@ -142,7 +158,7 @@ public class ActivityProduto extends AppCompatActivity {
                     Boolean produtoRepetido = false;
                     if (PedidoHelper.getListaWebPedidoItens() != null) {
                         for (final WebPedidoItens webPedidoItens : PedidoHelper.getListaWebPedidoItens()) {
-                            if (webPedidoItens.getId_produto() == listaProdutoAdpter.getItem(position).getId_produto()) {
+                            if (webPedidoItens.getId_produto().equals(listaProdutoAdpter.getItem(position).getId_produto())) {
                                 produtoRepetido = true;
                                 AlertDialog.Builder alert = new AlertDialog.Builder(ActivityProduto.this);
                                 alert.setTitle("Atenção");
@@ -153,8 +169,16 @@ public class ActivityProduto extends AppCompatActivity {
                             }
                         }
                     }
-                    if (!produtoRepetido) {
-                        enableActionMode(position);
+                    if (listaProdutoAdpter.getItem(position).getSaldo_estoque() > 0) {
+                        if (!produtoRepetido) {
+                            enableActionMode(position);
+                        }
+                    } else {
+                        AlertDialog.Builder alert = new AlertDialog.Builder(ActivityProduto.this);
+                        alert.setTitle("Atenção");
+                        alert.setMessage("O produto " + listaProdutoAdpter.getItem(position).getNome_produto() + " está com saldo em estoque zerado e por isso não pode ser lançado no pedido");
+                        alert.setNeutralButton("OK", null);
+                        alert.show();
                     }
                 }
             };
@@ -167,7 +191,7 @@ public class ActivityProduto extends AppCompatActivity {
                         Boolean produtoRepetido = false;
                         if (PedidoHelper.getListaWebPedidoItens() != null) {
                             for (final WebPedidoItens webPedidoItens : PedidoHelper.getListaWebPedidoItens()) {
-                                if (webPedidoItens.getId_produto() == listaProdutoAdpter.getItem(position).getId_produto()) {
+                                if (webPedidoItens.getId_produto().equals(listaProdutoAdpter.getItem(position).getId_produto())) {
                                     produtoRepetido = true;
                                     AlertDialog.Builder alert = new AlertDialog.Builder(ActivityProduto.this);
                                     alert.setTitle("Atenção");
@@ -178,8 +202,16 @@ public class ActivityProduto extends AppCompatActivity {
                                 }
                             }
                         }
-                        if (!produtoRepetido) {
-                            enableActionMode(position);
+                        if (listaProdutoAdpter.getItem(position).getSaldo_estoque() > 0) {
+                            if (!produtoRepetido) {
+                                enableActionMode(position);
+                            }
+                        } else {
+                            AlertDialog.Builder alert = new AlertDialog.Builder(ActivityProduto.this);
+                            alert.setTitle("Atenção");
+                            alert.setMessage("O produto " + listaProdutoAdpter.getItem(position).getNome_produto() + " está com saldo em estoque zerado e por isso não pode ser lançado no pedido");
+                            alert.setNeutralButton("OK", null);
+                            alert.show();
                         }
                     } else {
                         if (buscaProduto != null) {
@@ -188,7 +220,7 @@ public class ActivityProduto extends AppCompatActivity {
                         Boolean produtoRepetido = false;
                         if (PedidoHelper.getListaWebPedidoItens() != null) {
                             for (final WebPedidoItens webPedidoItens : PedidoHelper.getListaWebPedidoItens()) {
-                                if (webPedidoItens.getId_produto() == listaProdutoAdpter.getItem(position).getId_produto()) {
+                                if (webPedidoItens.getId_produto().equals(listaProdutoAdpter.getItem(position).getId_produto())) {
                                     produtoRepetido = true;
                                     AlertDialog.Builder alert = new AlertDialog.Builder(ActivityProduto.this);
                                     alert.setTitle("Atenção");
@@ -199,9 +231,17 @@ public class ActivityProduto extends AppCompatActivity {
                                 }
                             }
                         }
-                        if (!produtoRepetido) {
-                            PedidoHelper.setProduto(listaProdutoAdpter.getItem(position));
-                            finish();
+                        if (listaProdutoAdpter.getItem(position).getSaldo_estoque() > 0) {
+                            if (!produtoRepetido) {
+                                PedidoHelper.setProduto(listaProdutoAdpter.getItem(position));
+                                finish();
+                            }
+                        } else {
+                            AlertDialog.Builder alert = new AlertDialog.Builder(ActivityProduto.this);
+                            alert.setTitle("Atenção");
+                            alert.setMessage("O produto " + listaProdutoAdpter.getItem(position).getNome_produto() + " está com saldo em estoque zerado e por isso não pode ser lançado no pedido");
+                            alert.setNeutralButton("OK", null);
+                            alert.show();
                         }
                     }
                 }
@@ -211,7 +251,7 @@ public class ActivityProduto extends AppCompatActivity {
                     Boolean produtoRepetido = false;
                     if (PedidoHelper.getListaWebPedidoItens() != null) {
                         for (final WebPedidoItens webPedidoItens : PedidoHelper.getListaWebPedidoItens()) {
-                            if (webPedidoItens.getId_produto() == listaProdutoAdpter.getItem(position).getId_produto()) {
+                            if (webPedidoItens.getId_produto().equals(listaProdutoAdpter.getItem(position).getId_produto())) {
                                 produtoRepetido = true;
                                 AlertDialog.Builder alert = new AlertDialog.Builder(ActivityProduto.this);
                                 alert.setTitle("Atenção");
@@ -254,11 +294,6 @@ public class ActivityProduto extends AppCompatActivity {
             }
         });
 
-        if (PedidoHelper.getBuscaProduto() != null && !PedidoHelper.getBuscaProduto().trim().isEmpty()) {
-            buscaProduto.setIconified(false);
-            buscaProduto.setQuery(PedidoHelper.getBuscaProduto(), true);
-        }
-
         try {
             lista = db.listaProduto("SELECT * FROM TBL_PRODUTO WHERE ATIVO = 'S' ORDER BY NOME_PRODUTO");
             edtTotalProdutos.setText(lista.size() + " Produtos listados");
@@ -266,6 +301,11 @@ public class ActivityProduto extends AppCompatActivity {
             preecheRecyclerProduto(lista);
         } catch (Exception e) {
             e.printStackTrace();
+        }
+
+        if (PedidoHelper.getBuscaProduto() != null && !PedidoHelper.getBuscaProduto().trim().isEmpty()) {
+            buscaProduto.setIconified(false);
+            buscaProduto.setQuery(PedidoHelper.getBuscaProduto(), true);
         }
 
         setSupportActionBar(toolbar);
@@ -340,6 +380,9 @@ public class ActivityProduto extends AppCompatActivity {
                                 public void onClick(DialogInterface dialog, int which) {
                                     PedidoHelper.setListaProdutos(listaProdutoAdpter.getItensSelecionados());
                                     Intent intent = new Intent(ActivityProduto.this, ProdutoPedidoActivity.class);
+                                    if (buscaProduto != null) {
+                                        PedidoHelper.setBuscaProduto(buscaProduto.getQuery().toString());
+                                    }
                                     startActivity(intent);
                                     finish();
                                 }

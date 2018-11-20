@@ -2,7 +2,7 @@ package com.example.rcksuporte05.rcksistemas.model;
 
 public class PromocaoProduto {
     private int idPromocao;
-    private int idProduto;
+    private String idProduto;
     private int idEmpresa;
     private String ativo;
     private String tipoDesconto;
@@ -23,11 +23,11 @@ public class PromocaoProduto {
         this.idPromocao = idPromocao;
     }
 
-    public int getIdProduto() {
+    public String getIdProduto() {
         return idProduto;
     }
 
-    public void setIdProduto(int idProduto) {
+    public void setIdProduto(String idProduto) {
         this.idProduto = idProduto;
     }
 

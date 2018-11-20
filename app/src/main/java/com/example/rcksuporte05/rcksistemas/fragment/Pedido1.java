@@ -119,6 +119,9 @@ public class Pedido1 extends Fragment implements ListaAdapterProdutoPedido.Produ
                 alert.show();
                 e.printStackTrace();
             }
+        } else if (PedidoHelper.getWebPedido() != null) {
+            listaProdutoPedido = PedidoHelper.getListaWebPedidoItens();
+            preencheLista(listaProdutoPedido);
         }
 
         if (bundle.getInt("vizualizacao") == 1) {
@@ -145,6 +148,9 @@ public class Pedido1 extends Fragment implements ListaAdapterProdutoPedido.Produ
     }
 
     public List<WebPedidoItens> salvaPedidos() {
+        listaAdapterProdutoPedido.notifyDataSetChanged();
+        PedidoHelper.calculaValorPedido(listaProdutoPedido, PedidoHelper.getActivityPedidoMain());
+        PedidoHelper.setListaWebPedidoItens(listaProdutoPedido);
         return listaProdutoPedido;
     }
 

@@ -37,7 +37,7 @@ public class PedidoBO {
         }
     }
 
-    public PromocaoRetorno calculaDesconto(int idCliente, int idProduto, Context context) {
+    public PromocaoRetorno calculaDesconto(int idCliente, String idProduto, Context context) {
         db = new DBHelper(context);
 
         PromocaoDAO promocaoDAO = new PromocaoDAO(db);
@@ -49,7 +49,7 @@ public class PedidoBO {
             for (Promocao promocao : listaPromocao) {
                 if (promocao.getAplicacaoProduto() > 0) {
                     for (PromocaoProduto promocaoProduto : promocao.getListaPromoProduto()) {
-                        if (promocaoProduto.getIdProduto() == idProduto) {
+                        if (promocaoProduto.getIdProduto().equals(idProduto)) {
                             promocaoRetorno.setNomePromocao(promocao.getNomePromocao());
                             promocaoRetorno.setValorDesconto(promocaoProduto.getDescontoPerc());
                             return promocaoRetorno;

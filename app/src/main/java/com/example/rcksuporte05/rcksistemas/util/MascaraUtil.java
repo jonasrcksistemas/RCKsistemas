@@ -116,6 +116,12 @@ public class MascaraUtil {
         return mascaraReal(valor).replace("R$", "");
     }
 
+    public static String mascaraCep(String valor) {
+        if (valor.length() == 8)
+            return valor.substring(0, 5) + "-" + valor.substring(5, 8);
+        else
+            return valor;
+    }
 }
 
 

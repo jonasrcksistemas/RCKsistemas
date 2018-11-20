@@ -33,7 +33,7 @@ public class PromocaoProdutoDAO {
         content.put("USUARIO_NOME", promocaoProduto.getUsuarioNome());
         content.put("USUARIO_DATA", promocaoProduto.getUsuarioData());
 
-        if ((promocaoProduto.getIdPromocao() != 0 && promocaoProduto.getIdProduto() != 0) && this.db.contagem("SELECT COUNT(ID_PROMOCAO) FROM TBL_PROMOCAO_PRODUTO WHERE ID_PROMOCAO = " + promocaoProduto.getIdPromocao() + " AND ID_PRODUTO = " + promocaoProduto.getIdProduto()) > 0) {
+        if ((promocaoProduto.getIdPromocao() != 0 && !promocaoProduto.getIdProduto().equals("0")) && this.db.contagem("SELECT COUNT(ID_PROMOCAO) FROM TBL_PROMOCAO_PRODUTO WHERE ID_PROMOCAO = " + promocaoProduto.getIdPromocao() + " AND ID_PRODUTO = " + promocaoProduto.getIdProduto()) > 0) {
             content.put("ID_PROMOCAO", promocaoProduto.getIdPromocao());
             db.atualizaDados("TBL_PROMOCAO_PRODUTO", content, "ID_PROMOCAO = " + promocaoProduto.getIdPromocao());
         } else {
@@ -52,7 +52,7 @@ public class PromocaoProdutoDAO {
             PromocaoProduto promocaoProduto = new PromocaoProduto();
 
             promocaoProduto.setIdPromocao(cursor.getInt(cursor.getColumnIndex("ID_PROMOCAO")));
-            promocaoProduto.setIdProduto(cursor.getInt(cursor.getColumnIndex("ID_PRODUTO")));
+            promocaoProduto.setIdProduto(cursor.getString(cursor.getColumnIndex("ID_PRODUTO")));
             promocaoProduto.setIdEmpresa(cursor.getInt(cursor.getColumnIndex("ID_EMPRESA")));
             promocaoProduto.setAtivo(cursor.getString(cursor.getColumnIndex("ATIVO")));
             promocaoProduto.setTipoDesconto(cursor.getString(cursor.getColumnIndex("TIPO_DESCONTO")));

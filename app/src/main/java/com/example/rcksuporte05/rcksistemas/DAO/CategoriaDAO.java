@@ -72,4 +72,24 @@ public class CategoriaDAO {
         } while (cursor.moveToNext());
         return listaHashCategoria;
     }
+
+    public Categoria listaCategoriaPorId(int idCategoria) {
+        List<Categoria> listaCategoria = new ArrayList<>();
+        Cursor cursor;
+
+        cursor = db.listaDados("SELECT * FROM TBL_CADASTRO_CATEGORIA WHERE ID_CATEGORIA = " + idCategoria + ";");
+        cursor.moveToFirst();
+        do {
+            Categoria categoria = new Categoria();
+
+            categoria.setIdCategoria(cursor.getInt(cursor.getColumnIndex("ID_CATEGORIA")));
+            categoria.setIdEmpresa(cursor.getInt(cursor.getColumnIndex("ID_EMPRESA")));
+            categoria.setAtivo(cursor.getString(cursor.getColumnIndex("ATIVO")));
+            categoria.setNomeCategoria(cursor.getString(cursor.getColumnIndex("NOME_CATEGORIA")));
+            categoria.setUsuarioId(cursor.getString(cursor.getColumnIndex("USUARIO_ID")));
+
+            listaCategoria.add(categoria);
+        } while (cursor.moveToNext());
+        return listaCategoria.get(0);
+    }
 }

@@ -1981,26 +1981,6 @@ public class DBHelper extends SQLiteOpenHelper {
         System.gc();
     }
 
-    public void atualizarTBL_CONDICOES_PAG_CAB(String ATIVO, String ID_CONDICAO, String NOME_CONDICAO, String NUMERO_PARCELAS, String INTERVALO_DIAS, String TIPO_CONDICAO, String NFE_TIPO_FINANCEIRO, String NFE_MOSTRAR_PARCELAS, String USUARIO_ID, String USUARIO_NOME, String USUARIO_DATA, String PUBLICAR_NA_WEB) throws android.database.sqlite.SQLiteConstraintException {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues content = new ContentValues();
-        content.put("ATIVO", ATIVO);
-        content.put("ID_CONDICAO", ID_CONDICAO);
-        content.put("NOME_CONDICAO", NOME_CONDICAO);
-        content.put("NUMERO_PARCELAS", NUMERO_PARCELAS);
-        content.put("INTERVALO_DIAS", INTERVALO_DIAS);
-        content.put("TIPO_CONDICAO", TIPO_CONDICAO);
-        content.put("NFE_TIPO_FINANCEIRO", NFE_TIPO_FINANCEIRO);
-        content.put("NFE_MOSTRAR_PARCELAS", NFE_MOSTRAR_PARCELAS);
-        content.put("USUARIO_ID", USUARIO_ID);
-        content.put("USUARIO_NOME", USUARIO_NOME);
-        content.put("USUARIO_DATA", USUARIO_DATA);
-        content.put("PUBLICAR_NA_WEB", PUBLICAR_NA_WEB);
-
-        db.update("TBL_CONDICOES_PAG_CAB", content, "ID_CONDICAO = " + ID_CONDICAO, null);
-        System.gc();
-    }
-
     public void inserirTBL_VENDEDOR_BONUS_RESUMO(VendedorBonusResumo vendedorBonusResumo) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues content = new ContentValues();
@@ -2014,22 +1994,6 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("DATA_ULTIMA_ATUALIZACAO", vendedorBonusResumo.getData_ultima_atualizacao());
 
         db.insert("TBL_VENDEDOR_BONUS_RESUMO", null, content);
-        System.gc();
-    }
-
-    public void atualizarTBL_VENDEDOR_BONUS_RESUMO(String ID_VENDEDOR, String ID_EMPRESA, String VALOR_CREDITO, String VALOR_DEBITO, String VALOR_BONUS_CANCELADOS, String VALOR_SALDO, String DATA_ULTIMA_ATUALIZACAO) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues content = new ContentValues();
-
-        content.put("ID_VENDEDOR", ID_VENDEDOR);
-        content.put("ID_EMPRESA", ID_EMPRESA);
-        content.put("VALOR_CREDITO", VALOR_CREDITO);
-        content.put("VALOR_DEBITO", VALOR_DEBITO);
-        content.put("VALOR_BONUS_CANCELADOS", VALOR_BONUS_CANCELADOS);
-        content.put("VALOR_SALDO", VALOR_SALDO);
-        content.put("DATA_ULTIMA_ATUALIZACAO", DATA_ULTIMA_ATUALIZACAO);
-
-        db.update("TBL_VENDEDOR_BONUS_RESUMO", content, "ID_VENDEDOR = " + ID_VENDEDOR, null);
         System.gc();
     }
 
@@ -2237,7 +2201,7 @@ public class DBHelper extends SQLiteOpenHelper {
         do {
             Produto produto = new Produto();
 
-            produto.setId_produto(cursor.getInt(cursor.getColumnIndex("ID_PRODUTO")));
+            produto.setId_produto(cursor.getString(cursor.getColumnIndex("ID_PRODUTO")));
             produto.setNome_produto(cursor.getString(cursor.getColumnIndex("NOME_PRODUTO")));
             produto.setDescricao(cursor.getString(cursor.getColumnIndex("DESCRICAO")));
             produto.setUnidade(cursor.getString(cursor.getColumnIndex("UNIDADE")));

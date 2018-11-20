@@ -11,6 +11,7 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -26,6 +27,7 @@ import com.example.rcksuporte05.rcksistemas.model.Cliente;
 import com.example.rcksuporte05.rcksistemas.model.CondicoesPagamento;
 import com.example.rcksuporte05.rcksistemas.model.Operacao;
 import com.example.rcksuporte05.rcksistemas.model.WebPedido;
+import com.example.rcksuporte05.rcksistemas.util.MascaraUtil;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -83,6 +85,41 @@ public class Pedido2 extends Fragment {
 
         if (PedidoHelper.getIdPedido() > 0) {
             webPedido = webPedidoDAO.listaWebPedido("SELECT * FROM TBL_WEB_PEDIDO WHERE ID_WEB_PEDIDO = " + PedidoHelper.getIdPedido()).get(0);
+            objetoCliente = webPedido.getCadastro();
+
+            //Seleciona Condição de pagamento correta dentro do Spinner spPagamento
+            try {
+                int i = -1;
+                do {
+                    i++;
+                }
+                while (!webPedido.getId_condicao_pagamento().equals(adapterPagamento.getItem(i).getId_condicao()));
+                spPagamento.setSelection(i);
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+
+            //Seleciona operação correta dentro do Spinner spOperacao
+            try {
+                int i = -1;
+                do {
+                    i++;
+                }
+                while (!webPedido.getId_operacao().equals(adapterOperacao.getItem(i).getId_operacao()));
+                spOperacao.setSelection(i);
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+
+            edtObservacao.setText(webPedido.getObservacoes());
+            try {
+                txtDataEmissao.setText(new SimpleDateFormat("dd/MM/yyyy").format(new SimpleDateFormat("yyyy-MM-dd").parse(webPedido.getData_emissao())));
+                edtDataEntrega.setText(new SimpleDateFormat("dd/MM/yyyy").format(new SimpleDateFormat("yyyy-MM-dd").parse(webPedido.getData_prev_entrega())));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        } else if (PedidoHelper.getWebPedido() != null) {
+            webPedido = PedidoHelper.getWebPedido();
             objetoCliente = webPedido.getCadastro();
 
             //Seleciona Condição de pagamento correta dentro do Spinner spPagamento

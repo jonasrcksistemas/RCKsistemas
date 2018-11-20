@@ -137,7 +137,7 @@ public class WebPedidoItensDAO {
             webPedidoItens.setId_web_item_servidor(cursor.getString(cursor.getColumnIndex("ID_WEB_ITEM_SERVIDOR")));
             webPedidoItens.setValor_preco_pago(cursor.getString(cursor.getColumnIndex("VALOR_PRECO_PAGO")));
             webPedidoItens.setId_pedido(cursor.getString(cursor.getColumnIndex("ID_PEDIDO")));
-            webPedidoItens.setId_produto(cursor.getInt(cursor.getColumnIndex("ID_PRODUTO")));
+            webPedidoItens.setId_produto(cursor.getString(cursor.getColumnIndex("ID_PRODUTO")));
             webPedidoItens.setId_empresa(cursor.getString(cursor.getColumnIndex("ID_EMPRESA")));
             webPedidoItens.setQuantidade(cursor.getString(cursor.getColumnIndex("QUANTIDADE")));
             webPedidoItens.setValor_unitario(cursor.getFloat(cursor.getColumnIndex("VALOR_UNITARIO")));

@@ -150,6 +150,10 @@ public class ActivityPedidoMain extends AppCompatActivity {
                 toolbar.setSubtitle("Pedido: " + webPedido.getId_web_pedido());
 
 
+        } else if (PedidoHelper.getWebPedido() != null) {
+            webPedido = PedidoHelper.getWebPedido();
+            objetoCliente = webPedido.getCadastro();
+            ClienteHelper.setCliente(objetoCliente);
         } else {
             webPedido = new WebPedido();
         }

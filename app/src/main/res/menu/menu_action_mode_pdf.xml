@@ -4,38 +4,24 @@
     tools:mContext="com.example.rcksuporte05.rcksistemas.activity.ListagemPedidoEnviado">
 
     <item
-        android:id="@+id/action_delete"
-        android:icon="@drawable/ic_delete_white_24dp"
-        android:orderInCategory="1"
-        android:title="Deletar os pedidos selecionados"
-        app:showAsAction="always" />
-
-    <item
-        android:id="@+id/action_mode_menu_pedido_pendente"
-        android:icon="@mipmap/ic_enviar_pedidos_selecionados"
-        android:orderInCategory="2"
-        android:title="Enviar pedidos selecioandos"
-        app:showAsAction="always" />
-
-    <item
         android:id="@+id/action_duplica_pedido"
         android:icon="@drawable/ic_duplica_pedido"
-        android:orderInCategory="3"
+        android:orderInCategory="1"
         android:title="Duplica o pedido selecionado, para poder fatura-lo novamente"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/action_pdf_pedido"
         android:icon="@drawable/ic_pdf_pedido"
-        android:orderInCategory="4"
+        android:orderInCategory="2"
         android:title="Gerar PDF do pedido selecionado"
         app:showAsAction="always" />
 
     <item
         android:id="@+id/action_pdf_pedido_email"
         android:icon="@drawable/ic_pdf_pedido_email"
-        android:orderInCategory="5"
-        android:title="Gerar PDF do pedido selecionado"
+        android:orderInCategory="3"
+        android:title="Envia um espelho dos pedidos selecionados ao email do cliente"
         app:showAsAction="always" />
 
 </menu>

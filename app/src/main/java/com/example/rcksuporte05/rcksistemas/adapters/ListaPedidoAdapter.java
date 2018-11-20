@@ -22,8 +22,7 @@ import java.util.List;
  */
 
 public class ListaPedidoAdapter extends RecyclerView.Adapter<PedidoViewHolder> {
-    private static int currentSelectedIndex = -1;
-    private List<WebPedido> pedidos = new ArrayList<>();
+    private List<WebPedido> pedidos;
     private PedidoAdapterListener listener;
     private SparseBooleanArray selectedItems;
 
@@ -92,7 +91,6 @@ public class ListaPedidoAdapter extends RecyclerView.Adapter<PedidoViewHolder> {
     }
 
     public void toggleSelection(int pos) {
-        currentSelectedIndex = pos;
         if (selectedItems.get(pos, false)) {
             selectedItems.delete(pos);
 

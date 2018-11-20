@@ -209,7 +209,6 @@ public class ContatoActivity extends AppCompatActivity {
                     try {
                         Intent intent = new Intent(ContatoActivity.this, FinanceiroResumoActivity.class);
                         HistoricoFinanceiroHelper.setCliente(ClienteHelper.getCliente());
-//                        HistoricoFinanceiroHelper.setCadastroFinanceiroResumo(cadastroFinanceiroResumoDAO.listaCadastroFinanceiroResumo(ClienteHelper.getCliente().getId_cadastro_servidor()));
                         System.gc();
                         startActivity(intent);
                         CadastroClienteMain cadastroClienteMain = new CadastroClienteMain();

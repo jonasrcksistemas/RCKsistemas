@@ -61,6 +61,20 @@ public class ListaProdutoAdpter extends RecyclerView.Adapter<ProdutoViewHolder> 
 
         holder.textUN.setText(produtos.get(position).getUnidade());
 
+        if (produtos.get(position).getSaldo_estoque() <= 0) {
+            holder.nomeListaProduto.setTextColor(Color.RED);
+            holder.precoProduto.setTextColor(Color.RED);
+            holder.textUN.setTextColor(Color.RED);
+            holder.idProduto.setTextColor(Color.RED);
+            holder.txtSaldoEstoque.setTextColor(Color.RED);
+        } else {
+            holder.nomeListaProduto.setTextColor(Color.BLACK);
+            holder.precoProduto.setTextColor(Color.BLACK);
+            holder.textUN.setTextColor(Color.BLACK);
+            holder.idProduto.setTextColor(Color.BLACK);
+            holder.txtSaldoEstoque.setTextColor(Color.BLACK);
+        }
+
         if (produtos.get(position).getSaldo_estoque().toString().contains("-"))
             holder.txtSaldoEstoque.setText("Estoque: 00");
         else
