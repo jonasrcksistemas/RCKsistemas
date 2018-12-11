@@ -5,9 +5,11 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 
+import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 
@@ -30,11 +32,30 @@ public class CadastroCliente7 extends Fragment {
     EditText edtEmail3;
     @BindView(R.id.edtEmail2)
     EditText edtEmail2;
+    @BindView(R.id.btnContinuar)
+    Button btnContinuar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_cadastro_cliente7, container, false);
         ButterKnife.bind(this, view);
+
+        if (getActivity().getIntent().getIntExtra("novo", 0) >= 1) {
+            btnContinuar.setVisibility(View.VISIBLE);
+            btnContinuar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    inserirDadosDaFrame();
+                    DBHelper db = new DBHelper(getActivity());
+                    if (ClienteHelper.getCliente().getFinalizado().equals("S")) {
+                        ClienteHelper.getCliente().setAlterado("S");
+                    }
+                    db.atualizarTBL_CADASTRO(ClienteHelper.getCliente());
+
+                    ClienteHelper.moveTela(7);
+                }
+            });
+        }
 
         if (getActivity().getIntent().getIntExtra("vizualizacao", 0) >= 1) {
 

@@ -2,6 +2,7 @@ package com.example.rcksuporte05.rcksistemas.fragment;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -25,11 +26,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.rcksuporte05.rcksistemas.BO.CadastroAnexoBO;
 import com.example.rcksuporte05.rcksistemas.DAO.CategoriaDAO;
 import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.UsuarioHelper;
 import com.example.rcksuporte05.rcksistemas.R;
+import com.example.rcksuporte05.rcksistemas.model.CadastroAnexo;
 import com.example.rcksuporte05.rcksistemas.model.Categoria;
 import com.example.rcksuporte05.rcksistemas.util.MascaraUtil;
 
@@ -37,6 +40,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -95,18 +99,16 @@ public class CadastroCliente1 extends Fragment {
     Button btnLigar3;
     @BindView(R.id.rdSegundaCliente)
     RadioButton rdSegundaCliente;
-
     @BindView(R.id.rdTercaCliente)
     RadioButton rdTercaCliente;
-
     @BindView(R.id.rdQuartaCliente)
     RadioButton rdQuartaCliente;
-
     @BindView(R.id.rdQuintaCliente)
     RadioButton rdQuintaCliente;
-
     @BindView(R.id.rdSextaCliente)
     RadioButton rdSextaCliente;
+    @BindView(R.id.btnContinuar)
+    Button btnContinuar;
 
     private ArrayAdapter arrayIe;
     private ArrayAdapter arrayCategoria;
@@ -114,13 +116,14 @@ public class CadastroCliente1 extends Fragment {
     private List<Categoria> listaCategoria = new ArrayList<>();
     private View view;
     private RadioButton radioButtonRota;
+    private DBHelper db;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.activity_cadastro_cliente1, container, false);
         ButterKnife.bind(this, view);
 
-        DBHelper db = new DBHelper(getActivity());
+        db = new DBHelper(getActivity());
 
         CategoriaDAO categoriaDAO = new CategoriaDAO(db);
 
@@ -149,6 +152,185 @@ public class CadastroCliente1 extends Fragment {
                     spCategoria.setSelection(i);
                 }
             }
+        }
+
+        if (getActivity().getIntent().getIntExtra("novo", 0) >= 1) {
+            try {
+                ClienteHelper.setVendedor(db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE F_ID_VENDEDOR = " + UsuarioHelper.getUsuario().getId_quando_vendedor() + ";").get(0));
+            } catch (CursorIndexOutOfBoundsException e) {
+                e.printStackTrace();
+            }
+
+            if (ClienteHelper.getCliente().getId_cadastro() <= 0 && db.contagem("SELECT COUNT(*) FROM TBL_CADASTRO WHERE FINALIZADO = 'N'") >= 1) {
+                AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+                alert.setTitle("Atenção!");
+                alert.setMessage("Foi detectado um cadastro de cliente em andamento, deseja continua-lo?");
+                alert.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        db.alterar("DELETE FROM TBL_CADASTRO WHERE FINALIZADO = 'N'");
+                    }
+                });
+                alert.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        try {
+                            ClienteHelper.setCliente(db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE FINALIZADO = 'N'").get(0));
+                            try {
+                                ClienteHelper.getCliente().setSegmento(db.listaSegmento(String.valueOf(ClienteHelper.getCliente().getId_segmento())));
+                                ClienteHelper.getCliente().getSegmento().setDescricaoOutros(ClienteHelper.getCliente().getDescricao_segmento());
+                            } catch (CursorIndexOutOfBoundsException e) {
+                                e.printStackTrace();
+                            }
+                            try {
+                                ClienteHelper.getCliente().setReferenciasBancarias(db.listaReferenciaBancaria(String.valueOf(ClienteHelper.getCliente().getId_cadastro()), 1));
+                            } catch (CursorIndexOutOfBoundsException e) {
+                                e.printStackTrace();
+                            }
+                            try {
+                                ClienteHelper.getCliente().setReferenciasComerciais(db.listaReferenciacomercial(String.valueOf(ClienteHelper.getCliente().getId_cadastro()), 1));
+                            } catch (CursorIndexOutOfBoundsException e) {
+                                e.printStackTrace();
+                            }
+                            try {
+                                ClienteHelper.getCliente().setListaContato(db.listaContato(String.valueOf(ClienteHelper.getCliente().getId_cadastro()), 1));
+                            } catch (CursorIndexOutOfBoundsException e) {
+                                e.printStackTrace();
+                            }
+
+                            if (ClienteHelper.getCliente().getId_cadastro() > 0) {
+                                if (db.contagem("SELECT COUNT(ID_ANEXO) FROM TBL_CADASTRO_ANEXOS WHERE ID_CADASTRO = " + ClienteHelper.getCliente().getId_cadastro() + " AND EXCLUIDO = 'N';") > 0) {
+                                    final ProgressDialog progress = new ProgressDialog(getContext());
+                                    progress.setTitle("Aguarde");
+                                    progress.setMessage("Carregando anexos do cliente");
+                                    progress.setCancelable(false);
+                                    progress.show();
+                                    final CadastroAnexoBO cadastroAnexoBO = new CadastroAnexoBO();
+                                    Thread a = new Thread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            List<CadastroAnexo> listaCadastroAnexo = cadastroAnexoBO.listaCadastroAnexoComMiniatura(getContext(), ClienteHelper.getCliente().getId_cadastro());
+                                            ClienteHelper.setListaCadastroAnexo(listaCadastroAnexo);
+                                            getActivity().runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    progress.dismiss();
+                                                }
+                                            });
+                                        }
+                                    });
+                                    a.start();
+                                }
+                            } else {
+                                if (ClienteHelper.getCliente().getListaCadastroAnexo().size() > 0) {
+                                    ClienteHelper.setListaCadastroAnexo(ClienteHelper.getCliente().getListaCadastroAnexo());
+                                }
+                            }
+                            preencheTela();
+                            ClienteHelper.getCadastroCliente2().preencheTela();
+                        } catch (CursorIndexOutOfBoundsException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+                alert.show();
+            }
+
+            btnContinuar.setVisibility(View.VISIBLE);
+            btnContinuar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    inserirDadosDaFrame();
+
+                    boolean validado = true;
+                    if (ClienteHelper.getCliente().getPessoa_f_j() == null || ClienteHelper.getCliente().getPessoa_f_j().trim().isEmpty()) {
+                        Toast.makeText(getContext(), "Escolher Pessoa Fisica ou Juridica é obrigatorio", Toast.LENGTH_LONG).show();
+                        validado = false;
+                    }
+
+                    if (ClienteHelper.getCliente().getNome_cadastro() == null || ClienteHelper.getCliente().getNome_cadastro().trim().isEmpty()) {
+                        edtNomeCliente.setError("Campo Obrigatorio");
+                        edtNomeCliente.requestFocus();
+                        validado = false;
+                    }
+
+                    if (ClienteHelper.getCliente().getNome_fantasia() == null || ClienteHelper.getCliente().getNome_fantasia().trim().isEmpty()) {
+                        edtNomeFantasia.setError("Campo Obrigatorio");
+                        edtNomeFantasia.requestFocus();
+                        validado = false;
+                    }
+
+                    if (ClienteHelper.getCliente().getCpf_cnpj() == null || ClienteHelper.getCliente().getCpf_cnpj().trim().isEmpty()) {
+                        edtCpfCnpj.setError("Campo Obrigatorio");
+                        edtCpfCnpj.requestFocus();
+                        validado = false;
+                    } else if (ClienteHelper.getCliente().getPessoa_f_j().equals("F")) {
+                        if (!MascaraUtil.isValidCPF(ClienteHelper.getCliente().getCpf_cnpj())) {
+                            edtCpfCnpj.setError("CPF Inválido");
+                            edtCpfCnpj.requestFocus();
+                            validado = false;
+                        }
+                    } else if (ClienteHelper.getCliente().getPessoa_f_j().equals("J")) {
+                        if (!MascaraUtil.isValidCNPJ(ClienteHelper.getCliente().getCpf_cnpj())) {
+                            edtCpfCnpj.setError("CNPJ Inválido");
+                            edtCpfCnpj.requestFocus();
+                            validado = false;
+                        }
+                    }
+
+                    if (!verificaCpfCnpj(ClienteHelper.getCliente().getCpf_cnpj())) {
+                        edtCpfCnpj.setError("Já existe outro cliente com esse CPF/CNPJ");
+                        edtCpfCnpj.requestFocus();
+                        validado = false;
+                    }
+
+                    if (ClienteHelper.getCliente().getInd_da_ie_destinatario() != null && ClienteHelper.getCliente().getInd_da_ie_destinatario().equals("1")) {
+                        if (Integer.parseInt(ClienteHelper.getCliente().getInd_da_ie_destinatario()) == 1) {
+                            if (ClienteHelper.getCliente().getInscri_estadual() == null || ClienteHelper.getCliente().getInscri_estadual().trim().isEmpty()) {
+                                edtInscEstadual.setError("Campo Obrigatorio");
+                                edtInscEstadual.requestFocus();
+                                validado = false;
+                            }
+                        }
+                    }
+
+                    if (ClienteHelper.getCliente().getDiaVisita() == null || ClienteHelper.getCliente().getDiaVisita().trim().isEmpty()) {
+                        Toast.makeText(getContext(), "Escolha um dia da semana para a Visita", Toast.LENGTH_LONG).show();
+                        rgRotaCliente.requestFocus();
+                        validado = false;
+                    }
+
+                    if (validado) {
+                        if (ClienteHelper.getCliente().getId_cadastro() > 0) {
+                            ClienteHelper.getCliente().setAtivo("S");
+                            if (ClienteHelper.getCliente().getFinalizado().equals("S")) {
+                                ClienteHelper.getCliente().setAlterado("S");
+                            }
+
+                            db.atualizarTBL_CADASTRO(ClienteHelper.getCliente());
+                        } else {
+                            ClienteHelper.getCliente().setUsuario_data(new SimpleDateFormat("yyyy-MM-dd").format(new Date()));
+                            ClienteHelper.getCliente().setFinalizado("N");
+                            ClienteHelper.getCliente().setAtivo("S");
+                            ClienteHelper.getCliente().setF_cliente("S");
+                            ClienteHelper.getCliente().setF_fornecedor("N");
+                            ClienteHelper.getCliente().setF_funcionario("N");
+                            ClienteHelper.getCliente().setF_vendedor("N");
+                            ClienteHelper.getCliente().setF_transportador("N");
+                            ClienteHelper.getCliente().setId_entidade("1");
+                            ClienteHelper.getCliente().setId_empresa(Integer.parseInt(UsuarioHelper.getUsuario().getIdEmpresaMultiDevice()));
+                            ClienteHelper.getCliente().setEndereco_uf(ClienteHelper.getVendedor().getEndereco_uf());
+                            ClienteHelper.getCliente().setNome_municipio(ClienteHelper.getVendedor().getNome_municipio());
+                            ClienteHelper.getCliente().setId_pais(ClienteHelper.getVendedor().getId_pais());
+                            db.inserirTBL_CADASTRO(ClienteHelper.getCliente());
+                            ClienteHelper.getCliente().setId_cadastro(db.contagem("SELECT MAX(ID_CADASTRO) FROM TBL_CADASTRO;"));
+                            txtId.setText("ID: " + ClienteHelper.getCliente().getId_cadastro());
+                        }
+                        ClienteHelper.moveTela(1);
+                    }
+                }
+            });
         }
 
         if (getActivity().getIntent().getIntExtra("vizualizacao", 0) >= 1) {
@@ -439,6 +621,171 @@ public class CadastroCliente1 extends Fragment {
         return (view);
     }
 
+    private void preencheTela() {
+        txtId.setText("ID: " + ClienteHelper.getCliente().getId_cadastro());
+
+        if (ClienteHelper.getCliente().getCpf_cnpj() != null && ClienteHelper.getCliente().getPessoa_f_j() != null) {
+            switch (ClienteHelper.getCliente().getPessoa_f_j()) {
+                case "J":
+                    rdJuridica.setChecked(true);
+                    try {
+                        edtCpfCnpj.setText(ClienteHelper.getCliente().getCpf_cnpj());
+                    } catch (StringIndexOutOfBoundsException e) {
+                        Toast.makeText(getContext(), "Falta de informações no cadastro", Toast.LENGTH_SHORT).show();
+                    }
+                    break;
+                case "F":
+                    rdFisica.setChecked(true);
+                    edtCpfCnpj.setText(ClienteHelper.getCliente().getCpf_cnpj());
+                    break;
+                default:
+                    edtCpfCnpj.setText(ClienteHelper.getCliente().getCpf_cnpj());
+                    break;
+            }
+        }
+
+        btnLigar1.setVisibility(View.INVISIBLE);
+        btnLigar2.setVisibility(View.INVISIBLE);
+        btnLigar3.setVisibility(View.INVISIBLE);
+
+        if (ClienteHelper.getCliente().getTelefone_principal() != null)
+            edtTelefonePrincipal.setText((ClienteHelper.getCliente().getTelefone_principal()));
+        if (ClienteHelper.getCliente().getTelefone_dois() != null)
+            edtTelefone1.setText((ClienteHelper.getCliente().getTelefone_dois()));
+        if (ClienteHelper.getCliente().getTelefone_tres() != null)
+            edtTelefone2.setText((ClienteHelper.getCliente().getTelefone_tres()));
+
+        edtData.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mostraDatePickerDialog(getActivity(), edtData);
+            }
+        });
+
+        edtCpfCnpj.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus)
+                    validaCpfCnpj();
+                else
+                    edtCpfCnpj.setText(edtCpfCnpj.getText().toString().replaceAll("[^0-9]", ""));
+            }
+        });
+
+        spIe.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position != 0) {
+                    edtInscEstadual.setEnabled(false);
+                    edtInscEstadual.setText("");
+                } else {
+                    edtInscEstadual.setEnabled(true);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        arrayIe = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_activated_1, contribuinte);
+        spIe.setAdapter(arrayIe);
+
+        if (ClienteHelper.getCliente().getInd_da_ie_destinatario() != null) {
+            try {
+                spIe.setSelection(Integer.parseInt(ClienteHelper.getCliente().getInd_da_ie_destinatario()) - 1);
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (ClienteHelper.getCliente().getNome_cadastro() != null)
+            edtNomeCliente.setText(ClienteHelper.getCliente().getNome_cadastro());
+        if (ClienteHelper.getCliente().getNome_fantasia() != null)
+            edtNomeFantasia.setText(ClienteHelper.getCliente().getNome_fantasia());
+        if (ClienteHelper.getCliente().getInscri_estadual() != null)
+            edtInscEstadual.setText(ClienteHelper.getCliente().getInscri_estadual());
+        if (ClienteHelper.getCliente().getInscri_municipal() != null)
+            edtInscMunicipal.setText(ClienteHelper.getCliente().getInscri_municipal());
+        if (ClienteHelper.getCliente().getPessoa_contato_principal() != null)
+            edtPessoaContato.setText(ClienteHelper.getCliente().getPessoa_contato_principal());
+        if (ClienteHelper.getCliente().getEmail_principal() != null)
+            edtEmailPrincipal.setText(ClienteHelper.getCliente().getEmail_principal());
+        if (ClienteHelper.getCliente().getData_aniversario() != null) {
+            try {
+                edtData.setText(new SimpleDateFormat("dd/MM/yyyy").format(new SimpleDateFormat("yyyy-MM-dd").parse(ClienteHelper.getCliente().getData_aniversario())));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (rdJuridica.isChecked()) {
+            txtNomeCliente.setText("RAZÃO SOCIAL");
+            edtNomeCliente.setHint("Razão Social *");
+            txtData.setText("DATA ABERTURA");
+            edtData.setHint("Data Abertura *");
+            txtCpfCnpj.setText("CNPJ");
+            edtCpfCnpj.setHint("CNPJ *");
+
+        } else if (rdFisica.isChecked()) {
+            txtNomeCliente.setText("NOME");
+            edtNomeCliente.setHint("Nome *");
+            txtData.setText("DATA NASCIMENTO");
+            edtData.setHint("Data Nascimento *");
+            txtCpfCnpj.setText("CPF");
+            edtCpfCnpj.setHint("CPF *");
+        }
+
+        rdJuridica.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    txtNomeCliente.setText("RAZÃO SOCIAL");
+                    edtNomeCliente.setHint("Razão Social *");
+                    txtData.setText("DATA ABERTURA");
+                    edtData.setHint("Data Abertura *");
+                    txtCpfCnpj.setText("CNPJ");
+                    edtCpfCnpj.setHint("CNPJ *");
+                }
+            }
+        });
+
+        rdFisica.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    txtNomeCliente.setText("NOME");
+                    edtNomeCliente.setHint("Nome *");
+                    txtData.setText("DATA NASCIMENTO");
+                    edtData.setHint("Data Nascimento *");
+                    txtCpfCnpj.setText("CPF");
+                    edtCpfCnpj.setHint("CPF *");
+                }
+            }
+        });
+
+        if (ClienteHelper.getCliente().getDiaVisita() != null && !ClienteHelper.getCliente().getDiaVisita().trim().isEmpty()) {
+            switch (ClienteHelper.getCliente().getDiaVisita().toLowerCase()) {
+                case "segunda":
+                    rdSegundaCliente.setChecked(true);
+                    break;
+                case "terça":
+                    rdTercaCliente.setChecked(true);
+                    break;
+                case "quarta":
+                    rdQuartaCliente.setChecked(true);
+                    break;
+                case "quinta":
+                    rdQuintaCliente.setChecked(true);
+                    break;
+                case "sexta":
+                    rdSextaCliente.setChecked(true);
+                    break;
+            }
+        }
+    }
+
     public void validaCpfCnpj() {
         if (rdFisica.isChecked()) {
             if (MascaraUtil.isValidCPF(edtCpfCnpj.getText().toString().replaceAll("[^0-9]", ""))) {
@@ -594,6 +941,13 @@ public class CadastroCliente1 extends Fragment {
             }
 
         }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
+    }
+
+    public boolean verificaCpfCnpj(String cpfCnpj) {
+        if (db.contagem("SELECT COUNT(*) FROM TBL_CADASTRO WHERE CPF_CNPJ = '" + cpfCnpj + "' AND ID_CADASTRO <> " + ClienteHelper.getCliente().getId_cadastro() + " AND FINALIZADO = 'S';") > 0)
+            return false;
+        else
+            return true;
     }
 
     @Override

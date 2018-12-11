@@ -24,8 +24,11 @@ import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.model.Cliente;
 import com.example.rcksuporte05.rcksistemas.util.MascaraUtil;
 
+import java.text.SimpleDateFormat;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class ContatoActivity extends AppCompatActivity {
 
@@ -57,8 +60,16 @@ public class ContatoActivity extends AppCompatActivity {
     LinearLayout lyFinanceiro;
     @BindView(R.id.txtLimiteCredito)
     TextView txtLimiteCredito;
+    @BindView(R.id.edtDataCadastro)
+    TextView edtDataCadastro;
 
     private Cliente cliente;
+
+    @OnClick(R.id.lyNomeVendedor)
+    public void vendedor() {
+        Intent intent = new Intent(ContatoActivity.this, ContatoVendedorActivity.class);
+        startActivity(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -222,6 +233,13 @@ public class ContatoActivity extends AppCompatActivity {
 
             if (cliente.getLimite_credito() != null && !cliente.getLimite_credito().trim().isEmpty())
                 txtLimiteCredito.setText(MascaraUtil.mascaraReal(cliente.getLimite_credito()));
+
+            try {
+                String dataCadastro = new SimpleDateFormat("dd/MM/yyyy").format(new SimpleDateFormat("yyyy-MM-dd").parse(cliente.getUsuario_data()));
+                edtDataCadastro.setText("Cliente desde " + dataCadastro);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);

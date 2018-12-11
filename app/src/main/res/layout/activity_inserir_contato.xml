@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
@@ -22,10 +22,10 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingBottom="@dimen/activity_vertical_margin"
             android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin"
             android:paddingRight="@dimen/activity_horizontal_margin"
-            android:paddingTop="@dimen/activity_vertical_margin">
+            android:paddingBottom="@dimen/activity_vertical_margin">
 
 
             <TextView
@@ -67,43 +67,40 @@
                 android:id="@+id/txtTipoTelefone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Tipo Telefone"
                 android:layout_below="@+id/edtFuncaoResponsavelProspect"
-                android:textStyle="bold"
-                android:textColor="@color/colorAccent"
                 android:layout_marginTop="12dp"
-                />
+                android:text="Tipo Telefone"
+                android:textColor="@color/colorAccent"
+                android:textStyle="bold" />
 
             <Spinner
                 android:id="@+id/spTipoTelefone"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/edtFuncaoResponsavelProspect"
-                android:layout_marginLeft="17dp"
                 android:layout_marginStart="17dp"
-                android:layout_toEndOf="@+id/txtTipoTelefone"
-                android:layout_toRightOf="@+id/txtTipoTelefone"
+                android:layout_marginLeft="17dp"
                 android:layout_marginTop="12dp"
-                />
+                android:layout_toEndOf="@+id/txtTipoTelefone"
+                android:layout_toRightOf="@+id/txtTipoTelefone" />
 
             <TextView
                 android:id="@+id/txtTelefoneProspect"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/txtTipoTelefone"
+                android:layout_marginTop="12dp"
                 android:text="Telefone"
                 android:textColor="@color/colorAccent"
-                android:textStyle="bold"
-                android:layout_marginTop="12dp"
-                />
+                android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/edtTelefoneProspect"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
                 android:layout_below="@+id/txtTelefoneProspect"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
                 android:background="@drawable/borda_edittext"
                 android:inputType="number"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small" />
@@ -122,14 +119,25 @@
                 android:id="@+id/edtEmailProspect"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
                 android:layout_below="@+id/txtEmailProspect"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
                 android:background="@drawable/borda_edittext"
                 android:inputType="textEmailAddress"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
-
+            <Button
+                android:id="@+id/btnSalvar"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:layout_below="@+id/edtEmailProspect"
+                android:layout_gravity="center"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginBottom="15dp"
+                android:background="#e6b220"
+                android:text="SALVAR" />
 
         </RelativeLayout>
     </ScrollView>

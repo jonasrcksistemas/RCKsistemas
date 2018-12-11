@@ -15,7 +15,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.rcksuporte05.rcksistemas.DAO.CadastroFinanceiroResumoDAO;
 import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.HistoricoFinanceiroHelper;
@@ -56,6 +55,8 @@ public class CadastroCliente3 extends Fragment implements View.OnClickListener {
     Button btnHistoricoFinanceiro;
     @BindView(R.id.txtHistoricoFinanceiro)
     TextView txtHistoricoFinanceiro;
+    @BindView(R.id.btnContinuar)
+    Button btnContinuar;
 
     private int[] listaUf = {R.array.AC,
             R.array.AL,
@@ -90,6 +91,7 @@ public class CadastroCliente3 extends Fragment implements View.OnClickListener {
     private ArrayAdapter ufAdapter;
     private ArrayAdapter<Pais> paisAdapter;
     private List<Pais> listaPaises;
+    private DBHelper db;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -99,7 +101,7 @@ public class CadastroCliente3 extends Fragment implements View.OnClickListener {
         btnHistoricoFinanceiro.setOnClickListener(this);
         txtHistoricoFinanceiro.setOnClickListener(this);
 
-        DBHelper db = new DBHelper(getActivity());
+        db = new DBHelper(getActivity());
 
         listaPaises = db.listaPaises();
         paisAdapter = new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_activated_1, listaPaises);
@@ -110,6 +112,23 @@ public class CadastroCliente3 extends Fragment implements View.OnClickListener {
 
         municipioAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_activated_1, getResources().getStringArray(listaUf[edtUfCobranca.getSelectedItemPosition()]));
         edtMunicipioCobranca.setAdapter(municipioAdapter);
+
+        if (getActivity().getIntent().getIntExtra("novo", 0) >= 1) {
+            btnContinuar.setVisibility(View.VISIBLE);
+            btnContinuar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    inserirDadosDaFrame();
+
+                    if (ClienteHelper.getCliente().getFinalizado().equals("S")) {
+                        ClienteHelper.getCliente().setAlterado("S");
+                    }
+
+                    db.atualizarTBL_CADASTRO(ClienteHelper.getCliente());
+                    ClienteHelper.moveTela(3);
+                }
+            });
+        }
 
         if (getActivity().getIntent().getIntExtra("vizualizacao", 0) >= 1) {
 
@@ -252,11 +271,29 @@ public class CadastroCliente3 extends Fragment implements View.OnClickListener {
                     break;
                 }
             }
+        } else if (ClienteHelper.getVendedor().getCob_endereco_uf() != null && !ClienteHelper.getVendedor().getCob_endereco_uf().trim().isEmpty()) {
+            for (int i = 0; getResources().getStringArray(R.array.uf).length > i; i++) {
+                if (ClienteHelper.getVendedor().getCob_endereco_uf().equals(getResources().getStringArray(R.array.uf)[i])) {
+                    edtUfCobranca.setSelection(i);
+                    ClienteHelper.setPosicaoCobrancaUf(i);
+                    municipioAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_activated_1, getResources().getStringArray(listaUf[i]));
+                    edtMunicipioCobranca.setAdapter(municipioAdapter);
+                    break;
+                }
+            }
         }
 
         if (ClienteHelper.getCliente().getNome_cob_municipio() != null && !ClienteHelper.getCliente().getNome_cob_municipio().trim().isEmpty()) {
             for (int i = 0; getResources().getStringArray(listaUf[edtUfCobranca.getSelectedItemPosition()]).length > i; i++) {
                 if (ClienteHelper.getCliente().getNome_cob_municipio().equals(getResources().getStringArray(listaUf[edtUfCobranca.getSelectedItemPosition()])[i])) {
+                    edtMunicipioCobranca.setSelection(i);
+                    ClienteHelper.setPosicaoCobrancaMunicipio(i);
+                    break;
+                }
+            }
+        } else if (ClienteHelper.getVendedor().getNome_cob_municipio() != null && !ClienteHelper.getVendedor().getNome_cob_municipio().trim().isEmpty()) {
+            for (int i = 0; getResources().getStringArray(listaUf[edtUfCobranca.getSelectedItemPosition()]).length > i; i++) {
+                if (ClienteHelper.getVendedor().getNome_cob_municipio().equals(getResources().getStringArray(listaUf[edtUfCobranca.getSelectedItemPosition()])[i])) {
                     edtMunicipioCobranca.setSelection(i);
                     ClienteHelper.setPosicaoCobrancaMunicipio(i);
                     break;

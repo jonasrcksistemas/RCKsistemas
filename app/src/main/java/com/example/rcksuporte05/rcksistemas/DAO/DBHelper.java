@@ -34,7 +34,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private static String NomeBanco = "Banco.db";
 
     public DBHelper(Context context) {
-        super(context, NomeBanco, null, 6);
+        super(context, NomeBanco, null, 7);
     }
 
     @Override
@@ -178,7 +178,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 " ID_VENDEDOR INTEGER," +
                 " SITUACAO_PREDIO VARCHAR(1)," +
                 " DIA_VISITA VARCHAR(20)," +
-                " ALTERADO VARCHAR(1) DEFAULT 'N');");
+                " ALTERADO VARCHAR(1) DEFAULT 'N', " +
+                " FINALIZADO VARCHAR(1) DEFAULT 'S');");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS TBL_PRODUTO (ATIVO VARCHAR(1) DEFAULT 'S'  NOT NULL," +
                 " ID_PRODUTO VARCHAR(20) PRIMARY KEY," +
@@ -596,151 +597,9 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         if (newVersion > oldVersion) {
-            if (newVersion >= 6) {
-                db.execSQL("CREATE TABLE IF NOT EXISTS TBL_CADASTRO_FINANCEIRO_RESUMO (ID_CADASTRO INTEGER NOT NULL PRIMARY KEY,\n" +
-                        "               LIMITE_CREDITO NUMERIC (18,2),\n" +
-                        "               FINANCEIRO_VENCIDO NUMERIC (18,2),\n" +
-                        "               FINANCEIRO_VENCER NUMERIC (18,2),\n" +
-                        "               FINANCEIRO_QUITADO NUMERIC (18,2),\n" +
-                        "               PEDIDOS_LIBERADOS NUMERIC (18,2),\n" +
-                        "               LIMITE_UTILIZADO NUMERIC (18,2),\n" +
-                        "               LIMITE_DISPONIVEL NUMERIC (18,2),\n" +
-                        "               USUARIO_ID INTEGER,\n" +
-                        "               USUARIO_NOME VARCHAR (60),\n" +
-                        "               USUARIO_DATA TIMESTAMP ,\n" +
-                        "               DATA_ULTIMA_ATUALIZACAO TIMESTAMP);");
-
-                try {
-                    db.execSQL("DROP TABLE TBL_CADASTRO;");
-
-                    db.execSQL("CREATE TABLE IF NOT EXISTS TBL_CADASTRO " +
-                            "(ATIVO VARCHAR(1) DEFAULT 'S'  NOT NULL ," +
-                            " ID_EMPRESA INTEGER NOT NULL," +
-                            " ID_CADASTRO INTEGER PRIMARY KEY AUTOINCREMENT," +
-                            " ID_PROSPECT INTEGER ," +
-                            " ID_SEGMENTO INTEGER," +
-                            " DESCRICAO_SEGMENTO VARCHAR(300)," +
-                            " REFERENCIA_BANCARIA INTEGER," +
-                            " REFERENCIA_COMERCIAL INTEGER," +
-                            " ID_CADASTRO_SERVIDOR INTEGER ," +
-                            " PESSOA_F_J VARCHAR(1)," +
-                            " DATA_ANIVERSARIO DATE," +
-                            " NOME_CADASTRO VARCHAR(60)," +
-                            " NOME_FANTASIA VARCHAR(60)," +
-                            " CPF_CNPJ VARCHAR(14)," +
-                            " INSCRI_ESTADUAL VARCHAR(20)," +
-                            " INSCRI_MUNICIPAL VARCHAR(20)," +
-                            " ENDERECO VARCHAR(60)," +
-                            " ENDERECO_BAIRRO VARCHAR(60)," +
-                            " ENDERECO_NUMERO VARCHAR(20)," +
-                            " ENDERECO_COMPLEMENTO VARCHAR(20)," +
-                            " ENDERECO_UF CHAR(2) NOT NULL," +
-                            " NOME_MUNICIPIO VARCHAR(50)," +
-                            " ENDERECO_CEP VARCHAR(8)," +
-                            " USUARIO_ID INTEGER," +
-                            " USUARIO_NOME VARCHAR(60)," +
-                            " USUARIO_DATA TIMESTAMP," +
-                            " F_CLIENTE VARCHAR(1) DEFAULT 'N'  NOT NULL," +
-                            " F_FORNECEDOR VARCHAR(1) DEFAULT 'N'  NOT NULL," +
-                            " F_FUNCIONARIO VARCHAR(1) DEFAULT 'N'  NOT NULL," +
-                            " F_VENDEDOR VARCHAR(1) DEFAULT 'N'  NOT NULL," +
-                            " F_TRANSPORTADOR VARCHAR(1) DEFAULT 'N'  NOT NULL," +
-                            " DATA_ULTIMA_COMPRA DATE," +
-                            " NOME_VENDEDOR VARCHAR(60)," +
-                            " F_ID_CLIENTE INTEGER," +
-                            " ID_ENTIDADE INTEGER NOT NULL," +
-                            " F_ID_FORNECEDOR INTEGER," +
-                            " F_ID_VENDEDOR SMALLINT," +
-                            " F_ID_TRANSPORTADOR INTEGER," +
-                            " TELEFONE_PRINCIPAL VARCHAR(20)," +
-                            " EMAIL_PRINCIPAL VARCHAR(100)," +
-                            " ID_PAIS INTEGER ," +
-                            " F_ID_FUNCIONARIO INTEGER," +
-                            " AVISAR_COM_DIAS INTEGER DEFAULT 0 ," +
-                            " OBSERVACOES BLOB," +
-                            " PADRAO_ID_C_CUSTO INTEGER," +
-                            " PADRAO_ID_C_GERENCIADORA INTEGER," +
-                            " PADRAO_ID_C_ANALITICA INTEGER," +
-                            " COB_ENDERECO VARCHAR(60)," +
-                            " COB_ENDERECO_BAIRRO VARCHAR(60)," +
-                            " COB_ENDERECO_NUMERO VARCHAR(20)," +
-                            " COB_ENDERECO_COMPLEMENTO VARCHAR(20)," +
-                            " COB_ENDERECO_UF VARCHAR(2)," +
-                            " NOME_COB_MUNICIPIO VARCHAR(60)," +
-                            " COB_ENDERECO_CEP VARCHAR(8)," +
-                            " COB_ENDERECO_ID_PAIS INTEGER ," +
-                            " LIMITE_CREDITO DECIMAL(12, 2)," +
-                            " LIMITE_DISPONIVEL DECIMAL(12, 2)," +
-                            " PESSOA_CONTATO_FINANCEIRO VARCHAR(80)," +
-                            " EMAIL_FINANCEIRO VARCHAR(80)," +
-                            " OBSERVACOES_FATURAMENTO VARCHAR(300)," +
-                            " OBSERVACOES_FINANCEIRO VARCHAR(300)," +
-                            " TELEFONE_DOIS VARCHAR(20)," +
-                            " TELEFONE_TRES VARCHAR(20)," +
-                            " PESSOA_CONTATO_PRINCIPAL VARCHAR(80)," +
-                            " IND_DA_IE_DESTINATARIO INTEGER," +
-                            " COMISSAO_PERCENTUAL DECIMAL(12, 4)," +
-                            " ID_SETOR INTEGER," +
-                            " NFE_EMAIL_ENVIAR VARCHAR(1)," +
-                            " NFE_EMAIL_UM VARCHAR(60)," +
-                            " NFE_EMAIL_DOIS VARCHAR(60)," +
-                            " NFE_EMAIL_TRES VARCHAR(60)," +
-                            " NFE_EMAIL_QUATRO VARCHAR(60)," +
-                            " NFE_EMAIL_CINCO VARCHAR(60)," +
-                            " ID_GRUPO_VENDEDOR INTEGER," +
-                            " VENDEDOR_USA_PORTAL VARCHAR(1)," +
-                            " VENDEDOR_ID_USER_PORTAL INTEGER," +
-                            " F_TARIFA VARCHAR(1)," +
-                            " F_ID_TARIFA INTEGER," +
-                            " F_PRODUTOR VARCHAR(1)," +
-                            " RG_NUMERO VARCHAR(30)," +
-                            " RG_SSP VARCHAR(10)," +
-                            " CONTA_CONTABIL VARCHAR(15)," +
-                            " MOTORISTA VARCHAR(1)," +
-                            " F_ID_MOTORISTA INTEGER," +
-                            " HABILITACAO_NUMERO VARCHAR(20)," +
-                            " HABILITACAO_CATEGORIA VARCHAR(10)," +
-                            " HABILITACAO_VENCIMENTO DATE," +
-                            " MOT_ID_TRANSPORTADORA INTEGER," +
-                            " LOCAL_CADASTRO VARCHAR(20)," +
-                            " ID_EMPRESA_MULTIDEVICE INTEGER," +
-                            " ID_CATEGORIA INTEGER," +
-                            " ID_VENDEDOR INTEGER," +
-                            " SITUACAO_PREDIO VARCHAR(1)," +
-                            " DIA_VISITA VARCHAR(20)," +
-                            " ALTERADO VARCHAR(1) DEFAULT 'N');");
-
-                    db.execSQL("CREATE TABLE IF NOT EXISTS TBL_CADASTRO_ANEXOS(ID_ANEXO INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
-                            "               ID_ANEXO_SERVIDOR INTEGER , " +
-                            "               ID_ENTIDADE INTEGER NOT NULL DEFAULT 1, " +
-                            "               ID_CADASTRO INTEGER, " +
-                            "               ID_CADASTRO_SERVIDOR INTEGER, " +
-                            "               NOME_ANEXO VARCHAR(150), " +
-                            "               ANEXO BLOB, " +
-                            "               EXCLUIDO VARCHAR(1) DEFAULT 'N', " +
-                            "               PRINCIPAL VARCHAR(1) DEFAULT 'N');");
-
-                    db.execSQL("ALTER TABLE TBL_REFERENCIA_BANCARIA ADD COLUMN ID_ENTIDADE INTEGER;");
-
-                    db.execSQL("ALTER TABLE TBL_REFERENCIA_COMERCIAL ADD COLUMN ID_ENTIDADE INTEGER;");
-
-                    db.execSQL("ALTER TABLE TBL_CADASTRO_CONTATO ADD COLUMN ID_ENTIDADE INTEGER;");
-
-                    db.execSQL("UPDATE TBL_REFERENCIA_BANCARIA SET ID_ENTIDADE = 10;");
-
-                    db.execSQL("UPDATE TBL_REFERENCIA_COMERCIAL SET ID_ENTIDADE = 10;");
-
-                    db.execSQL("UPDATE TBL_CADASTRO_CONTATO SET ID_ENTIDADE = 10;");
-
-                    db.execSQL("INSERT INTO TBL_CADASTRO_ANEXOS (ID_ENTIDADE, ID_CADASTRO, ANEXO, EXCLUIDO, PRINCIPAL) " +
-                            "SELECT '10', ID_PROSPECT, FOTO_PRINCIPAL_BASE64, 'N', 'S' FROM TBL_PROSPECT");
-
-                    db.execSQL("INSERT INTO TBL_CADASTRO_ANEXOS (ID_ENTIDADE, ID_CADASTRO, ANEXO, EXCLUIDO, PRINCIPAL) " +
-                            "SELECT '10', ID_PROSPECT, FOTO_SECUNDARIA_BASE64, 'N', 'N' FROM TBL_PROSPECT");
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+            if (newVersion >= 7) {
+                db.execSQL("ALTER TABLE TBL_CADASTRO ADD COLUMN FINALIZADO VARCHAR(1) DEFAULT 'S';");
+                db.execSQL("UPDATE TBL_CADASTRO SET FINALIZADO = 'S';");
             }
         }
     }
@@ -1644,6 +1503,7 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("ALTERADO", "N");
         content.put("SITUACAO_PREDIO", cliente.getSituacaoPredio());
         content.put("DIA_VISITA", cliente.getDiaVisita());
+        content.put("FINALIZADO", cliente.getFinalizado());
 
         atualizarTBL_REFERENCIA_BANCARIA(cliente.getReferenciasBancarias(), String.valueOf(cliente.getId_cadastro()));
         atualizarTBL_REFERENCIA_COMERCIAL(cliente.getReferenciasComerciais(), String.valueOf(cliente.getId_cadastro()));
@@ -1759,6 +1619,7 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("ALTERADO", cliente.getAlterado());
         content.put("SITUACAO_PREDIO", cliente.getSituacaoPredio());
         content.put("DIA_VISITA", cliente.getDiaVisita());
+        content.put("FINALIZADO", cliente.getFinalizado());
 
         atualizarTBL_REFERENCIA_BANCARIA(cliente.getReferenciasBancarias(), String.valueOf(cliente.getId_cadastro()));
         atualizarTBL_REFERENCIA_COMERCIAL(cliente.getReferenciasComerciais(), String.valueOf(cliente.getId_cadastro()));
@@ -2051,7 +1912,7 @@ public class DBHelper extends SQLiteOpenHelper {
         do {
             Cliente cliente = new Cliente();
 
-            try {
+            /*try {
                 cliente.setSegmento(listaSegmento(cursor.getString(cursor.getColumnIndex("ID_SEGMENTO"))));
                 cliente.getSegmento().setDescricaoOutros(cursor.getString(cursor.getColumnIndex("DESCRICAO_SEGMENTO")));
             } catch (CursorIndexOutOfBoundsException e) {
@@ -2071,8 +1932,10 @@ public class DBHelper extends SQLiteOpenHelper {
                 cliente.setListaContato(listaContato(cursor.getString(cursor.getColumnIndex("ID_CADASTRO")), 1));
             } catch (CursorIndexOutOfBoundsException e) {
                 e.printStackTrace();
-            }
+            }*/
 
+            cliente.setId_segmento(cursor.getInt(cursor.getColumnIndex("ID_SEGMENTO")));
+            cliente.setDescricao_segmento(cursor.getString(cursor.getColumnIndex("DESCRICAO_SEGMENTO")));
             cliente.setAtivo(cursor.getString(cursor.getColumnIndex("ATIVO")));
             cliente.setId_empresa(cursor.getInt(cursor.getColumnIndex("ID_EMPRESA")));
             cliente.setId_cadastro(cursor.getInt(cursor.getColumnIndex("ID_CADASTRO")));
@@ -2163,6 +2026,7 @@ public class DBHelper extends SQLiteOpenHelper {
             cliente.setAlterado(cursor.getString(cursor.getColumnIndex("ALTERADO")));
             cliente.setSituacaoPredio(cursor.getString(cursor.getColumnIndex("SITUACAO_PREDIO")));
             cliente.setDiaVisita(cursor.getString(cursor.getColumnIndex("DIA_VISITA")));
+            cliente.setFinalizado(cursor.getString(cursor.getColumnIndex("FINALIZADO")));
 
             lista.add(cliente);
             System.gc();

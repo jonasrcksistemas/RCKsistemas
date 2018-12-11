@@ -110,6 +110,7 @@ public class SincroniaBO {
                 db.excluirClienteServidor(cliente);
                 notificacao.setProgress(maxProgress, contadorNotificacaoEProgresso, false);
 
+                cliente.setFinalizado("S");
                 int idCadastro = db.inserirTBL_CADASTRO(cliente);
                 if (cliente.getListaCadastroAnexo().size() > 0) {
                     for (CadastroAnexo cadastroAnexo : cliente.getListaCadastroAnexo()) {

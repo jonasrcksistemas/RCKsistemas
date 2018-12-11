@@ -4,9 +4,10 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -22,6 +23,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by RCK 03 on 05/02/2018.
@@ -47,10 +49,19 @@ public class ActivityAdicionaContato extends AppCompatActivity {
     @BindView(R.id.toolbarContatoProspect)
     Toolbar toolbar;
 
-    MenuItem menuItem;
+    @BindView(R.id.btnSalvar)
+    Button btnSalvar;
+
     ArrayAdapter<String> tipoArray;
     List<String> tiposTelefone;
+    private Contato contato = new Contato();
 
+    @OnClick(R.id.btnSalvar)
+    public void salvar() {
+        if (insereDadosdaFrame()) {
+            finish();
+        }
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -64,7 +75,7 @@ public class ActivityAdicionaContato extends AppCompatActivity {
         tipoArray = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, tiposTelefone);
         spTipoTelefone.setAdapter(tipoArray);
 
-        if (getIntent().getIntExtra("visualizacao", 0) != 1) {
+        if (getIntent().getIntExtra("visualizacao", 0) == 1) {
             if (getIntent().getIntExtra("contato", -1) > -1) {
                 injetaDadosNaTela(getIntent().getIntExtra("contato", 0));
             }
@@ -73,6 +84,10 @@ public class ActivityAdicionaContato extends AppCompatActivity {
             edtTelefoneProspect.setFocusable(false);
             edtEmailProspect.setFocusable(false);
             spTipoTelefone.setEnabled(false);
+            btnSalvar.setVisibility(View.GONE);
+
+        } else if (getIntent().getIntExtra("contato", -1) > -1) {
+            injetaDadosNaTela(getIntent().getIntExtra("contato", 0));
         }
 
         setSupportActionBar(toolbar);
@@ -81,7 +96,6 @@ public class ActivityAdicionaContato extends AppCompatActivity {
 
 
     public void injetaDadosNaTela(int position) {
-        Contato contato;
 
         if (getIntent().getIntExtra("cliente", 0) == 1)
             contato = ClienteHelper.getCliente().getListaContato().get(position);
@@ -103,7 +117,6 @@ public class ActivityAdicionaContato extends AppCompatActivity {
     }
 
     public boolean insereDadosdaFrame() {
-        Contato contato = new Contato();
 
         if (edtResponsavelProspect.getText() != null && !edtResponsavelProspect.getText().toString().trim().isEmpty()) {
             contato.setPessoa_contato(edtResponsavelProspect.getText().toString());
@@ -140,28 +153,30 @@ public class ActivityAdicionaContato extends AppCompatActivity {
         contato.setAtivo("S");
 
         DBHelper db = new DBHelper(this);
-        contato.setId_contato(String.valueOf(db.contagem("SELECT COUNT(*) FROM TBL_CADASTRO_CONTATO;") + 1));
+        if (contato.getId_contato() != null) {
+            if (getIntent().getIntExtra("cliente", 0) == 1) {
+                contato.setIdEntidade(1);
+                ClienteHelper.getCliente().getListaContato().set(getIntent().getIntExtra("contato", 0), contato);
+            } else {
+                contato.setIdEntidade(10);
+                ProspectHelper.getProspect().getListaContato().set(getIntent().getIntExtra("contato", 0), contato);
+            }
 
-        if (getIntent().getIntExtra("cliente", 0) == 1) {
-            contato.setIdEntidade(1);
-            ClienteHelper.getCliente().getListaContato().add(contato);
+            db.atualizarContato(contato, String.valueOf(ClienteHelper.getCliente().getId_cadastro()));
         } else {
-            contato.setIdEntidade(10);
-            ProspectHelper.getProspect().getListaContato().add(contato);
+            contato.setId_contato(String.valueOf(db.contagem("SELECT MAX(ID_CONTATO) FROM TBL_CADASTRO_CONTATO;") + 1));
+
+            if (getIntent().getIntExtra("cliente", 0) == 1) {
+                contato.setIdEntidade(1);
+                ClienteHelper.getCliente().getListaContato().add(contato);
+            } else {
+                contato.setIdEntidade(10);
+                ProspectHelper.getProspect().getListaContato().add(contato);
+            }
+
+            db.atualizarContato(contato, String.valueOf(ClienteHelper.getCliente().getId_cadastro()));
         }
 
-        db.atualizarContato(contato, "0");
-
-        return true;
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-        if (getIntent().getIntExtra("visualizacao", 0) == 1) {
-            getMenuInflater().inflate(R.menu.menu_salvar, menu);
-            menuItem = menu.findItem(R.id.menu_salvar);
-        }
         return true;
     }
 
@@ -170,11 +185,6 @@ public class ActivityAdicionaContato extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
-                break;
-            case R.id.menu_salvar:
-                if (insereDadosdaFrame()) {
-                    finish();
-                }
                 break;
         }
 

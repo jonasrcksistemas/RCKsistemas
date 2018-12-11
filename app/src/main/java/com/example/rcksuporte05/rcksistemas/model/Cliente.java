@@ -100,6 +100,9 @@ public class Cliente {
     private List<CadastroAnexo> listaCadastroAnexo = new ArrayList<>();
     private String situacaoPredio;
     private String diaVisita;
+    private int id_segmento;
+    private String descricao_segmento;
+    private String finalizado;
 
     public Cliente(Prospect prospect) {
         this.id_vendedor = prospect.getIdVendedor();
@@ -911,6 +914,30 @@ public class Cliente {
 
     public void setDiaVisita(String diaVisita) {
         this.diaVisita = diaVisita;
+    }
+
+    public int getId_segmento() {
+        return id_segmento;
+    }
+
+    public void setId_segmento(int id_segmento) {
+        this.id_segmento = id_segmento;
+    }
+
+    public String getDescricao_segmento() {
+        return descricao_segmento;
+    }
+
+    public void setDescricao_segmento(String descricao_segmento) {
+        this.descricao_segmento = descricao_segmento;
+    }
+
+    public String getFinalizado() {
+        return finalizado;
+    }
+
+    public void setFinalizado(String finalizado) {
+        this.finalizado = finalizado;
     }
 }
 

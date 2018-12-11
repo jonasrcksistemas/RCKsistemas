@@ -43,7 +43,6 @@ dependencies {
     // https://mvnrepository.com/artifact/com.google.android.gms/play-services-location
     implementation group: 'com.google.android.gms', name: 'play-services-location', version: '16.0.0'
 
-
     //trabalhar com PDF
     implementation group: 'com.itextpdf', name: 'itextpdf', version: '5.5.13'
 

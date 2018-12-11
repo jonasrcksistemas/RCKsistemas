@@ -18,9 +18,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
+import com.example.rcksuporte05.rcksistemas.DAO.CadastroAnexoDAO;
+import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.activity.ActivityAddCadastroAnexo;
@@ -45,6 +48,9 @@ public class CadastroCliente8 extends Fragment implements CadastroAnexoAdapter.C
     @BindView(R.id.btnAddAnexos)
     FloatingActionButton btnAddAnexos;
 
+    @BindView(R.id.btnContinuar)
+    Button btnContinuar;
+
     private CadastroAnexoAdapter cadastroAnexoAdapter;
     private ActionMode actionMode;
 
@@ -61,6 +67,43 @@ public class CadastroCliente8 extends Fragment implements CadastroAnexoAdapter.C
 
         recyclerAnexo.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerAnexo.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayout.VERTICAL));
+
+        if (getActivity().getIntent().getIntExtra("novo", 0) >= 1) {
+            btnContinuar.setVisibility(View.VISIBLE);
+            btnContinuar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    DBHelper db = new DBHelper(getActivity());
+
+                    if (ClienteHelper.getListaCadastroAnexo() != null && ClienteHelper.getListaCadastroAnexo().size() > 0) {
+                        CadastroAnexoDAO cadastroAnexoDAO = new CadastroAnexoDAO(db);
+
+                        for (CadastroAnexo cadastroAnexo : ClienteHelper.getListaCadastroAnexo()) {
+                            cadastroAnexo.setExcluido("N");
+                            cadastroAnexo.setIdEntidade(1);
+                            cadastroAnexo.setIdCadastro(ClienteHelper.getCliente().getId_cadastro());
+                            cadastroAnexo.setIdCadastroServidor(ClienteHelper.getCliente().getId_cadastro_servidor());
+                            cadastroAnexoDAO.atualizarCadastroAnexo(cadastroAnexo);
+                        }
+                    }
+
+                    if (ClienteHelper.getListaCadastroAnexoExcluidos() != null && ClienteHelper.getListaCadastroAnexoExcluidos().size() > 0) {
+                        CadastroAnexoDAO cadastroAnexoDAO = new CadastroAnexoDAO(db);
+
+                        for (CadastroAnexo cadastroAnexoExcluido : ClienteHelper.getListaCadastroAnexoExcluidos()) {
+                            cadastroAnexoExcluido.setExcluido("S");
+                            cadastroAnexoDAO.atualizarCadastroAnexo(cadastroAnexoExcluido);
+                        }
+                    }
+                    if (ClienteHelper.getCliente().getFinalizado().equals("S")) {
+                        ClienteHelper.getCliente().setAlterado("S");
+                    }
+                    db.atualizarTBL_CADASTRO(ClienteHelper.getCliente());
+
+                    ClienteHelper.moveTela(8);
+                }
+            });
+        }
 
         if (getActivity().getIntent().getIntExtra("vizualizacao", 0) >= 1) {
             btnAddAnexos.setVisibility(View.GONE);

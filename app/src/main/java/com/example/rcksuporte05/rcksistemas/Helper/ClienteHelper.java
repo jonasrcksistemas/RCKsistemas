@@ -25,6 +25,7 @@ import java.util.List;
 
 public class ClienteHelper {
     private static Cliente cliente;
+    private static Cliente vendedor;
     private static CadastroClienteMain cadastroClienteMain;
     private static CadastroCliente1 cadastroCliente1;
     private static CadastroCliente2 cadastroCliente2;
@@ -51,6 +52,14 @@ public class ClienteHelper {
 
     public static void setCliente(Cliente cliente) {
         ClienteHelper.cliente = cliente;
+    }
+
+    public static Cliente getVendedor() {
+        return vendedor;
+    }
+
+    public static void setVendedor(Cliente vendedor) {
+        ClienteHelper.vendedor = vendedor;
     }
 
     public static CadastroCliente1 getCadastroCliente1() {

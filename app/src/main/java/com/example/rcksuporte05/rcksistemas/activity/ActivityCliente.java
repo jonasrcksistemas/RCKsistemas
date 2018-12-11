@@ -86,6 +86,7 @@ public class ActivityCliente extends AppCompatActivity {
         Cliente cliente = new Cliente();
         Intent intent = new Intent(ActivityCliente.this, CadastroClienteMain.class);
         ClienteHelper.setCliente(cliente);
+        intent.putExtra("novo", 1);
         startActivity(intent);
     }
 
@@ -196,16 +197,16 @@ public class ActivityCliente extends AppCompatActivity {
             List<Cliente> listaCliente;
             switch (rgFiltraCliente.getCheckedRadioButtonId()) {
                 case R.id.filtraTodosClientes:
-                    listaCliente = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE ATIVO = 'S' AND (NOME_CADASTRO LIKE '%" + query + "%' OR NOME_FANTASIA LIKE '%" + query + "%' OR CPF_CNPJ LIKE '" + query + "%' OR TELEFONE_PRINCIPAL LIKE '%" + query + "%' OR ID_CADASTRO_SERVIDOR LIKE '%" + query + "%') ORDER BY ATIVO DESC, NOME_CADASTRO");
+                    listaCliente = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE FINALIZADO <> 'N' AND ATIVO = 'S' AND (NOME_CADASTRO LIKE '%" + query + "%' OR NOME_FANTASIA LIKE '%" + query + "%' OR CPF_CNPJ LIKE '" + query + "%' OR TELEFONE_PRINCIPAL LIKE '%" + query + "%' OR ID_CADASTRO_SERVIDOR LIKE '%" + query + "%') ORDER BY ATIVO DESC, NOME_CADASTRO");
                     break;
                 case R.id.filtraClientesEfetivados:
-                    listaCliente = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE F_CLIENTE = 'S' AND F_VENDEDOR = 'N' AND ATIVO = 'S' AND ID_CADASTRO_SERVIDOR > 0 AND (NOME_CADASTRO LIKE '%" + query + "%' OR NOME_FANTASIA LIKE '%" + query + "%' OR CPF_CNPJ LIKE '?%' OR TELEFONE_PRINCIPAL LIKE '%" + query + "%' OR ID_CADASTRO_SERVIDOR LIKE '%" + query + "%') ORDER BY ATIVO DESC, NOME_CADASTRO;");
+                    listaCliente = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE FINALIZADO <> 'N' AND F_CLIENTE = 'S' AND F_VENDEDOR = 'N' AND ATIVO = 'S' AND ID_CADASTRO_SERVIDOR > 0 AND (NOME_CADASTRO LIKE '%" + query + "%' OR NOME_FANTASIA LIKE '%" + query + "%' OR CPF_CNPJ LIKE '?%' OR TELEFONE_PRINCIPAL LIKE '%" + query + "%' OR ID_CADASTRO_SERVIDOR LIKE '%" + query + "%') ORDER BY ATIVO DESC, NOME_CADASTRO;");
                     break;
                 case R.id.filtraClientesNaoEfetivados:
-                    listaCliente = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE F_CLIENTE <> 'S' AND ATIVO = 'S' AND (NOME_CADASTRO LIKE '%" + query + "%' OR NOME_FANTASIA LIKE '%" + query + "%' OR CPF_CNPJ LIKE '?%' OR TELEFONE_PRINCIPAL LIKE '%" + query + "%' OR ID_CADASTRO_SERVIDOR LIKE '%" + query + "%') ORDER BY ATIVO DESC, NOME_CADASTRO;");
+                    listaCliente = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE FINALIZADO <> 'N' AND F_CLIENTE <> 'S' AND ATIVO = 'S' AND (NOME_CADASTRO LIKE '%" + query + "%' OR NOME_FANTASIA LIKE '%" + query + "%' OR CPF_CNPJ LIKE '?%' OR TELEFONE_PRINCIPAL LIKE '%" + query + "%' OR ID_CADASTRO_SERVIDOR LIKE '%" + query + "%') ORDER BY ATIVO DESC, NOME_CADASTRO;");
                     break;
                 default:
-                    listaCliente = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE ATIVO = 'S' AND (NOME_CADASTRO LIKE '%" + query + "%' OR NOME_FANTASIA LIKE '%" + query + "%' OR CPF_CNPJ LIKE '" + query + "%' OR TELEFONE_PRINCIPAL LIKE '%" + query + "%' OR ID_CADASTRO_SERVIDOR LIKE '%" + query + "%') ORDER BY ATIVO DESC, NOME_CADASTRO");
+                    listaCliente = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE FINALIZADO <> 'N' AND ATIVO = 'S' AND (NOME_CADASTRO LIKE '%" + query + "%' OR NOME_FANTASIA LIKE '%" + query + "%' OR CPF_CNPJ LIKE '" + query + "%' OR TELEFONE_PRINCIPAL LIKE '%" + query + "%' OR ID_CADASTRO_SERVIDOR LIKE '%" + query + "%') ORDER BY ATIVO DESC, NOME_CADASTRO");
                     break;
             }
             listaDeClientes.setVisibility(View.VISIBLE);
@@ -226,16 +227,16 @@ public class ActivityCliente extends AppCompatActivity {
             List<Cliente> listaCliente;
             switch (rgFiltraCliente.getCheckedRadioButtonId()) {
                 case R.id.filtraTodosClientes:
-                    listaCliente = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE ATIVO = 'S' ORDER BY ATIVO DESC, NOME_CADASTRO;");
+                    listaCliente = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE FINALIZADO <> 'N' AND ATIVO = 'S' ORDER BY ATIVO DESC, NOME_CADASTRO;");
                     break;
                 case R.id.filtraClientesEfetivados:
-                    listaCliente = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE F_CLIENTE = 'S' AND F_VENDEDOR = 'N' AND ATIVO = 'S' AND ID_CADASTRO_SERVIDOR > 0 ORDER BY ATIVO DESC, NOME_CADASTRO;");
+                    listaCliente = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE FINALIZADO <> 'N' AND F_CLIENTE = 'S' AND F_VENDEDOR = 'N' AND ATIVO = 'S' AND ID_CADASTRO_SERVIDOR > 0 ORDER BY ATIVO DESC, NOME_CADASTRO;");
                     break;
                 case R.id.filtraClientesNaoEfetivados:
-                    listaCliente = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE F_CLIENTE <> 'S' AND ATIVO = 'S' ORDER BY ATIVO DESC, NOME_CADASTRO;");
+                    listaCliente = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE FINALIZADO <> 'N' AND F_CLIENTE <> 'S' AND ATIVO = 'S' ORDER BY ATIVO DESC, NOME_CADASTRO;");
                     break;
                 default:
-                    listaCliente = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE AND ATIVO = 'S' ORDER BY ATIVO DESC, NOME_CADASTRO;");
+                    listaCliente = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE FINALIZADO <> 'N' AND AND ATIVO = 'S' ORDER BY ATIVO DESC, NOME_CADASTRO;");
                     break;
             }
             listaDeClientes.setVisibility(View.VISIBLE);
@@ -302,6 +303,7 @@ public class ActivityCliente extends AppCompatActivity {
                                 intent.putExtra("vizualizacao", 1);
                         } else {
                             intent = new Intent(ActivityCliente.this, CadastroClienteMain.class);
+                            intent.putExtra("novo", 1);
                             ClienteHelper.setCliente(listaClienteAdapter.getItem(position));
                         }
                         System.gc();
@@ -426,12 +428,32 @@ public class ActivityCliente extends AppCompatActivity {
         try {
             for (Cliente cliente : listaClientes) {
                 cliente.setListaCadastroAnexo(cadastroAnexoDAO.enviarCadastroAnexo(cliente.getId_cadastro()));
+                try {
+                    cliente.setSegmento(db.listaSegmento(String.valueOf(cliente.getId_segmento())));
+                    cliente.getSegmento().setDescricaoOutros(cliente.getDescricao_segmento());
+                } catch (CursorIndexOutOfBoundsException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    cliente.setReferenciasBancarias(db.listaReferenciaBancaria(String.valueOf(cliente.getId_cadastro()), 1));
+                } catch (CursorIndexOutOfBoundsException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    cliente.setReferenciasComerciais(db.listaReferenciacomercial(String.valueOf(cliente.getId_cadastro()), 1));
+                } catch (CursorIndexOutOfBoundsException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    cliente.setListaContato(db.listaContato(String.valueOf(cliente.getId_cadastro()), 1));
+                } catch (CursorIndexOutOfBoundsException e) {
+                    e.printStackTrace();
+                }
             }
         } catch (CursorIndexOutOfBoundsException e) {
             e.printStackTrace();
         }
         Call<List<Cliente>> call = apiRetrofit.salvarClientes(cabecalho, listaClientes);
-
         call.enqueue(new Callback<List<Cliente>>() {
             @Override
             public void onResponse(Call<List<Cliente>> call, Response<List<Cliente>> response) {

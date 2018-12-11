@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:layout_weight="1">
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/lyRecycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -15,21 +15,36 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerContatos"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_above="@+id/btnContinuar">
 
         </android.support.v7.widget.RecyclerView>
 
+        <Button
+            android:id="@+id/btnContinuar"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_alignParentBottom="true"
+            android:layout_gravity="center"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="15dp"
+            android:layout_marginBottom="15dp"
+            android:background="#e6b220"
+            android:text="CONTINUAR 4/9"
+            android:visibility="gone" />
 
-    </LinearLayout>
+
+    </RelativeLayout>
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/btnAddContato"
         android:layout_width="80dp"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right|end"
-        android:layout_marginBottom="@dimen/fab_margin"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
+        android:layout_marginBottom="90dp"
         android:src="@mipmap/ic_add_contato"
         app:backgroundTint="@color/colorAccent"
         app:elevation="3dp"

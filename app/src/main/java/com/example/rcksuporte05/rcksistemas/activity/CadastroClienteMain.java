@@ -1,12 +1,15 @@
 package com.example.rcksuporte05.rcksistemas.activity;
 
 import android.app.ProgressDialog;
+import android.database.CursorIndexOutOfBoundsException;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
 
 import com.example.rcksuporte05.rcksistemas.BO.CadastroAnexoBO;
 import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
@@ -157,12 +160,44 @@ public class CadastroClienteMain extends AppCompatActivity {
                     ClienteHelper.setListaCadastroAnexo(ClienteHelper.getCliente().getListaCadastroAnexo());
                 }
             }
+
+            try {
+                ClienteHelper.getCliente().setSegmento(db.listaSegmento(String.valueOf(ClienteHelper.getCliente().getId_segmento())));
+                ClienteHelper.getCliente().getSegmento().setDescricaoOutros(ClienteHelper.getCliente().getDescricao_segmento());
+            } catch (CursorIndexOutOfBoundsException e) {
+                e.printStackTrace();
+            }
+            try {
+                ClienteHelper.getCliente().setReferenciasBancarias(db.listaReferenciaBancaria(String.valueOf(ClienteHelper.getCliente().getId_cadastro()), 1));
+            } catch (CursorIndexOutOfBoundsException e) {
+                e.printStackTrace();
+            }
+            try {
+                ClienteHelper.getCliente().setReferenciasComerciais(db.listaReferenciacomercial(String.valueOf(ClienteHelper.getCliente().getId_cadastro()), 1));
+            } catch (CursorIndexOutOfBoundsException e) {
+                e.printStackTrace();
+            }
+            try {
+                ClienteHelper.getCliente().setListaContato(db.listaContato(String.valueOf(ClienteHelper.getCliente().getId_cadastro()), 1));
+            } catch (CursorIndexOutOfBoundsException e) {
+                e.printStackTrace();
+            }
         } catch (NullPointerException e) {
             e.printStackTrace();
             finish();
         }
 
         ClienteHelper.setCadastroClienteMain(this);
+
+        if (getIntent().getIntExtra("novo", 0) >= 1) {
+            mSlidingTabLayout.setVisibility(View.GONE);
+            mViewPager.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View view, MotionEvent motionEvent) {
+                    return true;
+                }
+            });
+        }
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -181,10 +216,18 @@ public class CadastroClienteMain extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-                if (mViewPager.getCurrentItem() != 0) {
-                    mViewPager.setCurrentItem(0);
+                if (getIntent().getIntExtra("novo", 0) < 1) {
+                    if (mViewPager.getCurrentItem() != 0) {
+                        mViewPager.setCurrentItem(0);
+                    } else {
+                        finish();
+                    }
                 } else {
-                    finish();
+                    if (mViewPager.getCurrentItem() != 0) {
+                        mViewPager.setCurrentItem(mViewPager.getCurrentItem() - 1);
+                    } else {
+                        finish();
+                    }
                 }
         }
         return super.onOptionsItemSelected(item);

@@ -11,7 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.activity.ActivityAdicionaBanco;
@@ -42,6 +44,9 @@ public class CadastroCliente6 extends Fragment implements ReferenciaComercialAda
     @BindView(R.id.btnAddBancos)
     Button btnAddBancos;
 
+    @BindView(R.id.btnContinuar)
+    Button btnContinuar;
+
     ReferenciaComercialAdapter referenciaComercialAdapter;
     ReferenciaBancariaAdapter referenciaBancariaAdapter;
 
@@ -59,6 +64,26 @@ public class CadastroCliente6 extends Fragment implements ReferenciaComercialAda
         recyclerBancos.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayout.VERTICAL));
 
         injetaDadosNaTela();
+
+        if (getActivity().getIntent().getIntExtra("novo", 0) >= 1) {
+            btnContinuar.setVisibility(View.VISIBLE);
+            btnContinuar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (ClienteHelper.getCliente().getReferenciasComerciais().size() < 2) {
+                        Toast.makeText(getContext(), "Insira Pelo Menos 2 referencias comercias ", Toast.LENGTH_LONG).show();
+                    } else {
+                        DBHelper db = new DBHelper(getActivity());
+                        if (ClienteHelper.getCliente().getFinalizado().equals("S")) {
+                            ClienteHelper.getCliente().setAlterado("S");
+                        }
+                        db.atualizarTBL_CADASTRO(ClienteHelper.getCliente());
+
+                        ClienteHelper.moveTela(6);
+                    }
+                }
+            });
+        }
 
         if (getActivity().getIntent().getIntExtra("vizualizacao", 0) >= 1) {
             btnAddReferencia.setVisibility(View.INVISIBLE);
@@ -84,7 +109,6 @@ public class CadastroCliente6 extends Fragment implements ReferenciaComercialAda
     }
 
     public void injetaDadosNaTela() {
-
         if (ClienteHelper.getCliente().getReferenciasComerciais().size() > 0) {
             referenciaComercialAdapter = new ReferenciaComercialAdapter(ClienteHelper.getCliente().getReferenciasComerciais(), this);
             recyclerReferenciaComercial.setAdapter(referenciaComercialAdapter);
@@ -96,7 +120,6 @@ public class CadastroCliente6 extends Fragment implements ReferenciaComercialAda
             recyclerBancos.setAdapter(referenciaBancariaAdapter);
             referenciaBancariaAdapter.notifyDataSetChanged();
         }
-
     }
 
     @Override
@@ -112,9 +135,6 @@ public class CadastroCliente6 extends Fragment implements ReferenciaComercialAda
 
     @Override
     public void onClickReferencia(int position) {
-//        Intent intent = new Intent(getContext(), ActivityAdicionaReferenciaComercial.class);
-//        intent.putExtra("edicao", 1);
-//        intent.putExtra("position", position);
-//        startActivity(intent);
+
     }
 }

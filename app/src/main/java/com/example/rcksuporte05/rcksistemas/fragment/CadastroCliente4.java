@@ -10,8 +10,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.activity.ActivityAdicionaContato;
@@ -34,6 +37,9 @@ public class CadastroCliente4 extends Fragment implements ListaContatoAdapter.Li
     @BindView(R.id.btnAddContato)
     FloatingActionButton btnAddContato;
 
+    @BindView(R.id.btnContinuar)
+    Button btnContinuar;
+
     private ListaContatoAdapter listaContatoAdapter;
 
     @Nullable
@@ -46,6 +52,25 @@ public class CadastroCliente4 extends Fragment implements ListaContatoAdapter.Li
         recyclerContatos.addItemDecoration(new DividerItemDecoration(getActivity(), LinearLayout.VERTICAL));
 
         preencheListaContatos();
+
+        if (getActivity().getIntent().getIntExtra("novo", 0) >= 1) {
+            btnContinuar.setVisibility(View.VISIBLE);
+            btnContinuar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (ClienteHelper.getCliente().getListaContato().size() < 1) {
+                        Toast.makeText(getContext(), "Pelo menos 1 contato é Obrigatorio!", Toast.LENGTH_LONG).show();
+                    } else {
+                        DBHelper db = new DBHelper(getActivity());
+                        if (ClienteHelper.getCliente().getFinalizado().equals("S")) {
+                            ClienteHelper.getCliente().setAlterado("S");
+                        }
+                        db.atualizarTBL_CADASTRO(ClienteHelper.getCliente());
+                        ClienteHelper.moveTela(4);
+                    }
+                }
+            });
+        }
 
         if (getActivity().getIntent().getIntExtra("vizualizacao", 0) >= 1) {
             btnAddContato.setVisibility(View.GONE);
@@ -64,7 +89,6 @@ public class CadastroCliente4 extends Fragment implements ListaContatoAdapter.Li
     @OnClick(R.id.btnAddContato)
     public void abrirTela() {
         Intent intent = new Intent(getActivity(), ActivityAdicionaContato.class);
-        intent.putExtra("visualizacao", 1);
         intent.putExtra("cliente", 1);
         startActivity(intent);
     }
@@ -73,6 +97,8 @@ public class CadastroCliente4 extends Fragment implements ListaContatoAdapter.Li
     public void onClick(int position) {
         Intent intent = new Intent(getActivity(), ActivityAdicionaContato.class);
         intent.putExtra("contato", position);
+        if (ClienteHelper.getCliente().getFinalizado().equals("S") && ClienteHelper.getCliente().getF_cliente().equals("S"))
+            intent.putExtra("visualizacao", 1);
         intent.putExtra("cliente", 1);
         startActivity(intent);
     }

@@ -24,6 +24,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by RCK 03 on 05/02/2018.
@@ -43,10 +44,15 @@ public class ActivityAdicionaBanco extends AppCompatActivity {
 
     @BindView(R.id.toolbarBancoProspect)
     Toolbar toolbarBancoProspect;
-
-    MenuItem menuItem;
     DBHelper db;
     ArrayAdapter<Banco> adapter;
+
+    @OnClick(R.id.btnSalvar)
+    public void salvar() {
+        if (insereDadosdaFrame()) {
+            finish();
+        }
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -59,18 +65,6 @@ public class ActivityAdicionaBanco extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         preencheBancos();
-
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-        if (getIntent().getIntExtra("vizualizacao", 0) != 1) {
-            getMenuInflater().inflate(R.menu.menu_salvar, menu);
-            menuItem = menu.findItem(R.id.menu_salvar);
-        }
-        return true;
     }
 
     @Override

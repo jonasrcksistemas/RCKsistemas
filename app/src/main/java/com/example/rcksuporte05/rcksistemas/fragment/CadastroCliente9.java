@@ -1,7 +1,5 @@
 package com.example.rcksuporte05.rcksistemas.fragment;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -11,12 +9,10 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.rcksuporte05.rcksistemas.DAO.CadastroAnexoDAO;
 import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.UsuarioHelper;
 import com.example.rcksuporte05.rcksistemas.R;
-import com.example.rcksuporte05.rcksistemas.model.CadastroAnexo;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -49,68 +45,24 @@ public class CadastroCliente9 extends Fragment {
                         db = new DBHelper(getActivity());
                         inserirDadosDaFrame();
 
-                        if (ClienteHelper.salvarCliente()) {
-                            if (verificaCpfCnpj(ClienteHelper.getCliente().getCpf_cnpj())) {
-                                if (ClienteHelper.getCliente().getId_cadastro() <= 0) {
-                                    ClienteHelper.getCliente().setAlterado("N");
-                                    db.inserirTBL_CADASTRO(ClienteHelper.getCliente());
-                                } else {
-                                    if (ClienteHelper.getCliente().getId_cadastro_servidor() > 0) {
-                                        ClienteHelper.getCliente().setAlterado("S");
-                                    }
-                                    db.atualizarTBL_CADASTRO(ClienteHelper.getCliente());
-                                }
-
-                                if (ClienteHelper.getListaCadastroAnexo() != null && ClienteHelper.getListaCadastroAnexo().size() > 0) {
-                                    CadastroAnexoDAO cadastroAnexoDAO = new CadastroAnexoDAO(db);
-
-                                    for (CadastroAnexo cadastroAnexo : ClienteHelper.getListaCadastroAnexo()) {
-                                        cadastroAnexo.setExcluido("N");
-                                        cadastroAnexo.setIdEntidade(1);
-                                        cadastroAnexo.setIdCadastro(ClienteHelper.getCliente().getId_cadastro());
-                                        cadastroAnexo.setIdCadastroServidor(ClienteHelper.getCliente().getId_cadastro_servidor());
-                                        cadastroAnexoDAO.atualizarCadastroAnexo(cadastroAnexo);
-                                    }
-                                }
-
-                                if (ClienteHelper.getListaCadastroAnexoExcluidos() != null && ClienteHelper.getListaCadastroAnexoExcluidos().size() > 0) {
-                                    CadastroAnexoDAO cadastroAnexoDAO = new CadastroAnexoDAO(db);
-
-                                    for (CadastroAnexo cadastroAnexoExcluido : ClienteHelper.getListaCadastroAnexoExcluidos()) {
-                                        cadastroAnexoExcluido.setExcluido("S");
-                                        cadastroAnexoDAO.atualizarCadastroAnexo(cadastroAnexoExcluido);
-                                    }
-                                }
-
-                                if (getActivity().getIntent().getIntExtra("prospect", 0) > 0)
-                                    db.alterar("DELETE FROM TBL_PROSPECT WHERE ID_PROSPECT = " + getActivity().getIntent().getIntExtra("prospect", 0) + ";");
-
-                                Toast.makeText(getActivity(), "Cliente salvo com sucesso!", Toast.LENGTH_LONG).show();
-                                getActivity().finish();
-
-                            } else {
-                                AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-                                alert.setTitle("Atenção");
-                                switch (ClienteHelper.getCliente().getPessoa_f_j()) {
-                                    case "F":
-                                        alert.setMessage("Já existe outro cliente com esse CPF");
-                                        break;
-                                    case "J":
-                                        alert.setMessage("Já existe outro cliente com esse CNPJ");
-                                        break;
-                                    default:
-                                        alert.setMessage("Já existe outro cliente com esse CPF/CNPJ");
-                                        break;
-                                }
-                                alert.setNeutralButton("OK", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        ClienteHelper.moveTela(0);
-                                    }
-                                });
-                                alert.show();
+                        if (ClienteHelper.getCliente().getFinalizado().equals("N")) {
+                            ClienteHelper.getCliente().setAlterado("N");
+                        } else {
+                            if (ClienteHelper.getCliente().getId_cadastro_servidor() > 0) {
+                                ClienteHelper.getCliente().setAlterado("S");
                             }
                         }
+                        if (ClienteHelper.getCliente().getFinalizado().equals("S")) {
+                            ClienteHelper.getCliente().setAlterado("S");
+                        }
+                        ClienteHelper.getCliente().setFinalizado("S");
+                        db.atualizarTBL_CADASTRO(ClienteHelper.getCliente());
+
+                        if (getActivity().getIntent().getIntExtra("prospect", 0) > 0)
+                            db.alterar("DELETE FROM TBL_PROSPECT WHERE ID_PROSPECT = " + getActivity().getIntent().getIntExtra("prospect", 0) + ";");
+
+                        Toast.makeText(getActivity(), "Cliente salvo com sucesso!", Toast.LENGTH_LONG).show();
+                        getActivity().finish();
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -148,12 +100,5 @@ public class CadastroCliente9 extends Fragment {
         ClienteHelper.getCliente().setId_empresa(Integer.parseInt(UsuarioHelper.getUsuario().getIdEmpresaMultiDevice()));
         ClienteHelper.getCliente().setUsuario_id(Integer.parseInt(UsuarioHelper.getUsuario().getId_usuario()));
         ClienteHelper.getCliente().setUsuario_nome(UsuarioHelper.getUsuario().getNome_usuario());
-    }
-
-    public boolean verificaCpfCnpj(String cpfCnpj) {
-        if (db.contagem("SELECT COUNT(*) FROM TBL_CADASTRO WHERE CPF_CNPJ = '" + cpfCnpj + "' AND ID_CADASTRO <> " + ClienteHelper.getCliente().getId_cadastro() + ";") > 0)
-            return false;
-        else
-            return true;
     }
 }
