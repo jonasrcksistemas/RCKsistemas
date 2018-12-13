@@ -614,8 +614,7 @@ public class SincroniaBO {
         mNotificationManager.notify(0, notificacao.build());
 
         final ProgressDialog progress = new ProgressDialog(activity);
-        progress.setMessage("Sincronia em execução");
-        progress.setTitle("Aguarde");
+        progress.setTitle("Sincronizando, aguarde");
         progress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         progress.setIndeterminate(true);
         progress.setCancelable(false);

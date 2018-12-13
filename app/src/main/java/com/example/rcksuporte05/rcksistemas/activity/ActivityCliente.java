@@ -27,6 +27,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
+import com.example.rcksuporte05.rcksistemas.BO.CadastroAnexoBO;
 import com.example.rcksuporte05.rcksistemas.DAO.CadastroAnexoDAO;
 import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
@@ -84,10 +85,91 @@ public class ActivityCliente extends AppCompatActivity {
     @OnClick(R.id.btnInserirCliente)
     public void inserirCliente() {
         Cliente cliente = new Cliente();
-        Intent intent = new Intent(ActivityCliente.this, CadastroClienteMain.class);
         ClienteHelper.setCliente(cliente);
-        intent.putExtra("novo", 1);
-        startActivity(intent);
+
+        if (db.contagem("SELECT COUNT(*) FROM TBL_CADASTRO WHERE FINALIZADO = 'N'") >= 1) {
+            android.support.v7.app.AlertDialog.Builder alert = new android.support.v7.app.AlertDialog.Builder(this);
+            alert.setTitle("Atenção!");
+            alert.setMessage("Foi detectado um cadastro de cliente em andamento, deseja continua-lo?");
+            alert.setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    db.alterar("DELETE FROM TBL_CADASTRO WHERE FINALIZADO = 'N'");
+                    Intent intent = new Intent(ActivityCliente.this, ActivityCpfCnpjCliente.class);
+                    intent.putExtra("novo", 1);
+                    startActivity(intent);
+                }
+            });
+            alert.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    try {
+                        ClienteHelper.setCliente(db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE FINALIZADO = 'N'").get(0));
+                        try {
+                            ClienteHelper.getCliente().setSegmento(db.listaSegmento(String.valueOf(ClienteHelper.getCliente().getId_segmento())));
+                            ClienteHelper.getCliente().getSegmento().setDescricaoOutros(ClienteHelper.getCliente().getDescricao_segmento());
+                        } catch (CursorIndexOutOfBoundsException e) {
+                            e.printStackTrace();
+                        }
+                        try {
+                            ClienteHelper.getCliente().setReferenciasBancarias(db.listaReferenciaBancaria(String.valueOf(ClienteHelper.getCliente().getId_cadastro()), 1));
+                        } catch (CursorIndexOutOfBoundsException e) {
+                            e.printStackTrace();
+                        }
+                        try {
+                            ClienteHelper.getCliente().setReferenciasComerciais(db.listaReferenciacomercial(String.valueOf(ClienteHelper.getCliente().getId_cadastro()), 1));
+                        } catch (CursorIndexOutOfBoundsException e) {
+                            e.printStackTrace();
+                        }
+                        try {
+                            ClienteHelper.getCliente().setListaContato(db.listaContato(String.valueOf(ClienteHelper.getCliente().getId_cadastro()), 1));
+                        } catch (CursorIndexOutOfBoundsException e) {
+                            e.printStackTrace();
+                        }
+
+                        if (ClienteHelper.getCliente().getId_cadastro() > 0) {
+                            if (db.contagem("SELECT COUNT(ID_ANEXO) FROM TBL_CADASTRO_ANEXOS WHERE ID_CADASTRO = " + ClienteHelper.getCliente().getId_cadastro() + " AND EXCLUIDO = 'N';") > 0) {
+                                final ProgressDialog progress = new ProgressDialog(ActivityCliente.this);
+                                progress.setTitle("Aguarde");
+                                progress.setMessage("Carregando anexos do cliente");
+                                progress.setCancelable(false);
+                                progress.show();
+                                final CadastroAnexoBO cadastroAnexoBO = new CadastroAnexoBO();
+                                Thread a = new Thread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        List<CadastroAnexo> listaCadastroAnexo = cadastroAnexoBO.listaCadastroAnexoComMiniatura(ActivityCliente.this, ClienteHelper.getCliente().getId_cadastro());
+                                        ClienteHelper.setListaCadastroAnexo(listaCadastroAnexo);
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                progress.dismiss();
+                                            }
+                                        });
+                                    }
+                                });
+                                a.start();
+                            }
+                        } else {
+                            if (ClienteHelper.getCliente().getListaCadastroAnexo().size() > 0) {
+                                ClienteHelper.setListaCadastroAnexo(ClienteHelper.getCliente().getListaCadastroAnexo());
+                            }
+                        }
+
+                        Intent intent = new Intent(ActivityCliente.this, CadastroClienteMain.class);
+                        intent.putExtra("novo", 1);
+                        startActivity(intent);
+                    } catch (CursorIndexOutOfBoundsException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            alert.show();
+        } else {
+            Intent intent = new Intent(ActivityCliente.this, ActivityCpfCnpjCliente.class);
+            intent.putExtra("novo", 1);
+            startActivity(intent);
+        }
     }
 
     @Override
@@ -427,7 +509,11 @@ public class ActivityCliente extends AppCompatActivity {
         final CadastroAnexoDAO cadastroAnexoDAO = new CadastroAnexoDAO(db);
         try {
             for (Cliente cliente : listaClientes) {
-                cliente.setListaCadastroAnexo(cadastroAnexoDAO.enviarCadastroAnexo(cliente.getId_cadastro()));
+                try {
+                    cliente.setListaCadastroAnexo(cadastroAnexoDAO.enviarCadastroAnexo(cliente.getId_cadastro()));
+                } catch (CursorIndexOutOfBoundsException e) {
+                    e.printStackTrace();
+                }
                 try {
                     cliente.setSegmento(db.listaSegmento(String.valueOf(cliente.getId_segmento())));
                     cliente.getSegmento().setDescricaoOutros(cliente.getDescricao_segmento());

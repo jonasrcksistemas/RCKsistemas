@@ -13,12 +13,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
+import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.ProspectHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.activity.ActivityAdicionaBanco;
 import com.example.rcksuporte05.rcksistemas.activity.ActivityAdicionaReferenciaComercial;
 import com.example.rcksuporte05.rcksistemas.adapters.ReferenciaBancariaAdapter;
 import com.example.rcksuporte05.rcksistemas.adapters.ReferenciaComercialAdapter;
+import com.example.rcksuporte05.rcksistemas.model.Prospect;
 import com.example.rcksuporte05.rcksistemas.util.DividerItemDecoration;
 
 import butterknife.BindView;
@@ -52,6 +54,9 @@ public class CadastroProspectObservacoesComerciais extends Fragment implements R
     @BindView(R.id.btnAddBancos)
     Button btnAddBancos;
 
+    @BindView(R.id.btnContinuar)
+    Button btnContinuar;
+
     ReferenciaComercialAdapter referenciaComercialAdapter;
     ReferenciaBancariaAdapter referenciaBancariaAdapter;
 
@@ -76,6 +81,20 @@ public class CadastroProspectObservacoesComerciais extends Fragment implements R
             edtLimiteDePrazoSugerido.setFocusable(false);
             btnAddReferencia.setVisibility(View.INVISIBLE);
             btnAddBancos.setVisibility(View.INVISIBLE);
+        }
+
+        if (getActivity().getIntent().getIntExtra("novo", 0) >= 1) {
+            btnContinuar.setVisibility(View.VISIBLE);
+            btnContinuar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    insereDadosDaFrame();
+
+                    DBHelper db = new DBHelper(getActivity());
+                    db.atualizarTBL_PROSPECT(ProspectHelper.getProspect());
+                    ProspectHelper.moveTela(6);
+                }
+            });
         }
 
         ProspectHelper.setCadastroProspectObservacoesComerciais(this);

@@ -316,7 +316,11 @@ public class PDFPedidoUtil extends PdfPageEventHelper {
         addColumn(writer, rect, false, Element.ALIGN_LEFT, true, totalPedido);
 
         rect = new Rectangle(23, 145, 425, 40);
-        addColumn(writer, rect, false, Element.ALIGN_BOTTOM, true, new Paragraph(new Chunk(webPedido.getObservacoes(), normalFont)));
+        try {
+            addColumn(writer, rect, false, Element.ALIGN_BOTTOM, true, new Paragraph(new Chunk(webPedido.getObservacoes(), normalFont)));
+        } catch (NullPointerException e) {
+            addColumn(writer, rect, false, Element.ALIGN_BOTTOM, true, new Paragraph(new Chunk("", normalFont)));
+        }
     }
 
     private Operacao buscaOperacao() {

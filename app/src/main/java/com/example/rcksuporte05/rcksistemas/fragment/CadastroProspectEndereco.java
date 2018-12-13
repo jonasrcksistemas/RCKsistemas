@@ -8,12 +8,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
+import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.ProspectHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.model.Pais;
@@ -42,7 +45,6 @@ public class CadastroProspectEndereco extends Fragment {
     @BindView(R.id.spMunicipioProspect)
     public Spinner spMunicipioProspect;
 
-
     @BindView(R.id.spPaisProspect)
     public Spinner spPaisProspect;
 
@@ -59,6 +61,9 @@ public class CadastroProspectEndereco extends Fragment {
 
     @BindView(R.id.rdProprio)
     RadioButton rdProprio;
+
+    @BindView(R.id.btnContinuar)
+    Button btnContinuar;
 
     ArrayAdapter municipioAdapter;
     ArrayAdapter ufAdapter;
@@ -197,6 +202,47 @@ public class CadastroProspectEndereco extends Fragment {
             rdProprio.setClickable(false);
         }
 
+        if (getActivity().getIntent().getIntExtra("novo", 0) >= 1) {
+            btnContinuar.setVisibility(View.VISIBLE);
+            btnContinuar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    inserirDadosDaFrame();
+
+                    boolean validado = true;
+                    if (ProspectHelper.getProspect().getEndereco() == null || ProspectHelper.getProspect().getEndereco().trim().isEmpty()) {
+
+                        validado = false;
+
+                        edtEnderecoProspect.requestFocus();
+                        edtEnderecoProspect.setError("Campo Obrigatorio");
+                    }
+
+                    if (ProspectHelper.getProspect().getEndereco_numero() == null || ProspectHelper.getProspect().getEndereco_numero().trim().isEmpty()) {
+
+                        validado = false;
+
+                        edtNumeroProspect.requestFocus();
+                        edtNumeroProspect.setError("Campo Obrigatorio");
+                    }
+
+                    if (ProspectHelper.getProspect().getEndereco_bairro() == null || ProspectHelper.getProspect().getEndereco_bairro().trim().isEmpty()) {
+
+                        validado = false;
+
+                        edtBairroProspect.requestFocus();
+                        edtBairroProspect.setError("Campo Obrigatorio");
+                    }
+
+                    if (validado) {
+                        DBHelper db = new DBHelper(getActivity());
+                        db.atualizarTBL_PROSPECT(ProspectHelper.getProspect());
+                        ProspectHelper.moveTela(2);
+                    }
+                }
+            });
+        }
+
         ProspectHelper.setCadastroProspectEndereco(this);
         return view;
     }
@@ -254,12 +300,30 @@ public class CadastroProspectEndereco extends Fragment {
                     break;
                 }
             }
+        } else if (ProspectHelper.getVendedor().getEndereco_uf() != null && !ProspectHelper.getVendedor().getEndereco_uf().trim().isEmpty()) {
+            for (int i = 0; getResources().getStringArray(R.array.uf).length > i; i++) {
+                if (ProspectHelper.getVendedor().getEndereco_uf().equals(getResources().getStringArray(R.array.uf)[i])) {
+                    spUfProspect.setSelection(i);
+                    ProspectHelper.setPosicaoUf(i);
+                    municipioAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_activated_1, getResources().getStringArray(listaUf[i]));
+                    spMunicipioProspect.setAdapter(municipioAdapter);
+                    break;
+                }
+            }
         }
 
 
         if (ProspectHelper.getProspect().getNome_municipio() != null && !ProspectHelper.getProspect().getNome_municipio().trim().isEmpty()) {
             for (int i = 0; getResources().getStringArray(listaUf[spUfProspect.getSelectedItemPosition()]).length > i; i++) {
                 if (ProspectHelper.getProspect().getNome_municipio().equals(getResources().getStringArray(listaUf[ProspectHelper.getPosicaoUf()])[i])) {
+                    spMunicipioProspect.setSelection(i);
+                    ProspectHelper.setPosicaoMunicipio(i);
+                    break;
+                }
+            }
+        } else if (ProspectHelper.getVendedor().getNome_municipio() != null && !ProspectHelper.getVendedor().getNome_municipio().trim().isEmpty()) {
+            for (int i = 0; getResources().getStringArray(listaUf[spUfProspect.getSelectedItemPosition()]).length > i; i++) {
+                if (ProspectHelper.getVendedor().getNome_municipio().equals(getResources().getStringArray(listaUf[spUfProspect.getSelectedItemPosition()])[i])) {
                     spMunicipioProspect.setSelection(i);
                     ProspectHelper.setPosicaoMunicipio(i);
                     break;

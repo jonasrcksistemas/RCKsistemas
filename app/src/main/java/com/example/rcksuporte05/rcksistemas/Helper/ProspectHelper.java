@@ -14,6 +14,7 @@ import com.example.rcksuporte05.rcksistemas.fragment.CadastroProspectGeral;
 import com.example.rcksuporte05.rcksistemas.fragment.CadastroProspectMotivos;
 import com.example.rcksuporte05.rcksistemas.fragment.CadastroProspectObservacoesComerciais;
 import com.example.rcksuporte05.rcksistemas.fragment.CadastroProspectSegmentos;
+import com.example.rcksuporte05.rcksistemas.model.Cliente;
 import com.example.rcksuporte05.rcksistemas.model.MotivoNaoCadastramento;
 import com.example.rcksuporte05.rcksistemas.model.Pais;
 import com.example.rcksuporte05.rcksistemas.model.Prospect;
@@ -37,6 +38,7 @@ public class ProspectHelper {
     public static String checkin;
     public static Location localizacao;
     private static Prospect prospect;
+    private static Cliente vendedor;
     private static List<Segmento> segmentos;
     private static List<MotivoNaoCadastramento> motivos;
     private static List<Pais> paises;
@@ -59,6 +61,14 @@ public class ProspectHelper {
 
     public static void setProspect(Prospect prospect) {
         ProspectHelper.prospect = prospect;
+    }
+
+    public static Cliente getVendedor() {
+        return vendedor;
+    }
+
+    public static void setVendedor(Cliente vendedor) {
+        ProspectHelper.vendedor = vendedor;
     }
 
     public static CadastroProspectGeral getCadastroProspectGeral() {
@@ -205,7 +215,7 @@ public class ProspectHelper {
         ProspectHelper.localizacao = localizacao;
     }
 
-    private static void moveTela(int position) {
+    public static void moveTela(int position) {
         mViewPager = (ViewPager) activityMain.findViewById(R.id.vp_tabs_prospect);
         if (mViewPager.getCurrentItem() != position) {
             mViewPager.setCurrentItem(position);

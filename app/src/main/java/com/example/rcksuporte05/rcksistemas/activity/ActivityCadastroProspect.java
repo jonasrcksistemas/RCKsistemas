@@ -1,18 +1,23 @@
 package com.example.rcksuporte05.rcksistemas.activity;
 
+import android.content.DialogInterface;
 import android.database.CursorIndexOutOfBoundsException;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.Toast;
 
 import com.example.rcksuporte05.rcksistemas.DAO.CadastroAnexoDAO;
 import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.ProspectHelper;
+import com.example.rcksuporte05.rcksistemas.Helper.UsuarioHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.TabsAdapterProspect;
 import com.example.rcksuporte05.rcksistemas.model.CadastroAnexo;
@@ -49,9 +54,7 @@ public class ActivityCadastroProspect extends AppCompatActivity {
         buscarMotivos();
         buscarPais();
 
-
         toolbar.setTitle("Cadastro de Prospect");
-
 
         tabsAdapterProspect = new TabsAdapterProspect(getSupportFragmentManager());
         mViewPager.setAdapter(tabsAdapterProspect);
@@ -160,6 +163,22 @@ public class ActivityCadastroProspect extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        if (getIntent().getIntExtra("novo", 0) >= 1) {
+            try {
+                ProspectHelper.setVendedor(db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE F_ID_VENDEDOR = " + UsuarioHelper.getUsuario().getId_quando_vendedor() + ";").get(0));
+            } catch (CursorIndexOutOfBoundsException e) {
+                e.printStackTrace();
+            }
+            mSlidingTabLayout.setVisibility(View.GONE);
+
+            mViewPager.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View view, MotionEvent motionEvent) {
+                    return true;
+                }
+            });
+        }
+
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -171,10 +190,40 @@ public class ActivityCadastroProspect extends AppCompatActivity {
         super.onOptionsItemSelected(item);
         switch (item.getItemId()) {
             case android.R.id.home:
-                if (mViewPager.getCurrentItem() != 0) {
-                    mViewPager.setCurrentItem(0);
+                if (getIntent().getIntExtra("novo", 1) < 1) {
+                    if (mViewPager.getCurrentItem() != 0) {
+                        mViewPager.setCurrentItem(0);
+                    } else {
+                        finish();
+                    }
                 } else {
-                    finish();
+                    if (mViewPager.getCurrentItem() != 0) {
+                        mViewPager.setCurrentItem(mViewPager.getCurrentItem() - 1);
+                    } else {
+                        if (ProspectHelper.getProspect().getProspectSalvo().equals("N") && ProspectHelper.getProspect().getId_prospect() != null) {
+                            AlertDialog.Builder alert = new AlertDialog.Builder(this);
+                            alert.setTitle("Atenção");
+                            alert.setMessage("Você está prestes a fechar esse cadastro em andamento. Deseja salva-lo PARCIALMENTE para continua-lo mais tarde?" +
+                                    "(Clicar em \"NÃO\" irá excluir esse Prospect)");
+                            alert.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    finish();
+                                }
+                            });
+                            alert.setNegativeButton("NÃO", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    db.alterar("DELETE FROM TBL_PROSPECT WHERE ID_PROSPECT = " + ProspectHelper.getProspect().getId_prospect() + ";");
+                                    finish();
+                                }
+                            });
+                            alert.show();
+                        } else {
+                            finish();
+                        }
+
+                    }
                 }
                 break;
         }

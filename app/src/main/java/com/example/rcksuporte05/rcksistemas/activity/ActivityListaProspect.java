@@ -77,6 +77,7 @@ public class ActivityListaProspect extends AppCompatActivity {
         prospect.setProspectSalvo("N");
         ProspectHelper.setProspect(prospect);
         Intent intent = new Intent(ActivityListaProspect.this, ActivityCadastroProspect.class);
+        intent.putExtra("novo", 1);
         startActivity(intent);
     }
 
@@ -205,6 +206,8 @@ public class ActivityListaProspect extends AppCompatActivity {
                 } else {
                     ProspectHelper.setProspect(lista.get(position));
                     Intent intent = new Intent(ActivityListaProspect.this, ActivityCadastroProspect.class);
+                    if (!lista.get(position).getProspectSalvo().equals("S"))
+                        intent.putExtra("novo", 1);
                     startActivity(intent);
                 }
             }
@@ -337,8 +340,7 @@ public class ActivityListaProspect extends AppCompatActivity {
                                         progress.setMessage("Enviando Prospects");
                                         progress.setTitle("Aguarde");
                                         progress.show();
-                                        List<Prospect> listaEnvio = listaProspectAdapter.getItensSelecionados();
-                                        enviarProspects(listaEnvio);
+                                        enviarProspects(listaProspectAdapter.getItensSelecionados());
                                     }
                                 });
                                 alert.show();
@@ -370,6 +372,7 @@ public class ActivityListaProspect extends AppCompatActivity {
                                             Cliente cliente = new Cliente(listaProspectAdapter.getItensSelecionados().get(0));
                                             Intent intent = new Intent(ActivityListaProspect.this, CadastroClienteMain.class);
                                             intent.putExtra("prospect", Integer.parseInt(listaProspectAdapter.getItensSelecionados().get(0).getId_prospect()));
+                                            intent.putExtra("novo", 1);
                                             ClienteHelper.setCliente(cliente);
                                             startActivity(intent);
                                             onDestroyActionMode(mode);

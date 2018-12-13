@@ -63,7 +63,7 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
         <Button
-            android:id="@+id/btnSalvar"
+            android:id="@+id/btnContinuar"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_below="@+id/edtTelFonecedorProspect"

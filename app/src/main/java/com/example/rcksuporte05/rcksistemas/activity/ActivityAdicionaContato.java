@@ -157,24 +157,26 @@ public class ActivityAdicionaContato extends AppCompatActivity {
             if (getIntent().getIntExtra("cliente", 0) == 1) {
                 contato.setIdEntidade(1);
                 ClienteHelper.getCliente().getListaContato().set(getIntent().getIntExtra("contato", 0), contato);
+                db.atualizarContato(contato, String.valueOf(ClienteHelper.getCliente().getId_cadastro()));
             } else {
                 contato.setIdEntidade(10);
                 ProspectHelper.getProspect().getListaContato().set(getIntent().getIntExtra("contato", 0), contato);
+                db.atualizarContato(contato, String.valueOf(ProspectHelper.getProspect().getId_cadastro()));
             }
 
-            db.atualizarContato(contato, String.valueOf(ClienteHelper.getCliente().getId_cadastro()));
         } else {
             contato.setId_contato(String.valueOf(db.contagem("SELECT MAX(ID_CONTATO) FROM TBL_CADASTRO_CONTATO;") + 1));
 
             if (getIntent().getIntExtra("cliente", 0) == 1) {
                 contato.setIdEntidade(1);
                 ClienteHelper.getCliente().getListaContato().add(contato);
+                db.atualizarContato(contato, String.valueOf(ClienteHelper.getCliente().getId_cadastro()));
             } else {
                 contato.setIdEntidade(10);
                 ProspectHelper.getProspect().getListaContato().add(contato);
+                db.atualizarContato(contato, String.valueOf(ProspectHelper.getProspect().getId_cadastro()));
             }
 
-            db.atualizarContato(contato, String.valueOf(ClienteHelper.getCliente().getId_cadastro()));
         }
 
         return true;

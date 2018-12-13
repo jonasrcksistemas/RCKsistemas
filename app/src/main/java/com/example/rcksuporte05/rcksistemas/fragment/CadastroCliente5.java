@@ -67,8 +67,6 @@ public class CadastroCliente5 extends Fragment implements SegmentoAdapter.Segmen
                         validado = false;
                     } else if (ClienteHelper.getCliente().getSegmento().getNomeSetor().toLowerCase().contains("outros")) {
                         if (ClienteHelper.getCliente().getSegmento().getDescricaoOutros() == null || ClienteHelper.getCliente().getSegmento().getDescricaoOutros().equals("")) {
-                            Toast.makeText(getContext(), "Observação obrigatorio quando opção Outros selecionada", Toast.LENGTH_LONG).show();
-
                             edtOutrosSegmentosCliente.setError("Observação obrigatorio quando opção Outros selecionada");
                             edtOutrosSegmentosCliente.requestFocus();
                             validado = false;
@@ -145,6 +143,7 @@ public class CadastroCliente5 extends Fragment implements SegmentoAdapter.Segmen
         } else {
             edtOutrosSegmentosCliente.setText("");
             edtOutrosSegmentosCliente.setEnabled(false);
+            btnContinuar.callOnClick();
         }
         segmentoAdapter.toggleSelection(position);
         segmentoAdapter.notifyDataSetChanged();

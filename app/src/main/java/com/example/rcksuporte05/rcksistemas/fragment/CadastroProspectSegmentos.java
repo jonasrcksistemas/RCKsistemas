@@ -9,9 +9,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.ProspectHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.SegmentoAdapter;
@@ -30,6 +33,8 @@ public class CadastroProspectSegmentos extends Fragment implements SegmentoAdapt
     public EditText edtOutrosSegmentosProspect;
     @BindView(R.id.recyclerSegmentos)
     RecyclerView recyclerSegmentos;
+    @BindView(R.id.btnContinuar)
+    Button btnContinuar;
     View view;
     SegmentoAdapter segmentoAdapter;
 
@@ -42,14 +47,40 @@ public class CadastroProspectSegmentos extends Fragment implements SegmentoAdapt
         recyclerSegmentos.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerSegmentos.addItemDecoration(new DividerItemDecoration(getContext(), LinearLayout.VERTICAL));
 
-
         preencheRecycler();
         insereDadosNaTela();
 
         if (ProspectHelper.getProspect().getProspectSalvo() != null && ProspectHelper.getProspect().getProspectSalvo().equals("S")) {
             recyclerSegmentos.setClickable(false);
             edtOutrosSegmentosProspect.setFocusable(false);
+        }
 
+        if (getActivity().getIntent().getIntExtra("novo", 0) >= 1) {
+            btnContinuar.setVisibility(View.VISIBLE);
+            btnContinuar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    insereDadosDaFrame();
+
+                    boolean validado = true;
+                    if (ProspectHelper.getProspect().getSegmento() == null) {
+                        validado = false;
+                        Toast.makeText(getActivity(), "Escolha o segmento!", Toast.LENGTH_LONG).show();
+                    } else if (ProspectHelper.getProspect().getSegmento().getNomeSetor().toLowerCase().contains("outros")) {
+                        if (ProspectHelper.getProspect().getSegmento().getDescricaoOutros() == null || ProspectHelper.getProspect().getSegmento().getDescricaoOutros().equals("")) {
+                            validado = false;
+                            edtOutrosSegmentosProspect.setError("Observação obrigatorio quando opção Outros selecionada");
+                            edtOutrosSegmentosProspect.requestFocus();
+                        }
+                    }
+
+                    if (validado) {
+                        DBHelper db = new DBHelper(getActivity());
+                        db.atualizarTBL_PROSPECT(ProspectHelper.getProspect());
+                        ProspectHelper.moveTela(4);
+                    }
+                }
+            });
         }
 
 

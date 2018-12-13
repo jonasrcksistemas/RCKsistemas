@@ -53,6 +53,7 @@ public class Prospect {
     private String prospectSalvo;
     private String ind_da_ie_destinatario_prospect;
     private String usuario_nome;
+    private String finalizado;
 
     public String getId_prospect() {
         return id_prospect;
@@ -380,5 +381,13 @@ public class Prospect {
 
     public void setIdCategoria(int idCategoria) {
         this.idCategoria = idCategoria;
+    }
+
+    public String getFinalizado() {
+        return finalizado;
+    }
+
+    public void setFinalizado(String finalizado) {
+        this.finalizado = finalizado;
     }
 }

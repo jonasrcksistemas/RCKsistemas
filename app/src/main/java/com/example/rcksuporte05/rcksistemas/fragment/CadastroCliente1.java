@@ -2,7 +2,6 @@ package com.example.rcksuporte05.rcksistemas.fragment;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -26,13 +25,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.rcksuporte05.rcksistemas.BO.CadastroAnexoBO;
 import com.example.rcksuporte05.rcksistemas.DAO.CategoriaDAO;
 import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.UsuarioHelper;
 import com.example.rcksuporte05.rcksistemas.R;
-import com.example.rcksuporte05.rcksistemas.model.CadastroAnexo;
 import com.example.rcksuporte05.rcksistemas.model.Categoria;
 import com.example.rcksuporte05.rcksistemas.util.MascaraUtil;
 
@@ -71,16 +68,16 @@ public class CadastroCliente1 extends Fragment {
     public EditText edtInscEstadual;
     @BindView(R.id.rgRotaCliente)
     public RadioGroup rgRotaCliente;
+    @BindView(R.id.rdFisica)
+    public RadioButton rdFisica;
+    @BindView(R.id.rdJuridica)
+    public RadioButton rdJuridica;
+    @BindView(R.id.txtCpfCnpj)
+    public TextView txtCpfCnpj;
     @BindView(R.id.txtId)
     TextView txtId;
-    @BindView(R.id.rdFisica)
-    RadioButton rdFisica;
-    @BindView(R.id.rdJuridica)
-    RadioButton rdJuridica;
     @BindView(R.id.txtNomeCliente)
     TextView txtNomeCliente;
-    @BindView(R.id.txtCpfCnpj)
-    TextView txtCpfCnpj;
     @BindView(R.id.spIe)
     Spinner spIe;
     @BindView(R.id.spCategoria)
@@ -112,7 +109,7 @@ public class CadastroCliente1 extends Fragment {
 
     private ArrayAdapter arrayIe;
     private ArrayAdapter arrayCategoria;
-    private String[] contribuinte = {"Contribuinte", "Isento", "Não Contribuinte"};
+    private String[] contribuinte = {"Com inscrição estadual", "Isento de inscrição", "Sem inscrição estadual"};
     private List<Categoria> listaCategoria = new ArrayList<>();
     private View view;
     private RadioButton radioButtonRota;
@@ -155,92 +152,20 @@ public class CadastroCliente1 extends Fragment {
         }
 
         if (getActivity().getIntent().getIntExtra("novo", 0) >= 1) {
+            rdFisica.setClickable(false);
+            rdJuridica.setClickable(false);
+            edtCpfCnpj.setFocusable(false);
+
             try {
                 ClienteHelper.setVendedor(db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE F_ID_VENDEDOR = " + UsuarioHelper.getUsuario().getId_quando_vendedor() + ";").get(0));
             } catch (CursorIndexOutOfBoundsException e) {
                 e.printStackTrace();
             }
 
-            if (ClienteHelper.getCliente().getId_cadastro() <= 0 && db.contagem("SELECT COUNT(*) FROM TBL_CADASTRO WHERE FINALIZADO = 'N'") >= 1) {
-                AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-                alert.setTitle("Atenção!");
-                alert.setMessage("Foi detectado um cadastro de cliente em andamento, deseja continua-lo?");
-                alert.setNegativeButton("Não", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        db.alterar("DELETE FROM TBL_CADASTRO WHERE FINALIZADO = 'N'");
-                    }
-                });
-                alert.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        try {
-                            ClienteHelper.setCliente(db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE FINALIZADO = 'N'").get(0));
-                            try {
-                                ClienteHelper.getCliente().setSegmento(db.listaSegmento(String.valueOf(ClienteHelper.getCliente().getId_segmento())));
-                                ClienteHelper.getCliente().getSegmento().setDescricaoOutros(ClienteHelper.getCliente().getDescricao_segmento());
-                            } catch (CursorIndexOutOfBoundsException e) {
-                                e.printStackTrace();
-                            }
-                            try {
-                                ClienteHelper.getCliente().setReferenciasBancarias(db.listaReferenciaBancaria(String.valueOf(ClienteHelper.getCliente().getId_cadastro()), 1));
-                            } catch (CursorIndexOutOfBoundsException e) {
-                                e.printStackTrace();
-                            }
-                            try {
-                                ClienteHelper.getCliente().setReferenciasComerciais(db.listaReferenciacomercial(String.valueOf(ClienteHelper.getCliente().getId_cadastro()), 1));
-                            } catch (CursorIndexOutOfBoundsException e) {
-                                e.printStackTrace();
-                            }
-                            try {
-                                ClienteHelper.getCliente().setListaContato(db.listaContato(String.valueOf(ClienteHelper.getCliente().getId_cadastro()), 1));
-                            } catch (CursorIndexOutOfBoundsException e) {
-                                e.printStackTrace();
-                            }
-
-                            if (ClienteHelper.getCliente().getId_cadastro() > 0) {
-                                if (db.contagem("SELECT COUNT(ID_ANEXO) FROM TBL_CADASTRO_ANEXOS WHERE ID_CADASTRO = " + ClienteHelper.getCliente().getId_cadastro() + " AND EXCLUIDO = 'N';") > 0) {
-                                    final ProgressDialog progress = new ProgressDialog(getContext());
-                                    progress.setTitle("Aguarde");
-                                    progress.setMessage("Carregando anexos do cliente");
-                                    progress.setCancelable(false);
-                                    progress.show();
-                                    final CadastroAnexoBO cadastroAnexoBO = new CadastroAnexoBO();
-                                    Thread a = new Thread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            List<CadastroAnexo> listaCadastroAnexo = cadastroAnexoBO.listaCadastroAnexoComMiniatura(getContext(), ClienteHelper.getCliente().getId_cadastro());
-                                            ClienteHelper.setListaCadastroAnexo(listaCadastroAnexo);
-                                            getActivity().runOnUiThread(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    progress.dismiss();
-                                                }
-                                            });
-                                        }
-                                    });
-                                    a.start();
-                                }
-                            } else {
-                                if (ClienteHelper.getCliente().getListaCadastroAnexo().size() > 0) {
-                                    ClienteHelper.setListaCadastroAnexo(ClienteHelper.getCliente().getListaCadastroAnexo());
-                                }
-                            }
-                            preencheTela();
-                            ClienteHelper.getCadastroCliente2().preencheTela();
-                        } catch (CursorIndexOutOfBoundsException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-                alert.show();
-            }
-
             btnContinuar.setVisibility(View.VISIBLE);
             btnContinuar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
                     inserirDadosDaFrame();
 
                     boolean validado = true;
@@ -302,6 +227,9 @@ public class CadastroCliente1 extends Fragment {
                     }
 
                     if (validado) {
+                        if (getActivity().getIntent().getIntExtra("prospect", 0) > 0) {
+                            db.alterar("DELETE FROM TBL_CADASTRO WHERE FINALIZADO = 'N'");
+                        }
                         if (ClienteHelper.getCliente().getId_cadastro() > 0) {
                             ClienteHelper.getCliente().setAtivo("S");
                             if (ClienteHelper.getCliente().getFinalizado().equals("S")) {
@@ -327,6 +255,10 @@ public class CadastroCliente1 extends Fragment {
                             ClienteHelper.getCliente().setId_cadastro(db.contagem("SELECT MAX(ID_CADASTRO) FROM TBL_CADASTRO;"));
                             txtId.setText("ID: " + ClienteHelper.getCliente().getId_cadastro());
                         }
+                        if (getActivity().getIntent().getIntExtra("prospect", 0) > 0) {
+                            db.alterar("DELETE FROM TBL_PROSPECT WHERE ID_PROSPECT = " + getActivity().getIntent().getIntExtra("prospect", 0) + ";");
+                        }
+
                         ClienteHelper.moveTela(1);
                     }
                 }
@@ -358,8 +290,8 @@ public class CadastroCliente1 extends Fragment {
 
             rdFisica.setClickable(false);
             rdJuridica.setClickable(false);
-            edtNomeFantasia.setFocusable(false);
             edtCpfCnpj.setFocusable(false);
+            edtNomeFantasia.setFocusable(false);
             edtTelefonePrincipal.setFocusable(false);
             edtTelefone1.setFocusable(false);
             edtTelefone2.setFocusable(false);
@@ -458,14 +390,14 @@ public class CadastroCliente1 extends Fragment {
                     case "J":
                         rdJuridica.setChecked(true);
                         try {
-                            edtCpfCnpj.setText(ClienteHelper.getCliente().getCpf_cnpj());
+                            edtCpfCnpj.setText(MascaraUtil.mascaraCNPJ(ClienteHelper.getCliente().getCpf_cnpj()));
                         } catch (StringIndexOutOfBoundsException e) {
                             Toast.makeText(getContext(), "Falta de informações no cadastro", Toast.LENGTH_SHORT).show();
                         }
                         break;
                     case "F":
                         rdFisica.setChecked(true);
-                        edtCpfCnpj.setText(ClienteHelper.getCliente().getCpf_cnpj());
+                        edtCpfCnpj.setText(MascaraUtil.mascaraCPF(ClienteHelper.getCliente().getCpf_cnpj()));
                         break;
                     default:
                         edtCpfCnpj.setText(ClienteHelper.getCliente().getCpf_cnpj());
@@ -948,11 +880,5 @@ public class CadastroCliente1 extends Fragment {
             return false;
         else
             return true;
-    }
-
-    @Override
-    public void onDestroy() {
-        System.gc();
-        super.onDestroy();
     }
 }

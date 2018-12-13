@@ -57,6 +57,9 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -83,12 +86,6 @@ public class CadastroProspectFotoSalvar extends Fragment implements GoogleApiCli
     @BindView(R.id.imagemProspect2)
     ImageButton imagemProspect2;
 
-    @BindView(R.id.btnSalvarParcial)
-    Button btnSalvarParcial;
-
-    @BindView(R.id.btnSalvarProspect)
-    Button btnSalvarProspect;
-
     @BindView(R.id.btnCheckinVisitaProspect)
     Button btnCheckinVisitaProspect;
 
@@ -100,6 +97,9 @@ public class CadastroProspectFotoSalvar extends Fragment implements GoogleApiCli
 
     @BindView(R.id.txtChekinEnderecoProspect)
     TextView txtChekinEnderecoProspect;
+
+    @BindView(R.id.btnContinuar)
+    Button btnContinuar;
 
     String encodedImage;
     Bitmap mImagem1;
@@ -133,8 +133,6 @@ public class CadastroProspectFotoSalvar extends Fragment implements GoogleApiCli
 
         if (ProspectHelper.getProspect().getProspectSalvo() != null && ProspectHelper.getProspect().getProspectSalvo().equals("S")) {
             edtDataRetorno.setFocusable(false);
-            btnSalvarParcial.setVisibility(View.INVISIBLE);
-            btnSalvarProspect.setVisibility(View.INVISIBLE);
             imagemProspect1.setEnabled(false);
             imagemProspect2.setEnabled(false);
             btnCheckinVisitaProspect.setClickable(false);
@@ -149,6 +147,100 @@ public class CadastroProspectFotoSalvar extends Fragment implements GoogleApiCli
             });
         }
 
+        if (getActivity().getIntent().getIntExtra("novo", 0) >= 1) {
+            btnContinuar.setVisibility(View.VISIBLE);
+            btnContinuar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    insereDadosDaFrame();
+
+                    boolean validado = true;
+                    if (ProspectHelper.getProspect().getDataRetorno() == null || ProspectHelper.getProspect().getDataRetorno().trim().isEmpty()) {
+                        edtDataRetorno.setBackgroundResource(R.drawable.borda_edittext_erro);
+                        Toast.makeText(getActivity(), "Informe a data de Retorno", Toast.LENGTH_LONG).show();
+                        validado = false;
+                    } else {
+                        Calendar dataAtual = new GregorianCalendar();
+                        Calendar dataRetorno = new GregorianCalendar();
+                        Date date = new Date();
+                        dataAtual.setTime(date);
+                        try {
+                            dataRetorno.setTime(new SimpleDateFormat("yyyy-MM-dd").parse(ProspectHelper.getProspect().getDataRetorno()));
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        if (dataAtual.getTime().after(dataRetorno.getTime())) {
+                            edtDataRetorno.setBackgroundResource(R.drawable.borda_edittext_erro);
+                            Toast.makeText(getActivity(), "A data deve ser posterior ao dia de hoje!", Toast.LENGTH_LONG).show();
+                            validado = false;
+                        }
+
+                        if (ProspectHelper.getProspect().getLatitude() == null && ProspectHelper.getProspect().getLongitude() == null) {
+                            Toast.makeText(getActivity(), "Fazer Check-in é obrigatório", Toast.LENGTH_LONG).show();
+                            validado = false;
+                        }
+                    }
+
+                    if (validado) {
+                        insereDadosDaFrame();
+                        if (ProspectHelper.getProspect().getId_prospect() != null && !ProspectHelper.getProspect().getId_prospect().trim().isEmpty()) {
+                            System.out.println("Esse prospect já tem id!");
+                        } else {
+                            ProspectHelper.getProspect().setId_prospect(String.valueOf(db.contagem("SELECT MAX(ID_PROSPECT) FROM TBL_PROSPECT;") + 1));
+                        }
+
+                        if (ProspectHelper.getProspect().getFotoPrincipalBase64() != null) {
+                            ProspectHelper.getProspect().getFotoPrincipalBase64().setIdCadastro(Integer.parseInt(ProspectHelper.getProspect().getId_prospect()));
+                            ProspectHelper.getProspect().getFotoPrincipalBase64().setPrincipal("S");
+                            ProspectHelper.getProspect().getFotoPrincipalBase64().setIdEntidade(10);
+                            ProspectHelper.getProspect().getFotoPrincipalBase64().setExcluido("N");
+                        }
+
+                        if (ProspectHelper.getProspect().getFotoSecundariaBase64() != null) {
+                            ProspectHelper.getProspect().getFotoSecundariaBase64().setIdCadastro(Integer.parseInt(ProspectHelper.getProspect().getId_prospect()));
+                            ProspectHelper.getProspect().getFotoSecundariaBase64().setPrincipal("N");
+                            ProspectHelper.getProspect().getFotoSecundariaBase64().setIdEntidade(10);
+                            ProspectHelper.getProspect().getFotoSecundariaBase64().setExcluido("N");
+                        }
+
+                        ProspectHelper.getProspect().setProspectSalvo("N");
+                        ProspectHelper.getProspect().setIdEmpresa(UsuarioHelper.getUsuario().getIdEmpresaMultiDevice());
+                        ProspectHelper.getProspect().setUsuario_id(UsuarioHelper.getUsuario().getId_usuario());
+                        ProspectHelper.getProspect().setUsuario_nome(UsuarioHelper.getUsuario().getNome_usuario());
+                        try {
+                            ProspectHelper.getProspect().setUsuario_data(new SimpleDateFormat("dd/MM/yyyy")
+                                    .format(new SimpleDateFormat("yyyy-MM-dd")
+                                            .parse(db.pegaDataAtual())));
+                        } catch (ParseException e) {
+                            e.printStackTrace();
+                        }
+                        db.atualizarTBL_PROSPECT(ProspectHelper.getProspect());
+
+                        if (ProspectHelper.salvarProspect()) {
+                            AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+                            alert.setTitle("Atenção");
+                            alert.setMessage("Tem certeza que deseja salvar esse prospect PERMANENTEMENTE?");
+                            alert.setNegativeButton("NÃO", null);
+                            alert.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    ProspectHelper.getProspect().setProspectSalvo("S");
+                                    ProspectHelper.getProspect().setIdEmpresa(UsuarioHelper.getUsuario().getIdEmpresaMultiDevice());
+                                    ProspectHelper.getProspect().setUsuario_id(UsuarioHelper.getUsuario().getId_usuario());
+                                    ProspectHelper.getProspect().setUsuario_nome(UsuarioHelper.getUsuario().getNome_usuario());
+                                    ProspectHelper.getProspect().setUsuario_data(db.pegaDataAtual());
+                                    ProspectHelper.getProspect().setIdVendedor(Integer.parseInt(UsuarioHelper.getUsuario().getId_quando_vendedor()));
+
+                                    db.atualizarTBL_PROSPECT(ProspectHelper.getProspect());
+                                    getActivity().finish();
+                                }
+                            });
+                            alert.show();
+                        }
+                    }
+                }
+            });
+        }
 
         ProspectHelper.setCadastroProspectFotoSalvar(this);
         return view;
@@ -236,117 +328,6 @@ public class CadastroProspectFotoSalvar extends Fragment implements GoogleApiCli
             progress.setTitle("Aguarde");
             progress.show();
             getGeocoder();
-        }
-    }
-
-
-    @OnClick(R.id.btnSalvarParcial)
-    public void salvarParcial() {
-        insereDadosDaFrame();
-        if (ProspectHelper.salvarParcial()) {
-            AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
-            alert.setTitle("Atenção");
-            alert.setMessage("Tem certeza que deseja salvar esse prospect para continuar mais tarde?");
-            alert.setNegativeButton("NÃO", null);
-            alert.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    if (ProspectHelper.getProspect().getId_prospect() != null && !ProspectHelper.getProspect().getId_prospect().trim().isEmpty()) {
-                        System.out.println("Esse prospect já tem id!");
-                    } else {
-                        ProspectHelper.getProspect().setId_prospect(String.valueOf(db.contagem("SELECT COUNT(*) FROM TBL_PROSPECT;") + 1));
-                    }
-                    if (ProspectHelper.getProspect().getFotoPrincipalBase64() != null) {
-                        ProspectHelper.getProspect().getFotoPrincipalBase64().setIdCadastro(Integer.parseInt(ProspectHelper.getProspect().getId_prospect()));
-                        ProspectHelper.getProspect().getFotoPrincipalBase64().setPrincipal("S");
-                        ProspectHelper.getProspect().getFotoPrincipalBase64().setIdEntidade(10);
-                        ProspectHelper.getProspect().getFotoPrincipalBase64().setExcluido("N");
-                    }
-
-                    if (ProspectHelper.getProspect().getFotoSecundariaBase64() != null) {
-                        ProspectHelper.getProspect().getFotoSecundariaBase64().setIdCadastro(Integer.parseInt(ProspectHelper.getProspect().getId_prospect()));
-                        ProspectHelper.getProspect().getFotoSecundariaBase64().setPrincipal("N");
-                        ProspectHelper.getProspect().getFotoSecundariaBase64().setIdEntidade(10);
-                        ProspectHelper.getProspect().getFotoSecundariaBase64().setExcluido("N");
-                    }
-
-                    ProspectHelper.getProspect().setProspectSalvo("N");
-                    ProspectHelper.getProspect().setIdEmpresa(UsuarioHelper.getUsuario().getIdEmpresaMultiDevice());
-                    ProspectHelper.getProspect().setUsuario_id(UsuarioHelper.getUsuario().getId_usuario());
-                    ProspectHelper.getProspect().setUsuario_nome(UsuarioHelper.getUsuario().getNome_usuario());
-                    try {
-                        ProspectHelper.getProspect().setUsuario_data(new SimpleDateFormat("dd/MM/yyyy")
-                                .format(new SimpleDateFormat("yyyy-MM-dd")
-                                        .parse(db.pegaDataAtual())));
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-                    db.atualizarTBL_PROSPECT(ProspectHelper.getProspect());
-                    getActivity().finish();
-                }
-            });
-            alert.show();
-        }
-    }
-
-    @OnClick(R.id.btnSalvarProspect)
-    public void salvarProspect() {
-        insereDadosDaFrame();
-        if (ProspectHelper.salvarParcial()) {
-            if (ProspectHelper.getProspect().getId_prospect() != null && !ProspectHelper.getProspect().getId_prospect().trim().isEmpty()) {
-                System.out.println("Esse prospect já tem id!");
-            } else {
-                ProspectHelper.getProspect().setId_prospect(String.valueOf(db.contagem("SELECT COUNT(*) FROM TBL_PROSPECT;") + 1));
-            }
-
-            if (ProspectHelper.getProspect().getFotoPrincipalBase64() != null) {
-                ProspectHelper.getProspect().getFotoPrincipalBase64().setIdCadastro(Integer.parseInt(ProspectHelper.getProspect().getId_prospect()));
-                ProspectHelper.getProspect().getFotoPrincipalBase64().setPrincipal("S");
-                ProspectHelper.getProspect().getFotoPrincipalBase64().setIdEntidade(10);
-                ProspectHelper.getProspect().getFotoPrincipalBase64().setExcluido("N");
-            }
-
-            if (ProspectHelper.getProspect().getFotoSecundariaBase64() != null) {
-                ProspectHelper.getProspect().getFotoSecundariaBase64().setIdCadastro(Integer.parseInt(ProspectHelper.getProspect().getId_prospect()));
-                ProspectHelper.getProspect().getFotoSecundariaBase64().setPrincipal("N");
-                ProspectHelper.getProspect().getFotoSecundariaBase64().setIdEntidade(10);
-                ProspectHelper.getProspect().getFotoSecundariaBase64().setExcluido("N");
-            }
-
-            ProspectHelper.getProspect().setProspectSalvo("N");
-            ProspectHelper.getProspect().setIdEmpresa(UsuarioHelper.getUsuario().getIdEmpresaMultiDevice());
-            ProspectHelper.getProspect().setUsuario_id(UsuarioHelper.getUsuario().getId_usuario());
-            ProspectHelper.getProspect().setUsuario_nome(UsuarioHelper.getUsuario().getNome_usuario());
-            try {
-                ProspectHelper.getProspect().setUsuario_data(new SimpleDateFormat("dd/MM/yyyy")
-                        .format(new SimpleDateFormat("yyyy-MM-dd")
-                                .parse(db.pegaDataAtual())));
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-            db.atualizarTBL_PROSPECT(ProspectHelper.getProspect());
-
-            if (ProspectHelper.salvarProspect()) {
-                AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
-                alert.setTitle("Atenção");
-                alert.setMessage("Tem certeza que deseja salvar esse prospect PERMANENTEMENTE?");
-                alert.setNegativeButton("NÃO", null);
-                alert.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        ProspectHelper.getProspect().setProspectSalvo("S");
-                        ProspectHelper.getProspect().setIdEmpresa(UsuarioHelper.getUsuario().getIdEmpresaMultiDevice());
-                        ProspectHelper.getProspect().setUsuario_id(UsuarioHelper.getUsuario().getId_usuario());
-                        ProspectHelper.getProspect().setUsuario_nome(UsuarioHelper.getUsuario().getNome_usuario());
-                        ProspectHelper.getProspect().setUsuario_data(db.pegaDataAtual());
-                        ProspectHelper.getProspect().setIdVendedor(Integer.parseInt(UsuarioHelper.getUsuario().getId_quando_vendedor()));
-
-                        db.atualizarTBL_PROSPECT(ProspectHelper.getProspect());
-                        getActivity().finish();
-                    }
-                });
-                alert.show();
-            }
         }
     }
 

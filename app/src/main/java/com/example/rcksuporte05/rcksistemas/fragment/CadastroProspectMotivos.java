@@ -8,9 +8,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.ProspectHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.MotivoAdapter;
@@ -29,6 +32,8 @@ public class CadastroProspectMotivos extends Fragment implements MotivoAdapter.M
     public EditText edtOutrosMotivosProspect;
     @BindView(R.id.recyclerMotivos)
     RecyclerView recyclerMotivos;
+    @BindView(R.id.btnContinuar)
+    Button btnContinuar;
     MotivoAdapter motivoAdapter;
 
     @Nullable
@@ -47,6 +52,38 @@ public class CadastroProspectMotivos extends Fragment implements MotivoAdapter.M
             edtOutrosMotivosProspect.setFocusable(false);
         }
 
+        if (getActivity().getIntent().getIntExtra("novo", 0) >= 1) {
+            btnContinuar.setVisibility(View.VISIBLE);
+            btnContinuar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    insereDadosDaFrame();
+
+                    boolean validado = true;
+                    try {
+                        if (ProspectHelper.getProspect().getMotivoNaoCadastramento() == null) {
+                            validado = false;
+                            Toast.makeText(getActivity(), "Escolha um Motivo para o Não cadastramento!", Toast.LENGTH_LONG).show();
+                        } else if (ProspectHelper.getProspect().getMotivoNaoCadastramento().getMotivo().toLowerCase().contains("outros") && ProspectHelper.getProspect().getMotivoNaoCadastramento().getDescricaoOutros().equals("")) {
+                            validado = false;
+                            edtOutrosMotivosProspect.setError("Observação obrigatorio quando opção Outros selecionada");
+                            edtOutrosMotivosProspect.requestFocus();
+                        }
+                    } catch (NullPointerException e) {
+                        e.printStackTrace();
+                        validado = false;
+                        Toast.makeText(getActivity(), "Escolha um Motivo para o Não cadastramento!", Toast.LENGTH_LONG).show();
+                    }
+
+                    if (validado) {
+                        DBHelper db = new DBHelper(getActivity());
+                        db.atualizarTBL_PROSPECT(ProspectHelper.getProspect());
+                        ProspectHelper.moveTela(5);
+                    }
+                }
+            });
+        }
+
         ProspectHelper.setCadastroProspectMotivos(this);
         return view;
     }
@@ -58,8 +95,6 @@ public class CadastroProspectMotivos extends Fragment implements MotivoAdapter.M
                 edtOutrosMotivosProspect.setText(ProspectHelper.getProspect().getMotivoNaoCadastramento().getDescricaoOutros());
             }
         }
-
-
     }
 
 

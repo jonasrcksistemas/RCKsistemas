@@ -11,15 +11,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.rcksuporte05.rcksistemas.DAO.CategoriaDAO;
 import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.ProspectHelper;
+import com.example.rcksuporte05.rcksistemas.Helper.UsuarioHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.model.Categoria;
 import com.example.rcksuporte05.rcksistemas.util.MascaraUtil;
@@ -84,6 +87,8 @@ public class CadastroProspectGeral extends Fragment {
     @BindView(R.id.txtCpfCnpjProspect)
     TextView txtCpfCnpjProspect;
 
+    @BindView(R.id.btnContinuar)
+    Button btnContinuar;
 
     View view;
     RadioButton radioButtonRota;
@@ -178,6 +183,68 @@ public class CadastroProspectGeral extends Fragment {
             rdSextaProspect.setClickable(false);
             spIeProspect.setEnabled(false);
             spCategoriaProspect.setEnabled(false);
+        }
+
+        if (getActivity().getIntent().getIntExtra("novo", 0) >= 1) {
+            btnContinuar.setVisibility(View.VISIBLE);
+            btnContinuar.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    inserirDadosDaFrame();
+
+                    boolean validado = true;
+                    if (ProspectHelper.getProspect().getPessoa_f_j() == null || ProspectHelper.getProspect().getPessoa_f_j().equals("")) {
+                        Toast.makeText(getContext(), "Escolher Pessoa Fisica ou Juridica é obrigatorio", Toast.LENGTH_LONG).show();
+                        validado = false;
+                    }
+                    edtNomeClienteProspect.requestFocus();
+
+
+                    if (ProspectHelper.getProspect().getNome_cadastro() == null || ProspectHelper.getProspect().getNome_cadastro().trim().equals("")) {
+                        validado = false;
+                        edtNomeClienteProspect.setError("Campo Obrigatorio");
+                        edtNomeClienteProspect.requestFocus();
+                    }
+
+
+                    if (ProspectHelper.getProspect().getNome_fantasia() == null || ProspectHelper.getProspect().getNome_fantasia().equals("")) {
+
+                        validado = false;
+                        edtNomeFantasiaProspect.setError("Campo Obrigatorio");
+                        edtNomeFantasiaProspect.requestFocus();
+                    }
+
+
+                    if (ProspectHelper.getProspect().getCpf_cnpj() == null || ProspectHelper.getProspect().getCpf_cnpj().equals("")) {
+
+                        validado = false;
+
+                        edtCpfCnpjProspect.setError("Campo Obrigatorio");
+                        edtCpfCnpjProspect.requestFocus();
+                    } else if (ProspectHelper.getProspect().getPessoa_f_j().equals("F")) {
+                        if (!MascaraUtil.isValidCPF(ProspectHelper.getProspect().getCpf_cnpj())) {
+                            validado = false;
+                            edtCpfCnpjProspect.setError("CPF invalido");
+                            edtCpfCnpjProspect.requestFocus();
+                        }
+                    } else if (ProspectHelper.getProspect().getPessoa_f_j().equals("J")) {
+                        if (!MascaraUtil.isValidCNPJ(ProspectHelper.getProspect().getCpf_cnpj())) {
+                            validado = false;
+                            edtCpfCnpjProspect.setError("CNPJ invalido");
+                            edtCpfCnpjProspect.requestFocus();
+                        }
+                    }
+
+                    if (validado) {
+                        ProspectHelper.getProspect().setProspectSalvo("N");
+                        ProspectHelper.getProspect().setUsuario_id(UsuarioHelper.getUsuario().getId_usuario());
+                        ProspectHelper.setProspect(db.atualizarTBL_PROSPECT(ProspectHelper.getProspect()));
+                        if (txtIdProspect.getText().toString().equals("0000"))
+                            txtIdProspect.setText(ProspectHelper.getProspect().getId_prospect());
+                        ProspectHelper.moveTela(1);
+                    }
+                }
+            });
         }
 
         ProspectHelper.setCadastroProspectGeral(this);

@@ -483,7 +483,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 "DESCRICAO_MOTIVO_NAO_CAD VARCHAR(300)," +
                 "PROSPECT_SALVO VARCHAR(1) DEFAULT 'N', " +
                 "ID_VENDEDOR INTEGER, " +
-                "ID_CATEGORIA INTEGER);");
+                "ID_CATEGORIA INTEGER, " +
+                "FINALIZADO VARCHAR(1) DEFAULT 'S');");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS TBL_SEGMENTO" +
                 "(ATIVO VARCHAR(1) DEFAULT 'S' NOT NULL," +
@@ -600,6 +601,8 @@ public class DBHelper extends SQLiteOpenHelper {
             if (newVersion >= 7) {
                 db.execSQL("ALTER TABLE TBL_CADASTRO ADD COLUMN FINALIZADO VARCHAR(1) DEFAULT 'S';");
                 db.execSQL("UPDATE TBL_CADASTRO SET FINALIZADO = 'S';");
+                db.execSQL("ALTER TABLE TBL_PROSPECT ADD COLUMN FINALIZADO VARCHAR(1) DEFAULT 'S';");
+                db.execSQL("UPDATE TBL_PROSPECT SET FINALIZADO = 'S';");
             }
         }
     }
@@ -723,12 +726,13 @@ public class DBHelper extends SQLiteOpenHelper {
             atualizaListaContatos(prospect.getListaContato(), prospect.getId_prospect());
             db.update("TBL_PROSPECT", content, "ID_PROSPECT = " + prospect.getId_prospect(), null);
         } else {
+
             content.put("ID_PROSPECT", prospect.getId_prospect());
-            prospect.setId_prospect(prospect.getId_prospect());
             atualizarTBL_REFERENCIA_BANCARIA(prospect.getReferenciasBancarias(), prospect.getId_prospect());
             atualizarTBL_REFERENCIA_COMERCIAL(prospect.getReferenciasComerciais(), prospect.getId_prospect());
             atualizaListaContatos(prospect.getListaContato(), prospect.getId_prospect());
             db.insert("TBL_PROSPECT", null, content);
+            prospect.setId_prospect(String.valueOf(contagem("SELECT MAX(ID_PROSPECT) FROM TBL_PROSPECT;")));
         }
 
         return prospect;

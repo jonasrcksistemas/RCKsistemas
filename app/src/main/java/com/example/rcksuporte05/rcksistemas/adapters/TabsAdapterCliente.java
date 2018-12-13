@@ -15,7 +15,7 @@ import com.example.rcksuporte05.rcksistemas.fragment.CadastroCliente8;
 import com.example.rcksuporte05.rcksistemas.fragment.CadastroCliente9;
 
 public class TabsAdapterCliente extends FragmentPagerAdapter {
-    private String[] titles = {"GERAL", "ENDEREÇO", "FINANCEIRO/COBRANÇA", "CONTATO *", "SEGMENTOS *", "OBSERVAÇÕES COMERCIAIS", "EMAIL NFE", "ANEXOS", "OBSERVAÇÕES"};
+    private String[] titles = {"GERAL", "ENDEREÇO", "FINANCEIRO/COBRANÇA", "CONTATO *", "SEGMENTOS *", "REFERÊNCIAS", "EMAIL NF-E", "FOTOS", "OBSERVAÇÕES"};
 
     public TabsAdapterCliente(FragmentManager fm) {
         super(fm);

@@ -4,8 +4,9 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -33,6 +34,8 @@ public class ActivityAdicionaReferenciaComercial extends AppCompatActivity {
     @BindView(R.id.toolbarReferenciaComercial)
     Toolbar toolbar;
 
+    @BindView(R.id.btnContinuar)
+    Button btnContinuar;
 
     MenuItem menuItem;
 
@@ -48,21 +51,19 @@ public class ActivityAdicionaReferenciaComercial extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        btnContinuar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (insereDadosdaFrame()) {
+                    finish();
+                }
+            }
+        });
+
         if (getIntent().getIntExtra("edicao", 0) == 1) {
 
         }
 
-    }
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-        if (getIntent().getIntExtra("vizualizacao", 0) != 1) {
-            getMenuInflater().inflate(R.menu.menu_salvar, menu);
-            menuItem = menu.findItem(R.id.menu_salvar);
-        }
-        return true;
     }
 
     @Override
@@ -70,11 +71,6 @@ public class ActivityAdicionaReferenciaComercial extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 finish();
-                break;
-            case R.id.menu_salvar:
-                if (insereDadosdaFrame()) {
-                    finish();
-                }
                 break;
         }
 
@@ -105,7 +101,7 @@ public class ActivityAdicionaReferenciaComercial extends AppCompatActivity {
         }
 
         DBHelper db = new DBHelper(this);
-        referenciaComercial.setId_referencia_comercial(String.valueOf(db.contagem("SELECT COUNT(*) FROM TBL_REFERENCIA_COMERCIAL;") + 1));
+        referenciaComercial.setId_referencia_comercial(String.valueOf(db.contagem("SELECT MAX(ID_REFERENCIA_COMERCIAL) FROM TBL_REFERENCIA_COMERCIAL;") + 1));
 
         db.atualizarReferenciaComercial(referenciaComercial, "0");
 

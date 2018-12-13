@@ -78,7 +78,7 @@
                 android:id="@+id/txtNomeCliente"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/rdPessoa"
+                android:layout_below="@+id/edtCpfCnpj"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
                 android:layout_marginTop="12dp"
@@ -128,7 +128,7 @@
                 android:id="@+id/txtCpfCnpj"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/edtNomeFantasia"
+                android:layout_below="@+id/rdPessoa"
                 android:layout_marginTop="12dp"
                 android:text="CPF"
                 android:textColor="@color/colorAccent"
@@ -154,7 +154,7 @@
                 android:id="@+id/txtInscEstadual"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/edtCpfCnpj"
+                android:layout_below="@+id/edtNomeFantasia"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
                 android:layout_marginTop="12dp"
@@ -164,9 +164,9 @@
 
             <EditText
                 android:id="@+id/edtInscEstadual"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/txtInscEstadual"
+                android:layout_below="@+id/spIe"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
                 android:background="@drawable/borda_edittext"
@@ -177,13 +177,11 @@
 
             <Spinner
                 android:id="@+id/spIe"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/edtInscEstadual"
+                android:layout_below="@+id/txtInscEstadual"
                 android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_toEndOf="@+id/edtInscEstadual"
-                android:layout_toRightOf="@+id/edtInscEstadual" />
+                android:layout_alignParentRight="true" />
 
             <TextView
                 android:id="@+id/txtInscMunicipal"
@@ -376,7 +374,7 @@
 
             <EditText
                 android:id="@+id/edtData"
-                android:layout_width="100dp"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@+id/txtData"
                 android:layout_alignParentStart="true"
@@ -393,11 +391,8 @@
                 android:id="@+id/txtCategoria"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignStart="@+id/spCategoria"
-                android:layout_alignLeft="@+id/spCategoria"
-                android:layout_alignTop="@+id/txtData"
-                android:layout_alignEnd="@+id/spCategoria"
-                android:layout_alignRight="@+id/spCategoria"
+                android:layout_below="@+id/edtData"
+                android:layout_marginTop="12dp"
                 android:gravity="center"
                 android:text="CATEGORIA"
                 android:textColor="@color/colorAccent"
@@ -405,21 +400,15 @@
 
             <Spinner
                 android:id="@+id/spCategoria"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/edtData"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginStart="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_toEndOf="@+id/edtData"
-                android:layout_toRightOf="@+id/edtData" />
+                android:layout_below="@+id/txtCategoria" />
 
             <TextView
                 android:id="@+id/txtRotaCliente"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@id/edtData"
+                android:layout_below="@id/spCategoria"
                 android:layout_marginTop="12dp"
                 android:text="Dia de Rota *" />
 

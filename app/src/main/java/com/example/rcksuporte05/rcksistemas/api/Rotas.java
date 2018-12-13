@@ -68,4 +68,7 @@ public interface Rotas {
 
     @POST("cliente/salvar")
     Call<List<Cliente>> salvarClientes(@HeaderMap Map<String, String> chaveAcesso, @Body List<Cliente> clientes);
+
+    @GET("cliente/verificacpfcnpj/{cpfcnpj}")
+    Call<Cliente> verificaCpfCnpj(@Path("cpfcnpj") String cpfCnpj, @HeaderMap Map<String, String> chaveAcesso);
 }

@@ -107,7 +107,11 @@ public class Cliente {
     public Cliente(Prospect prospect) {
         this.id_vendedor = prospect.getIdVendedor();
         this.idCategoria = prospect.getIdCategoria();
-        this.id_prospect = Integer.parseInt(prospect.getId_prospect());
+        try {
+            this.id_prospect = Integer.parseInt(prospect.getId_prospect());
+        } catch (NumberFormatException e) {
+            this.id_prospect = 0;
+        }
         this.segmento = prospect.getSegmento();
         this.referenciasBancarias = prospect.getReferenciasBancarias();
         this.referenciasComerciais = prospect.getReferenciasComerciais();
@@ -125,12 +129,24 @@ public class Cliente {
         this.endereco_uf = prospect.getEndereco_uf();
         this.nome_municipio = prospect.getNome_municipio();
         this.endereco_cep = prospect.getEndereco_cep();
-        this.id_pais = Integer.parseInt(prospect.getId_pais());
-        this.usuario_id = Integer.parseInt(prospect.getUsuario_id());
+        try {
+            this.id_pais = Integer.parseInt(prospect.getId_pais());
+        } catch (NumberFormatException e) {
+            this.id_pais = 0;
+        }
+        try {
+            this.usuario_id = Integer.parseInt(prospect.getUsuario_id());
+        } catch (NumberFormatException e) {
+            this.usuario_id = 0;
+        }
         this.usuario_data = prospect.getUsuario_data();
         this.situacaoPredio = prospect.getSituacaoPredio();
         this.limite_credito = prospect.getLimiteDeCreditoSugerido();
-        this.id_empresa = Integer.parseInt(prospect.getIdEmpresa());
+        try {
+            this.id_empresa = Integer.parseInt(prospect.getIdEmpresa());
+        } catch (NumberFormatException e) {
+            this.id_empresa = 0;
+        }
         this.diaVisita = prospect.getDiaVisita();
         this.observacoes_faturamento = prospect.getObservacoesComerciais();
         this.ind_da_ie_destinatario = prospect.getInd_da_ie_destinatario_prospect();

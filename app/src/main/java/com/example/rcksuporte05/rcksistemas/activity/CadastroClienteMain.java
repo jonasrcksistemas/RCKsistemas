@@ -33,6 +33,8 @@ public class CadastroClienteMain extends AppCompatActivity {
     SlidingTabLayout mSlidingTabLayout;
     private TabsAdapterCliente tabsAdapterCliente;
 
+    private String[] titles = {"Geral", "Endereço", "Financeiro/Cobrança", "Contato *", "Segmentos *", "Referências", "Email NF-E", "Fotos", "Observações"};
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,31 +58,69 @@ public class CadastroClienteMain extends AppCompatActivity {
                     case 0:
                         if (ClienteHelper.getCadastroCliente1() != null) {
                             ClienteHelper.getCadastroCliente1().inserirDadosDaFrame();
+                            if (getIntent().getIntExtra("novo", 0) >= 1) {
+                                toolbar.setTitle(titles[position]);
+                            }
                         }
                         break;
                     case 1:
                         if (ClienteHelper.getCadastroCliente2() != null) {
                             ClienteHelper.getCadastroCliente2().inserirDadosDaFrame();
+                            if (getIntent().getIntExtra("novo", 0) >= 1) {
+                                toolbar.setTitle(titles[position]);
+                            }
                         }
                         break;
                     case 2:
                         if (ClienteHelper.getCadastroCliente3() != null) {
                             ClienteHelper.getCadastroCliente3().inserirDadosDaFrame();
+                            if (getIntent().getIntExtra("novo", 0) >= 1) {
+                                toolbar.setTitle(titles[position]);
+                            }
+                        }
+                        break;
+                    case 3:
+                        if (getIntent().getIntExtra("novo", 0) >= 1) {
+                            toolbar.setTitle(titles[position]);
                         }
                         break;
                     case 4:
                         if (ClienteHelper.getCadastroCliente5() != null) {
                             ClienteHelper.getCadastroCliente5().inserirDadosDaFrame();
+                            if (getIntent().getIntExtra("novo", 0) >= 1) {
+                                toolbar.setTitle(titles[position]);
+                            }
+                        }
+                        break;
+                    case 5:
+                        if (getIntent().getIntExtra("novo", 0) >= 1) {
+                            toolbar.setTitle(titles[position]);
                         }
                         break;
                     case 6:
                         if (ClienteHelper.getCadastroCliente7() != null) {
                             ClienteHelper.getCadastroCliente7().inserirDadosDaFrame();
+                            if (getIntent().getIntExtra("novo", 0) >= 1) {
+                                toolbar.setTitle(titles[position]);
+                            }
+                        }
+                        break;
+                    case 7:
+                        if (getIntent().getIntExtra("novo", 0) >= 1) {
+                            toolbar.setTitle(titles[position]);
                         }
                         break;
                     case 8:
                         if (ClienteHelper.getCadastroCliente9() != null) {
                             ClienteHelper.getCadastroCliente9().inserirDadosDaFrame();
+                            if (getIntent().getIntExtra("novo", 0) >= 1) {
+                                toolbar.setTitle(titles[position]);
+                            }
+                        }
+                        break;
+                    case 9:
+                        if (getIntent().getIntExtra("novo", 0) >= 1) {
+                            toolbar.setTitle(titles[position]);
                         }
                         break;
                 }
