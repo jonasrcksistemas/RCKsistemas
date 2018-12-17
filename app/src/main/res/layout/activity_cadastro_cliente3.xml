@@ -36,7 +36,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
-                android:text="LIMITE DE CREDITO"
+                android:text="Limite de Credito"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
 
@@ -59,7 +59,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/edtLimiteCredito"
                 android:layout_marginTop="12dp"
-                android:text="CONTATO FINANCEIRO"
+                android:text="Contato Financeiro"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
 
@@ -96,7 +96,8 @@
                 android:layout_toRightOf="@+id/btnHistoricoFinanceiro"
                 android:gravity="center_vertical"
                 android:text="Historico Financeiro"
-                android:textColor="@color/colorAccent" />
+                android:textColor="@color/colorAccent"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/txtEmailFinanceiro"
@@ -104,7 +105,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/edtContatoFinanceiro"
                 android:layout_marginTop="12dp"
-                android:text="E-MAIL FINANCEIRO"
+                android:text="E-mail Financeiro"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
 
@@ -148,7 +149,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/View"
                 android:layout_marginTop="20dp"
-                android:text="ENDEREÇO"
+                android:text="Endereço"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
 
@@ -158,7 +159,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/edtEnderecoCobranca"
                 android:layout_marginTop="12dp"
-                android:text="NUMERO"
+                android:text="Numero"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
 
@@ -183,7 +184,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/edtNumero"
                 android:layout_marginTop="12dp"
-                android:text="BAIRRO"
+                android:text="Bairro"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
 
@@ -208,7 +209,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/edtCepCobranca"
                 android:layout_marginTop="12dp"
-                android:text="COMPLEMENTO"
+                android:text="Complemento"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
 
@@ -230,7 +231,7 @@
                 android:layout_alignParentLeft="true"
                 android:layout_marginTop="12dp"
                 android:maxLength="20"
-                android:text="PAÍS"
+                android:text="País"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
 
@@ -268,7 +269,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/edtPaisCobranca"
                 android:layout_marginTop="12dp"
-                android:text="MUNICIPIO"
+                android:text="Municipio"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
 
@@ -312,7 +313,7 @@
                 android:layout_marginEnd="15dp"
                 android:layout_marginBottom="15dp"
                 android:background="#e6b220"
-                android:text="CONTINUAR 3/9"
+                android:text="Continuar 3/9"
                 android:visibility="gone" />
 
         </RelativeLayout>

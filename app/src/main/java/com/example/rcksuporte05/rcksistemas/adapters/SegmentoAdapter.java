@@ -1,5 +1,6 @@
 package com.example.rcksuporte05.rcksistemas.adapters;
 
+import android.app.Activity;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseBooleanArray;
@@ -23,12 +24,14 @@ public class SegmentoAdapter extends RecyclerView.Adapter<SegmentoViewHolder> {
     private SparseBooleanArray selectedItems;
     private int posAnterior;
     private Segmento segmentoSelecionado;
+    private Activity activity;
 
-    public SegmentoAdapter(List<Segmento> segmentos, SegmentoListener listener) {
+    public SegmentoAdapter(List<Segmento> segmentos, SegmentoListener listener, Activity activity) {
         this.segmentos = segmentos;
         this.listener = listener;
         this.selectedItems = new SparseBooleanArray();
         this.posAnterior = -1;
+        this.activity = activity;
     }
 
     @Override
@@ -45,10 +48,10 @@ public class SegmentoAdapter extends RecyclerView.Adapter<SegmentoViewHolder> {
 
         holder.rlItemSegmentos.setActivated(selectedItems.get(position, false));
 
-        if (selectedItems.get(position)) {
+        if (selectedItems.get(position))
             holder.txtNomeSegmento.setTextColor(Color.parseColor("#ffffff"));
-        } else
-            holder.txtNomeSegmento.setTextColor(Color.parseColor("#607D8B"));
+        else
+            holder.txtNomeSegmento.setTextColor(activity.getResources().getColor(R.color.colorAccent));
 
         applyClickEvents(holder, position);
     }

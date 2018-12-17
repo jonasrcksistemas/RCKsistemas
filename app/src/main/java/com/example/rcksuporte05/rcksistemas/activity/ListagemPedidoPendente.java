@@ -24,8 +24,8 @@ import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.rcksuporte05.rcksistemas.BO.PedidoBO;
@@ -41,7 +41,6 @@ import com.example.rcksuporte05.rcksistemas.api.Rotas;
 import com.example.rcksuporte05.rcksistemas.model.Usuario;
 import com.example.rcksuporte05.rcksistemas.model.WebPedido;
 import com.example.rcksuporte05.rcksistemas.model.WebPedidoItens;
-import com.example.rcksuporte05.rcksistemas.util.DividerItemDecoration;
 import com.example.rcksuporte05.rcksistemas.util.PDFPedidoUtil;
 
 import java.util.ArrayList;
@@ -84,16 +83,15 @@ public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRe
         webPedidoDAO = new WebPedidoDAO(db);
         webPedidoItensDAO = new WebPedidoItensDAO(db);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarPedidoPendente);
+        Toolbar toolbar = findViewById(R.id.toolbarPedidoPendente);
         toolbar.setTitle("Pedidos Pendentes");
         setSupportActionBar(toolbar);
         usuario = UsuarioHelper.getUsuario();
-        edtNumerPedidoPendentes = (EditText) findViewById(R.id.edtNumeroPedidoPendente);
+        edtNumerPedidoPendentes = findViewById(R.id.edtNumeroPedidoPendente);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerViewPedidos.setLayoutManager(layoutManager);
-        recyclerViewPedidos.addItemDecoration(new DividerItemDecoration(this, LinearLayout.VERTICAL));
 
         actionModeCallback = new ActionModeCallback();
     }
@@ -379,7 +377,7 @@ public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRe
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerViewPedidos.setLayoutManager(layoutManager);
 
-        listaPedidoAdapter = new ListaPedidoAdapter(listaPedido, this);
+        listaPedidoAdapter = new ListaPedidoAdapter(listaPedido, this, this);
         recyclerViewPedidos.setAdapter(listaPedidoAdapter);
 
         listaPedidoAdapter.notifyDataSetChanged();
@@ -420,6 +418,152 @@ public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRe
     @Override
     public void onRowLongClicked(int position) {
         enableActionMode(position);
+    }
+
+    @Override
+    public View.OnClickListener onClickExcluir(final int position) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder deleteAlert = new AlertDialog.Builder(ListagemPedidoPendente.this);
+                deleteAlert.setTitle("Atenção!");
+                deleteAlert.setMessage("Deseja realmente excluir o pedido " + listaPedidoAdapter.getItem(position).getId_web_pedido() + "?");
+                deleteAlert.setNegativeButton("Não", null);
+                deleteAlert.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        try {
+                            pedidoBO.excluirPedido(ListagemPedidoPendente.this, listaPedidoAdapter.getItem(position));
+                            listaPedidoAdapter.remove(listaPedidoAdapter.getItem(position));
+                            onResume();
+                            Toast.makeText(ListagemPedidoPendente.this, "Pedido exlcuido com sucesso!", Toast.LENGTH_LONG).show();
+                        } catch (Exception e) {
+                            Toast.makeText(ListagemPedidoPendente.this, "Não foi possivel excluir o pedido!", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+                deleteAlert.show();
+            }
+        };
+    }
+
+    @Override
+    public View.OnClickListener onClickEnviar(final int position) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder alert = new AlertDialog.Builder(ListagemPedidoPendente.this);
+                alert.setTitle("Atenção!");
+                alert.setMessage("Deseja enviar o pedido " + listaPedidoAdapter.getItem(position).getId_web_pedido() + " para ser faturado?");
+                alert.setNegativeButton("Não", null);
+                alert.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                progress = new ProgressDialog(ListagemPedidoPendente.this);
+                                progress.setMessage("Enviando pedido " + listaPedidoAdapter.getItem(position).getId_web_pedido() + "...");
+                                progress.setTitle("Atenção!");
+                                progress.setCancelable(false);
+                                progress.show();
+                                enviarPedido(listaPedidoAdapter.getItem(position));
+                            }
+                        }
+                );
+                alert.show();
+            }
+        };
+    }
+
+    @Override
+    public View.OnClickListener onClickDuplic(final int position) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder duplicAlert = new AlertDialog.Builder(ListagemPedidoPendente.this);
+                duplicAlert.setTitle("Atenção");
+                duplicAlert.setMessage("Deseja duplicar o pedido selecionado para poder faturá-lo novamente?");
+                duplicAlert.setNegativeButton("Não", null);
+                duplicAlert.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        WebPedidoItensDAO webPedidoItensDAO = new WebPedidoItensDAO(db);
+                        listaPedidoAdapter.getItem(position).setWebPedidoItens(webPedidoItensDAO.listaWebPedidoItens("SELECT * FROM TBL_WEB_PEDIDO_ITENS WHERE ID_PEDIDO = " + listaPedidoAdapter.getItem(position).getId_web_pedido()));
+                        listaPedidoAdapter.getItem(position).setId_web_pedido(null);
+                        listaPedidoAdapter.getItem(position).setId_web_pedido_servidor(null);
+                        listaPedidoAdapter.getItem(position).setPedido_enviado("N");
+                        for (WebPedidoItens webPedidoItens : listaPedidoAdapter.getItem(position).getWebPedidoItens()) {
+                            webPedidoItens.setId_web_item_servidor(null);
+                            webPedidoItens.setId_pedido(null);
+                        }
+                        PedidoHelper.setWebPedido(listaPedidoAdapter.getItem(position));
+                        PedidoHelper.setListaWebPedidoItens(listaPedidoAdapter.getItem(position).getWebPedidoItens());
+
+                        Intent intent = new Intent(ListagemPedidoPendente.this, ActivityPedidoMain.class);
+                        startActivity(intent);
+                    }
+                });
+                duplicAlert.show();
+            }
+        };
+    }
+
+    @Override
+    public View.OnClickListener onClickPdf(final int position) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder alert = new AlertDialog.Builder(ListagemPedidoPendente.this);
+                alert.setTitle("Atenção");
+                alert.setMessage("Deseja gerar um arquivo PDF do pedido " + listaPedidoAdapter.getItem(position).getId_web_pedido() + " selecionado ?");
+                alert.setNegativeButton("Não", null);
+                alert.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        PDFPedidoUtil pdfPedidoUtil = new PDFPedidoUtil(listaPedidoAdapter.getItem(position), ListagemPedidoPendente.this);
+                        Intent arquivo = new Intent(Intent.ACTION_VIEW);
+                        arquivo.setDataAndType(Uri.fromFile(pdfPedidoUtil.criandoPdf()), "application/pdf");
+                        arquivo.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+
+                        Intent intent = Intent.createChooser(arquivo, "Abrir arquivo");
+                        startActivity(intent);
+                    }
+                });
+                alert.show();
+            }
+        };
+    }
+
+    @Override
+    public View.OnClickListener onClickEmail(final int position) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder emailAlert = new AlertDialog.Builder(ListagemPedidoPendente.this);
+                emailAlert.setTitle("Atenção");
+                emailAlert.setMessage("Deseja enviar um arquivo PDF do pedido " + listaPedidoAdapter.getItem(position).getId_web_pedido() + " para o email do cliente ?");
+                emailAlert.setNegativeButton("Não", null);
+                emailAlert.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        final Intent intent = new Intent(Intent.ACTION_SENDTO);
+
+                        PDFPedidoUtil pdfPedidoUtil = new PDFPedidoUtil(listaPedidoAdapter.getItem(position), ListagemPedidoPendente.this);
+                        if (listaPedidoAdapter.getItem(position).getCadastro().getEmail_principal() != null && !listaPedidoAdapter.getItem(position).getCadastro().getEmail_principal().trim().equals("")) {
+                            intent.setData(Uri.parse("mailto: " + listaPedidoAdapter.getItem(position).getCadastro().getEmail_principal()));
+                        } else if (listaPedidoAdapter.getItem(position).getCadastro().getEmail_financeiro() != null && !listaPedidoAdapter.getItem(position).getCadastro().getEmail_financeiro().trim().equals("")) {
+                            intent.setData(Uri.parse("mailto: " + listaPedidoAdapter.getItem(position).getCadastro().getEmail_financeiro()));
+                        } else {
+                            intent.setData(Uri.parse("mailto: Informe o email do cliente"));
+                        }
+                        intent.putExtra(Intent.EXTRA_SUBJECT, "Espelho do pedido " + listaPedidoAdapter.getItem(position).getId_web_pedido());
+                        intent.putExtra(Intent.EXTRA_TEXT, "Segue em anexo o espelho do pedido");
+                        intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(pdfPedidoUtil.criandoPdf()));
+
+                        startActivity(intent);
+                    }
+                });
+                emailAlert.show();
+            }
+        };
     }
 
     private void enableActionMode(int position) {

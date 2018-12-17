@@ -25,7 +25,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
-                android:text="ENDEREÇO"
+                android:text="Endereço"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
 
@@ -51,7 +51,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
                 android:layout_marginTop="12dp"
-                android:text="NUMERO"
+                android:text="Numero"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
 
@@ -78,7 +78,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
                 android:layout_marginTop="12dp"
-                android:text="BAIRRO"
+                android:text="Bairro"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
 
@@ -104,7 +104,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
                 android:layout_marginTop="12dp"
-                android:text="PAÍS"
+                android:text="País"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
 
@@ -123,7 +123,7 @@
                 android:layout_above="@+id/spPaisProspect"
                 android:layout_alignStart="@+id/spUfProspect"
                 android:layout_alignLeft="@+id/spUfProspect"
-                android:text="UF"
+                android:text="Uf"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
 
@@ -143,7 +143,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/spPaisProspect"
                 android:layout_marginTop="12dp"
-                android:text="MUNICIPIO"
+                android:text="Municipio"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
 
@@ -186,7 +186,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/edtCep"
                 android:layout_marginTop="12dp"
-                android:text="COMPLEMENTO"
+                android:text="Complemento"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
@@ -207,7 +207,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/edtComplementoProspect"
                 android:layout_marginTop="12dp"
-                android:text="PREDIO"
+                android:text="Predio"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
@@ -223,14 +223,14 @@
                     android:id="@+id/rdAlugado"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="ALUGADO" />
+                    android:text="Alugado" />
 
                 <RadioButton
                     android:id="@+id/rdProprio"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="45dp"
-                    android:text="PROPRIO" />
+                    android:text="Proprio" />
 
             </RadioGroup>
 

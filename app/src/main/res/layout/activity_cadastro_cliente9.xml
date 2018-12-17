@@ -11,19 +11,19 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingBottom="@dimen/activity_vertical_margin"
             android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin"
             android:paddingRight="@dimen/activity_horizontal_margin"
-            android:paddingTop="@dimen/activity_vertical_margin">
+            android:paddingBottom="@dimen/activity_vertical_margin">
 
             <TextView
                 android:id="@+id/txtobsFat"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
-                android:text="OBSERVAÇÕES QUE DEVEM APARECER NO MOMENTO DO FATURAMENTO"
+                android:text="Observações que devem aparecer no momento do faturamento"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
 
@@ -42,11 +42,11 @@
                 android:id="@+id/txtObsFinancas"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
                 android:layout_below="@+id/edtobsFat"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
                 android:layout_marginTop="16dp"
-                android:text="OBSERVAÇÕES FINANCEIRAS"
+                android:text="Observações financeiras"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
 

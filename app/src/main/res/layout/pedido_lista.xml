@@ -1,139 +1,250 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/item_lista_pedido"
     android:layout_width="match_parent"
-    android:layout_height="115dp"
-    android:background="#f4f4f4"
-    android:orientation="vertical">
+    android:layout_height="160dp"
+    android:background="#9999"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin">
 
-    <android.support.v7.widget.CardView
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:cardBackgroundColor="@color/branco"
-        app:cardElevation="10dp"
-        app:cardUseCompatPadding="true">
+        android:background="@drawable/border_shadow">
 
-        <RelativeLayout
+        <View
+            android:id="@+id/cor"
+            android:layout_width="5dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/cor_pedido" />
+
+        <TextView
+            android:id="@+id/txtNomeCliente"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginRight="5dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:paddingStart="5dp"
+            android:paddingLeft="5dp"
+            android:text="nomeCliente"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
+            android:textColor="#000000"
+            android:textSize="13sp" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/botoes"
+            android:layout_below="@+id/txtNomeCliente"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:gravity="center"
+            android:orientation="vertical">
 
             <TextView
-                android:id="@+id/txtNomeCliente"
-                android:layout_width="wrap_content"
+                android:id="@+id/edtNomeProduto"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                android:layout_marginEnd="5dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="5dp"
-                android:layout_marginStart="8dp"
-                android:ellipsize="end"
+                android:layout_below="@+id/txtNomeCliente"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
                 android:maxLines="1"
-                android:paddingLeft="5dp"
                 android:paddingStart="5dp"
-                android:text="nomeCliente"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                android:paddingLeft="5dp"
+                android:text="Nº 00000"
                 android:textColor="#000000"
-                android:textSize="13sp" />
+                android:textSize="10sp"
+                android:textStyle="bold" />
 
             <LinearLayout
-                android:id="@+id/linearLayout"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_below="@+id/txtNomeCliente"
-                android:layout_marginLeft="8dp"
-                android:layout_marginStart="8dp"
-                android:gravity="center"
-                android:orientation="vertical">
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/img_data_emissao"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:src="@mipmap/ic_clip_board" />
 
                 <TextView
-                    android:id="@+id/edtNomeProduto"
-                    android:layout_width="match_parent"
+                    android:id="@+id/txtDataEmissaoPedido"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_below="@+id/txtNomeCliente"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="10dp"
                     android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:maxLines="1"
-                    android:paddingLeft="5dp"
-                    android:paddingStart="5dp"
-                    android:text="Nº 00000"
+                    android:text="data missao"
                     android:textColor="#000000"
-                    android:textSize="10sp"
-                    android:textStyle="bold" />
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center">
-
-                    <ImageView
-                        android:id="@+id/img_data_emissao"
-                        android:layout_width="15dp"
-                        android:layout_height="15dp"
-                        android:src="@mipmap/ic_clip_board" />
-
-                    <TextView
-                        android:id="@+id/txtDataEmissaoPedido"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_weight="1"
-                        android:text="data missao"
-                        android:textColor="#000000"
-                        android:textSize="10sp" />
-
-                </LinearLayout>
-
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center">
-
-                    <ImageView
-                        android:id="@+id/img_data_entrega"
-                        android:layout_width="15dp"
-                        android:layout_height="15dp"
-                        android:src="@mipmap/ic_truck" />
-
-                    <TextView
-                        android:id="@+id/txtDataEntrega"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="10dp"
-                        android:layout_marginRight="10dp"
-                        android:layout_weight="1"
-                        android:text="data entrega"
-                        android:textColor="#000000"
-                        android:textSize="10sp" />
-
-                </LinearLayout>
+                    android:textSize="10sp" />
 
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/txtPrecoPedido"
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
                 android:layout_weight="1"
-                android:ellipsize="end"
-                android:gravity="center"
-                android:maxLines="1"
-                android:paddingBottom="15dp"
-                android:paddingEnd="15dp"
-                android:paddingRight="15dp"
-                android:text="precoPedido"
-                android:textColor="#000000"
-                android:textSize="25sp" />
+                android:gravity="center">
 
-        </RelativeLayout>
-    </android.support.v7.widget.CardView>
+                <ImageView
+                    android:id="@+id/img_data_entrega"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
+                    android:src="@mipmap/ic_truck" />
+
+                <TextView
+                    android:id="@+id/txtDataEntrega"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_weight="1"
+                    android:text="data entrega"
+                    android:textColor="#000000"
+                    android:textSize="10sp" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/txtOperacao"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/txtPrecoPedido"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_toEndOf="@+id/linearLayout"
+            android:layout_toRightOf="@+id/linearLayout"
+            android:ellipsize="end"
+            android:gravity="end"
+            android:maxLines="1"
+            android:paddingEnd="15dp"
+            android:paddingRight="15dp"
+            android:text="Operacao"
+            android:textSize="10sp" />
+
+        <TextView
+            android:id="@+id/txtPrecoPedido"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/botoes"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="1"
+            android:paddingEnd="15dp"
+            android:paddingRight="15dp"
+            android:text="precoPedido"
+            android:textColor="#000000"
+            android:textSize="25sp" />
+
+        <View
+            android:layout_width="wrap_content"
+            android:layout_height="1dp"
+            android:layout_above="@+id/botoes"
+            android:layout_toEndOf="@+id/cor"
+            android:layout_toRightOf="@+id/cor"
+            android:background="#999999" />
+
+        <LinearLayout
+            android:id="@+id/botoes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/lyEnvia"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:layout_marginBottom="7dp"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <Button
+                    android:id="@+id/btnEnviar"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/ic_envia_pedido" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:layout_marginBottom="7dp"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <Button
+                    android:id="@+id/btnDuplic"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/ic_duplica_pedido2" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/lyExcluir"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:layout_marginBottom="7dp"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <Button
+                    android:id="@+id/btnExcluir"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/ic_delete_pedido" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:layout_marginBottom="7dp"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <Button
+                    android:id="@+id/btnPdf"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/ic_pdf_pedido2" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:layout_marginBottom="7dp"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <Button
+                    android:id="@+id/btnEmail"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/ic_email_pedido" />
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
 </LinearLayout>

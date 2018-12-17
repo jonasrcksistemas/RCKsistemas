@@ -3,8 +3,8 @@ package com.example.rcksuporte05.rcksistemas.adapters.viewHolder;
 import android.support.v7.widget.RecyclerView;
 import android.view.HapticFeedbackConstants;
 import android.view.View;
+import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.rcksuporte05.rcksistemas.R;
@@ -31,7 +31,24 @@ public class PedidoViewHolder extends RecyclerView.ViewHolder implements View.On
     public TextView txtDataEmissaoPedido;
     @BindView(R.id.item_lista_pedido)
     public LinearLayout itemListaPedido;
-
+    @BindView(R.id.cor)
+    public View cor;
+    @BindView(R.id.lyExcluir)
+    public LinearLayout lyExcluir;
+    @BindView(R.id.lyEnvia)
+    public LinearLayout lyEnvia;
+    @BindView(R.id.btnExcluir)
+    public Button btnExcluir;
+    @BindView(R.id.btnEnviar)
+    public Button btnEnviar;
+    @BindView(R.id.btnDuplic)
+    public Button btnDuplic;
+    @BindView(R.id.btnPdf)
+    public Button btnPdf;
+    @BindView(R.id.btnEmail)
+    public Button btnEmail;
+    @BindView(R.id.txtOperacao)
+    public TextView txtOperacao;
 
     ListaPedidoAdapter.PedidoAdapterListener listener;
 
@@ -39,9 +56,7 @@ public class PedidoViewHolder extends RecyclerView.ViewHolder implements View.On
         super(itemView);
         itemView.setOnLongClickListener(this);
         ButterKnife.bind(this, itemView);
-
     }
-
 
     @Override
     public boolean onLongClick(View view) {

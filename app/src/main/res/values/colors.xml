@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#999999</color>
-    <color name="colorPrimaryDark">#ffbf00</color>
-    <color name="colorAccent">#608b73</color>
+    <color name="colorPrimary">#414141</color>
+    <color name="colorPrimaryDark">#e6b220</color>
+    <color name="colorAccent">#86869e</color>
     <color name="colorAccentDarck">#546e7b</color>
     <color name="colorControlNormal">#00796b</color>
     <color name="colorPrimaryDarkAzul">#01579B</color>
@@ -17,6 +17,5 @@
     <color name="corBotao">#e6b220</color>
     <color name="fundoClaro">#e5f0fa</color>
     <color name="corFloatButton">#dddfdd</color>
-
 
 </resources>

@@ -122,9 +122,9 @@ public class CadastroProspectSegmentos extends Fragment implements SegmentoAdapt
                 public void onClick(int position) {
 
                 }
-            });
+            }, getActivity());
         } else {
-            segmentoAdapter = new SegmentoAdapter(ProspectHelper.getSegmentos(), this);
+            segmentoAdapter = new SegmentoAdapter(ProspectHelper.getSegmentos(), this, getActivity());
         }
         recyclerSegmentos.setAdapter(segmentoAdapter);
         segmentoAdapter.notifyDataSetChanged();
@@ -138,6 +138,7 @@ public class CadastroProspectSegmentos extends Fragment implements SegmentoAdapt
         } else {
             edtOutrosSegmentosProspect.setText("");
             edtOutrosSegmentosProspect.setEnabled(false);
+            btnContinuar.callOnClick();
         }
         segmentoAdapter.toggleSelection(position);
         segmentoAdapter.notifyDataSetChanged();

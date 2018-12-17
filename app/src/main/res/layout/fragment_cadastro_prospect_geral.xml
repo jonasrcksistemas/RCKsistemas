@@ -26,7 +26,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
-                android:text="ID: 0000"
+                android:text="Id: 0000"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
 
@@ -36,7 +36,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/txtIdProspect"
                 android:layout_marginTop="12dp"
-                android:text="PESSOA"
+                android:text="Pessoa"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
 
@@ -56,7 +56,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
                 android:layout_marginTop="12dp"
-                android:text="RAZÃO SOCIAL"
+                android:text="Razão Social"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
 
@@ -80,7 +80,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
                 android:layout_marginTop="12dp"
-                android:text="NOME FANTASIA"
+                android:text="Nome Fantasia"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
 
@@ -133,20 +133,18 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
                 android:layout_marginTop="12dp"
-                android:text="INSCRIÇÃO ESTADUAL"
+                android:text="Inscrição Estadual"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
 
 
             <EditText
                 android:id="@+id/edtInscEstadualProspect"
-                android:layout_width="130dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/txtInscEstadualProspect"
+                android:layout_below="@+id/spIeProspect"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
-                android:layout_toStartOf="@+id/spIe"
-                android:layout_toLeftOf="@+id/spIe"
                 android:background="@drawable/borda_edittext"
                 android:hint="Inscrição Estadual"
                 android:inputType="textFilter|numberSigned"
@@ -154,14 +152,9 @@
 
             <Spinner
                 android:id="@+id/spIeProspect"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignTop="@+id/edtInscEstadualProspect"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_toEndOf="@+id/edtInscEstadualProspect"
-                android:layout_toRightOf="@+id/edtInscEstadualProspect" />
-
+                android:layout_below="@id/txtInscEstadualProspect" />
 
             <TextView
                 android:id="@+id/txtInscMunicipalProspect"
@@ -169,7 +162,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/edtInscEstadualProspect"
                 android:layout_marginTop="12dp"
-                android:text="INSCRIÇÃO MUNICIPAL"
+                android:text="Inscrição Municipal"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
 
@@ -191,7 +184,7 @@
                 android:layout_marginTop="12dp"
                 android:layout_marginEnd="12dp"
                 android:layout_marginRight="12dp"
-                android:text="CATEGORIA"
+                android:text="Categoria"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
 

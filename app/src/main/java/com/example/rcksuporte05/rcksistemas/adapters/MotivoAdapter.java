@@ -1,5 +1,6 @@
 package com.example.rcksuporte05.rcksistemas.adapters;
 
+import android.app.Activity;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseBooleanArray;
@@ -24,12 +25,14 @@ public class MotivoAdapter extends RecyclerView.Adapter<MotivoViewHolder> {
     private SparseBooleanArray selectedItems;
     private int posAnterior;
     private MotivoNaoCadastramento motivoSelecionado;
+    private Activity activity;
 
-    public MotivoAdapter(List<MotivoNaoCadastramento> motivos, MotivoListener listener) {
+    public MotivoAdapter(List<MotivoNaoCadastramento> motivos, MotivoListener listener, Activity activity) {
         this.listener = listener;
         this.motivos = motivos;
         this.selectedItems = new SparseBooleanArray();
         this.posAnterior = -1;
+        this.activity = activity;
     }
 
     @Override
@@ -48,7 +51,7 @@ public class MotivoAdapter extends RecyclerView.Adapter<MotivoViewHolder> {
         if (selectedItems.get(position)) {
             holder.txtMotivo.setTextColor(Color.parseColor("#ffffff"));
         } else
-            holder.txtMotivo.setTextColor(Color.parseColor("#607D8B"));
+            holder.txtMotivo.setTextColor(activity.getResources().getColor(R.color.colorAccent));
 
         applyClickEvents(holder, position);
     }

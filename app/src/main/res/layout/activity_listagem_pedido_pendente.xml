@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.rcksuporte05.rcksistemas.activity.ListagemPedidoPendente">
+    tools:context="com.example.rcksuporte05.rcksistemas.activity.ListagemPedidoPendente"
+    android:background="#d2d2d2">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbarPedidoPendente"

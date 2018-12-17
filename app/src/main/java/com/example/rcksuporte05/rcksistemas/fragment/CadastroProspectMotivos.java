@@ -120,9 +120,9 @@ public class CadastroProspectMotivos extends Fragment implements MotivoAdapter.M
                 public void onClick(int position) {
 
                 }
-            });
+            }, getActivity());
         } else {
-            motivoAdapter = new MotivoAdapter(ProspectHelper.getMotivos(), this);
+            motivoAdapter = new MotivoAdapter(ProspectHelper.getMotivos(), this, getActivity());
         }
         recyclerMotivos.setAdapter(motivoAdapter);
         motivoAdapter.notifyDataSetChanged();
@@ -136,6 +136,7 @@ public class CadastroProspectMotivos extends Fragment implements MotivoAdapter.M
         } else {
             edtOutrosMotivosProspect.setText("");
             edtOutrosMotivosProspect.setEnabled(false);
+            btnContinuar.callOnClick();
         }
         motivoAdapter.toggleSelection(position);
         motivoAdapter.notifyDataSetChanged();

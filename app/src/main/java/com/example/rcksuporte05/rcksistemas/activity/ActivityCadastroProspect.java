@@ -43,6 +43,9 @@ public class ActivityCadastroProspect extends AppCompatActivity {
     SlidingTabLayout mSlidingTabLayout;
     private DBHelper db;
 
+    private String[] titles = {"Geral", "Endereços", "Contato", "Segmentos *", "Motivos não Cadastramento *", "Observações Comerciais",
+            "adicionar Foto e Salvar"};
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,33 +69,55 @@ public class ActivityCadastroProspect extends AppCompatActivity {
                                                        case 0:
                                                            if (ProspectHelper.getCadastroProspectGeral() != null) {
                                                                ProspectHelper.getCadastroProspectGeral().inserirDadosDaFrame();
+                                                               if (getIntent().getIntExtra("novo", 0) >= 1) {
+                                                                   toolbar.setTitle(titles[position]);
+                                                               }
                                                            }
                                                            break;
                                                        case 1:
                                                            if (ProspectHelper.getCadastroProspectEndereco() != null) {
                                                                ProspectHelper.getCadastroProspectEndereco().inserirDadosDaFrame();
+                                                               if (getIntent().getIntExtra("novo", 0) >= 1) {
+                                                                   toolbar.setTitle(titles[position]);
+                                                               }
                                                            }
                                                            break;
                                                        case 2:
+                                                           if (getIntent().getIntExtra("novo", 0) >= 1) {
+                                                               toolbar.setTitle(titles[position]);
+                                                           }
                                                            break;
                                                        case 3:
                                                            if (ProspectHelper.getCadastroProspectSegmentos() != null) {
                                                                ProspectHelper.getCadastroProspectSegmentos().insereDadosDaFrame();
+                                                               if (getIntent().getIntExtra("novo", 0) >= 1) {
+                                                                   toolbar.setTitle(titles[position]);
+                                                               }
+
                                                            }
                                                            break;
                                                        case 4:
                                                            if (ProspectHelper.getCadastroProspectMotivos() != null) {
                                                                ProspectHelper.getCadastroProspectMotivos().insereDadosDaFrame();
+                                                               if (getIntent().getIntExtra("novo", 0) >= 1) {
+                                                                   toolbar.setTitle(titles[position]);
+                                                               }
                                                            }
                                                            break;
                                                        case 5:
                                                            if (ProspectHelper.getCadastroProspectObservacoesComerciais() != null) {
                                                                ProspectHelper.getCadastroProspectObservacoesComerciais().insereDadosDaFrame();
+                                                               if (getIntent().getIntExtra("novo", 0) >= 1) {
+                                                                   toolbar.setTitle(titles[position]);
+                                                               }
                                                            }
                                                            break;
                                                        case 6:
                                                            if (ProspectHelper.getCadastroProspectFotoSalvar() != null) {
                                                                ProspectHelper.getCadastroProspectFotoSalvar().insereDadosDaFrame();
+                                                               if (getIntent().getIntExtra("novo", 0) >= 1) {
+                                                                   toolbar.setTitle(titles[position]);
+                                                               }
                                                            }
                                                            break;
                                                    }
@@ -218,7 +243,9 @@ public class ActivityCadastroProspect extends AppCompatActivity {
                                     finish();
                                 }
                             });
+                            alert.setNeutralButton("Cancelar", null);
                             alert.show();
+
                         } else {
                             finish();
                         }

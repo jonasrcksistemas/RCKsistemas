@@ -29,6 +29,14 @@ public class PedidoBO {
         }
     }
 
+    public void excluirPedido(Context context, WebPedido pedido) {
+        db = new DBHelper(context);
+
+        db.alterar("DELETE FROM TBL_WEB_PEDIDO WHERE ID_WEB_PEDIDO = " + pedido.getId_web_pedido());
+        db.alterar("DELETE FROM TBL_WEB_PEDIDO_ITENS WHERE ID_PEDIDO = " + pedido.getId_web_pedido());
+
+    }
+
     public void excluiItenPedido(Context context, List<WebPedidoItens> webPedidoItens) {
         db = new DBHelper(context);
 

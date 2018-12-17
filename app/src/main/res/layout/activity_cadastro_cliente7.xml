@@ -18,9 +18,11 @@
 
             <TextView
                 android:id="@+id/txtEnviaNFE"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Enviar XML e DANFE da NF-e automaticamente: "
+                android:gravity="center"
+                android:text="Enviar XML e DANFE da NF-e automaticamente? "
+                android:textAlignment="center"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
 
@@ -68,7 +70,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
                 android:layout_marginTop="12dp"
-                android:text="E-MAIL"
+                android:text="E-mail"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
 
@@ -78,7 +80,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/edtEmail2"
                 android:layout_marginTop="12dp"
-                android:text="E-MAIL"
+                android:text="E-mail"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
 
@@ -88,7 +90,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/edtEmail3"
                 android:layout_marginTop="12dp"
-                android:text="E-MAIL"
+                android:text="E-mail"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
 
@@ -108,7 +110,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/edtEmail4"
                 android:layout_marginTop="12dp"
-                android:text="E-MAIL"
+                android:text="E-mail"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
 
@@ -118,7 +120,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/View"
                 android:layout_marginTop="12dp"
-                android:text="E-MAIL"
+                android:text="E-mail"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
 

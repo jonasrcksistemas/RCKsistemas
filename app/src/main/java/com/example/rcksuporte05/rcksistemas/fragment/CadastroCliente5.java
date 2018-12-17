@@ -127,9 +127,9 @@ public class CadastroCliente5 extends Fragment implements SegmentoAdapter.Segmen
                 public void onClick(int position) {
 
                 }
-            });
+            }, getActivity());
         } else {
-            segmentoAdapter = new SegmentoAdapter(listaSegmento, this);
+            segmentoAdapter = new SegmentoAdapter(listaSegmento, this, getActivity());
         }
         recyclerSegmentos.setAdapter(segmentoAdapter);
         segmentoAdapter.notifyDataSetChanged();

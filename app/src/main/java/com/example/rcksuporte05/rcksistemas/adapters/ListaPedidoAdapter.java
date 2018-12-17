@@ -1,5 +1,6 @@
 package com.example.rcksuporte05.rcksistemas.adapters;
 
+import android.app.Activity;
 import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseBooleanArray;
@@ -8,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.viewHolder.PedidoViewHolder;
 import com.example.rcksuporte05.rcksistemas.model.WebPedido;
@@ -25,14 +27,14 @@ public class ListaPedidoAdapter extends RecyclerView.Adapter<PedidoViewHolder> {
     private List<WebPedido> pedidos;
     private PedidoAdapterListener listener;
     private SparseBooleanArray selectedItems;
+    private Activity activity;
 
-    public ListaPedidoAdapter(List<WebPedido> pedidos, PedidoAdapterListener listener) {
+    public ListaPedidoAdapter(List<WebPedido> pedidos, PedidoAdapterListener listener, Activity activity) {
         this.pedidos = pedidos;
         this.selectedItems = new SparseBooleanArray();
         this.listener = listener;
-
+        this.activity = activity;
     }
-
 
     @Override
     public PedidoViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -44,10 +46,13 @@ public class ListaPedidoAdapter extends RecyclerView.Adapter<PedidoViewHolder> {
 
     @Override
     public void onBindViewHolder(PedidoViewHolder holder, int position) {
-        if (pedidos.get(position).getId_web_pedido_servidor() != null && !pedidos.get(position).getId_web_pedido_servidor().equals(""))
+        if (pedidos.get(position).getId_web_pedido_servidor() != null && !pedidos.get(position).getId_web_pedido_servidor().equals("")) {
             holder.txtIdPedido.setText("Nº " + pedidos.get(position).getId_web_pedido_servidor());
-        else
+            holder.lyExcluir.setVisibility(View.GONE);
+            holder.lyEnvia.setVisibility(View.GONE);
+        } else {
             holder.txtIdPedido.setText("Nº " + pedidos.get(position).getId_web_pedido());
+        }
 
         holder.txtNomeCliente.setText(pedidos.get(position).getCadastro().getNome_cadastro());
         holder.txtPrecoPedido.setText(MascaraUtil.mascaraReal(pedidos.get(position).getValor_total()));
@@ -64,11 +69,18 @@ public class ListaPedidoAdapter extends RecyclerView.Adapter<PedidoViewHolder> {
                 .setBackgroundColor(selectedItems.get(position) ? Color.parseColor("#5800a387")
                         : Color.TRANSPARENT);
 
+        DBHelper db = new DBHelper(activity);
+        holder.txtOperacao.setText(db.consulta("SELECT NOME_OPERACAO FROM TBL_OPERACAO_ESTOQUE WHERE ID_OPERACAO = " + pedidos.get(position).getId_operacao() + ";", "NOME_OPERACAO"));
+
         holder.itemView.setActivated(selectedItems.get(position, false));
 
+        holder.btnExcluir.setOnClickListener(listener.onClickExcluir(position));
+        holder.btnEnviar.setOnClickListener(listener.onClickEnviar(position));
+        holder.btnDuplic.setOnClickListener(listener.onClickDuplic(position));
+        holder.btnPdf.setOnClickListener(listener.onClickPdf(position));
+        holder.btnEmail.setOnClickListener(listener.onClickEmail(position));
+
         applyClickEvents(holder, position);
-
-
     }
 
     private void applyClickEvents(PedidoViewHolder holder, final int position) {
@@ -138,5 +150,15 @@ public class ListaPedidoAdapter extends RecyclerView.Adapter<PedidoViewHolder> {
         void onPedidoRowClicked(int position);
 
         void onRowLongClicked(int position);
+
+        View.OnClickListener onClickExcluir(int position);
+
+        View.OnClickListener onClickEnviar(int position);
+
+        View.OnClickListener onClickDuplic(int position);
+
+        View.OnClickListener onClickPdf(int position);
+
+        View.OnClickListener onClickEmail(int position);
     }
 }

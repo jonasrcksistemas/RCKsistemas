@@ -483,17 +483,17 @@ public class CadastroCliente1 extends Fragment {
         }
 
         if (rdJuridica.isChecked()) {
-            txtNomeCliente.setText("RAZÃO SOCIAL");
+            txtNomeCliente.setText("Razão social");
             edtNomeCliente.setHint("Razão Social *");
-            txtData.setText("DATA ABERTURA");
+            txtData.setText("Data abertura");
             edtData.setHint("Data Abertura *");
             txtCpfCnpj.setText("CNPJ");
             edtCpfCnpj.setHint("CNPJ *");
 
         } else if (rdFisica.isChecked()) {
-            txtNomeCliente.setText("NOME");
+            txtNomeCliente.setText("Nome");
             edtNomeCliente.setHint("Nome *");
-            txtData.setText("DATA NASCIMENTO");
+            txtData.setText("Data nascimento");
             edtData.setHint("Data Nascimento *");
             txtCpfCnpj.setText("CPF");
             edtCpfCnpj.setHint("CPF *");
@@ -503,9 +503,9 @@ public class CadastroCliente1 extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    txtNomeCliente.setText("RAZÃO SOCIAL");
+                    txtNomeCliente.setText("Razão social");
                     edtNomeCliente.setHint("Razão Social *");
-                    txtData.setText("DATA ABERTURA");
+                    txtData.setText("Data abertura");
                     edtData.setHint("Data Abertura *");
                     txtCpfCnpj.setText("CNPJ");
                     edtCpfCnpj.setHint("CNPJ *");
@@ -517,9 +517,9 @@ public class CadastroCliente1 extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    txtNomeCliente.setText("NOME");
+                    txtNomeCliente.setText("Nome");
                     edtNomeCliente.setHint("Nome *");
-                    txtData.setText("DATA NASCIMENTO");
+                    txtData.setText("Data nascimento");
                     edtData.setHint("Data Nascimento *");
                     txtCpfCnpj.setText("CPF");
                     edtCpfCnpj.setHint("CPF *");
@@ -653,17 +653,17 @@ public class CadastroCliente1 extends Fragment {
         }
 
         if (rdJuridica.isChecked()) {
-            txtNomeCliente.setText("RAZÃO SOCIAL");
+            txtNomeCliente.setText("Razão social");
             edtNomeCliente.setHint("Razão Social *");
-            txtData.setText("DATA ABERTURA");
+            txtData.setText("Data abertura");
             edtData.setHint("Data Abertura *");
             txtCpfCnpj.setText("CNPJ");
             edtCpfCnpj.setHint("CNPJ *");
 
         } else if (rdFisica.isChecked()) {
-            txtNomeCliente.setText("NOME");
+            txtNomeCliente.setText("Nome");
             edtNomeCliente.setHint("Nome *");
-            txtData.setText("DATA NASCIMENTO");
+            txtData.setText("Data nascimento");
             edtData.setHint("Data Nascimento *");
             txtCpfCnpj.setText("CPF");
             edtCpfCnpj.setHint("CPF *");
@@ -673,9 +673,9 @@ public class CadastroCliente1 extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    txtNomeCliente.setText("RAZÃO SOCIAL");
+                    txtNomeCliente.setText("Razão social");
                     edtNomeCliente.setHint("Razão Social *");
-                    txtData.setText("DATA ABERTURA");
+                    txtData.setText("Data abertura");
                     edtData.setHint("Data Abertura *");
                     txtCpfCnpj.setText("CNPJ");
                     edtCpfCnpj.setHint("CNPJ *");
@@ -687,9 +687,9 @@ public class CadastroCliente1 extends Fragment {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    txtNomeCliente.setText("NOME");
+                    txtNomeCliente.setText("Nome");
                     edtNomeCliente.setHint("Nome *");
-                    txtData.setText("DATA NASCIMENTO");
+                    txtData.setText("Data nascimento");
                     edtData.setHint("Data Nascimento *");
                     txtCpfCnpj.setText("CPF");
                     edtCpfCnpj.setHint("CPF *");
