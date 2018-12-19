@@ -43,8 +43,7 @@ public class ActivityCadastroProspect extends AppCompatActivity {
     SlidingTabLayout mSlidingTabLayout;
     private DBHelper db;
 
-    private String[] titles = {"Geral", "Endereços", "Contato", "Segmentos *", "Motivos não Cadastramento *", "Observações Comerciais",
-            "adicionar Foto e Salvar"};
+    private String[] titles = {"Geral", "Endereços", "Motivos não Cadastramento *", "adicionar Foto e Salvar"};
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -83,20 +82,6 @@ public class ActivityCadastroProspect extends AppCompatActivity {
                                                            }
                                                            break;
                                                        case 2:
-                                                           if (getIntent().getIntExtra("novo", 0) >= 1) {
-                                                               toolbar.setTitle(titles[position]);
-                                                           }
-                                                           break;
-                                                       case 3:
-                                                           if (ProspectHelper.getCadastroProspectSegmentos() != null) {
-                                                               ProspectHelper.getCadastroProspectSegmentos().insereDadosDaFrame();
-                                                               if (getIntent().getIntExtra("novo", 0) >= 1) {
-                                                                   toolbar.setTitle(titles[position]);
-                                                               }
-
-                                                           }
-                                                           break;
-                                                       case 4:
                                                            if (ProspectHelper.getCadastroProspectMotivos() != null) {
                                                                ProspectHelper.getCadastroProspectMotivos().insereDadosDaFrame();
                                                                if (getIntent().getIntExtra("novo", 0) >= 1) {
@@ -104,15 +89,7 @@ public class ActivityCadastroProspect extends AppCompatActivity {
                                                                }
                                                            }
                                                            break;
-                                                       case 5:
-                                                           if (ProspectHelper.getCadastroProspectObservacoesComerciais() != null) {
-                                                               ProspectHelper.getCadastroProspectObservacoesComerciais().insereDadosDaFrame();
-                                                               if (getIntent().getIntExtra("novo", 0) >= 1) {
-                                                                   toolbar.setTitle(titles[position]);
-                                                               }
-                                                           }
-                                                           break;
-                                                       case 6:
+                                                       case 3:
                                                            if (ProspectHelper.getCadastroProspectFotoSalvar() != null) {
                                                                ProspectHelper.getCadastroProspectFotoSalvar().insereDadosDaFrame();
                                                                if (getIntent().getIntExtra("novo", 0) >= 1) {
@@ -137,27 +114,14 @@ public class ActivityCadastroProspect extends AppCompatActivity {
                                                            }
                                                            break;
                                                        case 2:
-                                                           break;
-                                                       case 3:
-                                                           if (ProspectHelper.getCadastroProspectSegmentos() != null) {
-                                                               ProspectHelper.getCadastroProspectSegmentos().insereDadosDaFrame();
-                                                           }
-                                                           break;
-                                                       case 4:
                                                            if (ProspectHelper.getCadastroProspectMotivos() != null) {
                                                                ProspectHelper.getCadastroProspectMotivos().insereDadosDaFrame();
                                                            }
                                                            break;
-                                                       case 5:
-                                                           if (ProspectHelper.getCadastroProspectObservacoesComerciais() != null) {
-                                                               ProspectHelper.getCadastroProspectObservacoesComerciais().insereDadosDaFrame();
-                                                           }
-                                                           break;
-                                                       case 6:
+                                                       case 3:
                                                            if (ProspectHelper.getCadastroProspectFotoSalvar() != null) {
                                                                ProspectHelper.getCadastroProspectFotoSalvar().insereDadosDaFrame();
                                                            }
-                                                           break;
                                                    }
                                                }
 

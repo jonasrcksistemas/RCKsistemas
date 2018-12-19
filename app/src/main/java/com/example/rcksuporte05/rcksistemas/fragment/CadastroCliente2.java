@@ -228,11 +228,6 @@ public class CadastroCliente2 extends Fragment {
                         validado = false;
                     }
 
-                    if (ClienteHelper.getCliente().getSituacaoPredio() == null || ClienteHelper.getCliente().getSituacaoPredio().trim().isEmpty()) {
-                        Toast.makeText(getContext(), "Informe a situação do Predio", Toast.LENGTH_LONG).show();
-                        validado = false;
-                    }
-
                     if (validado) {
                         if (ClienteHelper.getCliente().getFinalizado().equals("S")) {
                             ClienteHelper.getCliente().setAlterado("S");
