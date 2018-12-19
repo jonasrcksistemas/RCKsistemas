@@ -123,7 +123,7 @@
                 android:layout_above="@+id/spPaisProspect"
                 android:layout_alignStart="@+id/spUfProspect"
                 android:layout_alignLeft="@+id/spUfProspect"
-                android:text="Uf"
+                android:text="UF"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
 

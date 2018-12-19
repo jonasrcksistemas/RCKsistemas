@@ -11,7 +11,9 @@ import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.viewHolder.ClientesViewHolder;
 import com.example.rcksuporte05.rcksistemas.model.Cliente;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -46,24 +48,19 @@ public class ListaClienteAdapter extends RecyclerView.Adapter<ClientesViewHolder
         holder.textViewNome.setText(clientes.get(position).getNome_cadastro());
         holder.textViewNomeFantasia.setText(clientes.get(position).getNome_fantasia());
 
-        if (clientes.get(position).getTelefone_principal() != null) {
-            String telefone = clientes.get(position).getTelefone_principal().trim().replaceAll("[^0-9]", "");
-            if (telefone.length() == 10) {
-                holder.textViewTelefone.setText("(" + telefone.substring(0, 2) + ") " + telefone.substring(2, 6) + "-" + telefone.substring(6, 10));
-            } else if (telefone.length() == 11) {
-                holder.textViewTelefone.setText("(" + telefone.substring(0, 2) + ") " + telefone.substring(2, 7) + "-" + telefone.substring(7, 11));
-            } else if (telefone.length() == 9 && !telefone.contains("-")) {
-                holder.textViewTelefone.setText(telefone.substring(0, 5) + "-" + telefone.substring(5, 9));
-            } else if (telefone.length() == 8) {
-                holder.textViewTelefone.setText(telefone.substring(0, 4) + "-" + telefone.substring(4, 8));
+        try {
+            if (new SimpleDateFormat("yyyy-MM-dd").parse(clientes.get(position).getData_ultima_compra()).before(new Date(1995))) {
+                holder.txtDataUltimaCompra.setText("Ainda não comprou");
             } else {
-                holder.textViewTelefone.setText(telefone);
+                holder.txtDataUltimaCompra.setText("Não compra à " + calcularDias(new SimpleDateFormat("yyyy-MM-dd").parse(clientes.get(position).getData_ultima_compra()), new Date()) + " dias");
             }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         if (clientes.get(position).getId_cadastro_servidor() > 0) {
             if (clientes.get(position).getF_cliente().equals("S")) {
-                holder.imStatus.setImageResource(R.mipmap.ic_prospect_salvo);
+                holder.imStatus.setVisibility(View.GONE);
             } else {
                 holder.imStatus.setImageResource(R.mipmap.ic_time);
                 holder.txtClienteAguarda.setVisibility(View.VISIBLE);
@@ -137,6 +134,10 @@ public class ListaClienteAdapter extends RecyclerView.Adapter<ClientesViewHolder
     public void clearSelection() {
         selectedItems.clear();
         notifyDataSetChanged();
+    }
+
+    private String calcularDias(Date data1, Date data2) {
+        return String.valueOf((data2.getTime() - data1.getTime()) / 86400000L);
     }
 
     public interface ClienteAdapterListener {

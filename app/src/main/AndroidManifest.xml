@@ -115,7 +115,9 @@
             android:value="[ADMOB_APP_ID]" />
 
         <activity android:name=".activity.ContatoVendedorActivity" />
-        <activity android:name=".activity.ActivityCpfCnpjCliente"></activity>
+        <activity android:name=".activity.ActivityCpfCnpjCliente" />
+        <activity android:name=".activity.BuscaUfActivity"></activity>
+        <activity android:name=".activity.BuscaMunicipioActivity"></activity>
     </application>
 
 </manifest>

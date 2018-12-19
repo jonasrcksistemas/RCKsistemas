@@ -43,10 +43,10 @@ public class PedidoViewHolder extends RecyclerView.ViewHolder implements View.On
     public Button btnEnviar;
     @BindView(R.id.btnDuplic)
     public Button btnDuplic;
-    @BindView(R.id.btnPdf)
-    public Button btnPdf;
-    @BindView(R.id.btnEmail)
-    public Button btnEmail;
+    @BindView(R.id.btnCompartilhar)
+    public Button btnCompartilhar;
+    @BindView(R.id.btnRastreio)
+    public Button btnRastreio;
     @BindView(R.id.txtOperacao)
     public TextView txtOperacao;
 

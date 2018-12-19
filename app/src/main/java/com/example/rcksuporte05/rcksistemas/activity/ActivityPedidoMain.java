@@ -43,7 +43,7 @@ public class ActivityPedidoMain extends AppCompatActivity {
     private static Cliente objetoCliente = null;
     @BindView(R.id.txtNomeCliente)
     public TextView txtNomeCliente;
-    @BindView(R.id.txtNomeFantasia)
+    @BindView(R.id.txtRazaoSocial)
     public TextView txtNomeFantasia;
     @BindView((R.id.txtCategoria))
     public TextView txtCategoria;

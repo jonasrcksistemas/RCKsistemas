@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -54,11 +55,7 @@ public class ActivityCpfCnpjCliente extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cpf_cnpj_cliente);
-
-        toolbar = findViewById(R.id.toolbar);
-        txtCpfCnpj = findViewById(R.id.txtCpfCnpj);
-        edtCpfCnpj = findViewById(R.id.edtCpfCnpj);
-        btnVerificar = findViewById(R.id.btnVerificar);
+        ButterKnife.bind(this);
 
         db = new DBHelper(this);
 

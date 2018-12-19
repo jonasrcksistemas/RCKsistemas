@@ -18,8 +18,8 @@ import butterknife.ButterKnife;
 public class ClientesViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.nomeListaCliente)
     public TextView textViewNome;
-    @BindView(R.id.telefoneListaCliente)
-    public TextView textViewTelefone;
+    @BindView(R.id.txtDataUltimaCompra)
+    public TextView txtDataUltimaCompra;
     @BindView(R.id.textViewNomeFantasia)
     public TextView textViewNomeFantasia;
     @BindView(R.id.txtClienteAguarda)

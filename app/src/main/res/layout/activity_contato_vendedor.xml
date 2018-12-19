@@ -42,7 +42,7 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:id="@+id/lyNomeVendedor"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -51,6 +51,8 @@
                         <ImageView
                             android:layout_width="30dp"
                             android:layout_height="30dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
                             android:layout_marginStart="12dp"
                             android:layout_marginLeft="12dp"
                             android:layout_marginTop="10dp"
@@ -66,7 +68,7 @@
                             android:text="Nome do Vendedor"
                             android:textAppearance="@style/Base.TextAppearance.AppCompat.Title" />
 
-                    </LinearLayout>
+                    </RelativeLayout>
 
                     <View
                         android:layout_width="match_parent"
@@ -74,7 +76,7 @@
                         android:layout_marginTop="12dp"
                         android:background="#999999" />
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:id="@+id/lyChamada"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -83,22 +85,32 @@
                         <ImageView
                             android:layout_width="30dp"
                             android:layout_height="30dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
                             android:layout_marginStart="12dp"
                             android:layout_marginLeft="12dp"
                             android:layout_marginTop="12dp"
                             android:background="@mipmap/ic_telefone" />
 
                         <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="12dp"
+                            android:layout_marginLeft="12dp"
+                            android:text="Telefone" />
+
+                        <TextView
                             android:id="@+id/txtTelefone"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_alignParentBottom="true"
                             android:layout_gravity="center"
                             android:layout_marginStart="12dp"
                             android:layout_marginLeft="12dp"
                             android:text="000000000"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.SearchResult.Subtitle" />
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
-                    </LinearLayout>
+                    </RelativeLayout>
 
                     <View
                         android:layout_width="match_parent"
@@ -106,32 +118,48 @@
                         android:layout_marginTop="12dp"
                         android:background="#999999" />
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:id="@+id/lyGps"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
 
                         <ImageView
+                            android:id="@+id/ivGps"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
                             android:layout_marginStart="12dp"
                             android:layout_marginLeft="12dp"
                             android:layout_marginTop="10dp"
                             android:background="@mipmap/ic_localizacao" />
 
                         <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginStart="12dp"
+                            android:layout_marginLeft="12dp"
+                            android:text="Endereço" />
+
+                        <TextView
                             android:id="@+id/txtEndereco"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentBottom="true"
                             android:layout_gravity="center"
                             android:layout_marginStart="12dp"
                             android:layout_marginLeft="12dp"
                             android:layout_marginEnd="12dp"
-                            android:text="Rua Zeferino Vicente Almeida, 108, Vila Ieda"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.SearchResult.Subtitle" />
+                            android:layout_toStartOf="@id/ivGps"
+                            android:layout_toLeftOf="@id/ivGps"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:text="Rua Zeferino Vicente Almeida, 108, Vila Ieda" />
 
-                    </LinearLayout>
+                    </RelativeLayout>
 
                     <View
                         android:layout_width="match_parent"
@@ -139,32 +167,34 @@
                         android:layout_marginTop="12dp"
                         android:background="#999999" />
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:id="@+id/lyuF"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:orientation="horizontal">
 
-                        <ImageView
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
+                        <TextView
+                            android:id="@+id/descricaoUf"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_marginStart="12dp"
                             android:layout_marginLeft="12dp"
-                            android:layout_marginTop="10dp"
-                            android:background="@drawable/ic_uf" />
+                            android:text="UF" />
 
                         <TextView
                             android:id="@+id/txtUf"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_below="@+id/descricaoUf"
+                            android:layout_alignParentBottom="true"
                             android:layout_gravity="center"
                             android:layout_marginStart="12dp"
                             android:layout_marginLeft="12dp"
                             android:layout_marginEnd="12dp"
                             android:text="Uf não informada"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.SearchResult.Subtitle" />
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
-                    </LinearLayout>
+                    </RelativeLayout>
 
                     <View
                         android:layout_width="match_parent"
@@ -172,32 +202,33 @@
                         android:layout_marginTop="12dp"
                         android:background="#999999" />
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:id="@+id/lyMunicipio"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
 
-                        <ImageView
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
+                        <TextView
+                            android:id="@+id/descricaoMunicipio"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_marginStart="12dp"
                             android:layout_marginLeft="12dp"
-                            android:layout_marginTop="10dp"
-                            android:background="@drawable/ic_municipio" />
+                            android:text="Cidade" />
 
                         <TextView
                             android:id="@+id/txtMunicipio"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_below="@+id/descricaoMunicipio"
                             android:layout_gravity="center"
                             android:layout_marginStart="12dp"
                             android:layout_marginLeft="12dp"
                             android:layout_marginEnd="12dp"
                             android:text="Cidade não informada"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.SearchResult.Subtitle" />
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
-                    </LinearLayout>
+                    </RelativeLayout>
 
                     <View
                         android:layout_width="match_parent"
@@ -205,31 +236,49 @@
                         android:layout_marginTop="12dp"
                         android:background="#999999" />
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:id="@+id/lyEmail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
 
                         <ImageView
+                            android:id="@+id/ivEmail"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
                             android:layout_marginStart="12dp"
                             android:layout_marginLeft="12dp"
                             android:layout_marginTop="10dp"
                             android:background="@mipmap/ic_mail" />
 
                         <TextView
+                            android:id="@+id/descricaoEmail"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:layout_marginLeft="12dp"
+                            android:text="Email" />
+
+                        <TextView
                             android:id="@+id/txtEmail"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_below="@+id/descricaoEmail"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentLeft="true"
                             android:layout_gravity="center"
                             android:layout_marginStart="12dp"
                             android:layout_marginLeft="12dp"
+                            android:layout_toStartOf="@+id/ivEmail"
+                            android:layout_toLeftOf="@+id/ivEmail"
+                            android:ellipsize="end"
+                            android:maxLines="1"
                             android:text="fernando@rcksistemas.com.br"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.SearchResult.Subtitle" />
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
 
-                    </LinearLayout>
+                    </RelativeLayout>
 
                     <View
                         android:layout_width="match_parent"
@@ -237,30 +286,34 @@
                         android:layout_marginTop="12dp"
                         android:background="#999999" />
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:orientation="horizontal">
 
-                        <ImageView
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:layout_marginStart="12dp"
-                            android:layout_marginLeft="12dp"
-                            android:layout_marginTop="10dp"
-                            android:background="@drawable/ic_data_cadastro" />
-
                         <TextView
-                            android:id="@+id/edtDataCadastro"
+                            android:id="@+id/descricaoDataCadastro"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_marginStart="12dp"
                             android:layout_marginLeft="12dp"
-                            android:text="Data de cadastro: "
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.SearchResult.Subtitle" />
+                            android:gravity="center_vertical"
+                            android:text="Cadastrado em " />
 
-                    </LinearLayout>
+                        <TextView
+                            android:id="@+id/edtDataCadastro"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/descricaoDataCadastro"
+                            android:layout_gravity="center"
+                            android:layout_marginStart="12dp"
+                            android:layout_marginLeft="12dp"
+                            android:gravity="center_vertical"
+                            android:text="01/01/2018"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+
+                    </RelativeLayout>
 
                     <View
                         android:layout_width="match_parent"

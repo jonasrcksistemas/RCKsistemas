@@ -259,10 +259,42 @@ public class ActivityCadastroProspect extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if (mViewPager.getCurrentItem() != 0) {
-            mViewPager.setCurrentItem(0);
+        if (getIntent().getIntExtra("novo", 1) < 1) {
+            if (mViewPager.getCurrentItem() != 0) {
+                mViewPager.setCurrentItem(0);
+            } else {
+                finish();
+            }
         } else {
-            super.onBackPressed();
+            if (mViewPager.getCurrentItem() != 0) {
+                mViewPager.setCurrentItem(mViewPager.getCurrentItem() - 1);
+            } else {
+                if (ProspectHelper.getProspect().getProspectSalvo().equals("N") && ProspectHelper.getProspect().getId_prospect() != null) {
+                    AlertDialog.Builder alert = new AlertDialog.Builder(this);
+                    alert.setTitle("Atenção");
+                    alert.setMessage("Você está prestes a fechar esse cadastro em andamento. Deseja salva-lo PARCIALMENTE para continua-lo mais tarde?" +
+                            "(Clicar em \"NÃO\" irá excluir esse Prospect)");
+                    alert.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            finish();
+                        }
+                    });
+                    alert.setNegativeButton("NÃO", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            db.alterar("DELETE FROM TBL_PROSPECT WHERE ID_PROSPECT = " + ProspectHelper.getProspect().getId_prospect() + ";");
+                            finish();
+                        }
+                    });
+                    alert.setNeutralButton("Cancelar", null);
+                    alert.show();
+
+                } else {
+                    finish();
+                }
+
+            }
         }
     }
 

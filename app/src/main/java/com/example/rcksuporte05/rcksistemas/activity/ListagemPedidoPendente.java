@@ -507,23 +507,23 @@ public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRe
     }
 
     @Override
-    public View.OnClickListener onClickPdf(final int position) {
+    public View.OnClickListener onClickCompartilhar(final int position) {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 AlertDialog.Builder alert = new AlertDialog.Builder(ListagemPedidoPendente.this);
                 alert.setTitle("Atenção");
-                alert.setMessage("Deseja gerar um arquivo PDF do pedido " + listaPedidoAdapter.getItem(position).getId_web_pedido() + " selecionado ?");
+                alert.setMessage("Deseja compartilhar o pedido " + listaPedidoAdapter.getItem(position).getId_web_pedido() + "?");
                 alert.setNegativeButton("Não", null);
                 alert.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         PDFPedidoUtil pdfPedidoUtil = new PDFPedidoUtil(listaPedidoAdapter.getItem(position), ListagemPedidoPendente.this);
-                        Intent arquivo = new Intent(Intent.ACTION_VIEW);
-                        arquivo.setDataAndType(Uri.fromFile(pdfPedidoUtil.criandoPdf()), "application/pdf");
-                        arquivo.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                        Intent arquivo = new Intent(Intent.ACTION_SEND);
+                        arquivo.setType("pdf/*");
+                        arquivo.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(pdfPedidoUtil.criandoPdf()));
 
-                        Intent intent = Intent.createChooser(arquivo, "Abrir arquivo");
+                        Intent intent = Intent.createChooser(arquivo, "Compartilhar pedido");
                         startActivity(intent);
                     }
                 });
@@ -533,35 +533,11 @@ public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRe
     }
 
     @Override
-    public View.OnClickListener onClickEmail(final int position) {
+    public View.OnClickListener onClickRastrear(final int position) {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlertDialog.Builder emailAlert = new AlertDialog.Builder(ListagemPedidoPendente.this);
-                emailAlert.setTitle("Atenção");
-                emailAlert.setMessage("Deseja enviar um arquivo PDF do pedido " + listaPedidoAdapter.getItem(position).getId_web_pedido() + " para o email do cliente ?");
-                emailAlert.setNegativeButton("Não", null);
-                emailAlert.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        final Intent intent = new Intent(Intent.ACTION_SENDTO);
-
-                        PDFPedidoUtil pdfPedidoUtil = new PDFPedidoUtil(listaPedidoAdapter.getItem(position), ListagemPedidoPendente.this);
-                        if (listaPedidoAdapter.getItem(position).getCadastro().getEmail_principal() != null && !listaPedidoAdapter.getItem(position).getCadastro().getEmail_principal().trim().equals("")) {
-                            intent.setData(Uri.parse("mailto: " + listaPedidoAdapter.getItem(position).getCadastro().getEmail_principal()));
-                        } else if (listaPedidoAdapter.getItem(position).getCadastro().getEmail_financeiro() != null && !listaPedidoAdapter.getItem(position).getCadastro().getEmail_financeiro().trim().equals("")) {
-                            intent.setData(Uri.parse("mailto: " + listaPedidoAdapter.getItem(position).getCadastro().getEmail_financeiro()));
-                        } else {
-                            intent.setData(Uri.parse("mailto: Informe o email do cliente"));
-                        }
-                        intent.putExtra(Intent.EXTRA_SUBJECT, "Espelho do pedido " + listaPedidoAdapter.getItem(position).getId_web_pedido());
-                        intent.putExtra(Intent.EXTRA_TEXT, "Segue em anexo o espelho do pedido");
-                        intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(pdfPedidoUtil.criandoPdf()));
-
-                        startActivity(intent);
-                    }
-                });
-                emailAlert.show();
+                Toast.makeText(ListagemPedidoPendente.this, "Em desenvolvimento!", Toast.LENGTH_LONG).show();
             }
         };
     }

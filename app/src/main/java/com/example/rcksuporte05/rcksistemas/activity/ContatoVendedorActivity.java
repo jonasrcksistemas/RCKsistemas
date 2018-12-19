@@ -10,7 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +23,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class ContatoVendedorActivity extends AppCompatActivity {
 
@@ -37,11 +38,11 @@ public class ContatoVendedorActivity extends AppCompatActivity {
     @BindView(R.id.txtEndereco)
     public TextView txtEndereco;
     @BindView(R.id.lyChamada)
-    public LinearLayout lyChamada;
+    public RelativeLayout lyChamada;
     @BindView(R.id.lyEmail)
-    public LinearLayout lyEmail;
+    public RelativeLayout lyEmail;
     @BindView(R.id.lyGps)
-    public LinearLayout lyGps;
+    public RelativeLayout lyGps;
     @BindView(R.id.edtDataCadastro)
     public TextView edtDataCadastro;
     @BindView(R.id.txtMunicipio)
@@ -49,25 +50,13 @@ public class ContatoVendedorActivity extends AppCompatActivity {
     @BindView(R.id.txtUf)
     public TextView txtUf;
 
-
     private Cliente vendedor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_contato_vendedor);
-
-        final Toolbar toolbar = findViewById(R.id.toolbar);
-        final TextView txtNomeVendedor = findViewById(R.id.txtNomeVendedor);
-        final TextView txtTelefone = findViewById(R.id.txtTelefone);
-        final TextView txtEmail = findViewById(R.id.txtEmail);
-        final TextView txtEndereco = findViewById(R.id.txtEndereco);
-        final LinearLayout lyChamada = findViewById(R.id.lyChamada);
-        final LinearLayout lyEmail = findViewById(R.id.lyEmail);
-        final LinearLayout lyGps = findViewById(R.id.lyGps);
-        final TextView edtDataCadastro = findViewById(R.id.edtDataCadastro);
-        final TextView txtMunicipio = findViewById(R.id.txtMunicipio);
-        final TextView txtUf = findViewById(R.id.txtUf);
+        ButterKnife.bind(this);
 
         try {
             DBHelper db = new DBHelper(ContatoVendedorActivity.this);
@@ -169,7 +158,7 @@ public class ContatoVendedorActivity extends AppCompatActivity {
 
             try {
                 String dataCadastro = new SimpleDateFormat("dd/MM/yyyy").format(new SimpleDateFormat("yyyy-MM-dd").parse(vendedor.getUsuario_data()));
-                edtDataCadastro.setText("Cadastrado em " + dataCadastro);
+                edtDataCadastro.setText(dataCadastro);
             } catch (ParseException e) {
                 e.printStackTrace();
             }

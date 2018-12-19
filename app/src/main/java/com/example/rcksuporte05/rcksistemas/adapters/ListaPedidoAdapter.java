@@ -77,8 +77,8 @@ public class ListaPedidoAdapter extends RecyclerView.Adapter<PedidoViewHolder> {
         holder.btnExcluir.setOnClickListener(listener.onClickExcluir(position));
         holder.btnEnviar.setOnClickListener(listener.onClickEnviar(position));
         holder.btnDuplic.setOnClickListener(listener.onClickDuplic(position));
-        holder.btnPdf.setOnClickListener(listener.onClickPdf(position));
-        holder.btnEmail.setOnClickListener(listener.onClickEmail(position));
+        holder.btnCompartilhar.setOnClickListener(listener.onClickCompartilhar(position));
+        holder.btnRastreio.setOnClickListener(listener.onClickRastrear(position));
 
         applyClickEvents(holder, position);
     }
@@ -157,8 +157,8 @@ public class ListaPedidoAdapter extends RecyclerView.Adapter<PedidoViewHolder> {
 
         View.OnClickListener onClickDuplic(int position);
 
-        View.OnClickListener onClickPdf(int position);
+        View.OnClickListener onClickCompartilhar(int position);
 
-        View.OnClickListener onClickEmail(int position);
+        View.OnClickListener onClickRastrear(int position);
     }
 }

@@ -25,8 +25,8 @@
 
     <TextView
         android:layout_below="@+id/txtIdProspect"
-        android:layout_alignLeft="@+id/txtNomeFantasia"
-        android:layout_alignStart="@+id/txtNomeFantasia"
+        android:layout_alignLeft="@+id/txtRazaoSocial"
+        android:layout_alignStart="@+id/txtRazaoSocial"
         android:id="@+id/nomeProspect"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -41,8 +41,8 @@
         android:id="@+id/txtDataRetorno"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/txtNomeFantasia"
-        android:layout_alignBottom="@+id/txtNomeFantasia"
+        android:layout_alignBaseline="@+id/txtRazaoSocial"
+        android:layout_alignBottom="@+id/txtRazaoSocial"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_marginEnd="30dp"
@@ -53,7 +53,7 @@
         android:maxLines="1" />
 
     <TextView
-        android:id="@+id/txtNomeFantasia"
+        android:id="@+id/txtRazaoSocial"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"

@@ -11,7 +11,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,8 +38,10 @@ public class ContatoActivity extends AppCompatActivity {
     Toolbar toolbar;
     @BindView(R.id.imFisicaJuridica)
     ImageView imFisicaJuridica;
-    @BindView(R.id.txtNomeFantasia)
+    @BindView(R.id.txtRazaoSocial)
     TextView txtRazaoSocial;
+    @BindView(R.id.txtNomeFantasia)
+    TextView txtNomeFantasia;
     @BindView(R.id.txtTelefone)
     TextView txtTelefone;
     @BindView(R.id.txtEmail)
@@ -47,21 +49,23 @@ public class ContatoActivity extends AppCompatActivity {
     @BindView(R.id.txtEndereco)
     TextView txtEndereco;
     @BindView(R.id.lyDetalhes)
-    LinearLayout lyDetalhes;
+    RelativeLayout lyDetalhes;
     @BindView(R.id.lyChamada)
-    LinearLayout lyChamada;
+    RelativeLayout lyChamada;
     @BindView(R.id.lyEmail)
-    LinearLayout lyEmail;
+    RelativeLayout lyEmail;
     @BindView(R.id.lyGps)
-    LinearLayout lyGps;
+    RelativeLayout lyGps;
     @BindView(R.id.lyNomeCliente)
-    LinearLayout lyNomeCliente;
+    RelativeLayout lyNomeCliente;
     @BindView(R.id.lyFinanceiro)
-    LinearLayout lyFinanceiro;
+    RelativeLayout lyFinanceiro;
     @BindView(R.id.txtLimiteCredito)
     TextView txtLimiteCredito;
     @BindView(R.id.edtDataCadastro)
     TextView edtDataCadastro;
+    @BindView(R.id.txtNomeVendedor)
+    TextView txtNomeVendedor;
 
     private Cliente cliente;
 
@@ -92,6 +96,15 @@ public class ContatoActivity extends AppCompatActivity {
 
             toolbar.setTitle("Contato");
             txtRazaoSocial.setText(cliente.getNome_cadastro());
+
+            txtNomeFantasia.setText(cliente.getNome_fantasia());
+
+            try {
+                txtNomeVendedor.setText(db.consulta("SELECT NOME_CADASTRO FROM TBL_CADASTRO WHERE F_ID_VENDEDOR = " + cliente.getId_vendedor(), "NOME_CADASTRO"));
+            } catch (CursorIndexOutOfBoundsException e) {
+                e.printStackTrace();
+                txtNomeVendedor.setText(String.valueOf(cliente.getId_vendedor()));
+            }
 
             if (cliente.getPessoa_f_j() != null) {
                 switch (cliente.getPessoa_f_j()) {
@@ -236,7 +249,7 @@ public class ContatoActivity extends AppCompatActivity {
 
             try {
                 String dataCadastro = new SimpleDateFormat("dd/MM/yyyy").format(new SimpleDateFormat("yyyy-MM-dd").parse(cliente.getUsuario_data()));
-                edtDataCadastro.setText("Cliente desde " + dataCadastro);
+                edtDataCadastro.setText(dataCadastro);
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -267,9 +280,9 @@ public class ContatoActivity extends AppCompatActivity {
         telefone = telefone.trim().replaceAll("[^0-9]", "");
         switch (telefone.length()) {
             case 10:
-                return "(" + telefone.substring(0, 2) + ")" + telefone.substring(2, 6) + "-" + telefone.substring(6, 10);
+                return "(" + telefone.substring(0, 2) + ") " + telefone.substring(2, 6) + "-" + telefone.substring(6, 10);
             case 11:
-                return "(" + telefone.substring(0, 2) + ")" + telefone.substring(2, 7) + "-" + telefone.substring(7, 11);
+                return "(" + telefone.substring(0, 2) + ") " + telefone.substring(2, 7) + "-" + telefone.substring(7, 11);
             case 9:
                 return telefone.substring(0, 5) + "-" + telefone.substring(5, 9);
             case 8:

@@ -1,9 +1,11 @@
 package com.example.rcksuporte05.rcksistemas.fragment;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -16,9 +18,10 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
-import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.ProspectHelper;
 import com.example.rcksuporte05.rcksistemas.R;
+import com.example.rcksuporte05.rcksistemas.activity.BuscaMunicipioActivity;
+import com.example.rcksuporte05.rcksistemas.activity.BuscaUfActivity;
 import com.example.rcksuporte05.rcksistemas.model.Pais;
 
 import butterknife.BindView;
@@ -107,6 +110,31 @@ public class CadastroProspectEndereco extends Fragment {
 
         ufAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_activated_1, getResources().getStringArray(R.array.uf));
         spUfProspect.setAdapter(ufAdapter);
+        spUfProspect.setClickable(false);
+        spUfProspect.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (motionEvent.getAction() == 1) {
+                    Intent intent = new Intent(getActivity(), BuscaUfActivity.class);
+                    intent.putExtra("prospect", 1);
+                    startActivity(intent);
+                }
+                return true;
+            }
+        });
+
+        spMunicipioProspect.setClickable(false);
+        spMunicipioProspect.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (motionEvent.getAction() == 1) {
+                    Intent intent = new Intent(getActivity(), BuscaMunicipioActivity.class);
+                    intent.putExtra("prospect", 1);
+                    startActivity(intent);
+                }
+                return true;
+            }
+        });
 
         spUfProspect.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -140,16 +168,11 @@ public class CadastroProspectEndereco extends Fragment {
                 @Override
                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                     if (!paisAdapter.getItem(position).getId_pais().equals("1058")) {
-                        String[] uf = {"EX"};
-                        ProspectHelper.setPosicaoUf(0);
-                        ProspectHelper.setPosicaoMunicipio(0);
-                        ufAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_activated_1, uf);
-                        spUfProspect.setAdapter(ufAdapter);
+                        ProspectHelper.setPosicaoUf(8);
+                        spUfProspect.setSelection(8);
                         municipioAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_activated_1, getResources().getStringArray(listaUf[8]));
+                        ProspectHelper.setPosicaoMunicipio(0);
                         spMunicipioProspect.setAdapter(municipioAdapter);
-                    } else {
-                        ufAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_activated_1, getResources().getStringArray(R.array.uf));
-                        spUfProspect.setAdapter(ufAdapter);
                     }
                     try {
                         spUfProspect.setSelection(ProspectHelper.getPosicaoUf());
@@ -245,6 +268,20 @@ public class CadastroProspectEndereco extends Fragment {
 
         ProspectHelper.setCadastroProspectEndereco(this);
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        if (ProspectHelper.getPosicaoUf() > -1) {
+            spUfProspect.setSelection(ProspectHelper.getPosicaoUf());
+            municipioAdapter = new ArrayAdapter(getContext(), android.R.layout.simple_list_item_activated_1, getResources().getStringArray(listaUf[ProspectHelper.getPosicaoUf()]));
+            spMunicipioProspect.setAdapter(municipioAdapter);
+        }
+
+        if (ProspectHelper.getPosicaoMunicipio() > -1)
+            spMunicipioProspect.setSelection(ProspectHelper.getPosicaoMunicipio());
+
+        super.onResume();
     }
 
     public void injetaDadosNaTela() {
@@ -390,11 +427,5 @@ public class CadastroProspectEndereco extends Fragment {
         ProspectHelper.setPosicaoPais(spPaisProspect.getSelectedItemPosition());
         ProspectHelper.setPosicaoUf(spUfProspect.getSelectedItemPosition());
         ProspectHelper.setPosicaoMunicipio(spMunicipioProspect.getSelectedItemPosition());
-    }
-
-    @Override
-    public void onResume() {
-        injetaDadosNaTela();
-        super.onResume();
     }
 }

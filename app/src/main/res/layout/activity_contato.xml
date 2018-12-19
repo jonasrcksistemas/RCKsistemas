@@ -41,7 +41,7 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:id="@+id/lyNomeCliente"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -51,21 +51,38 @@
                             android:id="@+id/imFisicaJuridica"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
                             android:layout_marginStart="12dp"
                             android:layout_marginLeft="12dp"
                             android:layout_marginTop="10dp" />
 
                         <TextView
-                            android:id="@+id/txtNomeFantasia"
+                            android:id="@+id/txtRazaoSocial"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentLeft="true"
                             android:layout_gravity="center"
                             android:layout_marginStart="12dp"
                             android:layout_marginLeft="12dp"
+                            android:layout_toStartOf="@+id/imFisicaJuridica"
+                            android:layout_toLeftOf="@+id/imFisicaJuridica"
+                            android:gravity="center_vertical"
                             android:text="Nome do Cliente"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title" />
+                            android:textAppearance="@style/TextAppearance.AppCompat.Large" />
 
-                    </LinearLayout>
+                        <TextView
+                            android:id="@+id/txtNomeFantasia"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/txtRazaoSocial"
+                            android:layout_alignStart="@+id/txtRazaoSocial"
+                            android:layout_alignLeft="@+id/txtRazaoSocial"
+                            android:gravity="center_vertical"
+                            android:text="Nome Fantasia" />
+
+                    </RelativeLayout>
 
                     <View
                         android:layout_width="match_parent"
@@ -73,31 +90,46 @@
                         android:layout_marginTop="12dp"
                         android:background="#999999" />
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:id="@+id/lyChamada"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
 
                         <ImageView
+                            android:id="@+id/ivChamada"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
                             android:layout_marginStart="12dp"
                             android:layout_marginLeft="12dp"
                             android:layout_marginTop="12dp"
                             android:background="@mipmap/ic_telefone" />
 
                         <TextView
+                            android:id="@+id/descricaoTelefone"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:layout_marginLeft="12dp"
+                            android:text="Telefone" />
+
+                        <TextView
                             android:id="@+id/txtTelefone"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentBottom="true"
                             android:layout_gravity="center"
                             android:layout_marginStart="12dp"
                             android:layout_marginLeft="12dp"
-                            android:text="000000000"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.SearchResult.Subtitle" />
+                            android:layout_toStartOf="@+id/ivChamada"
+                            android:layout_toLeftOf="@+id/ivChamada"
+                            android:text="(67) 99324-5775" />
 
-                    </LinearLayout>
+                    </RelativeLayout>
 
                     <View
                         android:layout_width="match_parent"
@@ -105,32 +137,49 @@
                         android:layout_marginTop="12dp"
                         android:background="#999999" />
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:id="@+id/lyGps"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
 
                         <ImageView
+                            android:id="@+id/ivGps"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
                             android:layout_marginStart="12dp"
                             android:layout_marginLeft="12dp"
                             android:layout_marginTop="12dp"
                             android:background="@mipmap/ic_localizacao" />
 
                         <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:layout_marginLeft="12dp"
+                            android:text="Endereço" />
+
+                        <TextView
                             android:id="@+id/txtEndereco"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentBottom="true"
                             android:layout_gravity="center"
                             android:layout_marginStart="12dp"
                             android:layout_marginLeft="12dp"
                             android:layout_marginEnd="12dp"
-                            android:text="Rua Zeferino Vicente Almeida, 108, Vila Ieda"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.SearchResult.Subtitle" />
+                            android:layout_toStartOf="@+id/ivGps"
+                            android:layout_toLeftOf="@+id/ivGps"
+                            android:ellipsize="end"
+                            android:gravity="center_vertical"
+                            android:maxLines="1"
+                            android:text="Rua Zeferino Vicente Almeida, 108, Vila Ieda" />
 
-                    </LinearLayout>
+                    </RelativeLayout>
 
                     <View
                         android:layout_width="match_parent"
@@ -138,31 +187,47 @@
                         android:layout_marginTop="12dp"
                         android:background="#999999" />
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:id="@+id/lyEmail"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
 
                         <ImageView
+                            android:id="@+id/ivEmail"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
                             android:layout_marginStart="12dp"
                             android:layout_marginLeft="12dp"
                             android:layout_marginTop="12dp"
                             android:background="@mipmap/ic_mail" />
 
                         <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="12dp"
+                            android:layout_marginLeft="12dp"
+                            android:text="Email" />
+
+                        <TextView
                             android:id="@+id/txtEmail"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentLeft="true"
+                            android:layout_alignParentBottom="true"
                             android:layout_gravity="center"
                             android:layout_marginStart="12dp"
                             android:layout_marginLeft="12dp"
-                            android:text="fernando@rcksistemas.com.br"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.SearchResult.Subtitle" />
+                            android:layout_toStartOf="@+id/ivEmail"
+                            android:layout_toLeftOf="@+id/ivEmail"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:text="fernando@rcksistemas.com.br" />
 
-                    </LinearLayout>
+                    </RelativeLayout>
 
                     <View
                         android:layout_width="match_parent"
@@ -170,31 +235,32 @@
                         android:layout_marginTop="12dp"
                         android:background="#999999" />
 
-                    <LinearLayout
+                    <RelativeLayout
                         android:id="@+id/lyCategoria"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:orientation="horizontal">
 
-                        <ImageView
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
+                        <TextView
+                            android:id="@+id/descricaoCategoria"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
                             android:layout_marginStart="12dp"
-                            android:layout_marginLeft="5dp"
-                            android:layout_marginTop="12dp"
-                            android:background="@mipmap/ic_categoria" />
+                            android:layout_marginLeft="12dp"
+                            android:text="Categoria" />
 
                         <TextView
                             android:id="@+id/txtCategoria"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_below="@id/descricaoCategoria"
                             android:layout_gravity="center"
                             android:layout_marginStart="12dp"
                             android:layout_marginLeft="12dp"
-                            android:text="Categoria não informada"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.SearchResult.Subtitle" />
+                            android:gravity="center_vertical"
+                            android:text="Categoria não informada" />
 
-                    </LinearLayout>
+                    </RelativeLayout>
 
                     <View
                         android:layout_width="match_parent"
@@ -203,28 +269,70 @@
                         android:background="#999999" />
 
                     <LinearLayout
-                        android:id="@+id/lyLimiteCredito"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
                         android:orientation="horizontal">
 
-                        <ImageView
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:layout_marginStart="12dp"
-                            android:layout_marginLeft="5dp"
+                        <RelativeLayout
+                            android:id="@+id/lyLimiteCredito"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <TextView
+                                android:id="@+id/descricaoLimiteCredito"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="12dp"
+                                android:layout_marginLeft="12dp"
+                                android:text="Limite de crédito" />
+
+                            <TextView
+                                android:id="@+id/txtLimiteCredito"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/descricaoLimiteCredito"
+                                android:layout_marginStart="12dp"
+                                android:layout_marginLeft="12dp"
+                                android:text="Não informado" />
+
+                        </RelativeLayout>
+
+                        <View
+                            android:layout_width="0.2dp"
+                            android:layout_height="match_parent"
                             android:layout_marginTop="12dp"
-                            android:background="@mipmap/ic_historico_financeiro" />
+                            android:background="#999999" />
 
-                        <TextView
-                            android:id="@+id/txtLimiteCredito"
+                        <RelativeLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginStart="12dp"
-                            android:layout_marginLeft="12dp"
-                            android:text="Não informado limite de crédito"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.SearchResult.Subtitle" />
+                            android:layout_weight="1"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/descricaoDataCadastro"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_marginStart="12dp"
+                                android:layout_marginLeft="12dp"
+                                android:gravity="center_vertical"
+                                android:text="Cliente desde" />
+
+                            <TextView
+                                android:id="@+id/edtDataCadastro"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/descricaoDataCadastro"
+                                android:layout_gravity="center"
+                                android:layout_marginStart="12dp"
+                                android:layout_marginLeft="12dp"
+                                android:gravity="center_vertical"
+                                android:text="01/01/2018" />
+
+                        </RelativeLayout>
 
                     </LinearLayout>
 
@@ -234,92 +342,53 @@
                         android:layout_marginTop="12dp"
                         android:background="#999999" />
 
-                    <LinearLayout
-                        android:id="@+id/lyFinanceiro"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:layout_marginStart="12dp"
-                            android:layout_marginLeft="5dp"
-                            android:layout_marginTop="12dp"
-                            android:background="@mipmap/ic_financeiro" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginStart="12dp"
-                            android:layout_marginLeft="12dp"
-                            android:text="Historico Financeiro"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.SearchResult.Subtitle" />
-
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="0.2dp"
-                        android:layout_marginTop="12dp"
-                        android:background="#999999" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <ImageView
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:layout_marginStart="12dp"
-                            android:layout_marginLeft="12dp"
-                            android:layout_marginTop="10dp"
-                            android:background="@drawable/ic_data_cadastro" />
-
-                        <TextView
-                            android:id="@+id/edtDataCadastro"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginStart="12dp"
-                            android:layout_marginLeft="12dp"
-                            android:text="Data de cadastro: "
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.SearchResult.Subtitle" />
-
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="0.2dp"
-                        android:layout_marginTop="12dp"
-                        android:background="#999999" />
-
-                    <LinearLayout
+                    <RelativeLayout
                         android:id="@+id/lyNomeVendedor"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
 
                         <ImageView
+                            android:id="@+id/ivNomeVendedor"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_alignParentRight="true"
                             android:layout_marginStart="12dp"
                             android:layout_marginLeft="5dp"
                             android:layout_marginTop="12dp"
                             android:background="@drawable/ic_homem_negocios" />
 
                         <TextView
+                            android:id="@+id/descricaoNomeVendedor"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentLeft="true"
                             android:layout_gravity="center"
                             android:layout_marginStart="12dp"
                             android:layout_marginLeft="12dp"
-                            android:text="Informações do vendedor"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.SearchResult.Subtitle" />
+                            android:layout_toStartOf="@+id/ivNomeVendedor"
+                            android:layout_toLeftOf="@+id/ivNomeVendedor"
+                            android:gravity="center_vertical"
+                            android:text="Vendedor(a)" />
 
-                    </LinearLayout>
+                        <TextView
+                            android:id="@+id/txtNomeVendedor"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/descricaoNomeVendedor"
+                            android:layout_alignParentStart="true"
+                            android:layout_alignParentLeft="true"
+                            android:layout_gravity="center"
+                            android:layout_marginStart="12dp"
+                            android:layout_marginLeft="12dp"
+                            android:layout_toStartOf="@+id/ivNomeVendedor"
+                            android:layout_toLeftOf="@+id/ivNomeVendedor"
+                            android:gravity="center_vertical"
+                            android:text="Joselinton" />
+
+                    </RelativeLayout>
 
                     <View
                         android:layout_width="match_parent"
@@ -328,27 +397,82 @@
                         android:background="#999999" />
 
                     <LinearLayout
-                        android:id="@+id/lyDetalhes"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
                         android:orientation="horizontal">
 
-                        <ImageView
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:layout_marginStart="12dp"
-                            android:layout_marginLeft="12dp"
-                            android:layout_marginTop="12dp"
-                            android:background="@mipmap/ic_detalhes" />
-
-                        <TextView
+                        <RelativeLayout
+                            android:id="@+id/lyFinanceiro"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginStart="12dp"
-                            android:layout_marginLeft="12dp"
-                            android:text="Mais Detalhes >>>"
-                            android:textAppearance="@style/Base.TextAppearance.AppCompat.SearchResult.Subtitle" />
+                            android:layout_weight="1">
+
+                            <ImageView
+                                android:id="@+id/ivFinanceiro"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_alignParentEnd="true"
+                                android:layout_alignParentRight="true"
+                                android:layout_marginStart="12dp"
+                                android:layout_marginLeft="5dp"
+                                android:layout_marginTop="12dp"
+                                android:background="@mipmap/ic_financeiro" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentStart="true"
+                                android:layout_alignParentLeft="true"
+                                android:layout_gravity="center"
+                                android:layout_marginStart="12dp"
+                                android:layout_marginLeft="12dp"
+                                android:layout_toStartOf="@+id/ivFinanceiro"
+                                android:layout_toLeftOf="@+id/ivFinanceiro"
+                                android:gravity="center_vertical"
+                                android:text="Historico Financeiro" />
+
+                        </RelativeLayout>
+
+                        <View
+                            android:layout_width="0.2dp"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="12dp"
+                            android:background="#999999" />
+
+                        <RelativeLayout
+                            android:id="@+id/lyDetalhes"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1">
+
+                            <ImageView
+                                android:id="@+id/ivDetalhes"
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_alignParentEnd="true"
+                                android:layout_alignParentRight="true"
+                                android:layout_marginStart="12dp"
+                                android:layout_marginLeft="12dp"
+                                android:layout_marginTop="12dp"
+                                android:background="@mipmap/ic_detalhes" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentStart="true"
+                                android:layout_alignParentLeft="true"
+                                android:layout_alignParentTop="true"
+                                android:layout_alignParentBottom="true"
+                                android:layout_gravity="center"
+                                android:layout_marginStart="12dp"
+                                android:layout_marginLeft="12dp"
+                                android:layout_toStartOf="@id/ivDetalhes"
+                                android:layout_toLeftOf="@id/ivDetalhes"
+                                android:gravity="center_vertical"
+                                android:text="Cadastro\ncompleto" />
+
+                        </RelativeLayout>
 
                     </LinearLayout>
 
@@ -359,11 +483,7 @@
                         android:background="#999999" />
 
                 </LinearLayout>
-
             </android.support.v7.widget.CardView>
-
         </LinearLayout>
-
     </ScrollView>
-
 </LinearLayout>
