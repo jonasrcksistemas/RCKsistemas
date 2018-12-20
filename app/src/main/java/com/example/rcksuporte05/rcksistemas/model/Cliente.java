@@ -93,15 +93,8 @@ public class Cliente {
     private int id_vendedor;
     private int id_prospect;
     private String alterado;
-    private Segmento segmento;
-    private List<ReferenciaBancaria> referenciasBancarias = new ArrayList<>();
-    private List<ReferenciaComercial> referenciasComerciais = new ArrayList<>();
-    private List<Contato> listaContato = new ArrayList<>();
     private List<CadastroAnexo> listaCadastroAnexo = new ArrayList<>();
     private String situacaoPredio;
-    private String diaVisita;
-    private int id_segmento;
-    private String descricao_segmento;
     private String finalizado;
 
     public Cliente(Prospect prospect) {
@@ -112,10 +105,6 @@ public class Cliente {
         } catch (NumberFormatException e) {
             this.id_prospect = 0;
         }
-        this.segmento = prospect.getSegmento();
-        this.referenciasBancarias = prospect.getReferenciasBancarias();
-        this.referenciasComerciais = prospect.getReferenciasComerciais();
-        this.listaContato = prospect.getListaContato();
         this.nome_cadastro = prospect.getNome_cadastro();
         this.nome_fantasia = prospect.getNome_fantasia();
         this.pessoa_f_j = prospect.getPessoa_f_j();
@@ -147,7 +136,6 @@ public class Cliente {
         } catch (NumberFormatException e) {
             this.id_empresa = 0;
         }
-        this.diaVisita = prospect.getDiaVisita();
         this.observacoes_faturamento = prospect.getObservacoesComerciais();
         this.ind_da_ie_destinatario = prospect.getInd_da_ie_destinatario_prospect();
         this.usuario_nome = prospect.getUsuario_nome();
@@ -868,38 +856,6 @@ public class Cliente {
         this.id_prospect = id_prospect;
     }
 
-    public Segmento getSegmento() {
-        return segmento;
-    }
-
-    public void setSegmento(Segmento segmento) {
-        this.segmento = segmento;
-    }
-
-    public List<ReferenciaBancaria> getReferenciasBancarias() {
-        return referenciasBancarias;
-    }
-
-    public void setReferenciasBancarias(List<ReferenciaBancaria> referenciasBancarias) {
-        this.referenciasBancarias = referenciasBancarias;
-    }
-
-    public List<ReferenciaComercial> getReferenciasComerciais() {
-        return referenciasComerciais;
-    }
-
-    public void setReferenciasComerciais(List<ReferenciaComercial> referenciasComerciais) {
-        this.referenciasComerciais = referenciasComerciais;
-    }
-
-    public List<Contato> getListaContato() {
-        return listaContato;
-    }
-
-    public void setListaContato(List<Contato> listaContato) {
-        this.listaContato = listaContato;
-    }
-
     public String getAlterado() {
         return alterado;
     }
@@ -922,30 +878,6 @@ public class Cliente {
 
     public void setSituacaoPredio(String situacaoPredio) {
         this.situacaoPredio = situacaoPredio;
-    }
-
-    public String getDiaVisita() {
-        return diaVisita;
-    }
-
-    public void setDiaVisita(String diaVisita) {
-        this.diaVisita = diaVisita;
-    }
-
-    public int getId_segmento() {
-        return id_segmento;
-    }
-
-    public void setId_segmento(int id_segmento) {
-        this.id_segmento = id_segmento;
-    }
-
-    public String getDescricao_segmento() {
-        return descricao_segmento;
-    }
-
-    public void setDescricao_segmento(String descricao_segmento) {
-        this.descricao_segmento = descricao_segmento;
     }
 
     public String getFinalizado() {

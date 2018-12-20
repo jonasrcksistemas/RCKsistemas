@@ -101,14 +101,10 @@ public class CadastroProspectFotoSalvar extends Fragment implements GoogleApiCli
     @BindView(R.id.btnContinuar)
     Button btnContinuar;
 
-    String encodedImage;
     Bitmap mImagem1;
     Bitmap mImagem2;
-    String latitude;
-    String longitude;
     RespostaGeocoder respostaGeocoder;
     Location mLocation;
-    String checkin;
     ProgressDialog progress;
     private Uri uri;
     private DBHelper db;
@@ -216,27 +212,26 @@ public class CadastroProspectFotoSalvar extends Fragment implements GoogleApiCli
                         }
                         db.atualizarTBL_PROSPECT(ProspectHelper.getProspect());
 
-                        if (ProspectHelper.salvarProspect()) {
-                            AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
-                            alert.setTitle("Atenção");
-                            alert.setMessage("Tem certeza que deseja salvar esse prospect PERMANENTEMENTE?");
-                            alert.setNegativeButton("NÃO", null);
-                            alert.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    ProspectHelper.getProspect().setProspectSalvo("S");
-                                    ProspectHelper.getProspect().setIdEmpresa(UsuarioHelper.getUsuario().getIdEmpresaMultiDevice());
-                                    ProspectHelper.getProspect().setUsuario_id(UsuarioHelper.getUsuario().getId_usuario());
-                                    ProspectHelper.getProspect().setUsuario_nome(UsuarioHelper.getUsuario().getNome_usuario());
-                                    ProspectHelper.getProspect().setUsuario_data(db.pegaDataAtual());
-                                    ProspectHelper.getProspect().setIdVendedor(Integer.parseInt(UsuarioHelper.getUsuario().getId_quando_vendedor()));
+                        AlertDialog.Builder alert = new AlertDialog.Builder(getContext());
+                        alert.setTitle("Atenção");
+                        alert.setMessage("Tem certeza que deseja salvar esse prospect PERMANENTEMENTE?");
+                        alert.setNegativeButton("NÃO", null);
+                        alert.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                ProspectHelper.getProspect().setProspectSalvo("S");
+                                ProspectHelper.getProspect().setIdEmpresa(UsuarioHelper.getUsuario().getIdEmpresaMultiDevice());
+                                ProspectHelper.getProspect().setUsuario_id(UsuarioHelper.getUsuario().getId_usuario());
+                                ProspectHelper.getProspect().setUsuario_nome(UsuarioHelper.getUsuario().getNome_usuario());
+                                ProspectHelper.getProspect().setUsuario_data(db.pegaDataAtual());
+                                ProspectHelper.getProspect().setIdVendedor(Integer.parseInt(UsuarioHelper.getUsuario().getId_quando_vendedor()));
 
-                                    db.atualizarTBL_PROSPECT(ProspectHelper.getProspect());
-                                    getActivity().finish();
-                                }
-                            });
-                            alert.show();
-                        }
+                                db.atualizarTBL_PROSPECT(ProspectHelper.getProspect());
+                                getActivity().finish();
+                            }
+                        });
+                        alert.show();
+
                     }
                 }
             });

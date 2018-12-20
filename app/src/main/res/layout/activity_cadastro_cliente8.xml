@@ -55,7 +55,7 @@
         android:layout_marginEnd="15dp"
         android:layout_marginBottom="15dp"
         android:background="#e6b220"
-        android:text="CONTINUAR 8/9"
+        android:text="CONTINUAR 4/5"
         android:visibility="gone" />
 
 </RelativeLayout>

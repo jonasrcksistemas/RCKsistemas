@@ -100,7 +100,7 @@ public class CadastroCliente8 extends Fragment implements CadastroAnexoAdapter.C
                     }
                     db.atualizarTBL_CADASTRO(ClienteHelper.getCliente());
 
-                    ClienteHelper.moveTela(8);
+                    ClienteHelper.moveTela(4);
                 }
             });
         }

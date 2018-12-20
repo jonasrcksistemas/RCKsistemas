@@ -1,7 +1,6 @@
 package com.example.rcksuporte05.rcksistemas.activity;
 
 import android.app.ProgressDialog;
-import android.database.CursorIndexOutOfBoundsException;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
@@ -33,7 +32,7 @@ public class CadastroClienteMain extends AppCompatActivity {
     SlidingTabLayout mSlidingTabLayout;
     private TabsAdapterCliente tabsAdapterCliente;
 
-    private String[] titles = {"Geral", "Endereço", "Financeiro/Cobrança", "Contato *", "Segmentos *", "Referências", "Email NF-E", "Fotos", "Observações"};
+    private String[] titles = {"Geral", "Endereço", "Email NF-E", "Fotos", "Observações"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,32 +71,11 @@ public class CadastroClienteMain extends AppCompatActivity {
                         }
                         break;
                     case 2:
-                        if (ClienteHelper.getCadastroCliente3() != null) {
-                            ClienteHelper.getCadastroCliente3().inserirDadosDaFrame();
-                            if (getIntent().getIntExtra("novo", 0) >= 1) {
-                                toolbar.setTitle(titles[position]);
-                            }
+                        if (getIntent().getIntExtra("novo", 0) >= 1) {
+                            toolbar.setTitle(titles[position]);
                         }
                         break;
                     case 3:
-                        if (getIntent().getIntExtra("novo", 0) >= 1) {
-                            toolbar.setTitle(titles[position]);
-                        }
-                        break;
-                    case 4:
-                        if (ClienteHelper.getCadastroCliente5() != null) {
-                            ClienteHelper.getCadastroCliente5().inserirDadosDaFrame();
-                            if (getIntent().getIntExtra("novo", 0) >= 1) {
-                                toolbar.setTitle(titles[position]);
-                            }
-                        }
-                        break;
-                    case 5:
-                        if (getIntent().getIntExtra("novo", 0) >= 1) {
-                            toolbar.setTitle(titles[position]);
-                        }
-                        break;
-                    case 6:
                         if (ClienteHelper.getCadastroCliente7() != null) {
                             ClienteHelper.getCadastroCliente7().inserirDadosDaFrame();
                             if (getIntent().getIntExtra("novo", 0) >= 1) {
@@ -105,22 +83,17 @@ public class CadastroClienteMain extends AppCompatActivity {
                             }
                         }
                         break;
-                    case 7:
+                    case 4:
                         if (getIntent().getIntExtra("novo", 0) >= 1) {
                             toolbar.setTitle(titles[position]);
                         }
                         break;
-                    case 8:
+                    case 5:
                         if (ClienteHelper.getCadastroCliente9() != null) {
                             ClienteHelper.getCadastroCliente9().inserirDadosDaFrame();
                             if (getIntent().getIntExtra("novo", 0) >= 1) {
                                 toolbar.setTitle(titles[position]);
                             }
-                        }
-                        break;
-                    case 9:
-                        if (getIntent().getIntExtra("novo", 0) >= 1) {
-                            toolbar.setTitle(titles[position]);
                         }
                         break;
                 }
@@ -141,22 +114,12 @@ public class CadastroClienteMain extends AppCompatActivity {
                             ClienteHelper.getCadastroCliente2().inserirDadosDaFrame();
                         }
                         break;
-                    case 2:
-                        if (ClienteHelper.getCadastroCliente3() != null) {
-                            ClienteHelper.getCadastroCliente3().inserirDadosDaFrame();
-                        }
-                        break;
-                    case 4:
-                        if (ClienteHelper.getCadastroCliente5() != null) {
-                            ClienteHelper.getCadastroCliente5().inserirDadosDaFrame();
-                        }
-                        break;
-                    case 6:
+                    case 3:
                         if (ClienteHelper.getCadastroCliente7() != null) {
                             ClienteHelper.getCadastroCliente7().inserirDadosDaFrame();
                         }
                         break;
-                    case 8:
+                    case 5:
                         if (ClienteHelper.getCadastroCliente9() != null) {
                             ClienteHelper.getCadastroCliente9().inserirDadosDaFrame();
                         }
@@ -201,27 +164,6 @@ public class CadastroClienteMain extends AppCompatActivity {
                 }
             }
 
-            try {
-                ClienteHelper.getCliente().setSegmento(db.listaSegmento(String.valueOf(ClienteHelper.getCliente().getId_segmento())));
-                ClienteHelper.getCliente().getSegmento().setDescricaoOutros(ClienteHelper.getCliente().getDescricao_segmento());
-            } catch (CursorIndexOutOfBoundsException e) {
-                e.printStackTrace();
-            }
-            try {
-                ClienteHelper.getCliente().setReferenciasBancarias(db.listaReferenciaBancaria(String.valueOf(ClienteHelper.getCliente().getId_cadastro()), 1));
-            } catch (CursorIndexOutOfBoundsException e) {
-                e.printStackTrace();
-            }
-            try {
-                ClienteHelper.getCliente().setReferenciasComerciais(db.listaReferenciacomercial(String.valueOf(ClienteHelper.getCliente().getId_cadastro()), 1));
-            } catch (CursorIndexOutOfBoundsException e) {
-                e.printStackTrace();
-            }
-            try {
-                ClienteHelper.getCliente().setListaContato(db.listaContato(String.valueOf(ClienteHelper.getCliente().getId_cadastro()), 1));
-            } catch (CursorIndexOutOfBoundsException e) {
-                e.printStackTrace();
-            }
         } catch (NullPointerException e) {
             e.printStackTrace();
             finish();

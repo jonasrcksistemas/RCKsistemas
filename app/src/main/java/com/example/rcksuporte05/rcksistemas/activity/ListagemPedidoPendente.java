@@ -28,7 +28,9 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.rcksuporte05.rcksistemas.BO.CadastroAnexoBO;
 import com.example.rcksuporte05.rcksistemas.BO.PedidoBO;
+import com.example.rcksuporte05.rcksistemas.DAO.CadastroAnexoDAO;
 import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.DAO.WebPedidoDAO;
 import com.example.rcksuporte05.rcksistemas.DAO.WebPedidoItensDAO;
@@ -38,6 +40,7 @@ import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.ListaPedidoAdapter;
 import com.example.rcksuporte05.rcksistemas.api.Api;
 import com.example.rcksuporte05.rcksistemas.api.Rotas;
+import com.example.rcksuporte05.rcksistemas.model.CadastroAnexo;
 import com.example.rcksuporte05.rcksistemas.model.Usuario;
 import com.example.rcksuporte05.rcksistemas.model.WebPedido;
 import com.example.rcksuporte05.rcksistemas.model.WebPedidoItens;
@@ -161,6 +164,22 @@ public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRe
                     List<WebPedido> webPedidosEnviados = response.body();
 
                     for (WebPedido pedido : webPedidosEnviados) {
+
+                        final CadastroAnexoDAO cadastroAnexoDAO = new CadastroAnexoDAO(db);
+                        pedido.getCadastro().setAlterado("N");
+                        db.atualizarTBL_CADASTRO(pedido.getCadastro());
+                        db.alterar("DELETE FROM TBL_CADASTRO_ANEXOS WHERE ID_CADASTRO = " + pedido.getCadastro().getId_cadastro() + ";");
+                        if (pedido.getCadastro().getListaCadastroAnexo().size() > 0) {
+                            for (CadastroAnexo cadastroAnexo : pedido.getCadastro().getListaCadastroAnexo()) {
+                                if (cadastroAnexo.getExcluido().equals("N"))
+                                    cadastroAnexoDAO.atualizarCadastroAnexo(cadastroAnexo);
+                                else if (cadastroAnexo.getExcluido().equals("S"))
+                                    db.alterar("DELETE FROM TBL_CADASTRO_ANEXOS WHERE ID_ANEXO = " + cadastroAnexo.getIdAnexo() + ";");
+                            }
+                        } else {
+                            db.alterar("DELETE FROM TBL_CADASTRO_ANEXOS WHERE ID_CADASTRO = " + pedido.getCadastro().getId_cadastro() + ";");
+                        }
+
                         webPedidoDAO.atualizarTBL_WEB_PEDIDO(pedido);
                         for (WebPedidoItens pedidoIten : pedido.getWebPedidoItens()) {
                             webPedidoItensDAO.atualizarTBL_WEB_PEDIDO_ITENS(pedidoIten);
@@ -213,6 +232,7 @@ public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRe
     }
 
     public void enviarPedido(final WebPedido webPedido) {
+        boolean novoCliente = false;
 
         final NotificationCompat.Builder notificacao = new NotificationCompat.Builder(ListagemPedidoPendente.this)
                 .setSmallIcon(R.mipmap.ic_enviar_pedidos)
@@ -223,6 +243,17 @@ public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRe
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(0, notificacao.build());
 
+        if (webPedido.getCadastro().getId_cadastro_servidor() <= 0) {
+            novoCliente = true;
+            if (db.contagem("SELECT COUNT(ID_ANEXO) FROM TBL_CADASTRO_ANEXOS WHERE ID_CADASTRO = " + webPedido.getCadastro().getId_cadastro() + " AND EXCLUIDO = 'N';") > 0) {
+
+                final CadastroAnexoBO cadastroAnexoBO = new CadastroAnexoBO();
+
+                List<CadastroAnexo> listaCadastroAnexo = cadastroAnexoBO.listaCadastroAnexoComMiniatura(ListagemPedidoPendente.this, webPedido.getCadastro().getId_cadastro());
+                webPedido.getCadastro().setListaCadastroAnexo(listaCadastroAnexo);
+            }
+        }
+
         final List<WebPedido> pedido = new ArrayList<>();
         pedido.add(prepararItemPedido(webPedido));
 
@@ -232,18 +263,36 @@ public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRe
 
         Call<List<WebPedido>> call = apiRotas.enviarPedidos(pedido, cabecalho);
 
+        final boolean finalNovoCliente = novoCliente;
         call.enqueue(new Callback<List<WebPedido>>() {
             @Override
             public void onResponse(Call<List<WebPedido>> call, Response<List<WebPedido>> response) {
                 if (response.code() == 200) {
                     final List<WebPedido> webPedidosEnviados = response.body();
 
+                    if (finalNovoCliente) {
+                        final CadastroAnexoDAO cadastroAnexoDAO = new CadastroAnexoDAO(db);
+                        webPedidosEnviados.get(0).getCadastro().setAlterado("N");
+                        db.atualizarTBL_CADASTRO(webPedidosEnviados.get(0).getCadastro());
+                        db.alterar("DELETE FROM TBL_CADASTRO_ANEXOS WHERE ID_CADASTRO = " + webPedidosEnviados.get(0).getCadastro().getId_cadastro() + ";");
+                        if (webPedidosEnviados.get(0).getCadastro().getListaCadastroAnexo().size() > 0) {
+                            for (CadastroAnexo cadastroAnexo : webPedidosEnviados.get(0).getCadastro().getListaCadastroAnexo()) {
+                                if (cadastroAnexo.getExcluido().equals("N"))
+                                    cadastroAnexoDAO.atualizarCadastroAnexo(cadastroAnexo);
+                                else if (cadastroAnexo.getExcluido().equals("S"))
+                                    db.alterar("DELETE FROM TBL_CADASTRO_ANEXOS WHERE ID_ANEXO = " + cadastroAnexo.getIdAnexo() + ";");
+                            }
+                        } else {
+                            db.alterar("DELETE FROM TBL_CADASTRO_ANEXOS WHERE ID_CADASTRO = " + webPedidosEnviados.get(0).getCadastro().getId_cadastro() + ";");
+                        }
+                    }
+
                     webPedidoDAO.atualizarTBL_WEB_PEDIDO(webPedidosEnviados.get(0));
                     for (WebPedidoItens pedidoIten : webPedidosEnviados.get(0).getWebPedidoItens()) {
                         webPedidoItensDAO.atualizarTBL_WEB_PEDIDO_ITENS(pedidoIten);
                     }
 
-                    PendingIntent pendingIntent = PendingIntent.getActivity(ListagemPedidoPendente.this, 0, new Intent(ListagemPedidoPendente.this, ListagemPedidoPendente.class), 0);
+                    PendingIntent pendingIntent = PendingIntent.getActivity(ListagemPedidoPendente.this, 0, new Intent(ListagemPedidoPendente.this, ListagemPedidoEnviado.class), 0);
 
                     notificacao.setContentTitle("Pedido " + webPedidosEnviados.get(0).getId_web_pedido_servidor() + " enviado com sucesso!")
                             .setSmallIcon(R.mipmap.ic_sincronia_sucesso)
@@ -287,12 +336,21 @@ public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRe
 
     public void prepararItensPedidos() {
         for (WebPedido pedido : listaPedido) {
+            if (pedido.getCadastro().getId_cadastro_servidor() <= 0) {
+                if (db.contagem("SELECT COUNT(ID_ANEXO) FROM TBL_CADASTRO_ANEXOS WHERE ID_CADASTRO = " + pedido.getCadastro().getId_cadastro() + " AND EXCLUIDO = 'N';") > 0) {
+
+                    final CadastroAnexoBO cadastroAnexoBO = new CadastroAnexoBO();
+
+                    List<CadastroAnexo> listaCadastroAnexo = cadastroAnexoBO.listaCadastroAnexoComMiniatura(ListagemPedidoPendente.this, pedido.getCadastro().getId_cadastro());
+                    pedido.getCadastro().setListaCadastroAnexo(listaCadastroAnexo);
+                }
+            }
+
             List<WebPedidoItens> webPedidoItenses;
 
             webPedidoItenses = webPedidoItensDAO.listaWebPedidoItens("SELECT * FROM TBL_WEB_PEDIDO_ITENS WHERE ID_PEDIDO = " + pedido.getId_web_pedido());
             pedido.setWebPedidoItens(webPedidoItenses);
         }
-
     }
 
     public WebPedido prepararItemPedido(WebPedido webPedido) {

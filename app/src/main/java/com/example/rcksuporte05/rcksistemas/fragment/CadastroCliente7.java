@@ -52,7 +52,7 @@ public class CadastroCliente7 extends Fragment {
                     }
                     db.atualizarTBL_CADASTRO(ClienteHelper.getCliente());
 
-                    ClienteHelper.moveTela(7);
+                    ClienteHelper.moveTela(3);
                 }
             });
         }

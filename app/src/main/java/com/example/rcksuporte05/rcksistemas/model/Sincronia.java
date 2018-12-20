@@ -23,7 +23,6 @@ public class Sincronia {
     private List<WebPedido> listaWebPedidosPendentes = new ArrayList<>();
     private List<WebPedido> listaWebPedidosFinalizados = new ArrayList<>();
     private List<Pais> listaPais = new ArrayList<>();
-    private List<Banco> bancos = new ArrayList<>();
     private List<Segmento> segmentos = new ArrayList<>();
     private List<MotivoNaoCadastramento> motivos = new ArrayList<>();
     private List<Prospect> listaProspectPendentes = new ArrayList<>();
@@ -176,14 +175,6 @@ public class Sincronia {
 
     public void setListaPais(List<Pais> listaPais) {
         this.listaPais = listaPais;
-    }
-
-    public List<Banco> getBancos() {
-        return bancos;
-    }
-
-    public void setBancos(List<Banco> bancos) {
-        this.bancos = bancos;
     }
 
     public List<Segmento> getSegmentos() {

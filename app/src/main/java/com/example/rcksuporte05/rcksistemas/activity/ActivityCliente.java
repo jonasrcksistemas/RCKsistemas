@@ -105,27 +105,6 @@ public class ActivityCliente extends AppCompatActivity {
                 public void onClick(DialogInterface dialogInterface, int i) {
                     try {
                         ClienteHelper.setCliente(db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE FINALIZADO = 'N'").get(0));
-                        try {
-                            ClienteHelper.getCliente().setSegmento(db.listaSegmento(String.valueOf(ClienteHelper.getCliente().getId_segmento())));
-                            ClienteHelper.getCliente().getSegmento().setDescricaoOutros(ClienteHelper.getCliente().getDescricao_segmento());
-                        } catch (CursorIndexOutOfBoundsException e) {
-                            e.printStackTrace();
-                        }
-                        try {
-                            ClienteHelper.getCliente().setReferenciasBancarias(db.listaReferenciaBancaria(String.valueOf(ClienteHelper.getCliente().getId_cadastro()), 1));
-                        } catch (CursorIndexOutOfBoundsException e) {
-                            e.printStackTrace();
-                        }
-                        try {
-                            ClienteHelper.getCliente().setReferenciasComerciais(db.listaReferenciacomercial(String.valueOf(ClienteHelper.getCliente().getId_cadastro()), 1));
-                        } catch (CursorIndexOutOfBoundsException e) {
-                            e.printStackTrace();
-                        }
-                        try {
-                            ClienteHelper.getCliente().setListaContato(db.listaContato(String.valueOf(ClienteHelper.getCliente().getId_cadastro()), 1));
-                        } catch (CursorIndexOutOfBoundsException e) {
-                            e.printStackTrace();
-                        }
 
                         if (ClienteHelper.getCliente().getId_cadastro() > 0) {
                             if (db.contagem("SELECT COUNT(ID_ANEXO) FROM TBL_CADASTRO_ANEXOS WHERE ID_CADASTRO = " + ClienteHelper.getCliente().getId_cadastro() + " AND EXCLUIDO = 'N';") > 0) {
@@ -184,12 +163,6 @@ public class ActivityCliente extends AppCompatActivity {
         listaDeClientes.addItemDecoration(new DividerItemDecoration(this, LinearLayout.VERTICAL));
 
         if (getIntent().getIntExtra("acao", 0) == 1) {
-            filtraClientesEfetivados.setChecked(true);
-            filtraClientesNaoEfetivados.setChecked(false);
-            filtraTodosClientes.setChecked(false);
-            filtraClientesEfetivados.setClickable(false);
-            filtraClientesNaoEfetivados.setEnabled(false);
-            filtraTodosClientes.setEnabled(false);
 
             btnInserirCliente.setVisibility(View.GONE);
         }
@@ -511,27 +484,6 @@ public class ActivityCliente extends AppCompatActivity {
             for (Cliente cliente : listaClientes) {
                 try {
                     cliente.setListaCadastroAnexo(cadastroAnexoDAO.enviarCadastroAnexo(cliente.getId_cadastro()));
-                } catch (CursorIndexOutOfBoundsException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    cliente.setSegmento(db.listaSegmento(String.valueOf(cliente.getId_segmento())));
-                    cliente.getSegmento().setDescricaoOutros(cliente.getDescricao_segmento());
-                } catch (CursorIndexOutOfBoundsException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    cliente.setReferenciasBancarias(db.listaReferenciaBancaria(String.valueOf(cliente.getId_cadastro()), 1));
-                } catch (CursorIndexOutOfBoundsException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    cliente.setReferenciasComerciais(db.listaReferenciacomercial(String.valueOf(cliente.getId_cadastro()), 1));
-                } catch (CursorIndexOutOfBoundsException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    cliente.setListaContato(db.listaContato(String.valueOf(cliente.getId_cadastro()), 1));
                 } catch (CursorIndexOutOfBoundsException e) {
                     e.printStackTrace();
                 }

@@ -19,11 +19,7 @@ public class Prospect {
     private String id_prospect;
     private String id_prospect_servidor;
     private String id_cadastro;
-    private Segmento segmento;
     private MotivoNaoCadastramento motivoNaoCadastramento;
-    private List<ReferenciaBancaria> referenciasBancarias = new ArrayList<>();
-    private List<ReferenciaComercial> referenciasComerciais = new ArrayList<>();
-    private List<Contato> listaContato = new ArrayList<>();
     private List<VisitaProspect> visitas = new ArrayList<>();
     private String nome_cadastro;
     private String nome_fantasia;
@@ -71,28 +67,12 @@ public class Prospect {
         this.id_cadastro = id_cadastro;
     }
 
-    public Segmento getSegmento() {
-        return segmento;
-    }
-
-    public void setSegmento(Segmento segmento) {
-        this.segmento = segmento;
-    }
-
     public MotivoNaoCadastramento getMotivoNaoCadastramento() {
         return motivoNaoCadastramento;
     }
 
     public void setMotivoNaoCadastramento(MotivoNaoCadastramento motivoNaoCadastramento) {
         this.motivoNaoCadastramento = motivoNaoCadastramento;
-    }
-
-    public List<Contato> getListaContato() {
-        return listaContato;
-    }
-
-    public void setListaContato(List<Contato> listaContato) {
-        this.listaContato = listaContato;
     }
 
     public String getNome_cadastro() {
@@ -253,22 +233,6 @@ public class Prospect {
 
     public void setFotoSecundariaBase64(CadastroAnexo fotoSecundariaBase64) {
         this.fotoSecundariaBase64 = fotoSecundariaBase64;
-    }
-
-    public List<ReferenciaBancaria> getReferenciasBancarias() {
-        return referenciasBancarias;
-    }
-
-    public void setReferenciasBancarias(List<ReferenciaBancaria> referenciasBancarias) {
-        this.referenciasBancarias = referenciasBancarias;
-    }
-
-    public List<ReferenciaComercial> getReferenciasComerciais() {
-        return referenciasComerciais;
-    }
-
-    public void setReferenciasComerciais(List<ReferenciaComercial> referenciasComerciais) {
-        this.referenciasComerciais = referenciasComerciais;
     }
 
     public String getObservacoesComerciais() {

@@ -177,7 +177,6 @@ public class DBHelper extends SQLiteOpenHelper {
                 " ID_CATEGORIA INTEGER," +
                 " ID_VENDEDOR INTEGER," +
                 " SITUACAO_PREDIO VARCHAR(1)," +
-                " DIA_VISITA VARCHAR(20)," +
                 " ALTERADO VARCHAR(1) DEFAULT 'N', " +
                 " FINALIZADO VARCHAR(1) DEFAULT 'S');");
 
@@ -473,7 +472,6 @@ public class DBHelper extends SQLiteOpenHelper {
                 "LIMITE_CREDITO_SUGERIDO DECIMAL(12,2)," +
                 "LIMITE_PRAZO_SUGERIDO DECIMAL(12,2)," +
                 "ID_EMPRESA INTEGER," +
-                "DIA_VISITA VARCHAR(20)," +
                 "DATA_RETORNO DATE," +
                 "IND_DA_IE_DESTINATARIO_PROSPECT INTEGER, " +
                 "OBSERVACOES_COMERCIAIS VARCHAR(300)," +
@@ -656,11 +654,6 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("ID_PROSPECT_SERVIDOR", prospect.getId_prospect_servidor());
         content.put("ID_CADASTRO", prospect.getId_cadastro());
         try {
-            content.put("ID_SEGMENTO", prospect.getSegmento().getIdSetor());
-        } catch (NullPointerException e) {
-            content.put("ID_SEGMENTO", 0);
-        }
-        try {
             content.put("ID_MOTIVO_NAO_CADASTRAMENTO", prospect.getMotivoNaoCadastramento().getIdItem());
         } catch (NullPointerException e) {
             content.put("ID_MOTIVO_NAO_CADASTRAMENTO", 0);
@@ -687,7 +680,6 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("LIMITE_CREDITO_SUGERIDO", prospect.getLimiteDeCreditoSugerido());
         content.put("LIMITE_PRAZO_SUGERIDO", prospect.getLimiteDePrazoSugerido());
         content.put("ID_EMPRESA", prospect.getIdEmpresa());
-        content.put("DIA_VISITA", prospect.getDiaVisita());
         content.put("DATA_RETORNO", prospect.getDataRetorno());
         content.put("PROSPECT_SALVO", prospect.getProspectSalvo());
         content.put("IND_DA_IE_DESTINATARIO_PROSPECT", prospect.getInd_da_ie_destinatario_prospect());
@@ -697,12 +689,6 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("ID_VENDEDOR", prospect.getIdVendedor());
         content.put("ID_CATEGORIA", prospect.getIdCategoria());
         content.put("OBSERVACOES_COMERCIAIS", prospect.getObservacoesComerciais());
-        try {
-            content.put("DESCRICAO_SEGMENTO", prospect.getSegmento().getDescricaoOutros());
-        } catch (NullPointerException e) {
-            content.put("DESCRICAO_SEGMENTO", 0);
-            e.printStackTrace();
-        }
 
         try {
             content.put("DESCRICAO_MOTIVO_NAO_CAD", prospect.getMotivoNaoCadastramento().getDescricaoOutros());
@@ -721,16 +707,10 @@ public class DBHelper extends SQLiteOpenHelper {
 
         if (prospect.getId_prospect() != null && contagem("SELECT COUNT(ID_PROSPECT) FROM TBL_PROSPECT WHERE ID_PROSPECT = " + prospect.getId_prospect()) > 0) {
             content.put("ID_PROSPECT", prospect.getId_prospect());
-            atualizarTBL_REFERENCIA_BANCARIA(prospect.getReferenciasBancarias(), prospect.getId_prospect());
-            atualizarTBL_REFERENCIA_COMERCIAL(prospect.getReferenciasComerciais(), prospect.getId_prospect());
-            atualizaListaContatos(prospect.getListaContato(), prospect.getId_prospect());
             db.update("TBL_PROSPECT", content, "ID_PROSPECT = " + prospect.getId_prospect(), null);
         } else {
 
             content.put("ID_PROSPECT", prospect.getId_prospect());
-            atualizarTBL_REFERENCIA_BANCARIA(prospect.getReferenciasBancarias(), prospect.getId_prospect());
-            atualizarTBL_REFERENCIA_COMERCIAL(prospect.getReferenciasComerciais(), prospect.getId_prospect());
-            atualizaListaContatos(prospect.getListaContato(), prospect.getId_prospect());
             db.insert("TBL_PROSPECT", null, content);
             prospect.setId_prospect(String.valueOf(contagem("SELECT MAX(ID_PROSPECT) FROM TBL_PROSPECT;")));
         }
@@ -773,29 +753,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 e.printStackTrace();
             }
             try {
-                prospect.setSegmento(listaSegmento(cursor.getString(cursor.getColumnIndex("ID_SEGMENTO"))));
-                prospect.getSegmento().setDescricaoOutros(cursor.getString(cursor.getColumnIndex("DESCRICAO_SEGMENTO")));
-            } catch (CursorIndexOutOfBoundsException e) {
-                e.printStackTrace();
-            }
-            try {
                 prospect.setMotivoNaoCadastramento(listaMotivoNaoCadastramento(cursor.getString(cursor.getColumnIndex("ID_MOTIVO_NAO_CADASTRAMENTO"))));
                 prospect.getMotivoNaoCadastramento().setDescricaoOutros(cursor.getString(cursor.getColumnIndex("DESCRICAO_MOTIVO_NAO_CAD")));
-            } catch (CursorIndexOutOfBoundsException e) {
-                e.printStackTrace();
-            }
-            try {
-                prospect.setReferenciasBancarias(listaReferenciaBancaria(cursor.getString(cursor.getColumnIndex("ID_PROSPECT")), 10));
-            } catch (CursorIndexOutOfBoundsException e) {
-                e.printStackTrace();
-            }
-            try {
-                prospect.setReferenciasComerciais(listaReferenciacomercial(cursor.getString(cursor.getColumnIndex("ID_PROSPECT")), 10));
-            } catch (CursorIndexOutOfBoundsException e) {
-                e.printStackTrace();
-            }
-            try {
-                prospect.setListaContato(listaContato(cursor.getString(cursor.getColumnIndex("ID_PROSPECT")), 10));
             } catch (CursorIndexOutOfBoundsException e) {
                 e.printStackTrace();
             }
@@ -819,7 +778,6 @@ public class DBHelper extends SQLiteOpenHelper {
             prospect.setLimiteDeCreditoSugerido(cursor.getString(cursor.getColumnIndex("LIMITE_CREDITO_SUGERIDO")));
             prospect.setLimiteDePrazoSugerido(cursor.getString(cursor.getColumnIndex("LIMITE_PRAZO_SUGERIDO")));
             prospect.setIdEmpresa(cursor.getString(cursor.getColumnIndex("ID_EMPRESA")));
-            prospect.setDiaVisita(cursor.getString(cursor.getColumnIndex("DIA_VISITA")));
             prospect.setDataRetorno(cursor.getString(cursor.getColumnIndex("DATA_RETORNO")));
             prospect.setObservacoesComerciais(cursor.getString(cursor.getColumnIndex("OBSERVACOES_COMERCIAIS")));
             prospect.setProspectSalvo(cursor.getString(cursor.getColumnIndex("PROSPECT_SALVO")));
@@ -857,30 +815,8 @@ public class DBHelper extends SQLiteOpenHelper {
             }
 
             try {
-                prospect.setSegmento(listaSegmento(cursor.getString(cursor.getColumnIndex("ID_SEGMENTO"))));
-                prospect.getSegmento().setDescricaoOutros(cursor.getString(cursor.getColumnIndex("DESCRICAO_SEGMENTO")));
-            } catch (CursorIndexOutOfBoundsException e) {
-                e.printStackTrace();
-            }
-
-            try {
                 prospect.setMotivoNaoCadastramento(listaMotivoNaoCadastramento(cursor.getString(cursor.getColumnIndex("ID_MOTIVO_NAO_CADASTRAMENTO"))));
                 prospect.getMotivoNaoCadastramento().setDescricaoOutros(cursor.getString(cursor.getColumnIndex("DESCRICAO_MOTIVO_NAO_CAD")));
-            } catch (CursorIndexOutOfBoundsException e) {
-                e.printStackTrace();
-            }
-            try {
-                prospect.setReferenciasBancarias(listaReferenciaBancaria(cursor.getString(cursor.getColumnIndex("ID_PROSPECT")), 10));
-            } catch (CursorIndexOutOfBoundsException e) {
-                e.printStackTrace();
-            }
-            try {
-                prospect.setReferenciasComerciais(listaReferenciacomercial(cursor.getString(cursor.getColumnIndex("ID_PROSPECT")), 10));
-            } catch (CursorIndexOutOfBoundsException e) {
-                e.printStackTrace();
-            }
-            try {
-                prospect.setListaContato(listaContato(cursor.getString(cursor.getColumnIndex("ID_PROSPECT")), 10));
             } catch (CursorIndexOutOfBoundsException e) {
                 e.printStackTrace();
             }
@@ -903,7 +839,6 @@ public class DBHelper extends SQLiteOpenHelper {
             prospect.setLimiteDeCreditoSugerido(cursor.getString(cursor.getColumnIndex("LIMITE_CREDITO_SUGERIDO")));
             prospect.setLimiteDePrazoSugerido(cursor.getString(cursor.getColumnIndex("LIMITE_PRAZO_SUGERIDO")));
             prospect.setIdEmpresa(cursor.getString(cursor.getColumnIndex("ID_EMPRESA")));
-            prospect.setDiaVisita(cursor.getString(cursor.getColumnIndex("DIA_VISITA")));
             prospect.setDataRetorno(cursor.getString(cursor.getColumnIndex("DATA_RETORNO")));
             prospect.setObservacoesComerciais(cursor.getString(cursor.getColumnIndex("OBSERVACOES_COMERCIAIS")));
             prospect.setProspectSalvo(cursor.getString(cursor.getColumnIndex("PROSPECT_SALVO")));
@@ -1411,17 +1346,6 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("ID_CADASTRO", cliente.getId_cadastro());
         content.put("ID_CADASTRO_SERVIDOR", cliente.getId_cadastro_servidor());
         content.put("ID_PROSPECT", cliente.getId_prospect());
-        try {
-            content.put("ID_SEGMENTO", cliente.getSegmento().getIdSetor());
-        } catch (NullPointerException e) {
-            content.put("ID_SEGMENTO", 0);
-        }
-        try {
-            content.put("DESCRICAO_SEGMENTO", cliente.getSegmento().getDescricaoOutros());
-        } catch (NullPointerException e) {
-            content.put("DESCRICAO_SEGMENTO", 0);
-            e.printStackTrace();
-        }
         content.put("PESSOA_F_J", cliente.getPessoa_f_j());
         content.put("DATA_ANIVERSARIO", cliente.getData_aniversario());
         content.put("NOME_CADASTRO", cliente.getNome_cadastro());
@@ -1506,12 +1430,7 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("ID_VENDEDOR", cliente.getId_vendedor());
         content.put("ALTERADO", "N");
         content.put("SITUACAO_PREDIO", cliente.getSituacaoPredio());
-        content.put("DIA_VISITA", cliente.getDiaVisita());
         content.put("FINALIZADO", cliente.getFinalizado());
-
-        atualizarTBL_REFERENCIA_BANCARIA(cliente.getReferenciasBancarias(), String.valueOf(cliente.getId_cadastro()));
-        atualizarTBL_REFERENCIA_COMERCIAL(cliente.getReferenciasComerciais(), String.valueOf(cliente.getId_cadastro()));
-        atualizaListaContatos(cliente.getListaContato(), String.valueOf(cliente.getId_cadastro()));
 
         db.insert("TBL_CADASTRO", null, content);
         System.gc();
@@ -1527,17 +1446,6 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("ID_CADASTRO", cliente.getId_cadastro());
         content.put("ID_CADASTRO_SERVIDOR", cliente.getId_cadastro_servidor());
         content.put("ID_PROSPECT", cliente.getId_prospect());
-        try {
-            content.put("ID_SEGMENTO", cliente.getSegmento().getIdSetor());
-        } catch (NullPointerException e) {
-            content.put("ID_SEGMENTO", 0);
-        }
-        try {
-            content.put("DESCRICAO_SEGMENTO", cliente.getSegmento().getDescricaoOutros());
-        } catch (NullPointerException e) {
-            content.put("DESCRICAO_SEGMENTO", 0);
-            e.printStackTrace();
-        }
         content.put("PESSOA_F_J", cliente.getPessoa_f_j());
         content.put("DATA_ANIVERSARIO", cliente.getData_aniversario());
         content.put("NOME_CADASTRO", cliente.getNome_cadastro());
@@ -1622,13 +1530,7 @@ public class DBHelper extends SQLiteOpenHelper {
         content.put("ID_VENDEDOR", cliente.getId_vendedor());
         content.put("ALTERADO", cliente.getAlterado());
         content.put("SITUACAO_PREDIO", cliente.getSituacaoPredio());
-        content.put("DIA_VISITA", cliente.getDiaVisita());
         content.put("FINALIZADO", cliente.getFinalizado());
-
-        atualizarTBL_REFERENCIA_BANCARIA(cliente.getReferenciasBancarias(), String.valueOf(cliente.getId_cadastro()));
-        atualizarTBL_REFERENCIA_COMERCIAL(cliente.getReferenciasComerciais(), String.valueOf(cliente.getId_cadastro()));
-        atualizaListaContatos(cliente.getListaContato(), String.valueOf(cliente.getId_cadastro()));
-
 
         db.update("TBL_CADASTRO", content, "ID_CADASTRO = " + cliente.getId_cadastro(), null);
         System.gc();
@@ -1915,31 +1817,7 @@ public class DBHelper extends SQLiteOpenHelper {
         cursor.moveToFirst();
         do {
             Cliente cliente = new Cliente();
-
-            /*try {
-                cliente.setSegmento(listaSegmento(cursor.getString(cursor.getColumnIndex("ID_SEGMENTO"))));
-                cliente.getSegmento().setDescricaoOutros(cursor.getString(cursor.getColumnIndex("DESCRICAO_SEGMENTO")));
-            } catch (CursorIndexOutOfBoundsException e) {
-                e.printStackTrace();
-            }
-            try {
-                cliente.setReferenciasBancarias(listaReferenciaBancaria(cursor.getString(cursor.getColumnIndex("ID_CADASTRO")), 1));
-            } catch (CursorIndexOutOfBoundsException e) {
-                e.printStackTrace();
-            }
-            try {
-                cliente.setReferenciasComerciais(listaReferenciacomercial(cursor.getString(cursor.getColumnIndex("ID_CADASTRO")), 1));
-            } catch (CursorIndexOutOfBoundsException e) {
-                e.printStackTrace();
-            }
-            try {
-                cliente.setListaContato(listaContato(cursor.getString(cursor.getColumnIndex("ID_CADASTRO")), 1));
-            } catch (CursorIndexOutOfBoundsException e) {
-                e.printStackTrace();
-            }*/
-
-            cliente.setId_segmento(cursor.getInt(cursor.getColumnIndex("ID_SEGMENTO")));
-            cliente.setDescricao_segmento(cursor.getString(cursor.getColumnIndex("DESCRICAO_SEGMENTO")));
+            
             cliente.setAtivo(cursor.getString(cursor.getColumnIndex("ATIVO")));
             cliente.setId_empresa(cursor.getInt(cursor.getColumnIndex("ID_EMPRESA")));
             cliente.setId_cadastro(cursor.getInt(cursor.getColumnIndex("ID_CADASTRO")));
@@ -2029,7 +1907,6 @@ public class DBHelper extends SQLiteOpenHelper {
             cliente.setId_vendedor(cursor.getInt(cursor.getColumnIndex("ID_VENDEDOR")));
             cliente.setAlterado(cursor.getString(cursor.getColumnIndex("ALTERADO")));
             cliente.setSituacaoPredio(cursor.getString(cursor.getColumnIndex("SITUACAO_PREDIO")));
-            cliente.setDiaVisita(cursor.getString(cursor.getColumnIndex("DIA_VISITA")));
             cliente.setFinalizado(cursor.getString(cursor.getColumnIndex("FINALIZADO")));
 
             lista.add(cliente);

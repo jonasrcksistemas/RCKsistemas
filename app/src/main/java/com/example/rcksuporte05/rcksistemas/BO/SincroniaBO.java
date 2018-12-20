@@ -29,7 +29,6 @@ import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.activity.MainActivity;
 import com.example.rcksuporte05.rcksistemas.api.Api;
 import com.example.rcksuporte05.rcksistemas.api.Rotas;
-import com.example.rcksuporte05.rcksistemas.model.Banco;
 import com.example.rcksuporte05.rcksistemas.model.CadastroAnexo;
 import com.example.rcksuporte05.rcksistemas.model.CadastroFinanceiroResumo;
 import com.example.rcksuporte05.rcksistemas.model.Categoria;
@@ -271,25 +270,6 @@ public class SincroniaBO {
             db.inserirTBL_PAISES(pais);
 
             contadorNotificacaoEProgresso++;
-            final int finalContadorNotificacaoEProgresso = contadorNotificacaoEProgresso;
-            activity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    progress.setProgress(finalContadorNotificacaoEProgresso);
-                }
-            });
-            mNotificationManager.notify(0, notificacao.build());
-        }
-
-        db.alterar("DELETE FROM TBL_BANCOS_FEBRABAN");
-
-        for (Banco banco : sincronia.getBancos()) {
-            notificacao.setProgress(maxProgress, contadorNotificacaoEProgresso, false);
-
-            db.insertBanco(banco);
-
-            contadorNotificacaoEProgresso++;
-
             final int finalContadorNotificacaoEProgresso = contadorNotificacaoEProgresso;
             activity.runOnUiThread(new Runnable() {
                 @Override

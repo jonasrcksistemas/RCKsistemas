@@ -78,7 +78,7 @@ public class CadastroProspectMotivos extends Fragment implements MotivoAdapter.M
                     if (validado) {
                         DBHelper db = new DBHelper(getActivity());
                         db.atualizarTBL_PROSPECT(ProspectHelper.getProspect());
-                        ProspectHelper.moveTela(5);
+                        ProspectHelper.moveTela(3);
                     }
                 }
             });

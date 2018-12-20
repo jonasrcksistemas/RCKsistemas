@@ -269,7 +269,7 @@
                 android:layout_marginEnd="15dp"
                 android:layout_marginBottom="15dp"
                 android:background="#e6b220"
-                android:text="CONTINUAR 1/7"
+                android:text="CONTINUAR 1/4"
                 android:visibility="gone" />
         </RelativeLayout>
     </ScrollView>

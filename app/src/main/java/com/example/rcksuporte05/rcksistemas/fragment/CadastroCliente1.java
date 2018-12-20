@@ -20,7 +20,6 @@ import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,6 +30,7 @@ import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.UsuarioHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.model.Categoria;
+import com.example.rcksuporte05.rcksistemas.model.Cliente;
 import com.example.rcksuporte05.rcksistemas.util.MascaraUtil;
 
 import java.text.ParseException;
@@ -66,8 +66,6 @@ public class CadastroCliente1 extends Fragment {
     public EditText edtNomeCliente;
     @BindView(R.id.edtInscEstadual)
     public EditText edtInscEstadual;
-    @BindView(R.id.rgRotaCliente)
-    public RadioGroup rgRotaCliente;
     @BindView(R.id.rdFisica)
     public RadioButton rdFisica;
     @BindView(R.id.rdJuridica)
@@ -94,16 +92,6 @@ public class CadastroCliente1 extends Fragment {
     Button btnLigar2;
     @BindView(R.id.btnLigar3)
     Button btnLigar3;
-    @BindView(R.id.rdSegundaCliente)
-    RadioButton rdSegundaCliente;
-    @BindView(R.id.rdTercaCliente)
-    RadioButton rdTercaCliente;
-    @BindView(R.id.rdQuartaCliente)
-    RadioButton rdQuartaCliente;
-    @BindView(R.id.rdQuintaCliente)
-    RadioButton rdQuintaCliente;
-    @BindView(R.id.rdSextaCliente)
-    RadioButton rdSextaCliente;
     @BindView(R.id.btnContinuar)
     Button btnContinuar;
 
@@ -112,7 +100,6 @@ public class CadastroCliente1 extends Fragment {
     private String[] contribuinte = {"Com inscrição estadual", "Isento de inscrição", "Sem inscrição estadual"};
     private List<Categoria> listaCategoria = new ArrayList<>();
     private View view;
-    private RadioButton radioButtonRota;
     private DBHelper db;
 
     @Override
@@ -159,6 +146,7 @@ public class CadastroCliente1 extends Fragment {
             try {
                 ClienteHelper.setVendedor(db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE F_ID_VENDEDOR = " + UsuarioHelper.getUsuario().getId_quando_vendedor() + ";").get(0));
             } catch (CursorIndexOutOfBoundsException e) {
+                ClienteHelper.setVendedor(new Cliente());
                 e.printStackTrace();
             }
 
@@ -218,12 +206,6 @@ public class CadastroCliente1 extends Fragment {
                                 validado = false;
                             }
                         }
-                    }
-
-                    if (ClienteHelper.getCliente().getDiaVisita() == null || ClienteHelper.getCliente().getDiaVisita().trim().isEmpty()) {
-                        Toast.makeText(getContext(), "Escolha um dia da semana para a Visita", Toast.LENGTH_LONG).show();
-                        rgRotaCliente.requestFocus();
-                        validado = false;
                     }
 
                     if (validado) {
@@ -301,12 +283,6 @@ public class CadastroCliente1 extends Fragment {
             edtInscEstadual.setFocusable(false);
             edtInscMunicipal.setFocusable(false);
             spIe.setEnabled(false);
-            rgRotaCliente.setClickable(false);
-            rdSegundaCliente.setClickable(false);
-            rdTercaCliente.setClickable(false);
-            rdQuartaCliente.setClickable(false);
-            rdQuintaCliente.setClickable(false);
-            rdSextaCliente.setClickable(false);
 
             if (ClienteHelper.getCliente().getIdCategoria() <= 0) {
                 spCategoria.setVisibility(View.INVISIBLE);
@@ -527,26 +503,6 @@ public class CadastroCliente1 extends Fragment {
             }
         });
 
-        if (ClienteHelper.getCliente().getDiaVisita() != null && !ClienteHelper.getCliente().getDiaVisita().trim().isEmpty()) {
-            switch (ClienteHelper.getCliente().getDiaVisita().toLowerCase()) {
-                case "segunda":
-                    rdSegundaCliente.setChecked(true);
-                    break;
-                case "terça":
-                    rdTercaCliente.setChecked(true);
-                    break;
-                case "quarta":
-                    rdQuartaCliente.setChecked(true);
-                    break;
-                case "quinta":
-                    rdQuintaCliente.setChecked(true);
-                    break;
-                case "sexta":
-                    rdSextaCliente.setChecked(true);
-                    break;
-            }
-        }
-
         System.gc();
 
         ClienteHelper.setCadastroCliente1(this);
@@ -696,26 +652,6 @@ public class CadastroCliente1 extends Fragment {
                 }
             }
         });
-
-        if (ClienteHelper.getCliente().getDiaVisita() != null && !ClienteHelper.getCliente().getDiaVisita().trim().isEmpty()) {
-            switch (ClienteHelper.getCliente().getDiaVisita().toLowerCase()) {
-                case "segunda":
-                    rdSegundaCliente.setChecked(true);
-                    break;
-                case "terça":
-                    rdTercaCliente.setChecked(true);
-                    break;
-                case "quarta":
-                    rdQuartaCliente.setChecked(true);
-                    break;
-                case "quinta":
-                    rdQuintaCliente.setChecked(true);
-                    break;
-                case "sexta":
-                    rdSextaCliente.setChecked(true);
-                    break;
-            }
-        }
     }
 
     public void validaCpfCnpj() {
@@ -812,11 +748,6 @@ public class CadastroCliente1 extends Fragment {
 
         if (listaCategoria.size() > 0)
             ClienteHelper.getCliente().setIdCategoria(listaCategoria.get(spCategoria.getSelectedItemPosition()).getIdCategoria());
-
-        if (rgRotaCliente.getCheckedRadioButtonId() > 0) {
-            radioButtonRota = (RadioButton) view.findViewById(rgRotaCliente.getCheckedRadioButtonId());
-            ClienteHelper.getCliente().setDiaVisita(radioButtonRota.getText().toString().toLowerCase());
-        }
     }
 
     public void fazerChamada(final String telefone, final String nome) {

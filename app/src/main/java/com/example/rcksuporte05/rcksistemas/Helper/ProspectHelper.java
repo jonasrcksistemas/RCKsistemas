@@ -3,29 +3,19 @@ package com.example.rcksuporte05.rcksistemas.Helper;
 import android.graphics.Bitmap;
 import android.location.Location;
 import android.support.v4.view.ViewPager;
-import android.widget.Toast;
 
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.activity.ActivityCadastroProspect;
-import com.example.rcksuporte05.rcksistemas.fragment.CadastroProspectContatos;
 import com.example.rcksuporte05.rcksistemas.fragment.CadastroProspectEndereco;
 import com.example.rcksuporte05.rcksistemas.fragment.CadastroProspectFotoSalvar;
 import com.example.rcksuporte05.rcksistemas.fragment.CadastroProspectGeral;
 import com.example.rcksuporte05.rcksistemas.fragment.CadastroProspectMotivos;
-import com.example.rcksuporte05.rcksistemas.fragment.CadastroProspectObservacoesComerciais;
-import com.example.rcksuporte05.rcksistemas.fragment.CadastroProspectSegmentos;
 import com.example.rcksuporte05.rcksistemas.model.Cliente;
 import com.example.rcksuporte05.rcksistemas.model.MotivoNaoCadastramento;
 import com.example.rcksuporte05.rcksistemas.model.Pais;
 import com.example.rcksuporte05.rcksistemas.model.Prospect;
 import com.example.rcksuporte05.rcksistemas.model.Segmento;
-import com.example.rcksuporte05.rcksistemas.util.MascaraUtil;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.List;
 
 /**
@@ -45,10 +35,7 @@ public class ProspectHelper {
     private static ActivityCadastroProspect activityMain;
     private static CadastroProspectGeral cadastroProspectGeral;
     private static CadastroProspectEndereco cadastroProspectEndereco;
-    private static CadastroProspectContatos cadastroProspectContatos;
-    private static CadastroProspectSegmentos cadastroProspectSegmentos;
     private static CadastroProspectMotivos cadastroProspectMotivos;
-    private static CadastroProspectObservacoesComerciais cadastroProspectObservacoesComerciais;
     private static CadastroProspectFotoSalvar cadastroProspectFotoSalvar;
     private static ViewPager mViewPager;
     private static int posicaoPais = -1;
@@ -95,36 +82,12 @@ public class ProspectHelper {
         ProspectHelper.cadastroProspectEndereco = cadastroProspectEndereco;
     }
 
-    public static CadastroProspectContatos getCadastroProspectContatos() {
-        return cadastroProspectContatos;
-    }
-
-    public static void setCadastroProspectContatos(CadastroProspectContatos cadastroProspectContatos) {
-        ProspectHelper.cadastroProspectContatos = cadastroProspectContatos;
-    }
-
-    public static CadastroProspectSegmentos getCadastroProspectSegmentos() {
-        return cadastroProspectSegmentos;
-    }
-
-    public static void setCadastroProspectSegmentos(CadastroProspectSegmentos cadastroProspectSegmentos) {
-        ProspectHelper.cadastroProspectSegmentos = cadastroProspectSegmentos;
-    }
-
     public static CadastroProspectMotivos getCadastroProspectMotivos() {
         return cadastroProspectMotivos;
     }
 
     public static void setCadastroProspectMotivos(CadastroProspectMotivos cadastroProspectMotivos) {
         ProspectHelper.cadastroProspectMotivos = cadastroProspectMotivos;
-    }
-
-    public static CadastroProspectObservacoesComerciais getCadastroProspectObservacoesComerciais() {
-        return cadastroProspectObservacoesComerciais;
-    }
-
-    public static void setCadastroProspectObservacoesComerciais(CadastroProspectObservacoesComerciais cadastroProspectObservacoesComerciais) {
-        ProspectHelper.cadastroProspectObservacoesComerciais = cadastroProspectObservacoesComerciais;
     }
 
     public static CadastroProspectFotoSalvar getCadastroProspectFotoSalvar() {
@@ -222,311 +185,6 @@ public class ProspectHelper {
         }
     }
 
-    public static boolean salvarProspect() {
-        /*
-        Esta variavel é usada para validar o movimento das frags, assim que movimenta, não movimenta outra frag
-         */
-
-        boolean verificaMovimento = true;
-
-        //Tela geral
-        if (prospect.getPessoa_f_j() == null || prospect.getPessoa_f_j().equals("")) {
-            if (verificaMovimento) {
-                verificaMovimento = false;
-                Toast.makeText(cadastroProspectGeral.getContext(), "Escolher Pessoa Fisica ou Juridica é obrigatorio", Toast.LENGTH_LONG).show();
-                moveTela(0);
-            }
-            cadastroProspectGeral.edtNomeClienteProspect.requestFocus();
-        }
-
-        if (prospect.getNome_cadastro() == null || prospect.getNome_cadastro().trim().equals("")) {
-            if (verificaMovimento) {
-                verificaMovimento = false;
-                moveTela(0);
-            }
-            cadastroProspectGeral.edtNomeClienteProspect.setError("Campo Obrigatorio");
-            cadastroProspectGeral.edtNomeClienteProspect.requestFocus();
-        }
-
-
-        if (prospect.getNome_fantasia() == null || prospect.getNome_fantasia().equals("")) {
-            if (verificaMovimento) {
-                verificaMovimento = false;
-                moveTela(0);
-            }
-            cadastroProspectGeral.edtNomeFantasiaProspect.setError("Campo Obrigatorio");
-            cadastroProspectGeral.edtNomeFantasiaProspect.requestFocus();
-        }
-
-
-        if (prospect.getCpf_cnpj() == null || prospect.getCpf_cnpj().equals("")) {
-            if (verificaMovimento) {
-                verificaMovimento = false;
-                moveTela(0);
-            }
-            cadastroProspectGeral.edtCpfCnpjProspect.setError("Campo Obrigatorio");
-            cadastroProspectGeral.edtCpfCnpjProspect.requestFocus();
-        } else if (prospect.getPessoa_f_j().equals("F")) {
-            if (!MascaraUtil.isValidCPF(prospect.getCpf_cnpj())) {
-                if (verificaMovimento) {
-                    verificaMovimento = false;
-                    moveTela(0);
-                }
-                cadastroProspectGeral.edtCpfCnpjProspect.setError("CPF invalido");
-                cadastroProspectGeral.edtCpfCnpjProspect.requestFocus();
-            }
-        } else if (prospect.getPessoa_f_j().equals("J")) {
-            if (!MascaraUtil.isValidCNPJ(prospect.getCpf_cnpj())) {
-                if (verificaMovimento) {
-                    verificaMovimento = false;
-                    moveTela(0);
-                }
-                cadastroProspectGeral.edtCpfCnpjProspect.setError("CNPJ invalido");
-                cadastroProspectGeral.edtCpfCnpjProspect.requestFocus();
-            }
-        }
-
-        //tela 2 Endereços
-        if (prospect.getEndereco() == null || prospect.getEndereco().trim().isEmpty()) {
-            if (verificaMovimento) {
-                verificaMovimento = false;
-                moveTela(1);
-            }
-            cadastroProspectEndereco.edtEnderecoProspect.requestFocus();
-            cadastroProspectEndereco.edtEnderecoProspect.setError("Campo Obrigatorio");
-        }
-
-        if (prospect.getEndereco_numero() == null || prospect.getEndereco_numero().trim().isEmpty()) {
-            if (verificaMovimento) {
-                verificaMovimento = false;
-                moveTela(1);
-            }
-            cadastroProspectEndereco.edtNumeroProspect.requestFocus();
-            cadastroProspectEndereco.edtNumeroProspect.setError("Campo Obrigatorio");
-        }
-
-        if (prospect.getEndereco_bairro() == null || prospect.getEndereco_bairro().trim().isEmpty()) {
-            if (verificaMovimento) {
-                verificaMovimento = false;
-                moveTela(1);
-            }
-            cadastroProspectEndereco.edtBairroProspect.requestFocus();
-            cadastroProspectEndereco.edtBairroProspect.setError("Campo Obrigatorio");
-        }
-
-        /*if (prospect.getEndereco_cep() == null || prospect.getEndereco_cep().trim().isEmpty()) {
-            if (verificaMovimento) {
-                verificaMovimento = false;
-                moveTela(1);
-            }
-            cadastroProspectEndereco.edtCep.requestFocus();
-            cadastroProspectEndereco.edtCep.setError("Campo Obrigatorio");
-        }*/
-
-        /*if (prospect.getSituacaoPredio() == null || prospect.getSituacaoPredio().trim().isEmpty()) {
-            if (verificaMovimento) {
-                verificaMovimento = false;
-                Toast.makeText(activityMain, "Informe a situação do Predio", Toast.LENGTH_LONG).show();
-                moveTela(1);
-            }
-        }*/
-
-        /*//tela 3 Contato
-        if (prospect.getListaContato().size() < 1) {
-            if (verificaMovimento) {
-                verificaMovimento = false;
-                Toast.makeText(activityMain, "Pelo menos 1 contato é Obrigatorio!", Toast.LENGTH_LONG).show();
-                moveTela(2);
-            }
-        }*/
-
-
-        //Tela 4 seguimentos
-        if (prospect.getSegmento() == null) {
-            if (verificaMovimento) {
-                verificaMovimento = false;
-                Toast.makeText(activityMain, "Escolha o segmento!", Toast.LENGTH_LONG).show();
-                moveTela(3);
-            }
-        } else if (prospect.getSegmento().getNomeSetor().toLowerCase().contains("outros")) {
-            if (prospect.getSegmento().getDescricaoOutros() == null || prospect.getSegmento().getDescricaoOutros().equals("")) {
-                if (verificaMovimento) {
-                    verificaMovimento = false;
-                    Toast.makeText(activityMain, "Observação obrigatorio quando opção Outros selecionada", Toast.LENGTH_LONG).show();
-                    moveTela(3);
-                }
-                cadastroProspectSegmentos.edtOutrosSegmentosProspect.setError("Observação obrigatorio quando opção Outros selecionada");
-                cadastroProspectSegmentos.edtOutrosSegmentosProspect.requestFocus();
-            }
-        }
-
-
-        //tela 5 motivo não cadastramento
-        try {
-            if (prospect.getMotivoNaoCadastramento() == null) {
-                if (verificaMovimento) {
-                    verificaMovimento = false;
-                    Toast.makeText(activityMain, "Escolha um Motivo para o Não cadastramento!", Toast.LENGTH_LONG).show();
-                    moveTela(4);
-                }
-            } else if (prospect.getMotivoNaoCadastramento().getMotivo().toLowerCase().contains("outros") && prospect.getMotivoNaoCadastramento().getDescricaoOutros().equals("")) {
-                if (verificaMovimento) {
-                    verificaMovimento = false;
-                    Toast.makeText(activityMain, "Escolha um Motivo para o Não cadastramento!", Toast.LENGTH_LONG).show();
-                    moveTela(4);
-                }
-                cadastroProspectMotivos.edtOutrosMotivosProspect.setError("Observação obrigatorio quando opção Outros selecionada");
-                cadastroProspectMotivos.edtOutrosMotivosProspect.requestFocus();
-            }
-        } catch (NullPointerException e) {
-            e.printStackTrace();
-            if (verificaMovimento) {
-                verificaMovimento = false;
-                Toast.makeText(activityMain, "Escolha um Motivo para o Não cadastramento!", Toast.LENGTH_LONG).show();
-                moveTela(4);
-            }
-        }
-
-        //tela 6 Observações Comerciais
-        /*if (prospect.getReferenciasComerciais().size() < 2) {
-            if (verificaMovimento) {
-                verificaMovimento = false;
-                Toast.makeText(activityMain, "Insira Pelo Menos 2 referencias comercias ", Toast.LENGTH_LONG).show();
-                moveTela(5);
-            }
-        }*/
-
-        //Tela 7 salvar foto
-        if (verificaMovimento) {
-            if (prospect.getDataRetorno() == null || prospect.getDataRetorno().trim().isEmpty()) {
-                cadastroProspectFotoSalvar.edtDataRetorno.setBackgroundResource(R.drawable.borda_edittext_erro);
-                Toast.makeText(activityMain, "Informe a data de Retorno", Toast.LENGTH_LONG).show();
-                verificaMovimento = false;
-            } else {
-                Calendar dataAtual = new GregorianCalendar();
-                Calendar dataRetorno = new GregorianCalendar();
-                Date date = new Date();
-                dataAtual.setTime(date);
-                try {
-                    dataRetorno.setTime(new SimpleDateFormat("yyyy-MM-dd").parse(prospect.getDataRetorno()));
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                String atual = new SimpleDateFormat("dd/MM/yyyy").format(dataAtual.getTime());
-                String retorno = new SimpleDateFormat("dd/MM/yyyy").format(dataRetorno.getTime());
-                if (dataAtual.getTime().after(dataRetorno.getTime())) {
-                    cadastroProspectFotoSalvar.edtDataRetorno.setBackgroundResource(R.drawable.borda_edittext_erro);
-                    Toast.makeText(activityMain, "A data deve ser posterior ao dia de hoje!", Toast.LENGTH_LONG).show();
-                    verificaMovimento = false;
-                }
-            }
-        }
-
-        /*if (verificaMovimento) {
-            try {
-                if (prospect.getFotoPrincipalBase64().trim().isEmpty()) {
-                    Toast.makeText(activityMain, "Foto 1 obrigatoria", Toast.LENGTH_LONG).show();
-                    verificaMovimento = false;
-                }
-            } catch (Exception e) {
-                Toast.makeText(activityMain, "Foto 1 obrigatoria", Toast.LENGTH_LONG).show();
-                verificaMovimento = false;
-            }
-        }*/
-
-        /*if (verificaMovimento) {
-            try {
-                if (prospect.getFotoSecundariaBase64().trim().isEmpty()) {
-                    Toast.makeText(activityMain, "Foto 2 obrigatoria", Toast.LENGTH_LONG).show();
-                    verificaMovimento = false;
-                }
-            } catch (Exception e) {
-                Toast.makeText(activityMain, "Foto 2 obrigatoria", Toast.LENGTH_LONG).show();
-                verificaMovimento = false;
-            }
-        }*/
-
-        if (verificaMovimento) {
-            if (prospect.getLatitude() == null && prospect.getLongitude() == null) {
-                Toast.makeText(activityMain, "Fazer Check-in é obrigatório", Toast.LENGTH_LONG).show();
-                verificaMovimento = false;
-            } /*else {
-                prospect.setLatitude(String.valueOf(localizacao.getLatitude()));
-                prospect.setLongitude(String.valueOf(localizacao.getLongitude()));
-            }*/
-        }
-
-        return verificaMovimento;
-
-    }
-
-    public static boolean salvarParcial() {
-         /*
-        Esta variavel é usada para validar o movimento das frags, assim que movimenta, não movimenta outra frag
-         */
-        boolean verificaMovimento = true;
-
-        //Tela geral
-        if (prospect.getPessoa_f_j() == null || prospect.getPessoa_f_j().equals("")) {
-            if (verificaMovimento) {
-                verificaMovimento = false;
-                Toast.makeText(cadastroProspectGeral.getContext(), "Escolher Pessoa Fisica ou Juridica é obrigatorio", Toast.LENGTH_LONG).show();
-                moveTela(0);
-            }
-            cadastroProspectGeral.edtNomeClienteProspect.requestFocus();
-        }
-
-
-        if (prospect.getNome_cadastro() == null || prospect.getNome_cadastro().trim().equals("")) {
-            if (verificaMovimento) {
-                verificaMovimento = false;
-                moveTela(0);
-            }
-            cadastroProspectGeral.edtNomeClienteProspect.setError("Campo Obrigatorio");
-            cadastroProspectGeral.edtNomeClienteProspect.requestFocus();
-        }
-
-
-        if (prospect.getNome_fantasia() == null || prospect.getNome_fantasia().equals("")) {
-            if (verificaMovimento) {
-                verificaMovimento = false;
-                moveTela(0);
-            }
-            cadastroProspectGeral.edtNomeFantasiaProspect.setError("Campo Obrigatorio");
-            cadastroProspectGeral.edtNomeFantasiaProspect.requestFocus();
-        }
-
-
-        if (prospect.getCpf_cnpj() == null || prospect.getCpf_cnpj().equals("")) {
-            if (verificaMovimento) {
-                verificaMovimento = false;
-                moveTela(0);
-            }
-            cadastroProspectGeral.edtCpfCnpjProspect.setError("Campo Obrigatorio");
-            cadastroProspectGeral.edtCpfCnpjProspect.requestFocus();
-        } else if (prospect.getPessoa_f_j().equals("F")) {
-            if (!MascaraUtil.isValidCPF(prospect.getCpf_cnpj())) {
-                if (verificaMovimento) {
-                    verificaMovimento = false;
-                    moveTela(0);
-                }
-                cadastroProspectGeral.edtCpfCnpjProspect.setError("CPF invalido");
-                cadastroProspectGeral.edtCpfCnpjProspect.requestFocus();
-            }
-        } else if (prospect.getPessoa_f_j().equals("J")) {
-            if (!MascaraUtil.isValidCNPJ(prospect.getCpf_cnpj())) {
-                if (verificaMovimento) {
-                    verificaMovimento = false;
-                    moveTela(0);
-                }
-                cadastroProspectGeral.edtCpfCnpjProspect.setError("CNPJ invalido");
-                cadastroProspectGeral.edtCpfCnpjProspect.requestFocus();
-            }
-        }
-
-        return verificaMovimento;
-    }
-
     public static void clear() {
         prospect = null;
         segmentos = null;
@@ -534,10 +192,7 @@ public class ProspectHelper {
         paises = null;
         cadastroProspectGeral = null;
         cadastroProspectEndereco = null;
-        cadastroProspectContatos = null;
-        cadastroProspectSegmentos = null;
         cadastroProspectMotivos = null;
-        cadastroProspectObservacoesComerciais = null;
         cadastroProspectFotoSalvar = null;
         posicaoPais = -1;
         posicaoUf = -1;
