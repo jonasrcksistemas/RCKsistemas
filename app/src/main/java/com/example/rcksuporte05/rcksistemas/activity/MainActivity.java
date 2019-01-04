@@ -139,6 +139,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             public void onFailure(Call<List<Usuario>> call, Throwable t) {
                 progress.dismiss();
                 Toast.makeText(MainActivity.this, "Não foi possivel sincronizar com o servidor, por favor verifique sua conexão", Toast.LENGTH_LONG).show();
+                t.printStackTrace();
                 edtLogin.requestFocus();
             }
         });

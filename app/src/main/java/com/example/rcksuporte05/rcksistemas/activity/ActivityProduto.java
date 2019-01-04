@@ -18,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
+import com.example.rcksuporte05.rcksistemas.Helper.CampanhaHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.PedidoHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.ListaProdutoAdpter;
@@ -139,6 +140,7 @@ public class ActivityProduto extends AppCompatActivity {
                         }
                         if (listaProdutoAdpter.getItem(position).getSaldo_estoque() > 0) {
                             if (!produtoRepetido) {
+                                CampanhaHelper.setCampanhaComercialCab(null);
                                 PedidoHelper.setProduto(listaProdutoAdpter.getItem(position));
                                 startActivity(intent);
                                 finish();

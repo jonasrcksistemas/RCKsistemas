@@ -58,7 +58,7 @@ public class ListaAdapterProdutoPedido extends RecyclerView.Adapter<ProdutoPedid
                 .setBackgroundColor(selectedItems.get(position) ? Color.parseColor("#dfdfdf")
                         : Color.TRANSPARENT);
 
-        if (lista.get(position).getDescontoIndevido()) {
+        if (lista.get(position).getDescontoIndevido() || lista.get(position).getCampanhaIndevida()) {
             holder.idPosition.setTextColor(Color.parseColor("#FF0000"));
             holder.nomeListaProduto.setTextColor(Color.parseColor("#FF0000"));
             holder.precoProduto.setTextColor(Color.parseColor("#FF0000"));

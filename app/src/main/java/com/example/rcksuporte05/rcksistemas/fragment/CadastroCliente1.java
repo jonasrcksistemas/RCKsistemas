@@ -84,8 +84,6 @@ public class CadastroCliente1 extends Fragment {
     TextView txtCategoria;
     @BindView(R.id.txtData)
     TextView txtData;
-    @BindView(R.id.edtInscMunicipal)
-    EditText edtInscMunicipal;
     @BindView(R.id.btnLigar1)
     Button btnLigar1;
     @BindView(R.id.btnLigar2)
@@ -176,17 +174,20 @@ public class CadastroCliente1 extends Fragment {
 
                     if (ClienteHelper.getCliente().getCpf_cnpj() == null || ClienteHelper.getCliente().getCpf_cnpj().trim().isEmpty()) {
                         edtCpfCnpj.setError("Campo Obrigatorio");
+                        Toast.makeText(getActivity(), "Campo Obrigatorio", Toast.LENGTH_LONG).show();
                         edtCpfCnpj.requestFocus();
                         validado = false;
                     } else if (ClienteHelper.getCliente().getPessoa_f_j().equals("F")) {
                         if (!MascaraUtil.isValidCPF(ClienteHelper.getCliente().getCpf_cnpj())) {
                             edtCpfCnpj.setError("CPF Inválido");
+                            Toast.makeText(getActivity(), "CPF Inválido", Toast.LENGTH_LONG).show();
                             edtCpfCnpj.requestFocus();
                             validado = false;
                         }
                     } else if (ClienteHelper.getCliente().getPessoa_f_j().equals("J")) {
                         if (!MascaraUtil.isValidCNPJ(ClienteHelper.getCliente().getCpf_cnpj())) {
                             edtCpfCnpj.setError("CNPJ Inválido");
+                            Toast.makeText(getActivity(), "CNPJ Inválido", Toast.LENGTH_LONG).show();
                             edtCpfCnpj.requestFocus();
                             validado = false;
                         }
@@ -194,6 +195,7 @@ public class CadastroCliente1 extends Fragment {
 
                     if (!verificaCpfCnpj(ClienteHelper.getCliente().getCpf_cnpj())) {
                         edtCpfCnpj.setError("Já existe outro cliente com esse CPF/CNPJ");
+                        Toast.makeText(getActivity(), "Já existe outro cliente com esse CPF/CNPJ", Toast.LENGTH_LONG).show();
                         edtCpfCnpj.requestFocus();
                         validado = false;
                     }
@@ -281,7 +283,6 @@ public class CadastroCliente1 extends Fragment {
             edtEmailPrincipal.setFocusable(false);
             edtNomeCliente.setFocusable(false);
             edtInscEstadual.setFocusable(false);
-            edtInscMunicipal.setFocusable(false);
             spIe.setEnabled(false);
 
             if (ClienteHelper.getCliente().getIdCategoria() <= 0) {
@@ -444,8 +445,6 @@ public class CadastroCliente1 extends Fragment {
             edtNomeFantasia.setText(ClienteHelper.getCliente().getNome_fantasia());
         if (ClienteHelper.getCliente().getInscri_estadual() != null)
             edtInscEstadual.setText(ClienteHelper.getCliente().getInscri_estadual());
-        if (ClienteHelper.getCliente().getInscri_municipal() != null)
-            edtInscMunicipal.setText(ClienteHelper.getCliente().getInscri_municipal());
         if (ClienteHelper.getCliente().getPessoa_contato_principal() != null)
             edtPessoaContato.setText(ClienteHelper.getCliente().getPessoa_contato_principal());
         if (ClienteHelper.getCliente().getEmail_principal() != null)
@@ -594,8 +593,6 @@ public class CadastroCliente1 extends Fragment {
             edtNomeFantasia.setText(ClienteHelper.getCliente().getNome_fantasia());
         if (ClienteHelper.getCliente().getInscri_estadual() != null)
             edtInscEstadual.setText(ClienteHelper.getCliente().getInscri_estadual());
-        if (ClienteHelper.getCliente().getInscri_municipal() != null)
-            edtInscMunicipal.setText(ClienteHelper.getCliente().getInscri_municipal());
         if (ClienteHelper.getCliente().getPessoa_contato_principal() != null)
             edtPessoaContato.setText(ClienteHelper.getCliente().getPessoa_contato_principal());
         if (ClienteHelper.getCliente().getEmail_principal() != null)
@@ -736,11 +733,6 @@ public class CadastroCliente1 extends Fragment {
             ClienteHelper.getCliente().setInscri_estadual(edtInscEstadual.getText().toString());
         else
             ClienteHelper.getCliente().setInscri_estadual(null);
-
-        if (!edtInscMunicipal.getText().toString().trim().isEmpty())
-            ClienteHelper.getCliente().setInscri_municipal(edtInscMunicipal.getText().toString());
-        else
-            ClienteHelper.getCliente().setInscri_municipal(null);
 
         ClienteHelper.getCliente().setId_vendedor(Integer.parseInt(UsuarioHelper.getUsuario().getId_quando_vendedor()));
 

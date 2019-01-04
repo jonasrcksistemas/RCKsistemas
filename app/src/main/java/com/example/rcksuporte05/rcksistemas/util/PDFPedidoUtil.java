@@ -1,6 +1,7 @@
 package com.example.rcksuporte05.rcksistemas.util;
 
 import android.app.Activity;
+import android.database.CursorIndexOutOfBoundsException;
 import android.os.Build;
 import android.os.Environment;
 
@@ -159,7 +160,12 @@ public class PDFPedidoUtil extends PdfPageEventHelper {
         telefone.setFont(normalFont);
         p2.add(telefone);
         p2.add("Categoria: ");
-        Chunk categoria = new Chunk(buscaCategoria(webPedido.getCadastro().getIdCategoria()) + "\n");
+        Chunk categoria;
+        try {
+            categoria = new Chunk(buscaCategoria(webPedido.getCadastro().getIdCategoria()) + "\n");
+        } catch (CursorIndexOutOfBoundsException e) {
+            categoria = new Chunk("");
+        }
         p2.add(categoria);
 
         Rectangle rect = new Rectangle(23, 800, 400, 705);
@@ -197,7 +203,7 @@ public class PDFPedidoUtil extends PdfPageEventHelper {
         Chunk infoDataEntrega = null;
         try {
             infoDataEntrega = new Chunk(new SimpleDateFormat("dd/MM/yyyy").format(new SimpleDateFormat("yyyy-MM-dd").parse(webPedido.getData_prev_entrega())), normalFont);
-        } catch (ParseException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         dataEntrega.add(infoDataEntrega);
@@ -258,28 +264,72 @@ public class PDFPedidoUtil extends PdfPageEventHelper {
             webPedido.setWebPedidoItens(listaPedidoItens());
 
         for (WebPedidoItens webPedidoItens : webPedido.getWebPedidoItens()) {
-            PdfPCell celulaProd = new PdfPCell(new Phrase(webPedidoItens.getId_produto(), smallFont));
-            celulaProd.setHorizontalAlignment(Element.ALIGN_CENTER);
-            tabelaProdutos.addCell(celulaProd);
-            tabelaProdutos.addCell(new Phrase(webPedidoItens.getNome_produto(), smallFont));
-            celulaProd = new PdfPCell(new Phrase(webPedidoItens.getUnidade(), smallFont));
-            celulaProd.setHorizontalAlignment(Element.ALIGN_CENTER);
-            tabelaProdutos.addCell(celulaProd);
-            celulaProd = new PdfPCell(new Phrase(webPedidoItens.getQuantidade(), smallFont));
-            celulaProd.setHorizontalAlignment(Element.ALIGN_CENTER);
-            tabelaProdutos.addCell(celulaProd);
-            celulaProd = new PdfPCell(new Phrase(MascaraUtil.duasCasaDecimal(webPedidoItens.getValor_unitario()), smallFont));
-            celulaProd.setHorizontalAlignment(Element.ALIGN_CENTER);
-            tabelaProdutos.addCell(celulaProd);
-            celulaProd = new PdfPCell(new Phrase(MascaraUtil.duasCasaDecimal(webPedidoItens.getValor_unitario() - (webPedidoItens.getValor_unitario() * (Float.parseFloat(webPedidoItens.getValor_desconto_real()) / 100))), smallFont));
-            celulaProd.setHorizontalAlignment(Element.ALIGN_CENTER);
-            tabelaProdutos.addCell(celulaProd);
-            celulaProd = new PdfPCell(new Phrase(MascaraUtil.duasCasaDecimal(webPedidoItens.getValor_desconto_real()), smallFont));
-            celulaProd.setHorizontalAlignment(Element.ALIGN_CENTER);
-            tabelaProdutos.addCell(celulaProd);
-            celulaProd = new PdfPCell(new Phrase(MascaraUtil.duasCasaDecimal(webPedidoItens.getValor_total()), smallFont));
-            celulaProd.setHorizontalAlignment(Element.ALIGN_CENTER);
-            tabelaProdutos.addCell(celulaProd);
+            PdfPCell celulaProd = null;
+            try {
+                celulaProd = new PdfPCell(new Phrase(webPedidoItens.getId_produto(), smallFont));
+                celulaProd.setHorizontalAlignment(Element.ALIGN_CENTER);
+                tabelaProdutos.addCell(celulaProd);
+                tabelaProdutos.addCell(new Phrase(webPedidoItens.getNome_produto(), smallFont));
+            } catch (Exception e) {
+                tabelaProdutos.addCell(new Phrase(""));
+                e.printStackTrace();
+            }
+            try {
+                celulaProd = new PdfPCell(new Phrase(webPedidoItens.getUnidade(), smallFont));
+                celulaProd.setHorizontalAlignment(Element.ALIGN_CENTER);
+                tabelaProdutos.addCell(celulaProd);
+            } catch (Exception e) {
+                tabelaProdutos.addCell(new PdfPCell(new Phrase("")));
+                e.printStackTrace();
+            }
+            try {
+                celulaProd = new PdfPCell(new Phrase(webPedidoItens.getQuantidade(), smallFont));
+                celulaProd.setHorizontalAlignment(Element.ALIGN_CENTER);
+                tabelaProdutos.addCell(celulaProd);
+            } catch (Exception e) {
+                tabelaProdutos.addCell(new PdfPCell(new Phrase("")));
+                e.printStackTrace();
+            }
+            try {
+                celulaProd = new PdfPCell(new Phrase(MascaraUtil.duasCasaDecimal(webPedidoItens.getValor_unitario()), smallFont));
+                celulaProd.setHorizontalAlignment(Element.ALIGN_CENTER);
+                tabelaProdutos.addCell(celulaProd);
+            } catch (Exception e) {
+                celulaProd = new PdfPCell(new Phrase("0.00", smallFont));
+                celulaProd.setHorizontalAlignment(Element.ALIGN_CENTER);
+                tabelaProdutos.addCell(celulaProd);
+                e.printStackTrace();
+            }
+            try {
+                celulaProd = new PdfPCell(new Phrase(MascaraUtil.duasCasaDecimal(webPedidoItens.getValor_unitario() - (Float.parseFloat(webPedidoItens.getValor_desconto_real()) / Float.parseFloat(webPedidoItens.getQuantidade()))), smallFont));
+                celulaProd.setHorizontalAlignment(Element.ALIGN_CENTER);
+                tabelaProdutos.addCell(celulaProd);
+            } catch (Exception e) {
+                celulaProd = new PdfPCell(new Phrase("0.00", smallFont));
+                celulaProd.setHorizontalAlignment(Element.ALIGN_CENTER);
+                tabelaProdutos.addCell(celulaProd);
+                e.printStackTrace();
+            }
+            try {
+                celulaProd = new PdfPCell(new Phrase(MascaraUtil.duasCasaDecimal(webPedidoItens.getValor_desconto_real()), smallFont));
+                celulaProd.setHorizontalAlignment(Element.ALIGN_CENTER);
+                tabelaProdutos.addCell(celulaProd);
+            } catch (Exception e) {
+                celulaProd = new PdfPCell(new Phrase("0.00", smallFont));
+                celulaProd.setHorizontalAlignment(Element.ALIGN_CENTER);
+                tabelaProdutos.addCell(celulaProd);
+                e.printStackTrace();
+            }
+            try {
+                celulaProd = new PdfPCell(new Phrase(MascaraUtil.duasCasaDecimal(webPedidoItens.getValor_total()), smallFont));
+                celulaProd.setHorizontalAlignment(Element.ALIGN_CENTER);
+                tabelaProdutos.addCell(celulaProd);
+            } catch (Exception e) {
+                celulaProd = new PdfPCell(new Phrase("0.00", smallFont));
+                celulaProd.setHorizontalAlignment(Element.ALIGN_CENTER);
+                tabelaProdutos.addCell(celulaProd);
+                e.printStackTrace();
+            }
         }
 
         tabelaProdutos.setHeaderRows(1);
@@ -295,25 +345,49 @@ public class PDFPedidoUtil extends PdfPageEventHelper {
         document.add(new Paragraph("           "));
 
         Paragraph totalProdutos = new Paragraph("    Valor total dos Produtos \n                                             ", cabFont);
-        Chunk produto = new Chunk(MascaraUtil.mascaraReal(webPedido.getValor_produtos()), normalFont);
-        totalProdutos.add(produto);
+        try {
+            Chunk produto = new Chunk(MascaraUtil.mascaraReal(webPedido.getValor_produtos()), normalFont);
+            totalProdutos.add(produto);
+            rect = new Rectangle(425, 145, 575, 110);
+            addColumn(writer, rect, false, Element.ALIGN_LEFT, true, totalProdutos);
+        } catch (Exception e) {
+            Chunk produto = new Chunk("R$0,00", normalFont);
+            totalProdutos.add(produto);
+            rect = new Rectangle(425, 145, 575, 110);
+            addColumn(writer, rect, false, Element.ALIGN_LEFT, true, totalProdutos);
+            e.printStackTrace();
+        }
 
-        rect = new Rectangle(425, 145, 575, 110);
-        addColumn(writer, rect, false, Element.ALIGN_LEFT, true, totalProdutos);
 
         Paragraph totalDescontos = new Paragraph("    Valor total dos Descontos \n                                             ", cabFont);
-        Chunk desconto = new Chunk(MascaraUtil.mascaraReal(webPedido.getValor_desconto()), normalFont);
-        totalDescontos.add(desconto);
+        try {
+            Chunk desconto = new Chunk(MascaraUtil.mascaraReal(webPedido.getValor_desconto()), normalFont);
+            totalDescontos.add(desconto);
+            rect = new Rectangle(425, 110, 575, 75);
+            addColumn(writer, rect, false, Element.ALIGN_LEFT, true, totalDescontos);
+        } catch (Exception e) {
+            Chunk desconto = new Chunk("R$0,00", normalFont);
+            totalDescontos.add(desconto);
+            rect = new Rectangle(425, 110, 575, 75);
+            addColumn(writer, rect, false, Element.ALIGN_LEFT, true, totalDescontos);
+            e.printStackTrace();
+        }
 
-        rect = new Rectangle(425, 110, 575, 75);
-        addColumn(writer, rect, false, Element.ALIGN_LEFT, true, totalDescontos);
 
         Paragraph totalPedido = new Paragraph("    Valor total do Pedido \n                                             ", cabFont);
-        Chunk pedido = new Chunk(MascaraUtil.mascaraReal(webPedido.getValor_total()), normalFont);
-        totalPedido.add(pedido);
+        try {
+            Chunk pedido = new Chunk(MascaraUtil.mascaraReal(webPedido.getValor_total()), normalFont);
+            totalPedido.add(pedido);
+            rect = new Rectangle(425, 75, 575, 40);
+            addColumn(writer, rect, false, Element.ALIGN_LEFT, true, totalPedido);
+        } catch (Exception e) {
+            Chunk pedido = new Chunk("R$0,00", normalFont);
+            totalPedido.add(pedido);
+            rect = new Rectangle(425, 75, 575, 40);
+            addColumn(writer, rect, false, Element.ALIGN_LEFT, true, totalPedido);
+            e.printStackTrace();
+        }
 
-        rect = new Rectangle(425, 75, 575, 40);
-        addColumn(writer, rect, false, Element.ALIGN_LEFT, true, totalPedido);
 
         rect = new Rectangle(23, 145, 425, 40);
         try {

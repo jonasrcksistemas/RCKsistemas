@@ -46,6 +46,10 @@ public class CadastroAnexoDAO {
         return retornarCadastros(db.listaDados("SELECT * FROM TBL_CADASTRO_ANEXOS WHERE ID_CADASTRO = " + idCadastro + " AND ID_ENTIDADE = 10 AND EXCLUIDO = 'N' ORDER BY ID_ANEXO;"));
     }
 
+    public List<CadastroAnexo> listaCadastroAnexoProspectAcao(int idCadastro) {
+        return retornarCadastros(db.listaDados("SELECT * FROM TBL_CADASTRO_ANEXOS WHERE ID_CADASTRO = " + idCadastro + " --AND ID_ENTIDADE = 11 AND EXCLUIDO = 'N' ORDER BY ID_ANEXO;"));
+    }
+
     private List<CadastroAnexo> retornarCadastros(Cursor cursor) {
         List<CadastroAnexo> listaCadastroAnexo = new ArrayList<>();
 

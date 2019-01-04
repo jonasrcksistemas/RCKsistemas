@@ -19,69 +19,54 @@
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar2"
-        android:layout_width="match_parent"
+    <RelativeLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:background="?attr/colorPrimary"
-        android:minHeight="?attr/actionBarSize"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
+        android:background="#dcdedc"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingTop="5dp"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingBottom="5dp">
 
-        <RelativeLayout
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/ifCliente"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_alignTop="@+id/btnBuscaCliente"
+            android:layout_alignBottom="@+id/btnBuscaCliente"
+            android:layout_toStartOf="@+id/btnBuscaCliente"
+            android:layout_toLeftOf="@+id/btnBuscaCliente"
+            android:background="@drawable/borda_edittext_preto"
+            android:gravity="center"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/txtNomeCliente"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginTop="15dp"
-                android:layout_marginRight="12dp"
-                android:layout_toStartOf="@+id/BtnFinanceiro"
-                android:layout_toLeftOf="@+id/BtnFinanceiro"
-                android:text="Toque aqui para selecionar seu cliente"
+                android:text="Toque aqui para selecionar o seu cliente"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
 
             <TextView
                 android:id="@+id/txtRazaoSocial"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/txtNomeCliente"
-                android:layout_alignStart="@+id/txtNomeCliente"
-                android:layout_alignLeft="@+id/txtNomeCliente"
-                android:layout_marginRight="12dp"
-                android:layout_toStartOf="@+id/BtnFinanceiro"
-                android:layout_toLeftOf="@+id/BtnFinanceiro"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                android:textSize="10dp"
+                android:visibility="gone" />
 
-            <TextView
-                android:id="@+id/txtCategoria"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/txtRazaoSocial"
-                android:layout_marginTop="12dp"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
+        </LinearLayout>
 
-            <Button
-                android:id="@+id/BtnFinanceiro"
-                android:layout_width="32dp"
-                android:layout_height="32dp"
-                android:layout_alignTop="@id/txtNomeCliente"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginEnd="12dp"
-                android:layout_marginRight="12dp"
-                android:background="@mipmap/ic_financeiro_botao" />
+        <Button
+            android:id="@+id/btnBuscaCliente"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:background="@mipmap/ic_busca" />
 
-        </RelativeLayout>
-
-    </android.support.v7.widget.Toolbar>
+    </RelativeLayout>
 
     <com.example.rcksuporte05.rcksistemas.util.SlidingTabLayout
         android:id="@+id/stl_tabsPedido"
@@ -91,7 +76,8 @@
         android:clipToPadding="false"
         android:paddingStart="36dp"
         android:paddingLeft="36dp"
-        android:theme="@style/Theme.Toolbar" />
+        android:theme="@style/Theme.Toolbar"
+        android:visibility="gone" />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/vp_tabsPedido"
@@ -99,17 +85,113 @@
         android:layout_height="0dp"
         android:layout_weight="0.99" />
 
-    <EditText
-        android:id="@+id/edtTotalVenda"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:background="#dddfdd"
-        android:focusable="false"
-        android:gravity="end"
-        android:paddingEnd="10dp"
-        android:paddingRight="10dp"
-        android:text="TOTAL    R$00,00"
-        android:textSize="15sp" />
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="1dp"
+            android:layout_weight="1"
+            android:background="@drawable/borda_edittext_preto"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:focusable="false"
+                android:gravity="center"
+                android:paddingEnd="10dp"
+                android:paddingRight="10dp"
+                android:text="SUB-TOTAL"
+                android:textColor="#000000"
+                android:textSize="10sp" />
+
+            <TextView
+                android:id="@+id/edtTotalProdutos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:focusable="false"
+                android:gravity="center"
+                android:paddingEnd="10dp"
+                android:paddingRight="10dp"
+                android:text="00,00"
+                android:textColor="#000000"
+                android:textSize="15sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/borda_edittext_preto"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:focusable="false"
+                android:gravity="center"
+                android:paddingEnd="10dp"
+                android:paddingRight="10dp"
+                android:text="DESCONTOS"
+                android:textColor="#000000"
+                android:textSize="10sp" />
+
+            <TextView
+                android:id="@+id/edtTotalDescontos"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:focusable="false"
+                android:gravity="center"
+                android:paddingEnd="10dp"
+                android:paddingRight="10dp"
+                android:text="00,00"
+                android:textColor="#000000"
+                android:textSize="15sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@drawable/borda_edittext_preto"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:focusable="false"
+                android:gravity="end"
+                android:paddingEnd="10dp"
+                android:paddingRight="10dp"
+                android:text="TOTAL"
+                android:textColor="#000000"
+                android:textSize="10sp" />
+
+            <TextView
+                android:id="@+id/edtTotalVenda"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:focusable="false"
+                android:gravity="end"
+                android:paddingEnd="10dp"
+                android:paddingRight="10dp"
+                android:text="00,00"
+                android:textColor="#000000"
+                android:textSize="15sp" />
+
+        </LinearLayout>
+    </LinearLayout>
 
 </LinearLayout>

@@ -2,6 +2,8 @@ package com.example.rcksuporte05.rcksistemas.adapters;
 
 import android.app.Activity;
 import android.graphics.Color;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseBooleanArray;
 import android.view.HapticFeedbackConstants;
@@ -44,14 +46,17 @@ public class ListaPedidoAdapter extends RecyclerView.Adapter<PedidoViewHolder> {
         return new PedidoViewHolder(itemView);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     public void onBindViewHolder(PedidoViewHolder holder, int position) {
         if (pedidos.get(position).getId_web_pedido_servidor() != null && !pedidos.get(position).getId_web_pedido_servidor().equals("")) {
-            holder.txtIdPedido.setText("Nº " + pedidos.get(position).getId_web_pedido_servidor());
+            holder.txtIdPedido.setText("Nº " + MascaraUtil.numeroZeros(pedidos.get(position).getId_web_pedido_servidor(), 5));
             holder.lyExcluir.setVisibility(View.GONE);
             holder.lyEnvia.setVisibility(View.GONE);
+            holder.cor.setBackground(activity.getDrawable(R.drawable.cor_pedido_enviado));
         } else {
-            holder.txtIdPedido.setText("Nº " + pedidos.get(position).getId_web_pedido());
+            holder.cor.setBackground(activity.getDrawable(R.drawable.cor_pedido_pendente));
+            holder.txtIdPedido.setText("Nº " + MascaraUtil.numeroZeros(pedidos.get(position).getId_web_pedido(), 5));
         }
 
         holder.txtNomeCliente.setText(pedidos.get(position).getCadastro().getNome_cadastro());
@@ -71,6 +76,7 @@ public class ListaPedidoAdapter extends RecyclerView.Adapter<PedidoViewHolder> {
 
         DBHelper db = new DBHelper(activity);
         holder.txtOperacao.setText(db.consulta("SELECT NOME_OPERACAO FROM TBL_OPERACAO_ESTOQUE WHERE ID_OPERACAO = " + pedidos.get(position).getId_operacao() + ";", "NOME_OPERACAO"));
+        holder.txtCondicaoPagamento.setText(db.consulta("SELECT * FROM TBL_CONDICOES_PAG_CAB WHERE ID_CONDICAO = " + pedidos.get(position).getId_condicao_pagamento() + ";", "NOME_CONDICAO"));
 
         holder.itemView.setActivated(selectedItems.get(position, false));
 

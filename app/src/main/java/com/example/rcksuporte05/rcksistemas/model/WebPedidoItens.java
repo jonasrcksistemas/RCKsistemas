@@ -42,8 +42,10 @@ public class WebPedidoItens extends Produto {
     private String valor_preco_pago;
     private String id_web_item_servidor;
     private String tipoDesconto;
+    private int idCampanha;
     private Boolean descontoIndevido = false;
     private Boolean produtoBase = true;
+    private Boolean campanhaIndevida = false;
 
     public WebPedidoItens(Produto produto) {
         this.setAtivo(produto.getAtivo());
@@ -98,6 +100,7 @@ public class WebPedidoItens extends Produto {
         this.setDescricao(produto.getDescricao());
         this.setProduto_tercerizacao(produto.getProduto_tercerizacao());
         this.setProduto_materia_prima(produto.getProduto_materia_prima());
+        this.setIdLinhaColecao(produto.getIdLinhaColecao());
     }
 
 
@@ -490,5 +493,21 @@ public class WebPedidoItens extends Produto {
 
     public void setProdutoBase(Boolean produtoBase) {
         this.produtoBase = produtoBase;
+    }
+
+    public int getIdCampanha() {
+        return idCampanha;
+    }
+
+    public void setIdCampanha(int idCampanha) {
+        this.idCampanha = idCampanha;
+    }
+
+    public Boolean getCampanhaIndevida() {
+        return campanhaIndevida;
+    }
+
+    public void setCampanhaIndevida(Boolean campanhaIndevida) {
+        this.campanhaIndevida = campanhaIndevida;
     }
 }

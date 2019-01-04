@@ -17,8 +17,12 @@ import android.widget.ImageView;
 
 import com.example.rcksuporte05.rcksistemas.DAO.CadastroAnexoDAO;
 import com.example.rcksuporte05.rcksistemas.DAO.CadastroFinanceiroResumoDAO;
+import com.example.rcksuporte05.rcksistemas.DAO.CampanhaComClientesDAO;
+import com.example.rcksuporte05.rcksistemas.DAO.CampanhaComercialCabDAO;
+import com.example.rcksuporte05.rcksistemas.DAO.CampanhaComercialItensDAO;
 import com.example.rcksuporte05.rcksistemas.DAO.CategoriaDAO;
 import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
+import com.example.rcksuporte05.rcksistemas.DAO.ProdutoLinhaColecaoDAO;
 import com.example.rcksuporte05.rcksistemas.DAO.PromocaoClienteDAO;
 import com.example.rcksuporte05.rcksistemas.DAO.PromocaoDAO;
 import com.example.rcksuporte05.rcksistemas.DAO.PromocaoProdutoDAO;
@@ -31,6 +35,9 @@ import com.example.rcksuporte05.rcksistemas.api.Api;
 import com.example.rcksuporte05.rcksistemas.api.Rotas;
 import com.example.rcksuporte05.rcksistemas.model.CadastroAnexo;
 import com.example.rcksuporte05.rcksistemas.model.CadastroFinanceiroResumo;
+import com.example.rcksuporte05.rcksistemas.model.CampanhaComClientes;
+import com.example.rcksuporte05.rcksistemas.model.CampanhaComercialCab;
+import com.example.rcksuporte05.rcksistemas.model.CampanhaComercialItens;
 import com.example.rcksuporte05.rcksistemas.model.Categoria;
 import com.example.rcksuporte05.rcksistemas.model.Cliente;
 import com.example.rcksuporte05.rcksistemas.model.CondicoesPagamento;
@@ -38,16 +45,15 @@ import com.example.rcksuporte05.rcksistemas.model.MotivoNaoCadastramento;
 import com.example.rcksuporte05.rcksistemas.model.Operacao;
 import com.example.rcksuporte05.rcksistemas.model.Pais;
 import com.example.rcksuporte05.rcksistemas.model.Produto;
+import com.example.rcksuporte05.rcksistemas.model.ProdutoLinhaColecao;
 import com.example.rcksuporte05.rcksistemas.model.Promocao;
 import com.example.rcksuporte05.rcksistemas.model.PromocaoCliente;
 import com.example.rcksuporte05.rcksistemas.model.PromocaoProduto;
 import com.example.rcksuporte05.rcksistemas.model.Prospect;
-import com.example.rcksuporte05.rcksistemas.model.Segmento;
 import com.example.rcksuporte05.rcksistemas.model.Sincronia;
 import com.example.rcksuporte05.rcksistemas.model.TabelaPreco;
 import com.example.rcksuporte05.rcksistemas.model.TabelaPrecoItem;
 import com.example.rcksuporte05.rcksistemas.model.Usuario;
-import com.example.rcksuporte05.rcksistemas.model.VendedorBonusResumo;
 import com.example.rcksuporte05.rcksistemas.model.VisitaProspect;
 import com.example.rcksuporte05.rcksistemas.model.WebPedido;
 import com.example.rcksuporte05.rcksistemas.model.WebPedidoItens;
@@ -77,6 +83,10 @@ public class SincroniaBO {
     private WebPedidoItensDAO webPedidoItensDAO;
     private CadastroFinanceiroResumoDAO cadastroFinanceiroResumoDAO;
     private CadastroAnexoDAO cadastroAnexoDAO;
+    private CampanhaComClientesDAO campanhaComClientesDAO;
+    private CampanhaComercialCabDAO campanhaComercialCabDAO;
+    private CampanhaComercialItensDAO campanhaComercialItensDAO;
+    private ProdutoLinhaColecaoDAO produtoLinhaColecaoDAO;
 
     public static Activity getActivity() {
         return activity;
@@ -243,25 +253,6 @@ public class SincroniaBO {
             mNotificationManager.notify(0, notificacao.build());
         }
 
-
-        db.alterar("DELETE FROM TBL_VENDEDOR_BONUS_RESUMO");
-
-        for (VendedorBonusResumo vendedorBonusResumo : sincronia.getListaVendedorBonusResumo()) {
-            notificacao.setProgress(maxProgress, contadorNotificacaoEProgresso, false);
-
-            db.inserirTBL_VENDEDOR_BONUS_RESUMO(vendedorBonusResumo);
-
-            contadorNotificacaoEProgresso++;
-            final int finalContadorNotificacaoEProgresso = contadorNotificacaoEProgresso;
-            activity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    progress.setProgress(finalContadorNotificacaoEProgresso);
-                }
-            });
-            mNotificationManager.notify(0, notificacao.build());
-        }
-
         db.alterar("DELETE FROM TBL_PAISES");
 
         for (Pais pais : sincronia.getListaPais()) {
@@ -270,21 +261,6 @@ public class SincroniaBO {
             db.inserirTBL_PAISES(pais);
 
             contadorNotificacaoEProgresso++;
-            final int finalContadorNotificacaoEProgresso = contadorNotificacaoEProgresso;
-            activity.runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    progress.setProgress(finalContadorNotificacaoEProgresso);
-                }
-            });
-            mNotificationManager.notify(0, notificacao.build());
-        }
-
-        for (Segmento segmento : sincronia.getSegmentos()) {
-            db.atualizarTBL_SEGMENTO(segmento);
-
-            contadorNotificacaoEProgresso++;
-
             final int finalContadorNotificacaoEProgresso = contadorNotificacaoEProgresso;
             activity.runOnUiThread(new Runnable() {
                 @Override
@@ -314,6 +290,21 @@ public class SincroniaBO {
         if (sincronia.isPedidosPendentes()) {
             for (WebPedido webPedido : sincronia.getListaWebPedidosPendentes()) {
                 notificacao.setProgress(maxProgress, contadorNotificacaoEProgresso, false);
+
+                final CadastroAnexoDAO cadastroAnexoDAO = new CadastroAnexoDAO(db);
+                webPedido.getCadastro().setAlterado("N");
+                db.atualizarTBL_CADASTRO(webPedido.getCadastro());
+                db.alterar("DELETE FROM TBL_CADASTRO_ANEXOS WHERE ID_CADASTRO = " + webPedido.getCadastro().getId_cadastro() + ";");
+                if (webPedido.getCadastro().getListaCadastroAnexo().size() > 0) {
+                    for (CadastroAnexo cadastroAnexo : webPedido.getCadastro().getListaCadastroAnexo()) {
+                        if (cadastroAnexo.getExcluido().equals("N"))
+                            cadastroAnexoDAO.atualizarCadastroAnexo(cadastroAnexo);
+                        else if (cadastroAnexo.getExcluido().equals("S"))
+                            db.alterar("DELETE FROM TBL_CADASTRO_ANEXOS WHERE ID_ANEXO = " + cadastroAnexo.getIdAnexo() + ";");
+                    }
+                } else {
+                    db.alterar("DELETE FROM TBL_CADASTRO_ANEXOS WHERE ID_CADASTRO = " + webPedido.getCadastro().getId_cadastro() + ";");
+                }
 
                 webPedidoDAO.atualizarTBL_WEB_PEDIDO(webPedido);
                 for (WebPedidoItens pedidoIten : webPedido.getWebPedidoItens()) {
@@ -531,6 +522,66 @@ public class SincroniaBO {
             mNotificationManager.notify(0, notificacao.build());
         }
 
+        db.alterar("DELETE FROM TBL_CAMPANHA_COM_CLIENTES;");
+        for (CampanhaComClientes campanhaComClientes : sincronia.getListaCampanhaComClientes()) {
+            campanhaComClientesDAO.atualizaCampanhaComClientes(campanhaComClientes);
+
+            contadorNotificacaoEProgresso++;
+            final int finalContadorNotificacaoEProgresso = contadorNotificacaoEProgresso;
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    progress.setProgress(finalContadorNotificacaoEProgresso);
+                }
+            });
+            mNotificationManager.notify(0, notificacao.build());
+        }
+
+        db.alterar("DELETE FROM TBL_CAMPANHA_COMERCIAL_CAB;");
+        for (CampanhaComercialCab campanhaComercialCab : sincronia.getListaCampanhaComercialCab()) {
+            campanhaComercialCabDAO.atualizaCampanhaComercialCab(campanhaComercialCab);
+
+            contadorNotificacaoEProgresso++;
+            final int finalContadorNotificacaoEProgresso = contadorNotificacaoEProgresso;
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    progress.setProgress(finalContadorNotificacaoEProgresso);
+                }
+            });
+            mNotificationManager.notify(0, notificacao.build());
+        }
+
+        db.alterar("DELETE FROM TBL_CAMPANHA_COMERCIAL_ITENS;");
+        for (CampanhaComercialItens campanhaComercialItens : sincronia.getListaCampanhaComercialItens()) {
+            campanhaComercialItensDAO.atualizaCampanhaComercialItens(campanhaComercialItens);
+
+            contadorNotificacaoEProgresso++;
+            final int finalContadorNotificacaoEProgresso = contadorNotificacaoEProgresso;
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    progress.setProgress(finalContadorNotificacaoEProgresso);
+                }
+            });
+            mNotificationManager.notify(0, notificacao.build());
+        }
+
+        db.alterar("DELETE FROM TBL_PRODUTO_LINHA_COLECAO;");
+        for (ProdutoLinhaColecao produtoLinhaColecao : sincronia.getListaProdutoLinhaColecao()) {
+            produtoLinhaColecaoDAO.atualizaProdutoLinhaColecao(produtoLinhaColecao);
+
+            contadorNotificacaoEProgresso++;
+            final int finalContadorNotificacaoEProgresso = contadorNotificacaoEProgresso;
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    progress.setProgress(finalContadorNotificacaoEProgresso);
+                }
+            });
+            mNotificationManager.notify(0, notificacao.build());
+        }
+
         Intent intent = new Intent(activity, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(activity, 0, intent, 0);
         notificacao.setContentText("Completo")
@@ -582,6 +633,10 @@ public class SincroniaBO {
         webPedidoItensDAO = new WebPedidoItensDAO(db);
         cadastroFinanceiroResumoDAO = new CadastroFinanceiroResumoDAO(db);
         cadastroAnexoDAO = new CadastroAnexoDAO(db);
+        campanhaComClientesDAO = new CampanhaComClientesDAO(db);
+        campanhaComercialCabDAO = new CampanhaComercialCabDAO(db);
+        campanhaComercialItensDAO = new CampanhaComercialItensDAO(db);
+        produtoLinhaColecaoDAO = new ProdutoLinhaColecaoDAO(db);
 
         final NotificationCompat.Builder notificacao = new NotificationCompat.Builder(activity)
                 .setSmallIcon(R.mipmap.ic_sincroniza_main)
@@ -682,6 +737,16 @@ public class SincroniaBO {
 
     private List<WebPedido> prepararItensPedidos(List<WebPedido> listaPedido) {
         for (WebPedido pedido : listaPedido) {
+            if (pedido.getCadastro().getId_cadastro_servidor() <= 0) {
+                if (db.contagem("SELECT COUNT(ID_ANEXO) FROM TBL_CADASTRO_ANEXOS WHERE ID_CADASTRO = " + pedido.getCadastro().getId_cadastro() + " AND EXCLUIDO = 'N';") > 0) {
+
+                    final CadastroAnexoBO cadastroAnexoBO = new CadastroAnexoBO();
+
+                    List<CadastroAnexo> listaCadastroAnexo = cadastroAnexoBO.listaCadastroAnexoComMiniatura(activity, pedido.getCadastro().getId_cadastro());
+                    pedido.getCadastro().setListaCadastroAnexo(listaCadastroAnexo);
+                }
+            }
+
             List<WebPedidoItens> webPedidoItenses;
 
             webPedidoItenses = webPedidoItensDAO.listaWebPedidoItens("SELECT * FROM TBL_WEB_PEDIDO_ITENS WHERE ID_PEDIDO = " + pedido.getId_web_pedido());

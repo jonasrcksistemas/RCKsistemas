@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.FileProvider;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AlertDialog;
@@ -53,6 +54,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -76,6 +78,11 @@ public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRe
     private MenuItem duplicaPedido;
     private ActionMode actionMode;
 
+    @OnClick(R.id.btnNovoPedido)
+    public void btnNovoPedido() {
+        Intent intent = new Intent(this, ActivityPedidoMain.class);
+        startActivity(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,7 +116,7 @@ public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRe
                 if (listaPedido.size() > 0) {
                     AlertDialog.Builder alert = new AlertDialog.Builder(this);
                     alert.setTitle("Atenção!");
-                    alert.setMessage("Deseja sincronizar os pedidos?");
+                    alert.setMessage("Deseja enviar todos os pedidos para o servidor?");
                     alert.setNegativeButton("NÃO", null);
                     alert.setPositiveButton("SIM", new DialogInterface.OnClickListener() {
                         @Override
@@ -485,7 +492,7 @@ public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRe
             public void onClick(View view) {
                 AlertDialog.Builder deleteAlert = new AlertDialog.Builder(ListagemPedidoPendente.this);
                 deleteAlert.setTitle("Atenção!");
-                deleteAlert.setMessage("Deseja realmente excluir o pedido " + listaPedidoAdapter.getItem(position).getId_web_pedido() + "?");
+                deleteAlert.setMessage("Deseja excluir o pedido Nº" + listaPedidoAdapter.getItem(position).getId_web_pedido() + "?");
                 deleteAlert.setNegativeButton("Não", null);
                 deleteAlert.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                     @Override
@@ -512,7 +519,7 @@ public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRe
             public void onClick(View view) {
                 AlertDialog.Builder alert = new AlertDialog.Builder(ListagemPedidoPendente.this);
                 alert.setTitle("Atenção!");
-                alert.setMessage("Deseja enviar o pedido " + listaPedidoAdapter.getItem(position).getId_web_pedido() + " para ser faturado?");
+                alert.setMessage("Deseja enviar o pedido Nº" + listaPedidoAdapter.getItem(position).getId_web_pedido() + " para o servidor?");
                 alert.setNegativeButton("Não", null);
                 alert.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                             @Override
@@ -537,8 +544,8 @@ public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRe
             @Override
             public void onClick(View view) {
                 AlertDialog.Builder duplicAlert = new AlertDialog.Builder(ListagemPedidoPendente.this);
-                duplicAlert.setTitle("Atenção");
-                duplicAlert.setMessage("Deseja duplicar o pedido selecionado para poder faturá-lo novamente?");
+                duplicAlert.setTitle("Confirme");
+                duplicAlert.setMessage("Criar um cópia do pedido Nº" + listaPedidoAdapter.getItem(position).getId_web_pedido() + ".");
                 duplicAlert.setNegativeButton("Não", null);
                 duplicAlert.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                     @Override
@@ -569,23 +576,23 @@ public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRe
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AlertDialog.Builder alert = new AlertDialog.Builder(ListagemPedidoPendente.this);
-                alert.setTitle("Atenção");
-                alert.setMessage("Deseja compartilhar o pedido " + listaPedidoAdapter.getItem(position).getId_web_pedido() + "?");
-                alert.setNegativeButton("Não", null);
-                alert.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        PDFPedidoUtil pdfPedidoUtil = new PDFPedidoUtil(listaPedidoAdapter.getItem(position), ListagemPedidoPendente.this);
-                        Intent arquivo = new Intent(Intent.ACTION_SEND);
-                        arquivo.setType("pdf/*");
-                        arquivo.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(pdfPedidoUtil.criandoPdf()));
+                try {
+                    PDFPedidoUtil pdfPedidoUtil = new PDFPedidoUtil(listaPedidoAdapter.getItem(position), ListagemPedidoPendente.this);
+                    Intent arquivo = new Intent(Intent.ACTION_SEND);
+                    arquivo.setType("pdf/*");
+                    arquivo.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(ListagemPedidoPendente.this, getApplicationContext().getPackageName() + ".my.package.name.provider", pdfPedidoUtil.criandoPdf()));
+                    arquivo.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
-                        Intent intent = Intent.createChooser(arquivo, "Compartilhar pedido");
-                        startActivity(intent);
-                    }
-                });
-                alert.show();
+                    Intent intent = Intent.createChooser(arquivo, "Compartilhar pedido");
+                    startActivity(intent);
+                } catch (Exception e) {
+                    AlertDialog.Builder alert = new AlertDialog.Builder(ListagemPedidoPendente.this);
+                    alert.setTitle("Atenção");
+                    alert.setMessage("Ocorreu um erro ao gerar o PDF\n" + e.getMessage());
+                    alert.setNeutralButton("OK", null);
+                    alert.show();
+                    e.printStackTrace();
+                }
             }
         };
     }
@@ -739,7 +746,7 @@ public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRe
                         public void onClick(DialogInterface dialog, int which) {
                             PDFPedidoUtil pdfPedidoUtil = new PDFPedidoUtil(listaPedidoAdapter.getItensSelecionados().get(0), ListagemPedidoPendente.this);
                             Intent arquivo = new Intent(Intent.ACTION_VIEW);
-                            arquivo.setDataAndType(Uri.fromFile(pdfPedidoUtil.criandoPdf()), "application/pdf");
+                            arquivo.setDataAndType(FileProvider.getUriForFile(ListagemPedidoPendente.this, getApplicationContext().getPackageName() + ".my.package.name.provider", pdfPedidoUtil.criandoPdf()), "application/pdf");
                             arquivo.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 
                             Intent intent = Intent.createChooser(arquivo, "Abrir arquivo");
@@ -771,7 +778,8 @@ public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRe
                             }
                             intent.putExtra(Intent.EXTRA_SUBJECT, "Espelho do pedido " + listaPedidoAdapter.getItensSelecionados().get(0).getId_web_pedido());
                             intent.putExtra(Intent.EXTRA_TEXT, "Segue em anexo o espelho do pedido");
-                            intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(pdfPedidoUtil.criandoPdf()));
+                            intent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(ListagemPedidoPendente.this, getApplicationContext().getPackageName() + ".my.package.name.provider", pdfPedidoUtil.criandoPdf()));
+                            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
                             startActivity(intent);
                         }

@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.rcksuporte05.rcksistemas.DAO.CadastroAnexoDAO;
 import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.UsuarioHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.VisitaHelper;
@@ -24,6 +25,7 @@ import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.VisitaAdapter;
 import com.example.rcksuporte05.rcksistemas.api.Api;
 import com.example.rcksuporte05.rcksistemas.api.Rotas;
+import com.example.rcksuporte05.rcksistemas.model.CadastroAnexo;
 import com.example.rcksuporte05.rcksistemas.model.Prospect;
 import com.example.rcksuporte05.rcksistemas.model.VisitaProspect;
 import com.example.rcksuporte05.rcksistemas.util.DividerItemDecoration;
@@ -56,9 +58,8 @@ public class ActivityHistoricoVisitaProspect extends AppCompatActivity implement
     @BindView(R.id.imFisicaJuridica)
     ImageView imFisicaJuridica;
 
-    @BindView(R.id.txtDescricaoVisita)
+    @BindView(R.id.txtDescricaoAcao)
     TextView txtNomeProspectVisita;
-
 
     private DBHelper db;
     private List<VisitaProspect> visitas;
@@ -103,6 +104,7 @@ public class ActivityHistoricoVisitaProspect extends AppCompatActivity implement
     @OnClick(R.id.btnAddVisita)
     public void abrirTela() {
         Intent intent = new Intent(this, ActivityVisita.class);
+        VisitaHelper.setVisitaProspect(new VisitaProspect());
         startActivity(intent);
     }
 
@@ -136,13 +138,6 @@ public class ActivityHistoricoVisitaProspect extends AppCompatActivity implement
             edtTotalVisita.setText("Visitas: " + visitaAdapter.getItemCount() + " Pendentes: " + visitaAdapter.contaPendentes());
         } else
             edtTotalVisita.setText("Visitas: " + visitaAdapter.getItemCount());
-    }
-
-    @Override
-    protected void onDestroy() {
-        VisitaHelper.limpaVisitaHelper();
-        System.gc();
-        super.onDestroy();
     }
 
     @Override
@@ -230,6 +225,24 @@ public class ActivityHistoricoVisitaProspect extends AppCompatActivity implement
         Map<String, String> cabecalho = new HashMap<>();
         cabecalho.put("AUTHORIZATION", UsuarioHelper.getUsuario().getToken());
 
+        for (VisitaProspect visitaProspect : visitaEnvio) {
+            try {
+                if (db.contagem("SELECT COUNT(*) FROM TBL_CADASTRO_ANEXOS WHERE ID_CADASTRO = " + visitaProspect.getIdVisita() + " AND ID_ENTIDADE = 11;") > 0) {
+                    CadastroAnexoDAO cadastroAnexoDAO = new CadastroAnexoDAO(db);
+                    List<CadastroAnexo> listaCadastroAnexo = cadastroAnexoDAO.listaCadastroAnexoProspect(Integer.parseInt(visitaProspect.getIdVisita()));
+
+                    for (CadastroAnexo cadastroAnexo : listaCadastroAnexo) {
+                        if (cadastroAnexo.getPrincipal().equals("S"))
+                            visitaProspect.setFotoPrincipalBase64(cadastroAnexo);
+                        else
+                            visitaProspect.setFotoSecundariaBase64(cadastroAnexo);
+                    }
+                }
+            } catch (CursorIndexOutOfBoundsException e) {
+                e.printStackTrace();
+            }
+        }
+
         Call<List<VisitaProspect>> call = apiRetrofit.salvarVisita(cabecalho, visitaEnvio);
 
         call.enqueue(new Callback<List<VisitaProspect>>() {
@@ -266,5 +279,13 @@ public class ActivityHistoricoVisitaProspect extends AppCompatActivity implement
                 progress.dismiss();
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        VisitaHelper.limpaVisitaHelper();
+        VisitaHelper.setProspect(null);
+        System.gc();
+        super.onDestroy();
     }
 }

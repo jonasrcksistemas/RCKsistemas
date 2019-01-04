@@ -15,7 +15,6 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
@@ -226,6 +225,12 @@ public class CadastroCliente2 extends Fragment {
                         edtCep.requestFocus();
                         edtCep.setError("Campo Obrigatorio");
                         validado = false;
+                    } else {
+                        if (ClienteHelper.getCliente().getEndereco_cep().replaceAll("^[0-9]", "").length() >= 8) {
+                            edtCep.requestFocus();
+                            edtCep.setError("Tamanho maximo é de 8 caracteres");
+                            validado = false;
+                        }
                     }
 
                     if (validado) {
@@ -254,11 +259,7 @@ public class CadastroCliente2 extends Fragment {
 
             if (ClienteHelper.getCliente().getEndereco_cep() != null) {
                 String cep = ClienteHelper.getCliente().getEndereco_cep().trim().replaceAll("[^0-9]", "");
-                if (cep.length() >= 8) {
-                    edtCep.setText(cep.substring(0, 5) + "-" + cep.substring(5));
-                } else {
-                    edtCep.setText(cep);
-                }
+                edtCep.setText(cep);
             }
         } else {
             if (ClienteHelper.getCliente().getId_pais() <= 0) {

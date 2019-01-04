@@ -214,12 +214,4 @@ public class CadastroClienteMain extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
-
-    @Override
-    protected void onDestroy() {
-        if (getIntent().getIntExtra("vizualizacao", 0) < 1) {
-            ClienteHelper.clear();
-        }
-        super.onDestroy();
-    }
 }

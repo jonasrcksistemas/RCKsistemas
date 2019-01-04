@@ -39,7 +39,7 @@
                 android:layout_alignParentTop="true"
                 android:layout_marginTop="21dp"
                 android:background="@drawable/borda_edittext"
-                android:hint="Endereço *"
+                android:hint="Endereço"
                 android:inputType="textCapCharacters"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
@@ -65,7 +65,7 @@
                 android:layout_toEndOf="@+id/txtNumeroProspect"
                 android:layout_toRightOf="@+id/txtNumero"
                 android:background="@drawable/borda_edittext"
-                android:hint="Numero *"
+                android:hint="Numero"
                 android:inputType="number"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
@@ -92,7 +92,7 @@
                 android:layout_toEndOf="@+id/txtMunicipio"
                 android:layout_toRightOf="@+id/txtMunicipio"
                 android:background="@drawable/borda_edittext"
-                android:hint="Bairro *"
+                android:hint="Bairro"
                 android:inputType="textCapCharacters"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
@@ -177,7 +177,7 @@
                 android:background="@drawable/borda_edittext"
                 android:hint="CEP"
                 android:inputType="number"
-                android:maxLength="8"
+                android:maxLength="9"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
             <TextView
@@ -201,51 +201,18 @@
                 android:inputType="textCapCharacters|textMultiLine"
                 android:maxLength="20" />
 
-            <TextView
-                android:id="@+id/txtRdSituacaoPredio"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/edtComplementoProspect"
-                android:layout_marginTop="12dp"
-                android:text="Predio"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small"
-                android:textColor="@color/colorAccent"
-                android:textStyle="bold" />
-
-            <RadioGroup
-                android:id="@+id/rgSituacaoPredio"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/txtRdSituacaoPredio"
-                android:orientation="horizontal">
-
-                <RadioButton
-                    android:id="@+id/rdAlugado"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Alugado" />
-
-                <RadioButton
-                    android:id="@+id/rdProprio"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="45dp"
-                    android:text="Proprio" />
-
-            </RadioGroup>
-
             <Button
                 android:id="@+id/btnContinuar"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:layout_below="@+id/rgSituacaoPredio"
+                android:layout_below="@+id/edtComplementoProspect"
                 android:layout_gravity="center"
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginEnd="15dp"
                 android:layout_marginBottom="15dp"
                 android:background="#e6b220"
-                android:text="CONTINUAR 2/4"
+                android:text="CONTINUAR 2/3"
                 android:visibility="gone" />
 
         </RelativeLayout>

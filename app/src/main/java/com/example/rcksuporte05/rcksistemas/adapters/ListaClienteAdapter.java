@@ -49,12 +49,13 @@ public class ListaClienteAdapter extends RecyclerView.Adapter<ClientesViewHolder
         holder.textViewNomeFantasia.setText(clientes.get(position).getNome_fantasia());
 
         try {
-            if (new SimpleDateFormat("yyyy-MM-dd").parse(clientes.get(position).getData_ultima_compra()).before(new Date(1995))) {
-                holder.txtDataUltimaCompra.setText("Ainda não comprou");
+            if (new SimpleDateFormat("yyyy-MM-dd").parse(clientes.get(position).getData_ultima_compra()).before(new SimpleDateFormat("yyyy-MM-dd").parse("2001-01-01"))) {
+                holder.txtDataUltimaCompra.setText("Sem compra");
             } else {
                 holder.txtDataUltimaCompra.setText("Não compra à " + calcularDias(new SimpleDateFormat("yyyy-MM-dd").parse(clientes.get(position).getData_ultima_compra()), new Date()) + " dias");
             }
         } catch (Exception e) {
+            holder.txtDataUltimaCompra.setText("Sem compra");
             e.printStackTrace();
         }
 

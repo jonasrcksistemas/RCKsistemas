@@ -23,7 +23,8 @@
         android:label="@string/app_name"
         android:largeHeap="true"
         android:supportsRtl="true"
-        android:theme="@style/Theme.MeuTema">
+        android:theme="@style/Theme.MeuTema"
+        android:usesCleartextTraffic="true">
         <activity
             android:name=".activity.MainActivity"
             android:theme="@style/Theme.Main" />
@@ -94,10 +95,7 @@
             android:name=".activity.ActivityCadastroProspect"
             android:screenOrientation="portrait" />
         <activity android:name=".activity.FinanceiroDetalheActivity" />
-        <activity android:name=".activity.ActivityAdicionaContato" />
-        <activity android:name=".activity.ActivityAdicionaBanco" />
         <activity android:name=".activity.ActivityListaProspectEnviado" />
-        <activity android:name=".activity.ActivityAdicionaReferenciaComercial" />
         <activity
             android:name=".activity.ActivityHistoricoVisitaProspect"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -116,8 +114,22 @@
 
         <activity android:name=".activity.ContatoVendedorActivity" />
         <activity android:name=".activity.ActivityCpfCnpjCliente" />
-        <activity android:name=".activity.BuscaUfActivity"></activity>
-        <activity android:name=".activity.BuscaMunicipioActivity"></activity>
+        <activity android:name=".activity.BuscaUfActivity" />
+        <activity android:name=".activity.BuscaMunicipioActivity" />
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="${applicationId}.my.package.name.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
+
+        <activity android:name=".activity.ActivityValidaProspect" />
+        <activity android:name=".activity.CampanhaActivity" />
+        <activity android:name=".activity.ItemCampanhaActivity"></activity>
     </application>
 
 </manifest>

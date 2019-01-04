@@ -1,39 +1,48 @@
 package com.example.rcksuporte05.rcksistemas.activity;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.rcksuporte05.rcksistemas.DAO.CadastroAnexoDAO;
 import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.UsuarioHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.VisitaHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.api.ApiGeocoder;
 import com.example.rcksuporte05.rcksistemas.api.Rotas;
+import com.example.rcksuporte05.rcksistemas.model.CadastroAnexo;
 import com.example.rcksuporte05.rcksistemas.model.VisitaProspect;
 import com.example.rcksuporte05.rcksistemas.util.DatePickerUtil;
+import com.example.rcksuporte05.rcksistemas.util.FotoUtil;
 import com.example.rcksuporte05.rcksistemas.util.classesGeocoderUtil.RespostaGeocoder;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -49,11 +58,14 @@ import com.google.android.gms.location.LocationSettingsStates;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.tasks.OnSuccessListener;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -68,6 +80,9 @@ import retrofit2.Response;
 
 public class ActivityVisita extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
+    static int REQUEST_CODE_IMAGEM_1 = 798;
+    static int REQUEST_CODE_IMAGEM_2 = 987;
+
     @BindView(R.id.txtLatitude)
     TextView txtLatitude;
     @BindView(R.id.txtLongitude)
@@ -78,25 +93,42 @@ public class ActivityVisita extends AppCompatActivity implements GoogleApiClient
     EditText edtDataRetornoVisita;
     @BindView(R.id.spTipoVisita)
     Spinner spTipoVisita;
-    @BindView(R.id.edtDescricaoVisita)
+    @BindView(R.id.edtTitulo)
+    EditText edtTitulo;
+    @BindView(R.id.edtDescricaoAcao)
     EditText edtDescricaoVisita;
     @BindView(R.id.tb_visita)
     Toolbar tb_visita;
-
     @BindView(R.id.btnCheckinVisita)
     Button btnCheckinVisita;
     @BindView(R.id.btnSalvarVisita)
     Button btnSalvarVisita;
+    @BindView(R.id.imagem1)
+    ImageButton imagem1;
+    @BindView(R.id.imagem2)
+    ImageButton imagem2;
     boolean verificaObrigatorios;
-
-
+    Bitmap mImagem1;
+    Bitmap mImagem2;
     ProgressDialog progress;
-
     RespostaGeocoder respostaGeocoder;
     Location mLocation;
     DBHelper db;
+    private Uri uri;
     private FusedLocationProviderClient mFusedLocationClient;
     private String[] tipoVisita = {"Presencial", "Telefone"};
+
+    @OnClick(R.id.imagem1)
+    public void chamarGaleria() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+        startActivityForResult(Intent.createChooser(intent, "Selecione uma imagem"), REQUEST_CODE_IMAGEM_1);
+    }
+
+    @OnClick(R.id.imagem2)
+    public void chamarGaleria2() {
+        Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+        startActivityForResult(Intent.createChooser(intent, "Selecione uma imagem"), REQUEST_CODE_IMAGEM_2);
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -109,6 +141,8 @@ public class ActivityVisita extends AppCompatActivity implements GoogleApiClient
         tb_visita.setTitle("Registro de Visita");
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        imagem1.setImageResource(R.mipmap.ic_add_imagem);
+        imagem2.setImageResource(R.mipmap.ic_add_imagem);
         txtLongitude.setVisibility(View.GONE);
         txtLongitude.setVisibility(View.GONE);
         txtChekinEndereco.setVisibility(View.GONE);
@@ -141,14 +175,33 @@ public class ActivityVisita extends AppCompatActivity implements GoogleApiClient
             }
         });
 
+        try {
+            if (db.contagem("SELECT COUNT(*) FROM TBL_CADASTRO_ANEXOS WHERE ID_CADASTRO = " + VisitaHelper.getVisitaProspect().getIdVisita() + " AND ID_ENTIDADE = 11;") > 0) {
+                CadastroAnexoDAO cadastroAnexoDAO = new CadastroAnexoDAO(db);
+                List<CadastroAnexo> listaCadastroAnexo = cadastroAnexoDAO.listaCadastroAnexoProspectAcao(Integer.parseInt(VisitaHelper.getVisitaProspect().getIdVisita()));
+
+                for (CadastroAnexo cadastroAnexo : listaCadastroAnexo) {
+                    if (cadastroAnexo.getPrincipal().equals("S"))
+                        VisitaHelper.getVisitaProspect().setFotoPrincipalBase64(cadastroAnexo);
+                    else
+                        VisitaHelper.getVisitaProspect().setFotoSecundariaBase64(cadastroAnexo);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         setSupportActionBar(tb_visita);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         int acao = getIntent().getIntExtra("acao", 0);
         switch (acao) {
             case 1:
                 injetaDadosNaTela();
+                edtTitulo.setFocusable(false);
                 edtDescricaoVisita.setFocusable(false);
                 edtDataRetornoVisita.setEnabled(false);
+                imagem1.setEnabled(false);
+                imagem2.setEnabled(false);
                 btnCheckinVisita.setEnabled(false);
                 btnSalvarVisita.setVisibility(View.GONE);
                 spTipoVisita.setEnabled(false);
@@ -157,7 +210,6 @@ public class ActivityVisita extends AppCompatActivity implements GoogleApiClient
                 injetaDadosNaTela();
                 break;
         }
-
     }
 
     @Override
@@ -190,6 +242,14 @@ public class ActivityVisita extends AppCompatActivity implements GoogleApiClient
         visita.setTipoContato(tipoVisita[spTipoVisita.getSelectedItemPosition()]);
 
         if (spTipoVisita.getSelectedItemPosition() == 0) {
+            if (edtTitulo.getText() != null && !edtTitulo.getText().toString().trim().equals("")) {
+                visita.setTitulo(edtTitulo.getText().toString());
+            } else {
+                edtTitulo.setError("Campo Obrigatorio");
+                edtTitulo.requestFocus();
+                verificaObrigatorios = false;
+            }
+
             if (edtDescricaoVisita.getText() != null && !edtDescricaoVisita.getText().toString().trim().equals("")) {
                 visita.setDescricaoVisita(edtDescricaoVisita.getText().toString());
             } else {
@@ -205,13 +265,7 @@ public class ActivityVisita extends AppCompatActivity implements GoogleApiClient
                 Toast.makeText(this, "A Data é Obrigatoria", Toast.LENGTH_SHORT).show();
             }
 
-            if (mLocation == null) {
-                if (txtLatitude.getText() != null && txtLatitude.getText().toString().trim().equals("")
-                        && txtLongitude.getText() != null && txtLongitude.getText().toString().trim().equals("")) {
-                    Toast.makeText(this, "Fazer Check-in é obrigatorio", Toast.LENGTH_SHORT).show();
-                    verificaObrigatorios = false;
-                }
-            } else {
+            if (mLocation != null) {
                 visita.setLongitude(String.valueOf(mLocation.getLongitude()));
                 visita.setLatitude(String.valueOf(mLocation.getLatitude()));
             }
@@ -221,6 +275,14 @@ public class ActivityVisita extends AppCompatActivity implements GoogleApiClient
             String dataRetorno = dataRetorno();
             if (dataRetorno != null) {
                 visita.setDataRetorno(dataRetorno);
+            }
+
+            if (edtTitulo.getText() != null && !edtTitulo.getText().toString().trim().equals("")) {
+                visita.setDescricaoVisita(edtTitulo.getText().toString());
+            } else {
+                edtTitulo.setError("Campo Obrigatorio");
+                edtTitulo.requestFocus();
+                verificaObrigatorios = false;
             }
 
             if (edtDescricaoVisita.getText() != null && !edtDescricaoVisita.getText().toString().trim().equals("")) {
@@ -234,7 +296,7 @@ public class ActivityVisita extends AppCompatActivity implements GoogleApiClient
 
 
         if (verificaObrigatorios) {
-            if (db.atualizaTBL_VISITA_PROSPECT(visita)) {
+            if (db.atualizaTBL_VISITA_PROSPECT(visita) != null) {
                 Toast.makeText(this, "Visita salva", Toast.LENGTH_LONG).show();
                 finish();
             } else {
@@ -290,10 +352,46 @@ public class ActivityVisita extends AppCompatActivity implements GoogleApiClient
 
     public void injetaDadosNaTela() {
         try {
+            edtTitulo.setText(VisitaHelper.getVisitaProspect().getTitulo());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        try {
             edtDescricaoVisita.setText(VisitaHelper.getVisitaProspect().getDescricaoVisita());
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        if (VisitaHelper.getImagem1() != null) {
+            mImagem1 = VisitaHelper.getImagem1();
+            imagem1.setImageBitmap(VisitaHelper.getImagem1());
+        } else {
+            try {
+                byte[] data = Base64.decode(VisitaHelper.getVisitaProspect().getFotoPrincipalBase64().getAnexo(), Base64.NO_WRAP);
+                mImagem1 = BitmapFactory.decodeByteArray(data, 0, data.length);
+                VisitaHelper.setImagem1(mImagem1);
+                imagem1.setImageBitmap(Bitmap.createScaledBitmap(mImagem1, 220, 230, false));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        if (VisitaHelper.getImagem2() != null) {
+            mImagem2 = VisitaHelper.getImagem2();
+            imagem2.setImageBitmap(VisitaHelper.getImagem2());
+        } else {
+            try {
+                byte[] data2 = Base64.decode(VisitaHelper.getVisitaProspect().getFotoSecundariaBase64().getAnexo(), Base64.NO_WRAP);
+                mImagem2 = BitmapFactory.decodeByteArray(data2, 0, data2.length);
+                VisitaHelper.setImagem2(mImagem2);
+                imagem2.setImageBitmap(Bitmap.createScaledBitmap(mImagem2, 220, 230, false));
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
         try {
             edtDataRetornoVisita.setText(new SimpleDateFormat("dd/MM/yyyy")
                     .format(new SimpleDateFormat("yyyy-MM-dd")
@@ -403,6 +501,81 @@ public class ActivityVisita extends AppCompatActivity implements GoogleApiClient
             }
 
         }
+
+        Bitmap bitmap = null;
+        if (requestCode == 123) {
+            if (resultCode == Activity.RESULT_OK) {
+
+                Intent novaIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, uri);
+                ActivityVisita.this.sendBroadcast(novaIntent);
+
+                Intent intent = new Intent(ActivityVisita.this, FotoActivity.class);
+
+                try {
+                    imagem1.setImageBitmap(FotoUtil.rotateBitmap(BitmapFactory.decodeStream(ActivityVisita.this.getContentResolver().openInputStream(uri)), uri));
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+                startActivity(intent);
+            }
+        } else if (requestCode == 456) {
+            if (resultCode == Activity.RESULT_OK) {
+                Bundle bundle = data.getExtras();
+                bitmap = (Bitmap) bundle.get("data");
+                imagem1.setImageBitmap(bitmap);
+            }
+        } else if (requestCode == REQUEST_CODE_IMAGEM_1) {
+            if (resultCode == Activity.RESULT_OK) {
+                if (data != null) {
+                    try {
+                        bitmap = FotoUtil.rotateBitmap(BitmapFactory.decodeStream(ActivityVisita.this.getContentResolver().openInputStream(data.getData())), data.getData());
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+
+                    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                    Bitmap testeDeDimuir = Bitmap.createScaledBitmap(bitmap, 220, 230, false);
+                    boolean validaCompressao = bitmap.compress(Bitmap.CompressFormat.JPEG, 75, outputStream);
+                    byte[] fotoBinario = outputStream.toByteArray();
+
+                    mImagem1 = bitmap;
+                    if (VisitaHelper.getVisitaProspect().getFotoPrincipalBase64() == null)
+                        VisitaHelper.getVisitaProspect().setFotoPrincipalBase64(new CadastroAnexo());
+                    VisitaHelper.getVisitaProspect().getFotoPrincipalBase64().setAnexo(Base64.encodeToString(fotoBinario, Base64.NO_WRAP));
+                    VisitaHelper.setImagem1(testeDeDimuir);
+                    imagem1.setImageBitmap(testeDeDimuir);
+                }
+            }
+        } else if (requestCode == REQUEST_CODE_IMAGEM_2) {
+            if (data != null) {
+                try {
+                    bitmap = FotoUtil.rotateBitmap(BitmapFactory.decodeStream(ActivityVisita.this.getContentResolver().openInputStream(data.getData())), data.getData());
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                Bitmap testeDeDimuir = Bitmap.createScaledBitmap(bitmap, 220, 230, false);
+                boolean validaCompressao = bitmap.compress(Bitmap.CompressFormat.JPEG, 75, outputStream);
+                byte[] fotoBinario = outputStream.toByteArray();
+
+
+                if (VisitaHelper.getVisitaProspect().getFotoSecundariaBase64() == null)
+                    VisitaHelper.getVisitaProspect().setFotoSecundariaBase64(new CadastroAnexo());
+                VisitaHelper.getVisitaProspect().getFotoSecundariaBase64().setAnexo(Base64.encodeToString(fotoBinario, Base64.NO_WRAP));
+                VisitaHelper.setImagem2(testeDeDimuir);
+                mImagem2 = bitmap;
+                imagem2.setImageBitmap(testeDeDimuir);
+            }
+        } else if (requestCode == 1) {
+            if (resultCode != 0) {
+                Toast.makeText(ActivityVisita.this, "Tente Novamente", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(ActivityVisita.this, "Sem Localização ativa, recurso indisponível", Toast.LENGTH_LONG).show();
+            }
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     @Override
@@ -484,4 +657,9 @@ public class ActivityVisita extends AppCompatActivity implements GoogleApiClient
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        VisitaHelper.limpaVisitaHelper();
+        super.onDestroy();
+    }
 }

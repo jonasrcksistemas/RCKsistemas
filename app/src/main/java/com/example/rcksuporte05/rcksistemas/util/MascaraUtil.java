@@ -122,6 +122,23 @@ public class MascaraUtil {
         else
             return valor;
     }
+
+    public static String numeroZeros(String valor, int quantidade) {
+        try {
+            if (valor.length() < quantidade) {
+                int diferenca = quantidade - valor.length();
+                String zeros = "";
+                for (int i = 0; diferenca > i; i++) {
+                    zeros += "0";
+                }
+                return zeros + valor;
+            } else {
+                return valor;
+            }
+        } catch (Exception e) {
+            return valor;
+        }
+    }
 }
 
 
