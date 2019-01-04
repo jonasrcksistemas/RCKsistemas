@@ -26,7 +26,6 @@ public class Prospect {
     private String pessoa_f_j;
     private String cpf_cnpj;
     private String inscri_estadual;
-    private String inscri_municipal;
     private String endereco;
     private String endereco_bairro;
     private String endereco_numero;
@@ -41,7 +40,6 @@ public class Prospect {
     private String limiteDeCreditoSugerido;
     private String limiteDePrazoSugerido;
     private String idEmpresa;
-    private String diaVisita;
     private String dataRetorno;
     private CadastroAnexo fotoPrincipalBase64;
     private CadastroAnexo fotoSecundariaBase64;
@@ -50,6 +48,9 @@ public class Prospect {
     private String ind_da_ie_destinatario_prospect;
     private String usuario_nome;
     private String finalizado;
+    private String telefone;
+    private String enderecoGps;
+    private int idPrimeiraVisita;
 
     public String getId_prospect() {
         return id_prospect;
@@ -113,14 +114,6 @@ public class Prospect {
 
     public void setInscri_estadual(String inscri_estadual) {
         this.inscri_estadual = inscri_estadual;
-    }
-
-    public String getInscri_municipal() {
-        return inscri_municipal;
-    }
-
-    public void setInscri_municipal(String inscri_municipal) {
-        this.inscri_municipal = inscri_municipal;
     }
 
     public String getEndereco() {
@@ -201,14 +194,6 @@ public class Prospect {
 
     public void setIdEmpresa(String idEmpresa) {
         this.idEmpresa = idEmpresa;
-    }
-
-    public String getDiaVisita() {
-        return diaVisita;
-    }
-
-    public void setDiaVisita(String diaVisita) {
-        this.diaVisita = diaVisita;
     }
 
     public String getDataRetorno() {
@@ -353,5 +338,29 @@ public class Prospect {
 
     public void setFinalizado(String finalizado) {
         this.finalizado = finalizado;
+    }
+
+    public String getTelefone() {
+        return telefone;
+    }
+
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
+    }
+
+    public String getEnderecoGps() {
+        return enderecoGps;
+    }
+
+    public void setEnderecoGps(String enderecoGps) {
+        this.enderecoGps = enderecoGps;
+    }
+
+    public int getIdPrimeiraVisita() {
+        return idPrimeiraVisita;
+    }
+
+    public void setIdPrimeiraVisita(int idPrimeiraVisita) {
+        this.idPrimeiraVisita = idPrimeiraVisita;
     }
 }

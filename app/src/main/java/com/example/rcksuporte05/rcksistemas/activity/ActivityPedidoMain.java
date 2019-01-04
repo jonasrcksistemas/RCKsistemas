@@ -1,5 +1,6 @@
 package com.example.rcksuporte05.rcksistemas.activity;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.CursorIndexOutOfBoundsException;
@@ -12,9 +13,10 @@ import android.support.v7.view.ActionMode;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.rcksuporte05.rcksistemas.DAO.CategoriaDAO;
 import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
@@ -45,14 +47,14 @@ public class ActivityPedidoMain extends AppCompatActivity {
     public TextView txtNomeCliente;
     @BindView(R.id.txtRazaoSocial)
     public TextView txtNomeFantasia;
-    @BindView((R.id.txtCategoria))
-    public TextView txtCategoria;
     @BindView(R.id.stl_tabsPedido)
     SlidingTabLayout stl_tabsPedido;
     @BindView(R.id.vp_tabsPedido)
     ViewPager mViewPager;
-    @BindView(R.id.BtnFinanceiro)
-    Button BtnFinanceiro;
+    @BindView(R.id.btnBuscaCliente)
+    Button btnBuscaCliente;
+    @BindView(R.id.ifCliente)
+    LinearLayout ifCliente;
     ActionModeCallback actionModeCallback;
     private PedidoHelper pedidoHelper;
     private TabsAdapterPedido tabsAdapterPedido;
@@ -65,21 +67,18 @@ public class ActivityPedidoMain extends AppCompatActivity {
     private CategoriaDAO categoriaDAO;
     private WebPedidoDAO webPedidoDAO;
 
-    @OnClick(R.id.BtnFinanceiro)
-    public void financeiro() {
-        if (objetoCliente != null) {
-//            Intent intent = new Intent(this, activityAnaliseDeCredito.class);
-            Intent intent = new Intent(this, FinanceiroResumoActivity.class);
-            intent.putExtra("valorPedido", PedidoHelper.getValorVenda());
-            HistoricoFinanceiroHelper.setCliente(objetoCliente);
-            this.startActivity(intent);
-        } else {
-            txtNomeCliente.setTextColor(Color.parseColor("#ffbf00"));
-            Toast.makeText(this, "Você precisa selecionar o cliente para consultar seu historico financeiro", Toast.LENGTH_SHORT).show();
+    @OnClick(R.id.btnBuscaCliente)
+    public void buscaCliente() {
+        if (vizualizacao != 1) {
+            bundle = new Bundle();
+            bundle.putInt("acao", 1);
+            Intent intent = new Intent(this, ActivityCliente.class);
+            intent.putExtras(bundle);
+            startActivity(intent);
         }
     }
 
-    @OnClick(R.id.txtNomeCliente)
+    @OnClick(R.id.ifCliente)
     public void nomeCliente() {
         if (vizualizacao != 1) {
             bundle = new Bundle();
@@ -98,8 +97,7 @@ public class ActivityPedidoMain extends AppCompatActivity {
 
         pedidoHelper = new PedidoHelper(this);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarFragsPedido);
-
+        Toolbar toolbar = findViewById(R.id.toolbarFragsPedido);
         vizualizacao = getIntent().getIntExtra("vizualizacao", 0);
 
         tabsAdapterPedido = new TabsAdapterPedido(getSupportFragmentManager(), ActivityPedidoMain.this, UsuarioHelper.getUsuario(), vizualizacao);
@@ -118,6 +116,14 @@ public class ActivityPedidoMain extends AppCompatActivity {
             toolbar.setTitle("Alteração do pedido");
         } else {
             toolbar.setTitle("Lançamento de Pedido");
+            if (ClienteHelper.getCliente() != null) {
+                objetoCliente = ClienteHelper.getCliente();
+                Intent intent = new Intent(this, ActivityProduto.class);
+                intent.putExtra("acao", 1);
+                startActivity(intent);
+            } else {
+                btnBuscaCliente.callOnClick();
+            }
         }
         db = new DBHelper(this);
         categoriaDAO = new CategoriaDAO(db);
@@ -156,6 +162,13 @@ public class ActivityPedidoMain extends AppCompatActivity {
             ClienteHelper.setCliente(objetoCliente);
         } else {
             webPedido = new WebPedido();
+        }
+
+        try {
+            txtNomeCliente.setText(objetoCliente.getNome_cadastro());
+            txtNomeFantasia.setText(objetoCliente.getNome_fantasia());
+        } catch (NullPointerException e) {
+            e.printStackTrace();
         }
 
         actionModeCallback = new ActionModeCallback();
@@ -204,8 +217,45 @@ public class ActivityPedidoMain extends AppCompatActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        if (getIntent().getIntExtra("vizualizacao", 0) != 1) {
+            getMenuInflater().inflate(R.menu.menu_produto_pedido, menu);
+        }
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.menu_salvar_produto:
+                if (mViewPager.getCurrentItem() == 0) {
+                    mViewPager.setCurrentItem(1);
+                } else {
+                    ProgressDialog dialog = new ProgressDialog(PedidoHelper.getActivityPedidoMain());
+                    dialog.setTitle("Atenção!");
+                    dialog.setMessage("Salvando o Pedido");
+                    dialog.setCancelable(false);
+                    dialog.show();
+
+//                if (adapterPagamento.getItem(spPagamento.getSelectedItemPosition()).getId_condicao().equals("1")) {
+                    if (pedidoHelper.salvaPedido()) {
+                        dialog.dismiss();
+                        AlertDialog.Builder alert = new AlertDialog.Builder(PedidoHelper.getActivityPedidoMain());
+                        alert.setTitle("Pedido salvo com sucesso!");
+                        alert.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                PedidoHelper.getActivityPedidoMain().finish();
+                            }
+                        });
+                        alert.setCancelable(false);
+                        alert.show();
+                    } else {
+                        dialog.dismiss();
+                    }
+                }
+                break;
             case android.R.id.home:
                 if (vizualizacao != 1) {
                     if (mViewPager.getCurrentItem() != 0) {
@@ -240,7 +290,7 @@ public class ActivityPedidoMain extends AppCompatActivity {
     protected void onDestroy() {
         pedidoHelper.limparDados();
         objetoCliente = null;
-        ClienteHelper.setCliente(null);
+        ClienteHelper.clear();
         HistoricoFinanceiroHelper.limparDados();
         System.gc();
         super.onDestroy();
@@ -256,13 +306,18 @@ public class ActivityPedidoMain extends AppCompatActivity {
     @Override
     protected void onResume() {
         try {
-            txtNomeCliente.setTextColor(Color.WHITE);
+            if (PedidoHelper.getListaWebPedidoItens().size() <= 0 && verificaCliente() && txtNomeCliente.getText().toString().equals("Toque aqui para selecionar o seu cliente")) {
+                Intent intent = new Intent(this, ActivityProduto.class);
+                intent.putExtra("acao", 1);
+                startActivity(intent);
+            }
             txtNomeCliente.setText(objetoCliente.getNome_cadastro());
+            txtNomeCliente.setTextColor(Color.parseColor("#FF8E908E"));
             txtNomeFantasia.setText(objetoCliente.getNome_fantasia());
-            txtCategoria.setText(listaCategoria.get(objetoCliente.getIdCategoria()).getNomeCategoria());
+            txtNomeFantasia.setVisibility(View.VISIBLE);
+            ifCliente.setGravity(View.TEXT_ALIGNMENT_TEXT_START);
         } catch (NullPointerException e) {
             e.printStackTrace();
-            txtNomeCliente.setText("Toque aqui para selecionar seu cliente");
         }
         super.onResume();
     }

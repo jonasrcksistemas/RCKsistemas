@@ -147,10 +147,4 @@ public class CadastroProspectMotivos extends Fragment implements MotivoAdapter.M
         ProspectHelper.setCadastroProspectMotivos(this);
         super.onResume();
     }
-
-    @Override
-    public void onDestroyView() {
-        insereDadosDaFrame();
-        super.onDestroyView();
-    }
 }

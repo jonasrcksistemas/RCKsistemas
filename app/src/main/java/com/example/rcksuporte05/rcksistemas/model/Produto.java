@@ -55,6 +55,7 @@ public class Produto {
     private String produto_materia_prima;
     private String produto_tercerizacao;
     private Float saldo_estoque;
+    private int idLinhaColecao;
 
     public String getDescricao() {
         return this.descricao;
@@ -486,5 +487,13 @@ public class Produto {
 
     public void setSaldo_estoque(Float saldo_estoque) {
         this.saldo_estoque = saldo_estoque;
+    }
+
+    public int getIdLinhaColecao() {
+        return idLinhaColecao;
+    }
+
+    public void setIdLinhaColecao(int idLinhaColecao) {
+        this.idLinhaColecao = idLinhaColecao;
     }
 }

@@ -22,8 +22,8 @@
         android:id="@+id/cdPromocao"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardBackgroundColor="#fdbe01"
         android:visibility="gone"
+        app:cardBackgroundColor="#fdbe01"
         tools:context=".activity.ProdutoPedidoActivity">
 
         <LinearLayout
@@ -49,18 +49,18 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingBottom="@dimen/activity_vertical_margin"
             android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:paddingTop="@dimen/activity_vertical_margin"
             android:paddingRight="@dimen/activity_horizontal_margin"
-            android:paddingTop="@dimen/activity_vertical_margin">
+            android:paddingBottom="@dimen/activity_vertical_margin">
 
             <EditText
                 android:id="@+id/edtNomeProduto"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@+id/btnBuscaProduto"
-                android:layout_toLeftOf="@+id/btnBuscaProduto"
                 android:layout_toStartOf="@+id/btnBuscaProduto"
+                android:layout_toLeftOf="@+id/btnBuscaProduto"
                 android:background="@drawable/borda_edittext"
                 android:focusable="false"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
@@ -73,6 +73,29 @@
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
                 android:layout_marginBottom="12dp"
+                android:background="@mipmap/ic_busca"
+                android:scaleType="centerCrop" />
+
+            <EditText
+                android:id="@+id/edtNomeCampanha"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/btnBuscaCampanha"
+                android:layout_toStartOf="@+id/btnBuscaCampanha"
+                android:layout_toLeftOf="@+id/btnBuscaCampanha"
+                android:background="@drawable/borda_edittext"
+                android:focusable="false"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/btnBuscaCampanha"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_below="@id/btnBuscaProduto"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginBottom="12dp"
                 android:background="@mipmap/ic_search_dark"
                 android:scaleType="centerCrop" />
 
@@ -81,35 +104,50 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_above="@+id/edtQuantidade"
-                android:layout_alignEnd="@+id/edtQuantidade"
-                android:layout_alignLeft="@+id/edtQuantidade"
-                android:layout_alignRight="@+id/edtQuantidade"
                 android:layout_alignStart="@+id/edtQuantidade"
+                android:layout_alignLeft="@+id/edtQuantidade"
+                android:layout_alignEnd="@+id/edtQuantidade"
+                android:layout_alignRight="@+id/edtQuantidade"
                 android:gravity="center"
                 android:text="QUANTIDADE"
                 android:textColor="@color/colorAccent" />
 
+            <Button
+                android:id="@+id/btnSubtraiQuantidade"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_alignBaseline="@+id/edtQuantidade"
+                android:background="@mipmap/ic_subtrai_quantidade" />
+
             <EditText
                 android:id="@+id/edtQuantidade"
-                android:layout_width="170dp"
+                android:layout_width="100dp"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/edtTabelaPreco"
-                android:layout_alignEnd="@+id/edtDesconto"
-                android:layout_alignRight="@+id/edtDesconto"
+                android:layout_toEndOf="@id/btnSubtraiQuantidade"
+                android:layout_toRightOf="@id/btnSubtraiQuantidade"
                 android:background="@drawable/borda_edittext"
                 android:gravity="center"
                 android:inputType="numberDecimal"
                 android:paddingEnd="12dp"
                 android:paddingRight="12dp" />
-            android:paddingRight="12dp"
+
+            <Button
+                android:id="@+id/btnSomaQuantidade"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_alignBaseline="@+id/edtQuantidade"
+                android:layout_toEndOf="@+id/edtQuantidade"
+                android:layout_toRightOf="@+id/edtQuantidade"
+                android:background="@mipmap/ic_soma_quantidade" />
 
             <TextView
                 android:id="@+id/txtValorUnitario"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/btnBuscaCampanha"
                 android:layout_alignEnd="@+id/edtTabelaPreco"
                 android:layout_alignRight="@+id/edtTabelaPreco"
-                android:layout_below="@+id/btnBuscaProduto"
                 android:text="VALOR UNITARIO R$"
                 android:textColor="@color/colorAccent" />
 
@@ -118,10 +156,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/txtValorUnitario"
-                android:layout_marginLeft="12dp"
                 android:layout_marginStart="12dp"
-                android:layout_toEndOf="@+id/edtQuantidade"
-                android:layout_toRightOf="@+id/edtQuantidade"
+                android:layout_marginLeft="12dp"
+                android:layout_toEndOf="@+id/btnSomaQuantidade"
+                android:layout_toRightOf="@+id/btnSomaQuantidade"
                 android:background="@drawable/borda_edittext"
                 android:focusable="false"
                 android:gravity="end|center"
@@ -133,9 +171,9 @@
                 android:id="@+id/txtValorProdutos"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/edtTabelaPreco"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:layout_below="@+id/edtTabelaPreco"
                 android:layout_marginTop="12dp"
                 android:text="VALOR PRODUTOS R$"
                 android:textColor="@color/colorAccent" />
@@ -182,8 +220,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBaseline="@+id/edtDesconto"
                 android:layout_alignBottom="@+id/edtDesconto"
-                android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
                 android:text="DESCONTO"
                 android:textColor="@color/colorAccent" />
 
@@ -216,9 +254,9 @@
                 android:id="@+id/txtDescontoReais"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/edtValorProdutos"
                 android:layout_alignBaseline="@+id/edtDescontoReais"
                 android:layout_alignBottom="@+id/edtDescontoReais"
-                android:layout_below="@id/edtValorProdutos"
                 android:layout_marginLeft="12dp"
                 android:layout_marginTop="12dp"
                 android:layout_toEndOf="@+id/edtDesconto"
@@ -246,9 +284,9 @@
                 android:id="@+id/txtTotal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/txtDesconto"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:layout_below="@+id/txtDesconto"
                 android:layout_marginTop="12dp"
                 android:text="TOTAL R$"
                 android:textColor="@color/colorAccent"

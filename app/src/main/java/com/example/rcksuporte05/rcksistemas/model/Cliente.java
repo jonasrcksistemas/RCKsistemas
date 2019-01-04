@@ -15,7 +15,6 @@ public class Cliente {
     private String nome_fantasia;
     private String cpf_cnpj;
     private String inscri_estadual;
-    private String inscri_municipal;
     private String endereco;
     private String endereco_bairro;
     private String endereco_numero;
@@ -110,7 +109,6 @@ public class Cliente {
         this.pessoa_f_j = prospect.getPessoa_f_j();
         this.cpf_cnpj = prospect.getCpf_cnpj();
         this.inscri_estadual = prospect.getInscri_estadual();
-        this.inscri_municipal = prospect.getInscri_municipal();
         this.endereco = prospect.getEndereco();
         this.endereco_bairro = prospect.getEndereco_bairro();
         this.endereco_numero = prospect.getEndereco_numero();
@@ -238,14 +236,6 @@ public class Cliente {
 
     public void setInscri_estadual(String inscri_estadual) {
         this.inscri_estadual = inscri_estadual;
-    }
-
-    public String getInscri_municipal() {
-        return inscri_municipal;
-    }
-
-    public void setInscri_municipal(String inscri_municipal) {
-        this.inscri_municipal = inscri_municipal;
     }
 
     public String getEndereco() {

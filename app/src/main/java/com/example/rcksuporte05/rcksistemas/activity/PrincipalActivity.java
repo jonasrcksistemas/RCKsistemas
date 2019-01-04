@@ -47,6 +47,7 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
     private static final int sair = 1;
     private static final int AtualizarBanco = 2;
     private static final int Sobre = 3;
+    private static final int Campanha = 4;
 
     @BindView(R.id.btnCliente)
     Button btnCliente;
@@ -108,8 +109,10 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
 
         sincronia = new Sincronia(true, true, true, false, false, false, false);
 
-        if (ContextCompat.checkSelfPermission(PrincipalActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(PrincipalActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(PrincipalActivity.this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA}, 0);
+        getUsuarios();
+
+        if (ContextCompat.checkSelfPermission(PrincipalActivity.this, Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(PrincipalActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(PrincipalActivity.this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(PrincipalActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(PrincipalActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(PrincipalActivity.this, new String[]{Manifest.permission.CALL_PHONE, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.CAMERA}, 0);
         }
         setSupportActionBar(tb_principal);
     }
@@ -180,11 +183,7 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
     public boolean onCreateOptionsMenu(Menu menu) {
         menu.add(0, sair, 0, "Sair");
         menu.add(0, Sobre, 0, "Informações do sistema");
-
-
-        if (UsuarioHelper.getUsuario().getNome_usuario().equalsIgnoreCase("RCK SISTEMAS")) {
-            menu.add(0, AtualizarBanco, 0, "Atualizar Banco");
-        }
+        menu.add(0, Campanha, 0, "Campanhas disponiveis");
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -213,6 +212,10 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
             case Sobre:
                 Intent intent = new Intent(PrincipalActivity.this, infoDialog.class);
                 startActivity(intent);
+                break;
+            case Campanha:
+                Intent intentCampanha = new Intent(PrincipalActivity.this, CampanhaActivity.class);
+                startActivity(intentCampanha);
                 break;
         }
         return false;
@@ -325,8 +328,6 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
 
     @Override
     protected void onResume() {
-        System.gc();
-        getUsuarios();
         if (getIntent().getIntExtra("alterado", 0) == 1) {
             sincroniaBO.sincronizaApi(new Sincronia(true, true, true, false, false, false, false));
             getIntent().putExtra("alterado", 0);

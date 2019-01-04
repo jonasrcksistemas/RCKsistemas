@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.content.FileProvider;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
@@ -227,7 +228,7 @@ public class ListagemPedidoEnviado extends AppCompatActivity implements ListaPed
             public void onClick(View view) {
                 AlertDialog.Builder duplicAlert = new AlertDialog.Builder(ListagemPedidoEnviado.this);
                 duplicAlert.setTitle("Atenção");
-                duplicAlert.setMessage("Deseja duplicar o pedido selecionado para poder faturá-lo novamente?");
+                duplicAlert.setMessage("Criar um cópia do pedido Nº" + listaPedidoAdapter.getItem(position).getId_web_pedido_servidor() + ".");
                 duplicAlert.setNegativeButton("Não", null);
                 duplicAlert.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                     @Override
@@ -258,7 +259,28 @@ public class ListagemPedidoEnviado extends AppCompatActivity implements ListaPed
 
     @Override
     public View.OnClickListener onClickCompartilhar(final int position) {
-        return null;
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    PDFPedidoUtil pdfPedidoUtil = new PDFPedidoUtil(listaPedidoAdapter.getItem(position), ListagemPedidoEnviado.this);
+                    Intent arquivo = new Intent(Intent.ACTION_SEND);
+                    arquivo.setType("pdf/*");
+                    arquivo.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(ListagemPedidoEnviado.this, getApplicationContext().getPackageName() + ".my.package.name.provider", pdfPedidoUtil.criandoPdf()));
+                    arquivo.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+                    Intent intent = Intent.createChooser(arquivo, "Compartilhar pedido");
+                    startActivity(intent);
+                } catch (Exception e) {
+                    AlertDialog.Builder alert = new AlertDialog.Builder(ListagemPedidoEnviado.this);
+                    alert.setTitle("Atenção");
+                    alert.setMessage("Ocorreu um erro ao gerar o PDF\n" + e.getMessage());
+                    alert.setNeutralButton("OK", null);
+                    alert.show();
+                    e.printStackTrace();
+                }
+            }
+        };
     }
 
     @Override
@@ -270,7 +292,7 @@ public class ListagemPedidoEnviado extends AppCompatActivity implements ListaPed
         if (actionMode == null) {
             actionMode = startSupportActionMode(actionModeCallback);
         }
-        if (listaPedidoAdapter.getSelectedItemCount() <= 0 || listaPedidoAdapter.getItem(position).getId_web_pedido().equals(listaPedidoAdapter.getItensSelecionados().get(0).getId_web_pedido()))
+        if (listaPedidoAdapter.getSelectedItemCount() <= 0 || listaPedidoAdapter.getItem(position).getId_web_pedido_servidor().equals(listaPedidoAdapter.getItensSelecionados().get(0).getId_web_pedido_servidor()))
             toggleSelection(position);
         else
             Toast.makeText(ListagemPedidoEnviado.this, "Somente é permitido a seleção de um pedido por vez", Toast.LENGTH_SHORT).show();
@@ -310,22 +332,13 @@ public class ListagemPedidoEnviado extends AppCompatActivity implements ListaPed
                     alert.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            try {
-                                PDFPedidoUtil pdfPedidoUtil = new PDFPedidoUtil(listaPedidoAdapter.getItensSelecionados().get(0), ListagemPedidoEnviado.this);
-                                Intent arquivo = new Intent(Intent.ACTION_VIEW);
-                                arquivo.setDataAndType(Uri.fromFile(pdfPedidoUtil.criandoPdf()), "application/pdf");
-                                arquivo.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                            PDFPedidoUtil pdfPedidoUtil = new PDFPedidoUtil(listaPedidoAdapter.getItensSelecionados().get(0), ListagemPedidoEnviado.this);
+                            Intent arquivo = new Intent(Intent.ACTION_VIEW);
+                            arquivo.setDataAndType(FileProvider.getUriForFile(ListagemPedidoEnviado.this, getApplicationContext().getPackageName() + ".my.package.name.provider", pdfPedidoUtil.criandoPdf()), "application/pdf");
+                            arquivo.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 
-                                Intent intent = Intent.createChooser(arquivo, "Abrir arquivo");
-                                startActivity(intent);
-                            } catch (Exception e) {
-                                AlertDialog.Builder alert = new AlertDialog.Builder(ListagemPedidoEnviado.this);
-                                alert.setTitle("Atenção");
-                                alert.setMessage("Ocorreu um erro ao gerar o PDF\n" + e.getMessage());
-                                alert.setNeutralButton("OK", null);
-                                alert.show();
-                                e.printStackTrace();
-                            }
+                            Intent intent = Intent.createChooser(arquivo, "Abrir arquivo");
+                            startActivity(intent);
                         }
                     });
                     alert.show();
@@ -333,35 +346,30 @@ public class ListagemPedidoEnviado extends AppCompatActivity implements ListaPed
                 case R.id.action_pdf_pedido_email:
                     AlertDialog.Builder emailAlert = new AlertDialog.Builder(ListagemPedidoEnviado.this);
                     emailAlert.setTitle("Atenção");
-                    emailAlert.setMessage("Deseja enviar um arquivo PDF do pedido " + listaPedidoAdapter.getItensSelecionados().get(0).getId_web_pedido_servidor() + " para o email do cliente ?");
+                    if (listaPedidoAdapter.getSelectedItemCount() > 1)
+                        emailAlert.setMessage("Deseja enviar os " + listaPedidoAdapter.getSelectedItemCount() + " pedidos selecionados para os emails de seus cliente?");
+                    else
+                        emailAlert.setMessage("Deseja enviar um arquivo PDF do pedido " + listaPedidoAdapter.getItensSelecionados().get(0).getId_web_pedido_servidor() + " para o email do cliente ?");
                     emailAlert.setNegativeButton("Não", null);
                     emailAlert.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
-                            try {
-                                final Intent intent = new Intent(Intent.ACTION_SENDTO);
+                            final Intent intent = new Intent(Intent.ACTION_SENDTO);
 
-                                PDFPedidoUtil pdfPedidoUtil = new PDFPedidoUtil(listaPedidoAdapter.getItensSelecionados().get(0), ListagemPedidoEnviado.this);
-                                if (listaPedidoAdapter.getItensSelecionados().get(0).getCadastro().getEmail_principal() != null && !listaPedidoAdapter.getItensSelecionados().get(0).getCadastro().getEmail_principal().trim().equals("")) {
-                                    intent.setData(Uri.parse("mailto: " + listaPedidoAdapter.getItensSelecionados().get(0).getCadastro().getEmail_principal()));
-                                } else if (listaPedidoAdapter.getItensSelecionados().get(0).getCadastro().getEmail_financeiro() != null && !listaPedidoAdapter.getItensSelecionados().get(0).getCadastro().getEmail_financeiro().trim().equals("")) {
-                                    intent.setData(Uri.parse("mailto: " + listaPedidoAdapter.getItensSelecionados().get(0).getCadastro().getEmail_financeiro()));
-                                } else {
-                                    intent.setData(Uri.parse("mailto: Informe o email do cliente"));
-                                }
-                                intent.putExtra(Intent.EXTRA_SUBJECT, "Espelho do pedido " + listaPedidoAdapter.getItensSelecionados().get(0).getId_web_pedido_servidor());
-                                intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(pdfPedidoUtil.criandoPdf()));
-                                intent.putExtra(Intent.EXTRA_TEXT, "Segue em anexo o espelho do pedido");
-
-                                startActivity(intent);
-                            } catch (Exception e) {
-                                AlertDialog.Builder alert = new AlertDialog.Builder(ListagemPedidoEnviado.this);
-                                alert.setTitle("Atenção");
-                                alert.setMessage("Ocorreu um erro ao gerar o PDF\n" + e.getMessage());
-                                alert.setNeutralButton("OK", null);
-                                alert.show();
-                                e.printStackTrace();
+                            PDFPedidoUtil pdfPedidoUtil = new PDFPedidoUtil(listaPedidoAdapter.getItensSelecionados().get(0), ListagemPedidoEnviado.this);
+                            if (listaPedidoAdapter.getItensSelecionados().get(0).getCadastro().getEmail_principal() != null && !listaPedidoAdapter.getItensSelecionados().get(0).getCadastro().getEmail_principal().trim().equals("")) {
+                                intent.setData(Uri.parse("mailto: " + listaPedidoAdapter.getItensSelecionados().get(0).getCadastro().getEmail_principal()));
+                            } else if (listaPedidoAdapter.getItensSelecionados().get(0).getCadastro().getEmail_financeiro() != null && !listaPedidoAdapter.getItensSelecionados().get(0).getCadastro().getEmail_financeiro().trim().equals("")) {
+                                intent.setData(Uri.parse("mailto: " + listaPedidoAdapter.getItensSelecionados().get(0).getCadastro().getEmail_financeiro()));
+                            } else {
+                                intent.setData(Uri.parse("mailto: Informe o email do cliente"));
                             }
+                            intent.putExtra(Intent.EXTRA_SUBJECT, "Espelho do pedido " + listaPedidoAdapter.getItensSelecionados().get(0).getId_web_pedido_servidor());
+                            intent.putExtra(Intent.EXTRA_TEXT, "Segue em anexo o espelho do pedido");
+                            intent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(ListagemPedidoEnviado.this, getApplicationContext().getPackageName() + ".my.package.name.provider", pdfPedidoUtil.criandoPdf()));
+                            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+                            startActivity(intent);
                         }
                     });
                     emailAlert.show();

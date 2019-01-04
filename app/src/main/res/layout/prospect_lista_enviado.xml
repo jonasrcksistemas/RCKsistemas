@@ -8,8 +8,8 @@
         android:id="@+id/txtIdProspectEnviado"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
         android:layout_marginStart="12dp"
+        android:layout_marginLeft="10dp"
         android:layout_marginTop="2dp"
         android:text="00"
         android:textAppearance="@style/TextAppearance.AppCompat.Small"
@@ -21,16 +21,15 @@
         android:layout_height="30dp"
         android:layout_below="@id/txtIdProspectEnviado"
         android:layout_toEndOf="@id/txtIdProspectEnviado"
-        android:layout_toRightOf="@id/txtIdProspectEnviado"
-        android:background="@mipmap/ic_pessoa_duvida" />
+        android:layout_toRightOf="@id/txtIdProspectEnviado" />
 
     <TextView
         android:id="@+id/nomeProspectEnviado"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/imFisicaJuridica"
-        android:layout_marginBottom="12dp"
         android:layout_marginTop="5dp"
+        android:layout_marginBottom="12dp"
         android:layout_toEndOf="@+id/txtIdProspectEnviado"
         android:layout_toRightOf="@+id/txtIdProspectEnviado"
         android:ellipsize="end"
@@ -46,8 +45,8 @@
         android:layout_alignTop="@+id/imFisicaJuridica"
         android:layout_marginEnd="10dp"
         android:layout_marginRight="10dp"
-        android:layout_toLeftOf="@id/txtDataRetornoEnviado"
         android:layout_toStartOf="@id/txtDataRetornoEnviado"
+        android:layout_toLeftOf="@id/txtDataRetornoEnviado"
         android:text="Visitar em: "
         android:theme="@style/txtStyle" />
 

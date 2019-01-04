@@ -19,11 +19,9 @@ public class Sincronia {
     private List<TabelaPreco> listaTabelaPreco = new ArrayList<>();
     private List<TabelaPrecoItem> listaTabelaPrecoItem = new ArrayList<>();
     private List<Usuario> listaUsuario = new ArrayList<>();
-    private List<VendedorBonusResumo> listaVendedorBonusResumo = new ArrayList<>();
     private List<WebPedido> listaWebPedidosPendentes = new ArrayList<>();
     private List<WebPedido> listaWebPedidosFinalizados = new ArrayList<>();
     private List<Pais> listaPais = new ArrayList<>();
-    private List<Segmento> segmentos = new ArrayList<>();
     private List<MotivoNaoCadastramento> motivos = new ArrayList<>();
     private List<Prospect> listaProspectPendentes = new ArrayList<>();
     private List<Prospect> listaProspectEnviados = new ArrayList<>();
@@ -32,6 +30,10 @@ public class Sincronia {
     private List<Categoria> listaCategoria = new ArrayList<>();
     private List<Promocao> listaPromocao = new ArrayList<>();
     private List<CadastroFinanceiroResumo> listaCadastroFinanceiroResumo = new ArrayList<>();
+    private List<CampanhaComClientes> listaCampanhaComClientes = new ArrayList<>();
+    private List<CampanhaComercialCab> listaCampanhaComercialCab = new ArrayList<>();
+    private List<CampanhaComercialItens> listaCampanhaComercialItens = new ArrayList<>();
+    private List<ProdutoLinhaColecao> listaProdutoLinhaColecao = new ArrayList<>();
 
     public Sincronia(boolean cliente,
                      boolean produto,
@@ -129,14 +131,6 @@ public class Sincronia {
         this.listaUsuario = listaUsuario;
     }
 
-    public List<VendedorBonusResumo> getListaVendedorBonusResumo() {
-        return listaVendedorBonusResumo;
-    }
-
-    public void setListaVendedorBonusResumo(List<VendedorBonusResumo> listaVendedorBonusResumo) {
-        this.listaVendedorBonusResumo = listaVendedorBonusResumo;
-    }
-
     public List<WebPedido> getListaWebPedidosPendentes() {
         return listaWebPedidosPendentes;
     }
@@ -175,14 +169,6 @@ public class Sincronia {
 
     public void setListaPais(List<Pais> listaPais) {
         this.listaPais = listaPais;
-    }
-
-    public List<Segmento> getSegmentos() {
-        return segmentos;
-    }
-
-    public void setSegmentos(List<Segmento> segmentos) {
-        this.segmentos = segmentos;
     }
 
     public List<MotivoNaoCadastramento> getMotivos() {
@@ -271,5 +257,37 @@ public class Sincronia {
 
     public void setListaCadastroFinanceiroResumo(List<CadastroFinanceiroResumo> listaCadastroFinanceiroResumo) {
         this.listaCadastroFinanceiroResumo = listaCadastroFinanceiroResumo;
+    }
+
+    public List<CampanhaComClientes> getListaCampanhaComClientes() {
+        return listaCampanhaComClientes;
+    }
+
+    public void setListaCampanhaComClientes(List<CampanhaComClientes> listaCampanhaComClientes) {
+        this.listaCampanhaComClientes = listaCampanhaComClientes;
+    }
+
+    public List<CampanhaComercialCab> getListaCampanhaComercialCab() {
+        return listaCampanhaComercialCab;
+    }
+
+    public void setListaCampanhaComercialCab(List<CampanhaComercialCab> listaCampanhaComercialCab) {
+        this.listaCampanhaComercialCab = listaCampanhaComercialCab;
+    }
+
+    public List<CampanhaComercialItens> getListaCampanhaComercialItens() {
+        return listaCampanhaComercialItens;
+    }
+
+    public void setListaCampanhaComercialItens(List<CampanhaComercialItens> listaCampanhaComercialItens) {
+        this.listaCampanhaComercialItens = listaCampanhaComercialItens;
+    }
+
+    public List<ProdutoLinhaColecao> getListaProdutoLinhaColecao() {
+        return listaProdutoLinhaColecao;
+    }
+
+    public void setListaProdutoLinhaColecao(List<ProdutoLinhaColecao> listaProdutoLinhaColecao) {
+        this.listaProdutoLinhaColecao = listaProdutoLinhaColecao;
     }
 }

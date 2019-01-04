@@ -18,6 +18,7 @@ import com.example.rcksuporte05.rcksistemas.DAO.CadastroAnexoDAO;
 import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.ProspectHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.UsuarioHelper;
+import com.example.rcksuporte05.rcksistemas.Helper.VisitaHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.TabsAdapterProspect;
 import com.example.rcksuporte05.rcksistemas.model.CadastroAnexo;
@@ -43,7 +44,7 @@ public class ActivityCadastroProspect extends AppCompatActivity {
     SlidingTabLayout mSlidingTabLayout;
     private DBHelper db;
 
-    private String[] titles = {"Geral", "Endereços", "Motivos não Cadastramento *", "adicionar Foto e Salvar"};
+    private String[] titles = {"Geral", "Endereços", "Descrever Ação"};
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -82,14 +83,6 @@ public class ActivityCadastroProspect extends AppCompatActivity {
                                                            }
                                                            break;
                                                        case 2:
-                                                           if (ProspectHelper.getCadastroProspectMotivos() != null) {
-                                                               ProspectHelper.getCadastroProspectMotivos().insereDadosDaFrame();
-                                                               if (getIntent().getIntExtra("novo", 0) >= 1) {
-                                                                   toolbar.setTitle(titles[position]);
-                                                               }
-                                                           }
-                                                           break;
-                                                       case 3:
                                                            if (ProspectHelper.getCadastroProspectFotoSalvar() != null) {
                                                                ProspectHelper.getCadastroProspectFotoSalvar().insereDadosDaFrame();
                                                                if (getIntent().getIntExtra("novo", 0) >= 1) {
@@ -114,11 +107,6 @@ public class ActivityCadastroProspect extends AppCompatActivity {
                                                            }
                                                            break;
                                                        case 2:
-                                                           if (ProspectHelper.getCadastroProspectMotivos() != null) {
-                                                               ProspectHelper.getCadastroProspectMotivos().insereDadosDaFrame();
-                                                           }
-                                                           break;
-                                                       case 3:
                                                            if (ProspectHelper.getCadastroProspectFotoSalvar() != null) {
                                                                ProspectHelper.getCadastroProspectFotoSalvar().insereDadosDaFrame();
                                                            }
@@ -152,6 +140,14 @@ public class ActivityCadastroProspect extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        try {
+            if (ProspectHelper.getProspect().getIdPrimeiraVisita() > 0) {
+                VisitaHelper.setVisitaProspect(db.listaVisitaPorId(ProspectHelper.getProspect()));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         if (getIntent().getIntExtra("novo", 0) >= 1) {
             try {
                 ProspectHelper.setVendedor(db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE F_ID_VENDEDOR = " + UsuarioHelper.getUsuario().getId_quando_vendedor() + ";").get(0));
@@ -163,6 +159,7 @@ public class ActivityCadastroProspect extends AppCompatActivity {
             mViewPager.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View view, MotionEvent motionEvent) {
+                    mViewPager.setCurrentItem(mViewPager.getCurrentItem());
                     return true;
                 }
             });

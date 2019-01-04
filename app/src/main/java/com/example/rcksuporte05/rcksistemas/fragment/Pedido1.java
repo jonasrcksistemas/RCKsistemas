@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.example.rcksuporte05.rcksistemas.BO.PedidoBO;
 import com.example.rcksuporte05.rcksistemas.DAO.CadastroFinanceiroResumoDAO;
+import com.example.rcksuporte05.rcksistemas.DAO.CampanhaComercialCabDAO;
 import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.DAO.WebPedidoItensDAO;
 import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
@@ -148,7 +149,7 @@ public class Pedido1 extends Fragment implements ListaAdapterProdutoPedido.Produ
     }
 
     public List<WebPedidoItens> salvaPedidos() {
-        listaAdapterProdutoPedido.notifyDataSetChanged();
+//        listaAdapterProdutoPedido.notifyDataSetChanged();
         PedidoHelper.calculaValorPedido(listaProdutoPedido, PedidoHelper.getActivityPedidoMain());
         PedidoHelper.setListaWebPedidoItens(listaProdutoPedido);
         return listaProdutoPedido;
@@ -203,6 +204,7 @@ public class Pedido1 extends Fragment implements ListaAdapterProdutoPedido.Produ
             idCliente = ClienteHelper.getCliente().getId_cadastro();
             tabelaPrecoItem = db.listaTabelaPrecoItem("SELECT * FROM TBL_TABELA_PRECO_ITENS WHERE ID_CATEGORIA = " + ClienteHelper.getCliente().getIdCategoria()).get(0);
             PedidoBO pedidoBO = new PedidoBO();
+            CampanhaComercialCabDAO campanhaComercialCabDAO = new CampanhaComercialCabDAO(db);
             if (bundle.getInt("vizualizacao") != 1) {
                 for (WebPedidoItens webPedidoItens : listaProdutoPedido) {
                     Float descontoPedido = pedidoBO.calculaDesconto(ClienteHelper.getCliente().getId_cadastro_servidor(), webPedidoItens.getId_produto(), getActivity()).getValorDesconto();
@@ -212,11 +214,13 @@ public class Pedido1 extends Fragment implements ListaAdapterProdutoPedido.Produ
                         webPedidoItens.setDescontoIndevido(true);
                     else
                         webPedidoItens.setDescontoIndevido(false);
+
+                    webPedidoItens.setCampanhaIndevida(!campanhaComercialCabDAO.verificaCampanha(ClienteHelper.getCliente(), webPedidoItens));
+
                 }
             }
             listaAdapterProdutoPedido.notifyDataSetChanged();
         }
-        System.gc();
         super.onResume();
     }
 

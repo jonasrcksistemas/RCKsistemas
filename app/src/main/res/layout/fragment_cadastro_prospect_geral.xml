@@ -14,45 +14,54 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:orientation="vertical"
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingTop="@dimen/activity_vertical_margin"
             android:paddingRight="@dimen/activity_horizontal_margin"
             android:paddingBottom="@dimen/activity_vertical_margin">
 
             <TextView
-                android:id="@+id/txtIdProspect"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                android:text="Id: 0000"
-                android:textColor="@color/colorAccent"
-                android:textStyle="bold" />
-
-            <TextView
                 android:id="@+id/txtPessoaProspect"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/txtIdProspect"
-                android:layout_marginTop="12dp"
+                android:layout_alignParentTop="true"
                 android:text="Pessoa"
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
 
-            <Spinner
-                android:id="@+id/spPessoaProspect"
-                android:layout_width="wrap_content"
+            <RadioGroup
+                android:id="@+id/rdPessoaProspect"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/txtPessoaProspect"
-                android:layout_toEndOf="@+id/txtIdProspect"
-                android:layout_toRightOf="@+id/txtIdProspect" />
+                android:background="#ededed"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/rdFisica"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="23dp"
+                    android:layout_marginLeft="23dp"
+                    android:text="Física"
+                    android:textColor="@color/colorAccent" />
+
+                <RadioButton
+                    android:id="@+id/rdJuridica"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="80dp"
+                    android:layout_marginLeft="80dp"
+                    android:text="Jurídica"
+                    android:textColor="@color/colorAccent" />
+
+            </RadioGroup>
 
             <TextView
                 android:id="@+id/txtNomeClienteProspect"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/spPessoaProspect"
+                android:layout_below="@+id/edtCpfCnpjProspect"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
                 android:layout_marginTop="12dp"
@@ -100,10 +109,37 @@
                 android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
             <TextView
-                android:id="@+id/txtCpfCnpjProspect"
+                android:id="@+id/txtTelefoneProspect"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/edtNomeFantasiaProspect"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginTop="12dp"
+                android:text="Telefone"
+                android:textColor="@color/colorAccent"
+                android:textStyle="bold" />
+
+
+            <EditText
+                android:id="@+id/edtTelefoneProspect"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txtTelefoneProspect"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/borda_edittext"
+                android:hint="Telefone"
+                android:inputType="textCapCharacters"
+                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+
+            <TextView
+                android:id="@+id/txtCpfCnpjProspect"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/rdPessoaProspect"
                 android:layout_marginTop="12dp"
                 android:text="CPF/CNPJ"
                 android:textColor="@color/colorAccent"
@@ -129,7 +165,7 @@
                 android:id="@+id/txtInscEstadualProspect"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/edtCpfCnpjProspect"
+                android:layout_below="@+id/edtTelefoneProspect"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
                 android:layout_marginTop="12dp"
@@ -142,7 +178,7 @@
                 android:id="@+id/edtInscEstadualProspect"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/spIeProspect"
+                android:layout_below="@+id/lyIeProspect"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentLeft="true"
                 android:background="@drawable/borda_edittext"
@@ -150,37 +186,25 @@
                 android:inputType="textFilter|numberSigned"
                 android:textAppearance="@style/TextAppearance.AppCompat.Small" />
 
-            <Spinner
-                android:id="@+id/spIeProspect"
+            <LinearLayout
+                android:id="@+id/lyIeProspect"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/txtInscEstadualProspect" />
+                android:layout_height="match_parent"
+                android:layout_below="@id/txtInscEstadualProspect"
+                android:background="@drawable/borda_edittext">
 
-            <TextView
-                android:id="@+id/txtInscMunicipalProspect"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/edtInscEstadualProspect"
-                android:layout_marginTop="12dp"
-                android:text="Inscrição Municipal"
-                android:textColor="@color/colorAccent"
-                android:textStyle="bold" />
+                <Spinner
+                    android:id="@+id/spIeProspect"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
 
-            <EditText
-                android:id="@+id/edtInscMunicipalProspect"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/txtInscMunicipalProspect"
-                android:background="@drawable/borda_edittext"
-                android:hint="Inscrição Municipal"
-                android:inputType="textFilter|numberSigned"
-                android:textAppearance="@style/TextAppearance.AppCompat.Small" />
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/txtCategoriaProspect"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/edtInscMunicipalProspect"
+                android:layout_below="@+id/edtInscEstadualProspect"
                 android:layout_marginTop="12dp"
                 android:layout_marginEnd="12dp"
                 android:layout_marginRight="12dp"
@@ -188,88 +212,34 @@
                 android:textColor="@color/colorAccent"
                 android:textStyle="bold" />
 
-            <Spinner
-                android:id="@+id/spCategoriaProspect"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/edtInscMunicipalProspect"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginTop="12dp"
-                android:layout_toEndOf="@+id/txtCategoriaProspect"
-                android:layout_toRightOf="@+id/txtCategoriaProspect" />
-
-            <TextView
-                android:id="@+id/txtRotaProspect"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@id/spCategoriaProspect"
-                android:text="Dia de Rota" />
-
-            <RadioGroup
-                android:id="@+id/rgRotaProspect"
+            <LinearLayout
+                android:id="@+id/lyCategoriaProspect"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@+id/txtRotaProspect"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentLeft="true"
+                android:layout_below="@+id/txtCategoriaProspect"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentRight="true"
-                android:layout_toEndOf="@+id/txtRotaProspect"
-                android:layout_toRightOf="@+id/txtIdProspect"
-                android:background="#ededed"
-                android:orientation="vertical">
+                android:background="@drawable/borda_edittext">
 
-                <RadioButton
-                    android:id="@+id/rdSegundaProspect"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Segunda"
-                    android:textColor="@color/colorAccent" />
+                <Spinner
+                    android:id="@+id/spCategoriaProspect"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
 
-                <RadioButton
-                    android:id="@+id/rdTercaProspect"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Terça"
-                    android:textColor="@color/colorAccent" />
-
-                <RadioButton
-                    android:id="@+id/rdQuartaProspect"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Quarta"
-                    android:textColor="@color/colorAccent" />
-
-
-                <RadioButton
-                    android:id="@+id/rdQuintaProspect"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Quinta"
-                    android:textColor="@color/colorAccent" />
-
-                <RadioButton
-                    android:id="@+id/rdSextaProspect"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Sexta"
-                    android:textColor="@color/colorAccent" />
-
-            </RadioGroup>
+            </LinearLayout>
 
             <Button
                 android:id="@+id/btnContinuar"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
-                android:layout_below="@+id/rgRotaProspect"
+                android:layout_below="@+id/lyCategoriaProspect"
                 android:layout_gravity="center"
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginEnd="15dp"
                 android:layout_marginBottom="15dp"
                 android:background="#e6b220"
-                android:text="CONTINUAR 1/4"
+                android:text="CONTINUAR 1/3"
                 android:visibility="gone" />
         </RelativeLayout>
     </ScrollView>

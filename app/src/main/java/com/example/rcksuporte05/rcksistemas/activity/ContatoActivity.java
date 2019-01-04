@@ -21,6 +21,7 @@ import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.HistoricoFinanceiroHelper;
 import com.example.rcksuporte05.rcksistemas.R;
+import com.example.rcksuporte05.rcksistemas.fragment.Pedido2;
 import com.example.rcksuporte05.rcksistemas.model.Cliente;
 import com.example.rcksuporte05.rcksistemas.util.MascaraUtil;
 
@@ -75,6 +76,21 @@ public class ContatoActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
+    @OnClick(R.id.novoPedido)
+    public void novoPedido() {
+        Intent intent = new Intent(ContatoActivity.this, ActivityPedidoMain.class);
+        ActivityPedidoMain activityPedidoMain = new ActivityPedidoMain();
+        Pedido2 pedido2 = new Pedido2();
+        activityPedidoMain.pegaCliente(ClienteHelper.getCliente());
+        pedido2.pegaCliente(ClienteHelper.getCliente());
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.btnNovoPedido)
+    public void btnNovoPedido() {
+        novoPedido();
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,7 +99,6 @@ public class ContatoActivity extends AppCompatActivity {
 
         DBHelper db = new DBHelper(this);
         CategoriaDAO categoriaDAO = new CategoriaDAO(db);
-        final CadastroFinanceiroResumoDAO cadastroFinanceiroResumoDAO = new CadastroFinanceiroResumoDAO(db);
 
         try {
             cliente = ClienteHelper.getCliente();
@@ -263,7 +278,6 @@ public class ContatoActivity extends AppCompatActivity {
             finish();
         }
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

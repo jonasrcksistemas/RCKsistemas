@@ -163,7 +163,6 @@ public class ActivityCliente extends AppCompatActivity {
         listaDeClientes.addItemDecoration(new DividerItemDecoration(this, LinearLayout.VERTICAL));
 
         if (getIntent().getIntExtra("acao", 0) == 1) {
-
             btnInserirCliente.setVisibility(View.GONE);
         }
 

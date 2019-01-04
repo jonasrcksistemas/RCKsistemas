@@ -28,9 +28,6 @@ public class ProspectViewHolder extends RecyclerView.ViewHolder implements View.
     @BindView(R.id.txtRazaoSocial)
     public TextView textViewNomeFantasia;
 
-    @BindView(R.id.txtDiaSemana)
-    public TextView txtDiaSemana;
-
     @BindView(R.id.prospectSalvo)
     public ImageView prospectSalvo;
 

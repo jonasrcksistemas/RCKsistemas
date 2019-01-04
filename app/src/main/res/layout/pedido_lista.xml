@@ -19,7 +19,7 @@
             android:id="@+id/cor"
             android:layout_width="5dp"
             android:layout_height="match_parent"
-            android:background="@drawable/cor_pedido" />
+            android:background="@drawable/cor_pedido_pendente" />
 
         <TextView
             android:id="@+id/txtNomeCliente"
@@ -32,9 +32,9 @@
             android:layout_marginEnd="5dp"
             android:layout_marginRight="5dp"
             android:ellipsize="end"
-            android:maxLines="1"
             android:paddingStart="5dp"
             android:paddingLeft="5dp"
+            android:singleLine="true"
             android:text="nomeCliente"
             android:textAppearance="@style/TextAppearance.AppCompat.Small"
             android:textColor="#000000"
@@ -55,14 +55,12 @@
                 android:id="@+id/edtNomeProduto"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/txtNomeCliente"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentLeft="true"
                 android:layout_weight="1"
+                android:ellipsize="start"
                 android:gravity="center_vertical"
-                android:maxLines="1"
                 android:paddingStart="5dp"
                 android:paddingLeft="5dp"
+                android:singleLine="true"
                 android:text="Nº 00000"
                 android:textColor="#000000"
                 android:textSize="10sp"
@@ -125,17 +123,31 @@
             android:id="@+id/txtOperacao"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_above="@+id/txtPrecoPedido"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
+            android:layout_below="@+id/txtNomeCliente"
+            android:layout_marginTop="3dp"
+            android:layout_toStartOf="@+id/txtCondicaoPagamento"
+            android:layout_toLeftOf="@+id/txtCondicaoPagamento"
             android:layout_toEndOf="@+id/linearLayout"
             android:layout_toRightOf="@+id/linearLayout"
             android:ellipsize="end"
+            android:singleLine="true"
+            android:text="Operacao"
+            android:textColor="#000000"
+            android:textSize="10sp" />
+
+        <TextView
+            android:id="@+id/txtCondicaoPagamento"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/txtPrecoPedido"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:ellipsize="end"
             android:gravity="end"
-            android:maxLines="1"
             android:paddingEnd="15dp"
             android:paddingRight="15dp"
-            android:text="Operacao"
+            android:singleLine="true"
+            android:text="condicaoPagamento"
             android:textSize="10sp" />
 
         <TextView
@@ -147,9 +159,9 @@
             android:layout_alignParentRight="true"
             android:ellipsize="end"
             android:gravity="center"
-            android:maxLines="1"
             android:paddingEnd="15dp"
             android:paddingRight="15dp"
+            android:singleLine="true"
             android:text="precoPedido"
             android:textColor="#000000"
             android:textSize="25sp" />
@@ -237,7 +249,8 @@
                 android:layout_marginTop="3dp"
                 android:layout_marginBottom="7dp"
                 android:layout_weight="1"
-                android:gravity="center">
+                android:gravity="center"
+                android:visibility="gone">
 
                 <Button
                     android:id="@+id/btnRastreio"

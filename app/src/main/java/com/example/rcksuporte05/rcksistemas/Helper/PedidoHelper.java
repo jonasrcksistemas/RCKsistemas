@@ -45,7 +45,9 @@ public class PedidoHelper {
     private Float valorProdutos = 0.0f;
     private Float descontoReal = 0.0f;
     private Float mediaDesconto = 0.0f;
-    private EditText edtTotalVenda;
+    private TextView edtTotalVenda;
+    private TextView edtTotalDescontos;
+    private TextView edtTotalProdutos;
     private ViewPager mViewPager;
     private DBHelper db;
     private WebPedidoDAO webPedidoDAO;
@@ -56,7 +58,9 @@ public class PedidoHelper {
 
     public PedidoHelper(ActivityPedidoMain activityPedidoMain) {
         this.activityPedidoMain = activityPedidoMain;
-        edtTotalVenda = (EditText) activityPedidoMain.findViewById(R.id.edtTotalVenda);
+        edtTotalVenda = activityPedidoMain.findViewById(R.id.edtTotalVenda);
+        edtTotalDescontos = activityPedidoMain.findViewById(R.id.edtTotalDescontos);
+        edtTotalProdutos = activityPedidoMain.findViewById(R.id.edtTotalProdutos);
         db = new DBHelper(activityPedidoMain);
         System.gc();
     }
@@ -146,8 +150,7 @@ public class PedidoHelper {
 
     public static void pintaTxtNomeCliente() {
         TextView txtNomeCliente = (TextView) activityPedidoMain.findViewById(R.id.txtNomeCliente);
-        txtNomeCliente.setTextColor(Color.RED
-        );
+        txtNomeCliente.setTextColor(Color.RED);
     }
 
     public static EditText editTextDataEntrega() {
@@ -156,14 +159,22 @@ public class PedidoHelper {
 
     public static void calculaValorPedido(List<WebPedidoItens> produtoPedido, ActivityPedidoMain activityPedidoMain) {
 
-        Float resultado = 0.f;
+        Float valorVenda = 0.f;
+        Float valorDesconto = 0.f;
+        Float valorProduto = 0.f;
         for (int i = 0; produtoPedido.size() > i; i++) {
-            resultado += Float.valueOf(produtoPedido.get(i).getValor_total());
+            valorVenda += Float.valueOf(produtoPedido.get(i).getValor_total());
+            valorDesconto += Float.valueOf(produtoPedido.get(i).getValor_desconto_real());
+            valorProduto += Float.valueOf(produtoPedido.get(i).getVenda_preco()) * Float.valueOf(produtoPedido.get(i).getQuantidade());
         }
-        setValorVenda(resultado);
+        setValorVenda(valorVenda);
         listaWebPedidoItens = produtoPedido;
-        EditText edtTotalVenda = (EditText) activityPedidoMain.findViewById(R.id.edtTotalVenda);
-        edtTotalVenda.setText(MascaraUtil.mascaraReal(resultado));
+        TextView edtTotalVenda = activityPedidoMain.findViewById(R.id.edtTotalVenda);
+        TextView edtTotalProdutos = activityPedidoMain.findViewById(R.id.edtTotalProdutos);
+        TextView edtTotalDescontos = activityPedidoMain.findViewById(R.id.edtTotalDescontos);
+        edtTotalVenda.setText(MascaraUtil.mascaraVirgula(valorVenda));
+        edtTotalProdutos.setText(MascaraUtil.mascaraVirgula(valorProduto));
+        edtTotalDescontos.setText(MascaraUtil.mascaraVirgula(valorDesconto));
     }
 
     public static Float getValorVenda() {
@@ -241,75 +252,93 @@ public class PedidoHelper {
                             dataPedido.setTime(new SimpleDateFormat("yyyy-MM-dd").parse(webPedido.getData_prev_entrega()));
                             String atual = new SimpleDateFormat("dd/MM/yyyy").format(dataAtual.getTime());
                             String pedido = new SimpleDateFormat("dd/MM/yyyy").format(dataPedido.getTime());
-                            if (atual.equals(pedido) || !dataAtual.getTime().after(dataPedido.getTime())) {
-                                Boolean descontoIndevido = false;
-                                for (WebPedidoItens webPedidoItens : listaWebPedidoItens) {
-                                    if (webPedidoItens.getDescontoIndevido()) {
-                                        descontoIndevido = true;
-                                        break;
-                                    }
-                                }
-                                if (!descontoIndevido) {
-                                    webPedido.setValor_total(valorVenda.toString());
-                                    for (int i = 0; listaWebPedidoItens.size() > i; i++) {
-                                        valorProdutos += Float.parseFloat(listaWebPedidoItens.get(i).getValor_bruto());
-                                        descontoReal += Float.parseFloat(listaWebPedidoItens.get(i).getValor_desconto_real());
-                                    }
-                                    mediaDesconto = (mediaDesconto / listaWebPedidoItens.size());
+                            if (webPedido.getId_condicao_pagamento() != null && !webPedido.getId_condicao_pagamento().equals("")) {
+                                if (atual.equals(pedido) || !dataAtual.getTime().after(dataPedido.getTime())) {
+                                    Boolean descontoIndevido = false;
+                                    Boolean campanhaIndevida = false;
+                                    for (WebPedidoItens webPedidoItens : listaWebPedidoItens) {
+                                        if (webPedidoItens.getDescontoIndevido()) {
+                                            descontoIndevido = true;
+                                            break;
+                                        }
 
-                                    webPedido.setDesconto_per(String.valueOf(mediaDesconto));
-                                    webPedido.setValor_produtos(String.valueOf(valorProdutos));
-                                    webPedido.setValor_desconto(String.valueOf(descontoReal));
-                                    if (Pedido1.listaProdutoRemovido.size() > 0 && PedidoHelper.getIdPedido() > 0) {
-                                        PedidoBO pedidoBO = new PedidoBO();
-                                        pedidoBO.excluiItenPedido(PedidoHelper.getActivityPedidoMain(), Pedido1.listaProdutoRemovido);
+                                        if (webPedidoItens.getCampanhaIndevida()) {
+                                            campanhaIndevida = true;
+                                            break;
+                                        }
                                     }
-                                    calculaValorPedido(listaWebPedidoItens, activityPedidoMain);
-                                    webPedido.setValor_total(String.valueOf(getValorVenda()));
+                                    if (!descontoIndevido) {
+                                        if (!campanhaIndevida) {
+                                            webPedido.setValor_total(valorVenda.toString());
+                                            for (int i = 0; listaWebPedidoItens.size() > i; i++) {
+                                                valorProdutos += Float.parseFloat(listaWebPedidoItens.get(i).getValor_bruto());
+                                                descontoReal += Float.parseFloat(listaWebPedidoItens.get(i).getValor_desconto_real());
+                                            }
+                                            mediaDesconto = (mediaDesconto / listaWebPedidoItens.size());
 
-                                    if (PedidoHelper.getIdPedido() > 0) {
-                                        webPedido.setId_web_pedido(String.valueOf(PedidoHelper.getIdPedido()));
-                                        webPedidoDAO.atualizarTBL_WEB_PEDIDO(webPedido);
-                                        for (int i = 0; listaWebPedidoItens.size() > i; i++) {
-                                            if (listaWebPedidoItens.get(i).getId_web_item() == null) {
-                                                if (db.contagem("SELECT COUNT(*) FROM TBL_WEB_PEDIDO_ITENS WHERE ID_PEDIDO = " + PedidoHelper.getIdPedido() + " AND ID_PRODUTO = " + listaWebPedidoItens.get(i).getId_produto() + ";") <= 0) {
-                                                    listaWebPedidoItens.get(i).setId_pedido(webPedido.getId_web_pedido());
-                                                    webPedidoItensDAO.inserirTBL_WEB_PEDIDO_ITENS(listaWebPedidoItens.get(i));
+                                            webPedido.setDesconto_per(String.valueOf(mediaDesconto));
+                                            webPedido.setValor_produtos(String.valueOf(valorProdutos));
+                                            webPedido.setValor_desconto(String.valueOf(descontoReal));
+                                            if (Pedido1.listaProdutoRemovido.size() > 0 && PedidoHelper.getIdPedido() > 0) {
+                                                PedidoBO pedidoBO = new PedidoBO();
+                                                pedidoBO.excluiItenPedido(PedidoHelper.getActivityPedidoMain(), Pedido1.listaProdutoRemovido);
+                                            }
+                                            calculaValorPedido(listaWebPedidoItens, activityPedidoMain);
+                                            webPedido.setValor_total(String.valueOf(getValorVenda()));
+
+                                            if (PedidoHelper.getIdPedido() > 0) {
+                                                webPedido.setId_web_pedido(String.valueOf(PedidoHelper.getIdPedido()));
+                                                webPedidoDAO.atualizarTBL_WEB_PEDIDO(webPedido);
+                                                for (int i = 0; listaWebPedidoItens.size() > i; i++) {
+                                                    if (listaWebPedidoItens.get(i).getId_web_item() == null) {
+                                                        if (db.contagem("SELECT COUNT(*) FROM TBL_WEB_PEDIDO_ITENS WHERE ID_PEDIDO = " + PedidoHelper.getIdPedido() + " AND ID_PRODUTO = " + listaWebPedidoItens.get(i).getId_produto() + ";") <= 0) {
+                                                            listaWebPedidoItens.get(i).setId_pedido(webPedido.getId_web_pedido());
+                                                            webPedidoItensDAO.inserirTBL_WEB_PEDIDO_ITENS(listaWebPedidoItens.get(i));
+                                                        }
+                                                    } else {
+                                                        webPedidoItensDAO.atualizarTBL_WEB_PEDIDO_ITENS(listaWebPedidoItens.get(i));
+                                                    }
                                                 }
                                             } else {
-                                                webPedidoItensDAO.atualizarTBL_WEB_PEDIDO_ITENS(listaWebPedidoItens.get(i));
+                                                webPedido.setPedido_enviado("N");
+                                                webPedido.setUsuario_lancamento_data(db.pegaDataHoraAtual());
+                                                webPedido.setData_emissao(db.pegaDataAtual());
+                                                webPedidoDAO.inserirTBL_WEB_PEDIDO(webPedido);
+                                                int idPedido = db.contagem("SELECT MAX(ID_WEB_PEDIDO) FROM TBL_WEB_PEDIDO");
+                                                for (int i = 0; listaWebPedidoItens.size() > i; i++) {
+                                                    if (db.contagem("SELECT COUNT(*) FROM TBL_WEB_PEDIDO_ITENS WHERE ID_PEDIDO = " + idPedido + " AND ID_PRODUTO = " + listaWebPedidoItens.get(i).getId_produto() + ";") <= 0) {
+                                                        listaWebPedidoItens.get(i).setId_pedido(String.valueOf(idPedido));
+                                                        listaWebPedidoItens.get(i).setId_empresa(UsuarioHelper.getUsuario().getIdEmpresaMultiDevice());
+                                                        webPedidoItensDAO.inserirTBL_WEB_PEDIDO_ITENS(listaWebPedidoItens.get(i));
+                                                    }
+                                                }
                                             }
+                                            return true;
+                                        } else {
+                                            Toast.makeText(activityPedidoMain, "Há produtos que não atendem a regra de campanha", Toast.LENGTH_SHORT).show();
+                                            moveTela(0);
+                                            return false;
                                         }
                                     } else {
-                                        webPedido.setPedido_enviado("N");
-                                        webPedido.setUsuario_lancamento_data(db.pegaDataHoraAtual());
-                                        webPedido.setData_emissao(db.pegaDataAtual());
-                                        webPedidoDAO.inserirTBL_WEB_PEDIDO(webPedido);
-                                        int idPedido = db.contagem("SELECT MAX(ID_WEB_PEDIDO) FROM TBL_WEB_PEDIDO");
-                                        for (int i = 0; listaWebPedidoItens.size() > i; i++) {
-                                            if (db.contagem("SELECT COUNT(*) FROM TBL_WEB_PEDIDO_ITENS WHERE ID_PEDIDO = " + idPedido + " AND ID_PRODUTO = " + listaWebPedidoItens.get(i).getId_produto() + ";") <= 0) {
-                                                listaWebPedidoItens.get(i).setId_pedido(String.valueOf(idPedido));
-                                                listaWebPedidoItens.get(i).setId_empresa(UsuarioHelper.getUsuario().getIdEmpresaMultiDevice());
-                                                webPedidoItensDAO.inserirTBL_WEB_PEDIDO_ITENS(listaWebPedidoItens.get(i));
-                                            }
-                                        }
+                                        Toast.makeText(activityPedidoMain, "Há produtos fora da faixa de desconto permitida", Toast.LENGTH_SHORT).show();
+                                        moveTela(0);
+                                        return false;
                                     }
-                                    return true;
                                 } else {
-                                    Toast.makeText(activityPedidoMain, "Há produtos fora da faixa de desconto permitida", Toast.LENGTH_SHORT).show();
-                                    moveTela(0);
-
+                                    Toast.makeText(activityPedidoMain, "A data de entrega não pode ser menor que a data de emissão da venda", Toast.LENGTH_SHORT).show();
+                                    editTextDataEntrega().setBackgroundResource(R.drawable.borda_edittext_erro);
+                                    moveTela(1);
                                     return false;
                                 }
                             } else {
-                                Toast.makeText(activityPedidoMain, "A data de entrega não pode ser menor que a data de emissão da venda", Toast.LENGTH_SHORT).show();
-                                editTextDataEntrega().setBackgroundResource(R.drawable.borda_edittext_erro);
-
+                                Toast.makeText(activityPedidoMain, "Você precisa selecionar uma condição de pagamento", Toast.LENGTH_SHORT).show();
+                                moveTela(1);
                                 return false;
                             }
                         } else {
                             Toast.makeText(activityPedidoMain, "ATENÇÃO - Você precisa informar a data de entrega", Toast.LENGTH_SHORT).show();
                             editTextDataEntrega().setBackgroundResource(R.drawable.borda_edittext_erro);
+                            moveTela(1);
                             return false;
                         }
                     } else {
@@ -320,6 +349,7 @@ public class PedidoHelper {
                 } else {
                     Toast.makeText(activityPedidoMain, "O pedido não pode ser salvo sem selecionar o cliente!", Toast.LENGTH_SHORT).show();
                     pintaTxtNomeCliente();
+                    moveTela(1);
                     return false;
                 }
             } catch (Exception e) {

@@ -49,6 +49,8 @@ public class PedidoViewHolder extends RecyclerView.ViewHolder implements View.On
     public Button btnRastreio;
     @BindView(R.id.txtOperacao)
     public TextView txtOperacao;
+    @BindView(R.id.txtCondicaoPagamento)
+    public TextView txtCondicaoPagamento;
 
     ListaPedidoAdapter.PedidoAdapterListener listener;
 

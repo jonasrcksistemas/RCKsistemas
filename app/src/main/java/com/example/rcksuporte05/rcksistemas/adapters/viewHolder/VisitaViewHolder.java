@@ -20,7 +20,7 @@ public class VisitaViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.rlItemVisita)
     public RelativeLayout rlItemVisita;
 
-    @BindView(R.id.txtDescricaoVisita)
+    @BindView(R.id.txtDescricaoAcao)
     public TextView txtDescricaoVisita;
 
     @BindView(R.id.txtDataVisita)

@@ -12,8 +12,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -56,14 +54,6 @@ public class CadastroProspectEndereco extends Fragment {
 
     @BindView(R.id.edtComplementoProspect)
     public EditText edtComplementoProspect;
-    @BindView(R.id.rgSituacaoPredio)
-    public RadioGroup rgSituacaoPredio;
-
-    @BindView(R.id.rdAlugado)
-    RadioButton rdAlugado;
-
-    @BindView(R.id.rdProprio)
-    RadioButton rdProprio;
 
     @BindView(R.id.btnContinuar)
     Button btnContinuar;
@@ -72,7 +62,6 @@ public class CadastroProspectEndereco extends Fragment {
     ArrayAdapter ufAdapter;
     ArrayAdapter<Pais> paisAdapter;
     View view;
-    RadioButton rdSituacaoPredio;
     int[] listaUf = {R.array.AC,
             R.array.AL,
             R.array.AM,
@@ -216,13 +205,10 @@ public class CadastroProspectEndereco extends Fragment {
             edtNumeroProspect.setFocusable(false);
             edtBairroProspect.setFocusable(false);
             edtCep.setFocusable(false);
-            rgSituacaoPredio.setClickable(false);
             spMunicipioProspect.setEnabled(false);
             spPaisProspect.setEnabled(false);
             spUfProspect.setEnabled(false);
             edtComplementoProspect.setFocusable(false);
-            rdAlugado.setClickable(false);
-            rdProprio.setClickable(false);
         }
 
         if (getActivity().getIntent().getIntExtra("novo", 0) >= 1) {
@@ -232,36 +218,15 @@ public class CadastroProspectEndereco extends Fragment {
                 public void onClick(View view) {
                     inserirDadosDaFrame();
 
-                    boolean validado = true;
-                    if (ProspectHelper.getProspect().getEndereco() == null || ProspectHelper.getProspect().getEndereco().trim().isEmpty()) {
-
-                        validado = false;
-
-                        edtEnderecoProspect.requestFocus();
-                        edtEnderecoProspect.setError("Campo Obrigatorio");
-                    }
-
-                    if (ProspectHelper.getProspect().getEndereco_numero() == null || ProspectHelper.getProspect().getEndereco_numero().trim().isEmpty()) {
-
-                        validado = false;
-
-                        edtNumeroProspect.requestFocus();
-                        edtNumeroProspect.setError("Campo Obrigatorio");
-                    }
-
-                    if (ProspectHelper.getProspect().getEndereco_bairro() == null || ProspectHelper.getProspect().getEndereco_bairro().trim().isEmpty()) {
-
-                        validado = false;
-
-                        edtBairroProspect.requestFocus();
-                        edtBairroProspect.setError("Campo Obrigatorio");
-                    }
-
-                    if (validado) {
+                    if (ProspectHelper.getProspect().getEndereco_cep().replaceAll("^[0-9]", "").length() >= 8) {
+                        edtCep.requestFocus();
+                        edtCep.setError("Tamanho maximo é de 8 caracteres");
+                    } else {
                         DBHelper db = new DBHelper(getActivity());
                         db.atualizarTBL_PROSPECT(ProspectHelper.getProspect());
                         ProspectHelper.moveTela(2);
                     }
+
                 }
             });
         }
@@ -288,7 +253,6 @@ public class CadastroProspectEndereco extends Fragment {
 
         if (ProspectHelper.getProspect().getEndereco() != null) {
             edtEnderecoProspect.setText(ProspectHelper.getProspect().getEndereco());
-
         }
         if (ProspectHelper.getProspect().getEndereco_numero() != null) {
             edtNumeroProspect.setText(ProspectHelper.getProspect().getEndereco_numero());
@@ -296,7 +260,6 @@ public class CadastroProspectEndereco extends Fragment {
         }
         if (ProspectHelper.getProspect().getEndereco_bairro() != null) {
             edtBairroProspect.setText(ProspectHelper.getProspect().getEndereco_bairro());
-
         }
 
         if (ProspectHelper.getProspect().getEndereco_cep() != null) {
@@ -368,17 +331,6 @@ public class CadastroProspectEndereco extends Fragment {
             }
         }
 
-        if (ProspectHelper.getProspect().getSituacaoPredio() != null && !ProspectHelper.getProspect().getSituacaoPredio().trim().isEmpty()) {
-            switch (ProspectHelper.getProspect().getSituacaoPredio()) {
-                case "ALUGADO":
-                    rdAlugado.setChecked(true);
-                    break;
-                case "PROPRIO":
-                    rdProprio.setChecked(true);
-                    break;
-            }
-        }
-
         if (ProspectHelper.getProspect().getEndereco_complemento() != null && !ProspectHelper.getProspect().getEndereco_complemento().trim().isEmpty()) {
             edtComplementoProspect.setText(ProspectHelper.getProspect().getEndereco_complemento());
         }
@@ -402,11 +354,6 @@ public class CadastroProspectEndereco extends Fragment {
 
         if (edtCep.getText() != null) {
             ProspectHelper.getProspect().setEndereco_cep(edtCep.getText().toString());
-        }
-
-        if (rgSituacaoPredio.getCheckedRadioButtonId() > 0) {
-            rdSituacaoPredio = (RadioButton) view.findViewById(rgSituacaoPredio.getCheckedRadioButtonId());
-            ProspectHelper.getProspect().setSituacaoPredio(rdSituacaoPredio.getText().toString().toUpperCase());
         }
 
         if (edtComplementoProspect.getText() != null && !edtComplementoProspect.getText().toString().trim().isEmpty()) {

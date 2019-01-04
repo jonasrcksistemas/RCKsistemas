@@ -71,4 +71,7 @@ public interface Rotas {
 
     @GET("cliente/verificacpfcnpj/{cpfcnpj}")
     Call<Cliente> verificaCpfCnpj(@Path("cpfcnpj") String cpfCnpj, @HeaderMap Map<String, String> chaveAcesso);
+
+    @POST("prospect/validar")
+    Call<Prospect> validaProspect(@Body Prospect prospect, @HeaderMap Map<String, String> chaveAcesso);
 }

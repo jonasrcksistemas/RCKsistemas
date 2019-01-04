@@ -192,12 +192,7 @@ public class ActivityCpfCnpjCliente extends AppCompatActivity {
                             alert.setMessage(cpfCnpj + " já cadastrado. \nCodigo: " + cliente.getId_cadastro() +
                                     ".\nNome de Cadastro: " + cliente.getNome_cadastro() + "\n" +
                                     "Nome Fantasia: " + cliente.getNome_fantasia());
-                            alert.setNeutralButton("OK", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    prosseguirCadastro();
-                                }
-                            });
+                            alert.setNeutralButton("OK", null);
                             progress.dismiss();
                             alert.show();
                         }

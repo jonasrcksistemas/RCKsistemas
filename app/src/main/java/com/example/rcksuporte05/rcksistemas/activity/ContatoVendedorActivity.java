@@ -2,7 +2,6 @@ package com.example.rcksuporte05.rcksistemas.activity;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.CursorIndexOutOfBoundsException;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -49,7 +48,8 @@ public class ContatoVendedorActivity extends AppCompatActivity {
     public TextView txtMunicipio;
     @BindView(R.id.txtUf)
     public TextView txtUf;
-
+    @BindView(R.id.txtDescricaoTelefone)
+    TextView txtDescricaoTelefone;
     private Cliente vendedor;
 
     @Override
@@ -72,6 +72,8 @@ public class ContatoVendedorActivity extends AppCompatActivity {
                 txtTelefone.setText(formataTelefone(vendedor.getTelefone_tres()));
             } else {
                 txtTelefone.setText("Nenhum telefone válido informado!");
+                txtDescricaoTelefone.setVisibility(View.INVISIBLE);
+
             }
 
             if (vendedor.getEmail_principal() != null && !vendedor.getEmail_principal().trim().equals("")) {
@@ -177,7 +179,7 @@ public class ContatoVendedorActivity extends AppCompatActivity {
             setSupportActionBar(toolbar);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        } catch (CursorIndexOutOfBoundsException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             Toast.makeText(ContatoVendedorActivity.this, "Erro ao carregar Vendedor", Toast.LENGTH_LONG).show();
             finish();

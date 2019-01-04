@@ -11,7 +11,6 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -27,11 +26,11 @@ import com.example.rcksuporte05.rcksistemas.model.Cliente;
 import com.example.rcksuporte05.rcksistemas.model.CondicoesPagamento;
 import com.example.rcksuporte05.rcksistemas.model.Operacao;
 import com.example.rcksuporte05.rcksistemas.model.WebPedido;
-import com.example.rcksuporte05.rcksistemas.util.MascaraUtil;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -73,7 +72,9 @@ public class Pedido2 extends Fragment {
 
 
         try {
-            adapterPagamento = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_activated_1, db.listaCondicoesPagamento("SELECT * FROM TBL_CONDICOES_PAG_CAB;"));
+            List<CondicoesPagamento> listaCondicoesPagamentos = db.listaCondicoesPagamento("SELECT * FROM TBL_CONDICOES_PAG_CAB;");
+            listaCondicoesPagamentos.add(0, new CondicoesPagamento());
+            adapterPagamento = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_activated_1, listaCondicoesPagamentos);
             spPagamento.setAdapter(adapterPagamento);
 
             adapterOperacao = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_activated_1, db.listaOperacao("SELECT * FROM TBL_OPERACAO_ESTOQUE;"));

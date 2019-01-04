@@ -1,6 +1,7 @@
 package com.example.rcksuporte05.rcksistemas.activity;
 
 import android.content.Intent;
+import android.database.CursorIndexOutOfBoundsException;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -18,10 +19,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.rcksuporte05.rcksistemas.BO.PedidoBO;
+import com.example.rcksuporte05.rcksistemas.DAO.CampanhaComercialCabDAO;
 import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
+import com.example.rcksuporte05.rcksistemas.Helper.CampanhaHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.PedidoHelper;
 import com.example.rcksuporte05.rcksistemas.R;
+import com.example.rcksuporte05.rcksistemas.model.CampanhaComercialCab;
+import com.example.rcksuporte05.rcksistemas.model.Cliente;
 import com.example.rcksuporte05.rcksistemas.model.Produto;
 import com.example.rcksuporte05.rcksistemas.model.PromocaoRetorno;
 import com.example.rcksuporte05.rcksistemas.model.TabelaPrecoItem;
@@ -32,6 +37,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class ProdutoPedidoActivity extends AppCompatActivity {
 
@@ -63,6 +69,15 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
     CardView cdPromocao;
     @BindView(R.id.txtPromocao)
     TextView txtPromocao;
+    @BindView(R.id.btnSubtraiQuantidade)
+    Button btnSubtraiQuantidade;
+    @BindView(R.id.btnSomaQuantidade)
+    Button btnSomaQuantidade;
+    @BindView(R.id.edtNomeCampanha)
+    EditText edtNomeCampanha;
+    @BindView(R.id.btnBuscaCampanha)
+    Button btnBuscaCampanha;
+
     private WebPedidoItens webPedidoItem;
     private MenuItem salvar_produto;
     private DBHelper db;
@@ -72,6 +87,44 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
     private Float quantidade;
     private Float totalProdutoBruto;
     private Float desconto;
+    private CampanhaComercialCabDAO campanhaComercialCabDAO;
+    private boolean verificaCampanha;
+
+    @OnClick(R.id.btnSomaQuantidade)
+    public void somaQuantidade() {
+        try {
+            Float valor = Float.parseFloat(edtQuantidade.getText().toString());
+            valor++;
+            if (valor <= 0) {
+                btnSubtraiQuantidade.setClickable(false);
+                edtQuantidade.setText("0");
+            } else {
+                btnSubtraiQuantidade.setClickable(true);
+                edtQuantidade.setText(String.valueOf(valor).replace(".0", ""));
+            }
+        } catch (Exception e) {
+            edtQuantidade.setText("1");
+            btnSubtraiQuantidade.setClickable(false);
+        }
+    }
+
+    @OnClick(R.id.btnSubtraiQuantidade)
+    public void subtraiQuantidade() {
+        try {
+            Float valor = Float.parseFloat(edtQuantidade.getText().toString());
+            valor--;
+            if (valor <= 0) {
+                btnSubtraiQuantidade.setClickable(false);
+                edtQuantidade.setText("0");
+            } else {
+                btnSubtraiQuantidade.setClickable(true);
+                edtQuantidade.setText(String.valueOf(valor).replace(".0", ""));
+            }
+        } catch (Exception e) {
+            edtQuantidade.setText("0");
+            btnSubtraiQuantidade.setClickable(false);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,7 +134,10 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
 
         PedidoHelper pedidoHelper = new PedidoHelper(this);
 
+        verificaCampanha = true;
+
         db = new DBHelper(this);
+        campanhaComercialCabDAO = new CampanhaComercialCabDAO(db);
         try {
             webPedidoItem = pedidoHelper.getWebPedidoItem();
 
@@ -107,6 +163,16 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
+                try {
+                    Float valor = Float.parseFloat(edtQuantidade.getText().toString());
+                    if (valor <= 0) {
+                        btnSubtraiQuantidade.setClickable(false);
+                    } else {
+                        btnSubtraiQuantidade.setClickable(true);
+                    }
+                } catch (Exception e) {
+                    btnSubtraiQuantidade.setClickable(false);
+                }
                 calculaDesconto();
             }
         });
@@ -152,6 +218,7 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
 
         if (getIntent().getIntExtra("vizualizacao", 0) == 1) {
             edtNomeProduto.setFocusable(false);
+            edtNomeCampanha.setFocusable(false);
             edtTabelaPreco.setFocusable(false);
             edtValorProdutos.setFocusable(false);
             edtQuantidade.setFocusable(false);
@@ -160,8 +227,11 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
             edtTotal.setFocusable(false);
             edtQuantidade.setFocusable(false);
             btnBuscaProduto.setEnabled(false);
+            btnBuscaCampanha.setEnabled(false);
             rbReal.setClickable(false);
             rbPorcentagem.setClickable(false);
+            btnSubtraiQuantidade.setVisibility(View.INVISIBLE);
+            btnSomaQuantidade.setVisibility(View.INVISIBLE);
             toolbar.setBackgroundColor(getResources().getColor(R.color.colorPrimaryCinza));
             this.setTheme(R.style.Theme_MeuTemaPedido);
         } else {
@@ -183,6 +253,52 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
                 }
             });
 
+            btnBuscaCampanha.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (PedidoHelper.getProduto() != null) {
+                        if (!verificaCampanha(ClienteHelper.getCliente(), PedidoHelper.getProduto())) {
+                            Toast.makeText(ProdutoPedidoActivity.this, "Nenhuma campanha encontrada", Toast.LENGTH_LONG).show();
+                            CampanhaHelper.setCampanhaComercialCab(null);
+                            edtNomeCampanha.setText("");
+                            webPedidoItem.setIdCampanha(0);
+                        }
+                    } else if (PedidoHelper.getWebPedidoItem() != null) {
+                        if (!verificaCampanha(ClienteHelper.getCliente(), PedidoHelper.getWebPedidoItem())) {
+                            Toast.makeText(ProdutoPedidoActivity.this, "Nenhuma campanha encontrada", Toast.LENGTH_LONG).show();
+                            CampanhaHelper.setCampanhaComercialCab(null);
+                            edtNomeCampanha.setText("");
+                            webPedidoItem.setIdCampanha(0);
+                        }
+                    } else {
+                        Toast.makeText(ProdutoPedidoActivity.this, "Nenhum produto localizado", Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
+
+            edtNomeCampanha.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (PedidoHelper.getProduto() != null) {
+                        if (!verificaCampanha(ClienteHelper.getCliente(), PedidoHelper.getProduto())) {
+                            Toast.makeText(ProdutoPedidoActivity.this, "Nenhuma campanha encontrada", Toast.LENGTH_LONG).show();
+                            CampanhaHelper.setCampanhaComercialCab(null);
+                            edtNomeCampanha.setText("");
+                            webPedidoItem.setIdCampanha(0);
+                        }
+                    } else if (PedidoHelper.getWebPedidoItem() != null) {
+                        if (!verificaCampanha(ClienteHelper.getCliente(), PedidoHelper.getWebPedidoItem())) {
+                            Toast.makeText(ProdutoPedidoActivity.this, "Nenhuma campanha encontrada", Toast.LENGTH_LONG).show();
+                            CampanhaHelper.setCampanhaComercialCab(null);
+                            edtNomeCampanha.setText("");
+                            webPedidoItem.setIdCampanha(0);
+                        }
+                    } else {
+                        Toast.makeText(ProdutoPedidoActivity.this, "Nenhum produto localizado", Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
+
             rgRealPorc.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -198,6 +314,10 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
                     }
                 }
             });
+        }
+
+        if (PedidoHelper.getWebPedidoItem() != null && PedidoHelper.getWebPedidoItem().getIdCampanha() > 0) {
+            CampanhaHelper.setCampanhaComercialCab(campanhaComercialCabDAO.listaCampanhaComercialCab(webPedidoItem.getIdCampanha()));
         }
     }
 
@@ -219,8 +339,10 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
             txtPromocao.setText(PedidoHelper.getListaProdutos().size() + " PRODUTOS SELECIONADOS");
         } else {
             try {
-                if (PedidoHelper.getProduto() != null && PedidoHelper.getProduto().getId_produto() != PedidoHelper.getWebPedidoItem().getId_produto()) {
+                if (PedidoHelper.getProduto() != null && !PedidoHelper.getProduto().getId_produto().equals(PedidoHelper.getWebPedidoItem().getId_produto())) {
                     webPedidoItem = new WebPedidoItens(PedidoHelper.getProduto());
+                    PedidoHelper.setProduto(null);
+                    PedidoHelper.setWebPedidoItem(webPedidoItem);
                     if (Float.parseFloat(edtDesconto.getText().toString()) <= 0)
                         edtDesconto.setText(tabelaPrecoItem.getPerc_desc_final());
                 } else {
@@ -235,10 +357,18 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
                 e.printStackTrace();
                 try {
                     webPedidoItem = new WebPedidoItens(PedidoHelper.getProduto());
+                    PedidoHelper.setWebPedidoItem(webPedidoItem);
                     if (Float.parseFloat(edtDesconto.getText().toString()) <= 0)
                         edtDesconto.setText(tabelaPrecoItem.getPerc_desc_final());
                 } catch (Exception nullPointer) {
                     nullPointer.printStackTrace();
+                }
+            }
+
+            if (getIntent().getIntExtra("pedido", 0) != 1 && verificaCampanha) {
+                verificaCampanha = false;
+                if (verificaCampanha(ClienteHelper.getCliente(), PedidoHelper.getWebPedidoItem())) {
+                    Toast.makeText(ProdutoPedidoActivity.this, "Campanhas disponiveis para este item encontradas", Toast.LENGTH_LONG).show();
                 }
             }
 
@@ -266,6 +396,14 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
                 cdPromocao.setVisibility(View.VISIBLE);
                 txtPromocao.setText("DESCONTO NÃO AUTORIZADO");
                 rbPorcentagem.setText("Desconto %(max 0%)");
+            }
+
+            if (CampanhaHelper.getCampanhaComercialCab() != null) {
+                edtNomeCampanha.setText(CampanhaHelper.getCampanhaComercialCab().getNomeCampanha());
+                webPedidoItem.setIdCampanha(CampanhaHelper.getCampanhaComercialCab().getIdCampanha());
+            } else {
+                edtNomeCampanha.setText("");
+                webPedidoItem.setIdCampanha(0);
             }
 
             edtNomeProduto.setText(webPedidoItem.getNome_produto());
@@ -309,50 +447,61 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
                             if (!edtTabelaPreco.getText().toString().isEmpty()) {
                                 if (Float.parseFloat(webPedidoItem.getVenda_preco()) > 0) {
                                     if (Float.parseFloat(edtDesconto.getText().toString()) <= descontoPedido) {
-                                        if (PedidoHelper.getListaProdutos() != null && PedidoHelper.getListaProdutos().size() > 0) {
-                                            final List<Produto> listaProdutosSelecionados = PedidoHelper.getListaProdutos();
-                                            for (Produto produto : listaProdutosSelecionados) {
-                                                WebPedidoItens produtoSelecionado = new WebPedidoItens(produto);
+                                        if (campanhaComercialCabDAO.verificaCampanha(ClienteHelper.getCliente(), webPedidoItem)) {
+                                            if (PedidoHelper.getListaProdutos() != null && PedidoHelper.getListaProdutos().size() > 0) {
+                                                final List<Produto> listaProdutosSelecionados = PedidoHelper.getListaProdutos();
+                                                for (Produto produto : listaProdutosSelecionados) {
+                                                    WebPedidoItens produtoSelecionado = new WebPedidoItens(produto);
 
-                                                produtoSelecionado.setValor_unitario(Float.valueOf(produto.getVenda_preco()));
-                                                produtoSelecionado.setQuantidade(quantidade.toString());
-                                                produtoSelecionado.setValor_total(String.valueOf((Float.parseFloat(produto.getVenda_preco()) * quantidade) - ((Float.parseFloat(edtDesconto.getText().toString()) / 100) * (Float.parseFloat(produto.getVenda_preco()) * quantidade))));
-                                                produtoSelecionado.setValor_bruto(String.valueOf(Float.valueOf(produtoSelecionado.getVenda_preco()) * Float.parseFloat(quantidade.toString())));
-                                                produtoSelecionado.setValor_desconto_per(edtDesconto.getText().toString());
-                                                produtoSelecionado.setValor_desconto_real(String.valueOf((Float.parseFloat(edtDesconto.getText().toString()) / 100) * (Float.parseFloat(produto.getVenda_preco()) * quantidade)));
+                                                    produtoSelecionado.setValor_unitario(Float.valueOf(produto.getVenda_preco()));
+                                                    produtoSelecionado.setQuantidade(quantidade.toString());
+                                                    produtoSelecionado.setValor_total(String.valueOf((Float.parseFloat(produto.getVenda_preco()) * quantidade) - ((Float.parseFloat(edtDesconto.getText().toString()) / 100) * (Float.parseFloat(produto.getVenda_preco()) * quantidade))));
+                                                    produtoSelecionado.setValor_bruto(String.valueOf(Float.valueOf(produtoSelecionado.getVenda_preco()) * Float.parseFloat(quantidade.toString())));
+                                                    produtoSelecionado.setValor_desconto_per(edtDesconto.getText().toString());
+                                                    produtoSelecionado.setValor_desconto_real(String.valueOf((Float.parseFloat(edtDesconto.getText().toString()) / 100) * (Float.parseFloat(produto.getVenda_preco()) * quantidade)));
+
+                                                    if (rbPorcentagem.isChecked())
+                                                        produtoSelecionado.setTipoDesconto("P");
+                                                    else if (rbReal.isChecked())
+                                                        produtoSelecionado.setTipoDesconto("R");
+
+                                                    if (CampanhaHelper.getCampanhaComercialCab() != null)
+                                                        produtoSelecionado.setIdCampanha(CampanhaHelper.getCampanhaComercialCab().getIdCampanha());
+
+                                                    PedidoHelper pedidoHelper = new PedidoHelper();
+                                                    pedidoHelper.inserirProduto(produtoSelecionado);
+
+                                                    PedidoHelper.setListaProdutos(null);
+                                                }
+                                            } else {
+                                                webPedidoItem.setValor_unitario(Float.parseFloat(webPedidoItem.getVenda_preco()));
+                                                webPedidoItem.setQuantidade(quantidade.toString());
+                                                webPedidoItem.setValor_total(String.valueOf(totalProdutoBruto - Float.parseFloat(edtDescontoReais.getText().toString())));
+                                                webPedidoItem.setValor_bruto(String.valueOf(totalProdutoBruto));
+                                                webPedidoItem.setValor_desconto_per(edtDesconto.getText().toString());
+                                                webPedidoItem.setValor_desconto_real(edtDescontoReais.getText().toString());
 
                                                 if (rbPorcentagem.isChecked())
-                                                    produtoSelecionado.setTipoDesconto("P");
+                                                    webPedidoItem.setTipoDesconto("P");
                                                 else if (rbReal.isChecked())
-                                                    produtoSelecionado.setTipoDesconto("R");
+                                                    webPedidoItem.setTipoDesconto("R");
 
-                                                PedidoHelper pedidoHelper = new PedidoHelper();
-                                                pedidoHelper.inserirProduto(produtoSelecionado);
+                                                if (CampanhaHelper.getCampanhaComercialCab() != null)
+                                                    webPedidoItem.setIdCampanha(CampanhaHelper.getCampanhaComercialCab().getIdCampanha());
 
-                                                PedidoHelper.setListaProdutos(null);
+                                                if (getIntent().getIntExtra("pedido", 0) != 1) {
+                                                    PedidoHelper pedidoHelper = new PedidoHelper();
+                                                    pedidoHelper.inserirProduto(webPedidoItem);
+                                                } else {
+                                                    PedidoHelper pedidoHelper = new PedidoHelper();
+                                                    pedidoHelper.alterarProduto(webPedidoItem, getIntent().getIntExtra("position", 0));
+                                                }
                                             }
+                                            finish();
                                         } else {
-                                            webPedidoItem.setValor_unitario(Float.parseFloat(webPedidoItem.getVenda_preco()));
-                                            webPedidoItem.setQuantidade(quantidade.toString());
-                                            webPedidoItem.setValor_total(String.valueOf(totalProdutoBruto - Float.parseFloat(edtDescontoReais.getText().toString())));
-                                            webPedidoItem.setValor_bruto(String.valueOf(totalProdutoBruto));
-                                            webPedidoItem.setValor_desconto_per(edtDesconto.getText().toString());
-                                            webPedidoItem.setValor_desconto_real(edtDescontoReais.getText().toString());
-
-                                            if (rbPorcentagem.isChecked())
-                                                webPedidoItem.setTipoDesconto("P");
-                                            else if (rbReal.isChecked())
-                                                webPedidoItem.setTipoDesconto("R");
-
-                                            if (getIntent().getIntExtra("pedido", 0) != 1) {
-                                                PedidoHelper pedidoHelper = new PedidoHelper();
-                                                pedidoHelper.inserirProduto(webPedidoItem);
-                                            } else {
-                                                PedidoHelper pedidoHelper = new PedidoHelper();
-                                                pedidoHelper.alterarProduto(webPedidoItem, getIntent().getIntExtra("position", 0));
-                                            }
+                                            Toast.makeText(this, "A campanha selecionada não se enquadra com este item!", Toast.LENGTH_SHORT).show();
+                                            edtNomeCampanha.setBackgroundResource(R.drawable.borda_edittext_erro);
                                         }
-                                        finish();
                                     } else {
                                         Toast.makeText(this, "Desconto ultrapassou o limite da categoria!", Toast.LENGTH_SHORT).show();
                                     }
@@ -380,6 +529,7 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
     protected void onDestroy() {
         PedidoHelper.setWebPedidoItem(null);
         PedidoHelper.setProduto(null);
+        CampanhaHelper.clear();
         System.gc();
         super.onDestroy();
     }
@@ -426,5 +576,22 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    private boolean verificaCampanha(Cliente cliente, Produto produto) {
+        edtNomeCampanha.setBackgroundResource(R.drawable.borda_edittext);
+        try {
+            List<CampanhaComercialCab> listaCampanha = campanhaComercialCabDAO.listaCampanhaComercialCab(cliente, produto);
+            if (listaCampanha.size() > 0) {
+                CampanhaHelper.setListaCampanha(listaCampanha);
+                Intent intent = new Intent(ProdutoPedidoActivity.this, CampanhaActivity.class);
+                intent.putExtra("pedido", 1);
+                startActivity(intent);
+                return true;
+            }
+        } catch (CursorIndexOutOfBoundsException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }

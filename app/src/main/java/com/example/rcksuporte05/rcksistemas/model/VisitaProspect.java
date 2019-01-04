@@ -15,7 +15,9 @@ public class VisitaProspect {
     private String latitude;
     private String longitude;
     private String idVisitaServidor;
-
+    private String titulo;
+    private CadastroAnexo fotoPrincipalBase64;
+    private CadastroAnexo fotoSecundariaBase64;
 
     public String getIdVisita() {
         return idVisita;
@@ -95,5 +97,29 @@ public class VisitaProspect {
 
     public void setIdVisitaServidor(String idVisitaServidor) {
         this.idVisitaServidor = idVisitaServidor;
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
+    }
+
+    public CadastroAnexo getFotoPrincipalBase64() {
+        return fotoPrincipalBase64;
+    }
+
+    public void setFotoPrincipalBase64(CadastroAnexo fotoPrincipalBase64) {
+        this.fotoPrincipalBase64 = fotoPrincipalBase64;
+    }
+
+    public CadastroAnexo getFotoSecundariaBase64() {
+        return fotoSecundariaBase64;
+    }
+
+    public void setFotoSecundariaBase64(CadastroAnexo fotoSecundariaBase64) {
+        this.fotoSecundariaBase64 = fotoSecundariaBase64;
     }
 }

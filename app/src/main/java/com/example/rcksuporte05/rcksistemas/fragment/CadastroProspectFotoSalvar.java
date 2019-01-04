@@ -22,20 +22,24 @@ import android.util.Base64;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.ProspectHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.UsuarioHelper;
+import com.example.rcksuporte05.rcksistemas.Helper.VisitaHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.activity.FotoActivity;
 import com.example.rcksuporte05.rcksistemas.api.ApiGeocoder;
 import com.example.rcksuporte05.rcksistemas.api.Rotas;
 import com.example.rcksuporte05.rcksistemas.model.CadastroAnexo;
+import com.example.rcksuporte05.rcksistemas.model.VisitaProspect;
 import com.example.rcksuporte05.rcksistemas.util.DatePickerUtil;
 import com.example.rcksuporte05.rcksistemas.util.FotoUtil;
 import com.example.rcksuporte05.rcksistemas.util.classesGeocoderUtil.RespostaGeocoder;
@@ -80,6 +84,15 @@ public class CadastroProspectFotoSalvar extends Fragment implements GoogleApiCli
     @BindView(R.id.edtDataRetorno)
     public EditText edtDataRetorno;
 
+    @BindView(R.id.spTipoVisita)
+    Spinner spTipoVisita;
+
+    @BindView(R.id.edtTitulo)
+    TextView edtTitulo;
+
+    @BindView(R.id.edtDescricaoAcao)
+    EditText edtDescricaoAcao;
+
     @BindView(R.id.imagemProspect1)
     ImageButton imagemProspect1;
 
@@ -100,15 +113,16 @@ public class CadastroProspectFotoSalvar extends Fragment implements GoogleApiCli
 
     @BindView(R.id.btnContinuar)
     Button btnContinuar;
-
     Bitmap mImagem1;
     Bitmap mImagem2;
     RespostaGeocoder respostaGeocoder;
     Location mLocation;
     ProgressDialog progress;
+    private String[] tipoVisita = {"Presencial", "Telefone"};
     private Uri uri;
     private DBHelper db;
     private FusedLocationProviderClient mFusedLocationClient;
+    private boolean verificaObrigatorios;
 
     @Nullable
     @Override
@@ -118,6 +132,9 @@ public class CadastroProspectFotoSalvar extends Fragment implements GoogleApiCli
         db = new DBHelper(getContext());
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
 
+        ArrayAdapter<String> adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_list_item_activated_1, tipoVisita);
+        spTipoVisita.setAdapter(adapter);
+
         imagemProspect1.setImageResource(R.mipmap.ic_add_imagem);
         imagemProspect2.setImageResource(R.mipmap.ic_add_imagem);
         txtLatitudeProspect.setVisibility(View.GONE);
@@ -125,9 +142,10 @@ public class CadastroProspectFotoSalvar extends Fragment implements GoogleApiCli
         txtChekinEnderecoProspect.setVisibility(View.GONE);
 
 
-        insereDadosNaTela();
-
         if (ProspectHelper.getProspect().getProspectSalvo() != null && ProspectHelper.getProspect().getProspectSalvo().equals("S")) {
+            spTipoVisita.setEnabled(false);
+            edtTitulo.setFocusable(false);
+            edtDescricaoAcao.setFocusable(false);
             edtDataRetorno.setFocusable(false);
             imagemProspect1.setEnabled(false);
             imagemProspect2.setEnabled(false);
@@ -177,13 +195,89 @@ public class CadastroProspectFotoSalvar extends Fragment implements GoogleApiCli
                         }
                     }
 
-                    if (validado) {
-                        insereDadosDaFrame();
+                    VisitaProspect visita;
+                    if (VisitaHelper.getVisitaProspect() != null)
+                        visita = VisitaHelper.getVisitaProspect();
+                    else
+                        visita = new VisitaProspect();
+                    verificaObrigatorios = true;
+
+                    visita.setProspect(VisitaHelper.getProspect());
+                    visita.setDataVisita(db.pegaDataAtual());
+                    visita.setUsuario_id(UsuarioHelper.getUsuario().getId_usuario());
+                    visita.setTipoContato(tipoVisita[spTipoVisita.getSelectedItemPosition()]);
+
+                    if (spTipoVisita.getSelectedItemPosition() == 0) {
+                        String dataRetorno = dataRetorno();
+                        if (dataRetorno != null) {
+                            visita.setDataRetorno(dataRetorno);
+                        } else {
+                            edtDataRetorno.setBackgroundResource(R.drawable.borda_edittext_erro);
+                            Toast.makeText(getActivity(), "A Data é Obrigatoria", Toast.LENGTH_SHORT).show();
+                        }
+
+                        if (mLocation != null) {
+                            visita.setLongitude(String.valueOf(mLocation.getLongitude()));
+                            visita.setLatitude(String.valueOf(mLocation.getLatitude()));
+                        }
+
+                    } else {
+
+                        String dataRetorno = dataRetorno();
+                        if (dataRetorno != null) {
+                            visita.setDataRetorno(dataRetorno);
+                        }
+
+                    }
+
+                    if (edtTitulo.getText() != null && !edtTitulo.getText().toString().trim().equals("")) {
+                        visita.setTitulo(edtTitulo.getText().toString());
+                    } else {
+                        edtTitulo.setError("Campo Obrigatorio");
+                        edtTitulo.requestFocus();
+                        verificaObrigatorios = false;
+                    }
+
+                    if (edtDescricaoAcao.getText() != null && !edtDescricaoAcao.getText().toString().trim().equals("")) {
+                        visita.setDescricaoVisita(edtDescricaoAcao.getText().toString());
+                    } else {
+                        edtDescricaoAcao.setError("Campo Obrigatorio");
+                        edtDescricaoAcao.requestFocus();
+                        verificaObrigatorios = false;
+                    }
+
+                    if (validado && verificaObrigatorios) {
+
                         if (ProspectHelper.getProspect().getId_prospect() != null && !ProspectHelper.getProspect().getId_prospect().trim().isEmpty()) {
                             System.out.println("Esse prospect já tem id!");
                         } else {
                             ProspectHelper.getProspect().setId_prospect(String.valueOf(db.contagem("SELECT MAX(ID_PROSPECT) FROM TBL_PROSPECT;") + 1));
                         }
+
+                        visita.setProspect(ProspectHelper.getProspect());
+                        visita = db.atualizaTBL_VISITA_PROSPECT(visita);
+                        if (visita != null) {
+                            ProspectHelper.getProspect().setIdPrimeiraVisita(Integer.parseInt(visita.getIdVisita()));
+                        } else {
+                            System.out.println("Falha ao salvar");
+                        }
+
+                        if (ProspectHelper.getProspect().getFotoPrincipalBase64() != null) {
+                            visita.setFotoPrincipalBase64(ProspectHelper.getProspect().getFotoPrincipalBase64());
+                            visita.getFotoPrincipalBase64().setIdCadastro(Integer.parseInt(visita.getIdVisita()));
+                            visita.getFotoPrincipalBase64().setPrincipal("S");
+                            visita.getFotoPrincipalBase64().setIdEntidade(11);
+                            visita.getFotoPrincipalBase64().setExcluido("N");
+                        }
+
+                        if (ProspectHelper.getProspect().getFotoSecundariaBase64() != null) {
+                            visita.setFotoSecundariaBase64(ProspectHelper.getProspect().getFotoSecundariaBase64());
+                            visita.getFotoSecundariaBase64().setIdCadastro(Integer.parseInt(visita.getIdVisita()));
+                            visita.getFotoSecundariaBase64().setPrincipal("N");
+                            visita.getFotoSecundariaBase64().setIdEntidade(11);
+                            visita.getFotoSecundariaBase64().setExcluido("N");
+                        }
+                        db.atualizaTBL_VISITA_PROSPECT(visita);
 
                         if (ProspectHelper.getProspect().getFotoPrincipalBase64() != null) {
                             ProspectHelper.getProspect().getFotoPrincipalBase64().setIdCadastro(Integer.parseInt(ProspectHelper.getProspect().getId_prospect()));
@@ -236,6 +330,8 @@ public class CadastroProspectFotoSalvar extends Fragment implements GoogleApiCli
                 }
             });
         }
+
+        insereDadosNaTela();
 
         ProspectHelper.setCadastroProspectFotoSalvar(this);
         return view;
@@ -324,6 +420,17 @@ public class CadastroProspectFotoSalvar extends Fragment implements GoogleApiCli
             progress.show();
             getGeocoder();
         }
+
+        if (VisitaHelper.getVisitaProspect() != null) {
+            edtTitulo.setText(VisitaHelper.getVisitaProspect().getTitulo());
+            edtDescricaoAcao.setText(VisitaHelper.getVisitaProspect().getDescricaoVisita());
+
+            if (VisitaHelper.getVisitaProspect().getTipoContato() != null && VisitaHelper.getVisitaProspect().getTipoContato().equals(tipoVisita[0])) {
+                spTipoVisita.setSelection(0);
+            } else {
+                spTipoVisita.setSelection(1);
+            }
+        }
     }
 
     @OnClick(R.id.imagemProspect1)
@@ -399,7 +506,6 @@ public class CadastroProspectFotoSalvar extends Fragment implements GoogleApiCli
             if (data != null) {
                 try {
                     bitmap = FotoUtil.rotateBitmap(BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(data.getData())), data.getData());
-
                 } catch (FileNotFoundException e) {
                     e.printStackTrace();
                 }
@@ -584,5 +690,39 @@ public class CadastroProspectFotoSalvar extends Fragment implements GoogleApiCli
                 Toast.makeText(getContext(), "Sem a permissão, função indisponivel!", Toast.LENGTH_LONG).show();
             }
         }
+    }
+
+    private String dataRetorno() {
+        if (edtDataRetorno.getText() != null && !edtDataRetorno.getText().toString().trim().isEmpty()) {
+            String dataCapturada = "";
+            Calendar dataAtual = new GregorianCalendar();
+            Calendar dataRetorno = new GregorianCalendar();
+            Date date = new Date();
+            dataAtual.setTime(date);
+
+            //pegar data da tela
+            try {
+                dataCapturada = new SimpleDateFormat("yyyy-MM-dd").format(new SimpleDateFormat("dd/MM/yyyy")
+                        .parse(edtDataRetorno.getText().toString().trim()));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            //converte no mesmo padrão da captura da atual
+            try {
+                dataRetorno.setTime(new SimpleDateFormat("yyyy-MM-dd").parse(dataCapturada));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            if (dataAtual.after(dataRetorno)) {
+                edtDataRetorno.setBackgroundResource(R.drawable.borda_edittext_erro);
+                Toast.makeText(getActivity(), "Data deve ser posterior a atual", Toast.LENGTH_SHORT).show();
+                verificaObrigatorios = false;
+            } else {
+                return dataCapturada;
+            }
+        }
+        return null;
     }
 }
