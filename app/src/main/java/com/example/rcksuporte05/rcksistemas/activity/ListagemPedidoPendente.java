@@ -35,6 +35,7 @@ import com.example.rcksuporte05.rcksistemas.DAO.CadastroAnexoDAO;
 import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.DAO.WebPedidoDAO;
 import com.example.rcksuporte05.rcksistemas.DAO.WebPedidoItensDAO;
+import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.PedidoHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.UsuarioHelper;
 import com.example.rcksuporte05.rcksistemas.R;
@@ -555,6 +556,7 @@ public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRe
                         listaPedidoAdapter.getItem(position).setId_web_pedido(null);
                         listaPedidoAdapter.getItem(position).setId_web_pedido_servidor(null);
                         listaPedidoAdapter.getItem(position).setPedido_enviado("N");
+                        ClienteHelper.setCliente(listaPedidoAdapter.getItem(position).getCadastro());
                         for (WebPedidoItens webPedidoItens : listaPedidoAdapter.getItem(position).getWebPedidoItens()) {
                             webPedidoItens.setId_web_item_servidor(null);
                             webPedidoItens.setId_pedido(null);
@@ -800,6 +802,7 @@ public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRe
                             webPedidoDuplicado.setId_web_pedido(null);
                             webPedidoDuplicado.setId_web_pedido_servidor(null);
                             webPedidoDuplicado.setPedido_enviado("N");
+                            ClienteHelper.setCliente(webPedidoDuplicado.getCadastro());
                             for (WebPedidoItens webPedidoItens : webPedidoDuplicado.getWebPedidoItens()) {
                                 webPedidoItens.setId_web_item_servidor(null);
                                 webPedidoItens.setId_pedido(null);

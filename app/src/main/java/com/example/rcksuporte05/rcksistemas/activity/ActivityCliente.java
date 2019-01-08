@@ -251,16 +251,16 @@ public class ActivityCliente extends AppCompatActivity {
             List<Cliente> listaCliente;
             switch (rgFiltraCliente.getCheckedRadioButtonId()) {
                 case R.id.filtraTodosClientes:
-                    listaCliente = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE FINALIZADO <> 'N' AND ATIVO = 'S' AND (NOME_CADASTRO LIKE '%" + query + "%' OR NOME_FANTASIA LIKE '%" + query + "%' OR CPF_CNPJ LIKE '" + query + "%' OR TELEFONE_PRINCIPAL LIKE '%" + query + "%' OR ID_CADASTRO_SERVIDOR LIKE '%" + query + "%') ORDER BY ATIVO DESC, NOME_CADASTRO");
+                    listaCliente = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE FINALIZADO <> 'N' AND ATIVO = 'S' AND F_VENDEDOR = 'N' AND (NOME_CADASTRO LIKE '%" + query + "%' OR NOME_FANTASIA LIKE '%" + query + "%' OR CPF_CNPJ LIKE '" + query + "%' OR TELEFONE_PRINCIPAL LIKE '%" + query + "%' OR ID_CADASTRO_SERVIDOR LIKE '%" + query + "%') ORDER BY ATIVO DESC, NOME_CADASTRO");
                     break;
                 case R.id.filtraClientesEfetivados:
-                    listaCliente = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE FINALIZADO <> 'N' AND F_CLIENTE = 'S' AND F_VENDEDOR = 'N' AND ATIVO = 'S' AND ID_CADASTRO_SERVIDOR > 0 AND (NOME_CADASTRO LIKE '%" + query + "%' OR NOME_FANTASIA LIKE '%" + query + "%' OR CPF_CNPJ LIKE '?%' OR TELEFONE_PRINCIPAL LIKE '%" + query + "%' OR ID_CADASTRO_SERVIDOR LIKE '%" + query + "%') ORDER BY ATIVO DESC, NOME_CADASTRO;");
+                    listaCliente = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE FINALIZADO <> 'N' AND F_CLIENTE = 'S' AND F_VENDEDOR = 'N' AND ATIVO = 'S' AND F_VENDEDOR = 'N' AND ID_CADASTRO_SERVIDOR > 0 AND (NOME_CADASTRO LIKE '%" + query + "%' OR NOME_FANTASIA LIKE '%" + query + "%' OR CPF_CNPJ LIKE '?%' OR TELEFONE_PRINCIPAL LIKE '%" + query + "%' OR ID_CADASTRO_SERVIDOR LIKE '%" + query + "%') ORDER BY ATIVO DESC, NOME_CADASTRO;");
                     break;
                 case R.id.filtraClientesNaoEfetivados:
-                    listaCliente = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE FINALIZADO <> 'N' AND F_CLIENTE <> 'S' AND ATIVO = 'S' AND (NOME_CADASTRO LIKE '%" + query + "%' OR NOME_FANTASIA LIKE '%" + query + "%' OR CPF_CNPJ LIKE '?%' OR TELEFONE_PRINCIPAL LIKE '%" + query + "%' OR ID_CADASTRO_SERVIDOR LIKE '%" + query + "%') ORDER BY ATIVO DESC, NOME_CADASTRO;");
+                    listaCliente = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE FINALIZADO <> 'N' AND F_CLIENTE <> 'S' AND ATIVO = 'S' AND F_VENDEDOR = 'N' AND (NOME_CADASTRO LIKE '%" + query + "%' OR NOME_FANTASIA LIKE '%" + query + "%' OR CPF_CNPJ LIKE '?%' OR TELEFONE_PRINCIPAL LIKE '%" + query + "%' OR ID_CADASTRO_SERVIDOR LIKE '%" + query + "%') ORDER BY ATIVO DESC, NOME_CADASTRO;");
                     break;
                 default:
-                    listaCliente = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE FINALIZADO <> 'N' AND ATIVO = 'S' AND (NOME_CADASTRO LIKE '%" + query + "%' OR NOME_FANTASIA LIKE '%" + query + "%' OR CPF_CNPJ LIKE '" + query + "%' OR TELEFONE_PRINCIPAL LIKE '%" + query + "%' OR ID_CADASTRO_SERVIDOR LIKE '%" + query + "%') ORDER BY ATIVO DESC, NOME_CADASTRO");
+                    listaCliente = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE FINALIZADO <> 'N' AND ATIVO = 'S' AND F_VENDEDOR = 'N' AND (NOME_CADASTRO LIKE '%" + query + "%' OR NOME_FANTASIA LIKE '%" + query + "%' OR CPF_CNPJ LIKE '" + query + "%' OR TELEFONE_PRINCIPAL LIKE '%" + query + "%' OR ID_CADASTRO_SERVIDOR LIKE '%" + query + "%') ORDER BY ATIVO DESC, NOME_CADASTRO");
                     break;
             }
             listaDeClientes.setVisibility(View.VISIBLE);
@@ -281,16 +281,16 @@ public class ActivityCliente extends AppCompatActivity {
             List<Cliente> listaCliente;
             switch (rgFiltraCliente.getCheckedRadioButtonId()) {
                 case R.id.filtraTodosClientes:
-                    listaCliente = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE FINALIZADO <> 'N' AND ATIVO = 'S' ORDER BY ATIVO DESC, NOME_CADASTRO;");
+                    listaCliente = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE FINALIZADO <> 'N' AND ATIVO = 'S' AND F_VENDEDOR = 'N' ORDER BY ATIVO DESC, NOME_CADASTRO;");
                     break;
                 case R.id.filtraClientesEfetivados:
-                    listaCliente = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE FINALIZADO <> 'N' AND F_CLIENTE = 'S' AND F_VENDEDOR = 'N' AND ATIVO = 'S' AND ID_CADASTRO_SERVIDOR > 0 ORDER BY ATIVO DESC, NOME_CADASTRO;");
+                    listaCliente = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE FINALIZADO <> 'N' AND F_CLIENTE = 'S' AND F_VENDEDOR = 'N' AND ATIVO = 'S' AND F_VENDEDOR = 'N' AND ID_CADASTRO_SERVIDOR > 0 ORDER BY ATIVO DESC, NOME_CADASTRO;");
                     break;
                 case R.id.filtraClientesNaoEfetivados:
-                    listaCliente = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE FINALIZADO <> 'N' AND F_CLIENTE <> 'S' AND ATIVO = 'S' ORDER BY ATIVO DESC, NOME_CADASTRO;");
+                    listaCliente = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE FINALIZADO <> 'N' AND F_CLIENTE <> 'S' AND ATIVO = 'S' AND F_VENDEDOR = 'N' ORDER BY ATIVO DESC, NOME_CADASTRO;");
                     break;
                 default:
-                    listaCliente = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE FINALIZADO <> 'N' AND AND ATIVO = 'S' ORDER BY ATIVO DESC, NOME_CADASTRO;");
+                    listaCliente = db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE FINALIZADO <> 'N' AND AND ATIVO = 'S' AND F_VENDEDOR = 'N' ORDER BY ATIVO DESC, NOME_CADASTRO;");
                     break;
             }
             listaDeClientes.setVisibility(View.VISIBLE);

@@ -508,9 +508,6 @@ public class ActivityValidaProspect extends AppCompatActivity implements GoogleA
             case 14:
                 prospect.setPessoa_f_j("J");
                 break;
-            default:
-                Toast.makeText(ActivityValidaProspect.this, "Tamanho do CNPJ/CPF inválido", Toast.LENGTH_SHORT).show();
-                break;
 
         }
         if (mLocation != null) {

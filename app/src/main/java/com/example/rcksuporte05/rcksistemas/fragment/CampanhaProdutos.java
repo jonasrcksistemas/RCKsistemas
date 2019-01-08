@@ -1,5 +1,6 @@
 package com.example.rcksuporte05.rcksistemas.fragment;
 
+import android.database.CursorIndexOutOfBoundsException;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -44,10 +45,15 @@ public class CampanhaProdutos extends Fragment {
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recycleCampanhaProdutos.setLayoutManager(layoutManager);
 
-        List<CampanhaComercialItens> lista = campanhaComercialItensDAO.listaCampanhaComercialItens(CampanhaHelper.getCampanhaComercialCab());
-        edtTotalProdutos.setText(lista.size() + " Produtos listados");
-        ListaCampanhaltensAdapter adapter = new ListaCampanhaltensAdapter(lista, null);
-        recycleCampanhaProdutos.setAdapter(adapter);
+        try {
+            List<CampanhaComercialItens> lista = campanhaComercialItensDAO.listaCampanhaComercialItens(CampanhaHelper.getCampanhaComercialCab());
+            edtTotalProdutos.setText(lista.size() + " Produtos listados");
+            ListaCampanhaltensAdapter adapter = new ListaCampanhaltensAdapter(lista, null);
+            recycleCampanhaProdutos.setAdapter(adapter);
+        } catch (CursorIndexOutOfBoundsException e) {
+            e.printStackTrace();
+            edtTotalProdutos.setText("Nenhum item encontrado");
+        }
 
         return view;
     }

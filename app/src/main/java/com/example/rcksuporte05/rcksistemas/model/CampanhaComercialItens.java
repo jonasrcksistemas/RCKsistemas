@@ -8,7 +8,7 @@ public class CampanhaComercialItens {
     private int idBaseCampanha;
     private int idCampanha;
     private int idLinhaProduto;
-    private int idProdutoVenda;
+    private String idProdutoVenda;
     private String nomeProdutoLinha;
     private Float quantidadeVenda;
     private int idProdutoBonus;
@@ -66,11 +66,11 @@ public class CampanhaComercialItens {
         this.idLinhaProduto = idLinhaProduto;
     }
 
-    public int getIdProdutoVenda() {
+    public String getIdProdutoVenda() {
         return idProdutoVenda;
     }
 
-    public void setIdProdutoVenda(int idProdutoVenda) {
+    public void setIdProdutoVenda(String idProdutoVenda) {
         this.idProdutoVenda = idProdutoVenda;
     }
 

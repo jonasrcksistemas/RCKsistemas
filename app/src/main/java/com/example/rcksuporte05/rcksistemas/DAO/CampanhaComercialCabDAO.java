@@ -99,7 +99,14 @@ public class CampanhaComercialCabDAO {
             campanhaComercialCab.setUsuarioData(cursor.getString(cursor.getColumnIndex("USUARIO_DATA")));
 
             if (db.contagem("SELECT COUNT(*) FROM TBL_CAMPANHA_COM_CLIENTES CAMP INNER JOIN TBL_CADASTRO CAD ON CAMP.ID_CLIENTE = CAD.ID_CADASTRO_SERVIDOR WHERE ID_CAMPANHA = " + campanhaComercialCab.getIdCampanha() + " AND CAMP.ID_EMPRESA = " + UsuarioHelper.getUsuario().getIdEmpresaMultiDevice() + " ORDER BY CAD.NOME_CADASTRO;") > 0) {
-                listaCampanhaComercialCab.add(campanhaComercialCab);
+                boolean insere = true;
+                for (int i = 0; listaCampanhaComercialCab.size() > i; i++) {
+                    if (campanhaComercialCab.getIdCampanha() == listaCampanhaComercialCab.get(i).getIdCampanha()) {
+                        insere = false;
+                    }
+                }
+                if (insere)
+                    listaCampanhaComercialCab.add(campanhaComercialCab);
             }
         } while (cursor.moveToNext());
         return listaCampanhaComercialCab;

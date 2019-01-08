@@ -112,10 +112,6 @@ public class ActivityCpfCnpjCliente extends AppCompatActivity {
             case 14:
                 ClienteHelper.getCliente().setPessoa_f_j("J");
                 break;
-            default:
-                Toast.makeText(ActivityCpfCnpjCliente.this, "Tamanho do CNPJ/CPF inválido", Toast.LENGTH_SHORT).show();
-                break;
-
         }
         ClienteHelper.getCliente().setCpf_cnpj(edtCpfCnpj.getText().toString().replaceAll("[^0-9]", ""));
         finish();

@@ -214,4 +214,12 @@ public class CadastroClienteMain extends AppCompatActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    protected void onDestroy() {
+        if (!ClienteHelper.getCliente().getF_cliente().equals("S")) {
+            ClienteHelper.clear();
+        }
+        super.onDestroy();
+    }
 }

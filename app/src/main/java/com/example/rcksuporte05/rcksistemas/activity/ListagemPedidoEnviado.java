@@ -28,6 +28,7 @@ import android.widget.Toast;
 import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.DAO.WebPedidoDAO;
 import com.example.rcksuporte05.rcksistemas.DAO.WebPedidoItensDAO;
+import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.PedidoHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.adapters.ListaPedidoAdapter;
@@ -239,6 +240,7 @@ public class ListagemPedidoEnviado extends AppCompatActivity implements ListaPed
                         webPedidoDuplicado.setId_web_pedido(null);
                         webPedidoDuplicado.setId_web_pedido_servidor(null);
                         webPedidoDuplicado.setPedido_enviado("N");
+                        ClienteHelper.setCliente(webPedidoDuplicado.getCadastro());
                         for (WebPedidoItens webPedidoItens : webPedidoDuplicado.getWebPedidoItens()) {
                             webPedidoItens.setId_web_item_servidor(null);
                             webPedidoItens.setId_pedido(null);
@@ -388,6 +390,7 @@ public class ListagemPedidoEnviado extends AppCompatActivity implements ListaPed
                             webPedidoDuplicado.setId_web_pedido(null);
                             webPedidoDuplicado.setId_web_pedido_servidor(null);
                             webPedidoDuplicado.setPedido_enviado("N");
+                            ClienteHelper.setCliente(webPedidoDuplicado.getCadastro());
                             for (WebPedidoItens webPedidoItens : webPedidoDuplicado.getWebPedidoItens()) {
                                 webPedidoItens.setId_web_item_servidor(null);
                                 webPedidoItens.setId_pedido(null);

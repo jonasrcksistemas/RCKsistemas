@@ -25,6 +25,9 @@ public class CampanhaComercialItensDAO {
         content.put("ID_BASE_CAMPANHA", campanhaComercialItens.getIdBaseCampanha());
         content.put("ID_CAMPANHA", campanhaComercialItens.getIdCampanha());
         content.put("ID_LINHA_PRODUTO", campanhaComercialItens.getIdLinhaProduto());
+        if (campanhaComercialItens.getIdLinhaProduto() == 0) {
+            content.put("ID_LINHA_PRODUTO", -1);
+        }
         content.put("ID_PRODUTO_VENDA", campanhaComercialItens.getIdProdutoVenda());
         content.put("NOME_PRODUTO_LINHA", campanhaComercialItens.getNomeProdutoLinha());
         content.put("QUANTIDADE_VENDA", campanhaComercialItens.getQuantidadeVenda());
@@ -64,7 +67,7 @@ public class CampanhaComercialItensDAO {
             campanhaComercialItens.setIdBaseCampanha(cursor.getInt(cursor.getColumnIndex("ID_BASE_CAMPANHA")));
             campanhaComercialItens.setIdCampanha(cursor.getInt(cursor.getColumnIndex("ID_CAMPANHA")));
             campanhaComercialItens.setIdLinhaProduto(cursor.getInt(cursor.getColumnIndex("ID_LINHA_PRODUTO")));
-            campanhaComercialItens.setIdProdutoVenda(cursor.getInt(cursor.getColumnIndex("ID_PRODUTO_VENDA")));
+            campanhaComercialItens.setIdProdutoVenda(cursor.getString(cursor.getColumnIndex("ID_PRODUTO_VENDA")));
             campanhaComercialItens.setNomeProdutoLinha(cursor.getString(cursor.getColumnIndex("NOME_PRODUTO_LINHA")));
             campanhaComercialItens.setQuantidadeVenda(cursor.getFloat(cursor.getColumnIndex("QUANTIDADE_VENDA")));
             campanhaComercialItens.setIdProdutoBonus(cursor.getInt(cursor.getColumnIndex("ID_PRODUTO_BONUS")));

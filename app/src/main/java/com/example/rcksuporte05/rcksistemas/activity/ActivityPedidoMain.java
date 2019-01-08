@@ -117,10 +117,14 @@ public class ActivityPedidoMain extends AppCompatActivity {
         } else {
             toolbar.setTitle("Lançamento de Pedido");
             if (ClienteHelper.getCliente() != null) {
-                objetoCliente = ClienteHelper.getCliente();
-                Intent intent = new Intent(this, ActivityProduto.class);
-                intent.putExtra("acao", 1);
-                startActivity(intent);
+                if (PedidoHelper.getListaWebPedidoItens() != null && PedidoHelper.getListaWebPedidoItens().size() > 0) {
+                    System.out.println("pedido duplicado!");
+                } else {
+                    objetoCliente = ClienteHelper.getCliente();
+                    Intent intent = new Intent(this, ActivityProduto.class);
+                    intent.putExtra("acao", 1);
+                    startActivity(intent);
+                }
             } else {
                 btnBuscaCliente.callOnClick();
             }

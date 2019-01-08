@@ -258,20 +258,24 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     if (PedidoHelper.getProduto() != null) {
                         if (!verificaCampanha(ClienteHelper.getCliente(), PedidoHelper.getProduto())) {
-                            Toast.makeText(ProdutoPedidoActivity.this, "Nenhuma campanha encontrada", Toast.LENGTH_LONG).show();
+                            Toast.makeText(ProdutoPedidoActivity.this, "Nenhuma campanha encontrada", Toast.LENGTH_SHORT).show();
                             CampanhaHelper.setCampanhaComercialCab(null);
                             edtNomeCampanha.setText("");
                             webPedidoItem.setIdCampanha(0);
                         }
                     } else if (PedidoHelper.getWebPedidoItem() != null) {
                         if (!verificaCampanha(ClienteHelper.getCliente(), PedidoHelper.getWebPedidoItem())) {
-                            Toast.makeText(ProdutoPedidoActivity.this, "Nenhuma campanha encontrada", Toast.LENGTH_LONG).show();
+                            Toast.makeText(ProdutoPedidoActivity.this, "Nenhuma campanha encontrada", Toast.LENGTH_SHORT).show();
                             CampanhaHelper.setCampanhaComercialCab(null);
                             edtNomeCampanha.setText("");
                             webPedidoItem.setIdCampanha(0);
                         }
                     } else {
-                        Toast.makeText(ProdutoPedidoActivity.this, "Nenhum produto localizado", Toast.LENGTH_LONG).show();
+                        if (PedidoHelper.getListaProdutos() != null && PedidoHelper.getListaProdutos().size() > 0) {
+                            Toast.makeText(ProdutoPedidoActivity.this, "Não é possivel lançar campanhas na multi-seleção de produtos", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(ProdutoPedidoActivity.this, "Nenhum produto localizado", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
             });
@@ -281,20 +285,24 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
                 public void onClick(View view) {
                     if (PedidoHelper.getProduto() != null) {
                         if (!verificaCampanha(ClienteHelper.getCliente(), PedidoHelper.getProduto())) {
-                            Toast.makeText(ProdutoPedidoActivity.this, "Nenhuma campanha encontrada", Toast.LENGTH_LONG).show();
+                            Toast.makeText(ProdutoPedidoActivity.this, "Nenhuma campanha encontrada", Toast.LENGTH_SHORT).show();
                             CampanhaHelper.setCampanhaComercialCab(null);
                             edtNomeCampanha.setText("");
                             webPedidoItem.setIdCampanha(0);
                         }
                     } else if (PedidoHelper.getWebPedidoItem() != null) {
                         if (!verificaCampanha(ClienteHelper.getCliente(), PedidoHelper.getWebPedidoItem())) {
-                            Toast.makeText(ProdutoPedidoActivity.this, "Nenhuma campanha encontrada", Toast.LENGTH_LONG).show();
+                            Toast.makeText(ProdutoPedidoActivity.this, "Nenhuma campanha encontrada", Toast.LENGTH_SHORT).show();
                             CampanhaHelper.setCampanhaComercialCab(null);
                             edtNomeCampanha.setText("");
                             webPedidoItem.setIdCampanha(0);
                         }
                     } else {
-                        Toast.makeText(ProdutoPedidoActivity.this, "Nenhum produto localizado", Toast.LENGTH_LONG).show();
+                        if (PedidoHelper.getListaProdutos() != null && PedidoHelper.getListaProdutos().size() > 0) {
+                            Toast.makeText(ProdutoPedidoActivity.this, "Não é possivel lançar campanhas na multi-seleção de produtos", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(ProdutoPedidoActivity.this, "Nenhum produto localizado", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
             });
@@ -368,7 +376,7 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
             if (getIntent().getIntExtra("pedido", 0) != 1 && verificaCampanha) {
                 verificaCampanha = false;
                 if (verificaCampanha(ClienteHelper.getCliente(), PedidoHelper.getWebPedidoItem())) {
-                    Toast.makeText(ProdutoPedidoActivity.this, "Campanhas disponiveis para este item encontradas", Toast.LENGTH_LONG).show();
+                    Toast.makeText(ProdutoPedidoActivity.this, "Campanhas disponiveis para este item encontradas", Toast.LENGTH_SHORT).show();
                 }
             }
 

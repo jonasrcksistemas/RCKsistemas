@@ -78,7 +78,7 @@
                 android:id="@+id/id_opcao_pedidos_pendentes"
                 android:layout_width="245dp"
                 android:layout_height="wrap_content"
-                android:checked="true"
+                android:checked="false"
                 android:maxLines="1"
                 android:text="Pedidos pendentes"
                 android:textColor="@color/colorAccent"
@@ -113,7 +113,7 @@
                 android:id="@+id/id_opcao_prospect"
                 android:layout_width="245dp"
                 android:layout_height="wrap_content"
-                android:checked="true"
+                android:checked="false"
                 android:text="Prospects Pendentes"
                 android:textColor="@color/colorAccent"
                 android:textSize="16sp" />
@@ -147,7 +147,7 @@
                 android:id="@+id/id_opcao_visiatas_pendentes"
                 android:layout_width="245dp"
                 android:layout_height="wrap_content"
-                android:checked="true"
+                android:checked="false"
                 android:text="Visitas Pendentes"
                 android:textColor="@color/colorAccent"
                 android:textSize="16sp" />

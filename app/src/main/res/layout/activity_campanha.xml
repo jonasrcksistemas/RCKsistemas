@@ -25,6 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:background="#dddfdd"
+        android:focusable="false"
         android:gravity="end"
         android:paddingEnd="5dp"
         android:paddingRight="5dp"

@@ -73,6 +73,9 @@ public class ListaClienteAdapter extends RecyclerView.Adapter<ClientesViewHolder
         if (clientes.get(position).getAlterado().equals("S")) {
             holder.txtClienteAguarda.setTextColor(Color.RED);
             holder.txtClienteAguarda.setText("Cliente com alterações pendentes");
+        } else {
+            holder.txtClienteAguarda.setTextColor(Color.BLACK);
+            holder.txtClienteAguarda.setText("Cliente aguardando análise para efetivação");
         }
 
         holder.itemView

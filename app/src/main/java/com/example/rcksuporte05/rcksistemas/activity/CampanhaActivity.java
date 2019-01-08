@@ -1,6 +1,7 @@
 package com.example.rcksuporte05.rcksistemas.activity;
 
 import android.content.Intent;
+import android.database.CursorIndexOutOfBoundsException;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -57,7 +58,12 @@ public class CampanhaActivity extends AppCompatActivity implements ListaCampanha
             preencheLista(CampanhaHelper.getListaCampanha());
         } else {
             toolbar.setTitle("Campanhas");
-            preencheLista(campanhaComercialCabDAO.listaCampanhaComercialCab());
+            try {
+                 preencheLista(campanhaComercialCabDAO.listaCampanhaComercialCab());
+            } catch (CursorIndexOutOfBoundsException e) {
+                e.printStackTrace();
+                edtTotalCampanhas.setText("Nenhuma campanha encontrada");
+            }
         }
 
         recycleCampanha.addItemDecoration(new DividerItemDecoration(this, LinearLayout.VERTICAL));
