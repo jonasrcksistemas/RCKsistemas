@@ -1,5 +1,6 @@
 package com.example.rcksuporte05.rcksistemas.adapters;
 
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import com.example.rcksuporte05.rcksistemas.model.CampanhaComercialCab;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 public class ListaCampanhaAdapter extends RecyclerView.Adapter<CampanhaViewHolder> {
@@ -45,6 +47,12 @@ public class ListaCampanhaAdapter extends RecyclerView.Adapter<CampanhaViewHolde
         }
         try {
             holder.txtDataTermino.setText("Validade  " + new SimpleDateFormat("dd/MM/yyyy").format(new SimpleDateFormat("yyyy-MM-dd").parse(campanhas.get(position).getDataFim())));
+            if (new SimpleDateFormat("yyyy-MM-dd").parse(campanhas.get(position).getDataFim()).before(new Date())) {
+                holder.txtDataTermino.setTextColor(Color.RED);
+            } else {
+                holder.txtDataTermino.setTextColor(Color.BLACK);
+            }
+
         } catch (ParseException e) {
             e.printStackTrace();
         }

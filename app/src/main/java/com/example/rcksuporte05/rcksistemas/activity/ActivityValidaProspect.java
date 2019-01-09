@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
@@ -477,7 +478,12 @@ public class ActivityValidaProspect extends AppCompatActivity implements GoogleA
                     case 500:
                         alert.setTitle("Atenção!");
                         alert.setMessage("Houve um erro ao consultar o servidor, se persistir, entre em contato com o pessoal responsável.");
-                        alert.setNeutralButton("OK", null);
+                        alert.setNeutralButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                prosseguirCadastro();
+                            }
+                        });
                         alert.show();
                         break;
                     default:
