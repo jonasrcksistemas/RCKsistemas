@@ -76,7 +76,7 @@ public class PedidoBO {
                     if (promocaoCliente.getIdCadastro() == idCliente) {
                         if (promocao.getAplicacaoProduto() > 0) {
                             for (PromocaoProduto promocaoProduto : promocao.getListaPromoProduto()) {
-                                if (promocaoProduto.getIdProduto() == idProduto) {
+                                if (promocaoProduto.getIdProduto().equals(idProduto)) {
                                     if (promocaoRetorno.getValorDesconto() > promocaoProduto.getDescontoPerc()) {
                                         return promocaoRetorno;
                                     } else {
