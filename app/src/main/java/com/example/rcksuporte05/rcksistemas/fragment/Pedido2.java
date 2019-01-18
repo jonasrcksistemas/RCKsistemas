@@ -11,6 +11,7 @@ import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -70,10 +71,9 @@ public class Pedido2 extends Fragment {
 
         bundle = getArguments();
 
-
         try {
             List<CondicoesPagamento> listaCondicoesPagamentos = db.listaCondicoesPagamento("SELECT * FROM TBL_CONDICOES_PAG_CAB;");
-            listaCondicoesPagamentos.add(0, new CondicoesPagamento());
+            listaCondicoesPagamentos.add(0, new CondicoesPagamento("0"));
             adapterPagamento = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_activated_1, listaCondicoesPagamentos);
             spPagamento.setAdapter(adapterPagamento);
 
@@ -97,7 +97,7 @@ public class Pedido2 extends Fragment {
                 while (!webPedido.getId_condicao_pagamento().equals(adapterPagamento.getItem(i).getId_condicao()));
                 spPagamento.setSelection(i);
             } catch (Exception e) {
-                System.out.println(e.getMessage());
+                e.printStackTrace();
             }
 
             //Seleciona operação correta dentro do Spinner spOperacao
@@ -116,7 +116,7 @@ public class Pedido2 extends Fragment {
             try {
                 txtDataEmissao.setText(new SimpleDateFormat("dd/MM/yyyy").format(new SimpleDateFormat("yyyy-MM-dd").parse(webPedido.getData_emissao())));
                 edtDataEntrega.setText(new SimpleDateFormat("dd/MM/yyyy").format(new SimpleDateFormat("yyyy-MM-dd").parse(webPedido.getData_prev_entrega())));
-            } catch (ParseException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         } else if (PedidoHelper.getWebPedido() != null) {
@@ -151,7 +151,7 @@ public class Pedido2 extends Fragment {
             try {
                 txtDataEmissao.setText(new SimpleDateFormat("dd/MM/yyyy").format(new SimpleDateFormat("yyyy-MM-dd").parse(webPedido.getData_emissao())));
                 edtDataEntrega.setText(new SimpleDateFormat("dd/MM/yyyy").format(new SimpleDateFormat("yyyy-MM-dd").parse(webPedido.getData_prev_entrega())));
-            } catch (ParseException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         } else {
@@ -233,6 +233,31 @@ public class Pedido2 extends Fragment {
                 }
             });
         }
+
+        spOperacao.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                pedidoHelper.salvaPedidoParcial();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
+
+        spPagamento.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                pedidoHelper.salvaPedidoParcial();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
         System.gc();
 
         return (view);

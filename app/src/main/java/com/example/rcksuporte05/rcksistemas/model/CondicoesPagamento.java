@@ -13,6 +13,14 @@ public class CondicoesPagamento {
     private String usuario_nome;
     private String usuario_data;
     private String publicar_na_web;
+    private String aceita_desconto;
+
+    public CondicoesPagamento(String id_condicao) {
+        this.id_condicao = id_condicao;
+    }
+
+    public CondicoesPagamento() {
+    }
 
     public String getAtivo() {
         return ativo;

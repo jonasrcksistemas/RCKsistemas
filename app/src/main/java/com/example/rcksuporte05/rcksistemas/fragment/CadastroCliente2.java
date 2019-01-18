@@ -12,8 +12,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.RadioButton;
-import android.widget.RadioGroup;
 import android.widget.Spinner;
 
 import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
@@ -38,18 +36,14 @@ public class CadastroCliente2 extends Fragment {
     public EditText edtCep;
     @BindView(R.id.edtEndereco)
     public EditText edtEndereco;
-    @BindView(R.id.rgSituacaoPredio)
-    public RadioGroup rgSituacaoPredio;
     @BindView(R.id.edtPais)
     Spinner edtPais;
     @BindView(R.id.edtUf)
     Spinner edtUf;
     @BindView(R.id.edtMunicipio)
     Spinner edtMunicipio;
-    @BindView(R.id.rdAlugado)
-    RadioButton rdAlugado;
-    @BindView(R.id.rdProprio)
-    RadioButton rdProprio;
+    @BindView(R.id.edtComplemento)
+    EditText edtComplemento;
     @BindView(R.id.btnContinuar)
     Button btnContinuar;
 
@@ -253,9 +247,7 @@ public class CadastroCliente2 extends Fragment {
             edtPais.setEnabled(false);
             edtUf.setEnabled(false);
             edtMunicipio.setEnabled(false);
-            rgSituacaoPredio.setClickable(false);
-            rdAlugado.setClickable(false);
-            rdProprio.setClickable(false);
+            edtComplemento.setFocusable(false);
 
             if (ClienteHelper.getCliente().getEndereco_cep() != null) {
                 String cep = ClienteHelper.getCliente().getEndereco_cep().trim().replaceAll("[^0-9]", "");
@@ -357,17 +349,8 @@ public class CadastroCliente2 extends Fragment {
             edtNumero.setText(ClienteHelper.getCliente().getEndereco_numero());
         if (ClienteHelper.getCliente().getEndereco_bairro() != null)
             edtBairro.setText(ClienteHelper.getCliente().getEndereco_bairro());
-
-        if (ClienteHelper.getCliente().getSituacaoPredio() != null && !ClienteHelper.getCliente().getSituacaoPredio().trim().isEmpty()) {
-            switch (ClienteHelper.getCliente().getSituacaoPredio().toUpperCase()) {
-                case "ALUGADO":
-                    rdAlugado.setChecked(true);
-                    break;
-                case "PROPRIO":
-                    rdProprio.setChecked(true);
-                    break;
-            }
-        }
+        if(ClienteHelper.getCliente().getEndereco_complemento() != null)
+            edtComplemento.setText(ClienteHelper.getCliente().getEndereco_complemento());
 
         System.gc();
 
@@ -411,17 +394,15 @@ public class CadastroCliente2 extends Fragment {
         else
             ClienteHelper.getCliente().setEndereco(null);
 
+        if (!edtComplemento.getText().toString().trim().isEmpty())
+            ClienteHelper.getCliente().setEndereco_complemento(edtComplemento.getText().toString());
+
         try {
             ClienteHelper.getCliente().setId_pais(Integer.parseInt(listaPaises.get(edtPais.getSelectedItemPosition()).getId_pais()));
             ClienteHelper.getCliente().setEndereco_uf(ufAdapter.getItem(edtUf.getSelectedItemPosition()).toString());
             ClienteHelper.getCliente().setNome_municipio(municipioAdapter.getItem(edtMunicipio.getSelectedItemPosition()).toString());
         } catch (ArrayIndexOutOfBoundsException e) {
             e.printStackTrace();
-        }
-
-        if (rgSituacaoPredio.getCheckedRadioButtonId() > 0) {
-            RadioButton rdSituacaoPredio = (RadioButton) view.findViewById(rgSituacaoPredio.getCheckedRadioButtonId());
-            ClienteHelper.getCliente().setSituacaoPredio(rdSituacaoPredio.getText().toString().toUpperCase());
         }
     }
 

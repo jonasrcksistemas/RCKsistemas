@@ -130,7 +130,7 @@
                         android:layout_alignParentStart="true"
                         android:layout_alignParentLeft="true"
                         android:layout_marginTop="16dp"
-                        android:text="DATA DE ENTREGA"
+                        android:text="DATA DE FATURAMENTO"
                         android:textColor="@color/colorAccent" />
 
                     <EditText

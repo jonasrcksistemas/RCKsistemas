@@ -94,6 +94,11 @@ public class CadastroProspectGeral extends Fragment {
             rdJuridica.setClickable(false);
         }
 
+        if (ProspectHelper.getProspect().getTelefone() != null && !ProspectHelper.getProspect().getTelefone().equals("")) {
+            edtTelefoneProspect.setText(ProspectHelper.getProspect().getTelefone());
+            edtTelefoneProspect.setFocusable(false);
+        }
+
         db = new DBHelper(getContext());
 
         CategoriaDAO categoriaDAO = new CategoriaDAO(db);

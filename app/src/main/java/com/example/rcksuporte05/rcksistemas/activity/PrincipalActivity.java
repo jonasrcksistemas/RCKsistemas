@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.CursorIndexOutOfBoundsException;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -22,6 +23,7 @@ import android.widget.Toast;
 import com.example.rcksuporte05.rcksistemas.BO.SincroniaBO;
 import com.example.rcksuporte05.rcksistemas.BO.UsuarioBO;
 import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
+import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.UsuarioHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.api.Api;
@@ -244,19 +246,29 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
                     Toast.makeText(PrincipalActivity.this, "Houve um erro ao salvar os usuarios", Toast.LENGTH_LONG).show();
                 else {
                     String aparelhoId = Settings.Secure.getString(getBaseContext().getContentResolver(), Settings.Secure.ANDROID_ID);
-                    Usuario usuarioLogin = db.listaUsuario("SELECT * FROM TBL_WEB_USUARIO WHERE ID_USUARIO = " + UsuarioHelper.getUsuario().getId_usuario()).get(0);
-                    if (aparelhoId.equals(usuarioLogin.getAparelho_id())) {
-                        loginNaApi(usuarioLogin);
-                    } else {
-                        if (!UsuarioHelper.getUsuario().getLogin().equals("DC")) {
-                            Toast.makeText(getApplicationContext(), "Este usuario está logado em outro aparelho!", Toast.LENGTH_SHORT).show();
-                            Toast.makeText(getApplicationContext(), "Por favor, refaça o seu login!", Toast.LENGTH_LONG).show();
-                            db.alterar("UPDATE TBL_LOGIN SET LOGADO = 'N';");
-                            Intent intent = new Intent(PrincipalActivity.this, MainActivity.class);
-                            startActivity(intent);
-                            finish();
+                    try {
+                        Usuario usuarioLogin = db.listaUsuario("SELECT * FROM TBL_WEB_USUARIO WHERE ID_USUARIO = " + UsuarioHelper.getUsuario().getId_usuario()).get(0);
+                        if (aparelhoId.equals(usuarioLogin.getAparelho_id())) {
+                            loginNaApi(usuarioLogin);
+                        } else {
+                            if (!UsuarioHelper.getUsuario().getLogin().equals("DC")) {
+                                Toast.makeText(getApplicationContext(), "Este usuario está logado em outro aparelho!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "Por favor, refaça o seu login!", Toast.LENGTH_LONG).show();
+                                db.alterar("UPDATE TBL_LOGIN SET LOGADO = 'N';");
+                                Intent intent = new Intent(PrincipalActivity.this, MainActivity.class);
+                                startActivity(intent);
+                                finish();
+                            }
+                            System.gc();
                         }
-                        System.gc();
+                    } catch (CursorIndexOutOfBoundsException e) {
+                        e.printStackTrace();
+                        Toast.makeText(getApplicationContext(), "Este usuario está logado em outro aparelho!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Por favor, refaça o seu login!", Toast.LENGTH_LONG).show();
+                        db.alterar("UPDATE TBL_LOGIN SET LOGADO = 'N';");
+                        Intent intent = new Intent(PrincipalActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
                     }
                 }
             }
@@ -265,6 +277,7 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onFailure(Call<List<Usuario>> call, Throwable t) {
                 t.printStackTrace();
+                Toast.makeText(PrincipalActivity.this, "Não foi possivel sincronizar com o servidor, por favor verifique sua conexão", Toast.LENGTH_LONG).show();
                 ivInternet.setVisibility(View.VISIBLE);
             }
         });
@@ -332,6 +345,7 @@ public class PrincipalActivity extends AppCompatActivity implements View.OnClick
             sincroniaBO.sincronizaApi(new Sincronia(true, true, true, false, false, false, false));
             getIntent().putExtra("alterado", 0);
         }
+        ClienteHelper.clear();
         super.onResume();
     }
 

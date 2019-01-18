@@ -59,8 +59,16 @@ public class ListaPedidoAdapter extends RecyclerView.Adapter<PedidoViewHolder> {
             holder.txtIdPedido.setText("Nº " + MascaraUtil.numeroZeros(pedidos.get(position).getId_web_pedido(), 5));
         }
 
+        if (pedidos.get(position).getFinalizado() != null && !pedidos.get(position).getFinalizado().equals("S")) {
+            holder.lyEnvia.setVisibility(View.GONE);
+            holder.lyCompartilhar.setVisibility(View.GONE);
+        }
+
         holder.txtNomeCliente.setText(pedidos.get(position).getCadastro().getNome_cadastro());
-        holder.txtPrecoPedido.setText(MascaraUtil.mascaraReal(pedidos.get(position).getValor_total()));
+        if (pedidos.get(position).getValor_total() != null)
+            holder.txtPrecoPedido.setText(MascaraUtil.mascaraReal(pedidos.get(position).getValor_total()));
+        else
+            holder.txtPrecoPedido.setText("");
 
         try {
             holder.txtDataEmissaoPedido.setText(new SimpleDateFormat("dd/MM/yyyy").format(new SimpleDateFormat("yyyy-MM-dd").parse(pedidos.get(position).getData_emissao())));
@@ -76,7 +84,20 @@ public class ListaPedidoAdapter extends RecyclerView.Adapter<PedidoViewHolder> {
 
         DBHelper db = new DBHelper(activity);
         holder.txtOperacao.setText(db.consulta("SELECT NOME_OPERACAO FROM TBL_OPERACAO_ESTOQUE WHERE ID_OPERACAO = " + pedidos.get(position).getId_operacao() + ";", "NOME_OPERACAO"));
-        holder.txtCondicaoPagamento.setText(db.consulta("SELECT * FROM TBL_CONDICOES_PAG_CAB WHERE ID_CONDICAO = " + pedidos.get(position).getId_condicao_pagamento() + ";", "NOME_CONDICAO"));
+        if (!pedidos.get(position).getId_condicao_pagamento().equals("0"))
+            holder.txtCondicaoPagamento.setText(db.consulta("SELECT * FROM TBL_CONDICOES_PAG_CAB WHERE ID_CONDICAO = " + pedidos.get(position).getId_condicao_pagamento() + ";", "NOME_CONDICAO"));
+        else
+            holder.txtCondicaoPagamento.setText("");
+
+        if (pedidos.get(position).getFinalizado().equals("N")) {
+            holder.abandonado.setVisibility(View.VISIBLE);
+            holder.txtPrecoPedido.setVisibility(View.INVISIBLE);
+            holder.lyEntrega.setVisibility(View.INVISIBLE);
+        } else {
+            holder.abandonado.setVisibility(View.INVISIBLE);
+            holder.txtPrecoPedido.setVisibility(View.VISIBLE);
+            holder.lyEntrega.setVisibility(View.VISIBLE);
+        }
 
         holder.itemView.setActivated(selectedItems.get(position, false));
 

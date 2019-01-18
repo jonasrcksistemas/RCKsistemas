@@ -217,8 +217,12 @@ public class CadastroClienteMain extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        if (!ClienteHelper.getCliente().getF_cliente().equals("S")) {
-            ClienteHelper.clear();
+        try {
+            if (!ClienteHelper.getCliente().getF_cliente().equals("S")) {
+                ClienteHelper.clear();
+            }
+        } catch (NullPointerException e) {
+            e.printStackTrace();
         }
         super.onDestroy();
     }

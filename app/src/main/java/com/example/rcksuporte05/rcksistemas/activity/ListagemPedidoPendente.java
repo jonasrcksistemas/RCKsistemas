@@ -77,6 +77,7 @@ public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRe
     private MenuItem geraPDF;
     private MenuItem emailPDF;
     private MenuItem duplicaPedido;
+    private MenuItem enviaPedido;
     private ActionMode actionMode;
 
     @OnClick(R.id.btnNovoPedido)
@@ -114,7 +115,10 @@ public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRe
                 finish();
                 break;
             case R.id.menu_pedido_pendente:
-                if (listaPedido.size() > 0) {
+
+                List<WebPedido> pedidoEnviar = webPedidoDAO.listaWebPedido("SELECT * FROM TBL_WEB_PEDIDO WHERE PEDIDO_ENVIADO = 'N' AND USUARIO_LANCAMENTO_ID = " + usuario.getId_usuario() + " AND FINALIZADO = 'S' ORDER BY ID_WEB_PEDIDO DESC;");
+                if (pedidoEnviar.size() > 0) {
+                    final List<WebPedido> finalPedidoEnviar = pedidoEnviar;
                     AlertDialog.Builder alert = new AlertDialog.Builder(this);
                     alert.setTitle("Atenção!");
                     alert.setMessage("Deseja enviar todos os pedidos para o servidor?");
@@ -128,7 +132,8 @@ public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRe
                             progress.setCancelable(false);
                             progress.show();
 
-                            enviarPedidos(listaPedido);
+//                            enviarPedidos(listaPedido);
+                            enviarPedidos(finalPedidoEnviar);
                         }
                     });
                     alert.show();
@@ -158,7 +163,7 @@ public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRe
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(0, notificacao.build());
 
-        prepararItensPedidos();
+        prepararItensPedidos(listaParaEnvio);
 
         final Rotas apiRotas = Api.buildRetrofit();
         Map<String, String> cabecalho = new HashMap<>();
@@ -342,7 +347,7 @@ public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRe
 
     }
 
-    public void prepararItensPedidos() {
+    public void prepararItensPedidos(List<WebPedido> listaPedido) {
         for (WebPedido pedido : listaPedido) {
             if (pedido.getCadastro().getId_cadastro_servidor() <= 0) {
                 if (db.contagem("SELECT COUNT(ID_ANEXO) FROM TBL_CADASTRO_ANEXOS WHERE ID_CADASTRO = " + pedido.getCadastro().getId_cadastro() + " AND EXCLUIDO = 'N';") > 0) {
@@ -467,6 +472,7 @@ public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRe
             Toast.makeText(this, "Nenuhm pedido pendente!", Toast.LENGTH_LONG).show();
         }
         edtNumerPedidoPendentes.setText(listaPedido.size() + ": Pedidos Pendentes");
+        ClienteHelper.clear();
         super.onResume();
     }
 
@@ -556,9 +562,11 @@ public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRe
                         listaPedidoAdapter.getItem(position).setId_web_pedido(null);
                         listaPedidoAdapter.getItem(position).setId_web_pedido_servidor(null);
                         listaPedidoAdapter.getItem(position).setPedido_enviado("N");
+                        listaPedidoAdapter.getItem(position).setFinalizado("N");
                         ClienteHelper.setCliente(listaPedidoAdapter.getItem(position).getCadastro());
                         for (WebPedidoItens webPedidoItens : listaPedidoAdapter.getItem(position).getWebPedidoItens()) {
                             webPedidoItens.setId_web_item_servidor(null);
+                            webPedidoItens.setId_web_item(null);
                             webPedidoItens.setId_pedido(null);
                         }
                         PedidoHelper.setWebPedido(listaPedidoAdapter.getItem(position));
@@ -641,6 +649,26 @@ public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRe
                 else
                     duplicaPedido.setVisible(true);
             }
+
+            boolean finalizado = false;
+            if (enviaPedido != null) {
+                for (WebPedido webPedido : listaPedidoAdapter.getItensSelecionados()) {
+                    if (webPedido.getFinalizado().equals("N")) {
+                        finalizado = true;
+                        break;
+                    }
+                }
+
+                if (finalizado) {
+                    enviaPedido.setVisible(false);
+                    geraPDF.setVisible(false);
+                    emailPDF.setVisible(false);
+                } else {
+                    enviaPedido.setVisible(true);
+                    geraPDF.setVisible(true);
+                    emailPDF.setVisible(true);
+                }
+            }
             actionMode.setTitle(String.valueOf(count));
             actionMode.invalidate();
         }
@@ -660,6 +688,7 @@ public class ListagemPedidoPendente extends AppCompatActivity implements SwipeRe
             geraPDF = menu.findItem(R.id.action_pdf_pedido);
             emailPDF = menu.findItem(R.id.action_pdf_pedido_email);
             duplicaPedido = menu.findItem(R.id.action_duplica_pedido);
+            enviaPedido = menu.findItem(R.id.action_mode_menu_pedido_pendente);
             return true;
         }
 

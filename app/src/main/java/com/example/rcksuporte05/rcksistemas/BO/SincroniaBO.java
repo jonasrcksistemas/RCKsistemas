@@ -293,6 +293,7 @@ public class SincroniaBO {
 
                 final CadastroAnexoDAO cadastroAnexoDAO = new CadastroAnexoDAO(db);
                 webPedido.getCadastro().setAlterado("N");
+                webPedido.setFinalizado("S");
                 db.atualizarTBL_CADASTRO(webPedido.getCadastro());
                 db.alterar("DELETE FROM TBL_CADASTRO_ANEXOS WHERE ID_CADASTRO = " + webPedido.getCadastro().getId_cadastro() + ";");
                 if (webPedido.getCadastro().getListaCadastroAnexo().size() > 0) {
@@ -418,6 +419,7 @@ public class SincroniaBO {
                 notificacao.setProgress(maxProgress, contadorNotificacaoEProgresso, false);
 
                 webPedido.setPedido_enviado("S");
+                webPedido.setFinalizado("S");
                 if (db.contagem("SELECT COUNT(*) FROM TBL_WEB_PEDIDO WHERE ID_WEB_PEDIDO_SERVIDOR = " + webPedido.getId_web_pedido_servidor()) > 0)
                     db.alterar("DELETE FROM TBL_WEB_PEDIDO WHERE ID_WEB_PEDIDO_SERVIDOR = " + webPedido.getId_web_pedido_servidor());
                 webPedidoDAO.inserirTBL_WEB_PEDIDO(webPedido);
@@ -664,7 +666,7 @@ public class SincroniaBO {
                 cabecalho.put("AUTHORIZATION", UsuarioHelper.getUsuario().getToken());
 
                 if (sincronia.isPedidosPendentes()) {
-                    final List<WebPedido> listaPedido = webPedidoDAO.listaWebPedido("SELECT * FROM TBL_WEB_PEDIDO WHERE PEDIDO_ENVIADO = 'N' AND USUARIO_LANCAMENTO_ID = " + UsuarioHelper.getUsuario().getId_usuario() + " ORDER BY ID_WEB_PEDIDO DESC;");
+                    final List<WebPedido> listaPedido = webPedidoDAO.listaWebPedido("SELECT * FROM TBL_WEB_PEDIDO WHERE PEDIDO_ENVIADO = 'N' AND USUARIO_LANCAMENTO_ID = " + UsuarioHelper.getUsuario().getId_usuario() + " AND FINALIZADO = 'S' ORDER BY ID_WEB_PEDIDO DESC;");
                     sincronia.setListaWebPedidosPendentes(prepararItensPedidos(listaPedido));
                 }
 

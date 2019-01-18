@@ -57,6 +57,7 @@ public class WebPedidoDAO {
         content.put("DATA_PREV_ENTREGA", webPedido.getData_prev_entrega());
         content.put("ID_WEB_PEDIDO_SERVIDOR", webPedido.getId_web_pedido_servidor());
         content.put("PEDIDO_ENVIADO", webPedido.getPedido_enviado());
+        content.put("FINALIZADO", webPedido.getFinalizado());
 
         db.salvarDados("TBL_WEB_PEDIDO", content);
         System.gc();
@@ -72,7 +73,7 @@ public class WebPedidoDAO {
         content.put("ID_CONDICAO_PAGAMENTO", webPedido.getId_condicao_pagamento());
         content.put("ID_OPERACAO", webPedido.getId_operacao());
         content.put("ID_TABELA", webPedido.getId_tabela());
-        content.put("NOME_EXTENSO", webPedido.getNome_extenso());
+        content.put("NOME_EXTENSO", webPedido.getCadastro().getNome_cadastro());
         content.put("DATA_EMISSAO", webPedido.getData_emissao());
         content.put("VALOR_PRODUTOS", webPedido.getValor_produtos());
         content.put("VALOR_DESCONTO", webPedido.getValor_desconto());
@@ -104,6 +105,7 @@ public class WebPedidoDAO {
         content.put("DATA_PREV_ENTREGA", webPedido.getData_prev_entrega());
         content.put("PEDIDO_ENVIADO", webPedido.getPedido_enviado());
         content.put("ID_WEB_PEDIDO_SERVIDOR", webPedido.getId_web_pedido_servidor());
+        content.put("FINALIZADO", webPedido.getFinalizado());
 
         db.atualizaDados("TBL_WEB_PEDIDO", content, "ID_WEB_PEDIDO = " + webPedido.getId_web_pedido());
         System.gc();
@@ -158,6 +160,7 @@ public class WebPedidoDAO {
                 webPedido.setId_web_pedido_servidor(cursor.getString(cursor.getColumnIndex("ID_WEB_PEDIDO_SERVIDOR")));
                 webPedido.setData_prev_entrega(cursor.getString(cursor.getColumnIndex("DATA_PREV_ENTREGA")));
                 webPedido.setPedido_enviado(cursor.getString(cursor.getColumnIndex("PEDIDO_ENVIADO")));
+                webPedido.setFinalizado(cursor.getString(cursor.getColumnIndex("FINALIZADO")));
 
                 lista.add(webPedido);
             } catch (CursorIndexOutOfBoundsException e) {

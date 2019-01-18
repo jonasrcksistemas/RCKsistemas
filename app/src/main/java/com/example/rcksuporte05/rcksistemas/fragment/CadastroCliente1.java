@@ -241,6 +241,7 @@ public class CadastroCliente1 extends Fragment {
                         }
                         if (getActivity().getIntent().getIntExtra("prospect", 0) > 0) {
                             db.alterar("DELETE FROM TBL_PROSPECT WHERE ID_PROSPECT = " + getActivity().getIntent().getIntExtra("prospect", 0) + ";");
+                            db.alterar("DELETE FROM TBL_VISITA_PROSPECT WHERE ID_CADASTRO = " + getActivity().getIntent().getIntExtra("prospect", 0) + ";");
                         }
 
                         ClienteHelper.moveTela(1);

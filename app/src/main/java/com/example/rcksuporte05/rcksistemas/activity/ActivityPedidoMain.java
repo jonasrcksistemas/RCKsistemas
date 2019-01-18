@@ -43,6 +43,8 @@ public class ActivityPedidoMain extends AppCompatActivity {
 
     public static ActionMode actionMode;
     private static Cliente objetoCliente = null;
+    @BindView(R.id.toolbarFragsPedido)
+    public Toolbar toolbar;
     @BindView(R.id.txtNomeCliente)
     public TextView txtNomeCliente;
     @BindView(R.id.txtRazaoSocial)
@@ -97,7 +99,6 @@ public class ActivityPedidoMain extends AppCompatActivity {
 
         pedidoHelper = new PedidoHelper(this);
 
-        Toolbar toolbar = findViewById(R.id.toolbarFragsPedido);
         vizualizacao = getIntent().getIntExtra("vizualizacao", 0);
 
         tabsAdapterPedido = new TabsAdapterPedido(getSupportFragmentManager(), ActivityPedidoMain.this, UsuarioHelper.getUsuario(), vizualizacao);
@@ -151,7 +152,7 @@ public class ActivityPedidoMain extends AppCompatActivity {
         }
 
         if (PedidoHelper.getIdPedido() > 0) {
-            webPedido = webPedidoDAO.listaWebPedido("SELECT * FROM TBL_WEB_PEDIDO WHERE ID_WEB_PEDIDO = " + PedidoHelper.getIdPedido()).get(0);
+            webPedido = webPedidoDAO.listaWebPedido("SELECT * FROM TBL_WEB_PEDIDO WHERE ID_WEB_PEDIDO = " + PedidoHelper.getIdPedido() + ";").get(0);
             objetoCliente = webPedido.getCadastro();
             ClienteHelper.setCliente(objetoCliente);
             if (webPedido.getId_web_pedido_servidor() != null)
@@ -294,17 +295,13 @@ public class ActivityPedidoMain extends AppCompatActivity {
     protected void onDestroy() {
         pedidoHelper.limparDados();
         objetoCliente = null;
-        ClienteHelper.clear();
         HistoricoFinanceiroHelper.limparDados();
         System.gc();
         super.onDestroy();
     }
 
     public boolean verificaCliente() {
-        if (objetoCliente != null)
-            return true;
-        else
-            return false;
+        return objetoCliente != null;
     }
 
     @Override
@@ -315,6 +312,7 @@ public class ActivityPedidoMain extends AppCompatActivity {
                 intent.putExtra("acao", 1);
                 startActivity(intent);
             }
+
             txtNomeCliente.setText(objetoCliente.getNome_cadastro());
             txtNomeCliente.setTextColor(Color.parseColor("#FF8E908E"));
             txtNomeFantasia.setText(objetoCliente.getNome_fantasia());
@@ -323,6 +321,8 @@ public class ActivityPedidoMain extends AppCompatActivity {
         } catch (NullPointerException e) {
             e.printStackTrace();
         }
+        if (verificaCliente())
+            pedidoHelper.salvaPedidoParcial();
         super.onResume();
     }
 

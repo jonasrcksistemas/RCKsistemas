@@ -16,6 +16,18 @@
         android:textSize="10dp" />
 
     <TextView
+        android:id="@+id/txtCodigoBarra"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/idProduto"
+        android:layout_marginStart="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_toEndOf="@+id/idProduto"
+        android:layout_toRightOf="@+id/idProduto"
+        android:textSize="10dp"
+        android:textColor="#000000"/>
+
+    <TextView
         android:id="@+id/nomeListaProduto"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -27,8 +39,6 @@
         android:layout_marginTop="5dp"
         android:layout_marginEnd="12dp"
         android:layout_marginRight="12dp"
-        android:ellipsize="end"
-        android:maxLines="1"
         android:text="nomeListaProduto"
         android:textColor="#000000"
         android:textSize="16sp" />

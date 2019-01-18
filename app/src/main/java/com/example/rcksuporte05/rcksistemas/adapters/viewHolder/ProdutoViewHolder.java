@@ -15,6 +15,8 @@ import butterknife.ButterKnife;
  */
 
 public class ProdutoViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    @BindView(R.id.txtCodigoBarra)
+    public TextView txtCodigoBarra;
     @BindView(R.id.nomeListaProduto)
     public TextView nomeListaProduto;
     @BindView(R.id.precoProduto)

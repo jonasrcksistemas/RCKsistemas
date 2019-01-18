@@ -34,7 +34,7 @@ public class DBHelper extends SQLiteOpenHelper {
     private static String NomeBanco = "Banco.db";
 
     public DBHelper(Context context) {
-        super(context, NomeBanco, null, 7);
+        super(context, NomeBanco, null, 8);
     }
 
     @Override
@@ -390,7 +390,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 " FATURADO VARCHAR(1)," +
                 " PEDIDO_ENVIADO VARCHAR(1) DEFAULT 'N', " +
                 " ID_WEB_PEDIDO_SERVIDOR INTEGER," +
-                " DATA_PREV_ENTREGA DATE);");
+                " DATA_PREV_ENTREGA DATE, " +
+                " FINALIZADO VARCHAR(1) DEFAULT 'N');");
 
         db.execSQL("CREATE TABLE IF NOT EXISTS TBL_OPERACAO_ESTOQUE (ATIVO CHAR(1) DEFAULT 'S'  NOT NULL, ID_OPERACAO INTEGER DEFAULT 0 PRIMARY KEY, NOME_OPERACAO VARCHAR(60) NOT NULL, NATUREZA_OPERACAO VARCHAR(60));");
 
@@ -647,7 +648,7 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         if (newVersion > oldVersion) {
-            if (newVersion >= 7) {
+            if (newVersion >= 8) {
                 db.execSQL("ALTER TABLE TBL_CADASTRO ADD COLUMN FINALIZADO VARCHAR(1) DEFAULT 'S';");
                 db.execSQL("UPDATE TBL_CADASTRO SET FINALIZADO = 'S';");
                 db.execSQL("ALTER TABLE TBL_PROSPECT ADD COLUMN FINALIZADO VARCHAR(1) DEFAULT 'S';");
@@ -706,6 +707,9 @@ public class DBHelper extends SQLiteOpenHelper {
                 db.execSQL("ALTER TABLE TBL_PRODUTO ADD COLUMN ID_LINHA_COLECAO INTEGER;");
                 db.execSQL("ALTER TABLE TBL_WEB_PEDIDO_ITENS ADD COLUMN ID_LINHA_COLECAO INTEGER;");
                 db.execSQL("ALTER TABLE TBL_WEB_PEDIDO_ITENS ADD COLUMN ID_CAMPANHA INTEGER;");
+
+                db.execSQL("ALTER TABLE TBL_WEB_PEDIDO ADD COLUMN FINALIZADO VARCHAR(1) DEFAULT 'N';");
+                db.execSQL("UPDATE TBL_WEB_PEDIDO SET FINALIZADO = 'S';");
             }
         }
     }
@@ -2403,7 +2407,7 @@ public class DBHelper extends SQLiteOpenHelper {
             content.put("TIPO_CONTATO", visita.getTipoContato());
             content.put("LATITUDE", visita.getLatitude());
             content.put("LONGITUDE", visita.getLongitude());
-            content.put("ID_CADASTRO", visita.getIdVisita());
+            content.put("ID_CADASTRO", visita.getProspect().getId_prospect());
             content.put("ID_CADASTRO_SERVIDOR", visita.getProspect().getId_cadastro());
             content.put("ID_VISITA_SERVIDOR", visita.getIdVisitaServidor());
             content.put("TITULO", visita.getTitulo());
@@ -2420,7 +2424,8 @@ public class DBHelper extends SQLiteOpenHelper {
                 cadastroAnexoDAO.atualizarCadastroAnexo(visita.getFotoSecundariaBase64());
             }
 
-            if (visita.getIdVisita() != null && contagem("SELECT COUNT(ID_VISITA) FROM TBL_VISITA_PROSPECT WHERE ID_VISITA = " + visita.getIdVisita()) > 0) {
+            if ((visita.getIdVisita() != null && contagem("SELECT COUNT(ID_VISITA) FROM TBL_VISITA_PROSPECT WHERE ID_VISITA = " + visita.getIdVisita()) > 0)
+                    || (visita.getIdVisitaServidor() != null && contagem("SELECT COUNT(ID_VISITA_SERVIDOR) FROM TBL_VISITA_PROSPECT WHERE ID_VISITA_SERVIDOR = " + visita.getIdVisitaServidor()) > 0)) {
                 content.put("ID_VISITA", visita.getIdVisita());
                 db.update("TBL_VISITA_PROSPECT", content, "ID_VISITA =" + visita.getIdVisita(), null);
             } else {
@@ -2441,7 +2446,7 @@ public class DBHelper extends SQLiteOpenHelper {
             SQLiteDatabase db = this.getReadableDatabase();
             Cursor cursor;
 
-            cursor = db.rawQuery("SELECT * FROM TBL_VISITA_PROSPECT --WHERE ID_CADASTRO = " + prospect.getId_prospect() + " ORDER BY ID_CADASTRO DESC;", null);
+            cursor = db.rawQuery("SELECT * FROM TBL_VISITA_PROSPECT WHERE ID_CADASTRO = " + prospect.getId_prospect() + " ORDER BY ID_CADASTRO DESC;", null);
             cursor.moveToFirst();
 
             do {
@@ -2463,7 +2468,6 @@ public class DBHelper extends SQLiteOpenHelper {
             } while (cursor.moveToNext());
         } catch (Exception e) {
             e.printStackTrace();
-            //TODO Consertar o cadastro de visitas
         }
 
         return visitas;
@@ -2565,6 +2569,12 @@ public class DBHelper extends SQLiteOpenHelper {
 
                 try {
                     visita.setIdVisitaServidor(cursor.getString(cursor.getColumnIndex("ID_VISITA_SERVIDOR")));
+                } catch (CursorIndexOutOfBoundsException e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    visita.setTitulo(cursor.getString(cursor.getColumnIndex("TITULO")));
                 } catch (CursorIndexOutOfBoundsException e) {
                     e.printStackTrace();
                 }

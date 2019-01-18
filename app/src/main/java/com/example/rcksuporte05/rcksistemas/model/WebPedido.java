@@ -45,6 +45,7 @@ public class WebPedido {
     private String data_prev_entrega;
     private List<WebPedidoItens> webPedidoItens;
     private String pedido_enviado;
+    private String finalizado;
 
     public WebPedido() {
     }
@@ -379,5 +380,13 @@ public class WebPedido {
 
     public void setPedido_enviado(String pedido_enviado) {
         this.pedido_enviado = pedido_enviado;
+    }
+
+    public String getFinalizado() {
+        return finalizado;
+    }
+
+    public void setFinalizado(String finalizado) {
+        this.finalizado = finalizado;
     }
 }

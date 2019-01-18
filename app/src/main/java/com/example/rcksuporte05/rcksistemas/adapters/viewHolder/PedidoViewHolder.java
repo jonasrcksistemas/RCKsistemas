@@ -37,6 +37,8 @@ public class PedidoViewHolder extends RecyclerView.ViewHolder implements View.On
     public LinearLayout lyExcluir;
     @BindView(R.id.lyEnvia)
     public LinearLayout lyEnvia;
+    @BindView(R.id.lyCompartilhar)
+    public LinearLayout lyCompartilhar;
     @BindView(R.id.btnExcluir)
     public Button btnExcluir;
     @BindView(R.id.btnEnviar)
@@ -51,6 +53,10 @@ public class PedidoViewHolder extends RecyclerView.ViewHolder implements View.On
     public TextView txtOperacao;
     @BindView(R.id.txtCondicaoPagamento)
     public TextView txtCondicaoPagamento;
+    @BindView(R.id.abandonado)
+    public LinearLayout abandonado;
+    @BindView(R.id.lyEntrega)
+    public LinearLayout lyEntrega;
 
     ListaPedidoAdapter.PedidoAdapterListener listener;
 

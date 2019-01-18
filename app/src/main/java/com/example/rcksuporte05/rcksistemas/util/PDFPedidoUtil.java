@@ -125,6 +125,11 @@ public class PDFPedidoUtil extends PdfPageEventHelper {
         Chunk municipio = new Chunk(webPedido.getCadastro().getNome_municipio() + "\n");
         municipio.setFont(normalFont);
         p.add(municipio);
+        p.add("Complemento: ");
+        Chunk complemento = new Chunk("\n");
+        if (webPedido.getCadastro().getEndereco_complemento() != null && !webPedido.getCadastro().getEndereco_complemento().trim().isEmpty())
+            complemento = new Chunk(webPedido.getCadastro().getEndereco_complemento() + "\n");
+        p.add(complemento);
         p.add("Condição de Pagamento: ");
         Chunk condPag = new Chunk(buscaCondPag().getNome_condicao());
         p.add(condPag);
@@ -148,7 +153,9 @@ public class PDFPedidoUtil extends PdfPageEventHelper {
         cpf.setFont(normalFont);
         p2.add(cpf);
         p2.add("IE: ");
-        Chunk IE = new Chunk(webPedido.getCadastro().getInscri_estadual() + "\n");
+        Chunk IE = new Chunk("\n");
+        if (webPedido.getCadastro().getInscri_estadual() != null)
+            IE = new Chunk(webPedido.getCadastro().getInscri_estadual() + "\n");
         IE.setFont(normalFont);
         p2.add(IE);
         p2.add("CEP: ");
@@ -168,23 +175,23 @@ public class PDFPedidoUtil extends PdfPageEventHelper {
         }
         p2.add(categoria);
 
-        Rectangle rect = new Rectangle(23, 800, 400, 705);
+        Rectangle rect = new Rectangle(23, 800, 400, 690);
         addColumn(writer, rect, false, Element.ALIGN_LEFT, false, p);
-        rect = new Rectangle(400, 800, 575, 705);
+        rect = new Rectangle(400, 800, 575, 690);
         addColumn(writer, rect, false, Element.ALIGN_RIGHT, false, p2);
 
         Paragraph operacao = new Paragraph("    Operação \n                ", cabFont);
         Chunk nomeOperacao = new Chunk(buscaOperacao().getNatureza_operacao(), normalFont);
         operacao.add(nomeOperacao);
 
-        rect = new Rectangle(23, 700, 230, 660);
+        rect = new Rectangle(23, 685, 230, 645);
         addColumn(writer, rect, false, Element.ALIGN_LEFT, true, operacao);
 
         Paragraph dadosVendedor = new Paragraph("   Vendedor \n                ", cabFont);
         Chunk infoVendedo = new Chunk(UsuarioHelper.getUsuario().getNome_usuario(), normalFont);
         dadosVendedor.add(infoVendedo);
 
-        rect = new Rectangle(230, 700, 385, 660);
+        rect = new Rectangle(230, 685, 385, 645);
         addColumn(writer, rect, false, Element.ALIGN_LEFT, true, dadosVendedor);
 
         Paragraph dataEmissao = new Paragraph("  Data emissão \n                ", cabFont);
@@ -196,7 +203,7 @@ public class PDFPedidoUtil extends PdfPageEventHelper {
         }
         dataEmissao.add(infoDataEmissao);
 
-        rect = new Rectangle(385, 700, 480, 660);
+        rect = new Rectangle(385, 685, 480, 645);
         addColumn(writer, rect, false, Element.ALIGN_LEFT, true, dataEmissao);
 
         Paragraph dataEntrega = new Paragraph("   Data entrega \n                ", cabFont);
@@ -208,9 +215,10 @@ public class PDFPedidoUtil extends PdfPageEventHelper {
         }
         dataEntrega.add(infoDataEntrega);
 
-        rect = new Rectangle(480, 700, 575, 660);
+        rect = new Rectangle(480, 685, 575, 645);
         addColumn(writer, rect, false, Element.ALIGN_LEFT, true, dataEntrega);
 
+        document.add(new Paragraph("           "));
         document.add(new Paragraph("           "));
         document.add(new Paragraph("           "));
         document.add(new Paragraph("           "));

@@ -44,6 +44,9 @@ public class ListaProdutoAdpter extends RecyclerView.Adapter<ProdutoViewHolder> 
 
         holder.idProduto.setText(String.valueOf(produtos.get(position).getId_produto()));
 
+        if (produtos.get(position).getCodigo_em_barras() != null && !produtos.get(position).getCodigo_em_barras().equals(""))
+            holder.txtCodigoBarra.setText("Codigo EAN: " + produtos.get(position).getCodigo_em_barras());
+
         holder.nomeListaProduto.setText(produtos.get(position).getNome_produto());
 
         String preco = null;
@@ -62,12 +65,14 @@ public class ListaProdutoAdpter extends RecyclerView.Adapter<ProdutoViewHolder> 
         holder.textUN.setText(produtos.get(position).getUnidade());
 
         if (produtos.get(position).getSaldo_estoque() <= 0) {
+            holder.txtCodigoBarra.setTextColor(Color.RED);
             holder.nomeListaProduto.setTextColor(Color.RED);
             holder.precoProduto.setTextColor(Color.RED);
             holder.textUN.setTextColor(Color.RED);
             holder.idProduto.setTextColor(Color.RED);
             holder.txtSaldoEstoque.setTextColor(Color.RED);
         } else {
+            holder.txtCodigoBarra.setTextColor(Color.BLACK);
             holder.nomeListaProduto.setTextColor(Color.BLACK);
             holder.precoProduto.setTextColor(Color.BLACK);
             holder.textUN.setTextColor(Color.BLACK);

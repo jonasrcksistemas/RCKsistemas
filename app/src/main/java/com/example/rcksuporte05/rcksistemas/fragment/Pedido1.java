@@ -137,7 +137,12 @@ public class Pedido1 extends Fragment implements ListaAdapterProdutoPedido.Produ
         webPedidoItem.setId_pedido(String.valueOf(db.contagem("SELECT MAX(ID_WEB_PEDIDO) FROM TBL_WEB_PEDIDO") + 1));
         webPedidoItem.setId_empresa(UsuarioHelper.getUsuario().getIdEmpresaMultiDevice());
         webPedidoItem.setUsuario_lancamento_id(String.valueOf(bundle.getInt("idUsuario")));
-        listaProdutoPedido.add(webPedidoItem);
+        if (listaProdutoPedido != null) {
+            listaProdutoPedido.add(webPedidoItem);
+        } else {
+            listaProdutoPedido = new ArrayList<>();
+            listaProdutoPedido.add(webPedidoItem);
+        }
         preencheLista(listaProdutoPedido);
     }
 
@@ -163,7 +168,8 @@ public class Pedido1 extends Fragment implements ListaAdapterProdutoPedido.Produ
 
     @Override
     public void onResume() {
-        PedidoHelper.calculaValorPedido(listaProdutoPedido, PedidoHelper.getActivityPedidoMain());
+        if (listaProdutoPedido != null)
+            PedidoHelper.calculaValorPedido(listaProdutoPedido, PedidoHelper.getActivityPedidoMain());
         if (ClienteHelper.getCliente() != null) {
             try {
                 cadastroFinanceiroResumoDAO = new CadastroFinanceiroResumoDAO(db);

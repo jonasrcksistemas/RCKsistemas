@@ -240,9 +240,11 @@ public class ListagemPedidoEnviado extends AppCompatActivity implements ListaPed
                         webPedidoDuplicado.setId_web_pedido(null);
                         webPedidoDuplicado.setId_web_pedido_servidor(null);
                         webPedidoDuplicado.setPedido_enviado("N");
+                        webPedidoDuplicado.setFinalizado("N");
                         ClienteHelper.setCliente(webPedidoDuplicado.getCadastro());
                         for (WebPedidoItens webPedidoItens : webPedidoDuplicado.getWebPedidoItens()) {
                             webPedidoItens.setId_web_item_servidor(null);
+                            webPedidoItens.setId_web_item(null);
                             webPedidoItens.setId_pedido(null);
                         }
                         PedidoHelper.setWebPedido(webPedidoDuplicado);
@@ -335,11 +337,11 @@ public class ListagemPedidoEnviado extends AppCompatActivity implements ListaPed
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             PDFPedidoUtil pdfPedidoUtil = new PDFPedidoUtil(listaPedidoAdapter.getItensSelecionados().get(0), ListagemPedidoEnviado.this);
-                            Intent arquivo = new Intent(Intent.ACTION_VIEW);
-                            arquivo.setDataAndType(FileProvider.getUriForFile(ListagemPedidoEnviado.this, getApplicationContext().getPackageName() + ".my.package.name.provider", pdfPedidoUtil.criandoPdf()), "application/pdf");
-                            arquivo.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                            Intent intent = new Intent(Intent.ACTION_VIEW);
+                            intent.setDataAndType(FileProvider.getUriForFile(ListagemPedidoEnviado.this, getApplicationContext().getPackageName() + ".my.package.name.provider", pdfPedidoUtil.criandoPdf()), "application/pdf");
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
-                            Intent intent = Intent.createChooser(arquivo, "Abrir arquivo");
                             startActivity(intent);
                         }
                     });
@@ -368,7 +370,7 @@ public class ListagemPedidoEnviado extends AppCompatActivity implements ListaPed
                             }
                             intent.putExtra(Intent.EXTRA_SUBJECT, "Espelho do pedido " + listaPedidoAdapter.getItensSelecionados().get(0).getId_web_pedido_servidor());
                             intent.putExtra(Intent.EXTRA_TEXT, "Segue em anexo o espelho do pedido");
-                            intent.putExtra(Intent.EXTRA_STREAM, FileProvider.getUriForFile(ListagemPedidoEnviado.this, getApplicationContext().getPackageName() + ".my.package.name.provider", pdfPedidoUtil.criandoPdf()));
+                            intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(pdfPedidoUtil.criandoPdf()));
                             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
                             startActivity(intent);
@@ -390,9 +392,11 @@ public class ListagemPedidoEnviado extends AppCompatActivity implements ListaPed
                             webPedidoDuplicado.setId_web_pedido(null);
                             webPedidoDuplicado.setId_web_pedido_servidor(null);
                             webPedidoDuplicado.setPedido_enviado("N");
+                            webPedidoDuplicado.setFinalizado("N");
                             ClienteHelper.setCliente(webPedidoDuplicado.getCadastro());
                             for (WebPedidoItens webPedidoItens : webPedidoDuplicado.getWebPedidoItens()) {
                                 webPedidoItens.setId_web_item_servidor(null);
+                                webPedidoItens.setId_web_item(null);
                                 webPedidoItens.setId_pedido(null);
                             }
                             PedidoHelper.setWebPedido(webPedidoDuplicado);

@@ -521,6 +521,8 @@ public class ActivityValidaProspect extends AppCompatActivity implements GoogleA
             prospect.setLongitude(String.valueOf(mLocation.getLongitude()));
         }
         prospect.setCpf_cnpj(edtCpfCnpj.getText().toString());
+        prospect.setTelefone(edtTelefone.getText().toString());
+        prospect.setEnderecoGps(txtEndereco.getText().toString());
         ProspectHelper.setProspect(prospect);
         Intent intent = new Intent(ActivityValidaProspect.this, ActivityCadastroProspect.class);
         intent.putExtra("novo", 1);

@@ -15,7 +15,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.rcksuporte05.rcksistemas.DAO.CadastroFinanceiroResumoDAO;
 import com.example.rcksuporte05.rcksistemas.DAO.CategoriaDAO;
 import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
