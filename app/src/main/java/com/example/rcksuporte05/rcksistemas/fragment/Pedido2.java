@@ -21,6 +21,7 @@ import android.widget.TextView;
 
 import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.DAO.WebPedidoDAO;
+import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.PedidoHelper;
 import com.example.rcksuporte05.rcksistemas.R;
 import com.example.rcksuporte05.rcksistemas.model.Cliente;
@@ -72,14 +73,8 @@ public class Pedido2 extends Fragment {
         bundle = getArguments();
 
         try {
-            List<CondicoesPagamento> listaCondicoesPagamentos = db.listaCondicoesPagamento("SELECT * FROM TBL_CONDICOES_PAG_CAB;");
-            listaCondicoesPagamentos.add(0, new CondicoesPagamento("0"));
-            adapterPagamento = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_activated_1, listaCondicoesPagamentos);
-            spPagamento.setAdapter(adapterPagamento);
-
             adapterOperacao = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_activated_1, db.listaOperacao("SELECT * FROM TBL_OPERACAO_ESTOQUE;"));
             spOperacao.setAdapter(adapterOperacao);
-
         } catch (CursorIndexOutOfBoundsException e) {
             e.printStackTrace();
         }
@@ -249,6 +244,7 @@ public class Pedido2 extends Fragment {
         spPagamento.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                PedidoHelper.setCondicoesPagamento(adapterPagamento.getItem(position));
                 pedidoHelper.salvaPedidoParcial();
             }
 
@@ -304,5 +300,40 @@ public class Pedido2 extends Fragment {
         objetoCliente = null;
         System.gc();
         super.onDestroy();
+    }
+
+    @Override
+    public void onResume() {
+        try {
+            if (ClienteHelper.getCliente() != null) {
+                List<CondicoesPagamento> listaCondicoesPagamentos;
+                if (db.contagem("SELECT COUNT(*) FROM TBL_CADASTRO_CONDICOES_PAG WHERE ID_CADASTRO = " + ClienteHelper.getCliente().getId_cadastro_servidor()) > 0) {
+                    listaCondicoesPagamentos = db.listaCondicoesPagamento("SELECT PAG.* FROM TBL_CONDICOES_PAG_CAB PAG INNER JOIN TBL_CADASTRO_CONDICOES_PAG CAD\n" +
+                            "ON PAG.ID_CONDICAO = CAD.ID_CONDICAO\n" +
+                            "WHERE CAD.ID_CADASTRO = " + ClienteHelper.getCliente().getId_cadastro_servidor() + ";");
+                } else {
+                    listaCondicoesPagamentos = db.listaCondicoesPagamento("SELECT * FROM TBL_CONDICOES_PAG_CAB ORDER BY NOME;");
+                }
+                listaCondicoesPagamentos.add(0, new CondicoesPagamento("0"));
+                adapterPagamento = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_activated_1, listaCondicoesPagamentos);
+                spPagamento.setAdapter(adapterPagamento);
+
+                if (PedidoHelper.getCondicoesPagamento() != null) {
+                    try {
+                        int i = -1;
+                        do {
+                            i++;
+                        }
+                        while (!PedidoHelper.getCondicoesPagamento().equals(adapterPagamento.getItem(i).getId_condicao()));
+                        spPagamento.setSelection(i);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        } catch (CursorIndexOutOfBoundsException e) {
+            e.printStackTrace();
+        }
+        super.onResume();
     }
 }

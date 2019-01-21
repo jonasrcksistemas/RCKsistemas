@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.example.rcksuporte05.rcksistemas.DAO.CadastroAnexoDAO;
+import com.example.rcksuporte05.rcksistemas.DAO.CadastroCondicoesPagDAO;
 import com.example.rcksuporte05.rcksistemas.DAO.CadastroFinanceiroResumoDAO;
 import com.example.rcksuporte05.rcksistemas.DAO.CampanhaComClientesDAO;
 import com.example.rcksuporte05.rcksistemas.DAO.CampanhaComercialCabDAO;
@@ -34,6 +35,7 @@ import com.example.rcksuporte05.rcksistemas.activity.MainActivity;
 import com.example.rcksuporte05.rcksistemas.api.Api;
 import com.example.rcksuporte05.rcksistemas.api.Rotas;
 import com.example.rcksuporte05.rcksistemas.model.CadastroAnexo;
+import com.example.rcksuporte05.rcksistemas.model.CadastroCondicoesPag;
 import com.example.rcksuporte05.rcksistemas.model.CadastroFinanceiroResumo;
 import com.example.rcksuporte05.rcksistemas.model.CampanhaComClientes;
 import com.example.rcksuporte05.rcksistemas.model.CampanhaComercialCab;
@@ -87,6 +89,7 @@ public class SincroniaBO {
     private CampanhaComercialCabDAO campanhaComercialCabDAO;
     private CampanhaComercialItensDAO campanhaComercialItensDAO;
     private ProdutoLinhaColecaoDAO produtoLinhaColecaoDAO;
+    private CadastroCondicoesPagDAO cadastroCondicoesPagDAO;
 
     public static Activity getActivity() {
         return activity;
@@ -584,6 +587,21 @@ public class SincroniaBO {
             mNotificationManager.notify(0, notificacao.build());
         }
 
+        db.alterar("DELETE FROM TBL_CADASTRO_CONDICOES_PAG;");
+        for (CadastroCondicoesPag cadastroCondicoesPag : sincronia.getListaCadastroCondicoesPag()) {
+            cadastroCondicoesPagDAO.atualizaCadastroCondicoesPag(cadastroCondicoesPag);
+
+            contadorNotificacaoEProgresso++;
+            final int finalContadorNotificacaoEProgresso = contadorNotificacaoEProgresso;
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    progress.setProgress(finalContadorNotificacaoEProgresso);
+                }
+            });
+            mNotificationManager.notify(0, notificacao.build());
+        }
+
         Intent intent = new Intent(activity, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(activity, 0, intent, 0);
         notificacao.setContentText("Completo")
@@ -639,6 +657,7 @@ public class SincroniaBO {
         campanhaComercialCabDAO = new CampanhaComercialCabDAO(db);
         campanhaComercialItensDAO = new CampanhaComercialItensDAO(db);
         produtoLinhaColecaoDAO = new ProdutoLinhaColecaoDAO(db);
+        cadastroCondicoesPagDAO = new CadastroCondicoesPagDAO(db);
 
         final NotificationCompat.Builder notificacao = new NotificationCompat.Builder(activity)
                 .setSmallIcon(R.mipmap.ic_sincroniza_main)

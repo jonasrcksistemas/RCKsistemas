@@ -34,6 +34,7 @@ public class Sincronia {
     private List<CampanhaComercialCab> listaCampanhaComercialCab = new ArrayList<>();
     private List<CampanhaComercialItens> listaCampanhaComercialItens = new ArrayList<>();
     private List<ProdutoLinhaColecao> listaProdutoLinhaColecao = new ArrayList<>();
+    private List<CadastroCondicoesPag> listaCadastroCondicoesPag = new ArrayList<>();
 
     public Sincronia(boolean cliente,
                      boolean produto,
@@ -289,5 +290,13 @@ public class Sincronia {
 
     public void setListaProdutoLinhaColecao(List<ProdutoLinhaColecao> listaProdutoLinhaColecao) {
         this.listaProdutoLinhaColecao = listaProdutoLinhaColecao;
+    }
+
+    public List<CadastroCondicoesPag> getListaCadastroCondicoesPag() {
+        return listaCadastroCondicoesPag;
+    }
+
+    public void setListaCadastroCondicoesPag(List<CadastroCondicoesPag> listaCadastroCondicoesPag) {
+        this.listaCadastroCondicoesPag = listaCadastroCondicoesPag;
     }
 }

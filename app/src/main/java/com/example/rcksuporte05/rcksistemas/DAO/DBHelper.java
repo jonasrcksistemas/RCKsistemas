@@ -642,22 +642,65 @@ public class DBHelper extends SQLiteOpenHelper {
                 " USUARIO_NOME VARCHAR(40)," +
                 " USUARIO_DATA TIMESTAMP(19));");
 
+        db.execSQL("CREATE TABLE TBL_CADASTRO_CONDICOES_PAG(" +
+                " ID_CADASTRO_CONDICAO INTEGER PRIMARY KEY AUTOINCREMENT," +
+                " ID_CONDICAO INTEGER NOT NULL," +
+                " ID_CADASTRO INTEGER NOT NULL," +
+                " USUARIO_ID INTEGER NOT NULL," +
+                " USUARIO_NOME VARCHAR(50) NOT NULL," +
+                " USUARIO_DATA TIMESTAMP(19));");
+
         System.gc();
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         if (newVersion > oldVersion) {
-            if (newVersion >= 8) {
-                db.execSQL("ALTER TABLE TBL_CADASTRO ADD COLUMN FINALIZADO VARCHAR(1) DEFAULT 'S';");
-                db.execSQL("UPDATE TBL_CADASTRO SET FINALIZADO = 'S';");
-                db.execSQL("ALTER TABLE TBL_PROSPECT ADD COLUMN FINALIZADO VARCHAR(1) DEFAULT 'S';");
-                db.execSQL("UPDATE TBL_PROSPECT SET FINALIZADO = 'S';");
-                db.execSQL("ALTER TABLE TBL_CADASTRO ADD COLUMN ENDERECO_GPS VARCHAR(300);");
-                db.execSQL("ALTER TABLE TBL_CADASTRO ADD COLUMN TELEFONE VARCHAR(20);");
-                db.execSQL("ALTER TABLE TBL_PROSPECT ADD COLUMN ENDERECO_GPS VARCHAR(300);");
-                db.execSQL("ALTER TABLE TBL_PROSPECT ADD COLUMN TELEFONE VARCHAR(20);");
-                db.execSQL("ALTER TABLE TBL_PROSPECT ADD COLUMN ID_PRIMEIRA_VISITA INTEGER;");
+            if (newVersion >= 7) {
+                try {
+                    db.execSQL("ALTER TABLE TBL_CADASTRO ADD COLUMN FINALIZADO VARCHAR(1) DEFAULT 'S';");
+                    db.execSQL("UPDATE TBL_CADASTRO SET FINALIZADO = 'S';");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    db.execSQL("ALTER TABLE TBL_PROSPECT ADD COLUMN FINALIZADO VARCHAR(1) DEFAULT 'S';");
+                    db.execSQL("UPDATE TBL_PROSPECT SET FINALIZADO = 'S';");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    db.execSQL("ALTER TABLE TBL_CADASTRO ADD COLUMN ENDERECO_GPS VARCHAR(300);");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    db.execSQL("ALTER TABLE TBL_CADASTRO ADD COLUMN TELEFONE VARCHAR(20);");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    db.execSQL("ALTER TABLE TBL_PROSPECT ADD COLUMN ENDERECO_GPS VARCHAR(300);");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    db.execSQL("ALTER TABLE TBL_PROSPECT ADD COLUMN TELEFONE VARCHAR(20);");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    db.execSQL("ALTER TABLE TBL_PROSPECT ADD COLUMN ID_PRIMEIRA_VISITA INTEGER;");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
 
                 db.execSQL("CREATE TABLE IF NOT EXISTS TBL_CAMPANHA_COM_CLIENTES (ID_CAMPANHA_COM_CLIENTES INTEGER NOT NULL PRIMARY KEY," +
                         " ID_EMPRESA INTEGER NOT NULL," +
@@ -704,12 +747,41 @@ public class DBHelper extends SQLiteOpenHelper {
                         " USUARIO_NOME VARCHAR(40)," +
                         " USUARIO_DATA TIMESTAMP(19));");
 
-                db.execSQL("ALTER TABLE TBL_PRODUTO ADD COLUMN ID_LINHA_COLECAO INTEGER;");
-                db.execSQL("ALTER TABLE TBL_WEB_PEDIDO_ITENS ADD COLUMN ID_LINHA_COLECAO INTEGER;");
-                db.execSQL("ALTER TABLE TBL_WEB_PEDIDO_ITENS ADD COLUMN ID_CAMPANHA INTEGER;");
+                try {
+                    db.execSQL("ALTER TABLE TBL_PRODUTO ADD COLUMN ID_LINHA_COLECAO INTEGER;");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
-                db.execSQL("ALTER TABLE TBL_WEB_PEDIDO ADD COLUMN FINALIZADO VARCHAR(1) DEFAULT 'N';");
+                try {
+                    db.execSQL("ALTER TABLE TBL_WEB_PEDIDO_ITENS ADD COLUMN ID_LINHA_COLECAO INTEGER;");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    db.execSQL("ALTER TABLE TBL_WEB_PEDIDO_ITENS ADD COLUMN ID_CAMPANHA INTEGER;");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            if (newVersion >= 8) {
+                try {
+                    db.execSQL("ALTER TABLE TBL_WEB_PEDIDO ADD COLUMN FINALIZADO VARCHAR(1) DEFAULT 'N';");
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
                 db.execSQL("UPDATE TBL_WEB_PEDIDO SET FINALIZADO = 'S';");
+
+                db.execSQL("CREATE TABLE TBL_CADASTRO_CONDICOES_PAG(" +
+                        " ID_CADASTRO_CONDICAO INTEGER PRIMARY KEY AUTOINCREMENT," +
+                        " ID_CONDICAO INTEGER NOT NULL," +
+                        " ID_CADASTRO INTEGER NOT NULL," +
+                        " USUARIO_ID INTEGER NOT NULL," +
+                        " USUARIO_NOME VARCHAR(50) NOT NULL," +
+                        " USUARIO_DATA TIMESTAMP(19));");
             }
         }
     }

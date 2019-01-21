@@ -16,6 +16,7 @@ import com.example.rcksuporte05.rcksistemas.activity.ProdutoPedidoActivity;
 import com.example.rcksuporte05.rcksistemas.fragment.Pedido1;
 import com.example.rcksuporte05.rcksistemas.fragment.Pedido2;
 import com.example.rcksuporte05.rcksistemas.model.CadastroFinanceiroResumo;
+import com.example.rcksuporte05.rcksistemas.model.CondicoesPagamento;
 import com.example.rcksuporte05.rcksistemas.model.Produto;
 import com.example.rcksuporte05.rcksistemas.model.WebPedido;
 import com.example.rcksuporte05.rcksistemas.model.WebPedidoItens;
@@ -30,6 +31,7 @@ import java.util.List;
 
 public class PedidoHelper {
 
+    private static CondicoesPagamento condicoesPagamento;
     private static Float valorVenda;
     private static ActivityPedidoMain activityPedidoMain;
     private static ProdutoPedidoActivity produtoPedidoActivity;
@@ -105,6 +107,14 @@ public class PedidoHelper {
 
     public static void setListaProdutos(List<Produto> listaProdutos) {
         PedidoHelper.listaProdutos = listaProdutos;
+    }
+
+    public static CondicoesPagamento getCondicoesPagamento() {
+        return condicoesPagamento;
+    }
+
+    public static void setCondicoesPagamento(CondicoesPagamento condicoesPagamento) {
+        PedidoHelper.condicoesPagamento = condicoesPagamento;
     }
 
     public static WebPedido getWebPedido() {
@@ -439,6 +449,7 @@ public class PedidoHelper {
         idPedido = 0;
         buscaProduto = null;
         listaProdutos = null;
+        condicoesPagamento = null;
         System.gc();
     }
 }
