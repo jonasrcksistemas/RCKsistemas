@@ -76,28 +76,42 @@
                 android:background="@mipmap/ic_busca"
                 android:scaleType="centerCrop" />
 
-            <EditText
-                android:id="@+id/edtNomeCampanha"
+            <LinearLayout
+                android:id="@+id/lyCampanha"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/btnBuscaCampanha"
-                android:layout_toStartOf="@+id/btnBuscaCampanha"
-                android:layout_toLeftOf="@+id/btnBuscaCampanha"
-                android:background="@drawable/borda_edittext"
-                android:focusable="false"
-                android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
-                android:textStyle="bold" />
+                android:layout_below="@+id/edtNomeProduto"
+                android:layout_marginTop="15dp"
+                android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/btnBuscaCampanha"
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:layout_below="@id/btnBuscaProduto"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:layout_marginBottom="12dp"
-                android:background="@mipmap/ic_search_dark"
-                android:scaleType="centerCrop" />
+                <EditText
+                    android:id="@+id/edtNomeCampanha"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/borda_edittext"
+                    android:focusable="false"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Small"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/btnInfoCampanha"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:layout_marginBottom="12dp"
+                    android:background="@drawable/ic_detalhes_campanha"
+                    android:scaleType="centerCrop"
+                    android:visibility="gone" />
+
+                <Button
+                    android:id="@+id/btnBuscaCampanha"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_marginBottom="12dp"
+                    android:background="@mipmap/ic_search_dark"
+                    android:scaleType="centerCrop" />
+            </LinearLayout>
+
 
             <TextView
                 android:id="@+id/txtQuantidade"
@@ -145,7 +159,7 @@
                 android:id="@+id/txtValorUnitario"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/btnBuscaCampanha"
+                android:layout_below="@+id/lyCampanha"
                 android:layout_alignEnd="@+id/edtTabelaPreco"
                 android:layout_alignRight="@+id/edtTabelaPreco"
                 android:text="VALOR UNITARIO R$"

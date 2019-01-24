@@ -41,10 +41,16 @@ public class CampanhaComercialItensDAO {
         db.salvarDados("TBL_CAMPANHA_COMERCIAL_ITENS", content);
     }
 
-    public List<CampanhaComercialItens> listaCampanhaComercialItens() {
-        Cursor cursor = db.listaDados("SELECT * FROM TBL_CAMPANHA_COMERCIAL_ITENS ORDER BY ID_CAMPANHA DESC;");
+    public CampanhaComercialItens listaCampanhaComercialItensDetalheProduto(CampanhaComercialCab campanhaComercialCab, String idProduto) {
+        Cursor cursor = db.listaDados("SELECT * FROM TBL_CAMPANHA_COMERCIAL_ITENS WHERE ID_CAMPANHA = " + campanhaComercialCab.getIdCampanha() + " AND ID_PRODUTO_VENDA = " + idProduto + ";");
 
-        return listaCampanhaComercialItens(cursor);
+        return listaCampanhaComercialItens(cursor).get(0);
+    }
+
+    public CampanhaComercialItens listaCampanhaComercialItensDetalheLinha(CampanhaComercialCab campanhaComercialCab, int idLinha) {
+        Cursor cursor = db.listaDados("SELECT * FROM TBL_CAMPANHA_COMERCIAL_ITENS WHERE ID_CAMPANHA = " + campanhaComercialCab.getIdCampanha() + " AND ID_LINHA_PRODUTO = " + idLinha + ";");
+
+        return listaCampanhaComercialItens(cursor).get(0);
     }
 
     public List<CampanhaComercialItens> listaCampanhaComercialItens(CampanhaComercialCab campanhaComercialCab) {
@@ -70,7 +76,7 @@ public class CampanhaComercialItensDAO {
             campanhaComercialItens.setIdProdutoVenda(cursor.getString(cursor.getColumnIndex("ID_PRODUTO_VENDA")));
             campanhaComercialItens.setNomeProdutoLinha(cursor.getString(cursor.getColumnIndex("NOME_PRODUTO_LINHA")));
             campanhaComercialItens.setQuantidadeVenda(cursor.getFloat(cursor.getColumnIndex("QUANTIDADE_VENDA")));
-            campanhaComercialItens.setIdProdutoBonus(cursor.getInt(cursor.getColumnIndex("ID_PRODUTO_BONUS")));
+            campanhaComercialItens.setIdProdutoBonus(cursor.getString(cursor.getColumnIndex("ID_PRODUTO_BONUS")));
             campanhaComercialItens.setQuantidadeBonus(cursor.getFloat(cursor.getColumnIndex("QUANTIDADE_BONUS")));
             campanhaComercialItens.setNomeProdutoBonus(cursor.getString(cursor.getColumnIndex("NOME_PRODUTO_BONUS")));
             campanhaComercialItens.setUsuarioId(cursor.getInt(cursor.getColumnIndex("USUARIO_ID")));

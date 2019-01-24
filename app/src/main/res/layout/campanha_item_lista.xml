@@ -44,6 +44,13 @@
                     android:gravity="center"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Small" />
 
+                <Button
+                    android:id="@+id/btnInfoCampanha"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"
+                    android:background="@drawable/ic_info"
+                    android:visibility="gone" />
+
             </LinearLayout>
 
             <LinearLayout

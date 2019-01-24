@@ -8,7 +8,7 @@ import com.example.rcksuporte05.rcksistemas.fragment.CampanhaClientes;
 import com.example.rcksuporte05.rcksistemas.fragment.CampanhaProdutos;
 
 public class TabsAdapterCampanha extends FragmentPagerAdapter {
-    private String[] titles = {"Clientes", "Itens"};
+    private String[] titles = {"Clientes", "Regulamento"};
 
     public TabsAdapterCampanha(FragmentManager fm) {
         super(fm);

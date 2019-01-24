@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import com.example.rcksuporte05.rcksistemas.BO.PedidoBO;
 import com.example.rcksuporte05.rcksistemas.DAO.CampanhaComercialCabDAO;
+import com.example.rcksuporte05.rcksistemas.DAO.CampanhaComercialItensDAO;
 import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.CampanhaHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.ClienteHelper;
@@ -77,6 +78,8 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
     EditText edtNomeCampanha;
     @BindView(R.id.btnBuscaCampanha)
     Button btnBuscaCampanha;
+    @BindView(R.id.btnInfoCampanha)
+    Button btnInfoCampanha;
 
     private WebPedidoItens webPedidoItem;
     private MenuItem salvar_produto;
@@ -123,6 +126,24 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
         } catch (Exception e) {
             edtQuantidade.setText("0");
             btnSubtraiQuantidade.setClickable(false);
+        }
+    }
+
+    @OnClick(R.id.btnInfoCampanha)
+    public void infoCampanha() {
+        CampanhaComercialItensDAO campanhaComercialItensDAO = new CampanhaComercialItensDAO(db);
+        Intent intent = new Intent(ProdutoPedidoActivity.this, ActivityDetalheCampanha.class);
+        try {
+            if (CampanhaHelper.getCampanhaComercialCab().getIdBaseCampanha() == 1) {
+                CampanhaHelper.setItemCampanhaDetalhe(campanhaComercialItensDAO.listaCampanhaComercialItensDetalheLinha(CampanhaHelper.getCampanhaComercialCab(), webPedidoItem.getIdLinhaColecao()));
+            } else if (CampanhaHelper.getCampanhaComercialCab().getIdBaseCampanha() == 2) {
+                CampanhaHelper.setItemCampanhaDetalhe(campanhaComercialItensDAO.listaCampanhaComercialItensDetalheProduto(CampanhaHelper.getCampanhaComercialCab(), webPedidoItem.getId_produto()));
+            } else {
+                Toast.makeText(this, "Falha ao carregar informações da campanha", Toast.LENGTH_SHORT).show();
+            }
+            startActivity(intent);
+        } catch (CursorIndexOutOfBoundsException e) {
+            Toast.makeText(this, "Falha ao carregar informações da campanha", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -262,12 +283,14 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
                             CampanhaHelper.setCampanhaComercialCab(null);
                             edtNomeCampanha.setText("");
                             webPedidoItem.setIdCampanha(0);
+                            btnInfoCampanha.setVisibility(View.GONE);
                         }
                     } else if (PedidoHelper.getWebPedidoItem() != null) {
                         if (!verificaCampanha(ClienteHelper.getCliente(), PedidoHelper.getWebPedidoItem())) {
                             Toast.makeText(ProdutoPedidoActivity.this, "Nenhuma campanha encontrada", Toast.LENGTH_SHORT).show();
                             CampanhaHelper.setCampanhaComercialCab(null);
                             edtNomeCampanha.setText("");
+                            btnInfoCampanha.setVisibility(View.GONE);
                             webPedidoItem.setIdCampanha(0);
                         }
                     } else {
@@ -288,6 +311,7 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
                             Toast.makeText(ProdutoPedidoActivity.this, "Nenhuma campanha encontrada", Toast.LENGTH_SHORT).show();
                             CampanhaHelper.setCampanhaComercialCab(null);
                             edtNomeCampanha.setText("");
+                            btnInfoCampanha.setVisibility(View.GONE);
                             webPedidoItem.setIdCampanha(0);
                         }
                     } else if (PedidoHelper.getWebPedidoItem() != null) {
@@ -295,6 +319,7 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
                             Toast.makeText(ProdutoPedidoActivity.this, "Nenhuma campanha encontrada", Toast.LENGTH_SHORT).show();
                             CampanhaHelper.setCampanhaComercialCab(null);
                             edtNomeCampanha.setText("");
+                            btnInfoCampanha.setVisibility(View.GONE);
                             webPedidoItem.setIdCampanha(0);
                         }
                     } else {
@@ -409,8 +434,12 @@ public class ProdutoPedidoActivity extends AppCompatActivity {
             if (CampanhaHelper.getCampanhaComercialCab() != null) {
                 edtNomeCampanha.setText(CampanhaHelper.getCampanhaComercialCab().getNomeCampanha());
                 webPedidoItem.setIdCampanha(CampanhaHelper.getCampanhaComercialCab().getIdCampanha());
+                if (getIntent().getIntExtra("vizualizacao", 0) != 1) {
+                    btnInfoCampanha.setVisibility(View.VISIBLE);
+                }
             } else {
                 edtNomeCampanha.setText("");
+                btnInfoCampanha.setVisibility(View.GONE);
                 webPedidoItem.setIdCampanha(0);
             }
 

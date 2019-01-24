@@ -72,6 +72,7 @@ public class Pedido1 extends Fragment implements ListaAdapterProdutoPedido.Produ
         View view = inflater.inflate(R.layout.activity_pedido1, container, false);
 
         webPedidoItensDAO = new WebPedidoItensDAO(db);
+        listaProdutoPedido = new ArrayList<>();
 
         final PedidoHelper pedidoHelper = new PedidoHelper(this);
         bundle = getArguments();

@@ -50,6 +50,11 @@ public class ListaCampanhaltensAdapter extends RecyclerView.Adapter<CampanhaItem
         holder.edtNomeProduto.setText(itensCampanha.get(position).getNomeProdutoBonus());
         holder.edtQuantidade.setText(MascaraUtil.mascaraVirgula(itensCampanha.get(position).getQuantidadeBonus()));
 
+        if (itensCampanha.get(position).getIdLinhaProduto() > 0) {
+            holder.btnInfoCampanha.setVisibility(View.VISIBLE);
+            holder.btnInfoCampanha.setOnClickListener(listener.onInfoClickListener(position));
+        }
+
     }
 
     @Override
@@ -59,11 +64,13 @@ public class ListaCampanhaltensAdapter extends RecyclerView.Adapter<CampanhaItem
         return 0;
     }
 
-    public void applyClickEvents(CampanhaItemViewHolder holder, CampanhaItemAdapterListener listener) {
-
+    public CampanhaComercialItens getItem(int position) {
+        return itensCampanha.get(position);
     }
 
     public interface CampanhaItemAdapterListener {
         void onClickListener(int position);
+
+        View.OnClickListener onInfoClickListener(int position);
     }
 }

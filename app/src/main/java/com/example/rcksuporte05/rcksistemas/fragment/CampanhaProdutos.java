@@ -1,5 +1,6 @@
 package com.example.rcksuporte05.rcksistemas.fragment;
 
+import android.content.Intent;
 import android.database.CursorIndexOutOfBoundsException;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -16,7 +17,9 @@ import com.example.rcksuporte05.rcksistemas.DAO.CampanhaComercialItensDAO;
 import com.example.rcksuporte05.rcksistemas.DAO.DBHelper;
 import com.example.rcksuporte05.rcksistemas.Helper.CampanhaHelper;
 import com.example.rcksuporte05.rcksistemas.R;
+import com.example.rcksuporte05.rcksistemas.activity.ActivityItemLinhaProduto;
 import com.example.rcksuporte05.rcksistemas.adapters.ListaCampanhaltensAdapter;
+import com.example.rcksuporte05.rcksistemas.adapters.ListaCampanhaltensAdapter.CampanhaItemAdapterListener;
 import com.example.rcksuporte05.rcksistemas.model.CampanhaComercialItens;
 
 import java.util.List;
@@ -24,7 +27,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class CampanhaProdutos extends Fragment {
+public class CampanhaProdutos extends Fragment implements CampanhaItemAdapterListener {
 
     @BindView(R.id.recycleCampanhaProdutos)
     RecyclerView recycleCampanhaProdutos;
@@ -34,6 +37,7 @@ public class CampanhaProdutos extends Fragment {
 
     private View view;
     private DBHelper db;
+    private ListaCampanhaltensAdapter adapter;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -48,7 +52,7 @@ public class CampanhaProdutos extends Fragment {
         try {
             List<CampanhaComercialItens> lista = campanhaComercialItensDAO.listaCampanhaComercialItens(CampanhaHelper.getCampanhaComercialCab());
             edtTotalProdutos.setText(lista.size() + " Produtos listados");
-            ListaCampanhaltensAdapter adapter = new ListaCampanhaltensAdapter(lista, null);
+            adapter = new ListaCampanhaltensAdapter(lista, CampanhaProdutos.this);
             recycleCampanhaProdutos.setAdapter(adapter);
         } catch (CursorIndexOutOfBoundsException e) {
             e.printStackTrace();
@@ -56,5 +60,23 @@ public class CampanhaProdutos extends Fragment {
         }
 
         return view;
+    }
+
+    @Override
+    public void onClickListener(int position) {
+
+    }
+
+    @Override
+    public View.OnClickListener onInfoClickListener(final int position) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), ActivityItemLinhaProduto.class);
+                intent.putExtra("linha", adapter.getItem(position).getIdLinhaProduto());
+                intent.putExtra("nomelinha", adapter.getItem(position).getNomeProdutoLinha());
+                startActivity(intent);
+            }
+        };
     }
 }

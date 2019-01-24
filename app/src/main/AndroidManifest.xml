@@ -26,6 +26,10 @@
         android:theme="@style/Theme.MeuTema"
         android:usesCleartextTraffic="true">
         <activity
+            android:name=".activity.ActivityDetalheCampanha"
+            android:theme="@style/Theme.CriarDialog" />
+        <activity android:name=".activity.ActivityItemLinhaProduto" />
+        <activity
             android:name=".activity.MainActivity"
             android:theme="@style/Theme.Main" />
         <activity
@@ -129,7 +133,7 @@
 
         <activity android:name=".activity.ActivityValidaProspect" />
         <activity android:name=".activity.CampanhaActivity" />
-        <activity android:name=".activity.ItemCampanhaActivity"></activity>
+        <activity android:name=".activity.ItemCampanhaActivity" />
     </application>
 
 </manifest>

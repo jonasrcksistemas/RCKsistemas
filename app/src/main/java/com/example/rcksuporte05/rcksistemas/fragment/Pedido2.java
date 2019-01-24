@@ -83,6 +83,9 @@ public class Pedido2 extends Fragment {
             webPedido = webPedidoDAO.listaWebPedido("SELECT * FROM TBL_WEB_PEDIDO WHERE ID_WEB_PEDIDO = " + PedidoHelper.getIdPedido()).get(0);
             objetoCliente = webPedido.getCadastro();
 
+            if (webPedido.getId_condicao_pagamento() != null)
+                PedidoHelper.setCondicoesPagamento(new CondicoesPagamento(webPedido.getId_condicao_pagamento()));
+
             //Seleciona Condição de pagamento correta dentro do Spinner spPagamento
             try {
                 int i = -1;
@@ -311,8 +314,19 @@ public class Pedido2 extends Fragment {
                     listaCondicoesPagamentos = db.listaCondicoesPagamento("SELECT PAG.* FROM TBL_CONDICOES_PAG_CAB PAG INNER JOIN TBL_CADASTRO_CONDICOES_PAG CAD\n" +
                             "ON PAG.ID_CONDICAO = CAD.ID_CONDICAO\n" +
                             "WHERE CAD.ID_CADASTRO = " + ClienteHelper.getCliente().getId_cadastro_servidor() + ";");
+
+                    boolean faltaAvista = true;
+                    for (CondicoesPagamento condicoesPagamento : listaCondicoesPagamentos) {
+                        if (condicoesPagamento.getId_condicao().equals("1")) {
+                            faltaAvista = false;
+                            break;
+                        }
+                    }
+                    if (faltaAvista) {
+                        listaCondicoesPagamentos.add(0, db.listaCondicoesPagamento("SELECT * FROM TBL_CONDICOES_PAG_CAB WHERE ID_CONDICAO = 1;").get(0));
+                    }
                 } else {
-                    listaCondicoesPagamentos = db.listaCondicoesPagamento("SELECT * FROM TBL_CONDICOES_PAG_CAB ORDER BY NOME;");
+                    listaCondicoesPagamentos = db.listaCondicoesPagamento("SELECT * FROM TBL_CONDICOES_PAG_CAB;");
                 }
                 listaCondicoesPagamentos.add(0, new CondicoesPagamento("0"));
                 adapterPagamento = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_activated_1, listaCondicoesPagamentos);
@@ -324,7 +338,7 @@ public class Pedido2 extends Fragment {
                         do {
                             i++;
                         }
-                        while (!PedidoHelper.getCondicoesPagamento().equals(adapterPagamento.getItem(i).getId_condicao()));
+                        while (!PedidoHelper.getCondicoesPagamento().getId_condicao().equals(adapterPagamento.getItem(i).getId_condicao()));
                         spPagamento.setSelection(i);
                     } catch (Exception e) {
                         e.printStackTrace();
