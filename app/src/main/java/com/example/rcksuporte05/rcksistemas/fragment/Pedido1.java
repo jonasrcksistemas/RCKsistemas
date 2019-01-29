@@ -183,7 +183,7 @@ public class Pedido1 extends Fragment implements ListaAdapterProdutoPedido.Produ
                 e.printStackTrace();
             }
         }
-        if (listaProdutoPedido.size() > 0) {
+        if (listaProdutoPedido != null && listaProdutoPedido.size() > 0) {
             if (ClienteHelper.getCliente().getId_cadastro() != idCliente && idCliente > 0) {
                 AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
                 alert.setTitle("Atenção");
