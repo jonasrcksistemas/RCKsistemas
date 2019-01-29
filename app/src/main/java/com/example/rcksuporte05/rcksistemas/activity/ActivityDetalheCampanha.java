@@ -69,9 +69,13 @@ public class ActivityDetalheCampanha extends Activity {
         edtNomeProdutoLinha.setText(campanhaComercialItens.getNomeProdutoLinha());
         edtQuantidadeLinha.setText(MascaraUtil.mascaraVirgula(campanhaComercialItens.getQuantidadeVenda()));
 
-        txtIdProduto.setText("Produto \n" + campanhaComercialItens.getIdProdutoBonus());
         edtNomeProduto.setText(campanhaComercialItens.getNomeProdutoBonus());
-        edtQuantidade.setText(MascaraUtil.mascaraVirgula(campanhaComercialItens.getQuantidadeBonus()));
+        try {
+            edtQuantidade.setText(String.valueOf(campanhaComercialItens.getQuantidadeBonus()).replace(".0", ""));
+        } catch (Exception e) {
+            e.printStackTrace();
+            edtQuantidade.setText(String.valueOf(campanhaComercialItens.getQuantidadeBonus()));
+        }
 
         if (campanhaComercialItens.getIdLinhaProduto() > 0) {
             btnInfoCampanha.setVisibility(View.VISIBLE);
@@ -87,3 +91,4 @@ public class ActivityDetalheCampanha extends Activity {
         }
     }
 }
+
