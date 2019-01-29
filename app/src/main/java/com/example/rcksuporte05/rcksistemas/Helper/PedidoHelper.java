@@ -324,7 +324,7 @@ public class PedidoHelper {
                             dataPedido.setTime(new SimpleDateFormat("yyyy-MM-dd").parse(webPedido.getData_prev_entrega()));
                             String atual = new SimpleDateFormat("dd/MM/yyyy").format(dataAtual.getTime());
                             String pedido = new SimpleDateFormat("dd/MM/yyyy").format(dataPedido.getTime());
-                            if (webPedido.getId_condicao_pagamento() != null && !webPedido.getId_condicao_pagamento().equals("")) {
+                            if (webPedido.getId_condicao_pagamento() != null && !webPedido.getId_condicao_pagamento().equals("0")) {
                                 if (atual.equals(pedido) || !dataAtual.getTime().after(dataPedido.getTime())) {
                                     Boolean descontoIndevido = false;
                                     Boolean campanhaIndevida = false;
