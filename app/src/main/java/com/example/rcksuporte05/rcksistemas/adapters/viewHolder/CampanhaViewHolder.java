@@ -3,6 +3,7 @@ package com.example.rcksuporte05.rcksistemas.adapters.viewHolder;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -23,6 +24,8 @@ public class CampanhaViewHolder extends RecyclerView.ViewHolder {
     public TextView txtDataTermino;
     @BindView(R.id.layoutCampanha)
     public RelativeLayout layoutCampanha;
+    @BindView(R.id.btnDescCampanha)
+    public Button btnDescCampanha;
 
     public CampanhaViewHolder(@NonNull View itemView) {
         super(itemView);

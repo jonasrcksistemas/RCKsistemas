@@ -1,6 +1,7 @@
 package com.example.rcksuporte05.rcksistemas.adapters;
 
 import android.app.Activity;
+import android.database.CursorIndexOutOfBoundsException;
 import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
@@ -83,7 +84,12 @@ public class ListaPedidoAdapter extends RecyclerView.Adapter<PedidoViewHolder> {
                         : Color.TRANSPARENT);
 
         DBHelper db = new DBHelper(activity);
-        holder.txtOperacao.setText(db.consulta("SELECT NOME_OPERACAO FROM TBL_OPERACAO_ESTOQUE WHERE ID_OPERACAO = " + pedidos.get(position).getId_operacao() + ";", "NOME_OPERACAO"));
+        try {
+            holder.txtOperacao.setText(db.consulta("SELECT NOME_OPERACAO FROM TBL_OPERACAO_ESTOQUE WHERE ID_OPERACAO = " + pedidos.get(position).getId_operacao() + ";", "NOME_OPERACAO"));
+        } catch (CursorIndexOutOfBoundsException e) {
+            holder.txtOperacao.setText("OPERAÇÃO NÃO DISPONIVEL");
+            e.printStackTrace();
+        }
         if (!pedidos.get(position).getId_condicao_pagamento().equals("0"))
             holder.txtCondicaoPagamento.setText(db.consulta("SELECT * FROM TBL_CONDICOES_PAG_CAB WHERE ID_CONDICAO = " + pedidos.get(position).getId_condicao_pagamento() + ";", "NOME_CONDICAO"));
         else
@@ -97,6 +103,17 @@ public class ListaPedidoAdapter extends RecyclerView.Adapter<PedidoViewHolder> {
             holder.abandonado.setVisibility(View.INVISIBLE);
             holder.txtPrecoPedido.setVisibility(View.VISIBLE);
             holder.lyEntrega.setVisibility(View.VISIBLE);
+        }
+
+        if (pedidos.get(position).getId_operacao().equals("66")) {
+            holder.imCampanha.setVisibility(View.VISIBLE);
+            holder.cor.setBackground(activity.getDrawable(R.drawable.cor_pedido_bonus));
+            holder.txtOperacao.setVisibility(View.GONE);
+            holder.lyDuplic.setVisibility(View.GONE);
+        } else {
+            holder.imCampanha.setVisibility(View.GONE);
+            holder.txtOperacao.setVisibility(View.VISIBLE);
+            holder.lyDuplic.setVisibility(View.VISIBLE);
         }
 
         holder.itemView.setActivated(selectedItems.get(position, false));

@@ -4,23 +4,44 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingTop="25dp"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context=".activity.CampanhaActivity">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recycleCampanhaClientes"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1" />
-
-    <EditText
-        android:id="@+id/edtTotalClientes"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:background="#dddfdd"
-        android:gravity="end"
-        android:paddingEnd="5dp"
-        android:paddingRight="5dp"
-        android:text="Total Clientes" />
+        android:layout_gravity="center"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/txtDataInicio"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Data inicio " />
+
+        <TextView
+            android:id="@+id/txtDataVencimento"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="Validade " />
+
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/edtDescCampanha"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/borda_edittext"
+        android:focusable="false"
+        android:gravity="top"
+        android:minHeight="250dp" />
 
 </LinearLayout>

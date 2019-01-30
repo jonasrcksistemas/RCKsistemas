@@ -16,6 +16,7 @@ import com.example.rcksuporte05.rcksistemas.util.MascaraUtil;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class ActivityDetalheCampanha extends Activity {
 
@@ -40,6 +41,13 @@ public class ActivityDetalheCampanha extends Activity {
     @BindView(R.id.edtQuantidade)
     EditText edtQuantidade;
     private CampanhaComercialItens campanhaComercialItens;
+
+    @OnClick(R.id.btnDescCampanha)
+    public void descCampanha() {
+        Intent intent = new Intent(ActivityDetalheCampanha.this, ItemCampanhaActivity.class);
+        intent.putExtra("detalhe", 1);
+        startActivity(intent);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

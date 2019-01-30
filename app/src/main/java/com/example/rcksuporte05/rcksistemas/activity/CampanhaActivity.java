@@ -3,12 +3,14 @@ package com.example.rcksuporte05.rcksistemas.activity;
 import android.content.Intent;
 import android.database.CursorIndexOutOfBoundsException;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
@@ -59,7 +61,7 @@ public class CampanhaActivity extends AppCompatActivity implements ListaCampanha
         } else {
             toolbar.setTitle("Campanhas");
             try {
-                 preencheLista(campanhaComercialCabDAO.listaCampanhaComercialCab());
+                preencheLista(campanhaComercialCabDAO.listaCampanhaComercialCab());
             } catch (CursorIndexOutOfBoundsException e) {
                 e.printStackTrace();
                 edtTotalCampanhas.setText("Nenhuma campanha encontrada");
@@ -88,6 +90,20 @@ public class CampanhaActivity extends AppCompatActivity implements ListaCampanha
             CampanhaHelper.setCampanhaComercialCab(adapter.getItem(position));
             startActivity(intent);
         }
+    }
+
+    @Override
+    public View.OnClickListener onClickDescCampanha(final int position) {
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                AlertDialog.Builder alert = new AlertDialog.Builder(CampanhaActivity.this);
+                alert.setTitle("Descrição");
+                alert.setMessage(adapter.getItem(position).getDescricaoCampanha());
+                alert.setNeutralButton("OK", null);
+                alert.show();
+            }
+        };
     }
 
     @Override

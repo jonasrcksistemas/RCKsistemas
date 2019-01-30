@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.HapticFeedbackConstants;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -57,6 +58,10 @@ public class PedidoViewHolder extends RecyclerView.ViewHolder implements View.On
     public LinearLayout abandonado;
     @BindView(R.id.lyEntrega)
     public LinearLayout lyEntrega;
+    @BindView(R.id.lyDuplic)
+    public LinearLayout lyDuplic;
+    @BindView(R.id.imCampanha)
+    public ImageView imCampanha;
 
     ListaPedidoAdapter.PedidoAdapterListener listener;
 

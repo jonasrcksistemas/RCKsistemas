@@ -602,6 +602,33 @@ public class SincroniaBO {
             mNotificationManager.notify(0, notificacao.build());
         }
 
+        db.alterar("DELETE FROM TBL_WEB_PEDIDO WHERE ID_OPERACAO = 66;");
+        for (WebPedido webPedido : sincronia.getListaPedidosBonus()) {
+            notificacao.setProgress(maxProgress, contadorNotificacaoEProgresso, false);
+
+            webPedido.setPedido_enviado("S");
+            webPedido.setFinalizado("S");
+            webPedido.setStatus("L");
+            if (db.contagem("SELECT COUNT(*) FROM TBL_WEB_PEDIDO WHERE ID_WEB_PEDIDO_SERVIDOR = " + webPedido.getId_web_pedido_servidor()) > 0)
+                db.alterar("DELETE FROM TBL_WEB_PEDIDO WHERE ID_WEB_PEDIDO_SERVIDOR = " + webPedido.getId_web_pedido_servidor());
+            webPedidoDAO.inserirTBL_WEB_PEDIDO(webPedido);
+            for (WebPedidoItens webPedidoItens : webPedido.getWebPedidoItens()) {
+                String idPedido = db.consulta("SELECT * FROM TBL_WEB_PEDIDO WHERE ID_WEB_PEDIDO_SERVIDOR = " + webPedido.getId_web_pedido_servidor(), "ID_WEB_PEDIDO");
+                webPedidoItens.setId_pedido(idPedido);
+                webPedidoItensDAO.atualizarTBL_WEB_PEDIDO_ITENS(webPedidoItens);
+            }
+
+            contadorNotificacaoEProgresso++;
+            final int finalContadorNotificacaoEProgresso = contadorNotificacaoEProgresso;
+            activity.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    progress.setProgress(finalContadorNotificacaoEProgresso);
+                }
+            });
+            mNotificationManager.notify(0, notificacao.build());
+        }
+
         Intent intent = new Intent(activity, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(activity, 0, intent, 0);
         notificacao.setContentText("Completo")

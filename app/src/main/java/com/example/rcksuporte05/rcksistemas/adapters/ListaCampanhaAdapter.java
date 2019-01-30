@@ -53,6 +53,8 @@ public class ListaCampanhaAdapter extends RecyclerView.Adapter<CampanhaViewHolde
                 holder.txtDataTermino.setTextColor(Color.BLACK);
             }
 
+            holder.btnDescCampanha.setOnClickListener(listener.onClickDescCampanha(position));
+
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -82,5 +84,7 @@ public class ListaCampanhaAdapter extends RecyclerView.Adapter<CampanhaViewHolde
 
     public interface CampanhaAdapterListener {
         void onClickListener(int position);
+
+        View.OnClickListener onClickDescCampanha(int position);
     }
 }

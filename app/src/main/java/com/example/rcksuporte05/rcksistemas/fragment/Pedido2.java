@@ -73,7 +73,11 @@ public class Pedido2 extends Fragment {
         bundle = getArguments();
 
         try {
-            adapterOperacao = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_activated_1, db.listaOperacao("SELECT * FROM TBL_OPERACAO_ESTOQUE;"));
+            if (bundle.getInt("vizualizacao") == 1) {
+                adapterOperacao = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_activated_1, db.listaOperacao("SELECT * FROM TBL_OPERACAO_ESTOQUE;"));
+            } else {
+                adapterOperacao = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_activated_1, db.listaOperacao("SELECT * FROM TBL_OPERACAO_ESTOQUE WHERE ID_OPERACAO <> 66;"));
+            }
             spOperacao.setAdapter(adapterOperacao);
         } catch (CursorIndexOutOfBoundsException e) {
             e.printStackTrace();

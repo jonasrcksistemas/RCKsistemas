@@ -46,12 +46,16 @@
             android:id="@+id/txtNomeCliente"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="15dp"
             android:layout_marginEnd="5dp"
             android:layout_marginRight="5dp"
+            android:layout_toStartOf="@+id/imCampanha"
+            android:layout_toLeftOf="@+id/imCampanha"
             android:ellipsize="end"
             android:paddingStart="5dp"
             android:paddingLeft="5dp"
@@ -196,6 +200,18 @@
             android:layout_toRightOf="@+id/cor"
             android:background="#999999" />
 
+        <ImageView
+            android:id="@+id/imCampanha"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/ic_campanha_trofeu"
+            android:visibility="gone" />
+
         <LinearLayout
             android:id="@+id/botoes"
             android:layout_width="match_parent"
@@ -220,6 +236,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/lyDuplic"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="3dp"

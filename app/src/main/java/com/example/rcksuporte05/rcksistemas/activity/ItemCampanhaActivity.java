@@ -3,10 +3,8 @@ package com.example.rcksuporte05.rcksistemas.activity;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.rcksuporte05.rcksistemas.Helper.CampanhaHelper;
@@ -58,13 +56,6 @@ public class ItemCampanhaActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-        getMenuInflater().inflate(R.menu.menu_item_campanha, menu);
-        return true;
-    }
-
-    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
@@ -74,20 +65,14 @@ public class ItemCampanhaActivity extends AppCompatActivity {
                     finish();
                 }
                 break;
-            case R.id.infoCampanha:
-                AlertDialog.Builder alert = new AlertDialog.Builder(ItemCampanhaActivity.this);
-                alert.setTitle("Descrição");
-                alert.setMessage(CampanhaHelper.getCampanhaComercialCab().getDescricaoCampanha());
-                alert.setNeutralButton("OK", null);
-                alert.show();
-                break;
         }
         return super.onOptionsItemSelected(item);
     }
 
     @Override
     protected void onDestroy() {
-        CampanhaHelper.clear();
+        if (getIntent().getIntExtra("detalhe", 0) != 1)
+            CampanhaHelper.clear();
         super.onDestroy();
     }
 }
