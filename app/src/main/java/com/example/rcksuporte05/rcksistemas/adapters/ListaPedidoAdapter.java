@@ -108,11 +108,11 @@ public class ListaPedidoAdapter extends RecyclerView.Adapter<PedidoViewHolder> {
         if (pedidos.get(position).getId_operacao().equals("66")) {
             holder.imCampanha.setVisibility(View.VISIBLE);
             holder.cor.setBackground(activity.getDrawable(R.drawable.cor_pedido_bonus));
-            holder.txtOperacao.setVisibility(View.GONE);
+            holder.txtCondicaoPagamento.setVisibility(View.GONE);
             holder.lyDuplic.setVisibility(View.GONE);
         } else {
             holder.imCampanha.setVisibility(View.GONE);
-            holder.txtOperacao.setVisibility(View.VISIBLE);
+            holder.txtCondicaoPagamento.setVisibility(View.VISIBLE);
             holder.lyDuplic.setVisibility(View.VISIBLE);
         }
 
