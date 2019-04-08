@@ -16,9 +16,9 @@ public class Api {
 
 //  private static final String url = "http://192.168.0.105:725/ws/";
 //    private static final String url = "http://192.168.0.105:725/WhalleAPI2.5.0/ws/";
-  private static final String url = "http://192.168.0.154:1020/WhalleAPI2.5.0/ws/";
+//  private static final String url = "http://192.168.0.154:1020/WhalleAPI2.5.0/ws/";
 //  private static final String url = "http://192.168.0.157:725/WhalleAPI2.5.0/ws/";
-//  private static final String url = "http://portalmixnutri.ddns.com.br:725/WhalleAPI2.5.0/ws/";
+  private static final String url = "http://portalmixnutri.ddns.com.br:725/WhalleAPI2.5.0/ws/";
 
     private static Rotas apiRotas;
 
