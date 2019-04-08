@@ -66,6 +66,8 @@ public class ListaPedidoAdapter extends RecyclerView.Adapter<PedidoViewHolder> {
         }
 
         holder.txtNomeCliente.setText(pedidos.get(position).getCadastro().getNome_cadastro());
+        holder.txtFantasiaCliente.setText(pedidos.get(position).getCadastro().getNome_fantasia());
+
         if (pedidos.get(position).getValor_total() != null)
             holder.txtPrecoPedido.setText(MascaraUtil.mascaraReal(pedidos.get(position).getValor_total()));
         else

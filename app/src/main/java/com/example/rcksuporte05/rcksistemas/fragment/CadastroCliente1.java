@@ -117,7 +117,7 @@ public class CadastroCliente1 extends Fragment {
             e.printStackTrace();
             AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
             alert.setTitle("Atenção");
-            alert.setMessage("Você precisa ter sincroniza do pelo menos uma vez");
+            alert.setMessage("Você precisa ter sincronizado pelo menos uma vez");
             alert.setNeutralButton("OK", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {

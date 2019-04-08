@@ -159,8 +159,6 @@ public class ActivityPedidoMain extends AppCompatActivity {
                 toolbar.setSubtitle("Pedido: " + webPedido.getId_web_pedido_servidor());
             else
                 toolbar.setSubtitle("Pedido: " + webPedido.getId_web_pedido());
-
-
         } else if (PedidoHelper.getWebPedido() != null) {
             webPedido = PedidoHelper.getWebPedido();
             objetoCliente = webPedido.getCadastro();
@@ -185,6 +183,7 @@ public class ActivityPedidoMain extends AppCompatActivity {
 
     public WebPedido salvaPedido() {
         webPedido.setCadastro(objetoCliente);
+
         webPedido.setId_empresa(UsuarioHelper.getUsuario().getIdEmpresaMultiDevice());
         webPedido.setId_vendedor(UsuarioHelper.getUsuario().getId_quando_vendedor());
 

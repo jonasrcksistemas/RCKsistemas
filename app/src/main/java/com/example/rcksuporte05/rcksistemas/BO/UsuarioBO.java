@@ -21,6 +21,7 @@ public class UsuarioBO {
 
         try {
 
+
             db.alterar("DELETE FROM TBL_WEB_USUARIO");
             for (Usuario usuario : usuarioList) {
                 db.inserirTBL_WEB_USUARIO(usuario);

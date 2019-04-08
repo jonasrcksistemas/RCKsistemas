@@ -18,9 +18,13 @@ public class WebPedidoDAO {
 
     public void inserirTBL_WEB_PEDIDO(WebPedido webPedido) {
         ContentValues content = new ContentValues();
-
         content.put("ID_EMPRESA", webPedido.getId_empresa());
-        content.put("ID_CADASTRO", webPedido.getCadastro().getId_cadastro_servidor());
+        if( webPedido.getCadastro().getId_cadastro_servidor() <= 0 ) {
+            content.put("ID_CADASTRO", webPedido.getCadastro().getId_cadastro());
+        } else {
+            content.put("ID_CADASTRO", webPedido.getCadastro().getId_cadastro_servidor());
+        }
+
         content.put("ID_VENDEDOR", webPedido.getId_vendedor());
         content.put("ID_CONDICAO_PAGAMENTO", webPedido.getId_condicao_pagamento());
         content.put("ID_OPERACAO", webPedido.getId_operacao());
@@ -65,10 +69,15 @@ public class WebPedidoDAO {
 
     public void atualizarTBL_WEB_PEDIDO(WebPedido webPedido) {
         ContentValues content = new ContentValues();
-
         content.put("ID_WEB_PEDIDO", webPedido.getId_web_pedido());
         content.put("ID_EMPRESA", webPedido.getId_empresa());
-        content.put("ID_CADASTRO", webPedido.getCadastro().getId_cadastro_servidor());
+        if( webPedido.getCadastro().getId_cadastro_servidor() <= 0 ) {
+            content.put("ID_CADASTRO", webPedido.getCadastro().getId_cadastro());
+        } else {
+            content.put("ID_CADASTRO", webPedido.getCadastro().getId_cadastro_servidor());
+        }
+        //Codigo original
+        //content.put("ID_CADASTRO", webPedido.getCadastro().getId_cadastro_servidor());
         content.put("ID_VENDEDOR", webPedido.getId_vendedor());
         content.put("ID_CONDICAO_PAGAMENTO", webPedido.getId_condicao_pagamento());
         content.put("ID_OPERACAO", webPedido.getId_operacao());
@@ -123,7 +132,14 @@ public class WebPedidoDAO {
 
                 webPedido.setId_web_pedido(cursor.getString(cursor.getColumnIndex("ID_WEB_PEDIDO")));
                 webPedido.setId_empresa(cursor.getString(cursor.getColumnIndex("ID_EMPRESA")));
-                webPedido.setCadastro(db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE ID_CADASTRO_SERVIDOR = " + cursor.getString(cursor.getColumnIndex("ID_CADASTRO"))).get(0));
+
+                //Codigo original abaixo comentado
+                //webPedido.setCadastro(db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE ID_CADASTRO_SERVIDOR = " + cursor.getString(cursor.getColumnIndex("ID_CADASTRO"))).get(0));
+
+                webPedido.setCadastro(db.listaCliente("SELECT * FROM TBL_CADASTRO WHERE ID_CADASTRO_SERVIDOR = "
+                        + cursor.getString(cursor.getColumnIndex("ID_CADASTRO")) + " OR (ID_CADASTRO = "
+                        +  cursor.getString(cursor.getColumnIndex("ID_CADASTRO")) + " AND (ID_CADASTRO_SERVIDOR <= 0 OR ID_CADASTRO_SERVIDOR IS NULL) )").get(0));
+
                 webPedido.setId_vendedor(cursor.getString(cursor.getColumnIndex("ID_VENDEDOR")));
                 webPedido.setId_condicao_pagamento(cursor.getString(cursor.getColumnIndex("ID_CONDICAO_PAGAMENTO")));
                 webPedido.setId_operacao(cursor.getString(cursor.getColumnIndex("ID_OPERACAO")));
@@ -164,7 +180,7 @@ public class WebPedidoDAO {
 
                 lista.add(webPedido);
             } catch (CursorIndexOutOfBoundsException e) {
-                System.out.println("Cliente não encontrado na base de dados!");
+                //System.out.println("Cliente não encontrado na base de dados!");
                 e.printStackTrace();
             }
 

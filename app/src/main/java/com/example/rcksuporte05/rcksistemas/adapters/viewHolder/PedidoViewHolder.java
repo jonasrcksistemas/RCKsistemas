@@ -24,6 +24,10 @@ public class PedidoViewHolder extends RecyclerView.ViewHolder implements View.On
     public TextView txtIdPedido;
     @BindView(R.id.txtNomeCliente)
     public TextView txtNomeCliente;
+
+    @BindView(R.id.txtFantasiaCliente)
+    public TextView txtFantasiaCliente;
+
     @BindView(R.id.txtPrecoPedido)
     public TextView txtPrecoPedido;
     @BindView(R.id.txtDataEntrega)

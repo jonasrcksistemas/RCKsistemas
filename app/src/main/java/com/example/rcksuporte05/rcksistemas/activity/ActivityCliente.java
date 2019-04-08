@@ -324,6 +324,7 @@ public class ActivityCliente extends AppCompatActivity {
                             ActivityPedidoMain activityPedidoMain = new ActivityPedidoMain();
                             Pedido2 pedido2 = new Pedido2();
                             activityPedidoMain.pegaCliente(listaClienteAdapter.getItem(position));
+                            System.out.println(listaClienteAdapter.getItem(position));
                             pedido2.pegaCliente(listaClienteAdapter.getItem(position));
                             /*CadastroFinanceiroResumoDAO cadastroFinanceiroResumoDAO = new CadastroFinanceiroResumoDAO(db);
                             HistoricoFinanceiroHelper.setCadastroFinanceiroResumo(cadastroFinanceiroResumoDAO.listaCadastroFinanceiroResumo(ClienteHelper.getCliente().getId_cadastro_servidor()));*/
